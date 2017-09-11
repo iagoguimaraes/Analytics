@@ -12,6 +12,8 @@ namespace Analytics.App_Start
                 "~/Content/Scripts/bootstrap.min.js",
                 "~/Content/Scripts/angular.min.js",
                 "~/Content/Scripts/adminlte.js",
+                "~/Content/Scripts/app.js",
+                "~/Content/Scripts/loading.js",
             };
 
             string[] coreStyles = {
