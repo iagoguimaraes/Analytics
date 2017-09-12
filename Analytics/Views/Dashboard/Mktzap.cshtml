@@ -4,63 +4,72 @@
 @{
     ViewBag.Titulo = "DASHBOARD MKTZAP";
 }
-
-@section Sidebar{
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-        <li class="active"><a href="#control-sidebar-filter-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        <li><a href="#control-sidebar-timer-tab" data-toggle="tab"><i class="fa fa-clock-o"></i></a></li>
-    </ul>
-    <!-- tab content -->
-    <div class="tab-content">
-
-        <!-- filter tab -->
-        <div class="tab-pane active" id="control-sidebar-filter-tab">
-            <h3 class="control-sidebar-heading">Filtros</h3>
-            <div class="form-group">
-                <label>Data Inicial:</label>
-
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" id="dtini" class="form-control pull-right datepicker">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Data Final:</label>
-
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <input type="text" id="dtfim" class="form-control pull-right datepicker">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Carteira</label>
-                <select id="carteiras" class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Selecione" style="width: 100%;" tabindex="-1" aria-hidden="true"></select>
-            </div>
-
-            <button id="aplicar" type="submit" class="btn btn-primary">Aplicar</button>
-        </div>
-        <!-- /.tab-pane -->
-        <!-- Timer tab -->
-        <div class="tab-pane" id="control-sidebar-timer-tab">
-            <h3 class="control-sidebar-heading">Timer</h3>
-        </div>
-        <!-- /.tab-pane -->
-
-    </div>
-}
-
 <div ng-controller="mktzapController">
-    {{message}}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content container-fluid">
+            <span>{{message}}</span>
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a href="#control-sidebar-filter-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            <li><a href="#control-sidebar-timer-tab" data-toggle="tab"><i class="fa fa-clock-o"></i></a></li>
+        </ul>
+        <!-- tab content -->
+        <div class="tab-content">
+
+            <!-- filter tab -->
+            <div class="tab-pane active" id="control-sidebar-filter-tab">
+                <h3 class="control-sidebar-heading">Filtros</h3>
+                <div class="form-group">
+                    <label>Data Inicial:</label>
+
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" id="dtini" class="form-control pull-right datepicker">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Data Final:</label>
+
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" id="dtfim" class="form-control pull-right datepicker">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Carteira</label>
+                    <select id="carteiras" class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Selecione" style="width: 100%;" tabindex="-1" aria-hidden="true"></select>
+                </div>
+
+                <button id="aplicar" type="submit" class="btn btn-primary">Aplicar</button>
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Timer tab -->
+            <div class="tab-pane" id="control-sidebar-timer-tab">
+                <h3 class="control-sidebar-heading">Timer</h3>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
 </div>
 
-<script>    
+<script>
     app.controller("mktzapController", function ($scope) {
         $scope.message = "Hello World!";
     });
