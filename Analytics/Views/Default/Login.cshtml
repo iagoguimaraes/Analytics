@@ -3,9 +3,9 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html ng-app="analytics">
 <head>
-    
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" type="image/png" href="~/ccashico.ico" />
@@ -33,19 +33,19 @@
         }
     </style>
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" ng-controller="loginController">
     <div class="bg">
         <div class="login-box">
             <!-- /.login-logo -->
             <div class="login-box-body">
                 <p class="login-box-msg">Entre com seu login e senha</p>
-                <form action="/Default/Logar" method="post">
+                <form name="loginForm">
                     <div class="form-group has-feedback">
-                        <input type="text" class="form-control" placeholder="Usuário" name="login" required>
+                        <input type="text" class="form-control" placeholder="Usuário" ng-model="usuario.login" ng-required="true">
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        <input type="password" class="form-control" placeholder="Senha" name="senha" required>
+                        <input type="password" class="form-control" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <div class="row">
@@ -53,15 +53,36 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                            <button type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid" class="btn btn-primary btn-block btn-flat">Sign In</button>
                         </div>
-                        <!-- /.col -->
-                    </div>
+                        <!-- /.col -->                       
+                    </div>   
                 </form>
             </div>
             <!-- /.login-box-body -->
         </div>
     </div>
     <!-- /.login-box -->
+
+    <script>
+        var app = angular.module('analytics', []);
+        app.controller('loginController', function ($scope, $http, $window) {
+            $scope.logar = function (usuario) {
+                delete $scope.usuario;
+                $.ajax({
+                    type: "POST",
+                    url: "/Default/Logar",
+                    data: usuario,
+                    success: function (data) {
+                        $window.location.href = "/Default/Index";
+                    },
+                    error: function (r) {
+                        alert(r.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>

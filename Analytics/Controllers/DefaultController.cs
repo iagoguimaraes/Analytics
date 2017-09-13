@@ -35,10 +35,13 @@ namespace Analytics.Controllers
             if (usuario != null)
             {
                 Session["usuario"] = usuario;
-                return RedirectToAction("Index");
+                return Json("sucesso");
             }
             else
-                return View("Login");
+            {
+                Response.StatusCode = 403;
+                return Json("Usuáro e/ou senha incorretos");
+            }
         }
     }
 }
