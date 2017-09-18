@@ -4,11 +4,13 @@
 @{
     ViewBag.Titulo = "DASHBOARD MKTZAP";
 }
-<div ng-controller="mktzapController">
+<div ng-app="mktzapApp" ng-controller="mktzapController">
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content container-fluid">
-            <span>{{message}}</span>
+            <div>Finalizado: {{finalizado}}</div>
+            <div>Produtivo: {{produtivo}}</div>
+            <div>Negociação: {{negociacao}}</div>
         </section>
     </div>
     <!-- /.content-wrapper -->
@@ -68,9 +70,17 @@
     <div class="control-sidebar-bg"></div>
 
 </div>
-
 <script>
-    app.controller("mktzapController", function ($scope) {
-        $scope.message = "Hello World!";
+    let api = "http://localhost:3359/api/";
+    let app = angular.module("mktzapApp", []);
+    app.controller("mktzapController", function ($scope, $http) {
+        $http.get(api + 'mktzap/dashboard', {}).then(function (r) {
+            $scope.finalizado = r.data.Table[0].finalizado;
+            $scope.produtivo = r.data.Table[0].produtivo;
+            $scope.negociacao = r.data.Table[0].negociacao;
+        }, function (r) {
+            console.log(r)
+        });
+
     });
 </script>
