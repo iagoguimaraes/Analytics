@@ -10,18 +10,39 @@ namespace DAL
 {
     public class dMktzap
     {
-        public DataSet Dashboard()
+        public DataSet Dashboard(DateTime dtini, DateTime dtfim, DataTable campanhas, DataTable setores)
         {
             try
             {
                 using(SqlHelper sql = new SqlHelper("CUBO_CREDITCASH"))
                 {
-                    return sql.ExecuteProcedureDataSet("dashboard_mktzap");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("setores", setores);
+
+                    return sql.ExecuteProcedureDataSet("dashboard_mktzap", parametros);
                 }
             }
             catch (Exception e)
             {
-                throw new Exception("Erro ao obter dados: " + e.Message);
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+        public DataSet Filtros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CREDITCASH"))
+                {
+                    return sql.ExecuteProcedureDataSet("dashboard_mktzapFiltros");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
             }
         }
     }
