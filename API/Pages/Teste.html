@@ -26,7 +26,7 @@
         <input type="button" value="Carregar Dados" ng-click="carregarDashboard()" />
     </div>
 
-    {{filtros | stringify}}
+    {{filtros}}
 
     <div ng-if="dashboard.status === 200">
         <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table"></d-table>
@@ -45,13 +45,12 @@
             }];
         });
 
-        angular.module('app').controller('controller', function ($scope, $http, $filter) {
+        angular.module('app').controller('controller', ['$scope', '$http', 'service', function ($scope, $http, service) {
 
             $scope.filtros = {};
-            $scope.filtros2 = { dtini: "2017-09-01", dtfim: "2017-09-20", campanhas: "[{ id: 267 }, { id: 15 }]", setores: "" };
+            $scope.filtros2 = { dtini: "2017-09-01", dtfim: "2017-09-20", campanhas: [{ id: 267 }, { id: 15 }], setores: ["75", "268"] };
 
-            console.log($scope.filtros);
-            console.log($filter('stringify')($scope.filtros));
+            console.log(service.arrayToObject($scope.filtros2.setores));
 
             $http({
                 method: 'GET',
@@ -74,7 +73,7 @@
                     alert(r.data.Message);
                 });
             }
-        });
+        }]);
 
         angular.module('app').directive('columnChart', function () {
             return {
@@ -196,11 +195,22 @@
             }
         });
 
-        angular.module('app').filter('stringify', function () {
-            return function (input) {
-                return JSON.stringify(input);
+        angular.module('app').service('service', function () {
+            this.stringify = function (input) {
+                let _input = input;
+                for (var property in _input) {
+                    if (_input.hasOwnProperty(property)) {
+                        _input[property] = JSON.stringify(_input[property]);
+                    }
+                }
+                return JSON.stringify(_input);
+            }
+            this.arrayToObject = function(array){
+                return array.map(obj => ({id:obj}));
             }
         });
+
+
 
     </script>
 </body>
