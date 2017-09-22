@@ -26,8 +26,6 @@
         <input type="button" value="Carregar Dados" ng-click="carregarDashboard()" />
     </div>
 
-    {{filtros}}
-
     <div ng-if="dashboard.status === 200">
         <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table"></d-table>
         <pie-chart titulo="Atendimento por Canal" series-name="Qt Atendimento" dados="dashboard.data.Table1"></pie-chart>
@@ -45,12 +43,9 @@
             }];
         });
 
-        angular.module('app').controller('controller', ['$scope', '$http', 'service', function ($scope, $http, service) {
+        angular.module('app').controller('controller', ['$scope', '$http', function ($scope, $http) {
 
-            $scope.filtros = {};
-            $scope.filtros2 = { dtini: "2017-09-01", dtfim: "2017-09-20", campanhas: [{ id: 267 }, { id: 15 }], setores: ["75", "268"] };
-
-            console.log(service.arrayToObject($scope.filtros2.setores));
+            $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };
 
             $http({
                 method: 'GET',
@@ -66,7 +61,7 @@
                 $http({
                     method: 'POST',
                     url: "/api/mktzap/dashboard",
-                    data: $scope.filtros2,
+                    data: $scope.filtros,
                 }).then(function success(r) {
                     $scope.dashboard = r;
                 }, function error(r) {
@@ -88,38 +83,40 @@
                 },
                 template: '<div></div>',
                 link: function (scope, element) {
-                    Highcharts.chart(element[0], {
-                        chart: {
-                            type: 'column'
-                        },
-                        title: {
-                            text: scope.titulo
-                        },
-                        subtitle: {
-                            text: scope.subtitulo
-                        },
-                        xAxis: {
-                            categories: scope.dados.map(obj => obj[Object.keys(obj)[0]]),
-                            crosshair: true
-                        },
-                        yAxis: {
+                    scope.$watch('dados', function (dados) {
+                        Highcharts.chart(element[0], {
+                            chart: {
+                                type: 'column'
+                            },
                             title: {
-                                text: scope.yAxisTitle
-                            }
-                        },
-                        series: [{
-                            name: scope.seriesName,
-                            data: scope.dados.map(obj => obj[Object.keys(obj)[1]])
-                        }],
-                        plotOptions: {
-                            column: {
-                                dataLabels: {
-                                    enabled: true,
-                                    //rotation: 270
+                                text: scope.titulo
+                            },
+                            subtitle: {
+                                text: scope.subtitulo
+                            },
+                            xAxis: {
+                                categories: dados.map(obj => obj[Object.keys(obj)[0]]),
+                                crosshair: true
+                            },
+                            yAxis: {
+                                title: {
+                                    text: scope.yAxisTitle
+                                }
+                            },
+                            series: [{
+                                name: scope.seriesName,
+                                data: dados.map(obj => obj[Object.keys(obj)[1]])
+                            }],
+                            plotOptions: {
+                                column: {
+                                    dataLabels: {
+                                        enabled: true,
+                                        //rotation: 270
+                                    }
                                 }
                             }
-                        }
 
+                        });
                     });
                 }
             }
@@ -135,20 +132,22 @@
                 },
                 template: '<div></div>',
                 link: function (scope, element) {
-                    Highcharts.chart(element[0], {
-                        chart: {
-                            type: 'pie'
-                        },
-                        title: {
-                            text: scope.titulo
-                        },
-                        subtitle: {
-                            text: scope.subtitulo
-                        },
-                        series: [{
-                            name: scope.seriesName,
-                            data: scope.dados.map(obj => ({ 'name': obj[Object.keys(obj)[0]], 'y': obj[Object.keys(obj)[1]] }))
-                        }]
+                    scope.$watch('dados', function (dados) {
+                        Highcharts.chart(element[0], {
+                            chart: {
+                                type: 'pie'
+                            },
+                            title: {
+                                text: scope.titulo
+                            },
+                            subtitle: {
+                                text: scope.subtitulo
+                            },
+                            series: [{
+                                name: scope.seriesName,
+                                data: dados.map(obj => ({ 'name': obj[Object.keys(obj)[0]], 'y': obj[Object.keys(obj)[1]] }))
+                            }]
+                        });
                     });
                 }
             }
@@ -165,16 +164,18 @@
                 },
                 template: '<table><tfoot></tfoot></table>',
                 link: function (scope, element) {
-                    $(element[0]).DataTable({
-                        destroy: true,
-                        info: scope.info,
-                        paging: scope.paging,
-                        searching: scope.searching,
-                        data: scope.dados,
-                        language: {
-                            url: '/Content/Json/datatables-lang.json'
-                        },
-                        columns: Object.keys(scope.dados[0]).map(p => ({ title: p, data: p }))
+                    scope.$watch('dados', function (dados) {
+                        $(element[0]).DataTable({
+                            destroy: true,
+                            info: scope.info,
+                            paging: scope.paging,
+                            searching: scope.searching,
+                            data: dados,
+                            language: {
+                                url: '/Content/Json/datatables-lang.json'
+                            },
+                            columns: Object.keys(dados[0]).map(p => ({ title: p, data: p }))
+                        });
                     });
                 }
             }
@@ -183,34 +184,25 @@
             return {
                 restrict: 'E',
                 replace: true,
+                require: 'ngModel',
                 scope: {
                     dados: '=',
                 },
                 template: '<select class="select2" multiple="multiple"></select>',
-                link: function (scope, element) {
+                link: function (scope, element, attr, ctrl) {
                     $(element[0]).select2({
                         data: scope.dados.map(obj => ({ 'id': obj[Object.keys(obj)[0]], 'text': obj[Object.keys(obj)[1]] }))
                     });
+
+                    // transforma array em array de objeto
+                    element.bind('change', function () {
+                        let arrayObjt = ctrl.$modelValue.map(obj => ({ id: obj }));
+                        ctrl.$setViewValue(JSON.stringify(arrayObjt));
+                    });
+
                 }
             }
         });
-
-        angular.module('app').service('service', function () {
-            this.stringify = function (input) {
-                let _input = input;
-                for (var property in _input) {
-                    if (_input.hasOwnProperty(property)) {
-                        _input[property] = JSON.stringify(_input[property]);
-                    }
-                }
-                return JSON.stringify(_input);
-            }
-            this.arrayToObject = function(array){
-                return array.map(obj => ({id:obj}));
-            }
-        });
-
-
 
     </script>
 </body>
