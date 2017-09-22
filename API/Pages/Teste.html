@@ -7,6 +7,7 @@
     <link href="../Content/Styles/bootstrap.min.css" rel="stylesheet" />
     <link href="../Content/Styles/datatables.min.css" rel="stylesheet" />
     <link href="../Content/Styles/select2.min.css" rel="stylesheet" />
+    <link href="../Content/Styles/bootstrap-datepicker.min.css" rel="stylesheet" />
 
     <script src="../Content/Scripts/jquery.min.js"></script>
     <script src="../Content/Scripts/bootstrap.min.js"></script>
@@ -14,13 +15,14 @@
     <script src="../Content/Scripts/highcharts.js"></script>
     <script src="../Content/Scripts/jquery.dataTables.min.js"></script>
     <script src="../Content/Scripts/select2.full.min.js"></script>
+    <script src="../Content/Scripts/bootstrap-datepicker.min.js"></script>
 
 </head>
 <body ng-app="app" ng-controller="controller">
 
     <div ng-if="dadosFiltros.status === 200">
-        <input ng-model="filtros.dtini" type="text" />
-        <input ng-model="filtros.dtfim" type="text" />
+        <datepicker ng-model="filtros.dtini"></datepicker>
+        <datepicker ng-model="filtros.dtfim"></datepicker>
         <select2 ng-model="filtros.campanhas" dados="dadosFiltros.data.Table"></select2>
         <select2 ng-model="filtros.setores" dados="dadosFiltros.data.Table1"></select2>
         <input type="button" value="Carregar Dados" ng-click="carregarDashboard()" />
@@ -200,6 +202,22 @@
                         ctrl.$setViewValue(JSON.stringify(arrayObjt));
                     });
 
+                }
+            }
+        });
+        angular.module('app').directive('datepicker', function () {
+            return {
+                restrict: 'E',
+                replace: true,
+                require: 'ngModel',
+                scope: {
+                },
+                template: '<input type="text"/>',
+                link: function (scope, element, attr, ctrl) {
+                    $(element[0]).datepicker({
+                        format: 'yyyy-mm-dd'
+                        ,autoclose: true
+                    });
                 }
             }
         });
