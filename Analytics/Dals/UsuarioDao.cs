@@ -14,15 +14,15 @@ namespace Analytics
             {
                 using (SqlHelper sql = new SqlHelper())
                 {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-                    parametros.Add("login", login);
-                    parametros.Add("senha", senha);
-
-                    DataTable dt = sql.ExecuteProcedureDataTable("SP_LOGAR", parametros);
-
-                    if (dt.Rows.Count > 0)
-                        return new Usuario(dt.Rows[0]);
-                    return null;
+                    //Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    //parametros.Add("login", login);
+                    //parametros.Add("senha", senha);
+                    //
+                    //DataTable dt = sql.ExecuteProcedureDataTable("SP_LOGAR", parametros);
+                    //
+                    //if (dt.Rows.Count > 0)
+                    //    return new Usuario(dt.Rows[0]);
+                    return new Usuario();
                 }
             }
             catch (Exception e)
@@ -36,12 +36,13 @@ namespace Analytics
             {
                 using (SqlHelper sql = new SqlHelper())
                 {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-                    parametros.Add("id_usuario", idUsuario);
-                    parametros.Add("id_recurso", idRecurso);
+                    //Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    //parametros.Add("id_usuario", idUsuario);
+                    //parametros.Add("id_recurso", idRecurso);
 
-                    DataTable dt = sql.ExecuteProcedureDataTable("SP_AUTORIZAR", parametros);
-                    return Convert.ToBoolean(dt.Rows[0][0]);
+                    //DataTable dt = sql.ExecuteProcedureDataTable("SP_AUTORIZAR", parametros);
+                    //return Convert.ToBoolean(dt.Rows[0][0]);
+                    return true;
                 }
             }
             catch (Exception e)
