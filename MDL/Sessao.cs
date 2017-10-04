@@ -33,5 +33,14 @@ namespace MDL
             id_grupo = Convert.ToInt32(row["id_grupo"]);
         }
 
+        public Sessao(string sessao)
+        {
+            string[] dados = sessao.Split(';');
+            id_sessao = Convert.ToInt32(dados[0]);
+            data_criacao = Convert.ToDateTime(dados[1]);
+            id_usuario = Convert.ToInt32(dados[2]);
+            id_grupo = Convert.ToInt32(dados[3]);
+        }
+
     }
 }

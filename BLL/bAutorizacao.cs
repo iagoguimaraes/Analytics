@@ -9,13 +9,13 @@ using DAL;
 
 namespace BLL
 {
-    public class bAutenticacao
+    public class bAutorizacao
     {
         public Sessao InserirSessao(string login, string senha)
         {
             try
             {
-                dAutenticacao dal = new dAutenticacao();
+                dAutorizaocao dal = new dAutorizaocao();
                 DataTable dtUsuario = dal.ObterUsuario(login, senha);
 
                 if (dtUsuario.Rows.Count == 0)
@@ -30,5 +30,24 @@ namespace BLL
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+
+        public bool AcessoRecurso(int id_grupo, string path)
+        {
+            try
+            {
+                dAutorizaocao dal = new dAutorizaocao();
+                DataTable dtAcesso = dal.AcessoRecurso(id_grupo, path);
+
+                if (dtAcesso.Rows.Count == 0)
+                    return false;
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }

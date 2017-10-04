@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class dAutenticacao
+    public class dAutorizaocao
     {
         public DataTable ObterUsuario(string login, string senha)
         {
@@ -42,6 +42,26 @@ namespace DAL
                     parametros.Add("id_grupo", usuario.id_grupo.ToString());
 
                     return sql.ExecuteProcedureDataTable("sp_ins_sessao", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
+        public DataTable AcessoRecurso(int id_grupo, string path)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper())
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_grupo", id_grupo.ToString());
+                    parametros.Add("path", path);
+
+                    return sql.ExecuteProcedureDataTable("sp_sel_acessoRecurso", parametros);
                 }
             }
             catch (Exception e)

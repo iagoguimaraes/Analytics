@@ -22,7 +22,7 @@ namespace API.Controllers
                 string login = form["login"];
                 string senha = form["senha"];
 
-                Sessao sessao = new bAutenticacao().InserirSessao(login, senha);
+                Sessao sessao = new bAutorizacao().InserirSessao(login, senha);
                 string token = new EncryptHelper().Encrypt(sessao.ToString());
                 return Request.CreateResponse(HttpStatusCode.OK, token);
             }

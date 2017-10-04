@@ -16,6 +16,7 @@ namespace API.Controllers
     {
         [Route("dashboard")]
         [HttpPost]
+        [Authorization]
         public HttpResponseMessage Dashboard(FormDataCollection form)
         {
             try
