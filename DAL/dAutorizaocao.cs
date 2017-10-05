@@ -69,5 +69,27 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+
+        public DataTable RegistrarRequisicao(long tempo_execucao, int id_sessao, int id_recurso)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper())
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("tempo_execucao", tempo_execucao.ToString());
+                    parametros.Add("id_sessao", id_sessao.ToString());
+                    parametros.Add("id_recurso", id_recurso.ToString());
+
+                    return sql.ExecuteProcedureDataTable("sp_ins_requisicao", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
     }
 }
