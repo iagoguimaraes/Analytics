@@ -11,6 +11,9 @@ namespace BLL
 {
     public class bAutorizacao
     {
+        /// <summary>
+        /// insere registro para a sessão (caso o usuário e senha estejam corretos)
+        /// </summary>
         public Sessao InserirSessao(string login, string senha)
         {
             try
@@ -60,12 +63,38 @@ namespace BLL
             }
         }
 
+        /// <summary>
+        /// registra a requisição no banco
+        /// </summary>
         public void RegistrarRequisicao(long tempo_execucao, int id_sessao, int id_recurso)
         {
             try
             {
                 dAutorizaocao dal = new dAutorizaocao();
                 dal.RegistrarRequisicao(tempo_execucao, id_sessao, id_recurso);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// obtem as paginas que um determinado grupo possui acesso
+        /// </summary>
+        public List<Pagina> AcessoPagina(int id_grupo)
+        {
+            try
+            {
+                dAutorizaocao dal = new dAutorizaocao();
+                DataTable dtAcesso = dal.AcessoPagina(id_grupo);
+
+                List<Pagina> paginas = new List<Pagina>();
+
+                foreach (DataRow row in dtAcesso.Rows)
+                    paginas.Add(new Pagina(row));
+
+                return paginas;
             }
             catch (Exception e)
             {

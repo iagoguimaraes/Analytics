@@ -49,6 +49,17 @@
 
         angular.module('app').controller('controller', ['$scope', '$http', function ($scope, $http) {
 
+            // TESTANDO PAGINAS
+            $http({
+                method: 'GET',
+                url: "/api/autenticacao/getPaginas",
+            }).then(function success(r) {
+                console.log(r);
+            }, function error(r) {
+                alert(r.data.Message);
+            });
+
+
             $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };
 
             $http({

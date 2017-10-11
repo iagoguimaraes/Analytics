@@ -91,5 +91,24 @@ namespace DAL
             }
         }
 
+        public DataTable AcessoPagina(int id_grupo)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper())
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_grupo", id_grupo.ToString());
+
+                    return sql.ExecuteProcedureDataTable("sp_sel_acessoPagina", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
     }
 }

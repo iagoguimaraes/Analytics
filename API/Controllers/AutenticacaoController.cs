@@ -31,5 +31,23 @@ namespace API.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("getPaginas")]
+        [HttpGet]
+        [Authorization]
+        public HttpResponseMessage GetPagina()
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+                List<Pagina> paginas = new bAutorizacao().AcessoPagina(sessao.id_grupo);
+                return Request.CreateResponse(HttpStatusCode.OK, paginas);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

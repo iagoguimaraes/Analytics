@@ -14,7 +14,7 @@ namespace DAL
         {
             try
             {
-                using(SqlHelper sql = new SqlHelper("CUBO_CREDITCASH"))
+                using(SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -35,7 +35,7 @@ namespace DAL
         {
             try
             {
-                using (SqlHelper sql = new SqlHelper("CUBO_CREDITCASH"))
+                using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
                     return sql.ExecuteProcedureDataSet("dashboard_mktzapFiltros");
                 }
