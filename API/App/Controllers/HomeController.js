@@ -5,8 +5,7 @@
         method: 'GET',
         url: "/api/autenticacao/getPaginas",
     }).then(function success(r) {
-        $scope.paginas = r.data;
-        console.log(formatarMenu(r.data));
+        $scope.paginas = formatarMenu(r.data);
     }, function error(r) {
         alert(r.data.Message);
     });

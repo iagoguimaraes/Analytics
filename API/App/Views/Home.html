@@ -106,25 +106,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   -------------------------->
 
                 <script type="text/ng-template" id="field_renderer.html">
-                    {{data.label}}
-                    <ul>
-                        <li ng-repeat="field in data.fields" ng-include="'field_renderer.html'"></li>
+                    <span ng-bind="path.nome || path.path"></span>
+                    <ul>                      
+                        <li ng-repeat="path in path.subpath" ng-include="'field_renderer.html'">                          
+                        </li>
                     </ul>
                 </script>
 
-                <ul ng-controller="NestedFormCtrl">
-                    <li ng-repeat="field in formData" ng-include="'field_renderer.html'"></li>
+                <ul>
+                    <li ng-repeat="path in paginas.subpath" ng-include="'field_renderer.html'"></li>
                 </ul>
-
-                <div>
-                    <p ng-repeat="pagina in paginas">
-                        {{pagina.path}}
-                        {{pagina.nome}}
-                        {{pagina.url}}
-                    </p>
-                </div>
-
-
 
             </section>
             <!-- /.content -->
