@@ -13,6 +13,7 @@ namespace MDL
         public string path { get; set; }
         public string nome { get; set; }
         public string url { get; set; }
+        public string icone { get; set; }
 
         public Pagina(DataRow row)
         {
@@ -20,6 +21,7 @@ namespace MDL
             path = row["path"].ToString();
             nome = row["nome"].ToString();
             url = row["url"].ToString();
+            icone = row["icone"].ToString();
         }
     }
 }

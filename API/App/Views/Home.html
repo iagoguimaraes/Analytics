@@ -70,21 +70,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MENU</li>
-                    <!-- Optionally, you can add icons to the links -->
-                    <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-                    <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-link"></i> <span>Multilevel</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="#">Link in level 2</a></li>
-                            <li><a href="#">Link in level 2</a></li>
-                        </ul>
-                    </li>
+
+                    <!-- esquema do menu dinâmico -->
+                    <li class="treeview" ng-repeat="path in paginas.subpath" ng-include="'Templates/MenuItem.html'"></li>
+
                 </ul>
                 <!-- /.sidebar-menu -->
             </section>
@@ -104,19 +93,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!--------------------------
                   | Your Page Content Here |
                   -------------------------->
-
-                <script type="text/ng-template" id="field_renderer.html">
-                    <span ng-bind="path.nome || path.path"></span>
-                    <ul>                      
-                        <li ng-repeat="path in path.subpath" ng-include="'field_renderer.html'">                          
-                        </li>
-                    </ul>
-                </script>
-
-                <ul>
-                    <li ng-repeat="path in paginas.subpath" ng-include="'field_renderer.html'"></li>
-                </ul>
-
             </section>
             <!-- /.content -->
         </div>

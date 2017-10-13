@@ -1,0 +1,14 @@
+﻿
+<a href="{{path.url || '#'}}">
+    <i class="{{path.icone}}"></i>
+    <span ng-bind="path.nome || path.path"></span>
+    
+    <span class="pull-right-container" ng-switch="{{path.icone}}">
+        <i class="{{path.icone}}" ng-switch-when="{{path.icone}}"></i>
+        <i class="fa fa-angle-left pull-right" ng-switch-default></i>
+    </span>
+</a>
+<ul class="treeview-menu">
+    <li class="treeview" ng-repeat="path in path.subpath" ng-include="'Templates/MenuItem.html'">
+    </li>
+</ul>
