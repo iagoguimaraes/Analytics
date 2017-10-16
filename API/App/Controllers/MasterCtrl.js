@@ -1,6 +1,6 @@
-﻿angular.module('app').controller('MasterCtrl', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('MasterCtrl', function ($scope, $http) {
 
-    // TESTANDO PAGINAS
+    // obtendo as paginas
     $http({
         method: 'GET',
         url: "/api/autenticacao/getPaginas",
@@ -41,4 +41,4 @@
         return menu;
     }
 
-}]);
+});

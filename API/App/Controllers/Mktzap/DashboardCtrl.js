@@ -1,6 +1,6 @@
-﻿angular.module('app').controller('MktzapDashboardCtrl', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('MktzapDashboardCtrl', function ($scope, $http) {
 
-    $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };
+    $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };   
 
     // carrega os filtros e colocar no scope
     $http({
@@ -25,4 +25,4 @@
         });
     }
 
-}]);
+});

@@ -1,3 +1,3 @@
-﻿angular.module('app').controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('HomeCtrl', function ($scope, $http) {
 
-}]);
+});

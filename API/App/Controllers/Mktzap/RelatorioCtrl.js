@@ -1,3 +1,3 @@
-﻿angular.module('app').controller('MktzapRelatorioCtrl', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('MktzapRelatorioCtrl', function ($scope, $http) {
 
-}]);
+});
