@@ -1,4 +1,6 @@
-﻿angular.module('app').controller('MktzapDashboardCtrl', function ($scope, $http) {
+﻿angular.module('app').controller('MktzapDashboardCtrl', function ($scope, $http, dadosPagina) {
+
+    dadosPagina.titulo = 'Dashboard Mktzap'
 
     $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };   
 

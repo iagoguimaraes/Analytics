@@ -1,4 +1,7 @@
-﻿angular.module('app').controller('MasterCtrl', function ($scope, $http) {
+﻿angular.module('app').controller('MasterCtrl', function ($scope, $http, dadosPagina) {
+
+    // dados da pagina (título, descrição etc) reusável em outros Ctrl
+    $scope.dadosPagina = dadosPagina;
 
     // obtendo as paginas
     $http({
