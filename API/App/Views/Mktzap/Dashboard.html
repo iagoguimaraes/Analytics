@@ -1,1 +1,14 @@
-﻿<div>DASHBOARD</div>
+﻿
+<div ng-if="dadosFiltros.status === 200">
+    <date-picker ng-model="filtros.dtini"></date-picker>
+    <date-picker ng-model="filtros.dtfim"></date-picker>
+    <select2 ng-model="filtros.campanhas" dados="dadosFiltros.data.Table"></select2>
+    <select2 ng-model="filtros.setores" dados="dadosFiltros.data.Table1"></select2>
+    <input type="button" value="Carregar Dados" ng-click="carregarDashboard()" />
+</div>
+
+<div ng-if="dashboard.status === 200">
+    <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table"></d-table>
+    <pie-chart titulo="Atendimento por Canal" series-name="Qt Atendimento" dados="dashboard.data.Table1"></pie-chart>
+    <column-chart titulo="Atendimento por Campanha" series-name="Qt Atendimento" dados="dashboard.data.Table2"></column-chart>
+</div>
