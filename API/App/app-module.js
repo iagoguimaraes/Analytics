@@ -1,4 +1,4 @@
-﻿angular.module('app', [], function ($httpProvider) {
+﻿angular.module('app', ['ngRoute'], function ($httpProvider) {
     // setando o token no header das requisições
     $httpProvider.defaults.headers.common['Token'] = localStorage.getItem('token');
     // Use x-www-form-urlencoded Content-Type
@@ -8,3 +8,4 @@
         return angular.isObject(data) && String(data) !== '[object File]' ? $.param(data) : data;
     }];
 });
+

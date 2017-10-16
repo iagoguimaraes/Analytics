@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('MktzapController', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('MktzapDashboardCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };
 

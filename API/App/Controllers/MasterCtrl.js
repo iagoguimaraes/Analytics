@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('HomeController', ['$scope', '$http', function ($scope, $http) {
+﻿angular.module('app').controller('MasterCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // TESTANDO PAGINAS
     $http({

@@ -1,21 +1,19 @@
-﻿angular.module('app', ['ngRoute']).config(function ($routeProvider) {
+﻿angular.module('app').config(function ($routeProvider) {
     $routeProvider
-
-        // route for the home page
         .when('/', {
-            templateUrl: 'Views/Home.html',
-            controller: 'HomeController'
+            templateUrl: '/App/Views/Home/Home.html',
+            controller: 'HomeCtrl'
         })
 
-        // route for the about page
-        .when('/Dashboard/Mktzap', {
-            templateUrl: 'Views/Dashboard/Mktzap.html',
-            controller: 'MktzapController'
+        .when('/Mktzap/Dashboard', {
+            templateUrl: '/App/Views/Mktzap/Dashboard.html',
+            controller: 'MktzapDashboardCtrl'
         })
 
-        // route for the contact page
-        .when('/contact', {
-            templateUrl: 'pages/contact.html',
-            controller: 'contactController'
-        });
+        .when('/Mktzap/Relatorio', {
+            templateUrl: '/App/Views/Mktzap/Relatorio.html',
+            controller: 'MktzapRelatorioCtrl'
+        })
+
+        .otherwise({ redirectTo: '/' });
 });
