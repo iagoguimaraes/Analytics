@@ -1,18 +1,26 @@
-﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, dadosPagina) {
+﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, $filter, dadosPagina) {
 
     dadosPagina.titulo = 'Dashboard Mktzap'
 
-    $scope.filtros = { dtini: "", dtfim: "", campanhas: "", setores: "" };   
+    // filtros iniciais
+    $scope.filtros = {
+        dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+        dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        campanhas: "",
+        setores: ""
+    };
 
     // carrega os filtros e colocar no scope
-    $http({
-        method: 'GET',
-        url: "/api/mktzap/filtros",
-    }).then(function success(r) {
-        $scope.dadosFiltros = r;
-    }, function error(r) {
-        alert(r.data.Message);
-    });
+    $scope.carregarFiltros = function () {
+        $http({
+            method: 'GET',
+            url: "/api/mktzap/filtros",
+        }).then(function success(r) {
+            $scope.dadosFiltros = r;
+        }, function error(r) {
+            alert(r.data.Message);
+        });
+    }
 
     // obtem filtros do escopo e carrega os dados do dashboard
     $scope.carregarDashboard = function () {
@@ -26,5 +34,8 @@
             alert(r.data.Message);
         });
     }
+
+    $scope.carregarFiltros();
+    $scope.carregarDashboard();
 
 });
