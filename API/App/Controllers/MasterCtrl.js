@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('ctrl-master', function ($scope, $http, dadosPagina) {
+﻿angular.module('app').controller('ctrl-master', function ($scope, $http, $window, dadosPagina) {
 
     // dados da pagina (título, descrição etc) reusável em outros Ctrl
     $scope.dadosPagina = dadosPagina;
@@ -10,7 +10,12 @@
     }).then(function success(r) {
         $scope.paginas = formatarMenu(r.data);
     }, function error(r) {
-        alert(r.data.Message);
+        if (r.status === 401) {
+            $window.location.href = '/Login.html';
+        }
+        else{
+            alert(r.data.Message);
+        }    
     });
 
     // formata o menu hierarquicamente para usar no ng-repeat
