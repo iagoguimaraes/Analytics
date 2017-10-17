@@ -2,17 +2,17 @@
     $routeProvider
         .when('/', {
             templateUrl: '/App/Views/Home/Home.html',
-            controller: 'HomeCtrl'
+            controller: 'ctrl-home'
         })
 
         .when('/Mktzap/Dashboard', {
             templateUrl: '/App/Views/Mktzap/Dashboard.html',
-            controller: 'MktzapDashboardCtrl'
+            controller: 'ctrl-mktzap-dashboard'
         })
 
         .when('/Mktzap/Relatorio', {
             templateUrl: '/App/Views/Mktzap/Relatorio.html',
-            controller: 'MktzapRelatorioCtrl'
+            controller: 'ctrl-mktzap-relatorio'
         })
 
         .otherwise({ redirectTo: '/' });

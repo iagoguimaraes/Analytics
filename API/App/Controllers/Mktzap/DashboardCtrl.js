@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('MktzapDashboardCtrl', function ($scope, $http, dadosPagina) {
+﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, dadosPagina) {
 
     dadosPagina.titulo = 'Dashboard Mktzap'
 
