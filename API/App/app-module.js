@@ -7,5 +7,7 @@
     $httpProvider.defaults.transformRequest = [function (data) {
         return angular.isObject(data) && String(data) !== '[object File]' ? $.param(data) : data;
     }];
+    // tirando cache das requisições
+    $httpProvider.defaults.cache = false
 });
 
