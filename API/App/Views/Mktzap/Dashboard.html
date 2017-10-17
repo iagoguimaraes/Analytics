@@ -1,80 +1,74 @@
 ﻿
-<div ng-if="dadosFiltros.status === 200">
-    <date-picker ng-model="filtros.dtini"></date-picker>
-    <date-picker ng-model="filtros.dtfim"></date-picker>
-    <select2 ng-model="filtros.campanhas" dados="dadosFiltros.data.Table"></select2>
-    <select2 ng-model="filtros.setores" dados="dadosFiltros.data.Table1"></select2>
-    <input type="button" value="Carregar Dados" ng-click="carregarDashboard()" />
-</div>
-
 <div ng-if="dashboard.status === 200">
     <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table"></d-table>
     <pie-chart titulo="Atendimento por Canal" series-name="Qt Atendimento" dados="dashboard.data.Table1"></pie-chart>
     <column-chart titulo="Atendimento por Campanha" series-name="Qt Atendimento" dados="dashboard.data.Table2"></column-chart>
 </div>
 
-
-
+<!-- SIDE BAR CONTROL -->
 <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-        <li class="active"><a data-target="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
         <li><a data-target="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-        <!-- Home tab content -->
-        <div class="tab-pane active" id="control-sidebar-home-tab">
-            <h3 class="control-sidebar-heading">Recent Activity</h3>
-            <ul class="control-sidebar-menu">
-                <li>
-                    <a href="javascript:;">
-                        <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-                            <p>Will be 23 on April 24th</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.control-sidebar-menu -->
-            <h3 class="control-sidebar-heading">Tasks Progress</h3>
-            <ul class="control-sidebar-menu">
-                <li>
-                    <a href="javascript:;">
-                        <h4 class="control-sidebar-subheading">
-                            Custom Template Design
-                            <span class="pull-right-container">
-                                <span class="label label-danger pull-right">70%</span>
-                            </span>
-                        </h4>
-                        <div class="progress progress-xxs">
-                            <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.control-sidebar-menu -->
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dadosFiltros.status === 200">
+            <!--DATA INCIAL-->
+            <div class="form-group">               
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>               
+            </div>
+            
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>  
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Campanhas</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dadosFiltros.data.Table"></select2>
+            </div>
+
+            <!--SETORES-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Setores</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.setores" dados="dadosFiltros.data.Table1"></select2>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="carregarDashboard()">Carregar Dados</button>
+            </div>
+
         </div>
         <!-- /.tab-pane -->
-        <!-- Stats tab content -->
-        <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-        <!-- /.tab-pane -->
+
+        <!-- Configurações -->
+        
         <!-- Settings tab content -->
         <div class="tab-pane" id="control-sidebar-settings-tab">
-            <form method="post">
-                <h3 class="control-sidebar-heading">General Settings</h3>
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">
-                        Report panel usage
-                        <input type="checkbox" class="pull-right" checked>
-                    </label>
-                    <p>
-                        Some information about this general settings option
-                    </p>
-                </div>
-                <!-- /.form-group -->
-            </form>
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Atualizar
+                    <input type="checkbox" class="pull-right" checked="">
+                </label>
+                    
+                <label>A cada<input type="number" /> Segundos</label>              
+            </div>
         </div>
         <!-- /.tab-pane -->
     </div>
