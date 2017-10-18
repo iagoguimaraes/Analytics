@@ -23,7 +23,10 @@
                     series: [{
                         name: scope.seriesName,
                         data: dados.map(obj => ({ 'name': obj[Object.keys(obj)[0]], 'y': obj[Object.keys(obj)[1]] }))
-                    }]
+                    }],
+                    tooltip: {
+                        pointFormat: '{point.y} (<b>{point.percentage:.1f}%</b>)'
+                    },
                 });
             });
         }

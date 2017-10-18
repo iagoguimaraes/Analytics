@@ -46,7 +46,7 @@
             }
         });
         // retorna
-        return menu;
+        return menu;      
     }
 
 });
