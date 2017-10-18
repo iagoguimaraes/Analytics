@@ -1,12 +1,11 @@
 ﻿<!-- DASHBOARD -->
 <div ng-if="dashboard.status === 200">
-    
+
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
             <div class="small-box bg-gray">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].atendimento"></h3>
-                    
                     <p>Atendimento</p>
                 </div>
                 <div class="icon">
@@ -70,20 +69,22 @@
         </div>
         <div class="col-xs-12 col-md-8">
             <bar-chart dados="dashboard.data.Table3" titulo="Atendimento por Setor" series-name="Qt Atendimento"></bar-chart>
-            
+
         </div>
     </div>
     <div class="row margin-bottom">
-        <div class="col-xs-8">
-            <column-chart dados="dashboard.data.Table2" titulo="Atendimento por Campanha" series-name="Qt Atendimento"></column-chart>   
-        </div>         
-        <div class="col-xs-4">
+        <div class="col-xs-12 col-md-8">
+            <column-chart dados="dashboard.data.Table2" titulo="Atendimento por Campanha" series-name="Qt Atendimento"></column-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
             <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table4" paging="false" scroll-collapse="true" scroll-y="324px" order="[[1,'desc']]"></d-table>
-        </div> 
+        </div>
     </div>
     <div class="row">
-             
-    </div>  
+        <div class="col-xs-12">
+            <line-chart dados="dashboard.data.Table5" titulo="Atendimento por Campanha" series-name="Qt Atendimento"></line-chart>
+        </div>
+    </div>
 </div>
 
 <!-- SIDE BAR CONTROL -->
@@ -98,16 +99,16 @@
         <!-- Filtros -->
         <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dadosFiltros.status === 200">
             <!--DATA INCIAL-->
-            <div class="form-group">               
+            <div class="form-group">
                 <label class="control-sidebar-subheading">Data Inicial</label>
                 <div class="input-group date">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                </div>               
+                </div>
             </div>
-            
+
             <!--DATA FINAL-->
             <div class="form-group">
                 <label class="control-sidebar-subheading">Data Final</label>
@@ -116,7 +117,7 @@
                         <i class="fa fa-calendar"></i>
                     </div>
                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                </div>  
+                </div>
             </div>
 
             <!--CAMPANHAS-->
@@ -138,17 +139,16 @@
 
         </div>
         <!-- /.tab-pane -->
-
         <!-- Configurações -->
-        
         <!-- Settings tab content -->
         <div class="tab-pane" id="control-sidebar-settings-tab">
             <div class="form-group">
-                <label class="control-sidebar-subheading">Atualizar
+                <label class="control-sidebar-subheading">
+                    Atualizar
                     <input type="checkbox" class="pull-right" checked="">
                 </label>
-                    
-                <label>A cada<input type="number" /> Segundos</label>              
+
+                <label>A cada<input type="number" /> Segundos</label>
             </div>
         </div>
         <!-- /.tab-pane -->
