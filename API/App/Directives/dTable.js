@@ -3,24 +3,30 @@
         restrict: 'E',
         replace: true,
         scope: {
-            info: '@',
-            paging: '@',
-            searching: '@',
             dados: '=',
+            info: '=',
+            paging: '=',
+            searching: '=',
+            scrollCollapse: '=',
+            scrollY: '@',
+            order: '=',
         },
         template: '<table><tfoot></tfoot></table>',
         link: function (scope, element) {
             scope.$watch('dados', function (dados) {
                 $(element[0]).DataTable({
-                    destroy: true,
-                    info: scope.info,
-                    paging: scope.paging,
-                    searching: scope.searching,
+                    destroy: true,                 
                     data: dados,
+                    columns: Object.keys(dados[0]).map(p => ({ title: p, data: p })),
                     language: {
                         url: '/Content/Json/datatables-lang.json'
                     },
-                    columns: Object.keys(dados[0]).map(p => ({ title: p, data: p }))
+                    info: scope.info,
+                    paging: scope.paging,
+                    searching: scope.searching,
+                    scrollCollapse: scope.scrollCollapse,
+                    scrollY: scope.scrollY,
+                    order: scope.order
                 });
             });
         }
