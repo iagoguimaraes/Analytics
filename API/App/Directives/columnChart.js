@@ -3,11 +3,12 @@
         restrict: 'E',
         replace: true,
         scope: {
+            dados: '=',
             titulo: '@',
             subtitulo: '@',
+            height: '@',
             yAxisTitle: '@',
-            seriesName: '@',
-            dados: '=',
+            seriesName: '@',           
         },
         template: '<div></div>',
         link: function (scope, element) {

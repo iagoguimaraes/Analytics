@@ -3,16 +3,18 @@
         restrict: 'E',
         replace: true,
         scope: {
+            dados: '=',
             titulo: '@',
             subtitulo: '@',
-            dados: '=',
+            height: '@',
         },
         template: '<div></div>',
         link: function (scope, element) {
             scope.$watch('dados', function (dados) {
                 Highcharts.chart(element[0], {
                     chart: {
-                        type: 'pie'
+                        type: 'pie',
+                        height: scope.height
                     },
                     title: {
                         text: scope.titulo
