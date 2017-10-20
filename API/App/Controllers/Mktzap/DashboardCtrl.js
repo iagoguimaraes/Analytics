@@ -1,6 +1,7 @@
 ﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, $filter, $interval, dadosPagina) {
 
-    dadosPagina.titulo = 'Dashboard Mktzap'
+    dadosPagina.titulo = 'Dashboard Mktzap';
+    dadosPagina.descricao = '';
 
     // filtros iniciais
     let ontem = new Date();

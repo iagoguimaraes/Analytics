@@ -15,5 +15,10 @@
             controller: 'ctrl-mktzap-relatorio'
         })
 
+        .when('/Tim/HoraHora', {
+            templateUrl: '/App/Views/Tim/HoraHora.html?v=' + new Date().getTime(),
+            controller: 'ctrl-tim-horahora',
+        })
+
         .otherwise({ redirectTo: '/' });
 });
