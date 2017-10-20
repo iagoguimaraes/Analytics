@@ -5,7 +5,7 @@
         <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
             <div class="small-box bg-gray">
                 <div class="inner">
-                    <h3 ng-bind="dashboard.data.Table[0].atendimento"></h3>
+                    <h3 ng-bind="dashboard.data.Table[0].atendimento || 0"></h3>
                     <p>Atendimento</p>
                 </div>
                 <div class="icon">
@@ -16,7 +16,7 @@
         <div class="col-xs-12 col-sm-6 col-lg-2">
             <div class="small-box bg-aqua">
                 <div class="inner">
-                    <h3 ng-bind="dashboard.data.Table[0].interacao"></h3>
+                    <h3 ng-bind="dashboard.data.Table[0].interacao || 0"></h3>
                     <h4 class="pull-right" ng-bind="dashboard.data.Table[0].interacao / dashboard.data.Table[0].atendimento | percentage: 1"></h4>
                     <p>Interação</p>
                 </div>
@@ -28,7 +28,7 @@
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-red">
                 <div class="inner">
-                    <h3 ng-bind="dashboard.data.Table[0].cpc"></h3>
+                    <h3 ng-bind="dashboard.data.Table[0].cpc || 0"></h3>
                     <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpc / dashboard.data.Table[0].interacao | percentage: 1"></h4>
                     <p>CPC</p>
                 </div>
@@ -40,7 +40,7 @@
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-yellow">
                 <div class="inner">
-                    <h3 ng-bind="dashboard.data.Table[0].cpca"></h3>
+                    <h3 ng-bind="dashboard.data.Table[0].cpca || 0"></h3>
                     <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpca / dashboard.data.Table[0].cpc | percentage: 1"></h4>
                     <p>CPCA</p>
                 </div>
@@ -52,7 +52,7 @@
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3 ng-bind="dashboard.data.Table[0].negociacao"></h3>
+                    <h3 ng-bind="dashboard.data.Table[0].negociacao || 0"></h3>
                     <h4 class="pull-right" ng-bind="dashboard.data.Table[0].negociacao / dashboard.data.Table[0].cpca | percentage: 1"></h4>
                     <p>Negociação</p>
                 </div>
@@ -82,7 +82,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <line-chart dados="dashboard.data.Table5" titulo="Atendimento por Campanha" series-name="Qt Atendimento"></line-chart>
+            <line-chart dados="dashboard.data.Table5" titulo="Atendimento por Dia" series-name="Qt Atendimento"></line-chart>
         </div>
     </div>
 </div>
@@ -145,10 +145,17 @@
             <div class="form-group">
                 <label class="control-sidebar-subheading">
                     Atualizar
-                    <input type="checkbox" class="pull-right" checked="">
+                    <input type="checkbox" class="pull-right" ng-model="atualizar.check" ng-change="atualizarDash(atualizar.check)">
                 </label>
-
-                <label>A cada<input type="number" /> Segundos</label>
+            </div>
+            <div class="form-group">
+                <label class="control-sidebar-subheading">A cada quantos minutos</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="number" class="form-control pull-right" ng-model="atualizar.tempo"/>
+                </div>
             </div>
         </div>
         <!-- /.tab-pane -->

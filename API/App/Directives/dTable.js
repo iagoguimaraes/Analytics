@@ -14,8 +14,12 @@
         template: '<table><tfoot></tfoot></table>',
         link: function (scope, element) {
             scope.$watch('dados', function (dados) {
+
+                if (!dados.length)
+                    return false;
+
                 $(element[0]).DataTable({
-                    destroy: true,                 
+                    destroy: true,
                     data: dados,
                     columns: Object.keys(dados[0]).map(p => ({ title: p, data: p })),
                     language: {

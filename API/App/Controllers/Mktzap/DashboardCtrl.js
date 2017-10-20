@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, $filter, dadosPagina) {
+﻿angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, $filter, $interval, dadosPagina) {
 
     dadosPagina.titulo = 'Dashboard Mktzap'
 
@@ -9,6 +9,13 @@
         campanhas: "",
         setores: ""
     };
+
+    // atualização automática
+    $scope.atualizar = {
+        check: false,
+        tempo: 60
+    }
+    $scope.Timer = null;
 
     // carrega os filtros e colocar no scope
     $scope.carregarFiltros = function () {
@@ -33,6 +40,18 @@
         }, function error(r) {
             alert(r.data.Message);
         });
+    }
+
+    // iniciar ou parar atualização automatica do dashbaord
+    $scope.atualizarDash = function (v) {
+        if (v) {
+            $scope.Timer = $interval($scope.carregarDashboard, $scope.atualizar.tempo * 1000 * 60);
+        }
+        else {
+            if (angular.isDefined($scope.Timer)) {
+                $interval.cancel($scope.Timer);
+            }
+        }
     }
 
     $scope.carregarFiltros();
