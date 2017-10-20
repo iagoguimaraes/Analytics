@@ -3,9 +3,12 @@
     dadosPagina.titulo = 'Dashboard Mktzap'
 
     // filtros iniciais
+    let ontem = new Date();
+    ontem.setDate(ontem.getDate()-1);
+
     $scope.filtros = {
-        dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-        dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        dtini: $filter('date')(ontem, "yyyy-MM-dd"),
+        dtfim: $filter('date')(ontem, "yyyy-MM-dd"),
         campanhas: "",
         setores: ""
     };
@@ -31,12 +34,14 @@
 
     // obtem filtros do escopo e carrega os dados do dashboard
     $scope.carregarDashboard = function () {
+        dadosPagina.loading = true;
         $http({
             method: 'POST',
             url: "/api/mktzap/dashboard",
             data: $scope.filtros,
-        }).then(function success(r) {
+        }).then(function success(r) {            
             $scope.dashboard = r;
+            dadosPagina.loading = false;
         }, function error(r) {
             alert(r.data.Message);
         });

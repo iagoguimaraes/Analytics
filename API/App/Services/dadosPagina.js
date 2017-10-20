@@ -2,5 +2,6 @@
     return {
          titulo: ''
         ,descricao: ''
+        ,loading: false
     };
 });
