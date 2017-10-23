@@ -11,3 +11,9 @@
     $httpProvider.defaults.cache = false
 });
 
+// ao iniciar
+angular.module('app').run(["$locale", function ($locale) {
+    // formato de numero
+    $locale.NUMBER_FORMATS.GROUP_SEP = ".";
+    $locale.NUMBER_FORMATS.DECIMAL_SEP = ",";
+}]);
