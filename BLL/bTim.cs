@@ -22,16 +22,29 @@ namespace BLL
             }
         }
 
-        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim)
+        public DataSet DashboardFiltros()
         {
             try
             {
-                return new dTim().DashboardHoraHora(dtini,dtfim);
+                return new dTim().DashboardFiltros();
             }
             catch (Exception e)
             {
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+
+        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim, DataTable campanhas)
+        {
+            try
+            {
+                return new dTim().DashboardHoraHora(dtini,dtfim, campanhas);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }

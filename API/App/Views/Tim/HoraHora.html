@@ -99,7 +99,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <!-- Filtros -->
-        <div class="tab-pane active" id="control-sidebar-filters-tab">
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
             <!--DATA INCIAL-->
             <div class="form-group">
                 <label class="control-sidebar-subheading">Data Inicial</label>
@@ -120,6 +120,12 @@
                     </div>
                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                 </div>
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Campanhas</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashboardFiltros.data.Table"></select2>
             </div>
           
             <!--BOTÃO-->

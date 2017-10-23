@@ -27,7 +27,22 @@ namespace DAL
             }
         }
 
-        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim)
+        public DataSet DashboardFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                {
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
+        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim, DataTable campanhas)
         {
             try
             {
@@ -37,6 +52,7 @@ namespace DAL
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
 
                     return sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                 }
@@ -46,6 +62,8 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+
+
 
     }
 }
