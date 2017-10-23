@@ -21,5 +21,17 @@ namespace BLL
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+
+        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim)
+        {
+            try
+            {
+                return new dTim().DashboardHoraHora(dtini,dtfim);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
     }
 }

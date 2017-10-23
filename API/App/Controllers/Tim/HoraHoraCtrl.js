@@ -4,23 +4,15 @@
 
 
     // obtem filtros do escopo e carrega os dados do dashboard
-    $scope.carregarCubo = function () {
+    $scope.carregarDashboard = function () {
         dadosPagina.loading = true;
         $http({
             method: 'POST',
-            url: "/api/tim/cubo",
-            //data: $scope.filtros,
+            url: "/api/tim/dashboard/horahora",
+            data: { dtini: '2017-10-23', dtfim: '2017-10-23' },
         }).then(function success(r) {
-            //$scope.dashboard = r;
-            console.log(r.data.Table2);
-
-
-            let res = alasql('select d.disposition,sum(c.quantidade)qtd from ? c inner join ? d on d.id_disposition = c.id_disposition group by d.disposition', [r.data.Table6, r.data.Table2], function (res) {
-                console.log(res);
-            });
-            
-
-
+            //console.log(r.data);
+            $scope.dashboard = r;
 
             dadosPagina.loading = false;
         }, function error(r) {
@@ -29,6 +21,6 @@
     }
 
 
-    $scope.carregarCubo();
+    $scope.carregarDashboard();
 
 });

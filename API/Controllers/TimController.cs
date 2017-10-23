@@ -17,7 +17,7 @@ namespace API.Controllers
         [HttpPost]
         [Authorization]
         [GravarRequisicao]
-        public HttpResponseMessage Dashboard(FormDataCollection form)
+        public HttpResponseMessage Cubo(FormDataCollection form)
         {
             try
             {
@@ -30,5 +30,31 @@ namespace API.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/horahora")]
+        [HttpPost]
+        [Authorization]
+        [GravarRequisicao]
+        public HttpResponseMessage DashboardHoraHora(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                DataSet resultado = new bTim().DashboardHoraHora(dtini,dtfim);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+
+
+
     }
 }
