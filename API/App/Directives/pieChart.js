@@ -7,6 +7,7 @@
             titulo: '@',
             subtitulo: '@',
             height: '@',
+            innerSize: '@',
         },
         template: '<div></div>',
         link: function (scope, element) {
@@ -24,11 +25,13 @@
                     },
                     series: [{
                         name: scope.seriesName,
-                        data: dados.map(obj => ({ 'name': obj[Object.keys(obj)[0]], 'y': obj[Object.keys(obj)[1]] }))
+                        data: dados.map(obj => ({ 'name': obj[Object.keys(obj)[0]], 'y': obj[Object.keys(obj)[1]] })),
+                        innerSize: scope.innerSize,
                     }],
                     tooltip: {
                         pointFormat: '{point.y} (<b>{point.percentage:.1f}%</b>)'
                     },
+                    
                 });
             });
         }

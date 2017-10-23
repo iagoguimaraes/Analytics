@@ -1,4 +1,5 @@
-﻿<div ng-if="dashboard.status === 200">
+﻿<!-- DASHBAORD -->
+<div ng-if="dashboard.status === 200">
     <div class="row margin-bottom">
         <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
             <div class="small-box bg-gray">
@@ -7,7 +8,7 @@
                     <p>Discado</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-phone-square"></i>
+                    <i class="fa fa-phone"></i>
                 </div>
             </div>
         </div>
@@ -68,13 +69,89 @@
     </div>
 
     <div class="row margin-bottom">
-        <div class="col-xs-12 col-md-5">
-            <column-chart dados="dashboard.data.Table2" titulo="Chamadas por Campanha" series-name="Qt Chamadas"></column-chart>
-        </div>
         <div class="col-xs-12 col-md-7">
-            <pie-chart dados="dashboard.data.Table3" titulo="Finalização" series-name="Qt Chamadas"></pie-chart>
+            <pie-chart dados="dashboard.data.Table2" titulo="Finalização" series-name="Qt Chamadas" inner-size="60%"></pie-chart>
         </div>
+        <div class="col-xs-12 col-md-5">
+            <bar-chart dados="dashboard.data.Table3" titulo="Hit Rate por Rota" series-name="Hit Rate"></bar-chart>
+        </div>
+    </div>
+
+    <div>
+        <pie-chart dados="dashboard.data.Table4" titulo="Tipo de Telefone" series-name="Qt Chamadas"></pie-chart>
+    </div>
+
+    <div>
+        <column-chart dados="dashboard.data.Table5" titulo="Hit Rate por Tipo de Telefone" series-name="Hit Rate"></column-chart>
     </div>
 
 </div>
 
+
+
+<!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        <li><a data-target="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+          
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="carregarDashboard()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+        <!-- Configurações -->
+        <!-- Settings tab content -->
+        <div class="tab-pane" id="control-sidebar-settings-tab">
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    Atualizar
+                    <input type="checkbox" class="pull-right" ng-model="atualizar.check" ng-change="atualizarDash(atualizar.check)">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-sidebar-subheading">A cada quantos minutos</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="number" class="form-control pull-right" ng-model="atualizar.tempo" />
+                </div>
+            </div>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>
