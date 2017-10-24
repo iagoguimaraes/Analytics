@@ -20,7 +20,7 @@
                         data: dados,
                         columns: Object.keys(dados[0]).map(p => ({ title: p, data: p })),
                         language: {
-                            url: '/Content/Json/datatables-lang.json'
+                            url: '../Content/Json/datatables-lang.json'
                         },
                         info: scope.info,
                         paging: scope.paging,
