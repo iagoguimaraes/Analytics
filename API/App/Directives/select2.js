@@ -15,7 +15,8 @@
             // transforma array em array de objeto
             element.bind('change', function () {
                 let arrayObjt = ctrl.$modelValue.map(obj => ({ id: obj }));
-                ctrl.$setViewValue(JSON.stringify(arrayObjt));
+                let viewValue = arrayObjt.length ? JSON.stringify(arrayObjt) : null; // ou retorna lista com itens ou null (serializador C#)
+                ctrl.$setViewValue(viewValue);
             });
 
         }

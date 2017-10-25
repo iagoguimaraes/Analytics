@@ -50,7 +50,7 @@
         }).then(function success(r) {
             //console.log(r.data);
             $scope.dashboard = r;
-
+        
             dadosPagina.loading = false;
         }, function error(r) {
             alert(r.data.Message);
