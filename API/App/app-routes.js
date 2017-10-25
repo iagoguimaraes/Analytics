@@ -20,5 +20,10 @@
             controller: 'ctrl-tim-horahora',
         })
 
+       .when('/Tim/BTC', {
+           templateUrl: '/App/Views/Tim/BTC.html?v=' + new Date().getTime(),
+           controller: 'ctrl-tim-btc',
+       })
+
         .otherwise({ redirectTo: '/' });
 });
