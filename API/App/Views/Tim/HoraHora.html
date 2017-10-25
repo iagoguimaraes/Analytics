@@ -5,10 +5,14 @@
             <div class="small-box bg-gray">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].discado | number"></h3>
+                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].discado_pa | number"></h4>
                     <p>Discado</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-phone"></i>
+                </div>
+                <div class="small-box-footer">
+                    PA: <span ng-bind="dashboard.data.Table[0].pa"></span>
                 </div>
             </div>
         </div>
@@ -16,63 +20,114 @@
             <div class="small-box bg-aqua">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].contato | number"></h3>
-                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].contato / dashboard.data.Table[0].discado | percentage: 1"></h4>
+                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].contato_pa | number"></h4>
                     <p>Contato</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-headphones"></i>
                 </div>
+                <div class="small-box-footer" ng-bind="dashboard.data.Table[0].contato / dashboard.data.Table[0].discado | percentage: 1"></div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-red">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].cpc | number"></h3>
-                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpc / dashboard.data.Table[0].contato | percentage: 1"></h4>
+                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpc_pa | number"></h4>
                     <p>CPC</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-male"></i>
                 </div>
+                <div class="small-box-footer" ng-bind="dashboard.data.Table[0].cpc / dashboard.data.Table[0].contato | percentage: 1"></div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-yellow">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].cpca | number"></h3>
-                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpca / dashboard.data.Table[0].cpc | percentage: 1"></h4>
+                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpca_pa | number"></h4>
                     <p>CPCA</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-street-view"></i>
                 </div>
+                <div class="small-box-footer" ng-bind="dashboard.data.Table[0].cpca / dashboard.data.Table[0].cpc | percentage: 1"></div>
             </div>
         </div>
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3 ng-bind="dashboard.data.Table[0].promessa | number"></h3>
-                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].promessa / dashboard.data.Table[0].cpca | percentage: 1"></h4>
+                    <h4 class="pull-right" ng-bind="dashboard.data.Table[0].promessa_pa | number"></h4>
                     <p>Promessa</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-thumbs-o-up"></i>
                 </div>
+                <div class="small-box-footer" ng-bind="dashboard.data.Table[0].promessa / dashboard.data.Table[0].cpca | percentage: 1"></div>
             </div>
         </div>
     </div>
 
     <div class="row margin-bottom">
         <div class="col-xs-12 margin-bottom">
-            <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table1" paging="false" scroll-collapse="true" searching="false"></d-table>
+            <h3 class="text-center">Análise por Hora</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.data.Table1">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Discado</th>
+                            <th>Contato</th>
+                            <th>CPC</th>
+                            <th>CPCA</th>
+                            <th>Promessa</th>
+                            <th>Hit Rate</th>
+                            <th>Tx Loc</th>
+                            <th>Tx Apv</th>
+                            <th>Conversão</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="hora in dashboard.data.Table1">
+                            <td>{{hora.hora}}</td>
+                            <td>{{hora.discado | number}}</td>
+                            <td>{{hora.contato | number}}</td>
+                            <td>{{hora.cpc | number}}</td>
+                            <td>{{hora.cpca | number}}</td>
+                            <td>{{hora.promessa | number}}</td>
+                            <td>{{hora.contato / hora.discado | percentage:1}}</td>
+                            <td>{{hora.cpc / hora.contato | percentage:1}}</td>
+                            <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
+                            <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th>{{dashboard.data.Table[0].discado | number}}</th>
+                            <th>{{dashboard.data.Table[0].contato | number}}</th>
+                            <th>{{dashboard.data.Table[0].cpc | number}}</th>
+                            <th>{{dashboard.data.Table[0].cpca | number}}</th>
+                            <th>{{dashboard.data.Table[0].promessa | number}}</th>
+                            <th>{{dashboard.data.Table[0].contato / dashboard.data.Table[0].discado | percentage: 1}}</th>
+                            <th>{{dashboard.data.Table[0].cpc / dashboard.data.Table[0].contato | percentage: 1}}</th>
+                            <th>{{dashboard.data.Table[0].cpca / dashboard.data.Table[0].cpc | percentage: 1}}</th>
+                            <th>{{dashboard.data.Table[0].promessa / dashboard.data.Table[0].cpca | percentage: 1}}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>            
         </div>
     </div>
 
+    
     <div class="row margin-bottom">
         <div class="col-xs-12 col-md-7 margin-bottom">
             <h3 class="text-center">Diagrama de Finalizações</h3>
             <sankey-chart dados="dashboard.data.Table2" series-name="Qt Tabulação"></sankey-chart>
-        </div>    
+        </div>
         <div class="col-xs-12 col-md-5 margin-bottom">
             <h3 class="text-center">Finalizações do Discador</h3>
             <pie-chart dados="dashboard.data.Table3" series-name="Qt Chamadas" inner-size="60%"></pie-chart>
@@ -127,7 +182,7 @@
                 <label class="control-sidebar-subheading">Campanhas</label>
                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashboardFiltros.data.Table"></select2>
             </div>
-          
+
             <!--BOTÃO-->
             <div class="form-group">
                 <button type="button" class="btn btn-primary" ng-click="carregarDashboard()">Carregar Dados</button>
