@@ -4,8 +4,6 @@
         replace: true,
         scope: {
             dados: '=',
-            titulo: '@',
-            subtitulo: '@',
             height: '@',
             yAxisTitle: '@',
             seriesName: '@',           
@@ -16,12 +14,6 @@
                 Highcharts.chart(element[0], {
                     chart: {
                         type: 'column'
-                    },
-                    title: {
-                        text: scope.titulo
-                    },
-                    subtitle: {
-                        text: scope.subtitulo
                     },
                     xAxis: {
                         categories: dados.map(obj => obj[Object.keys(obj)[0]]),

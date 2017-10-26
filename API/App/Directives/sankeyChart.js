@@ -4,8 +4,6 @@
         replace: true,
         scope: {
             dados: '=',
-            titulo: '@',
-            subtitulo: '@',
             height: '@',
             seriesName: '@',
         },
@@ -16,12 +14,6 @@
                 Highcharts.chart(element[0], {
                     chart: {
                         height: scope.height,
-                    },
-                    title: {
-                        text: scope.titulo
-                    },
-                    subtitle: {
-                        text: scope.subtitulo
                     },
                     series: [{
                         keys: ['from', 'to', 'weight'],

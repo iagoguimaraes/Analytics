@@ -51,7 +51,7 @@
             url: "/api/tim/dashboard/btc",
             data: $scope.filtros,
         }).then(function success(r) {
-            $scope.dashboard.dados = r.data;
+            $scope.dashboard.r = r;
 
             $scope.carregarMapa();
 
@@ -63,7 +63,7 @@
 
     // carrega o mapa de acordo com o indicador escolhido
     $scope.carregarMapa = function () {
-        let dados = $scope.dashboard.dados.Table;        
+        let dados = $scope.dashboard.r.data.Table1;        
         switch ($scope.indicador_mapa) {
             case 'hitrate':
                 $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.contato * 100 / obj.discado).toFixed(1) }));

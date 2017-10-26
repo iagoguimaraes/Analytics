@@ -4,8 +4,6 @@
         replace: true,
         scope: {
             dados: '=',
-            titulo: '@',
-            subtitulo: '@',
             height: '@',
             innerSize: '@',
         },
@@ -16,12 +14,6 @@
                     chart: {
                         type: 'pie',
                         height: scope.height
-                    },
-                    title: {
-                        text: scope.titulo
-                    },
-                    subtitle: {
-                        text: scope.subtitulo
                     },
                     series: [{
                         name: scope.seriesName,
