@@ -3,10 +3,16 @@
     dadosPagina.descricao = 'Tim'
 
     $scope.dashboard = {};
-    $scope.indicador_mapa = 'hitrate'
+    $scope.mapa = {
+        indicador: 'hitrate'
+    }
+
+    // filtros iniciais
+    let dtini = new Date();
+    dtini.setDate(dtini.getDate() - 7);
 
     $scope.filtros = {
-        dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+        dtini: $filter('date')(dtini, "yyyy-MM-dd"),
         dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
         campanhas: null,
     };
@@ -53,6 +59,14 @@
         }).then(function success(r) {
             $scope.dashboard.r = r;
 
+            $scope.dashboard.hitratePorHora = r.data.Table.map(obj => ({ hora: obj.hora_nome, value: (obj.contato * 100 / obj.discado).toFixed(1)/1 }));
+            $scope.dashboard.txlocPorHora = r.data.Table.map(obj => ({ hora: obj.hora_nome, value: (obj.cpc * 100 / obj.contato).toFixed(1)/1 }));
+            $scope.dashboard.conversaoPorHora = r.data.Table.map(obj => ({ hora: obj.hora_nome, value: (obj.promessa * 100 / obj.cpca).toFixed(1)/1 }));
+
+            $scope.dashboard.hitratePorRota = r.data.Table2.map(obj => ({ hora: obj.rota, value: (obj.contato * 100 / obj.discado).toFixed(1) / 1 }));
+            $scope.dashboard.quantidadePorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: obj.discado }));
+            $scope.dashboard.hitratePorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: (obj.contato * 100 / obj.discado).toFixed(1) / 1 }));
+
             $scope.carregarMapa();
 
             dadosPagina.loading = false;
@@ -63,8 +77,8 @@
 
     // carrega o mapa de acordo com o indicador escolhido
     $scope.carregarMapa = function () {
-        let dados = $scope.dashboard.r.data.Table1;        
-        switch ($scope.indicador_mapa) {
+        let dados = $scope.dashboard.r.data.Table1;
+        switch ($scope.mapa.indicador) {
             case 'hitrate':
                 $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.contato * 100 / obj.discado).toFixed(1) }));
                 break;
@@ -78,7 +92,7 @@
                 $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
                 break;
             default:
-                $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.indicador_mapa] }));
+                $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
         }
     }
 

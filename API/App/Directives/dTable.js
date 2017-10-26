@@ -14,7 +14,7 @@
         template: '<table><tfoot></tfoot></table>',
         link: function (scope, element) {
             scope.$watch('dados', function (dados) {
-                if (dados) {
+                if (dados | dados.length) {
                     $(element[0]).DataTable({
                         destroy: true,
                         data: dados,
