@@ -1,5 +1,4 @@
 ﻿using BLL;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -58,11 +57,33 @@ namespace API.Controllers
         {
             try
             {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string campanhas = form["campanhas"];
 
                 DataSet resultado = new bTim().DashboardHoraHora(dtini,dtfim, campanhas);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/btc")]
+        [HttpPost]
+        [Authorization]
+        [GravarRequisicao]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string campanhas = form["campanhas"];
+
+                DataSet resultado = new bTim().DashboardBTC(dtini, dtfim, campanhas);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }

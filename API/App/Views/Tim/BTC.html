@@ -1,7 +1,97 @@
 ﻿
+
+
 <div class="row margin-bottom">
     <div class="col-xs-12 margin-bottom">
-        <mapa-brasil style="height: 500px" width="100%" dados="1"></mapa-brasil>
+        <div class="form-control">
+            <select ng-model="indicador_mapa" ng-change="carregarMapa()">
+                <option value="hitrate">Hit Rate</option>
+                <option value="txloc">Tx Loc</option>
+                <option value="txapv">Tx Apv</option>
+                <option value="conversao">Conversão</option>
+                <option value="discado">Discado</option>
+                <option value="contato">Contato</option>
+                <option value="cpc">CPC</option>
+                <option value="cpca">CPCA</option>
+                <option value="promessa">Promessa</option>
+            </select>
+        </div>
+        <<mapa-brasil style="height: 500px" width="100%" dados="dashboard.mapa"></mapa-brasil>
     </div>
 </div>
 
+
+
+
+<!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        <li><a data-target="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Campanhas</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashboardFiltros.data.Table"></select2>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="carregarDashboard()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+        <!-- Configurações -->
+        <!-- Settings tab content -->
+        <div class="tab-pane" id="control-sidebar-settings-tab">
+            <div class="form-group">
+                <label class="control-sidebar-subheading">
+                    Atualizar
+                    <input type="checkbox" class="pull-right" ng-model="atualizar.check" ng-change="atualizarDash(atualizar.check)">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-sidebar-subheading">A cada quantos minutos</label>
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="number" class="form-control pull-right" ng-model="atualizar.tempo" />
+                </div>
+            </div>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>
