@@ -9,16 +9,8 @@
         link: function (scope, element) {
             scope.$watch('dados', function (dados) {
 
-                AmCharts.makeChart(element[0], {
-                    type: "map",
-                    theme: "light",
-                    colorSteps: 10,
-                    dataProvider: {
-                        mapURL: "/App/Content/Libs/ammap/maps/svg/brazilLow.svg",
-                        getAreasFromMap: true,
-                        zoomLevel: 0.9,
-                        areas: [
-                            { id: 'BR-AC', value: 500 },
+                dados = [
+                            { id: 'BR-AC', value: 300 },
                             { id: 'BR-AL', value: 500 },
                             { id: 'BR-AM', value: 500 },
                             { id: 'BR-AP', value: 500 },
@@ -44,8 +36,18 @@
                             { id: 'BR-SC', value: 500 },
                             { id: 'BR-SE', value: 500 },
                             { id: 'BR-SP', value: 500 },
-                            { id: 'BR-TO', value: 500 },
-                        ]
+                            { id: 'BR-TO', value: 800 },
+                ];
+
+                AmCharts.makeChart(element[0], {
+                    type: "map",
+                    theme: "light",
+                    colorSteps: 10,
+                    dataProvider: {
+                        mapURL: "/App/Content/Libs/ammap/maps/svg/brazilLow.svg",
+                        getAreasFromMap: true,
+                        zoomLevel: 0.9,
+                        areas: dados
                     },
                     areasSettings: {
                         autoZoom: true,
@@ -53,8 +55,8 @@
                     },
                     valueLegend: {
                         right: 10,
-                        minValue: "Mínimo",
-                        maxValue: "Máximo"
+                        minValue: dados.reduce((min,uf) => (uf.value < min ? uf.value : min),Number.MAX_VALUE),
+                        maxValue: dados.reduce((max, uf) => (uf.value > max ? uf.value : max),Number.MIN_VALUE),
                     },
                     zoomControl: {
                         minZoomLevel: 0.9
