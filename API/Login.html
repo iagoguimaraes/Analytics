@@ -6,13 +6,14 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link href="App/Content/Styles/bootstrap.min.css" rel="stylesheet" />
-    <link href="App/Content/Styles/adminlte.css" rel="stylesheet" />
-    <link href="App/Content/Styles/google-fonts.css" rel="stylesheet" />
+    <link href="/App/Content/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="/App/Content/Styles/adminlte.css" rel="stylesheet" />
+    <link href="/App/Content/Styles/google-fonts.css" rel="stylesheet" />
+    <link href="/App/Content/Styles/loading.css" rel="stylesheet" />
 
-    <script src="App/Content/Scripts/jquery.min.js"></script>
-    <script src="App/Content/Scripts/bootstrap.min.js"></script>
-    <script src="App/Content/Scripts/angular.min.js"></script>
+    <script src="/App/Content/Scripts/jquery.min.js"></script>
+    <script src="/App/Content/Scripts/bootstrap.min.js"></script>
+    <script src="/App/Content/Scripts/angular.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR"></script>
 
     <style>
@@ -37,7 +38,7 @@
         <div class="login-box">
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <p class="login-box-msg">Entre com seu login e senha</p>
+                <p class="login-box-msg">Entre com seu login e senha {{dadosPagina.loading}}</p>
                 <form name="loginForm" autocomplete="off">
                     <div class="form-group has-feedback">
                         <input type="text" class="form-control" placeholder="Usuário" ng-model="usuario.login" ng-required="true">
@@ -68,11 +69,18 @@
     </div>
     <!-- /.login-box -->
 
+    <!--LOADING-->
+    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
+
     <script>      
         localStorage.removeItem('token');
 
         var app = angular.module('analytics', []);
         app.controller('loginController', function ($scope, $http, $window) {
+
+            $scope.dadosPagina = {
+                loading: false
+            }
 
             $scope.usuario = {
                 login: '',
@@ -86,6 +94,8 @@
             $window.imNotARobot = $scope.imNotARobot;
 
             $scope.logar = function (usuario) {
+                $scope.dadosPagina.loading = true;
+
                 delete $scope.usuario;
                 grecaptcha.reset();
 
@@ -98,7 +108,9 @@
                         $window.location.href = '/';
                     },
                     error: function (r) {
-                        alert(r.responseText);
+                        $scope.dadosPagina.loading = false;
+                        $scope.$apply();
+                        alert(r.responseText);                       
                     }
                 });
             }
