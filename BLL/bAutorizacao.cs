@@ -8,6 +8,7 @@ using System.Data;
 using DAL;
 using Newtonsoft.Json;
 using System.Net;
+using System.DirectoryServices.AccountManagement;
 
 namespace BLL
 {
@@ -19,13 +20,21 @@ namespace BLL
         public string ObterToken(string login, string senha)
         {
             try
-            {
-                // faz logon com login e senha
+            {                           
+                // verica as credencias do AD
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "CREDITCASH"))
+                {
+                    bool isValid = pc.ValidateCredentials(login, senha);
+                    if (!isValid)
+                        throw new Exception("Usuário e/ou senha incorreto(s)");
+                }
+
+                // obtem o usuário nos cadastro do analytics
                 dAutorizaocao dal = new dAutorizaocao();
-                DataTable dtUsuario = dal.ObterUsuario(login, senha);
+                DataTable dtUsuario = dal.ObterUsuario(login, new EncryptHelper().Encrypt(senha));
 
                 if (dtUsuario.Rows.Count == 0)
-                    throw new Exception("Usuário e/ou senha incorreto(s)");
+                    throw new Exception("Usuário não cadastrado ou desativado no Analytics");
 
                 // insere um registro de sessao
                 Usuario usuario = new Usuario(dtUsuario.Rows[0]);
