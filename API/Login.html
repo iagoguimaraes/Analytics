@@ -13,6 +13,7 @@
     <script src="App/Content/Scripts/jquery.min.js"></script>
     <script src="App/Content/Scripts/bootstrap.min.js"></script>
     <script src="App/Content/Scripts/angular.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR"></script>
 
     <style>
         .bg {
@@ -38,7 +39,6 @@
             <div class="login-box-body">
                 <p class="login-box-msg">Entre com seu login e senha</p>
                 <form name="loginForm" autocomplete="off">
-                    <div class="g-recaptcha" data-sitekey="your_site_key"></div>
                     <div class="form-group has-feedback">
                         <input type="text" class="form-control" placeholder="Usuário" ng-model="usuario.login" ng-required="true">
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -47,7 +47,7 @@
                         <input type="password" class="form-control" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
-                    <div class="row">
+                    <div class="row margin-bottom">
                         <div class="col-xs-8">
                         </div>
                         <!-- /.col -->
@@ -56,21 +56,39 @@
                         </div>
                         <!-- /.col -->
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="g-recaptcha" data-callback="imNotARobot" data-sitekey="6LdmFjYUAAAAABiYObPUYcZ90GZfHhQWIwUaHuTr"></div>
+                        </div>                        
+                    </div>                    
                 </form>
             </div>
             <!-- /.login-box-body -->
         </div>
     </div>
     <!-- /.login-box -->
-    <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR" async defer></script>
-    <script>
 
+    <script>      
         localStorage.removeItem('token');
 
         var app = angular.module('analytics', []);
         app.controller('loginController', function ($scope, $http, $window) {
+
+            $scope.usuario = {
+                login: '',
+                senha: '',
+                recaptcha: ''
+            };
+
+            $scope.imNotARobot = function () {
+                $scope.usuario.recaptcha = (grecaptcha.getResponse());
+            };
+            $window.imNotARobot = $scope.imNotARobot;
+
             $scope.logar = function (usuario) {
                 delete $scope.usuario;
+                grecaptcha.reset();
+
                 $.ajax({
                     type: "POST",
                     url: "/api/autenticacao/logar",
