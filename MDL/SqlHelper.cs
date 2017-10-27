@@ -129,6 +129,30 @@ namespace MDL
                 cmd.Dispose();
             }
         }
+        public void ExecuteProcedure(string Procedure, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
+            cmd.CommandTimeout = 18000;           
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
 
         #endregion
 

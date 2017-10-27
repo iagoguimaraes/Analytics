@@ -13,6 +13,7 @@ namespace MDL
         public DateTime data_criacao { get; set; }
         public int id_usuario { get; set; }
         public int id_grupo { get; set; }
+        public DateTime data_expiracao { get; set; }
 
         public override string ToString()
         {
@@ -22,7 +23,9 @@ namespace MDL
                 ";", 
                 id_usuario.ToString(), 
                 ";",
-                id_grupo.ToString());
+                id_grupo.ToString(),
+                ";",
+                data_expiracao.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         public Sessao(DataRow row)
@@ -31,6 +34,7 @@ namespace MDL
             data_criacao = Convert.ToDateTime(row["data_criacao"]);
             id_usuario = Convert.ToInt32(row["id_usuario"]);
             id_grupo = Convert.ToInt32(row["id_grupo"]);
+            data_expiracao = Convert.ToDateTime(row["data_expiracao"]);
         }
 
         public Sessao(string sessao)
@@ -40,6 +44,7 @@ namespace MDL
             data_criacao = Convert.ToDateTime(dados[1]);
             id_usuario = Convert.ToInt32(dados[2]);
             id_grupo = Convert.ToInt32(dados[3]);
+            data_expiracao = Convert.ToDateTime(dados[4]);
         }
 
     }

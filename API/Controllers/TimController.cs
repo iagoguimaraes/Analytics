@@ -15,8 +15,9 @@ namespace API.Controllers
     {
         [Route("cubo")]
         [HttpPost]
-        [Authorization]
-        [GravarRequisicao]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
         public HttpResponseMessage Cubo(FormDataCollection form)
         {
             try
@@ -33,8 +34,8 @@ namespace API.Controllers
 
         [Route("dashboard/filtros")]
         [HttpGet]
-        [Authorization]
-        [GravarRequisicao]
+        [Autenticar]
+        [Autorizar]
         public HttpResponseMessage DashboardFiltros()
         {
             try
@@ -51,8 +52,9 @@ namespace API.Controllers
 
         [Route("dashboard/horahora")]
         [HttpPost]
-        [Authorization]
-        [GravarRequisicao]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
         public HttpResponseMessage DashboardHoraHora(FormDataCollection form)
         {
             try
@@ -73,8 +75,9 @@ namespace API.Controllers
 
         [Route("dashboard/btc")]
         [HttpPost]
-        [Authorization]
-        [GravarRequisicao]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
         public HttpResponseMessage DashboardBTC(FormDataCollection form)
         {
             try

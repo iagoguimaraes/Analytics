@@ -24,11 +24,13 @@ namespace API.Controllers
                 string senha = form["senha"];
                 string recaptcha = form["recaptcha"];
 
-                if (!Validate(recaptcha))
+                bAutorizacao bll = new bAutorizacao();
+
+                if (!bll.ValidarCaptcha(recaptcha))
                     throw new Exception("Captcha não fornecido");
 
-                Sessao sessao = new bAutorizacao().InserirSessao(login, senha);
-                string token = new EncryptHelper().Encrypt(sessao.ToString());
+                string token = bll.ObterToken(login, senha);
+
                 return Request.CreateResponse(HttpStatusCode.OK, token);
             }
             catch (Exception e)
@@ -37,27 +39,11 @@ namespace API.Controllers
             }
         }
 
-        private bool Validate(string encodedResponse)
-        {
-            if (string.IsNullOrEmpty(encodedResponse)) return false;
-
-            var secret = "6LdmFjYUAAAAALBVVP4mgi7Jvfj8hSP14XgKXUQw";
-            if (string.IsNullOrEmpty(secret)) return false;
-
-            WebClient client = new WebClient();
-            WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
-            proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
-            client.Proxy = proxy;
-
-            var googleReply = client.DownloadString(
-                $"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={encodedResponse}");
-
-            return JsonConvert.DeserializeObject<RecaptchaResponse>(googleReply).Success;
-        }
-
         [Route("getPaginas")]
         [HttpGet]
-        [Authorization]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
         public HttpResponseMessage GetPagina()
         {
             try

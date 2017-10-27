@@ -16,8 +16,9 @@ namespace API.Controllers
     {
         [Route("dashboard")]
         [HttpPost]
-        [Authorization]
-        [GravarRequisicao]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
         public HttpResponseMessage Dashboard(FormDataCollection form)
         {
             try
@@ -39,6 +40,8 @@ namespace API.Controllers
 
         [Route("filtros")]
         [HttpGet]
+        [Autenticar]
+        [Autorizar]
         public HttpResponseMessage Filtros(FormDataCollection form)
         {
             try
