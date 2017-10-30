@@ -60,9 +60,13 @@
             $scope.dashboard.txlocPorHora = r.data.Table.map(obj => ({ hora: obj.hora_nome, value: (obj.cpc * 100 / obj.contato).toFixed(1)/1 }));
             $scope.dashboard.conversaoPorHora = r.data.Table.map(obj => ({ hora: obj.hora_nome, value: (obj.promessa * 100 / obj.cpca).toFixed(1)/1 }));
 
+            $scope.dashboard.quantidadePorRota = r.data.Table2.map(obj => ({ hora: obj.rota, value: obj.discado }));
             $scope.dashboard.hitratePorRota = r.data.Table2.map(obj => ({ hora: obj.rota, value: (obj.contato * 100 / obj.discado).toFixed(1) / 1 }));
+            $scope.dashboard.txlocPorRota = r.data.Table2.map(obj => ({ hora: obj.rota, value: (obj.cpc * 100 / obj.contato).toFixed(1) / 1 }));
+
             $scope.dashboard.quantidadePorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: obj.discado }));
             $scope.dashboard.hitratePorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: (obj.contato * 100 / obj.discado).toFixed(1) / 1 }));
+            $scope.dashboard.txlocPorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: (obj.cpc * 100 / obj.contato).toFixed(1) / 1 }));
 
             $scope.carregarMapa();
 
