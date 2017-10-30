@@ -28,23 +28,17 @@
             url: "/api/mktzap/filtros",
         }).then(function success(r) {
             $scope.dadosFiltros = r;
-        }, function error(r) {
-            alert(r.data.Message);
         });
     }
 
     // obtem filtros do escopo e carrega os dados do dashboard
     $scope.carregarDashboard = function () {
-        dadosPagina.loading = true;
         $http({
             method: 'POST',
             url: "/api/mktzap/dashboard",
             data: $scope.filtros,
         }).then(function success(r) {            
             $scope.dashboard = r;
-            dadosPagina.loading = false;
-        }, function error(r) {
-            alert(r.data.Message);
         });
     }
 

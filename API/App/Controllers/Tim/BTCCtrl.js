@@ -43,15 +43,12 @@
             url: "/api/tim/dashboard/filtros",
         }).then(function success(r) {
             $scope.dashboardFiltros = r;
-        }, function error(r) {
-            alert(r.data.Message);
         });
     }
 
 
     // obtem filtros do escopo e carrega os dados do dashboard
     $scope.carregarDados = function () {
-        dadosPagina.loading = true;
         $http({
             method: 'POST',
             url: "/api/tim/dashboard/btc",
@@ -69,9 +66,6 @@
 
             $scope.carregarMapa();
 
-            dadosPagina.loading = false;
-        }, function error(r) {
-            alert(r.data.Message);
         });
     }
 

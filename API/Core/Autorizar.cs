@@ -31,14 +31,14 @@ namespace API
                 bool autorizado = bll.AcessoRecurso(sessao.id_grupo, path, out id_recurso);
 
                 if(!autorizado)
-                    throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                 // armazena o id do recurso na requisição
                 actionContext.Request.Properties["id_recurso"] = id_recurso;
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
         }
     }

@@ -9,13 +9,6 @@
         url: "/api/autenticacao/getPaginas",
     }).then(function success(r) {
         $scope.paginas = formatarMenu(r.data);
-    }, function error(r) {
-        if (r.status === 401) {
-            $window.location.href = '/Login.html';
-        }
-        else{
-            alert(r.data.Message);
-        }    
     });
 
     // formata o menu hierarquicamente para usar no ng-repeat

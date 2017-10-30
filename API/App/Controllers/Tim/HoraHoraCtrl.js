@@ -34,26 +34,18 @@
             url: "/api/tim/dashboard/filtros",
         }).then(function success(r) {
             $scope.dashboardFiltros = r;
-        }, function error(r) {
-            alert(r.data.Message);
         });
     }
 
 
     // obtem filtros do escopo e carrega os dados do dashboard
     $scope.carregarDashboard = function () {
-        dadosPagina.loading = true;
         $http({
             method: 'POST',
             url: "/api/tim/dashboard/horahora",
             data: $scope.filtros,
         }).then(function success(r) {
-            //console.log(r.data);
-            $scope.dashboard = r;
-        
-            dadosPagina.loading = false;
-        }, function error(r) {
-            alert(r.data.Message);
+            $scope.dashboard = r;        
         });
     }
 
