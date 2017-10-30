@@ -23,10 +23,15 @@
                             data: dados.map(obj =>[obj['de'], obj['para'], obj['qtd']]),
                             type: 'sankey',
                             name: scope.seriesName
-                        }]
+                        }],
+                        tooltip: {
+                            pointFormatter: function () {
+                                return this.fromNode.name + ' → ' + this.toNode.name + ' (' + (this.weight * 100 / this.fromNode.sum).toFixed(1) + '%)'
+                            }
+                        },
 
                     });
-                }               
+                }
             });
         }
     }
