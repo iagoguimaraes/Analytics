@@ -33,7 +33,8 @@ namespace DAL
             {
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    //return sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_filtros");
                 }
             }
             catch (Exception e)
@@ -54,7 +55,8 @@ namespace DAL
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("campanhas", campanhas);
 
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    //return sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_horahora", parametros);
                 }
             }
             catch (Exception e)
@@ -75,7 +77,8 @@ namespace DAL
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("campanhas", campanhas);
 
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    //return sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_btc", parametros);
                 }
             }
             catch (Exception e)
