@@ -1,7 +1,8 @@
-﻿angular.module('app').config(function ($httpProvider) {
+﻿angular.module('app').config(function ($httpProvider, $windowProvider) {
 
     // se não tiver token na sessao redireciona para pagina de login
     if (localStorage.getItem('token') === null) {
+        let $window = $windowProvider.$get();
         $window.location.href = 'Login.html'
     }
 
