@@ -25,5 +25,10 @@
            controller: 'ctrl-tim-btc',
        })
 
+       .when('/Riachuelo/HoraHora', {
+           templateUrl: '/App/Views/Riachuelo/HoraHora.html?v=' + new Date().getTime(),
+           controller: 'ctrl-riachuelo-horahora',
+       })
+
         .otherwise({ redirectTo: '/' });
 });
