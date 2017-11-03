@@ -1,0 +1,116 @@
+﻿<div ng-if="dashboard.r.status === 200">
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-6 margin-bottom">
+            <h3 class="text-center">Análise por Hora</h3>
+            <column-chart dados="dashboard.hitratePorHora" height="200" series-name="Hit Rate"></column-chart>
+            <column-chart dados="dashboard.txlocPorHora" height="200" series-name="Tx Loc"></column-chart>
+            <column-chart dados="dashboard.conversaoPorHora" height="200" series-name="Conversão"></column-chart>
+        </div>
+        <div class="col-xs-12 col-md-6 margin-bottom">
+            <h3>
+                Análise por Região
+                <small class="pull-right">
+                    <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                        <option value="hitrate">Hit Rate</option>
+                        <option value="txloc">Tx Loc</option>
+                        <option value="txapv">Tx Apv</option>
+                        <option value="conversao">Conversão</option>
+                        <option value="discado">Discado</option>
+                        <option value="contato">Contato</option>
+                        <option value="cpc">CPC</option>
+                        <option value="cpca">CPCA</option>
+                        <option value="promessa">Promessa</option>
+                    </select>
+                </small>
+            </h3>
+            <mapa-brasil style="height: 600px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+        </div>
+    </div>
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Volume por Rota</h4>
+            <pie-chart dados="dashboard.quantidadePorRota" height="300" series-name="Qt Chamada"></pie-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Hit Rate por Rota</h4>
+            <bar-chart dados="dashboard.hitratePorRota" height="300" series-name="Hit Rate"></bar-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Conversão por Rota</h4>
+            <column-chart dados="dashboard.txlocPorRota" height="300" series-name="Tx Loc"></column-chart>
+        </div>
+    </div>
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Volume por Tipo de Telefone</h4>
+            <pie-chart dados="dashboard.quantidadePorTel" height="300" series-name="Qt Chamada"></pie-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Hit Rate por Tipo de Telefone</h4>
+            <bar-chart dados="dashboard.hitratePorTel" height="300" series-name="Hit Rate"></bar-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <h4 class="text-center">Conversão por Tipo de Telefone</h4>
+            <column-chart dados="dashboard.txlocPorTel" height="300" series-name="Tx Loc"></column-chart>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>       
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Carteiras</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashboardFiltros.data.Table"></select2>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="carregarDados()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+        
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>

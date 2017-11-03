@@ -30,5 +30,10 @@
            controller: 'ctrl-riachuelo-horahora',
        })
 
+       .when('/Riachuelo/BTC', {
+           templateUrl: '/App/Views/Riachuelo/BTC.html?v=' + new Date().getTime(),
+           controller: 'ctrl-riachuelo-btc',
+       })
+
         .otherwise({ redirectTo: '/' });
 });

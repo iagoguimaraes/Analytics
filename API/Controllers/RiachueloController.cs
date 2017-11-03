@@ -54,5 +54,28 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/btc")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string carteiras = form["carteiras"];
+
+                DataSet resultado = new bRiachuelo().DashboardBTC(dtini, dtfim, carteiras);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
