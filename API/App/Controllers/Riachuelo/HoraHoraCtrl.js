@@ -32,8 +32,10 @@
             $scope.dashboard.status = r.status;
             $scope.dashboard.resumo = data.Table[0];
             $scope.dashboard.carteiraativa = data.Table1[0];
-            $scope.dashboard.horahora = data.Table2;
-            $scope.dashboard.diagrama = data.Table3;
+            $scope.dashboard.carteira = data.Table2;
+            $scope.dashboard.horahora = data.Table3;
+            $scope.dashboard.diagrama = data.Table4;
+            $scope.dashboard.discador = data.Table5;
         });
     }
 
