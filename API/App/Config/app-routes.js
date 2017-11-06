@@ -35,5 +35,10 @@
            controller: 'ctrl-riachuelo-btc',
        })
 
+       .when('/Riachuelo/Producao', {
+           templateUrl: '/App/Views/Riachuelo/Producao.html?v=' + new Date().getTime(),
+           controller: 'ctrl-riachuelo-producao',
+       })
+
         .otherwise({ redirectTo: '/' });
 });

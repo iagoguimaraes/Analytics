@@ -13,10 +13,10 @@
                         type: "serial",
                         theme: "light",
                         dataProvider: dados,
-                        categoryField: "hora",
+                        categoryField: Object.keys(dados[0])[0],
                         graphs: [
                             {
-                                valueField: "promessa",
+                                valueField: Object.keys(dados[0])[1],
                                 bullet: "round",
                                 dashLength: 2,
                                 bulletSize: 15,

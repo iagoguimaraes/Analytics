@@ -77,5 +77,28 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/producao")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducao(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string carteiras = form["carteiras"];
+
+                DataSet resultado = new bRiachuelo().DashboardProducao(dtini, dtfim, carteiras);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
