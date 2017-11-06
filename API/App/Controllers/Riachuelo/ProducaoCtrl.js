@@ -62,7 +62,6 @@
             default:
                 $scope.dashboard.grafico = dados.map(obj => ({ data: obj.data, value: obj[$scope.grafico.indicador] }));
         }
-        console.log($scope.dashboard.grafico);
     }
 
     $scope.carregarDashboard();
