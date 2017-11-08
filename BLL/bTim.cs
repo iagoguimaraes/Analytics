@@ -67,5 +67,21 @@ namespace BLL
             }
         }
 
+        public DataSet DashboardProducao(string dtini, string dtfim, string filas)
+        {
+            try
+            {
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(dtfim);
+                DataTable _filas = JsonConvert.DeserializeObject<DataTable>(filas);
+
+                return new dTim().DashboardProducao(_dtini, _dtfim, _filas);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }

@@ -25,6 +25,11 @@
            controller: 'ctrl-tim-btc',
        })
 
+       .when('/Tim/Producao', {
+                   templateUrl: '/App/Views/Tim/Producao.html?v=' + new Date().getTime(),
+                   controller: 'ctrl-tim-producao',
+       })
+
        .when('/Riachuelo/HoraHora', {
            templateUrl: '/App/Views/Riachuelo/HoraHora.html?v=' + new Date().getTime(),
            controller: 'ctrl-riachuelo-horahora',

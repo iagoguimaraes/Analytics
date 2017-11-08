@@ -97,7 +97,28 @@ namespace API.Controllers
         }
 
 
+        [Route("dashboard/producao")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducao(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string filas = form["filas"];
 
+                DataSet resultado = new bTim().DashboardProducao(dtini, dtfim, filas);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
 
     }
