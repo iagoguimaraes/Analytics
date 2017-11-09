@@ -61,9 +61,9 @@ namespace API.Controllers
             {
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
-                string campanhas = form["campanhas"];
+                string produtos = form["produtos"];
 
-                DataSet resultado = new bTim().DashboardHoraHora(dtini,dtfim, campanhas);
+                DataSet resultado = new bTim().DashboardHoraHora(dtini,dtfim, produtos);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
@@ -84,9 +84,9 @@ namespace API.Controllers
             {
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
-                string campanhas = form["campanhas"];
+                string produtos = form["produtos"];
 
-                DataSet resultado = new bTim().DashboardBTC(dtini, dtfim, campanhas);
+                DataSet resultado = new bTim().DashboardBTC(dtini, dtfim, produtos);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
@@ -108,9 +108,9 @@ namespace API.Controllers
             {
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
-                string filas = form["filas"];
+                string produtos = form["produtos"];
 
-                DataSet resultado = new bTim().DashboardProducao(dtini, dtfim, filas);
+                DataSet resultado = new bTim().DashboardProducao(dtini, dtfim, produtos);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }

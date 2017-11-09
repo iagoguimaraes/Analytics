@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('ctrl-tim-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
+﻿angular.module('app').controller('ctrl-tim-producao', function ($scope, $http, $filter, dadosPagina) {
     dadosPagina.titulo = 'Produção';
     dadosPagina.descricao = 'Tim'
 
@@ -9,7 +9,7 @@
     $scope.filtros = {
         dtini: $filter('date')(ontem, "yyyy-MM-dd"),
         dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-        filas: ''
+        produtos: ''
     };
     $scope.dashFiltros = {};
     $scope.dashboard = {};
@@ -23,7 +23,7 @@
     }).then(function success(r) {
         let data = r.data;
         $scope.dashFiltros.status = r.status;
-        $scope.dashFiltros.filas = data.Table;
+        $scope.dashFiltros.produtos = data.Table;
     });
 
     // obtem filtros do escopo e carrega os dados do dashboard

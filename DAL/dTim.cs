@@ -33,8 +33,7 @@ namespace DAL
             {
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
-                    //return sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_filtros");
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
                 }
             }
             catch (Exception e)
@@ -43,7 +42,7 @@ namespace DAL
             }
         }
 
-        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim, DataTable campanhas)
+        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim, DataTable produtos)
         {
             try
             {
@@ -53,10 +52,9 @@ namespace DAL
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("produtos", produtos);
 
-                    //return sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_horahora", parametros);
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                 }
             }
             catch (Exception e)
@@ -65,7 +63,7 @@ namespace DAL
             }
         }
 
-        public DataSet DashboardBTC(DateTime dtini, DateTime dtfim, DataTable campanhas)
+        public DataSet DashboardBTC(DateTime dtini, DateTime dtfim, DataTable produtos)
         {
             try
             {
@@ -75,10 +73,9 @@ namespace DAL
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("produtos", produtos);
 
-                    //return sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
-                    return sql.ExecuteProcedureDataSet("sp_dashboard_callflex_btc", parametros);
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
                 }
             }
             catch (Exception e)
@@ -87,7 +84,7 @@ namespace DAL
             }
         }
 
-        public DataSet DashboardProducao(DateTime dtini, DateTime dtfim, DataTable filas)
+        public DataSet DashboardProducao(DateTime dtini, DateTime dtfim, DataTable produtos)
         {
             try
             {
@@ -97,7 +94,7 @@ namespace DAL
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("filas", filas);
+                    parametros.Add("produtos", produtos);
 
                     return sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                 }

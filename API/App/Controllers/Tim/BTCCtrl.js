@@ -1,4 +1,4 @@
-﻿angular.module('app').controller('ctrl-tim-btc', function ($scope, $http, $filter, $interval, dadosPagina) {
+﻿angular.module('app').controller('ctrl-tim-btc', function ($scope, $http, $filter, dadosPagina) {
     dadosPagina.titulo = 'Best Time to Call';
     dadosPagina.descricao = 'Tim'
 
@@ -14,28 +14,9 @@
     $scope.filtros = {
         dtini: $filter('date')(dtini, "yyyy-MM-dd"),
         dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-        campanhas: null,
+        produtos: null,
     };
-
-    // atualização automática
-    $scope.atualizar = {
-        check: false,
-        tempo: 60
-    }
-    $scope.Timer = null;
-
-    // iniciar ou parar atualização automatica do dashbaord
-    $scope.atualizarDash = function (v) {
-        if (v) {
-            $scope.Timer = $interval($scope.carregarDashboard, $scope.atualizar.tempo * 1000 * 60);
-        }
-        else {
-            if (angular.isDefined($scope.Timer)) {
-                $interval.cancel($scope.Timer);
-            }
-        }
-    }
-
+    
     // carrega os filtros e colocar no scope
     $scope.carregarFiltros = function () {
         $http({

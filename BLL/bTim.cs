@@ -35,15 +35,15 @@ namespace BLL
             }
         }
 
-        public DataSet DashboardHoraHora(string dtini, string dtfim, string campanhas)
+        public DataSet DashboardHoraHora(string dtini, string dtfim, string produtos)
         {
             try
             {
                 DateTime _dtini = Convert.ToDateTime(dtini);
                 DateTime _dtfim = Convert.ToDateTime(dtfim);
-                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
+                DataTable _produtos = JsonConvert.DeserializeObject<DataTable>(produtos);
 
-                return new dTim().DashboardHoraHora(_dtini, _dtfim, _campanhas);
+                return new dTim().DashboardHoraHora(_dtini, _dtfim, _produtos);
             }
             catch (Exception e)
             {
@@ -51,15 +51,15 @@ namespace BLL
             }
         }
 
-        public DataSet DashboardBTC(string dtini, string dtfim, string campanhas)
+        public DataSet DashboardBTC(string dtini, string dtfim, string produtos)
         {
             try
             {
                 DateTime _dtini = Convert.ToDateTime(dtini);
                 DateTime _dtfim = Convert.ToDateTime(dtfim);
-                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
+                DataTable _produtos = JsonConvert.DeserializeObject<DataTable>(produtos);
 
-                return new dTim().DashboardBTC(_dtini, _dtfim, _campanhas);
+                return new dTim().DashboardBTC(_dtini, _dtfim, _produtos);
             }
             catch (Exception e)
             {
@@ -67,15 +67,15 @@ namespace BLL
             }
         }
 
-        public DataSet DashboardProducao(string dtini, string dtfim, string filas)
+        public DataSet DashboardProducao(string dtini, string dtfim, string produtos)
         {
             try
             {
                 DateTime _dtini = Convert.ToDateTime(dtini);
                 DateTime _dtfim = Convert.ToDateTime(dtfim);
-                DataTable _filas = JsonConvert.DeserializeObject<DataTable>(filas);
+                DataTable _produtos = JsonConvert.DeserializeObject<DataTable>(produtos);
 
-                return new dTim().DashboardProducao(_dtini, _dtfim, _filas);
+                return new dTim().DashboardProducao(_dtini, _dtfim, _produtos);
             }
             catch (Exception e)
             {
