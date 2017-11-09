@@ -14,7 +14,9 @@ namespace MDL
         public string nome { get; set; }
         public string url { get; set; }
         public string icone { get; set; }
+        public string imagem { get; set; }
         public int ordem { get; set; }
+        
 
         public Pagina(DataRow row)
         {
@@ -23,6 +25,7 @@ namespace MDL
             nome = row["nome"].ToString();
             url = row["url"].ToString();
             icone = row["icone"].ToString();
+            imagem = row["imagem"].ToString();
             ordem = Convert.ToInt32(row["ordem"]);
         }
     }
