@@ -32,12 +32,10 @@
                     item = pagina;
                 // root
                 else if (i == 0)
-                    item = { path: hierarquia[i], subpath: [], imagem: pagina.imagem };
+                    item = { path: hierarquia[i], subpath: [], imagem: pagina.imagem, root: 1 };
                 // pasta
                 else
                     item = { path: hierarquia[i], subpath: [] };
-
-
 
                 // procura este item dentro da hierarquia
                 let find = atual.subpath.find(f => f.path === item.path);
