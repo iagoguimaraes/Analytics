@@ -1,4 +1,4 @@
 ﻿angular.module('app').controller('ctrl-home', function ($scope, $http, dadosPagina) {
-    dadosPagina.titulo = 'Página Inicial'
-    dadosPagina.descricao = 'Seja Bem-Vindo!'
+    dadosPagina.titulo = 'Seja Bem-Vindo!'
+    dadosPagina.descricao = 'Credit Cash Analytics'
 });
