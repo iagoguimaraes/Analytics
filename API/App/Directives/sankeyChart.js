@@ -29,7 +29,9 @@
                                 return this.fromNode.name + ' → ' + this.toNode.name + ' (' + (this.weight * 100 / this.fromNode.sum).toFixed(1) + '%)'
                             }
                         },
-
+                        credits: {
+                            enabled: false
+                        },
                     });
                 }
             });

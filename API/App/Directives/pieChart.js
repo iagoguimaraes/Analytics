@@ -27,7 +27,9 @@
                         tooltip: {
                             pointFormat: '{point.y} (<b>{point.percentage:.1f}%</b>)'
                         },
-
+                        credits: {
+                            enabled: false
+                        },
                     });
                 }                
             });

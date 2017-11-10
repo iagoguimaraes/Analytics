@@ -24,6 +24,9 @@
                             name: scope.seriesName,
                             data: Object.keys(dados[0]).map(obj =>[obj, dados[0][obj]])
                         }],
+                        credits: {
+                            enabled: false
+                        },
 
                     });
                 }

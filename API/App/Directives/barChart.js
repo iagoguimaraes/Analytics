@@ -39,7 +39,10 @@
                                     enabled: true,
                                 }
                             }
-                        }
+                        },
+                        credits: {
+                            enabled: false
+                        },
 
                     });
                 }

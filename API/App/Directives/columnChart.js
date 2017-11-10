@@ -40,7 +40,10 @@
                                     //rotation: 270
                                 }
                             }
-                        }
+                        },
+                        credits: {
+                            enabled: false
+                        },
 
                     });
                 }
