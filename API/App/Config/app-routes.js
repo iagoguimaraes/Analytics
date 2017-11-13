@@ -26,8 +26,8 @@
        })
 
        .when('/Tim/Producao', {
-                   templateUrl: '/App/Views/Tim/Producao.html?v=' + new Date().getTime(),
-                   controller: 'ctrl-tim-producao',
+           templateUrl: '/App/Views/Tim/Producao.html?v=' + new Date().getTime(),
+           controller: 'ctrl-tim-producao',
        })
 
        .when('/Riachuelo/HoraHora', {
@@ -43,6 +43,11 @@
        .when('/Riachuelo/Producao', {
            templateUrl: '/App/Views/Riachuelo/Producao.html?v=' + new Date().getTime(),
            controller: 'ctrl-riachuelo-producao',
+       })
+
+       .when('/Renner/HoraHora', {
+           templateUrl: '/App/Views/Renner/HoraHora.html?v=' + new Date().getTime(),
+           controller: 'ctrl-renner-horahora',
        })
 
         .otherwise({ redirectTo: '/' });
