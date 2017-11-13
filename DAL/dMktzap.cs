@@ -10,7 +10,7 @@ namespace DAL
 {
     public class dMktzap
     {
-        public DataSet Dashboard(DateTime dtini, DateTime dtfim, DataTable campanhas, DataTable setores)
+        public DataSet Dashboard(DateTime fDtini, DateTime fDtfim, DateTime eDtini, DateTime eDtfim, DataTable campanhas, DataTable setores)
         {
             try
             {
@@ -18,8 +18,10 @@ namespace DAL
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("dtini", dtini);
-                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("fDtini", fDtini);
+                    parametros.Add("fDtfim", fDtfim);
+                    parametros.Add("eDtini", eDtini);
+                    parametros.Add("eDtfim", eDtfim);
                     parametros.Add("campanhas", campanhas);
                     parametros.Add("setores", setores);
 

@@ -30,6 +30,8 @@
                             categoryBalloonColor: "#8d83c8",
                             balloonPointerOrientation: "vertical"
                         },
+                        startEffect: 'bounce',
+                        startDuration: 1
                     });
                 }
              

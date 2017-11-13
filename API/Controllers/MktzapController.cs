@@ -1,5 +1,4 @@
 ﻿using BLL;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,12 +22,14 @@ namespace API.Controllers
         {
             try
             {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
-                DataTable setores = JsonConvert.DeserializeObject<DataTable>(form["setores"]);
+                string fDtini = form["fDtini"];
+                string fDtfim = form["fDtfim"];
+                string eDtini = form["eDtini"];
+                string eDtfim = form["eDtfim"];
+                string campanhas = form["campanhas"];
+                string setores = form["setores"];
 
-                DataSet resultado = new bMktzap().Dashboard(dtini, dtfim, campanhas, setores);
+                DataSet resultado = new bMktzap().Dashboard(fDtini, fDtfim, eDtini, eDtfim, campanhas, setores);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
