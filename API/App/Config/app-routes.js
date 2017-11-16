@@ -50,5 +50,15 @@
            controller: 'ctrl-renner-horahora',
        })
 
+       .when('/Renner/BTC', {
+           templateUrl: '/App/Views/Renner/BTC.html?v=' + new Date().getTime(),
+           controller: 'ctrl-renner-btc',
+       })
+
+       .when('/Renner/Producao', {
+           templateUrl: '/App/Views/Renner/Producao.html?v=' + new Date().getTime(),
+           controller: 'ctrl-renner-producao',
+       })
+
         .otherwise({ redirectTo: '/' });
 });

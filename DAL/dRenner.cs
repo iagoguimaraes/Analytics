@@ -45,5 +45,48 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+
+        public DataSet DashboardBTC(DateTime dtini, DateTime dtfim, DataTable produtos)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
+        public DataSet DashboardProducao(DateTime dtini, DateTime dtfim, DataTable produtos)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
     }
 }
