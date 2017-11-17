@@ -13,7 +13,7 @@ namespace DAL
 
         #region LOGIN / SESSAO
 
-        public DataTable ObterUsuario(string login, string senha)
+        public DataTable ObterUsuario(string login)
         {
             try
             {
@@ -22,7 +22,6 @@ namespace DAL
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("login", login);
-                    parametros.Add("senha", senha);
 
                     return sql.ExecuteProcedureDataTable("sp_sel_usuario_bylogin", parametros);
                 }

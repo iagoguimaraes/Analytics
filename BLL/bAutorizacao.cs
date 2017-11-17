@@ -31,7 +31,7 @@ namespace BLL
 
                 // obtem o usuário nos cadastro do analytics
                 dAutorizaocao dal = new dAutorizaocao();
-                DataTable dtUsuario = dal.ObterUsuario(login, new EncryptHelper().Encrypt(senha));
+                DataTable dtUsuario = dal.ObterUsuario(login);
 
                 if (dtUsuario.Rows.Count == 0)
                     throw new Exception("Usuário não cadastrado ou desativado no Analytics");
