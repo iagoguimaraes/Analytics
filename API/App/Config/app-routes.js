@@ -60,5 +60,10 @@
            controller: 'ctrl-renner-producao',
        })
 
+       .when('/Vivo/HoraHora', {
+           templateUrl: '/App/Views/Vivo/HoraHora.html?v=' + new Date().getTime(),
+           controller: 'ctrl-vivo-horahora',
+       })
+
         .otherwise({ redirectTo: '/' });
 });

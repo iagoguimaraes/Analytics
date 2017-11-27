@@ -22,7 +22,16 @@
                             keys: ['from', 'to', 'weight'],
                             data: dados.map(obj =>[obj['de'], obj['para'], obj['qtd']]),
                             type: 'sankey',
-                            name: scope.seriesName
+                            name: scope.seriesName,
+                            tooltip: {
+                                nodeFormatter: function () {
+                                    let gap = this.sum - this.linksFrom.reduce((a, b) => a + b.weight, 0);
+                                    let label = this.name + ': <b>' + this.sum + '</b><br>';
+                                    if (gap > 0 && gap < this.sum)
+                                        label += gap + ' (' + (gap * 100 / this.sum).toFixed(1) + '%)'
+                                    return label;
+                                }
+                            }
                         }],
                         tooltip: {
                             pointFormatter: function () {
