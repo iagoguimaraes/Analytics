@@ -65,5 +65,10 @@
            controller: 'ctrl-vivo-horahora',
        })
 
+       .when('/Vivo/Producao', {
+           templateUrl: '/App/Views/Vivo/Producao.html?v=' + new Date().getTime(),
+           controller: 'ctrl-vivo-producao',
+       })
+
         .otherwise({ redirectTo: '/' });
 });
