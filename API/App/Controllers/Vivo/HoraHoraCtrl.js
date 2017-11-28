@@ -5,7 +5,8 @@
     $scope.filtros = {
         dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
         dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-        campanhas: ''
+        campanhas: '',
+        segmentacoes: ''
     };
     $scope.dashFiltros = {};
     $scope.dashboard = {};
@@ -20,6 +21,7 @@
         let data = r.data;
         $scope.dashFiltros.status = r.status;
         $scope.dashFiltros.campanhas = data.Table;
+        $scope.dashFiltros.segmentacoes = data.Table1;
     });
 
     // obtem filtros do escopo e carrega os dados do dashboard

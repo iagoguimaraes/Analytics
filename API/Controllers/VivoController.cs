@@ -25,9 +25,11 @@ namespace API.Controllers
             {
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
+                string segmentacoes = form["segmentacoes"];
                 string campanhas = form["campanhas"];
+                
 
-                DataSet resultado = new bVivo().DashboardHoraHora(dtini, dtfim, campanhas);
+                DataSet resultado = new bVivo().DashboardHoraHora(dtini, dtfim, segmentacoes, campanhas);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
