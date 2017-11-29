@@ -70,5 +70,10 @@
            controller: 'ctrl-vivo-producao',
        })
 
+       .when('/Vivo/BTC', {
+           templateUrl: '/App/Views/Vivo/BTC.html?v=' + new Date().getTime(),
+           controller: 'ctrl-vivo-btc',
+       })
+
         .otherwise({ redirectTo: '/' });
 });

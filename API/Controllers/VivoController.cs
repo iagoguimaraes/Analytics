@@ -82,5 +82,30 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/btc")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string segmentacoes = form["segmentacoes"];
+                string campanhas = form["campanhas"];
+
+
+                DataSet resultado = new bVivo().DashboardBTC(dtini, dtfim, segmentacoes, campanhas);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
