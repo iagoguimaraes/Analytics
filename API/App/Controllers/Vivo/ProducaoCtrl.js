@@ -39,6 +39,7 @@
             $scope.dashboard.status = r.status;
             $scope.dashboard.resumo = data.Table[0];
             $scope.dashboard.dia = data.Table1;
+            $scope.dashboard.tabulacao = data.Table2;
 
             $scope.carregarGrafico();
 
