@@ -3,8 +3,7 @@
     dadosPagina.descricao = 'Vivo'
 
     $scope.filtros = {
-        dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-        dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        data: $filter('date')(new Date(), "yyyy-MM-dd"),
         campanhas: '',
         segmentacoes: ''
     };
@@ -58,6 +57,9 @@
                 break;
             case 'conversao':
                 $scope.dashboard.grafico = dados.map(obj => ({ data: obj.hora, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
+                break;
+            case 'ocupacao':
+                $scope.dashboard.grafico = dados.map(obj => ({ data: obj.hora, value: (obj.falado_ad * 100 / 3600).toFixed(1) }));
                 break;
             default:
                 $scope.dashboard.grafico = dados.map(obj => ({ data: obj.hora, value: obj[$scope.grafico.indicador] }));

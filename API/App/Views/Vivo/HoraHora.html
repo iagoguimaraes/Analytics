@@ -78,32 +78,32 @@
             <div class="row" style="background-color: #f59120; color:white; opacity: 0.8">
                 <div class="col-sm-2 col-sm-offset-1 border-right">
                     <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.discado_pa | megaNumber"></h5>
-                        <span class="description-text">Discado PA</span>
+                        <h5 class="description-header" ng-bind="dashboard.resumo.discado_ad | megaNumber"></h5>
+                        <span class="description-text">Discado AD</span>
                     </div>
                 </div>
                 <div class="col-sm-2 border-right">
                     <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.contato_pa | megaNumber"></h5>
-                        <span class="description-text">Contato PA</span>
+                        <h5 class="description-header" ng-bind="dashboard.resumo.contato_ad | megaNumber"></h5>
+                        <span class="description-text">Contato AD</span>
                     </div>
                 </div>
                 <div class="col-sm-2 border-right">
                     <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h5>
-                        <span class="description-text">CPC PA</span>
+                        <h5 class="description-header" ng-bind="dashboard.resumo.cpc_ad | megaNumber"></h5>
+                        <span class="description-text">CPC AD</span>
                     </div>
                 </div>
                 <div class="col-sm-2 border-right">
                     <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.cpca_pa | number"></h5>
-                        <span class="description-text">CPCA PA</span>
+                        <h5 class="description-header" ng-bind="dashboard.resumo.cpca_ad | number"></h5>
+                        <span class="description-text">CPCA AD</span>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.promessa_pa | number"></h5>
-                        <span class="description-text">Promessa PA</span>
+                        <h5 class="description-header" ng-bind="dashboard.resumo.promessa_ad | number"></h5>
+                        <span class="description-text">Promessa AD</span>
                     </div>
                 </div>
             </div> 
@@ -137,6 +137,7 @@
                                     <th>TxLoc</th>
                                     <th>TxApv</th>
                                     <th>Conversão</th>
+                                    <th>Ocupação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -152,6 +153,7 @@
                                     <td>{{p.cpc / p.contato | percentage:1}}</td>
                                     <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                     <td>{{p.promessa / p.cpca | percentage:1}}</td>
+                                    <td>{{p.falado / p.ad / p.logado | percentage:1}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -187,6 +189,7 @@
                                     <th>Tx Loc</th>
                                     <th>Tx Apv</th>
                                     <th>Conversão</th>
+                                    <th>Ocupação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,6 +204,7 @@
                                     <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                     <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
                                     <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                    <td>{{hora.falado_ad / 3600 | percentage:1}}</td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -215,6 +219,7 @@
                                     <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                     <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                     <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    <th>{{dashboard.resumo.falado_ad / dashboard.resumo.logado | percentage: 1}}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -249,6 +254,7 @@
                         <option value="txloc">Tx Loc</option>
                         <option value="txapv">Tx Apv</option>
                         <option value="conversao">Conversão</option>
+                        <option value="ocupacao">Ocupação</option>
                         <option value="discado">Discado</option>
                         <option value="contato">Contato</option>
                         <option value="cpc">CPC</option>
@@ -276,25 +282,15 @@
     <div class="tab-content">
         <!-- Filtros -->
         <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
-            <!--DATA INCIAL-->
-            <div class="form-group">
-                <label class="control-sidebar-subheading">Data Inicial</label>
-                <div class="input-group date">
-                    <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                    </div>
-                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                </div>
-            </div>
 
-            <!--DATA FINAL-->
+            <!--DATA-->
             <div class="form-group">
-                <label class="control-sidebar-subheading">Data Final</label>
+                <label class="control-sidebar-subheading">Data</label>
                 <div class="input-group date">
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
                 </div>
             </div>
 

@@ -10,7 +10,7 @@ namespace DAL
 {
     public class dVivo
     {
-        public DataSet DashboardHoraHora(DateTime dtini, DateTime dtfim, DataTable segmentacoes, DataTable campanhas)
+        public DataSet DashboardHoraHora(DateTime data, DataTable segmentacoes, DataTable campanhas)
         {
             try
             {
@@ -18,8 +18,7 @@ namespace DAL
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentacoes", segmentacoes);
                     parametros.Add("campanhas", campanhas);                    
 

@@ -23,13 +23,12 @@ namespace API.Controllers
         {
             try
             {
-                string dtini = form["dtini"];
-                string dtfim = form["dtfim"];
+                string data = form["data"];
                 string segmentacoes = form["segmentacoes"];
                 string campanhas = form["campanhas"];
                 
 
-                DataSet resultado = new bVivo().DashboardHoraHora(dtini, dtfim, segmentacoes, campanhas);
+                DataSet resultado = new bVivo().DashboardHoraHora(data, segmentacoes, campanhas);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
