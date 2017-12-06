@@ -10,6 +10,7 @@
     $scope.dashFiltros = {};
     $scope.dashboard = {};
     $scope.grafico = { indicador: 'hitrate' };
+    $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
 
     //carregar os filtros
     $http({
@@ -35,12 +36,34 @@
             $scope.dashboard.resumo = data.Table[0];
             $scope.dashboard.produto = data.Table1;
             $scope.dashboard.horahora = data.Table2;
-            $scope.dashboard.diagrama = data.Table3;
+            $scope.diagrama.dados = data.Table3;
             $scope.dashboard.discador = data.Table4;
 
+            $scope.carregarFiltroDiagrama();
+            $scope.carregarDiagrama();
             $scope.carregarGrafico();
         });
     }
+
+    // carrega o filtro com as navegacoes disponiveis
+    $scope.carregarFiltroDiagrama = function () {
+        $scope.diagrama.navegacoes = $scope.diagrama.dados.reduce(
+        function (total, item) {
+            let n = { id_navegacao: item.id_navegacao, descricao: item.descricao };
+            if (!total.some(x => x.id_navegacao == n.id_navegacao))
+                total.push(n);
+
+            return total;
+        }, []);
+
+        $scope.diagrama.navegacao = $scope.diagrama.navegacoes[0].id_navegacao;
+    };
+
+    // carregar o diagrama de acordo com a navegação escolhida
+    $scope.carregarDiagrama = function () {
+        let navegacao = $scope.diagrama.navegacao;
+        $scope.dashboard.diagrama = $scope.diagrama.dados.filter(obj => obj.id_navegacao == navegacao);
+    };
 
     // carrega o grafico de acordo com o indicador escolhido
     $scope.carregarGrafico = function () {
