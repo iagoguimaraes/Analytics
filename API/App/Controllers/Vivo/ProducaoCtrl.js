@@ -62,6 +62,9 @@
             case 'conversao':
                 $scope.dashboard.grafico = dados.map(obj => ({ data: obj.data, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
                 break;
+            case 'ocupacao':
+                $scope.dashboard.grafico = dados.map(obj => ({ data: obj.data, value: ((obj.falado / obj.ad) * 100 / obj.logado).toFixed(1) }));
+                break;
             default:
                 $scope.dashboard.grafico = dados.map(obj => ({ data: obj.data, value: obj[$scope.grafico.indicador] }));
         }
