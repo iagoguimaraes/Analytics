@@ -1,4 +1,4 @@
-﻿angular.module('app', ['ngRoute'], function () { });
+﻿angular.module('app', ['ngRoute','angular.filter'], function () { });
 
 // ao iniciar
 angular.module('app').run(function ($locale) {

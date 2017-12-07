@@ -1,6 +1,6 @@
 ﻿<!-- DAHSBOARD -->
 <div ng-if="dashboard.status == 200">
-  
+
     <div class="box box-widget widget-user">
         <div class="widget-user-header bg-black" style="background: url('/App/Content/Images/Vivo/viva-tudo.jpg') center center;">
         </div>
@@ -106,7 +106,7 @@
                         <span class="description-text">Promessa AD</span>
                     </div>
                 </div>
-            </div> 
+            </div>
 
 
 
@@ -140,8 +140,27 @@
                                     <th>Ocupação</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr ng-repeat="p in dashboard.produto">
+                            <tbody ng-repeat="c in dashboard.produto | groupBy: 'carteira'">
+
+                                <tr class="text-bold">
+                                    <td>
+                                        <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                        {{c[0].carteira}}
+                                    </td>
+                                    <td>{{c | sumByColumn: 'ad' | number}}</td>
+                                    <td>{{c | sumByColumn: 'discado'| number}}</td>
+                                    <td>{{c | sumByColumn: 'contato'| number}}</td>
+                                    <td>{{c | sumByColumn: 'cpc'| number}}</td>
+                                    <td>{{c | sumByColumn: 'cpca'| number}}</td>
+                                    <td>{{c | sumByColumn: 'promessa'| number}}</td>
+                                    <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                    <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                    <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                    <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    <td>{{(c | divideSumColumns: 'falado':'ad') / c[0].logado | percentage:1}}</td>
+                                </tr>
+
+                                <tr ng-repeat="p in c" ng-show="showTbody">
                                     <td>{{p.produto}}</td>
                                     <td>{{p.ad | number}}</td>
                                     <td>{{p.discado | number}}</td>
@@ -155,7 +174,9 @@
                                     <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                     <td>{{p.falado / p.ad / p.logado | percentage:1}}</td>
                                 </tr>
+
                             </tbody>
+
                         </table>
                     </div>
 
@@ -235,8 +256,7 @@
             <h3 class="box-title">
                 Diagrama de Finalizações
                 <small class="pull-right">
-                    <select ng-model="diagrama.navegacao" ng-options="n.id_navegacao as n.descricao for n in diagrama.navegacoes" ng-change="carregarDiagrama()">
-                    </select>
+                    <select ng-model="diagrama.navegacao" ng-options="n.id_navegacao as n.descricao for n in diagrama.navegacoes" ng-change="carregarDiagrama()"></select>
                 </small>
             </h3>
             <sankey-chart dados="dashboard.diagrama" series-name="Qt Chamadas"></sankey-chart>

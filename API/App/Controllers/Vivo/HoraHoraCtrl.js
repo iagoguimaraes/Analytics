@@ -11,6 +11,7 @@
     $scope.dashboard = {};
     $scope.grafico = { indicador: 'hitrate' };
     $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
+    $scope.showTbody = false;
 
     //carregar os filtros
     $http({
