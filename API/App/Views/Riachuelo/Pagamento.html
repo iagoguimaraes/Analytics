@@ -1,0 +1,102 @@
+﻿<!-- DAHSBOARD -->
+<div ng-if="dashboard.status == 200">
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-4 margin-bottom">
+            <img class="image-responsive center-block" src="/App/Content/Images/Riachuelo/pgto-riachuelo.png" style="height: 100px; width: 100%; object-fit: cover;" />
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.quantidade | number"></h3>
+                    <p>Qtd Pagamento</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-credit-card"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
+                    <p>Vlr Pagamento</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-money"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-8">
+            <column-chart dados="dashboard.qtDia" series-name="Qtd Pagamento"></column-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <pie-chart dados="dashboard.qtCarteira" series-name="Qtd Pagamento"></pie-chart>
+        </div>
+    </div>
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-8">
+            <line-chart dados="dashboard.vlDia" series-name="Vlr Pagamento"></line-chart>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <pie-chart dados="dashboard.vlCarteira" series-name="Vlr Pagamento" inner-size="60%"></pie-chart>
+        </div>
+    </div>
+
+</div>
+
+<!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Campanhas</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>

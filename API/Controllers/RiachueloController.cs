@@ -100,5 +100,28 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/pagamento")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagamento(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string carteiras = form["carteiras"];
+
+                DataSet resultado = new bRiachuelo().DashboardPagamento(dtini, dtfim, carteiras);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
