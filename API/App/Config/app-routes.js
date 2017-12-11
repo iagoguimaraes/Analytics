@@ -51,6 +51,10 @@
            templateUrl: '/App/Views/Riachuelo/Pagamento.html?v=' + new Date().getTime(),
            controller: 'ctrl-riachuelo-pagamento',
        })
+        .when('/Riachuelo/Carteira', {
+            templateUrl: '/App/Views/Riachuelo/Carteira.html?v=' + new Date().getTime(),
+            controller: 'ctrl-riachuelo-carteira',
+        })
 
         // ## RENNER ##
        .when('/Renner/HoraHora', {

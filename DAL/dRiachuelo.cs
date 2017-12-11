@@ -108,5 +108,26 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+
+        public DataSet DashboardCarteira(DateTime dtini, DateTime dtfim, DataTable carteiras)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
     }
 }
