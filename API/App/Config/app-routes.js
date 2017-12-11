@@ -7,6 +7,12 @@
             controller: 'ctrl-home'
         })
 
+        // ## ANALYTICS ##
+        .when('/Analytics/Acesso', {
+            templateUrl: '/App/Views/Analytics/Acesso.html?v=' + new Date().getTime(),
+            controller: 'ctrl-acesso'
+        })
+
 
         // ## MKTZAP ##
         .when('/Mktzap/Dashboard', {
