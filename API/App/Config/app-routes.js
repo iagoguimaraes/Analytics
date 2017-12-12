@@ -57,10 +57,15 @@
            templateUrl: '/App/Views/Riachuelo/Pagamento.html?v=' + new Date().getTime(),
            controller: 'ctrl-riachuelo-pagamento',
        })
-        .when('/Riachuelo/Carteira', {
+       .when('/Riachuelo/Carteira', {
             templateUrl: '/App/Views/Riachuelo/Carteira.html?v=' + new Date().getTime(),
             controller: 'ctrl-riachuelo-carteira',
+       })
+       .when('/Riachuelo/Efetividade', {
+            templateUrl: '/App/Views/Riachuelo/Efetividade.html?v=' + new Date().getTime(),
+            controller: 'ctrl-riachuelo-efetividade',
         })
+    
 
         // ## RENNER ##
        .when('/Renner/HoraHora', {
@@ -90,5 +95,5 @@
            controller: 'ctrl-vivo-btc',
        })
 
-        .otherwise({ redirectTo: '/' });
+       .otherwise({ redirectTo: '/' });
 });

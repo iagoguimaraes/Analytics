@@ -1,0 +1,94 @@
+﻿<!-- DAHSBOARD -->
+<div ng-if="dashboard.status == 200">
+
+    <div class="row margin-bottom">        
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Efetividade por Carteira</h3>
+                <bar-chart dados="dashboard.efetividadeCarteira" series-name="Efetividade"></bar-chart>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Promessa Paga por Carteira</h3>
+                <pie-chart dados="dashboard.promessaPagaCarteira" series-name="Promessa Paga" inner-size="60%"></pie-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Promessa Paga por Dia</h3>
+                <column-chart dados="dashboard.promessaPagaDia" series-name="Promessa Paga"></column-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Efetividade por Dia</h3>
+                <line-chart dados="dashboard.efetividadeDia" series-name="Efetividade"></line-chart>
+            </div>
+    </div>
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-6">
+            <h3 class="text-center">Lote Pago por Carteira</h3>
+            <bar-chart dados="dashboard.efetividadeLoteCarteira" series-name="% Pago"></bar-chart>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <h3 class="text-center">Pagamento Lote por Carteira</h3>
+            <pie-chart dados="dashboard.pagamentoLoteCarteira" series-name="Pagamento" inner-size="60%"></pie-chart>
+        </div>
+        <div class="col-xs-12">
+            <h3 class="text-center">Pagamentos Lotes</h3>
+            <column-chart dados="dashboard.pagamentoLoteDia" series-name="Pagamento"></column-chart>
+        </div>
+        <div class="col-xs-12">
+            <h3 class="text-center">% Pago Lotes</h3>
+            <line-chart dados="dashboard.efetividadeLoteDia" series-name="% Pago"></line-chart>
+        </div>
+    </div>
+
+</div>
+
+<!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+
+            <!--CAMPANHAS-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Campanhas</label>
+                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>

@@ -123,12 +123,12 @@ namespace API.Controllers
             }
         }
 
-        [Route("dashboard/carteira")]
+        [Route("dashboard/efetividade")]
         [HttpPost]
         [Autenticar]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
+        public HttpResponseMessage DashboardEfetividade(FormDataCollection form)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace API.Controllers
                 string dtfim = form["dtfim"];
                 string carteiras = form["carteiras"];
 
-                DataSet resultado = new bRiachuelo().DashboardCarteira(dtini, dtfim, carteiras);
+                DataSet resultado = new bRiachuelo().DashboardEfetividade(dtini, dtfim, carteiras);
 
                 return Request.CreateResponse(HttpStatusCode.OK, resultado);
             }
