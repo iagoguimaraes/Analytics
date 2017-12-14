@@ -106,5 +106,23 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/lote")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardLote(FormDataCollection form)
+        {
+            try
+            {
+                DataSet resultado = new bVivo().DashboardLote();
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }

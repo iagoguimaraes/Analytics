@@ -94,6 +94,10 @@
            templateUrl: '/App/Views/Vivo/BTC.html?v=' + new Date().getTime(),
            controller: 'ctrl-vivo-btc',
        })
+       .when('/Vivo/Lote', {
+            templateUrl: '/App/Views/Vivo/Lote.html?v=' + new Date().getTime(),
+            controller: 'ctrl-vivo-lote',
+        })
 
        .otherwise({ redirectTo: '/' });
 });

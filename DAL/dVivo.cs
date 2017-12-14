@@ -90,6 +90,20 @@ namespace DAL
             }
         }
 
+        public DataSet DashboardLote()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_lote");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
 
     }
 }

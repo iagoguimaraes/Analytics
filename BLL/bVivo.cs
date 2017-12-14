@@ -73,5 +73,17 @@ namespace BLL
             }
         }
 
+        public DataSet DashboardLote()
+        {
+            try
+            {
+                return new dVivo().DashboardLote();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }
