@@ -12,7 +12,10 @@
             templateUrl: '/App/Views/Analytics/Acesso.html?v=' + new Date().getTime(),
             controller: 'ctrl-acesso'
         })
-
+       .when('/Analytics/DiarioBordo', {
+           templateUrl: '/App/Views/Analytics/DiarioBordo.html?v=' + new Date().getTime(),
+           controller: 'ctrl-diariobordo',
+       })
 
         // ## MKTZAP ##
         .when('/Mktzap/Dashboard', {
@@ -97,7 +100,9 @@
        .when('/Vivo/Lote', {
             templateUrl: '/App/Views/Vivo/Lote.html?v=' + new Date().getTime(),
             controller: 'ctrl-vivo-lote',
-        })
+       })
+
+
 
        .otherwise({ redirectTo: '/' });
 });

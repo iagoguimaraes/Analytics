@@ -23,7 +23,9 @@
 
     $scope.filtrarDados = function () {
         if ($scope.dashboard.filtro.dia)
-            $scope.dashboard.lote = $scope.dashboard.dados.filter(o => o.dia = $scope.dashboard.filtro.dia);
+            $scope.dashboard.grafico = $scope.dashboard.dados
+                .filter(o => o.dia == $scope.dashboard.filtro.dia)
+                .map(o => ({lote: o.data_inclusao, discado: (o.discado/o.total).toFixed(1)*100}));
     };
 
     $scope.carregarDashboard();

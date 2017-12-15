@@ -1,4 +1,5 @@
 ﻿using BLL;
+using MDL;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -128,6 +129,74 @@ namespace API.Controllers
 
                 new bAnalytics().RemoverAcessoRecurso(id_recurso, id_grupo);
 
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("diariobordo/consultar")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        public HttpResponseMessage ConsultarDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string empresas = form["empresas"];
+                string carteiras = form["carteiras"];
+                string ocorrencias = form["ocorrencias"];
+                string usuarios = form["usuarios"];
+
+                DataSet resultado = new bAnalytics().ConsultarDiarioBordo(dtini, dtfim, empresas, carteiras, ocorrencias, usuarios);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("diariobordo/opcoes")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        public HttpResponseMessage OpcoesDiarioBordo()
+        {
+            try
+            {
+                DataSet resultado = new bAnalytics().OpcoesDiarioBordo();
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("diariobordo/inserir")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        public HttpResponseMessage InserirDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_empresa = Convert.ToInt32(form["empresa"]);
+                int id_carteira = Convert.ToInt32(form["carteira"]);
+                int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);             
+                string descricao = form["descricao"];
+
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                new bAnalytics().InserirDiarioBordo(data, hora, id_empresa, id_carteira, id_ocorrencia, sessao.id_usuario, descricao);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception e)
