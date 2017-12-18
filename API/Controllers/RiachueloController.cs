@@ -123,6 +123,29 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/carteira")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string carteiras = form["carteiras"];
+
+                DataSet resultado = new bRiachuelo().DashboardCarteira(dtini, dtfim, carteiras);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/efetividade")]
         [HttpPost]
         [Autenticar]

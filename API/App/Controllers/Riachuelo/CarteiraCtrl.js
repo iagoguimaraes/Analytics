@@ -35,12 +35,11 @@
             url: "/api/riachuelo/dashboard/carteira",
             data: $scope.filtros,
         }).then(function success(r) {
-            let data = r.data;
             $scope.dashboard.status = r.status;
 
-            $scope.dashboard.resumo = data.Table[0];
-            $scope.dashboard.carteira = data.Table1;
-            $scope.dashboard.dia = data.Table2;
+            $scope.dashboard.resumo = r.data.Table[0];
+            $scope.dashboard.carteira = r.data.Table1;
+            $scope.dashboard.dia = r.data.Table2;
 
             $scope.carregarGrafico();
         });
