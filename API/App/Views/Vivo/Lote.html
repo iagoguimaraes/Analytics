@@ -2,13 +2,66 @@
 
     <div class="row margin-bottom">
         <div class="col-xs-12">
-            <input type="range" min="0" max="15" value="10" ng-model="dashboard.filtro.dia" ng-change="filtrarDados()" />
-            {{dashboard.filtro.dia}}
+            <input type="range" min="0" max="15" value="10" ng-model="dashboard.comparativo.dia" ng-change="filtrarColumn();filtrarBubble();" />
+            {{dashboard.comparativo.dia}}
         </div>
     </div>
         
-    {{dashboard.grafico}}
+    <label>Indicador:</label>
+    <select ng-model="dashboard.comparativo.indicador" ng-change="filtrarColumn()">
+        <option value="total">Volume</option>
+        <option value="promessa">Promessa</option>
+        <option value="%discado">% Discado</option>
+        <option value="%contato">% Contato</option>
+        <option value="%cpc">% CPC</option>
+        <option value="%cpca">% CPCA</option>
+        <option value="%promessa">% Promessa</option>
+        <option value="conversao">Conversão</option>
+        <option value="spin">Spin Rate</option>
+    </select>
 
-    <column-chart dados="dashboard.grafico"></column-chart>
+    <column-chart dados="dashboard.comparativo.column" series-name="teste"></column-chart>
+     
+    <label>Eixo X:</label>
+    <select ng-model="dashboard.comparativo.x" ng-change="filtrarBubble()">
+        <option value="total">Volume</option>
+        <option value="promessa">Promessa</option>
+        <option value="%discado">% Discado</option>
+        <option value="%contato">% Contato</option>
+        <option value="%cpc">% CPC</option>
+        <option value="%cpca">% CPCA</option>
+        <option value="%promessa">% Promessa</option>
+        <option value="conversao">Conversão</option>
+        <option value="spin">Spin Rate</option>
+    </select>
+
+    <label>Eixo Y:</label>
+    <select ng-model="dashboard.comparativo.y" ng-change="filtrarBubble()">
+        <option value="total">Volume</option>
+        <option value="promessa">Promessa</option>
+        <option value="%discado">% Discado</option>
+        <option value="%contato">% Contato</option>
+        <option value="%cpc">% CPC</option>
+        <option value="%cpca">% CPCA</option>
+        <option value="%promessa">% Promessa</option>
+        <option value="conversao">Conversão</option>
+        <option value="spin">Spin Rate</option>
+    </select>
+
+    <label>Eixo Z:</label>
+    <select ng-model="dashboard.comparativo.z" ng-change="filtrarBubble()">
+        <option value=""></option>
+        <option value="total">Volume</option>
+        <option value="promessa">Promessa</option>
+        <option value="%discado">% Discado</option>
+        <option value="%contato">% Contato</option>
+        <option value="%cpc">% CPC</option>
+        <option value="%cpca">% CPCA</option>
+        <option value="%promessa">% Promessa</option>
+        <option value="conversao">Conversão</option>
+        <option value="spin">Spin Rate</option>
+    </select>
+
+    <bubble-chart dados="dashboard.comparativo.bubble" titulo-x="dashboard.comparativo.x" titulo-y="dashboard.comparativo.y" titulo-z="dashboard.comparativo.z"></bubble-chart>
 
 </div>
