@@ -9,6 +9,9 @@
             y: '%promessa',
             z: 'total',
             indicador: '%discado'
+        },
+        lote: {
+
         }
     };
 
@@ -20,9 +23,13 @@
         }).then(function success(r) {
             $scope.dashboard.status = r.status;
             $scope.dashboard.dados = r.data.Table;
+            $scope.dashboard.lotes = [...new Set(r.data.Table.map(item => item.data_inclusao))]
+
+            $scope.dashboard.lote.dtinclusao = $scope.dashboard.lotes[0];
 
             $scope.filtrarColumn();
             $scope.filtrarBubble();
+            $scope.filtrarLote();
         });
     }
 
@@ -45,6 +52,11 @@
                 y: calcular($scope.dashboard.comparativo.y, o),
                 z: calcular($scope.dashboard.comparativo.z, o)
             }));
+    };
+
+    $scope.filtrarLote = function () {
+        $scope.dashboard.lote.dados = $scope.dashboard.dados
+            .filter(o => o.data_inclusao == $scope.dashboard.lote.dtinclusao);
     };
 
     $scope.carregarDashboard();
