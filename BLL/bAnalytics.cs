@@ -130,6 +130,33 @@ namespace BLL
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+        public void EditarDiarioBordo(int id_diario_bordo, string data, string hora, int id_empresa, int id_carteira, int id_ocorrencia, int id_usuario, string descricao)
+        {
+            try
+            {
+                DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
+
+                if (string.IsNullOrEmpty(descricao))
+                    descricao = "";
+
+                new dAnalytics().EditarDiarioBordo(id_diario_bordo, _data, id_empresa, id_carteira, id_ocorrencia, id_usuario, descricao);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+        public void RemoverDiarioBordo(int id_diario_bordo)
+        {
+            try
+            {
+                new dAnalytics().RemoverDiarioBordo(id_diario_bordo);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
 
     }
 }

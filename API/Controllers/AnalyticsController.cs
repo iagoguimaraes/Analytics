@@ -191,12 +191,58 @@ namespace API.Controllers
                 string hora = form["hora"];
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
-                int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);             
+                int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 string descricao = form["descricao"];
 
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
                 new bAnalytics().InserirDiarioBordo(data, hora, id_empresa, id_carteira, id_ocorrencia, sessao.id_usuario, descricao);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("diariobordo/editar")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        public HttpResponseMessage EditarDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_empresa = Convert.ToInt32(form["empresa"]);
+                int id_carteira = Convert.ToInt32(form["carteira"]);
+                int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
+                string descricao = form["descricao"];
+
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                new bAnalytics().EditarDiarioBordo(id_diario_bordo, data, hora, id_empresa, id_carteira, id_ocorrencia, sessao.id_usuario, descricao);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("diariobordo/remover")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        public HttpResponseMessage RemoverDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+
+                new bAnalytics().RemoverDiarioBordo(id_diario_bordo);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception e)

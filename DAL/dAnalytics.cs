@@ -173,6 +173,49 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+        public void EditarDiarioBordo(int id_diario_bordo, DateTime data, int id_empresa, int id_carteira, int id_ocorrencia, int id_usuario, string descricao)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+                    parametros.Add("data", data);
+                    parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("id_carteira", id_carteira);
+                    parametros.Add("id_ocorrencia", id_ocorrencia);
+                    parametros.Add("id_usuario", id_usuario);
+                    parametros.Add("descricao", descricao);
+
+                    sql.ExecuteProcedureDataSet("sp_upd_diario_bordo", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+        public void RemoverDiarioBordo(int id_diario_bordo)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+
+                    sql.ExecuteProcedureDataSet("sp_del_diario_bordo", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
+
 
     }
 }
