@@ -102,7 +102,19 @@
             controller: 'ctrl-vivo-lote',
        })
 
-
+       // ## Heath for Pet ##
+       .when('/Pet/HoraHora', {
+           templateUrl: '/App/Views/Pet/HoraHora.html?v=' + new Date().getTime(),
+           controller: 'ctrl-pet-horahora',
+       })
+       .when('/Pet/BTC', {
+           templateUrl: '/App/Views/Pet/BTC.html?v=' + new Date().getTime(),
+           controller: 'ctrl-pet-btc',
+       })
+       .when('/Pet/Producao', {
+           templateUrl: '/App/Views/Pet/Producao.html?v=' + new Date().getTime(),
+           controller: 'ctrl-pet-producao',
+       })
 
        .otherwise({ redirectTo: '/' });
 });
