@@ -85,5 +85,21 @@ namespace BLL
             }
         }
 
+        public DataSet DashboardPagamento(string dtini, string dtfim, string segmentacoes)
+        {
+            try
+            {
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(dtfim);
+                DataTable _segmentacoes = JsonConvert.DeserializeObject<DataTable>(segmentacoes);
+
+                return new dVivo().DashboardPagamento(_dtini, _dtfim, _segmentacoes);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }
