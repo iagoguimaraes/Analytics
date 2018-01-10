@@ -104,7 +104,11 @@
        .when('/Vivo/Pagamento', {
             templateUrl: '/App/Views/Vivo/Pagamento.html?v=' + new Date().getTime(),
             controller: 'ctrl-vivo-pagamento',
-        })
+       })
+       .when('/Vivo/Carteira', {
+           templateUrl: '/App/Views/Vivo/Carteira.html?v=' + new Date().getTime(),
+           controller: 'ctrl-vivo-carteira',
+       })
 
        // ## Heath for Pet ##
        .when('/Pet/HoraHora', {
