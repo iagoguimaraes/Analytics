@@ -105,7 +105,26 @@ namespace DAL
             }
         }
 
+        public DataSet DashboardHoraHoraSinergy(DateTime dtini, DateTime dtfim, DataTable produtos)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
 
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+
+                    return sql.ExecuteProcedureDataSet("sp_dashboard_horahora_sinergy", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
 
     }
 }

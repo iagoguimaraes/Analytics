@@ -41,6 +41,10 @@
            templateUrl: '/App/Views/Tim/Producao.html?v=' + new Date().getTime(),
            controller: 'ctrl-tim-producao',
        })
+       .when('/Tim/Sinergy/HoraHora', {
+           templateUrl: '/App/Views/Tim/HoraHora.html?v=' + new Date().getTime(),
+           controller: 'ctrl-tim-sinergy-horahora',
+       })
 
 
         // ## RIACHUELO ##

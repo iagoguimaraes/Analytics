@@ -83,5 +83,21 @@ namespace BLL
             }
         }
 
+        public DataSet DashboardHoraHoraSinergy(string dtini, string dtfim, string produtos)
+        {
+            try
+            {
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(dtfim);
+                DataTable _produtos = JsonConvert.DeserializeObject<DataTable>(produtos);
+
+                return new dTim().DashboardHoraHoraSinergy(_dtini, _dtfim, _produtos);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }
