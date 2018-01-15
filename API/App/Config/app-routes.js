@@ -127,6 +127,10 @@
            templateUrl: '/App/Views/Pet/Producao.html?v=' + new Date().getTime(),
            controller: 'ctrl-pet-producao',
        })
+       .when('/Pet/PromessaSMS', {
+           templateUrl: '/App/Views/Pet/PromessaSMS.html?v=' + new Date().getTime(),
+           controller: 'ctrl-pet-promessasms',
+       })
 
        .otherwise({ redirectTo: '/' });
 });

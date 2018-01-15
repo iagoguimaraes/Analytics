@@ -80,5 +80,28 @@ namespace API.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/promessasms")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPromessaSMS(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+
+                DataSet resultado = new bPet().DashboardPromessaSMS(dtini, dtfim);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

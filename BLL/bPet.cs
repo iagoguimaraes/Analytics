@@ -54,5 +54,20 @@ namespace BLL
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+
+        public DataSet DashboardPromessaSMS(string dtini, string dtfim)
+        {
+            try
+            {
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(dtfim);
+
+                return new dPet().DashboardPromessaSMS(_dtini, _dtfim);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
     }
 }
