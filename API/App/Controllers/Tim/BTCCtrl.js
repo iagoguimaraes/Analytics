@@ -49,6 +49,8 @@
             $scope.dashboard.hitratePorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: (obj.contato * 100 / obj.discado).toFixed(1) / 1 }));
             $scope.dashboard.txlocPorTel = r.data.Table3.map(obj => ({ hora: obj.tipo_telefone, value: (obj.cpc * 100 / obj.contato).toFixed(1) / 1 }));
 
+            $scope.dashboard.dddhit = r.data.Table4;
+
             $scope.carregarMapa();
 
         });
