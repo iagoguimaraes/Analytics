@@ -87,6 +87,10 @@
            templateUrl: '/App/Views/Renner/Producao.html?v=' + new Date().getTime(),
            controller: 'ctrl-renner-producao',
        })
+       .when('/Renner/Pagamento', {
+           templateUrl: '/App/Views/Renner/Pagamento.html?v=' + new Date().getTime(),
+           controller: 'ctrl-renner-pagamento',
+       })
 
         // ## VIVO ##
        .when('/Vivo/HoraHora', {

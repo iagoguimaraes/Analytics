@@ -102,5 +102,28 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/pagamento")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagamento(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string produtos = form["produtos"];
+
+                DataSet resultado = new bRenner().DashboardPagamento(dtini, dtfim, produtos);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

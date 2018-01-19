@@ -71,5 +71,21 @@ namespace BLL
             }
         }
 
+        public DataSet DashboardPagamento(string dtini, string dtfim, string produtos)
+        {
+            try
+            {
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(dtfim);
+                DataTable _produtos = JsonConvert.DeserializeObject<DataTable>(produtos);
+
+                return new dRenner().DashboardPagamento(_dtini, _dtfim, _produtos);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
+
     }
 }
