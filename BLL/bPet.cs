@@ -69,5 +69,20 @@ namespace BLL
                 throw new Exception("ERRO BLL: " + e.Message);
             }
         }
+
+        public DataSet CheckSMS(string id_chamada, string sms)
+        {
+            try
+            {
+                string _id_chamada = id_chamada;
+                bool _sms = Convert.ToBoolean(sms);
+
+                return new dPet().CheckSMS(_id_chamada, _sms);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO BLL: " + e.Message);
+            }
+        }
     }
 }

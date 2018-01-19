@@ -22,6 +22,17 @@
         });
     }
 
+    $scope.checkSMS = function (chamada) {
+        $http({
+            method: 'POST',
+            url: "/api/pet/dashboard/checksms",
+            data: {
+                id_chamada: chamada.id_chamada,
+                sms: chamada.sms
+            },
+        });
+    }
+
     $scope.carregarDashboard();
 
 });

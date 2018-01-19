@@ -103,5 +103,27 @@ namespace API.Controllers
             }
         }
 
+        [Route("dashboard/checksms")]
+        [HttpPost]
+        [Autenticar]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CheckSMS(FormDataCollection form)
+        {
+            try
+            {
+                string id_chamada = form["id_chamada"];
+                string sms = form["sms"];
+
+                DataSet resultado = new bPet().CheckSMS(id_chamada, sms);
+
+                return Request.CreateResponse(HttpStatusCode.OK, resultado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

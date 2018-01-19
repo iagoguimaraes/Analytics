@@ -89,5 +89,25 @@ namespace DAL
                 throw new Exception("Erro DAL: " + e.Message);
             }
         }
+
+        public DataSet CheckSMS(string id_chamada, bool sms)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_PET"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_chamada", id_chamada);
+                    parametros.Add("sms", Convert.ToInt16(sms).ToString());
+
+                    return sql.ExecuteProcedureDataSet("sp_upd_smsChamada", parametros);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro DAL: " + e.Message);
+            }
+        }
     }
 }
