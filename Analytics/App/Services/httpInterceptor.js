@@ -16,7 +16,7 @@
 
             if (rejection.status === 401) {
                 alert('Sua sessão não existe ou expirou');
-                $window.location.href = 'Login.html';
+                $window.location.href = '/login.html';
             }
             else if(rejection.status === 403){
                 alert('Você não tem permissão a este recurso');
