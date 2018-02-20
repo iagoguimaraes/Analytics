@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Credit Cash Analytics</title>
+    <meta charset="utf-8" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/adminlte.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/google-fonts.css" rel="stylesheet" />
+    <link href="/Content/Styles/loading.css" rel="stylesheet" />
+
+    <script src="/Content/Scripts/jquery.min.js"></script>
+    <script src="/Content/Scripts/bootstrap.min.js"></script>
+    <script src="/Content/Scripts/angular.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR"></script>
+
+    <style>
+        .bg {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: url('/Content/Images/ccashbg.jpg') no-repeat right top;
+        }
+
+        .login-box {
+            border: 1px solid gray;
+            -webkit-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
+            box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
+            opacity: 0.98;
+        }
+    </style>
+</head>
+<body class="hold-transition login-page" ng-app="analytics" ng-controller="loginController">
+    <div class="bg">
+        <div class="login-box">
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg">Entre com seu login e senha</p>
+                <form name="loginForm" autocomplete="off">
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" placeholder="Usuário" ng-model="usuario.login" ng-required="true">
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" class="form-control" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="row margin-bottom">
+                        <div class="col-xs-8">
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-xs-4">
+                            <button type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid" class="btn btn-primary btn-block btn-flat">Entrar</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="g-recaptcha" data-callback="imNotARobot" data-sitekey="6LdmFjYUAAAAABiYObPUYcZ90GZfHhQWIwUaHuTr"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.login-box-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!--LOADING-->
+    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
+
+    <script>
+
+        localStorage.removeItem('token');
+
+        var app = angular.module('analytics', []);
+        app.controller('loginController', function ($scope, $http, $window) {
+
+            $scope.dadosPagina = {
+                loading: false
+            }
+
+            $scope.usuario = {
+                login: '',
+                senha: '',
+                recaptcha: ''
+            };
+
+            $scope.imNotARobot = function () {
+                $scope.usuario.recaptcha = (grecaptcha.getResponse());
+            };
+            $window.imNotARobot = $scope.imNotARobot;
+
+            $scope.logar = function (usuario) {
+                $scope.dadosPagina.loading = true;
+
+                delete $scope.usuario;
+                grecaptcha.reset();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/autenticacao/logar",
+                    data: usuario,
+                    success: function (data) {
+                        localStorage.setItem('token', data);
+                        $window.location.href = '/';
+                    },
+                    error: function (r) {
+                        $scope.dadosPagina.loading = false;
+                        $scope.$apply();
+                        alert(r.responseText);
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

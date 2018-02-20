@@ -1,0 +1,216 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-riachuelo-btc">
+
+    <div ng-if="dashboard.r.status === 200">
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <h3 class="text-center">Análise por Hora</h3>
+                <high-chart series="dashboard.hitratePorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                <high-chart series="dashboard.txlocPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                <high-chart series="dashboard.conversaoPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <h3>
+                    Análise por Região
+                    <small class="pull-right">
+                        <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                            <option value="hitrate">Hit Rate</option>
+                            <option value="txloc">Tx Loc</option>
+                            <option value="txapv">Tx Apv</option>
+                            <option value="conversao">Conversão</option>
+                            <option value="discado">Discado</option>
+                            <option value="contato">Contato</option>
+                            <option value="cpc">CPC</option>
+                            <option value="cpca">CPCA</option>
+                            <option value="promessa">Promessa</option>
+                        </select>
+                    </small>
+                </h3>
+                <mapa-brasil style="height: 600px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Volume por Rota</h4>
+                <high-chart series="dashboard.quantidadePorRota" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Hit Rate por Rota</h4>
+                <high-chart series="dashboard.hitratePorRota" axis-Categories="dashboard.rotas" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Tx Loc por Rota</h4>
+                <high-chart series="dashboard.txlocPorRota" axis-Categories="dashboard.rotas" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Volume por Tipo de Telefone</h4>
+                <high-chart series="dashboard.quantidadePorTel" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Hit Rate por Tipo de Telefone</h4>
+                <high-chart series="dashboard.hitratePorTel" axis-Categories="dashboard.tipos" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <h4 class="text-center">Tx Loc por Tipo de Telefone</h4>
+                <high-chart series="dashboard.txlocPorTel" axis-Categories="dashboard.tipos" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Carteiras</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashboardFiltros.data.Table"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDados()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-riachuelo-btc', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Best Time to Call';
+        dadosPagina.descricao = 'Riachuelo'
+
+        $scope.dashboard = {};
+        $scope.mapa = {
+            indicador: 'hitrate'
+        }
+
+        // filtros iniciais
+        let dtini = new Date();
+        dtini.setDate(dtini.getDate() - 7);
+
+        $scope.filtros = {
+            dtini: $filter('date')(dtini, "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            carteiras: null,
+        };
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/riachuelo/dashboard/filtros",
+            }).then(function success(r) {
+                $scope.dashboardFiltros = r;
+            });
+        }
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDados = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/btc",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.r = r;
+
+                $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_descricao);
+                $scope.dashboard.rotas = r.data.Table2.map(obj => obj.rota);
+                $scope.dashboard.tipos = r.data.Table3.map(obj => obj.tipo_telefone);
+
+                $scope.dashboard.hitratePorHora = [{ name: 'HitRate', data: r.data.Table.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorHora = [{ name: 'TxLoc', data: r.data.Table.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+                $scope.dashboard.conversaoPorHora = [{ name: 'Conversão', data: r.data.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) / 1) }];
+
+                $scope.dashboard.quantidadePorRota = [{ name: 'Qtd', data: r.data.Table2.map(obj => ({ name: obj.rota, y: obj.discado })) }];
+                $scope.dashboard.hitratePorRota = [{ name: 'HitRate', data: r.data.Table2.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorRota = [{ name: 'TxLoc', data: r.data.Table2.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+
+                $scope.dashboard.quantidadePorTel = [{ name: 'Qtd', data: r.data.Table3.map(obj => ({ name: obj.tipo_telefone, y: obj.discado })) }];
+                $scope.dashboard.hitratePorTel = [{ name: 'HitRate', data: r.data.Table3.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorTel = [{ name: 'TxLoc', data: r.data.Table3.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+
+                $scope.carregarMapa();
+
+            });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.r.data.Table1;
+            switch ($scope.mapa.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.contato * 100 / obj.discado).toFixed(1) }));
+                    break;
+                case 'txloc':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.contato).toFixed(1) }));
+                    break;
+                case 'txapv':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpca * 100 / obj.cpc).toFixed(1) }));
+                    break;
+                case 'conversao':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+        $scope.carregarFiltros();
+        $scope.carregarDados();
+
+    });
+
+</script>

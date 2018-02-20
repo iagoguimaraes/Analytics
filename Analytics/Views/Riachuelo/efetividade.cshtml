@@ -1,0 +1,166 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-riachuelo-efetividade">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Efetividade por Carteira</h3>
+                <high-chart series="dashboard.efetividadeCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Promessa Paga por Carteira</h3>
+                <high-chart series="dashboard.promessaPagaCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Promessa Paga por Dia</h3>
+                <high-chart series="dashboard.promessaPagaDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Efetividade por Dia</h3>
+                <high-chart series="dashboard.efetividadeDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Lote Pago por Carteira</h3>
+                <high-chart series="dashboard.efetividadeLoteCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Pagamento Lote por Carteira</h3>
+                <high-chart series="dashboard.pagamentoLoteCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Pagamentos Lotes</h3>
+                <high-chart series="dashboard.pagamentoLoteDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">% Pago Lotes</h3>
+                <high-chart series="dashboard.efetividadeLoteDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Campanhas</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-riachuelo-efetividade', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Efetividade';
+        dadosPagina.descricao = 'Riachuelo'
+
+        // filtros iniciais
+        let ontem = new Date();
+        ontem.setDate(ontem.getDate() - 7);
+
+        $scope.filtros = {
+            dtini: $filter('date')(ontem, "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            carteiras: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteiras = data.Table;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/efetividade",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.carteiras = r.data.Table.map(obj => obj.carteira);
+
+                $scope.dashboard.promessaPagaCarteira = [{ name: 'PromessaPaga', data: data.Table.map(obj => ({ name: obj.carteira, y: obj.promessaPaga })) }];
+                $scope.dashboard.efetividadeCarteira = [{ name: 'Efetividade', data: data.Table.map(obj => (obj.promessaPaga * 100 / obj.promessa).toFixed(1) / 1) }];
+
+                $scope.dashboard.promessaPagaDia = [{ name: 'PromessaPaga', data: data.Table1.map(obj => obj.promessaPaga) }];
+                $scope.dashboard.efetividadeDia = [{ name: 'Efetividade', data: data.Table1.map(obj => (obj.promessaPaga * 100 / obj.promessa).toFixed(1) / 1) }];
+
+                $scope.dashboard.pagamentoLoteCarteira = [{ name: 'Pago', data: data.Table2.map(obj => ({ name: obj.carteira, y: obj.pago })) }];
+                $scope.dashboard.efetividadeLoteCarteira = [{ name: 'Efetividade', data: data.Table2.map(obj => (obj.pago * 100 / obj.inclusao).toFixed(1) / 1) }];
+
+                $scope.dashboard.pagamentoLoteDia = [{ name: 'Pago', data: data.Table3.map(obj => obj.pago) }];
+                $scope.dashboard.efetividadeLoteDia = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.pago * 100 / obj.inclusao).toFixed(1) / 1) }];
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>

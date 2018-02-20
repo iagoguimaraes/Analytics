@@ -1,0 +1,199 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-renner-pagamento">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vl_pagamento | megaNumber"></h3>
+                        <p>Total Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                        <p>Promessas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.recebido | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.recebido / dashboard.resumo.promessa | percentage: 1"></h4>
+                        <p>Promessa Paga</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-download"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green-gradient">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vl_recebido | currency:'R$'"></h3>
+                        <p>Valor Promessa Paga</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h4 class="text-center">Pagamento por Produto</h4>
+                <high-chart series="dashboard.produtoPgto" type="pie"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h4 class="text-center">Efetividade por Produto</h4>
+                <high-chart series="dashboard.produtoEftv" axis-Categories="dashboard.produtos" type="bar" plot-Options-Bar-Data-Label="true"></high-chart>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 class="text-center">Pagamento por Dia</h4>
+                <high-chart series="dashboard.diaPgto" axis-Categories="dashboard.dias" type="line" axis-></high-chart>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 class="text-center">Efetividade por Dia</h4>
+                <high-chart series="dashboard.diaProm" axis-Categories="dashboard.dias" type="column"
+                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--FILAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Produtos</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-renner-pagamento', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Pagamento';
+        dadosPagina.descricao = 'Renner'
+
+        // filtros iniciais
+        let ontem = new Date();
+        ontem.setDate(ontem.getDate() - 15);
+
+        $scope.filtros = {
+            dtini: $filter('date')(ontem, "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            produtos: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/renner/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.produtos = data.Table;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/renner/dashboard/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.dias = data.Table.map(o => o.data);
+                $scope.dashboard.produtos = data.Table1.map(o => o.produto);
+
+                $scope.dashboard.resumo = data.Table2[0];
+
+                $scope.dashboard.produtoPgto = [{ name: 'Valor', data: data.Table3.map(o => ({ name: o.produto, y: o.vl_pagamento })) }];
+                $scope.dashboard.produtoEftv = [{ name: 'Valor', data: data.Table4.map(o => o.efetividade) }];
+                $scope.dashboard.diaPgto = [{ name: 'Valor', data: data.Table5.map(o => o.vl_pagamento) }];
+                $scope.dashboard.diaProm = [
+                    { name: 'promessa', type: 'column', data: data.Table6.map(obj => obj.promessa) },
+                    { name: 'recebido', type: 'column', data: data.Table6.map(obj => obj.recebido) },
+                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table6.map(obj => obj.efetividade) },
+                ];
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>

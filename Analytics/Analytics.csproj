@@ -1,0 +1,521 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B023E732-7B58-4650-85B3-DC6C51F401C2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Analytics</RootNamespace>
+    <AssemblyName>Analytics</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App\Directives\datePicker.js" />
+    <Content Include="App\Directives\dTable.js" />
+    <Content Include="App\Directives\mapaBrasil.js" />
+    <Content Include="App\Directives\sankeyChart.js" />
+    <Content Include="App\Directives\select2.js" />
+    <Content Include="App\Directives\timePicker.js" />
+    <Content Include="Content\Images\Home\confiante.gif" />
+    <Content Include="Content\Images\Home\dados.gif" />
+    <Content Include="Content\Images\Home\dashboard.gif" />
+    <Content Include="Content\Images\Home\equilibrio.gif" />
+    <Content Include="Content\Images\Home\informacao.gif" />
+    <Content Include="Content\Images\Home\necessario.gif" />
+    <Content Include="Content\Images\Home\produtividade.gif" />
+    <Content Include="Content\Images\Home\qualquerlugar.gif" />
+    <Content Include="Content\Images\Home\responsivo.gif" />
+    <Content Include="Content\Images\Home\seguro.gif" />
+    <Content Include="Content\Images\Mktzap\whatsapp.png" />
+    <Content Include="Content\Images\Pet\header_logo.png" />
+    <Content Include="Content\Images\Pet\hfp-background.jpg" />
+    <Content Include="Content\Images\Pet\hfp-logo.png" />
+    <Content Include="Content\Images\Renner\fachada.jpg" />
+    <Content Include="Content\Images\Renner\logo.jpg" />
+    <Content Include="Content\Images\Renner\renner.jpg" />
+    <Content Include="Content\Images\Riachuelo\oscar_freire.jpg" />
+    <Content Include="Content\Images\Riachuelo\pgto-riachuelo.png" />
+    <Content Include="Content\Images\Riachuelo\riachuelo.png" />
+    <Content Include="Content\Images\sort_asc.png" />
+    <Content Include="Content\Images\sort_both.png" />
+    <Content Include="Content\Images\sort_desc.png" />
+    <Content Include="Content\Images\Tim\bg.png" />
+    <Content Include="Content\Images\Tim\icone.jpg" />
+    <Content Include="Content\Images\Tim\logo.jpg" />
+    <Content Include="Content\Images\Vivo\viva-tudo.jpg" />
+    <Content Include="Content\Images\Vivo\vivatudo.png" />
+    <Content Include="Content\Images\Vivo\vivo.png" />
+    <Content Include="Content\Images\Vivo\vivo_boneco.gif" />
+    <Content Include="Content\Libs\amcharts\amcharts.js" />
+    <Content Include="Content\Libs\amcharts\funnel.js" />
+    <Content Include="Content\Libs\amcharts\gantt.js" />
+    <Content Include="Content\Libs\amcharts\gauge.js" />
+    <Content Include="Content\Libs\amcharts\images\dragIcon.gif" />
+    <Content Include="Content\Libs\amcharts\images\dragIconBlack.gif" />
+    <Content Include="Content\Libs\amcharts\images\dragIconH.gif" />
+    <Content Include="Content\Libs\amcharts\images\dragIconHBlack.gif" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBig.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBig.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigBlack.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigBlack.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigBlackH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigBlackH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectBigH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmall.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmall.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallBlack.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallBlack.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallBlackH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallBlackH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRectSmallH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBig.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBig.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigBlack.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigBlack.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigBlackH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigBlackH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundBigH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmall.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmall.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallBlack.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallBlack.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallBlackH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallBlackH.svg" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallH.png" />
+    <Content Include="Content\Libs\amcharts\images\dragIconRoundSmallH.svg" />
+    <Content Include="Content\Libs\amcharts\images\eraserIcon.svg" />
+    <Content Include="Content\Libs\amcharts\images\eraserIconH.svg" />
+    <Content Include="Content\Libs\amcharts\images\export.png" />
+    <Content Include="Content\Libs\amcharts\images\exportWhite.png" />
+    <Content Include="Content\Libs\amcharts\images\lens.png" />
+    <Content Include="Content\Libs\amcharts\images\lens.svg" />
+    <Content Include="Content\Libs\amcharts\images\lensWhite.png" />
+    <Content Include="Content\Libs\amcharts\images\lensWhite.svg" />
+    <Content Include="Content\Libs\amcharts\images\lensWhite_old.png" />
+    <Content Include="Content\Libs\amcharts\images\lens_old.png" />
+    <Content Include="Content\Libs\amcharts\images\pencilIcon.svg" />
+    <Content Include="Content\Libs\amcharts\images\pencilIconH.svg" />
+    <Content Include="Content\Libs\amcharts\images\xIcon.svg" />
+    <Content Include="Content\Libs\amcharts\images\xIconH.svg" />
+    <Content Include="Content\Libs\amcharts\lang\pt.js" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern1.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern10.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern11.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern12.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern13.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern14.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern15.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern16.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern17.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern18.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern19.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern2.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern20.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern21.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern3.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern4.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern5.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern6.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern7.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern8.png" />
+    <Content Include="Content\Libs\amcharts\patterns\black\pattern9.png" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern1.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern1r.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern2.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern3.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern4.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern5.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\chalk\pattern6.jpg" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern1.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern10.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern11.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern12.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern13.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern14.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern15.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern16.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern17.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern18.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern19.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern2.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern20.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern21.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern3.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern4.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern5.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern6.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern7.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern8.png" />
+    <Content Include="Content\Libs\amcharts\patterns\white\pattern9.png" />
+    <Content Include="Content\Libs\amcharts\pie.js" />
+    <Content Include="Content\Libs\amcharts\radar.js" />
+    <Content Include="Content\Libs\amcharts\serial.js" />
+    <Content Include="Content\Libs\amcharts\themes\black.js" />
+    <Content Include="Content\Libs\amcharts\themes\chalk.js" />
+    <Content Include="Content\Libs\amcharts\themes\dark.js" />
+    <Content Include="Content\Libs\amcharts\themes\light.js" />
+    <Content Include="Content\Libs\amcharts\themes\patterns.js" />
+    <Content Include="Content\Libs\amcharts\xy.js" />
+    <Content Include="Content\Libs\ammap\ammap.css" />
+    <Content Include="Content\Libs\ammap\ammap.js" />
+    <Content Include="Content\Libs\ammap\ammap_amcharts_extension.js" />
+    <Content Include="Content\Libs\ammap\images\arrowDown.gif" />
+    <Content Include="Content\Libs\ammap\images\arrowUp.gif" />
+    <Content Include="Content\Libs\ammap\images\export.png" />
+    <Content Include="Content\Libs\ammap\images\homeIcon.gif" />
+    <Content Include="Content\Libs\ammap\images\homeIconWhite.gif" />
+    <Content Include="Content\Libs\ammap\images\minus.gif" />
+    <Content Include="Content\Libs\ammap\images\panDown.gif" />
+    <Content Include="Content\Libs\ammap\images\panLeft.gif" />
+    <Content Include="Content\Libs\ammap\images\panRight.gif" />
+    <Content Include="Content\Libs\ammap\images\panUp.gif" />
+    <Content Include="Content\Libs\ammap\images\plus.gif" />
+    <Content Include="Content\Libs\ammap\images\xIcon.gif" />
+    <Content Include="Content\Libs\ammap\images\xIcon.svg" />
+    <Content Include="Content\Libs\ammap\images\xIconH.gif" />
+    <Content Include="Content\Libs\ammap\images\xIconH.svg" />
+    <Content Include="Content\Libs\ammap\lang\pt.js" />
+    <Content Include="Content\Libs\ammap\maps\js\brazilHigh.js" />
+    <Content Include="Content\Libs\ammap\maps\js\brazilLow.js" />
+    <Content Include="Content\Libs\ammap\maps\svg\brazilHigh.svg" />
+    <Content Include="Content\Libs\ammap\maps\svg\brazilLow.svg" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern1.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern10.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern11.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern12.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern13.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern14.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern15.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern16.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern17.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern18.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern19.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern2.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern20.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern21.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern3.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern4.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern5.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern6.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern7.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern8.png" />
+    <Content Include="Content\Libs\ammap\patterns\black\pattern9.png" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern1.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern1r.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern2.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern3.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern4.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern5.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\chalk\pattern6.jpg" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern1.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern10.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern11.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern12.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern13.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern14.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern15.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern16.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern17.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern18.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern19.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern2.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern20.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern21.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern3.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern4.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern5.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern6.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern7.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern8.png" />
+    <Content Include="Content\Libs\ammap\patterns\white\pattern9.png" />
+    <Content Include="Content\Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Content\Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Content\Scripts\jquery.dataTables.min.js" />
+    <Content Include="Content\Scripts\sankey.js" />
+    <Content Include="Content\Scripts\select2.full.min.js" />
+    <Content Include="Content\Styles\bootstrap-datepicker.min.css" />
+    <Content Include="Content\Styles\bootstrap-timepicker.min.css" />
+    <Content Include="Content\Styles\datatables.min.css" />
+    <Content Include="Content\Styles\select2.min.css" />
+    <Content Include="index.html" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\MenuItem.html" />
+    <Content Include="Views\Vivo\horahora.cshtml" />
+    <Content Include="Views\master.cshtml" />
+    <Content Include="Views\Home\home.cshtml" />
+    <Content Include="Content\Fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\Fonts\ionicons.ttf" />
+    <Content Include="Content\Fonts\ionicons.woff" />
+    <Content Include="Views\Vivo\producao.cshtml" />
+    <Content Include="Views\Vivo\btc.cshtml" />
+    <Content Include="Views\Vivo\pagamento.cshtml" />
+    <Content Include="Views\Vivo\carteira.cshtml" />
+    <Content Include="Views\Riachuelo\horahora.cshtml" />
+    <Content Include="Views\Riachuelo\producao.cshtml" />
+    <Content Include="Views\Riachuelo\btc.cshtml" />
+    <Content Include="Views\Riachuelo\pagamento.cshtml" />
+    <Content Include="Views\Riachuelo\efetividade.cshtml" />
+    <Content Include="Views\Riachuelo\carteira.cshtml" />
+    <Content Include="Views\Renner\horahora.cshtml" />
+    <Content Include="Views\Renner\producao.cshtml" />
+    <Content Include="Views\Renner\btc.cshtml" />
+    <Content Include="Views\Renner\pagamento.cshtml" />
+    <Content Include="Views\Tim\Callflex\horahora.cshtml" />
+    <Content Include="Views\Tim\Sinergy\horahora.cshtml" />
+    <Content Include="Views\Tim\Callflex\producao.cshtml" />
+    <Content Include="Views\Tim\Callflex\btc.cshtml" />
+    <Content Include="Views\Pet\horahora.cshtml" />
+    <Content Include="Views\Pet\producao.cshtml" />
+    <Content Include="Views\Pet\btc.cshtml" />
+    <Content Include="Views\Pet\promessasms.cshtml" />
+    <Content Include="Views\Mktzap\dashboard.cshtml" />
+    <Content Include="Content\Json\datatables-lang.json" />
+    <Content Include="Views\Analytics\acesso.cshtml" />
+    <Content Include="Views\Analytics\diariobordo.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App\app-module.js" />
+    <Content Include="App\Config\app-http.js" />
+    <Content Include="App\Directives\highChart.js" />
+    <Content Include="App\Filters\divideSumColumns.js" />
+    <Content Include="App\Filters\megaNumber.js" />
+    <Content Include="App\Filters\percentage.js" />
+    <Content Include="App\Filters\sumByColumn.js" />
+    <Content Include="App\Services\dadosPagina.js" />
+    <Content Include="App\Services\httpInterceptor.js" />
+    <Content Include="Content\Images\ccashlogo.png" />
+    <Content Include="Content\Images\ccashbg.jpg" />
+    <Content Include="Content\Scripts\adminlte.js" />
+    <Content Include="Content\Scripts\angular-filter.min.js" />
+    <Content Include="Content\Scripts\angular.min.js" />
+    <Content Include="Content\Scripts\bootstrap.min.js" />
+    <Content Include="Content\Scripts\highcharts.js" />
+    <Content Include="Content\Scripts\jquery.min.js" />
+    <Content Include="Content\Styles\adminlte.min.css" />
+    <Content Include="Content\Styles\app.css" />
+    <Content Include="Content\Styles\bootstrap.min.css" />
+    <Content Include="Content\Styles\font-awesome.min.css" />
+    <Content Include="Content\Styles\google-fonts.css" />
+    <Content Include="Content\Styles\ionicons.min.css" />
+    <Content Include="Content\Styles\loading.css" />
+    <Content Include="Content\Styles\skin-black.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="login.html" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
+    <Compile Include="Controllers\AutenticacaoController.cs" />
+    <Compile Include="Controllers\MktzapController.cs" />
+    <Compile Include="Controllers\PetController.cs" />
+    <Compile Include="Controllers\RennerController.cs" />
+    <Compile Include="Controllers\RiachueloController.cs" />
+    <Compile Include="Controllers\TimController.cs" />
+    <Compile Include="Controllers\VivoController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Autorizar.cs" />
+    <Compile Include="Models\Captcha.cs" />
+    <Compile Include="Models\EncryptHelper.cs" />
+    <Compile Include="Models\Gravar.cs" />
+    <Compile Include="Models\Sessao.cs" />
+    <Compile Include="Models\SqlHelper.cs" />
+    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>25899</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:25899/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

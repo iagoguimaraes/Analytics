@@ -1,0 +1,391 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-mktzap-dashboard">
+    <!-- DASHBOARD -->
+    <div ng-if="dashboard.status === 200">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].atendimento | megaNumber"></h3>
+                        <p>Atendimento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-comments-o"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].finalizado | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].finalizado / dashboard.data.Table[0].atendimento | percentage: 1"></h4>
+                        <p>Finalizado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-comments-o"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].interacao | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].interacao / dashboard.data.Table[0].finalizado | percentage: 1"></h4>
+                        <p>Interação</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting-o"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].cpc | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpc / dashboard.data.Table[0].interacao | percentage: 1"></h4>
+                        <p>CPC</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].cpca | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].cpca / dashboard.data.Table[0].cpc | percentage: 1"></h4>
+                        <p>CPCA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].negociacao | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].negociacao / dashboard.data.Table[0].cpca | percentage: 1"></h4>
+                        <p>Negociação</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <h3 class="text-center">Atendimento por Canal</h3>
+                <high-chart series="dashboard.atendimentoCanal" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <h3 class="text-center">Atendimento por Setor</h3>
+                <high-chart series="dashboard.atendimentoSetor" axis-Categories="dashboard.setores" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+        </div>
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-8">
+                <h3 class="text-center">Atendimento por Campanha</h3>
+                <column-chart dados="dashboard.data.Table2" series-name="Qt Atendimento"></column-chart>
+                <high-chart series="dashboard.atendimentoCampanha" axis-Categories="dashboard.campanhas" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table4" paging="false" scroll-collapse="true" scroll-y="324px" order="[[1,'desc']]"></d-table>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h3>
+                    Análise por Região
+                    <small class="pull-right">
+                        <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                            <option value="atendimento">Atendimento</option>
+                            <option value="finalizado">Finalizado</option>
+                            <option value="interacao">Interação</option>
+                            <option value="cpc">CPC</option>
+                            <option value="cpca">CPCA</option>
+                            <option value="negociacao">Negociação</option>
+                            <option value="%finalizado">% Finalizado</option>
+                            <option value="%interacao">% Interacao</option>
+                            <option value="%cpc">% CPC</option>
+                            <option value="%negociado">% Negociacao</option>
+                        </select>
+                    </small>
+                </h3>
+                <mapa-brasil style="height: 600px" width="100%" dados="mapa.dados"></mapa-brasil>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h3 class="box-title">
+                    Gráfico por Dia
+                    <small class="pull-right">
+                        <select ng-model="grafico.eixo" ng-change="carregarGrafico()">
+                            <option value="dataentrada">Data Entrada</option>
+                            <option value="datafinalizado">Data Finalização</option>
+                        </select>
+                        <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                            <option value="atendimento">Atendimento</option>
+                            <option value="finalizado">Finalizado</option>
+                            <option value="interacao">Interação</option>
+                            <option value="cpc">CPC</option>
+                            <option value="cpca">CPCA</option>
+                            <option value="negociacao">Negociação</option>
+                            <option value="%finalizado">% Finalizado</option>
+                            <option value="%interacao">% Interacao</option>
+                            <option value="%cpc">% CPC</option>
+                            <option value="%negociado">% Negociacao</option>
+                        </select>
+                    </small>
+                </h3>
+                <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table8" scroll-collapse="true" scroll-y="324px" order="[[6,'desc']]"></d-table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            <li><a data-target="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-clock-o"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dadosFiltros.status === 200">
+
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data de Finalização Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.fDtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data de Finalização Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.fDtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data de Entrada Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.eDtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data de Entrada Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.eDtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Campanhas</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dadosFiltros.data.Table"></select2>
+                </div>
+
+                <!--SETORES-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Setores</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.setores" dados="dadosFiltros.data.Table1"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Configurações -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">
+                        Atualizar
+                        <input type="checkbox" class="pull-right" ng-model="atualizar.check" ng-change="atualizarDash(atualizar.check)">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">A cada quantos minutos</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <input type="number" class="form-control pull-right" ng-model="atualizar.tempo" />
+                    </div>
+                </div>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-mktzap-dashboard', function ($scope, $http, $filter, $interval, dadosPagina) {
+
+        dadosPagina.titulo = 'Dashboard Mktzap';
+        dadosPagina.descricao = '';
+
+        $scope.filtros = {
+            fDtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            fDtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            eDtini: "",
+            eDtfim: "",
+            campanhas: "",
+            setores: ""
+        };
+
+        $scope.mapa = {
+            indicador: 'atendimento'
+        };
+        $scope.grafico = {
+            eixo: 'dataentrada',
+            indicador: 'atendimento'
+        };
+
+        // atualização automática
+        $scope.atualizar = {
+            check: false,
+            tempo: 60
+        }
+        $scope.Timer = null;
+
+        // iniciar ou parar atualização automatica do dashbaord
+        $scope.atualizarDash = function (v) {
+            if (v) {
+                $scope.Timer = $interval($scope.carregarDashboard, $scope.atualizar.tempo * 1000 * 60);
+            }
+            else {
+                if (angular.isDefined($scope.Timer)) {
+                    $interval.cancel($scope.Timer);
+                }
+            }
+        }
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/mktzap/filtros",
+            }).then(function success(r) {
+                $scope.dadosFiltros = r;
+            });
+        }
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/mktzap/dashboard",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard = r;
+
+                $scope.dashboard.campanhas = r.data.Table2.map(obj => obj.campanha);
+                $scope.dashboard.setores = r.data.Table3.map(obj => obj.setor);
+
+                $scope.dashboard.atendimentoCanal = [{ name: 'Atendimento', data: r.data.Table1.map(obj => ({ name: obj.canal, y: obj.atendimento })) }];
+                $scope.dashboard.atendimentoCampanha = [{ name: 'Atendimento', data: r.data.Table2.map(obj => obj.atendimento) }];
+                $scope.dashboard.atendimentoSetor = [{ name: 'Atendimento', data: r.data.Table3.map(obj => obj.atendimento) }];
+
+                $scope.carregarMapa();
+                $scope.carregarGrafico();
+            });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.data.Table5;
+            switch ($scope.mapa.indicador) {
+                case '%finalizado':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.finalizado * 100 / obj.atendimento).toFixed(1) }));
+                    break;
+                case '%interacao':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.interacao * 100 / obj.finalizado).toFixed(1) }));
+                    break;
+                case '%cpc':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.interacao).toFixed(1) }));
+                    break;
+                case '%negociado':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.negociacao * 100 / obj.cpca).toFixed(1) }));
+                    break;
+                default:
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+        $scope.carregarGrafico = function () {
+            let dados;
+
+            if ($scope.grafico.eixo == 'dataentrada')
+                dados = $scope.dashboard.data.Table6;
+            else if ($scope.grafico.eixo == 'datafinalizado')
+                dados = $scope.dashboard.data.Table7;
+
+            $scope.dashboard.datas = dados.map(obj => obj.data);
+
+            switch ($scope.grafico.indicador) {
+                case '%finalizado':
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.finalizado * 100 / obj.atendimento).toFixed(1)/1) }];
+                    break;
+                case '%interacao':
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1 / 1)) }];
+                    break;
+                case '%cpc':
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1) / 1) }];
+                    break;
+                case '%negociado':
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) / 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            }
+        }
+
+
+        $scope.carregarFiltros();
+        $scope.carregarDashboard();
+
+    });
+</script>

@@ -1,0 +1,195 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace Analytics
+{
+    public class SqlHelper : IDisposable
+    {
+        #region Campos
+
+        SqlConnection oSqlConnection;
+
+        #endregion
+
+        #region Propriedades
+        public string server { get; set; }
+        public string database { get; set; }
+        public string user { get; set; }
+        public string pass { get; set; }
+        private string ConnectionString
+        {
+            get
+            {
+                return "Server=" + server + ";" +
+                        "Database=" + database + ";" +
+                        "User Id=" + user + "; " +
+                        "Password=" + pass + ";";
+            }
+        }
+
+        #endregion
+
+        #region Construtor
+
+        public SqlHelper(string Database = "DB_ANALYTICS")
+        {
+            server = "172.20.0.29";
+            database = Database;
+            user = "analytics";
+            pass = "@N@LYT!CScreditcash";
+
+            oSqlConnection = new SqlConnection(ConnectionString);
+        }
+
+        #endregion
+
+        #region Métodos
+        public DataTable ExecuteQueryDataTable(string Query, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Query, oSqlConnection);
+            cmd.CommandTimeout = 18000;
+            SqlDataAdapter da = new SqlDataAdapter();
+            DataTable dt = new DataTable();
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.Text;
+                da.SelectCommand = cmd;
+                da.Fill(dt);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
+        public DataTable ExecuteProcedureDataTable(string Procedure, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
+            cmd.CommandTimeout = 18000;
+            SqlDataAdapter da = new SqlDataAdapter();
+            DataTable dt = new DataTable();
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand = cmd;
+                da.Fill(dt);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
+        public DataSet ExecuteProcedureDataSet(string Procedure, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
+            cmd.CommandTimeout = 18000;
+            SqlDataAdapter da = new SqlDataAdapter();
+            DataSet ds = new DataSet();
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
+        public void ExecuteProcedure(string Procedure, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
+            cmd.CommandTimeout = 18000;
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region Dispose
+
+        // Flag: Has Dispose already been called?
+        bool disposed = false;
+
+        // Public implementation of Dispose pattern callable by consumers.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                // Free any other managed objects here.
+                //
+            }
+
+            // Free any unmanaged objects here.
+            //
+            disposed = true;
+        }
+
+        ~SqlHelper()
+        {
+            Dispose(false);
+        }
+
+        #endregion
+    }
+}

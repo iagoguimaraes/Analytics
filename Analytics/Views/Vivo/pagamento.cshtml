@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-vivo-pagamento">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd | number"></h3>
+                        <p>Qtd Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr | currency:'R$'"></h3>
+                        <p>Vlr Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-8">
+                <high-chart series="dashboard.qtDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <high-chart series="dashboard.qtCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-8">
+                <high-chart series="dashboard.vlDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <high-chart series="dashboard.vlCarteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--SEGMENTACOES-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Segmentações</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+
+<script>
+
+    angular.module('app').controller('ctrl-vivo-pagamento', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Pagamento';
+        dadosPagina.descricao = 'Vivo'
+
+        // filtros iniciais
+        let ontem = new Date();
+        ontem.setDate(ontem.getDate() - 7);
+
+        $scope.filtros = {
+            dtini: $filter('date')(ontem, "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            segmentacoes: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/vivo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.segmentacoes = data.Table1;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.quantidade))}];
+                $scope.dashboard.vlDia = [{ name: 'Valor', data: r.data.Table2.map(obj => (obj.valor)) }];
+                $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table3.map(obj => ({ name: obj.segmentacao, y: obj.quantidade })) }];
+                $scope.dashboard.vlCarteira = [{ name: 'Valor', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmentacao, y: obj.valor })) }];
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
