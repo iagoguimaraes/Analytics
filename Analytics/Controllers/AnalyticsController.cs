@@ -29,7 +29,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("id_grupo", sessao.id_grupo.ToString());
 
-                    DataTable paginas = sql.ExecuteProcedureDataTable("sp_sel_acessoPagina2", parametros);
+                    DataTable paginas = sql.ExecuteProcedureDataTable("sp_sel_acessoPagina", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, paginas);
                 }               
             }
