@@ -87,130 +87,155 @@
                 <h3 class="text-center">Aging Médio</h3>
                 <high-chart series="dashboard.graficoAgn" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
             </div>
-        </div>
 
-    </div>
+            <div class="col-xs-12">
 
-    <!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                    </div>
-                </div>
-
-                <!--SEGMENTACOES-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Segmentacoes</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
-                </div>
-
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.tabela">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Quantidade</th>
+                                <th>Ticket Médio</th>
+                                <th>Aging Médio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in dashboard.tabela">
+                                <td>{{row.data}}</td>
+                                <td>{{row.quantidade}}</td>
+                                <td>{{row.valor}}</td>
+                                <td>{{row.aging}}</td>
+                            </tr>
+                        </tbody>                       
+                    </table>
                 </div>
 
             </div>
-            <!-- /.tab-pane -->
+
         </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
 
-</div>
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--SEGMENTACOES-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmentacoes</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </div>
 
 
-<script>
+    <script>
 
-    angular.module('app').controller('ctrl-vivo-carteira', function ($scope, $http, $filter, $interval, dadosPagina) {
-        dadosPagina.titulo = 'Carteira';
-        dadosPagina.descricao = 'Vivo'
+        angular.module('app').controller('ctrl-vivo-carteira', function ($scope, $http, $filter, $interval, dadosPagina) {
+            dadosPagina.titulo = 'Carteira';
+            dadosPagina.descricao = 'Vivo'
 
-        // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+            // filtros iniciais
+            let newdate = new Date();
+            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
-        $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            segmentacoes: ''
-        };
-        $scope.dashFiltros = {};
-        $scope.dashboard = {};
-        $scope.grafico = {
-            indicador: 'ativo'
-        };
+            $scope.filtros = {
+                dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+                dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+                segmentacoes: ''
+            };
+            $scope.dashFiltros = {};
+            $scope.dashboard = {};
+            $scope.grafico = {
+                indicador: 'ativo'
+            };
 
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/vivo/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            let data = r.data;
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.segmentacoes = data.Table1;
-        });
-
-        // obtem filtros do escopo e carrega os dados do dashboard
-        $scope.carregarDashboard = function () {
+            // carregar os filtros
             $http({
-                method: 'POST',
-                url: "/api/vivo/dashboard/carteira",
+                method: 'GET',
+                url: "/api/vivo/dashboard/filtros",
                 data: $scope.filtros,
             }).then(function success(r) {
-                $scope.dashboard.status = r.status;
-
-                $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.segmentacao, y: obj.mediaAtivo })) }];
-
-                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
-                $scope.dashboard.dia = r.data.Table2;
-
-                $scope.carregarGrafico();
+                let data = r.data;
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.segmentacoes = data.Table1;
             });
-        }
+
+            // obtem filtros do escopo e carrega os dados do dashboard
+            $scope.carregarDashboard = function () {
+                $http({
+                    method: 'POST',
+                    url: "/api/vivo/dashboard/carteira",
+                    data: $scope.filtros,
+                }).then(function success(r) {
+                    $scope.dashboard.status = r.status;
+
+                    $scope.dashboard.resumo = r.data.Table[0];
+                    $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.segmentacao, y: obj.mediaAtivo })) }];
+
+                    $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
+                    $scope.dashboard.dia = r.data.Table2;
+
+                    $scope.carregarGrafico();
+                });
+            }
 
 
-        // carrega o mapa de acordo com o indicador escolhido
-        $scope.carregarGrafico = function () {
-            let dados = $scope.dashboard.dia;
-            let indicador = $scope.grafico.indicador;
+            // carrega o mapa de acordo com o indicador escolhido
+            $scope.carregarGrafico = function () {
+                let dados = $scope.dashboard.dia;
+                let indicador = $scope.grafico.indicador;
 
-            $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
-            $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
-            $scope.dashboard.graficoAgn = [{ name: 'Aging', data: dados.map(obj => (obj[indicador + 'Agn'])) }];
-        }
+                $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
+                $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
+                $scope.dashboard.graficoAgn = [{ name: 'Aging', data: dados.map(obj => (obj[indicador + 'Agn'])) }];
+                $scope.dashboard.tabela = dados.map(obj => ({ data: obj.data, quantidade: obj[indicador], valor: obj[indicador + 'Vlr'], aging: obj[indicador + 'Agn'] }));
+            }
 
 
-        $scope.carregarDashboard();
+            $scope.carregarDashboard();
 
-    });
+        });
 
-</script>
+    </script>
