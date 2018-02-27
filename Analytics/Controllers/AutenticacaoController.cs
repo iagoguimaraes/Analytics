@@ -24,9 +24,9 @@ namespace Analytics.Controllers
                 string recaptcha = form["recaptcha"];
 
                 // valida o captcha
-                Captcha captcha = new Captcha();
-                if (!captcha.ValidarCaptcha(recaptcha))
-                    throw new Exception("Captcha não fornecido");
+                //Captcha captcha = new Captcha();
+                //if (!captcha.ValidarCaptcha(recaptcha))
+                //    throw new Exception("Captcha não fornecido");
 
                 // verica as credencias do AD
                 using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "CREDITCASH"))
