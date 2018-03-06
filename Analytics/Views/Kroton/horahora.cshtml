@@ -199,36 +199,38 @@
                                     <th>Conversão</th>
                                 </tr>
                             </thead>
-                            <tbody ng-repeat="e in dashboard.credor | groupBy: 'empresa'">
+                            <tbody ng-repeat="e in dashboard.credor | groupBy: 'carteira'">
 
                                 <tr class="text-bold">
                                     <td>
                                         <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                        {{e[0].empresa}}
+                                        {{e[0].carteira}}
                                     </td>
                                     <td>{{e | sumByColumn: 'qtd_discado'| number}}</td>
                                     <td>{{e | sumByColumn: 'contato'| number}}</td>
                                     <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                     <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                     <td>{{e | sumByColumn: 'promessa'| number}}</td>
-                                    <td>{{e | divideSumColumns: 'contato':'qtd_discado' | percentage:1}}</td>
+                                    <td>{{e | divideSumColumns: 'contato':'qtd_discado' | corrigePercent | percentage:1}}</td>
                                     <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                     <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                     <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
-                                </tr>
+                            
+                             </tr>
 
-                                <tr ng-repeat="c in e" ng-show="showTbody">
-                                    <td>{{c.carteira}}</td>
-                                    <td>{{c.qtd_discado | number}}</td>
-                                    <td>{{c.contato | number}}</td>
-                                    <td>{{c.cpc | number}}</td>
-                                    <td>{{c.cpca | number}}</td>
-                                    <td>{{c.promessa | number}}</td>
-                                    <td>{{c.contato / c.qtd_discado | percentage:1}}</td>
-                                    <td>{{c.cpc / c.contato | percentage:1}}</td>
-                                    <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                    <td>{{c.promessa / c.cpca | percentage:1}}</td>
-                                </tr>
+
+                            <tr ng-repeat="c in e" ng-show="showTbody">
+                                <td>{{c.status_aluno}}</td>
+                                <td>{{c.qtd_discado | number}}</td>
+                                <td>{{c.contato | number}}</td>
+                                <td>{{c.cpc | number}}</td>
+                                <td>{{c.cpca | number}}</td>
+                                <td>{{c.promessa | number}}</td>
+                                <td>{{c.contato / c.qtd_discado | corrigePercent | percentage:1}}</td>
+                                <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                            </tr>
 
                             </tbody>
 
