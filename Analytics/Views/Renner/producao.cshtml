@@ -210,12 +210,12 @@
         dadosPagina.descricao = 'Renner'
 
         // filtros iniciais
-        let ontem = new Date();
-        ontem.setDate(ontem.getDate() - 7);
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
-            dtini: $filter('date')(ontem, "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             produtos: ''
         };
         $scope.dashFiltros = {};
