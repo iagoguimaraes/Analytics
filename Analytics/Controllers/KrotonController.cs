@@ -15,16 +15,22 @@ namespace Analytics.Controllers
     {
 
         [Route("dashboard/filtros")]
-        [HttpGet]
+        [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardFiltros()
+        public HttpResponseMessage DashboardFiltros(FormDataCollection form)
         {
             try
             {
+                int id_empresa = Convert.ToInt16(form["id_empresa"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();                    
+
+                    parametros.Add("empresa", id_empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -46,6 +52,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
+                int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
                 {
@@ -55,6 +62,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("statusAluno", statusAluno);
+                    parametros.Add("empresa", id_empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -78,6 +86,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
+                int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
                 {
@@ -87,6 +96,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("statusAluno", statusAluno);
+                    parametros.Add("empresa", id_empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

@@ -314,7 +314,7 @@
     angular.module('app').controller('ctrl-kroton-horahora', function ($scope, $http, $filter, $interval, dadosPagina) {
 
         dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'Kroton Ativos';
+        dadosPagina.descricao = 'Kroton Inativos';
         $scope.showTbody = false;
 
         $scope.filtros = {
@@ -322,6 +322,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteiras: '',
             statusAluno: '',
+            id_empresa: '2', /*Id Empresa - Kroton Inativos*/
         };
 
         $scope.dashFiltros = {};
@@ -331,7 +332,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/kroton/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
