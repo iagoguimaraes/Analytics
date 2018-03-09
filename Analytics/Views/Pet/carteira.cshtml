@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-riachuelo-carteira">
+<div ng-controller="ctrl-pet-carteira">
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
@@ -54,14 +54,6 @@
 
 
             </div>
-
-
-
-
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <h3 class="text-center">Média Carteira Ativa por Produto</h3>
-                <high-chart series="dashboard.carteira" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-            </div>
         </div>
 
         <div class="row margin-bottom">
@@ -94,7 +86,7 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+            <div class="tab-pane active" id="control-sidebar-filters-tab">
                 <!--DATA INCIAL-->
                 <div class="form-group">
                     <label class="control-sidebar-subheading">Data Inicial</label>
@@ -117,12 +109,6 @@
                     </div>
                 </div>
 
-                <!--CAMPANHAS-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Campanhas</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                </div>
-
                 <!--BOTÃO-->
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -141,9 +127,9 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-riachuelo-carteira', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-pet-carteira', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Carteira';
-        dadosPagina.descricao = 'Riachuelo'
+        dadosPagina.descricao = 'Health for Pet'
 
         // filtros iniciais
         let newdate = new Date();
@@ -152,38 +138,26 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: ''
         };
-        $scope.dashFiltros = {};
+
         $scope.dashboard = {};
         $scope.grafico = {
             indicador: 'ativo'
         };
 
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/riachuelo/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            let data = r.data;
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = data.Table;
-        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/riachuelo/dashboard/carteira",
+                url: "/api/pet/dashboard/carteira",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.carteira, y: obj.ativo })) }];
-                $scope.dashboard.dia = r.data.Table2;
+                $scope.dashboard.dia = r.data.Table1;
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
 
                 $scope.carregarGrafico();
             });
