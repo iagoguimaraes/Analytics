@@ -8,6 +8,7 @@
             series: '=',
             titleText: '@',
             axisCategories: '=',
+            axis1Categories: '=',
             yAxisTitle: '@',
             yAxisMin: '@',
             yAxisMax: '@',
@@ -33,9 +34,15 @@
                     title: {
                         text: scope.titleText
                     },
-                    xAxis: {
-                        categories: scope.axisCategories,
-                    },
+                    xAxis: [
+                        {
+                            categories: scope.axisCategories,
+                        },
+                        {
+                            categories: scope.axis1Categories,
+                            opposite: true
+                        }
+                    ],
                     yAxis: [
                         {
                             title: {

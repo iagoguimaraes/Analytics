@@ -187,6 +187,41 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentacoes", segmentacoes);
+                    parametros.Add("campanhas", campanhas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_comparativo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
     }
 }
