@@ -216,6 +216,52 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/multicanal")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardMultiCanal(FormDataCollection form)
+        {
+            try
+            {
+                string fDtini = form["fDtini"];
+                string fDtfim = form["fDtfim"];
+                string eDtini = form["eDtini"];
+                string eDtfim = form["eDtfim"];
+
+                DateTime minDate = Convert.ToDateTime("1753-01-01 12:00:00");
+                DateTime maxDate = Convert.ToDateTime("9999-12-31 23:59:59");
+
+                DateTime _fDtini = string.IsNullOrEmpty(fDtini) ? minDate : Convert.ToDateTime(fDtini);
+                DateTime _fDtfim = string.IsNullOrEmpty(fDtfim) ? maxDate : Convert.ToDateTime(fDtfim);
+                DateTime _eDtini = string.IsNullOrEmpty(eDtini) ? minDate : Convert.ToDateTime(eDtini);
+                DateTime _eDtfim = string.IsNullOrEmpty(eDtfim) ? maxDate : Convert.ToDateTime(eDtfim);
+
+                DataTable _campanhas = new DataTable();
+                _campanhas.Columns.Add();
+                _campanhas.Rows.Add(new object[] { 267 });
+                _campanhas.Rows.Add(new object[] { 593 });
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("fDtini", _fDtini);
+                    parametros.Add("fDtfim", _fDtfim);
+                    parametros.Add("eDtini", _eDtini);
+                    parametros.Add("eDtfim", _eDtfim);
+                    parametros.Add("campanhas", _campanhas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("dashboard_mktzap", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
