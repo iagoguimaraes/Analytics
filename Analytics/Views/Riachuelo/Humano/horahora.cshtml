@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-riachuelo-hum-horahora">
+    {{dados}}
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-riachuelo-hum-horahora', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Hora Hora';
+        dadosPagina.descricao = 'Riachuelo'
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.data;
+        });
+        
+    });
+</script>

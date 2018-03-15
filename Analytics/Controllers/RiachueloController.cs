@@ -13,6 +13,9 @@ namespace Analytics.Controllers
     [RoutePrefix("api/riachuelo")]
     public class RiachueloController : ApiController
     {
+
+        #region DIGITAL
+
         [Route("dashboard/filtros")]
         [HttpGet]
         [Autorizar]
@@ -212,6 +215,32 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        #endregion
+
+        #region HUMANO
+
+        [Route("dashboard/humano/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
 
     }
 }
