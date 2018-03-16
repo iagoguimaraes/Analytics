@@ -9,7 +9,9 @@
         link: function (scope, element, attr, ctrl) {
             $(element[0]).datepicker({
                 format: 'yyyy-mm-dd'
-                , autoclose: true
+                ,autoclose: true
+                ,ignoreReadonly: true
+                ,allowInputToggle: true
             });
         }
     }
