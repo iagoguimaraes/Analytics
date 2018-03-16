@@ -201,6 +201,21 @@ namespace Analytics.Controllers
                 DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
                 DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentacoes_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes_2"]);
+                DataTable campanhas_2 = JsonConvert.DeserializeObject<DataTable>(form["campanhas_2"]);
+
+                string procedure = "sp_dashboard_comparativo_hora";
+
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_comparativo_mes";
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
                 {
@@ -212,8 +227,10 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentacoes", segmentacoes);
                     parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentacoes_2", segmentacoes_2);
+                    parametros.Add("campanhas_2", campanhas_2);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_comparativo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
