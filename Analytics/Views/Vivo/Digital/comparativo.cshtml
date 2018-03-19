@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <!--INDICADORES PERCENTUAIS-->
+            <!--INDICADORES PERCENTUAIS e MAILING-->
             <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
                 <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
                     <div class="inner">
@@ -133,6 +133,19 @@
                         <i class="fa fa-thumbs-up"></i>
                     </div>
                     <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-lg-2">
+                <div class="small-box" ng-class="dashboard.mailing.vs >= 0 ? 'bg-green' : 'bg-red'">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.mailing.vs | percentage:1"></h3>
+                        <p>{{dashboard.mailing.p1 | number}} vs {{dashboard.mailing.p2 | number}}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                    <a href="#" ng-click="grafico.indicador = 'mailing'" class="small-box-footer">Mailing <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -344,8 +357,8 @@
         }
 
         $scope.carregarComparativo = function () {
-            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(mailing) mailing from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa, sum(mailing2) mailing from ?', [$scope.dashboard.dados.Table])[0];
 
             let calculo = {
                 hitrate1: dados1.contato / dados1.discado,
@@ -368,6 +381,8 @@
             $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 - calculo.txloc2 };
             $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 - calculo.txapv2 };
             $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 - calculo.conversao2 };
+
+            $scope.dashboard.mailing = { p1: dados1.mailing, p2: dados2.mailing, vs: dados1.mailing / dados2.mailing - 1 };
 
         }
 
