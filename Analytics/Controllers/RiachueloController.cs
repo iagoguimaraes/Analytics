@@ -319,6 +319,91 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoProducao(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable empresas_2 = JsonConvert.DeserializeObject<DataTable>(form["empresas_2"]);
+                DataTable carteiras_2 = JsonConvert.DeserializeObject<DataTable>(form["carteiras_2"]);
+
+                string procedure = "sp_dashboard_humano_comparativo_hora";
+
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_humano_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_humano_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_humano_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_humano_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_humano_comparativo_mes";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("empresas_2", empresas_2);
+                    parametros.Add("carteiras_2", carteiras_2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }
