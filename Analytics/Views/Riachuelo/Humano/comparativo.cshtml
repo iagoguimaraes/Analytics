@@ -141,7 +141,7 @@
                 <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-green' : 'bg-red'">
                     <div class="inner">
                         <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
-                        <p>{{dashboard.esforco.p1 | percentage:1}} vs {{dashboard.esforco.p2 | percentage:1}}</p>
+                        <p>{{dashboard.esforco.p1 | number:1}} vs {{dashboard.esforco.p2 | number:1}}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-up"></i>
@@ -379,8 +379,8 @@
                 txapv2: dados2.cpca / dados2.cpc,
                 conversao1: dados1.promessa / dados1.cpca,
                 conversao2: dados2.promessa / dados2.cpca,
-                esforco1: dados1.promessa / dados1.discado,
-                esforco2: dados2.promessa / dados2.discado
+                esforco1: dados1.discado / dados1.promessa,
+                esforco2: dados2.discado / dados2.promessa
             }
 
             $scope.dashboard.discado = { p1: dados1.discado, p2: dados2.discado, vs: dados1.discado / dados2.discado - 1 };
@@ -393,7 +393,7 @@
             $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 - calculo.txloc2 };
             $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 - calculo.txapv2 };
             $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 - calculo.conversao2 };
-            $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 - calculo.esforco2 };
+            $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 / calculo.esforco2 - 1};
         }
 
         $scope.carregarDashboard();
