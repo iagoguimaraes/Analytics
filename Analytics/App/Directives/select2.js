@@ -6,10 +6,11 @@
         scope: {
             dados: '=',
         },
-        template: '<select class="select2" multiple="multiple"></select>',
+        template: '<select class="select2" multiple="multiple" readonly="true"></select>',
         link: function (scope, element, attr, ctrl) {
             $(element[0]).select2({
-                data: scope.dados.map(obj => ({ 'id': obj[Object.keys(obj)[0]], 'text': obj[Object.keys(obj)[1]] }))
+                data: scope.dados.map(obj => ({ 'id': obj[Object.keys(obj)[0]], 'text': obj[Object.keys(obj)[1]] })),
+                allowClear: true,
             });
 
             // transforma array em array de objeto
