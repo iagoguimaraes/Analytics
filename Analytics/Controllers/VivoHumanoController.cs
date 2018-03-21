@@ -99,7 +99,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/humano/btc")]
+        [Route("dashboard/btc")]
         [HttpPost]
         [Autorizar]
         [Gravar]
