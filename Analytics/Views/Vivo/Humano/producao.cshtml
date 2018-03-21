@@ -6,13 +6,18 @@
 <!-- DAHSBOARD -->
 <div ng-controller="ctrl-vivo-producao">
     <div ng-if="dashboard.status == 200">
-
+        
+        <!-- RESUMO -->
         <div class="row margin-bottom">
+            
+            <!-- BANNER -->
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box" style="background-color: #7e2595">
                     <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
                 </div>
             </div>
+
+           
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -75,7 +80,7 @@
         </div>
 
 
-
+        <!-- ANÁLISE POR DIA -->
         <div class="row">
             <div class="col-xs-12">
 
@@ -90,37 +95,33 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
-                                        <th>AD</th>
-                                        <th>Mailing</th>
+                                        <th>PA</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Promessa / PA </th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
-                                        <th>Ocupação</th>
-                                        <th>Mailing/AD</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="dia in dashboard.dia">
-                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{dia.ad | number}}</td>
-                                        <td>{{dia.mailing | number}}</td>
+                                        <td>{{dia.dt | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.pa | number }}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.promessa / dia.pa | number : 0 }}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
-                                        <td>{{dia.falado / dia.ad / dia.logado | percentage:1}}</td>
-                                        <td>{{dia.mailing / dia.ad | number:0}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -131,6 +132,7 @@
             </div>
         </div>
 
+        <!-- GRÁFICO POR HORA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <h3 class="box-title">
@@ -141,8 +143,6 @@
                             <option value="txloc">Tx Loc</option>
                             <option value="txapv">Tx Apv</option>
                             <option value="conversao">Conversão</option>
-                            <option value="ocupacao">Ocupação</option>
-                            <option value="mailing">Mailing</option>
                             <option value="discado">Discado</option>
                             <option value="contato">Contato</option>
                             <option value="cpc">CPC</option>
@@ -155,6 +155,7 @@
             </div>
         </div>
 
+        <!-- ANÁLISE POR OCORRENCIA -->
         <div class="row">
             <div class="col-xs-12">
                 <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.tabulacao" paging="false" order="[[2,'desc']]"></d-table>
@@ -163,7 +164,7 @@
 
     </div>
 
-    <!-- SIDE BAR CONTROL -->
+    <!-- SIDE BAR CONTROL (MENU LATERAL)-->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -195,16 +196,22 @@
                     </div>
                 </div>
 
-                <!--SEGMENTACOES-->
+                <!--EMPRESA-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Segmentações</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                    <label class="control-sidebar-subheading">Empresa</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
                 </div>
 
-                <!--CAMPANHAS-->
+                <!--CARTEIRA-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Campanhas</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
+                    <label class="control-sidebar-subheading">Carteira</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                </div>
+
+                <!--AGING-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Aging</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
                 </div>
 
                 <!--BOTÃO-->
@@ -225,7 +232,7 @@
 <script>
     angular.module('app').controller('ctrl-vivo-producao', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Produção';
-        dadosPagina.descricao = 'Vivo AD'
+        dadosPagina.descricao = 'Vivo Humano'
 
         // filtros iniciais
         let newdate = new Date();
@@ -234,30 +241,32 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            campanhas: '',
-            segmentacoes: ''
+            empresa: '',
+            carteira: '',
+            aging: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'hitrate' };
+        $scope.grafico = { indicador: 'promessa' };
 
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/vivo/dashboard/filtros",
+            url: "/api/vivo/humano/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.campanhas = data.Table;
-            $scope.dashFiltros.segmentacoes = data.Table1;
+            $scope.dashFiltros.empresa = data.Table;
+            $scope.dashFiltros.carteira = data.Table1;
+            $scope.dashFiltros.aging = data.Table2;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/vivo/dashboard/producao",
+                url: "/api/vivo/humano/dashboard/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
@@ -287,10 +296,7 @@
                     break;
                 case 'conversao':
                     $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;
-                case 'ocupacao':
-                    $scope.dashboard.grafico = [{ name: 'ocupacao', data: dados.map(obj => (obj.falado / obj.ad / obj.logado * 100).toFixed(1) * 1) }];
-                    break;
+                    break;               
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
