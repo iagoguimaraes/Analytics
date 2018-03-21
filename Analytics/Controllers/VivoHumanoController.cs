@@ -99,98 +99,6 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/btc")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardBTC(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
-                    parametros.Add("campanhas", campanhas);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("dashboard/pagamento")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardPagamento(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("dashboard/carteira")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
         [Route("dashboard/comparativo")]
         [HttpPost]
         [Autorizar]
@@ -203,10 +111,14 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
                 DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
-                DataTable segmentacoes_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes_2"]);
-                DataTable campanhas_2 = JsonConvert.DeserializeObject<DataTable>(form["campanhas_2"]);
+
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+
+                DataTable empresa_2= JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
+                DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
+                DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
 
                 string procedure = "sp_dashboard_comparativo_hora";
 
@@ -229,10 +141,14 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
-                    parametros.Add("campanhas", campanhas);
-                    parametros.Add("segmentacoes_2", segmentacoes_2);
-                    parametros.Add("campanhas_2", campanhas_2);
+
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("aging", aging);
+
+                    parametros.Add("empresa_2", empresa_2);
+                    parametros.Add("carteira_2", carteira_2);
+                    parametros.Add("aging_2", aging_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
