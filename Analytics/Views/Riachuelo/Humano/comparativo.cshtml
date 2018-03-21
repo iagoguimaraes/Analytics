@@ -3,7 +3,8 @@
 }
 
 
-<div ng-controller="ctrl-vivo-comparativo">
+
+<div ng-controller="ctrl-riachuelo-hum-comparativo">
     <div ng-if="dashboard.status == 200">
 
         <!--GRAFICO-->
@@ -13,7 +14,7 @@
                 <high-chart series="dashboard.series" axis-Categories="dashboard.categories" type="line" plot-Options-Line-Data-Label="true"></high-chart>
             </div>
         </div>
-        
+
         <!-- QUADROS -->
         <div class="row">
 
@@ -53,7 +54,7 @@
                     <div class="icon">
                         <i class="fa fa-male"></i>
                     </div>
-                    <a href="#"  ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="#" ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -66,7 +67,7 @@
                     <div class="icon">
                         <i class="fa fa-street-view"></i>
                     </div>
-                    <a href="#"  ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="#" ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -79,11 +80,11 @@
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
                     </div>
-                    <a href="#"  ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
-            <!--INDICADORES PERCENTUAIS e MAILING-->
+            <!--INDICADORES PERCENTUAIS-->
             <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
                 <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
                     <div class="inner">
@@ -137,15 +138,15 @@
             </div>
 
             <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.mailing.vs >= 0 ? 'bg-green' : 'bg-red'">
+                <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-green' : 'bg-red'">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.mailing.vs | percentage:1"></h3>
-                        <p>{{dashboard.mailing.p1 | number}} vs {{dashboard.mailing.p2 | number}}</p>
+                        <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
+                        <p>{{dashboard.esforco.p1 | number:1}} vs {{dashboard.esforco.p2 | number:1}}</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
+                        <i class="fa fa-thumbs-up"></i>
                     </div>
-                    <a href="#" ng-click="grafico.indicador = 'mailing'" class="small-box-footer">Mailing <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -188,16 +189,16 @@
                     </div>
                 </div>
 
-                <!--SEGMENTACOES-->
+                <!--EMPRESA 1-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Segmentações</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                    <label class="control-sidebar-subheading">Empresas</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
                 </div>
 
-                <!--CAMPANHAS-->
+                <!--CARTEIRA 1-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Campanhas</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
+                    <label class="control-sidebar-subheading">Carteiras</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                 </div>
 
                 <!--VISÃO-->
@@ -244,16 +245,16 @@
                     </div>
                 </div>
 
-                <!--SEGMENTACOES-->
+                <!--EMPRESA 2-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Segmentações</label>
-                    <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.segmentacoes_2" dados="dashFiltros.segmentacoes"></select2>
+                    <label class="control-sidebar-subheading">Empresas</label>
+                    <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresas_2" dados="dashFiltros.empresas_2"></select2>
                 </div>
 
-                <!--CAMPANHAS-->
+                <!--CARTEIRA 2-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Campanhas</label>
-                    <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.campanhas_2" dados="dashFiltros.campanhas"></select2>
+                    <label class="control-sidebar-subheading">Carteiras</label>
+                    <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteiras_2" dados="dashFiltros.carteiras_2"></select2>
                 </div>
             </div>
 
@@ -266,10 +267,11 @@
 
 </div>
 
+
 <script>
-    angular.module('app').controller('ctrl-vivo-comparativo', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-riachuelo-hum-comparativo', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Comparativo';
-        dadosPagina.descricao = 'Vivo'
+        dadosPagina.descricao = 'Riachuelo'
 
         // filtros iniciais
         let _dt1 = new Date();
@@ -284,10 +286,10 @@
             dtfim: _dt1,
             dtini_2: _dt2,
             dtfim_2: _dt2,
-            campanhas: '',
-            segmentacoes: '',
-            campanhas_2: '',
-            segmentacoes_2: '',
+            empresas: '',
+            carteiras: '',
+            empresas_2: '',
+            carteiras_2: '',
             visao: 'hora',
         };
         $scope.dashFiltros = {};
@@ -297,20 +299,24 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/vivo/dashboard/filtros",
+            url: "/api/riachuelo/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.campanhas = data.Table;
-            $scope.dashFiltros.segmentacoes = data.Table1;
+            $scope.dashFiltros.empresas = data.Table;
+            $scope.dashFiltros.carteiras = data.Table1;
+            $scope.dashFiltros.empresas_2 = data.Table;
+            $scope.dashFiltros.carteiras_2 = data.Table1;
+
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/vivo/dashboard/comparativo",
+                url: "/api/riachuelo/dashboard/humano/comparativo",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -344,6 +350,10 @@
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1);
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.promessa2 * 100 / obj.cpca2).toFixed(1) * 1);
                     break;
+                case 'esforco':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado/ obj.promessa).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.discado2/ obj.promessa2).toFixed(1) * 1);
+                    break;
                 default:
                     series1 = $scope.dashboard.dados.Table.map(obj => obj[indicador]);
                     series2 = $scope.dashboard.dados.Table.map(obj => obj[indicador + '2']);
@@ -357,8 +367,8 @@
         }
 
         $scope.carregarComparativo = function () {
-            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(mailing) mailing from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa, sum(mailing2) mailing from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa from ?', [$scope.dashboard.dados.Table])[0];
 
             let calculo = {
                 hitrate1: dados1.contato / dados1.discado,
@@ -369,6 +379,8 @@
                 txapv2: dados2.cpca / dados2.cpc,
                 conversao1: dados1.promessa / dados1.cpca,
                 conversao2: dados2.promessa / dados2.cpca,
+                esforco1: dados1.discado / dados1.promessa,
+                esforco2: dados2.discado / dados2.promessa
             }
 
             $scope.dashboard.discado = { p1: dados1.discado, p2: dados2.discado, vs: dados1.discado / dados2.discado - 1 };
@@ -381,9 +393,7 @@
             $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 - calculo.txloc2 };
             $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 - calculo.txapv2 };
             $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 - calculo.conversao2 };
-
-            $scope.dashboard.mailing = { p1: dados1.mailing, p2: dados2.mailing, vs: dados1.mailing / dados2.mailing - 1 };
-
+            $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 / calculo.esforco2 - 1};
         }
 
         $scope.carregarDashboard();
