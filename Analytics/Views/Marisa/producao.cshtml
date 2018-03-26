@@ -11,7 +11,7 @@
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box" style="background-color: white">
-                    <img class="img-responsive center-block" src="~/Content/Images/Marisa/marisa_logo.png" height="100" width="100" />
+                    <img class="center-block" src="~/Content/Images/Marisa/logo-marisa.svg" height="100" width="100" />
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
@@ -272,7 +272,8 @@
                 let funil = data.Table[0];
                 let dadosFunil = [];
                 Object.keys(funil).map(function (key, index) {
-                    dadosFunil.push([key, funil[key]]);
+                    if(key != 'discado')
+                        dadosFunil.push([key, funil[key]]);
                 });
 
                 $scope.dashboard.funil = [{ name: 'Quantidade', data: dadosFunil }];
