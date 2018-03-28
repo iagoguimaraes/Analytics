@@ -1,0 +1,231 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-vivo-respostasms">
+
+    <!--FILTROS-->
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.tabulacao">
+            <label class="control-sidebar-subheading">Tabulações</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tabulacao" dados="dashboard.dimensao.tabulacao" ng-change="aplicarFiltros()"></select22>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.agencia">
+            <label class="control-sidebar-subheading">Agencia</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.agencia" dados="dashboard.dimensao.agencia" ng-change="aplicarFiltros()"></select22style="width:>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.operacao">
+            <label class="control-sidebar-subheading">Operação</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operacao" dados="dashboard.dimensao.operacao" ng-change="aplicarFiltros()"></select22style="width:>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.produto">
+            <label class="control-sidebar-subheading">Produto</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.produto" dados="dashboard.dimensao.produto" ng-change="aplicarFiltros()"></select22>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.carteira">
+            <label class="control-sidebar-subheading">Carteira</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.adimplente">
+            <label class="control-sidebar-subheading">Adimplente</label>
+            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.adimplente" dados="dashboard.dimensao.adimplente" ng-change="aplicarFiltros()"></select22>
+        </div>
+    </div>
+   
+    <!--TABULACAO-->
+    <div class="col-xs-12 col-md-8">
+        <h3 class="text-center">Tabulação</h3>
+        <high-chart series="dashboard.tabulacao" axis-Categories="dimensao.tabulacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+    </div>
+
+    <!--ADIMPLENTE-->
+    <div class="col-xs-12 col-md-4">
+        <h3 class="text-center">Adimplente x Inadimplente</h3>
+        <high-chart series="dashboard.adimplente" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+    </div>
+
+    <!--AGENCIA-->
+    <div class="col-xs-12 col-md-6">
+        <h3 class="text-center">Agencias</h3>
+        <high-chart series="dashboard.agencia" axis-Categories="dimensao.agencia" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+    </div>
+
+    <!--LOCALIZACAO-->
+    <div class="col-xs-12 col-md-6">
+        <h3 class="text-center">Localização</h3>
+        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+    </div>
+
+    <!--POR DIA-->
+    <div class="col-xs-12">
+        <h3 class="text-center">Respostas por Dia</h3>
+        <high-chart series="dashboard.data" axis-Categories="dimensao.data" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+    </div>
+
+    <!--OPERACAO-->
+    <div class="col-xs-12 col-md-3">
+        <h3 class="text-center">Operacao</h3>
+        <high-chart series="dashboard.operacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+    </div>
+
+    <!--PRODUTO-->
+    <div class="col-xs-12 col-md-3">
+        <h3 class="text-center">Produto</h3>
+        <high-chart series="dashboard.produto" axis-Categories="dimensao.produto" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+    </div>
+
+    <!--CARTEIRA-->
+    <div class="col-xs-12 col-md-6">
+        <h3 class="text-center">Carteira</h3>
+        <high-chart series="dashboard.carteira" axis-Categories="dimensao.carteira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-respostasms', function ($scope, $http, $filter, dadosPagina, cubo) {
+        dadosPagina.titulo = 'Respostas SMS';
+        dadosPagina.descricao = 'Vivo'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+        $scope.dashboard = { dimensao: {}, filtros: {} };
+        $scope.dimensao = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/respostasms",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+            });
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.tabulacao = cubo.obterDimensao('TABULACAO');
+            $scope.dashboard.dimensao.agencia = cubo.obterDimensao('AGENCIA');
+            $scope.dashboard.dimensao.operacao = cubo.obterDimensao('OPERACAO');
+            $scope.dashboard.dimensao.produto = cubo.obterDimensao('PRODUTO');
+            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
+            $scope.dashboard.dimensao.adimplente = cubo.obterDimensao('ADIMPLENTE');
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.tabulacao = cubo.obterDimensao('TABULACAO');
+            $scope.dimensao.agencia = cubo.obterDimensao('AGENCIA');
+            $scope.dimensao.operacao = cubo.obterDimensao('OPERACAO');
+            $scope.dimensao.produto = cubo.obterDimensao('PRODUTO');
+            $scope.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
+            $scope.dimensao.data = cubo.obterDimensao('DATA');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            let tabulacao = alasql('select TABULACAO, sum(QUANTIDADE) qtd from ? group by TABULACAO', [dados]);
+            $scope.dashboard.tabulacao = [{ name: 'respostas', data: tabulacao.map(obj => obj.qtd) }];
+
+            let agencia = alasql('select AGENCIA, sum(QUANTIDADE) qtd from ? group by AGENCIA', [dados]);
+            $scope.dashboard.agencia = [{ name: 'respostas', data: agencia.map(obj => obj.qtd) }];
+
+            let data = alasql('select DATA, sum(QUANTIDADE) qtd from ? group by DATA', [dados]);
+            $scope.dashboard.data = [{ name: 'respostas', data: data.map(obj => obj.qtd) }];
+
+            let adimplente = alasql('select ADIMPLENTE, sum(QUANTIDADE) qtd from ? group by ADIMPLENTE', [dados]);
+            $scope.dashboard.adimplente = [{ name: 'respostas', data: adimplente.map(obj => ({ name: obj.ADIMPLENTE, y: obj.qtd })) }];
+
+            let operacao = alasql('select OPERACAO, sum(QUANTIDADE) qtd from ? group by OPERACAO', [dados]);
+            $scope.dashboard.operacao = [{ name: 'respostas', data: operacao.map(obj => ({ name: obj.OPERACAO, y: obj.qtd })) }];
+
+            let produto = alasql('select PRODUTO, sum(QUANTIDADE) qtd from ? group by PRODUTO', [dados]);
+            $scope.dashboard.produto = [{ name: 'respostas', data: produto.map(obj => obj.qtd) }];
+
+            let carteira = alasql('select CARTEIRA, sum(QUANTIDADE) qtd from ? group by CARTEIRA', [dados]);
+            $scope.dashboard.carteira = [{ name: 'respostas', data: carteira.map(obj => obj.qtd) }];
+
+            $scope.dashboard.mapa = alasql('select "BR-" + UF id, sum(QUANTIDADE) [value] from ? group by UF', [dados]);
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('TABULACAO', $scope.dashboard.filtros.tabulacao);
+            cubo.filtrar('AGENCIA', $scope.dashboard.filtros.agencia);
+            cubo.filtrar('OPERACAO', $scope.dashboard.filtros.operacao);
+            cubo.filtrar('PRODUTO', $scope.dashboard.filtros.produto);
+            cubo.filtrar('CARTEIRA', $scope.dashboard.filtros.carteira);
+            cubo.filtrar('ADIMPLENTE', $scope.dashboard.filtros.adimplente);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>

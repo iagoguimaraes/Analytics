@@ -1,4 +1,5 @@
-﻿angular.module('app').directive('select2', function () {
+﻿// SELECT QUE USA OBJETO {ID, e TEXT}
+angular.module('app').directive('select2', function () {
     return {
         restrict: 'E',
         replace: true,
@@ -20,6 +21,25 @@
                 ctrl.$setViewValue(viewValue);
             });
 
+        }
+    }
+});
+
+// SELECT QUE USA ARRAY DE STRING DIRETO
+angular.module('app').directive('select22', function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        require: 'ngModel',
+        scope: {
+            dados: '=',
+        },
+        template: '<select class="select2" multiple="multiple" readonly="true"></select>',
+        link: function (scope, element, attr, ctrl) {
+            $(element[0]).select2({
+                data: scope.dados.map(obj => ({ 'id': obj, 'text': obj })),
+                allowClear: true,
+            });
         }
     }
 });
