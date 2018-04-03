@@ -36,9 +36,12 @@ angular.module('app').directive('select22', function () {
         },
         template: '<select class="select2" multiple="multiple" readonly="true"></select>',
         link: function (scope, element, attr, ctrl) {
-            $(element[0]).select2({
-                data: scope.dados.map(obj => ({ 'id': obj, 'text': obj })),
-                allowClear: true,
+            scope.$watch('dados', function () {
+                $(element[0]).empty();
+                $(element[0]).select2({
+                    data: scope.dados.map(obj => ({ 'id': obj, 'text': obj })),
+                    allowClear: true,
+                });
             });
         }
     }

@@ -29,7 +29,7 @@ namespace Analytics.Controllers
                 //    throw new Exception("Captcha não fornecido");
 
                 // verica as credencias do AD
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "CREDITCASH"))
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "creditcash.com.br"))
                 {
                     bool isValid = pc.ValidateCredentials(login, senha);
                     if (!isValid)
