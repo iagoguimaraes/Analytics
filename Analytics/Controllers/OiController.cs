@@ -43,8 +43,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                //DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
@@ -55,11 +55,11 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("credores", credores);
-                    parametros.Add("carteiras", carteiras);
-                    parametros.Add("campanha", campanhas);
-                    parametros.Add("segmento", segmentos);
-                    parametros.Add("produto", produtos);
+                    parametros.Add("empresas", empresas);
+                    //parametros.Add("carteiras", carteiras);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -81,8 +81,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                //DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
@@ -93,11 +93,11 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("credores", credores);
-                    parametros.Add("carteiras", carteiras);
-                    parametros.Add("campanha", campanhas);
-                    parametros.Add("segmento", segmentos);
-                    parametros.Add("produto", produtos);
+                    parametros.Add("empresas", empresas);
+                    //parametros.Add("carteiras", carteiras);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

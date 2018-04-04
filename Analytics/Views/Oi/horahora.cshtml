@@ -9,10 +9,10 @@
             <div class="widget-user-header bg-black" style="background: url('/Content/Images/oi/oi.jpg') center center;">
             </div>
             <div class="widget-user-image">
-                <img class="img-circle" src="/Content/Images/Oi/logo-oi.png" height="128" width="128">
+                <img class="img-circle" src="/Content/Images/Oi/logo_oitratado.jpg" style="background-color: #fab510" height="160" width="200">
             </div>
             <div class="box-footer">
-                <div class="row">
+                <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="row bg-black-gradient">
+                <div class="row" style="background-color: #fab510; color:white; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
@@ -168,12 +168,12 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_emp_nectar'">
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_campanha'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_emp_nectar}}
+                                            {{e[0].ds_campanha}}
                                         </td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
@@ -187,7 +187,7 @@
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_carteira}}</td>
+                                        <td>{{c.ds_segmento}}</td>
                                         <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
@@ -278,28 +278,22 @@
                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
                     </div>
 
-                    <!--CARTEIRA-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Carteira</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                    </div>
-
                     <!--CAMPANHA-->
                     <div class="form-group">
                         <label class="control-sidebar-subheading">Campanha</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
                     </div>
 
                     <!--SEGMENTO-->
                     <div class="form-group">
                         <label class="control-sidebar-subheading">Segmento</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos"></select2>
                     </div>
 
                     <!--PRDOUTO-->
                     <div class="form-group">
                         <label class="control-sidebar-subheading">Produto</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                     </div>
 
                     <!--BOTÃO-->
@@ -322,7 +316,7 @@
 
 <script>
     angular.module('app').controller('ctrl-oi-horahora', function ($scope, $http, $filter, dadosPagina) {
-        dadosPagina.titulo = 'Producao';
+        dadosPagina.titulo = 'Hora Hora';
         dadosPagina.descricao = 'Oi Telecomunicações'
         $scope.showTbody = false;
 
@@ -332,10 +326,10 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             empresas: '',
-            carteiras: '',
-            campanha: '',
-            segmento:'',
-            produto:''
+            //carteiras: '',
+            campanhas: '',
+            segmentos:'',
+            produtos:'',
         }
         $scope.grafico = { indicador: 'promessa' };
 
@@ -348,16 +342,16 @@
             $scope.dados = r.status;
 
             $scope.dashFiltros.empresas = r.data.Table;
-            $scope.dashFiltros.carteiras = r.data.Table1;
-            $scope.dashFiltros.campanhas = r.data.Table2;
-            $scope.dashFiltros.segmentos = r.data.Table3;
-            $scope.dashFiltros.produtos = r.data.Table4;
+            //$scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.campanhas = r.data.Table1;
+            $scope.dashFiltros.segmentos = r.data.Table2;
+            $scope.dashFiltros.produtos = r.data.Table3;
         });
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/riachuelo/dashboard/humano/horahora",
+                url: "/api/oi/dashboard/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
