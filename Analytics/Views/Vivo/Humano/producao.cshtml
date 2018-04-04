@@ -6,18 +6,23 @@
 <!-- DAHSBOARD -->
 <div ng-controller="ctrl-vivo-producao">
     <div ng-if="dashboard.status == 200">
-        
+
         <!-- RESUMO -->
         <div class="row margin-bottom">
-            
             <!-- BANNER -->
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box" style="background-color: #7e2595">
                     <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
                 </div>
+
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pa | megaNumber"></h3>
+                        <p>Média PA</p>
+                    </div>
+                </div>
             </div>
 
-           
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -28,7 +33,16 @@
                         <i class="fa fa-phone"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado_pa | megaNumber"></h3>
+                        <p>Discado PA</p>
+                    </div>
+
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
@@ -40,7 +54,16 @@
                         <i class="fa fa-headphones"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato_pa | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato_pa / dashboard.resumo.discado_pa | percentage: 1"></h4>
+                        <p>Contato PA</p>
+                    </div>
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-red">
                     <div class="inner">
@@ -52,7 +75,16 @@
                         <i class="fa fa-male"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc_pa / dashboard.resumo.contato_pa | percentage: 1"></h4>
+                        <p>CPC PA</p>
+                    </div>
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
@@ -64,7 +96,16 @@
                         <i class="fa fa-street-view"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca_pa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca_pa / dashboard.resumo.cpc_pa | percentage: 1"></h4>
+                        <p>CPCA PA</p>
+                    </div>
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
@@ -74,6 +115,14 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa_pa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa_pa / dashboard.resumo.cpca_pa | percentage: 1"></h4>
+                        <p>Promessa PA</p>
                     </div>
                 </div>
             </div>
@@ -162,7 +211,7 @@
             </div>
         </div>
 
-    </div>
+    </div> 
 
     <!-- SIDE BAR CONTROL (MENU LATERAL)-->
     <aside class="control-sidebar control-sidebar-dark">
