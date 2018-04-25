@@ -69,7 +69,7 @@
                         },
                         line: {
                             dataLabels: {
-                                enabled: scope.plotOptionsLineDataLabel
+                                enabled: scope.plotOptionsLineDataLabel                                  
                             }
                         },
                         spline: {
@@ -97,3 +97,4 @@
         }
     }
 });
+

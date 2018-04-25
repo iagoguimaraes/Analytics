@@ -108,18 +108,22 @@ namespace Analytics.Controllers
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                int sabado = Convert.ToInt16(form["sabado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
                     parametros.Add("aging", aging);
+                    parametros.Add("sabado", sabado);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_tempo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

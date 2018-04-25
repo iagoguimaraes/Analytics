@@ -181,7 +181,7 @@
             </div>
         </div>
 
-        <!-- GRÁFICO POR HORA -->
+        <!-- GRÁFICO POR DIA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <h3 class="box-title">
@@ -332,7 +332,7 @@
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dia;
-            $scope.dashboard.datas = dados.map(obj => obj.data);
+            $scope.dashboard.datas = dados.map(obj => obj.dt);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
                     $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
@@ -345,7 +345,7 @@
                     break;
                 case 'conversao':
                     $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;               
+                    break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
