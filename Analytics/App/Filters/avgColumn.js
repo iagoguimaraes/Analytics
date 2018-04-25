@@ -7,7 +7,7 @@
             
         });
 
-        var result = total / collection.length;
+        var result = Math.floor(total / collection.length);
 
        return result;
     };
