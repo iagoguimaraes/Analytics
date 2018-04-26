@@ -14,7 +14,7 @@
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_acordo | number"></h3>
-                        <p>Qtd Acordo</p>
+                        <p>Quantidade Acordos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-credit-card"></i>
@@ -25,7 +25,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.vl_acordo | currency:'R$'"></h3>
-                        <p>Vlr Acordo</p>
+                        <p>Valor Acordos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
@@ -36,32 +36,76 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.risco | currency:'R$'"></h3>
-                        <p>Vlr Risco</p>
+                        <p>Valor Riscos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-5">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.pagamento | number"></h3>
-                        <p>Qtd Pagamento</p>
+                        <p>Quantidade Pagamentos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-chevron-circle-down"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
-                        <p>Vlr Pagamento</p>
+                        <p>Valor Pagamentos</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-chevron-circle-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.risco_pgto | currency:'R$'"></h3>
+                        <p>Valor Pagamento Riscos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-chevron-circle-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.efetividade_acordo_qtd"></h3>
+                        <p>Efetividade Pagamentos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-line-chart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.efetividade_acordo_valor"></h3>
+                        <p>Efetividade Pagamentos Financeiro</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-line-chart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.efetividade_risco_valor"></h3>
+                        <p>Efetividade Valor Riscos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-line-chart"></i>
                     </div>
                 </div>
             </div>
@@ -148,79 +192,80 @@
                 </div>
             </div>
         </div>
-            <div class="box box-primary" style="border-top-color: #66cc33">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Análise por Operador</h3>
-                </div>
-                <div class="box-body">
-                    <!--PRODUÇÃO POR OPERADOR-->
-                    <div class="row margin-bottom">
-                        <div class="col-xs-12">
-                            
-                            <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[3,'desc']]"></d-table>
-                        </div>
-                    </div>
-
-                </div>
+        <div class="box box-primary" style="border-top-color: #66cc33">
+            <div class="box-header with-border">
+                <h3 class="box-title">Análise por Operador</h3>
             </div>
+            <div class="box-body">
+                <!--PRODUÇÃO POR OPERADOR-->
+                <div class="row margin-bottom">
+                    <div class="col-xs-12">
 
-                <!-- SIDE BAR CONTROL -->
-                <aside class="control-sidebar control-sidebar-dark">
-                    <!-- Create the tabs -->
-                    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <!-- Filtros -->
-                        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
-                            <!--DATA INCIAL-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Inicial</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                                </div>
-                            </div>
-
-                            <!--DATA FINAL-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Final</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                                </div>
-                            </div>
-
-                            <!--CREDORES-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Credores</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores"></select2>
-                            </div>
-
-                            <!--VISÃO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Visão</label>
-                                <select class="form-control" ng-model="filtros.visao">
-                                    <option value="vencimento">Vencimento</option>
-                                    <option value="andamento" selected="selected">Andamento</option>
-                                </select>
-                            </div>
-
-
-                            <!--BOTÃO-->
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                            </div>
-
-                        </div>
-                        <!-- /.tab-pane -->
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[3,'desc']]"></d-table>
                     </div>
-                </aside>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--CREDORES-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Credores</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores"></select2>
+                    </div>
+
+                    <!--VISÃO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Visão</label>
+                        <select class="form-control" ng-model="filtros.visao">
+                            <option value="vencimento">Vencimento</option>
+                            <option value="andamento" selected="selected">Andamento</option>
+                        </select>
+                    </div>
+
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+    </div>
                 <!-- /.control-sidebar -->
                 <!-- Add the sidebar's background. This div must be placed
             immediately after the control sidebar -->
