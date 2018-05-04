@@ -16,7 +16,7 @@
             </div>
             <div class="box-footer">
                 <div class="row" style="background-color: #003399; color: white;">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -40,16 +40,22 @@
                             <span class="description-text">CPCA</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 border-right" >
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.acordo | number"></h5>
                             <span class="description-text">Acordo</span>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo_ex | number"></h5>
+                            <span class="description-text">Acordo Exceção</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row" style="background-color: #66cc33; color: white;">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
@@ -73,10 +79,16 @@
                             <span class="description-text">Valor Acordo</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.valor_risco | currency: 'R$'"></h5>
                             <span class="description-text">Valor Risco</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_riscoex | currency: 'R$'"></h5>
+                            <span class="description-text">Valor Exceção Risco</span>
                         </div>
                     </div>
                 </div>
@@ -104,6 +116,8 @@
                                         <th>Acordo</th>
                                         <th>Valor Acordo</th>
                                         <th>Valor Risco</th>
+                                        <th>Acordo Exceção</th>
+                                        <th>Valor  Exceção</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -120,6 +134,10 @@
                                         <td>{{hora.acordo | number}}</td>
                                         <td>{{hora.valor_acordo | number}}</td>
                                         <td>{{hora.valor_risco | number}}</td>
+
+                                        <td>{{hora.acordo_ex | number}}</td>
+                                        <td>{{hora.valor_riscoex | number}}</td>
+
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -136,6 +154,8 @@
                                         <th>{{dashboard.resumo.acordo | number}}</th>
                                         <th>{{dashboard.resumo.valor_acordo | number}}</th>
                                         <th>{{dashboard.resumo.valor_risco | number}}</th>
+                                        <td>{{hora.acordo_ex | number}}</td>
+                                        <td>{{hora.valor_riscoex | number}}</td>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -171,6 +191,8 @@
                                         <th>Acordo</th>
                                         <th>Valor Acordo</th>
                                         <th>Valor Risco</th>
+                                        <th>Acordo Exceção</th>
+                                        <th>Valor Exceção</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -191,6 +213,8 @@
                                         <td>{{g | sumByColumn: 'acordo'| number}}</td>
                                         <td>{{g | sumByColumn: 'valor_acordo'| number}}</td>
                                         <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'acordo_ex'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_riscoex'| number}}</td>
                                         <td>{{g | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -206,6 +230,8 @@
                                         <td>{{c.acordo | number}}</td>
                                         <td>{{c.valor_acordo | number}}</td>
                                         <td>{{c.valor_risco | number}}</td>
+                                        <td>{{c.acordo_ex | number}}</td>
+                                        <td>{{c.valor_riscoex | number}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
