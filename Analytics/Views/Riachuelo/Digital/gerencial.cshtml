@@ -9,14 +9,11 @@
     <div ng-if="dashboard.status == 200">
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 margin-bottom">
-                <img class="image-responsive center-block" src="/Content/Images/Riachuelo/riachuelo.png" style="height: 100px; width: 100%; object-fit: cover;" />
-            </div>
             <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-green">
+                <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number"></h3>
-                        <p>Total de Promessas</p>
+                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number "></h3>
+                        <p>Quantidade de Promessas</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -25,15 +22,45 @@
             </div>
 
             <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-blue">
+                <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_inclusao | number"></h3>
-                        <p>Total de Inclusões</p>
+                        <h3 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$'"></h3>
+                        <p>Valor de Promessas</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-plus-square"></i>
+                        <i class="fa fa-money"></i>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_inclusao | currency:'R$' "></h3>
+                        <p>Valor das Entradas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h4 class="text-center">Recebimento em Valor</h4>
+                <high-chart series="dashboard.vlEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
+                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h4 class="text-center">Recebimento por Carteira</h4>
+                <high-chart series="dashboard.qtEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
+                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
             </div>
         </div>
 
@@ -46,20 +73,13 @@
         </div>
 
         <div class="row margin-bottom">
-            <h4 class="text-center">Inclusões</h4>
+            <h4 class="text-center">Entradas</h4>
             <div class="col-xs-12">
                 <high-chart series="dashboard.qtInclusao" axis-Categories="dashboard.semanaIncl" plot-Options-Column-Data-Label="true" type="column"></high-chart>
             </div>
         </div>
 
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <h4 class="text-center">Recebimento por Lote</h4>
-                <high-chart series="dashboard.efetividade" axis-Categories="dashboard.semanaReceb" type="column"
-                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
-                            y-Axis1-Max="100"></high-chart>
-            </div>
-        </div>
+        
 
     </div>
 
@@ -166,13 +186,21 @@
                     { name: 'Promessas', type: 'column', data: r.data.Table1.map(obj => (obj.qtd_promessa)) },
                     { name: 'Dias', type: 'column', data: r.data.Table1.map(obj => (obj.dias)) }
                 ];
-                $scope.dashboard.qtInclusao = [{ name: 'Inclusões', data: r.data.Table2.map(obj => (obj.qtd_inclusao)) }];
-                $scope.dashboard.efetividade = [
-                    { name: 'Inclusões', type: 'column', data: data.Table3.map(obj => obj.qtd_inclusao) },
+                $scope.dashboard.qtInclusao = [{ name: 'Entradas', data: r.data.Table2.map(obj => (obj.qtd_inclusao)) }];
+
+                $scope.dashboard.vlEfetividade = [
+                   { name: 'Vlr Entrada', type: 'column', data: data.Table3.map(obj => obj.vlr_inclusao) },
+                   { name: 'Vlr Pago', type: 'column', data: data.Table3.map(obj => obj.vlr_pago) },
+                   { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.vlrEfetividade) },
+                ];
+
+                $scope.dashboard.qtEfetividade = [
+                    { name: 'Entradas', type: 'column', data: data.Table3.map(obj => obj.qtd_inclusao) },
                     { name: 'Pagamentos', type: 'column', data: data.Table3.map(obj => obj.qtd_pago) },
-                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.efetividade) },
+                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.qtEfetividade) },
                 ];
                 
+               
 
             });
         }
