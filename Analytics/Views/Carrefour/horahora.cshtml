@@ -114,10 +114,11 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Acordo</th>
-                                        <th>Valor Acordo</th>
-                                        <th>Valor Risco</th>
+                                        <th>Vlr Acordo</th>
+                                        <th>Vlr Risco</th>
                                         <th>Acordo Exceção</th>
-                                        <th>Valor  Exceção</th>
+                                        <th>Vlr Risco Exceção</th>
+                                        <th>Vlr Risco Total</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -134,10 +135,9 @@
                                         <td>{{hora.acordo | number}}</td>
                                         <td>{{hora.valor_acordo | number}}</td>
                                         <td>{{hora.valor_risco | number}}</td>
-
                                         <td>{{hora.acordo_ex | number}}</td>
                                         <td>{{hora.valor_riscoex | number}}</td>
-
+                                        <td>{{hora.valor_riscoex + hora.valor_risco | number}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -154,8 +154,9 @@
                                         <th>{{dashboard.resumo.acordo | number}}</th>
                                         <th>{{dashboard.resumo.valor_acordo | number}}</th>
                                         <th>{{dashboard.resumo.valor_risco | number}}</th>
-                                        <td>{{hora.acordo_ex | number}}</td>
-                                        <td>{{hora.valor_riscoex | number}}</td>
+                                        <th>{{dashboard.resumo.acordo_ex | number}}</th>
+                                        <th>{{dashboard.resumo.valor_riscoex | number}}</th>
+                                        <th>{{dashboard.resumo.valor_riscoex + dashboard.resumo.valor_risco | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -189,10 +190,11 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Acordo</th>
-                                        <th>Valor Acordo</th>
-                                        <th>Valor Risco</th>
+                                        <th>Vlr Acordo</th>
+                                        <th>Vlr Risco</th>
                                         <th>Acordo Exceção</th>
-                                        <th>Valor Exceção</th>
+                                        <th>Vlr Risco Exceção</th>
+                                        <th>Vlr Risco Total</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -215,6 +217,7 @@
                                         <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
                                         <td>{{g | sumByColumn: 'acordo_ex'| number}}</td>
                                         <td>{{g | sumByColumn: 'valor_riscoex'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_total_risco' | number}}</td>
                                         <td>{{g | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -232,6 +235,7 @@
                                         <td>{{c.valor_risco | number}}</td>
                                         <td>{{c.acordo_ex | number}}</td>
                                         <td>{{c.valor_riscoex | number}}</td>
+                                        <td>{{c.valor_riscoex + c.valor_risco | number}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
