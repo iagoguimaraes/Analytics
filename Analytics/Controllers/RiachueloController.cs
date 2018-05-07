@@ -262,6 +262,38 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/gerencial")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardGerencial(FormDataCollection form)
+        {
+            try
+            {
+                DateTime ano = Convert.ToDateTime(form["dtini"]);
+                DateTime mesIni = Convert.ToDateTime(form["dtini"]);
+                DateTime mesFim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", Convert.ToInt16(ano.ToString("yyyy")));
+                    parametros.Add("mesIni", Convert.ToInt16(mesIni.ToString("MM")));
+                    parametros.Add("mesFim", Convert.ToInt16(mesFim.ToString("MM")));
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_gerencial", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO

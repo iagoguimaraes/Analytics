@@ -1,0 +1,184 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-riachuelo-gerencial">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <img class="image-responsive center-block" src="/Content/Images/Riachuelo/riachuelo.png" style="height: 100px; width: 100%; object-fit: cover;" />
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number"></h3>
+                        <p>Total de Promessas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_inclusao | number"></h3>
+                        <p>Total de Inclusões</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-plus-square"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <h4 class="text-center">Promessas</h4>
+            <div class="col-xs-12">
+                <high-chart series="dashboard.qtPromessa" axis-Categories="dashboard.semanaProm" 
+                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" type="column"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <h4 class="text-center">Inclusões</h4>
+            <div class="col-xs-12">
+                <high-chart series="dashboard.qtInclusao" axis-Categories="dashboard.semanaIncl" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h4 class="text-center">Recebimento por Lote</h4>
+                <high-chart series="dashboard.efetividade" axis-Categories="dashboard.semanaReceb" type="column"
+                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Campanhas</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-riachuelo-gerencial', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Gerencial';
+        dadosPagina.descricao = 'Riachuelo'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteiras: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteiras = data.Table;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/gerencial",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.semanaProm = r.data.Table1.map(obj => obj.semana);
+                $scope.dashboard.semanaIncl = r.data.Table2.map(obj => obj.semana);
+                $scope.dashboard.semanaReceb = r.data.Table3.map(obj => obj.semana);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.qtPromessa = [
+                    { name: 'Promessas', type: 'column', data: r.data.Table1.map(obj => (obj.qtd_promessa)) },
+                    { name: 'Dias', type: 'column', data: r.data.Table1.map(obj => (obj.dias)) }
+                ];
+                $scope.dashboard.qtInclusao = [{ name: 'Inclusões', data: r.data.Table2.map(obj => (obj.qtd_inclusao)) }];
+                $scope.dashboard.efetividade = [
+                    { name: 'Inclusões', type: 'column', data: data.Table3.map(obj => obj.qtd_inclusao) },
+                    { name: 'Pagamentos', type: 'column', data: data.Table3.map(obj => obj.qtd_pago) },
+                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.efetividade) },
+                ];
+                
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
