@@ -80,18 +80,17 @@
 
         <div class="row margin-bottom">
             <div class="col-xs-12">
-                <high-chart series="dashboard.qtDia" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-            </div>
-        </div>
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <high-chart series="dashboard.qtDiaAcordo" axis-Categories="dashboard.diasAcordo" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                <h4 class="text-center">Valor Pagamentos - Dia a Dia</h4>
+                <high-chart series="dashboard.diaFinanceiro" axis-Categories="dashboard.diasfinanceiro" plot-Options-Column-Data-Label="true" type="column"></high-chart>
             </div>
         </div>
 
-        <div class="row margin-bottom">
+        <div class="row">
             <div class="col-xs-12">
-                <high-chart series="dashboard.efetividadeDia" axis-Categories="dashboard.diasEfetividade" plot-Options-Line-Data-Label="true"></high-chart>
+                <h4 class="text-center">Efetividade por Dia</h4>
+                <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividade" type="column"
+                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
             </div>
         </div>
 
@@ -175,7 +174,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            visao: 'vencimento',
+            visao: 'andamento',
 
         };
         $scope.dashFiltros = {};
@@ -192,15 +191,19 @@
                 let data = r.data;
 
                 $scope.dashboard.diasPag = r.data.Table1.map(obj => obj.data);
-                $scope.dashboard.diasAcordo = r.data.Table4.map(obj => obj.data);
-                $scope.dashboard.diasEfetividade = r.data.Table4.map(obj => obj.data);
+                $scope.dashboard.diasfinanceiro = r.data.Table4.map(obj => obj.data);
+                $scope.dashboard.diasEfetividade = r.data.Table5.map(obj => obj.data);
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.qtDia = [{ name: 'Quantidade Pagamentos', data: r.data.Table1.map(obj => (obj.qtd_pagto)) }];
-                $scope.dashboard.efetividadeDia = [{ name: 'Efetividade', data: data.Table2.map(obj => (obj.qtd_pagto * 100 / obj.qtd_acordo).toFixed(1) / 1) }];
                 $scope.dashboard.operador = r.data.Table3;
-                $scope.dashboard.qtDiaAcordo = [{ name: 'Quantidade Acordos', data: r.data.Table4.map(obj => (obj.qtd_acordo)) }];
+                $scope.dashboard.diaFinanceiro = [{ name: 'Valor Pagamentos', data: r.data.Table4.map(obj => (obj.vl_pagto)) }];
+                $scope.dashboard.diaProm = [
+                    { name: 'acordo', type: 'column', data: data.Table5.map(obj => obj.qtd_acordo) },
+                    { name: 'pagamento', type: 'column', data: data.Table5.map(obj => obj.qtd_pagto) },
+                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table5.map(obj => obj.Efetividade) },
+                            ];
+
             });
         }
 

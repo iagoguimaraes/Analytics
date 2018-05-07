@@ -176,22 +176,21 @@
 
                 <div class="row margin-bottom">
                     <div class="col-xs-12">
-                        <high-chart series="dashboard.qtDia" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <h4 class="text-center">Saldo Risco - Pagamentos </h4>
+                        <high-chart series="dashboard.saldoRisco" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
-                <div class="row margin-bottom">
+                <div class="row">
                     <div class="col-xs-12">
-                        <high-chart series="dashboard.qtDiaAcordo" axis-Categories="dashboard.diasAcordo" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                    </div>
-                </div>
-
-                <div class="row margin-bottom">
-                    <div class="col-xs-12">
-                        <high-chart series="dashboard.efetividadeDia" axis-Categories="dashboard.diasEfetividade" plot-Options-Line-Data-Label="true"></high-chart>
+                        <h4 class="text-center">Efetividade por Dia</h4>
+                        <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividadeNew" type="column"
+                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="box box-primary" style="border-top-color: #66cc33">
             <div class="box-header with-border">
                 <h3 class="box-title">Análise por Operador</h3>
@@ -318,14 +317,19 @@
                             $scope.dashboard.diasPag = r.data.Table1.map(obj => obj.data);
                             $scope.dashboard.diasAcordo = r.data.Table4.map(obj => obj.data);
                             $scope.dashboard.diasEfetividade = r.data.Table4.map(obj => obj.data);
+                            $scope.dashboard.diasEfetividadeNew = r.data.Table6.map(obj => obj.data);
+
                             $scope.dashboard.grupo = data.Table5;
 
                             $scope.dashboard.status = r.status;
                             $scope.dashboard.resumo = data.Table[0];
-                            $scope.dashboard.qtDia = [{ name: 'Quantidade Pagamentos', data: r.data.Table1.map(obj => (obj.qtd_pagto)) }];
-                            $scope.dashboard.efetividadeDia = [{ name: 'Efetividade', data: data.Table2.map(obj => (obj.qtd_pagto * 100 / obj.qtd_acordo).toFixed(1) / 1) }];
+                            $scope.dashboard.saldoRisco = [{ name: 'Saldo Risco', data: r.data.Table1.map(obj => (obj.valor_risco)) }];
                             $scope.dashboard.operador = r.data.Table3;
-                            $scope.dashboard.qtDiaAcordo = [{ name: 'Quantidade Acordos', data: r.data.Table4.map(obj => (obj.qtd_acordo)) }];
+                            $scope.dashboard.diaProm = [
+                                    { name: 'acordo', type: 'column', data: data.Table6.map(obj => obj.qtd_acordo) },
+                                    { name: 'pagamento', type: 'column', data: data.Table6.map(obj => obj.qtd_pagto) },
+                                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table6.map(obj => obj.efetividade) },
+                            ];
                         });
                     }
 
