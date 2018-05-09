@@ -109,5 +109,38 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/recebimento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardRecebimento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("produtos", produtos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_recebimento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }

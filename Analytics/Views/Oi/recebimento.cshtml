@@ -1,0 +1,348 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-oi-recebimento">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab">
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial Importação</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final Importação</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--CAMPANHA-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Campanha</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
+                    </div>
+
+                    <!--SEGMENTO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos"></select2>
+                    </div>
+
+                    <!--PRDOUTO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Produto</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+
+        <!-- DAHSBOARD -->
+        <div ng-if="dashboard.status == 200">
+
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.totalpag | number"></h3>
+                            <p>Total Pagamentos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-credit-card"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.espontaneo | number"></h3>
+                            <p>Espontâneos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-money"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.mala | number"></h3>
+                            <p>Mala</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-money"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                            <p>Promessa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-money"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.vlr_totalpag | currency:'R$'"></h3>
+                            <p>Financeiro Total</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.vlr_espontaneo | currency:'R$'"></h3>
+                            <p>Financeiro Espontâneos</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.vlr_mala | currency:'R$'"></h3>
+                            <p>Financeiro Mala</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$'"></h3>
+                            <p>Financeiro Promessa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ANALISE POR SEGMENTACAO-->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary" style="border-top-color: #66cc33">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Análise por Segmentação</h3>
+                        </div>
+                        <div class="box-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.grupo">
+                                    <thead>
+                                        <tr>
+                                            <th>Credor</th>
+                                            <th>Total Pagamento</th>
+                                            <th>Total Pag Financeiro</th>
+                                            <th>Espontâneo </th>
+                                            <th>Espontâneo Financeiro</th>
+                                            <th>Mala</th>
+                                            <th>Mala Financeiro</th>
+                                            <th>Promessa</th>
+                                            <th>Promessa Financeiro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="g in dashboard.grupo | groupBy: 'empresa'">
+
+                                        <tr class="text-bold">
+                                            <td>
+                                                <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                {{g[0].empresa}}
+                                            </td>
+                                            <td>{{g | sumByColumn: 'totalpag'| number}}</td>
+                                            <td>{{g | sumByColumn: 'vlr_totalpag'| number}}</td>
+
+                                            <td>{{g | sumByColumn: 'espontaneo'| number}}</td>
+                                            <td>{{g | sumByColumn: 'vlr_espontaneo'| number}}</td>
+
+                                            <td>{{g | sumByColumn: 'mala'| number}}</td>
+                                            <td>{{g | sumByColumn: 'vlr_mala'| number}}</td>
+
+                                            <td>{{g | sumByColumn: 'promessa'| number}}</td>
+                                            <td>{{g | sumByColumn: 'vlr_promessa'| number}}</td>
+                                            
+    
+                                        </tr>
+
+                                        <tr ng-repeat="c in g" ng-show="showTbody">
+                                            <td>{{c.dtpag}}</td>
+
+                                            <td>{{c.totalpag | number}}</td>
+                                            <td>{{c.vlr_totalpag | number }}</td>
+                                            <td>{{c.espontaneo | number}}</td>
+                                            <td>{{c.vlr_espontaneo | number}}</td>
+                                            <td>{{c.mala | number}}</td>
+                                            <td>{{c.vlr_mala | number}}</td>
+                                            <td>{{c.promessa | number}}</td>
+                                            <td>{{c.vlr_promessa | number}}</td>
+
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box box-primary" style="border-top-color: #66cc33">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Análise Gráfica - Recebimento</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-8">
+                            <h4 class="text-center">Cascata por Semana</h4>
+                            <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividadeNew" type="column"
+                                        plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <h4 class="text-center">Funil (Pagamentos por Grupo)</h4>
+                            <high-chart series="dashboard.funil" type="funnel" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        </div>
+                    </div>
+                </div>
+   
+                <div class="row margin-bottom">
+                    <div class="col-xs-12 col-md-6">
+                        <h4 class="text-center">Financeiro por Carteira</h4>
+                        <high-chart series="dashboard.vlDia" axis-Categories="dashboard.Carteiras" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <h4 class="text-center">Quantidade por Carteira</h4>
+                        <high-chart series="dashboard.vlCarteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+        </div>
+</div>
+
+        <script>
+
+            angular.module('app').controller('ctrl-oi-recebimento', function ($scope, $http, $filter, $interval, dadosPagina) {
+                dadosPagina.titulo = 'Recebimento';
+                dadosPagina.descricao = 'Oi Telecomunicações'
+
+                // filtros iniciais
+                let newdate = new Date();
+                let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), -60);
+
+                $scope.filtros = {
+                    dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+                    dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+                    campanhas: '',
+                    segmentos: '',
+                    produtos: '',
+                };
+                $scope.dashFiltros = {};
+                $scope.dashboard = {};
+                $scope.grafico = { indicador: 'hitrate' };
+
+                // carregar os filtros
+                $http({
+                    method: 'GET',
+                    url: "/api/oi/dashboard/filtros",
+                    data: $scope.filtros,
+                }).then(function success(r) {
+                    let data = r.data;
+                    $scope.dashFiltros.status = r.status;
+
+                    $scope.dashFiltros.campanhas = r.data.Table1;
+                    $scope.dashFiltros.segmentos = r.data.Table2;
+                    $scope.dashFiltros.produtos = r.data.Table3;
+                });
+
+                // obtem filtros do escopo e carrega os dados do dashboard
+                $scope.carregarDashboard = function () {
+                    $http({
+                        method: 'POST',
+                        url: "/api/oi/dashboard/recebimento",
+                        data: $scope.filtros,
+                    }).then(function success(r) {
+                        let data = r.data;
+                        $scope.dashboard.status = r.status;
+                        $scope.dashboard.resumo = data.Table[0];
+                        $scope.dashboard.vlCarteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.empresa, y: obj.quantidade })) }];
+                        $scope.dashboard.vlDia = [{ name: 'Valor', innerSize: '60%', data: r.data.Table2.map(obj => ({ name: obj.empresa, y: obj.valor })) }];
+                        $scope.dashboard.cascataPag = data.Table3;
+                        $scope.dashboard.grupo = data.Table4;
+
+                        let funil = data.Table5[0];
+                        let dadosFunil = [];
+                        Object.keys(funil).map(function (key, index) {
+                            
+                                dadosFunil.push([key, funil[key]]);
+                        });
+
+
+                        $scope.dashboard.funil = [{ name: 'Quantidade', data: dadosFunil }];
+
+                        $scope.dashboard.diaProm = [
+                        { name: 'espontaneo', type: 'column', data: data.Table3.map(obj => obj.espontaneo) },
+                        { name: 'promessa', type: 'column', data: data.Table3.map(obj => obj.promessa) },
+                        { name: 'mala', type: 'column', data: data.Table3.map(obj => obj.mala) },
+                        ];
+
+                        $scope.dashboard.diasEfetividadeNew = data.Table3.map(obj => obj.periodo);
+                        $scope.dashboard.Carteiras = data.Table2.map(obj => obj.empresa);
+                       
+
+                    });
+                }
+
+                $scope.carregarDashboard();
+
+            });
+
+        </script>
