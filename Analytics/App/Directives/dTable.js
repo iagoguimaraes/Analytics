@@ -10,6 +10,8 @@
             scrollCollapse: '=',
             scrollY: '@',
             order: '=',
+            buttons: '=',
+            dom: '@',
         },
         template: '<table><tfoot></tfoot></table>',
         link: function (scope, element) {
@@ -27,7 +29,9 @@
                         searching: scope.searching,
                         scrollCollapse: scope.scrollCollapse,
                         scrollY: scope.scrollY,
-                        order: scope.order
+                        order: scope.order,
+                        buttons: scope.buttons,
+                        dom: scope.dom,
                     });
                 }               
             });
