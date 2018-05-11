@@ -272,6 +272,16 @@
                             <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                         </div>
                     </div>
+                    <!--SEGMENTOS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos"></select2>
+                    </div>
+                    <!--FAIXAS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Faixas</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas"></select2>
+                    </div>
 
                     <!--BOTÃO-->
                     <div class="form-group">
@@ -302,8 +312,22 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            segmentos: '',
+            faixas: '',
         }
         $scope.grafico = { indicador: 'promessa' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/caedu/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.segmentos = data.Table;
+            $scope.dashFiltros.faixas = data.Table1;
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {

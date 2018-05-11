@@ -13,6 +13,25 @@ namespace Analytics.Controllers
     [RoutePrefix("api/caedu")]
     public class CaeduController : ApiController
     {
+        [Route("dashboard/filtros")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         #region HUMANO
 
