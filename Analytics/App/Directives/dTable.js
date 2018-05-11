@@ -31,7 +31,7 @@
                         scrollY: scope.scrollY,
                         order: scope.order,
                         buttons: scope.buttons,
-                        dom: scope.dom,
+                        dom: scope.dom || 'lfrtip',
                     });
                 }               
             });
