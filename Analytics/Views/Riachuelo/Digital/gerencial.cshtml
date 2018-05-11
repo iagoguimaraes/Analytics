@@ -7,13 +7,12 @@
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
-
-        <div class="row margin-bottom">
+        <div class="row margin-bottom">          
             <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-yellow">
+                <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number "></h3>
-                        <p>Quantidade de Promessas</p>
+                        <h3 ng-bind="dashboard.resumo.qtd_pago | number "></h3>
+                        <p>Quantidade Recebimento</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -22,10 +21,37 @@
             </div>
 
             <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_inclusao | number "></h3>
+                        <p>Quantidade Carteira</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-plus-square"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago  / dashboard.resumo.qtd_inclusao | percentage: 1 "></h3>
+                        <p> % Recebido </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row margin-bottom">
+          
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$'"></h3>
-                        <p>Valor de Promessas</p>
+                        <h3 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h3>
+                        <p>Valor Recebimento</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
@@ -36,50 +62,37 @@
             <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_inclusao | currency:'R$' "></h3>
-                        <p>Valor das Entradas</p>
+                        <h3 ng-bind="dashboard.resumo.vlr_inclusao | currency:'R$ ' "></h3>
+                        <p>Valor Carteira</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-dollar"></i>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <h4 class="text-center">Recebimento em Valor</h4>
-                <high-chart series="dashboard.vlEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
-                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
-                            y-Axis1-Max="100"></high-chart>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_pago / dashboard.resumo.vlr_inclusao | percentage: 1 "></h3>
+                        <p> % Recebido </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
+
         <div class="row margin-bottom">
             <div class="col-xs-12">
-                <h4 class="text-center">Recebimento por Carteira</h4>
+                <h3 style="text-align:center">Recebimento de Carteira</h3>                
+                <h3 style="text-align:center">{{dashFiltros.year2 > dashFiltros.year1 ? dashFiltros.year2 : dashFiltros.year1 + ' / ' + dashFiltros.year2}}</h3>
                 <high-chart series="dashboard.qtEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
-                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            plot-Options-Spline-Data-Label="true" y-Axis1-Min="0"
                             y-Axis1-Max="100"></high-chart>
             </div>
-        </div>
-
-        <div class="row margin-bottom">
-            <h4 class="text-center">Promessas</h4>
-            <div class="col-xs-12">
-                <high-chart series="dashboard.qtPromessa" axis-Categories="dashboard.semanaProm" 
-                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" type="column"></high-chart>
-            </div>
-        </div>
-
-        <div class="row margin-bottom">
-            <h4 class="text-center">Entradas</h4>
-            <div class="col-xs-12">
-                <high-chart series="dashboard.qtInclusao" axis-Categories="dashboard.semanaIncl" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-            </div>
-        </div>
-
-        
+        </div>        
 
     </div>
 
@@ -146,9 +159,10 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        let firstDayYear = '2018-01-01'
 
         $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtini: $filter('date')(firstDayYear, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteiras: ''
         };
@@ -176,30 +190,34 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
 
-                $scope.dashboard.semanaProm = r.data.Table1.map(obj => obj.semana);
-                $scope.dashboard.semanaIncl = r.data.Table2.map(obj => obj.semana);
-                $scope.dashboard.semanaReceb = r.data.Table3.map(obj => obj.semana);
+                $scope.dashFiltros.year1 = new Date (($scope.filtros.dtini)).getFullYear();
+                $scope.dashFiltros.year2 = new Date (($scope.filtros.dtfim)).getFullYear();
 
-                $scope.dashboard.status = r.status;
+                console.log($scope.dashFiltros.year);
                 $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.semanaReceb = r.data.Table1.map(obj => obj.semana);
+
+                $scope.dashboard.qtEfetividade = [
+                   { name: 'Carteira', type: 'column', data: data.Table1.map(obj => obj.qtd_inclusao) },
+                   { name: 'Recebimento', type: 'column', data: data.Table1.map(obj => obj.qtd_pago) },
+                   { name: 'Recebido', type: 'spline', yAxis: 1, data: data.Table1.map(obj => obj.qtEfetividade) },
+                ];
+
+                /*
                 $scope.dashboard.qtPromessa = [
                     { name: 'Promessas', type: 'column', data: r.data.Table1.map(obj => (obj.qtd_promessa)) },
                     { name: 'Dias', type: 'column', data: r.data.Table1.map(obj => (obj.dias)) }
                 ];
+               
+               
                 $scope.dashboard.qtInclusao = [{ name: 'Entradas', data: r.data.Table2.map(obj => (obj.qtd_inclusao)) }];
 
                 $scope.dashboard.vlEfetividade = [
                    { name: 'Vlr Entrada', type: 'column', data: data.Table3.map(obj => obj.vlr_inclusao) },
                    { name: 'Vlr Pago', type: 'column', data: data.Table3.map(obj => obj.vlr_pago) },
                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.vlrEfetividade) },
-                ];
+                ];*/
 
-                $scope.dashboard.qtEfetividade = [
-                    { name: 'Entradas', type: 'column', data: data.Table3.map(obj => obj.qtd_inclusao) },
-                    { name: 'Pagamentos', type: 'column', data: data.Table3.map(obj => obj.qtd_pago) },
-                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.qtEfetividade) },
-                ];
-                
                
 
             });

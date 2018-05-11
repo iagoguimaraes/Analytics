@@ -41,14 +41,14 @@
 
                     <!--EMPRESA-->
                     <div class="form-group">
-                        <label class="control-sidebar-subheading">Empresa</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                     </div>
 
                     <!--CAMPANHA-->
                     <div class="form-group">
-                        <label class="control-sidebar-subheading">Carteira</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                        <label class="control-sidebar-subheading">Faixa</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
                     </div>
 
 
@@ -220,7 +220,7 @@
 
             angular.module('app').controller('ctrl-caedu-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
             dadosPagina.titulo = 'Produção';
-            dadosPagina.descricao = 'Caedu'
+            dadosPagina.descricao = 'Caedu - Humano'
 
             // filtros iniciais
             let newdate = new Date();
@@ -229,10 +229,26 @@
             $scope.filtros = {
                 dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+                segmento: '',
+                faixa: '',
             };
             $scope.dashFiltros = {};
             $scope.dashboard = {};
             $scope.grafico = { indicador: 'hitrate' };
+
+            // carregar os filtros
+            $http({
+                method: 'GET',
+                url: "/api/caedu/dashboard/humano/filtros",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dados = r.status;
+
+                $scope.dashFiltros.segmento = r.data.Table;
+                $scope.dashFiltros.faixa = r.data.Table1;
+                console.log($scope.dashFiltros);
+
+            });
 
             // obtem filtros do escopo e carrega os dados do dashboard
             $scope.carregarDashboard = function () {
