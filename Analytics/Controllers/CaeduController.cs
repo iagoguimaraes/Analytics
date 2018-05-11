@@ -13,8 +13,12 @@ namespace Analytics.Controllers
     [RoutePrefix("api/caedu")]
     public class CaeduController : ApiController
     {
-        [Route("dashboard/filtros")]
-        [HttpPost]
+
+
+        #region HUMANO
+
+        [Route("dashboard/humano/filtros")]
+        [HttpGet]
         [Autorizar]
         [Gravar]
         public HttpResponseMessage DashboardFiltros()
@@ -33,8 +37,6 @@ namespace Analytics.Controllers
             }
         }
 
-        #region HUMANO
-
         [Route("dashboard/humano/horahora")]
         [HttpPost]
         [Autorizar]
@@ -45,6 +47,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable faixa    = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
                 {
@@ -52,6 +56,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("faixa", faixa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_humano", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
