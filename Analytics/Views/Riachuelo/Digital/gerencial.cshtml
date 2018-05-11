@@ -86,7 +86,8 @@
 
         <div class="row margin-bottom">
             <div class="col-xs-12">
-                <h4 class="text-center">Recebimento por Carteira</h4>
+                <h3 style="text-align:center">Recebimento de Carteira</h3>                
+                <h3 style="text-align:center">{{dashFiltros.year2 > dashFiltros.year1 ? dashFiltros.year2 : dashFiltros.year1 + ' / ' + dashFiltros.year2}}</h3>
                 <high-chart series="dashboard.qtEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
                             plot-Options-Spline-Data-Label="true" y-Axis1-Min="0"
                             y-Axis1-Max="100"></high-chart>
@@ -189,6 +190,10 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
 
+                $scope.dashFiltros.year1 = new Date (($scope.filtros.dtini)).getFullYear();
+                $scope.dashFiltros.year2 = new Date (($scope.filtros.dtfim)).getFullYear();
+
+                console.log($scope.dashFiltros.year);
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.semanaReceb = r.data.Table1.map(obj => obj.semana);
 
