@@ -37,6 +37,26 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Pagamento Inicio</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtiniPag"></date-picker>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Pagamento Fim</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfimPag"></date-picker>
+                        </div>
+                    </div>
+
                     <!--CAMPANHA-->
                     <div class="form-group">
                         <label class="control-sidebar-subheading">Campanha</label>
@@ -278,9 +298,15 @@
                 let newdate = new Date();
                 let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), -60);
 
+                let newdatePag = new Date();
+                let primeiroDiaMesPag = new Date(newdatePag.getFullYear(), newdatePag.getMonth(), 1);
+
                 $scope.filtros = {
                     dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                     dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+
+                    dtiniPag: $filter('date')(primeiroDiaMesPag, "yyyy-MM-dd"),
+                    dtfimPag: $filter('date')(newdatePag, "yyyy-MM-dd"),
                     campanhas: '',
                     segmentos: '',
                     produtos: '',
