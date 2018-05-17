@@ -146,5 +146,66 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim2 = Convert.ToDateTime(form["dtfim_2"]);
+
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+
+                DataTable campanhas2 = JsonConvert.DeserializeObject<DataTable>(form["campanhas2"]);
+                DataTable segmentos2 = JsonConvert.DeserializeObject<DataTable>(form["segmentos2"]);
+                DataTable produtos2 = JsonConvert.DeserializeObject<DataTable>(form["produtos2"]);
+
+                string procedure = "sp_dashboard_comparativo_hora";
+
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_comparativo_mes";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("campanha", campanhas);
+                    parametros.Add("segmento", segmentos);
+                    parametros.Add("produto", produtos);
+
+                    parametros.Add("campanha_2", campanhas2);
+                    parametros.Add("segmento_2", segmentos2);
+                    parametros.Add("produto_2", produtos2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
