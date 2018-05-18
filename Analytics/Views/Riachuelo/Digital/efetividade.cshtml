@@ -86,6 +86,12 @@
                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                 </div>
 
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Funcionário</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario"></select2>
+                </div>
+
                 <!--BOTÃO-->
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -115,7 +121,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: ''
+            carteiras: '',
+            funcionario: ''
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -129,6 +136,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
+            $scope.dashFiltros.funcionario = data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -144,7 +152,7 @@
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
                 $scope.dashboard.carteiras = r.data.Table.map(obj => obj.carteira);
 
-                $scope.dashboard.promessaPagaCarteira = [{ name: 'PromessaPaga', data: data.Table.map(obj => ({ name: obj.carteira, y: obj.promessaPaga })) }];
+                $scope.dashboard.promessaPagaCarteira = [{ name: 'PromessaPaga', data: data.Table.map(obj => ({name: obj.carteira, y: obj.promessaPaga})) }];
                 $scope.dashboard.efetividadeCarteira = [{ name: 'Efetividade', data: data.Table.map(obj => (obj.promessaPaga * 100 / obj.promessa).toFixed(1) / 1) }];
 
                 $scope.dashboard.promessaPagaDia = [{ name: 'PromessaPaga', data: data.Table1.map(obj => obj.promessaPaga) }];
