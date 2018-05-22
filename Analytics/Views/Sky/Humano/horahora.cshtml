@@ -10,7 +10,7 @@
                 
         <!--BANNER-->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Sky/bg.png') center center;">
+            <div class="widget-user-header" style="background: url('/Content/Images/Sky/bg.png') center center;">
             </div>
 
             <!--IMAGEM REDONDA-->
@@ -54,7 +54,7 @@
                     </div>
                 </div>-->
 
-                <div class="row" style="background-color:rgb(239, 197, 197); color:black; opacity: 0.8">
+                <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
@@ -87,13 +87,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="background-color:#df2b1a; color:white;">
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number: 1 "></h5>
-                            <span class="description-text">Esforço</span>
-                        </div>
-                    </div>
+                <div class="row" style="background-color:#ff0000; color:white;">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
@@ -120,8 +114,14 @@
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$ '"></h5>
-                            <span class="description-text">Valor Promessa</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa_cartao | number"></h5>
+                            <span class="description-text">Promessa Cartão</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa_migracao | number"></h5>
+                            <span class="description-text">Promessa Migração</span>
                         </div>
                     </div>
                 </div>
@@ -150,7 +150,10 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Promessa Cartão</th>
+                                        <th>Promessa Migração</th>
+                                        <th>% Cartão</th>
+                                        <th>% Migração</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -169,7 +172,10 @@
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_promessa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'promessa_migracao'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa_migracao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -183,7 +189,10 @@
                                         <td>{{p.cpc | number}}</td>
                                         <td>{{p.cpca | number}}</td>
                                         <td>{{p.promessa | number}}</td>
-                                        <td>{{p.vlr_promessa | number}}</td>
+                                        <td>{{p.promessa_cartao | number}}</td>
+                                        <td>{{p.promessa_migracao | number}}</td>
+                                        <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
+                                        <td>{{p.promessa_migracao / p.promessa | percentage:1}}</td>
                                         <td>{{p.contato / p.discado | percentage:1}}</td>
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.cpc | percentage:1}}</td>
@@ -203,7 +212,6 @@
         <!--ANÁLISE POR HORA-->
         <div class="row">
             <div class="col-xs-12">
-
                 <div class="box box-danger">
                     <div class="box-header with-border">
                         <h3 class="box-title">Análise por Hora</h3>
@@ -220,7 +228,10 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Promessa Cartão</th>
+                                        <th>Promessa Migração</th>
+                                        <th>% Cartão</th>
+                                        <th>% Migração</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -235,7 +246,10 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.vlr_promessa| number}}</td>
+                                        <td>{{hora.promessa_cartao | number}}</td>
+                                        <td>{{hora.promessa_migracao | number}}</td>
+                                        <td>{{hora.promessa_cartao / hora.promessa | percentage:1}}</td>
+                                        <td>{{hora.promessa_migracao / hora.promessa | percentage:1}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -250,7 +264,10 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_promessa | number}}</th>
+                                        <th>{{dashboard.resumo.promessa_cartao | number}}</th>
+                                        <th>{{dashboard.resumo.promessa_migracao | number}}</th>
+                                        <th>{{dashboard.resumo.promessa_cartao / dashboard.resumo.promessa | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa_migracao / dashboard.resumo.promessa | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -281,7 +298,8 @@
                             <option value="cpc">CPC</option>
                             <option value="cpca">CPCA</option>                            
                             <option value="promessa">Promessa</option>                            
-                            <option value="vlr_promessa">Valor Promessa</option>
+                            <option value="promessa_cartao">Promessa Cartão</option>
+                            <option value="promessa_migracao">Promessa Migração</option>
                         </select>
                     </small>
                 </h3>

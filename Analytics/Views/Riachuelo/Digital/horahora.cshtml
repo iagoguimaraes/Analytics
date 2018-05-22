@@ -111,20 +111,39 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr ng-repeat="carteira in dashboard.carteira">
-                                        <td>{{carteira.produto}}</td>
-                                        <td>{{carteira.carteira | number}}</td>
-                                        <td>{{carteira.discado / carteira.carteira | number:1}}</td>
-                                        <td>{{carteira.discado | number}}</td>
-                                        <td>{{carteira.contato | number}}</td>
-                                        <td>{{carteira.cpc | number}}</td>
-                                        <td>{{carteira.cpca | number}}</td>
-                                        <td>{{carteira.promessa | number}}</td>
-                                        <td>{{carteira.contato / carteira.discado | percentage:1}}</td>
-                                        <td>{{carteira.cpc / carteira.contato | percentage:1}}</td>
-                                        <td>{{carteira.cpca / carteira.cpc | percentage:1}}</td>
-                                        <td>{{carteira.promessa / carteira.cpca | percentage:1}}</td>
+                                <tbody ng-repeat="p in dashboard.carteira | groupBy: 'produto'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{p[0].produto}}
+                                        </td>
+                                        <td>{{p | sumByColumn: 'carteira'| number}}</td>
+                                        <td>{{p | divideSumColumns: 'discado':'carteira' | number:1}}</td>
+                                        <td>{{p | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{p | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{p | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{p | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{p | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{p | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                        <td>{{p | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{p | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{p | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="f in p" ng-show="showTbody">
+                                        <td>{{f.funcionario}}</td>
+                                        <td>{{f.carteira | number}}</td>
+                                        <td>{{f.discado / f.carteira | number:1}}</td>
+                                        <td>{{f.discado | number}}</td>
+                                        <td>{{f.contato | number}}</td>
+                                        <td>{{f.cpc | number}}</td>
+                                        <td>{{f.cpca | number}}</td>
+                                        <td>{{f.promessa | number}}</td>
+                                        <td>{{f.contato / f.discado | percentage:1}}</td>
+                                        <td>{{f.cpc / f.contato | percentage:1}}</td>
+                                        <td>{{f.cpca / f.cpc | percentage:1}}</td>
+                                        <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -134,8 +153,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <div class="row">
             <div class="col-xs-12">
@@ -255,6 +272,12 @@
                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                 </div>
 
+                <!--FUNCIONARIO-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Funcionário</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario"></select2>
+                </div>
+
                 <!--BOTÃO-->
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -281,7 +304,8 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            carteiras: ''
+            carteiras: '',
+            funcionario: ''
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -295,6 +319,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
+            $scope.dashFiltros.funcionario = data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

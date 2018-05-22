@@ -94,6 +94,12 @@
                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                 </div>
 
+                <!--FUNCIONARIO-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Funcionário</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario"></select2>
+                </div>
+
                 <!--BOTÃO-->
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -123,7 +129,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: ''
+            carteiras: '',
+            funcionario: ''
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -137,6 +144,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
+            $scope.dashFiltros.funcionario = data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
