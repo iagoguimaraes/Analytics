@@ -278,6 +278,63 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+
+                DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
+                DataTable segmentacao_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao_2"]);
+
+                string procedure = "sp_dashboard_comparativo_hora";
+
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_comparativo_mes";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);
+
+                    parametros.Add("carteira_2", carteira_2);
+                    parametros.Add("segmentacao_2", segmentacao_2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
     }
 }
