@@ -60,7 +60,7 @@
         //carregar os grupos
         $http({
             method: 'GET',
-            url: "/api/analytics/grupo/consultar",
+            url: "/api/acessogrupo/grupo/consultar",
         }).then(function success(r) {
             $scope.statusGrupo = r.status;
             $scope.grupos = r.data.Table;
@@ -70,7 +70,7 @@
         $scope.popularAcessos = function () {
             $http({
                 method: 'POST',
-                url: "/api/analytics/acesso/consultar",
+                url: "/api/acessogrupo/acesso/consultar",
                 data: $scope.model,
             }).then(function success(r) {
                 $scope.statusAcesso = r.status;
@@ -83,7 +83,7 @@
             if (item.selected) {
                 $http({
                     method: 'POST',
-                    url: "/api/analytics/acesso/pagina/inserir",
+                    url: "/api/acessogrupo/acesso/pagina/inserir",
                     data: {
                         id_pagina: item.id_pagina,
                         id_grupo: $scope.model.grupo
@@ -93,7 +93,7 @@
             else {
                 $http({
                     method: 'POST',
-                    url: "/api/analytics/acesso/pagina/remover",
+                    url: "/api/acessogrupo/acesso/pagina/remover",
                     data: {
                         id_pagina: item.id_pagina,
                         id_grupo: $scope.model.grupo
@@ -106,7 +106,7 @@
             if (item.selected) {
                 $http({
                     method: 'POST',
-                    url: "/api/analytics/acesso/recurso/inserir",
+                    url: "/api/acessogrupo/acesso/recurso/inserir",
                     data: {
                         id_recurso: item.id_recurso,
                         id_grupo: $scope.model.grupo
@@ -116,7 +116,7 @@
             else {
                 $http({
                     method: 'POST',
-                    url: "/api/analytics/acesso/recurso/remover",
+                    url: "/api/acessogrupo/acesso/recurso/remover",
                     data: {
                         id_recurso: item.id_recurso,
                         id_grupo: $scope.model.grupo
