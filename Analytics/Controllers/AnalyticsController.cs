@@ -27,7 +27,7 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("id_grupo", sessao.id_grupo.ToString());
+                    parametros.Add("id_usuario", sessao.id_usuario.ToString());
 
                     DataTable paginas = sql.ExecuteProcedureDataTable("sp_sel_acessoPagina", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, paginas);

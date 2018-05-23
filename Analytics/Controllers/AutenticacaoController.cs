@@ -60,7 +60,6 @@ namespace Analytics.Controllers
 
                     parametros.Add("data_criacao", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     parametros.Add("id_usuario", usuario.id_usuario.ToString());
-                    parametros.Add("id_grupo", usuario.id_grupo.ToString());
                     parametros.Add("data_expiracao", DateTime.Now.AddDays(1).ToString("yyyy-MM-dd HH:mm:ss"));
 
                     DataTable dtSessao = sql.ExecuteProcedureDataTable("sp_ins_sessao", parametros);
