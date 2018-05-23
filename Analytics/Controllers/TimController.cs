@@ -291,11 +291,13 @@ namespace Analytics.Controllers
                 DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
                 DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
 
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
+                DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
-                DataTable segmentacao_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao_2"]);
+                DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
 
                 string procedure = "sp_dashboard_comparativo_hora";
 
@@ -319,11 +321,13 @@ namespace Analytics.Controllers
                     parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
 
+                    parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
-                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("aging", aging);
 
+                    parametros.Add("empresa_2", empresa_2);
                     parametros.Add("carteira_2", carteira_2);
-                    parametros.Add("segmentacao_2", segmentacao_2);
+                    parametros.Add("aging_2", aging_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
