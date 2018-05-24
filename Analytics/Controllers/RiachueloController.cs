@@ -450,6 +450,28 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/grupo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardRespostaSMS(FormDataCollection form)
+        {
+            try
+            {
+
+                using (SqlHelper sql = new SqlHelper("DB_RIACHUELO"))
+                {
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_grupo");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }
