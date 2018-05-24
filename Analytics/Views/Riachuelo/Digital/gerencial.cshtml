@@ -7,18 +7,7 @@
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
-        <div class="row margin-bottom">          
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_pago | number "></h3>
-                        <p>Quantidade Recebimento</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </div>
-                </div>
-            </div>
+        <div class="row margin-bottom">
 
             <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-blue">
@@ -31,6 +20,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago | number "></h3>
+                        <p>Quantidade Recebimento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -45,8 +48,9 @@
 
         </div>
 
-        <div class="row margin-bottom">
-          
+        <!-- VALOR RECEBIMENTO -->
+        <!--<div class="row margin-bottom">
+
             <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-green">
                     <div class="inner">
@@ -81,18 +85,18 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="row margin-bottom">
             <div class="col-xs-12">
-                <h3 style="text-align:center">Recebimento de Carteira</h3>                
+                <h3 style="text-align:center">Recebimento de Carteira</h3>
                 <h3 style="text-align:center">{{dashFiltros.year2 > dashFiltros.year1 ? dashFiltros.year2 : dashFiltros.year1 + ' / ' + dashFiltros.year2}}</h3>
                 <high-chart series="dashboard.qtEfetividade" axis-Categories="dashboard.semanaReceb" type="column"
                             plot-Options-Spline-Data-Label="true" y-Axis1-Min="0"
                             y-Axis1-Max="100"></high-chart>
             </div>
-        </div>        
+        </div>
 
     </div>
 
