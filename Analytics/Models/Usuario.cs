@@ -13,7 +13,6 @@ namespace Analytics
         public string login { get; set; }
         public DateTime data_criacao { get; set; }
         public bool ativo { get; set; }
-        public int id_grupo { get; set; }
 
         public Usuario(DataRow row)
         {
@@ -22,7 +21,6 @@ namespace Analytics
             login = Convert.ToString(row["login"]);
             data_criacao = Convert.ToDateTime(row["data_criacao"]);
             ativo = Convert.ToBoolean(row["ativo"]);
-            id_grupo = Convert.ToInt32(row["id_grupo"]);
         }
     }
 }

@@ -321,7 +321,7 @@
         // carregar as opções do diario de bordo
         $http({
             method: 'POST',
-            url: "/api/analytics/diariobordo/opcoes",
+            url: "/api/diariobordo/opcoes",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.opcoes.status = r.status;
@@ -335,7 +335,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/analytics/diariobordo/consultar",
+                url: "/api/diariobordo/consultar",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -348,7 +348,7 @@
 
             $http({
                 method: 'POST',
-                url: "/api/analytics/diariobordo/inserir",
+                url: "/api/diariobordo/inserir",
                 data: $scope.diario,
             }).then(function success(r) {
                 $scope.diario = {
@@ -378,7 +378,7 @@
 
             $http({
                 method: 'POST',
-                url: "/api/analytics/diariobordo/editar",
+                url: "/api/diariobordo/editar",
                 data: $scope.editdiario,
             }).then(function success(r) {
                 $scope.carregarDashboard();
@@ -388,7 +388,7 @@
         $scope.removerOcorrencia = function () {
             $http({
                 method: 'POST',
-                url: "/api/analytics/diariobordo/remover",
+                url: "/api/diariobordo/remover",
                 data: $scope.editdiario,
             }).then(function success(r) {
                 $scope.carregarDashboard();

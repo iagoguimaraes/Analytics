@@ -11,7 +11,6 @@ namespace Analytics
         public int id_sessao { get; set; }
         public DateTime data_criacao { get; set; }
         public int id_usuario { get; set; }
-        public int id_grupo { get; set; }
         public DateTime data_expiracao { get; set; }
 
         public override string ToString()
@@ -22,8 +21,6 @@ namespace Analytics
                 ";",
                 id_usuario.ToString(),
                 ";",
-                id_grupo.ToString(),
-                ";",
                 data_expiracao.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
@@ -32,7 +29,6 @@ namespace Analytics
             id_sessao = Convert.ToInt32(row["id_sessao"]);
             data_criacao = Convert.ToDateTime(row["data_criacao"]);
             id_usuario = Convert.ToInt32(row["id_usuario"]);
-            id_grupo = Convert.ToInt32(row["id_grupo"]);
             data_expiracao = Convert.ToDateTime(row["data_expiracao"]);
         }
 
@@ -42,8 +38,7 @@ namespace Analytics
             id_sessao = Convert.ToInt32(dados[0]);
             data_criacao = Convert.ToDateTime(dados[1]);
             id_usuario = Convert.ToInt32(dados[2]);
-            id_grupo = Convert.ToInt32(dados[3]);
-            data_expiracao = Convert.ToDateTime(dados[4]);
+            data_expiracao = Convert.ToDateTime(dados[3]);
         }
 
     }

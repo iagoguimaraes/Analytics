@@ -44,14 +44,14 @@ namespace Analytics
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("id_grupo", sessao.id_grupo.ToString());
+                    parametros.Add("id_usuario", sessao.id_usuario.ToString());
                     parametros.Add("path", path);
 
                     DataTable dtAcesso = sql.ExecuteProcedureDataTable("sp_sel_acessoRecurso", parametros);
 
                     if(dtAcesso.Rows.Count > 0)
                     {                       
-                        if (string.IsNullOrEmpty(dtAcesso.Rows[0]["id_grupo"].ToString()))
+                        if (string.IsNullOrEmpty(dtAcesso.Rows[0]["id_recurso"].ToString()))
                             throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                         // armazena o id do recurso na requisição
