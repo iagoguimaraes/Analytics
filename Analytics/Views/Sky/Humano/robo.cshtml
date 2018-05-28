@@ -7,10 +7,10 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                     <img class="img-responsive center-block" src="~/Content/Images/CreditCash/robo_200x200.png" height="100" width="100" />
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box" style="background-color: #cccccc">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.consulta | megaNumber"></h3>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box" style="background-color: #47d147">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.sucesso | megaNumber"></h3>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box" style="background-color: #47d147">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.adimplente | number"></h3>
@@ -45,26 +45,57 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: #80aaff">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.tme"></h3>
-                        <p>Tempo Médio de Execução</p>
+        <!--ANALISE POR CARTEIRA-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Análise por Carteira</h3>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-clock-o"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: #80aaff">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.tmc"></h3>
-                        <p>Tempo Médio de Consulta</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-clock-o"></i>
+                    <div class="box-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira</th>
+                                        <th>Consulta</th>
+                                        <th>Sucesso</th>
+                                        <th>Adimplente</th>
+                                        <th>% Sucesso</th>
+                                        <th>% Adimplente</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.carteira | groupBy: 'carteira'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].carteira}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'consulta'| number}}</td>
+                                        <td>{{c | sumByColumn: 'sucesso'| number}}</td>
+                                        <td>{{c | sumByColumn: 'adimplente'| number}}</td>                                        
+                                        <td>{{c | divideSumColumns: 'sucesso':'consulta' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'adimplente':'sucesso' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.segmentacao}}</td>
+                                        <td>{{p.consulta | number}}</td>
+                                        <td>{{p.sucesso | number}}</td>
+                                        <td>{{p.adimplente | number}}</td>
+                                        <td>{{p.sucesso / p.consulta | percentage:1}}</td>
+                                        <td>{{p.adimplente / p.sucesso | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -86,8 +117,6 @@
                                         <th>Consulta</th>
                                         <th>Sucesso</th>
                                         <th>Adimplente</th>
-                                        <th>Tempo</th>
-                                        <th>TMC</th>
                                         <th>% Sucesso</th>
                                         <th>% Adimplente</th>
                                     </tr>
@@ -98,8 +127,6 @@
                                         <td>{{dia.consulta | number}}</td>
                                         <td>{{dia.sucesso | number}}</td>
                                         <td>{{dia.adimplente | number}}</td>
-                                        <td>{{dia.tempo}}</td>
-                                        <td>{{dia.tmc}}</td>
                                         <td>{{dia.sucesso / dia.consulta | percentage:1}}</td>
                                         <td>{{dia.adimplente / dia.sucesso | percentage:1}}</td>
                                     </tr>
@@ -112,7 +139,7 @@
         </div>
 
         <!-- SIDE BAR CONTROL -->
-        <aside class="control-sidebar control-sidebar-dark">
+        <aside class="control-sidebar control-sidebar-dark" ng-if="dashFiltros.status === 200">
             <!-- Create the tabs -->
             <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
                 <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
@@ -141,6 +168,18 @@
                             </div>
                             <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                         </div>
+                    </div>
+
+                    <!--CARTEIRA-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Carteira</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                    </div>
+
+                    <!--SEGMENTACAO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmentação</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
                     </div>
 
                     <!--BOTÃO-->
@@ -173,9 +212,24 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteira: '',
+            segmentacao: '',
         };
 
+        $scope.dashFiltros = {};
         $scope.dashboard = {};
+
+        //carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = data.Table;
+            $scope.dashFiltros.segmentacao = data.Table1;
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -187,7 +241,8 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.diadia = data.Table1;
+                $scope.dashboard.carteira = data.Table1;
+                $scope.dashboard.diadia = data.Table2;
             });
         }
 
