@@ -1,0 +1,238 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-caedu-pagamento">
+    <div ng-if="dashboard.status == 200">
+
+        <!--QUANTIDADE RECEBIMENTO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_inclusao | number "></h3>
+                        <p>Quantidade Carteira</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-plus-square"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago | number "></h3>
+                        <p>Quantidade Recebimento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago  / dashboard.resumo.qtd_inclusao | percentage: 1 "></h3>
+                        <p> % Recebido </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- VALOR RECEBIMENTO -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_inclusao | currency:'R$ ' "></h3>
+                        <p>Valor Carteira</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dollar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h3>
+                        <p>Valor Recebimento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_pago / dashboard.resumo.vlr_inclusao | percentage: 1 "></h3>
+                        <p> % Recebido </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h3 style="text-align:center">
+                    Recebimento por Lote
+                    <small class="pull-right">
+                        <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                            <option value="qtd">Quantidade</option>
+                            <option value="vlr">Valor</option>
+                        </select>
+                    </small>
+                </h3>
+                <high-chart series="dashboard.qtEfetividade" axis-Categories="dashboard.dia" type="column"
+                            plot-Options-Spline-Data-Label="true" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
+            </div>
+        </div>
+
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab">
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+                    <!--SEGMENTOS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                    </div>
+                    <!--FAIXAS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Faixas</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-caedu-pagamento', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Carteira';
+        dadosPagina.descricao = 'Caedu'
+
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            segmento: '',
+            faixa: '',
+        }
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        $scope.grafico = { indicador: 'qtd' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/caedu/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.segmento = r.data.Table;
+            $scope.dashFiltros.faixa = r.data.Table1;
+        });
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/caedu/dashboard/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+     
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.dia = r.data.Table1.map(obj => obj.dia);
+                $scope.dashboard.dados = r.data;
+
+                $scope.carregarGrafico();             
+            });
+        }
+
+        $scope.carregarGrafico = function () {
+            let data = $scope.dashboard.dados;
+
+            if ($scope.grafico.indicador == 'vlr') {
+                $scope.dashboard.qtEfetividade = [
+                    { name: 'Vl Carteira', type: 'column', data: data.Table1.map(obj => obj.vlr_inclusao) },
+                    { name: 'Vl Recebimento', type: 'column', data: data.Table1.map(obj => obj.vlr_pago) },
+                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table1.map(obj => obj.vlrEfetividade) },
+                ];
+            }
+            else {
+                $scope.dashboard.qtEfetividade = [
+                    { name: 'Carteira', type: 'column', data: data.Table1.map(obj => obj.qtd_inclusao) },
+                    { name: 'Recebimento', type: 'column', data: data.Table1.map(obj => obj.qtd_pago) },
+                    { name: 'Efetividade', type: 'spline', yAxis: 1, data: data.Table1.map(obj => obj.qtEfetividade) },
+                ];
+            }
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+
+</script>
