@@ -450,19 +450,65 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/grupo")]
+        [Route("dashboard/humano/grupo")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardRespostaSMS(FormDataCollection form)
+        public HttpResponseMessage DashboardGrupo(FormDataCollection form)
         {
             try
             {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable grupo = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
-                using (SqlHelper sql = new SqlHelper("DB_RIACHUELO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_grupo");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("grupo", grupo);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_grupo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable grupo = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("grupo", grupo);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
