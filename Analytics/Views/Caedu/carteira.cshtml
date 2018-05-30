@@ -1,0 +1,213 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-caedu-carteira">
+    <div ng-if="dashboard.status == 200">
+
+        <!--TOTAIS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+
+                <h3 class="text-center">Inclusão, Devoluçaõ e Carteira Ativa</h3>
+
+                <div class="info-box bg-green">
+                    <span class="info-box-icon"><i class="fa fa-plus-square"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Inclusão</span>
+                        <span class="info-box-number">{{dashboard.resumo.inclusao | number}}</span>
+                        <span class="progress-description">
+                            {{dashboard.resumo.vlInclusao | currency:'R$'}}
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Devolução</span>
+                        <span class="info-box-number">{{dashboard.resumo.devolucao | number}}</span>
+                        <span class="progress-description">
+                            {{dashboard.resumo.vlDevolucao | currency:'R$'}}
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+
+                <div class="info-box bg-red">
+                    <span class="info-box-icon"><i class="fa fa-archive"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Média de Carteira Ativa</span>
+                        <span class="info-box-number">{{dashboard.resumo.ativo | number}}</span>
+                        <span class="progress-description">
+                            {{dashboard.resumo.vlAtivo | currency:'R$'}}
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <h3 class="text-center">Média Carteira Ativa por Fase</h3>
+                <high-chart series="dashboard.carteira" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
+
+        <!--GRAFICOS POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <h3 class="box-title">
+                    Gráfico por Dia
+                    <small class="pull-right">
+                        <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                            <option value="inclusao">Inclusão</option>
+                            <option value="devolucao">Devolução</option>
+                            <option value="ativo">Ativo</option>
+                        </select>
+                    </small>
+                </h3>
+                <high-chart series="dashboard.graficoQtd" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" height="300"></high-chart>
+            </div>
+        </div>
+
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab">
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+                    <!--SEGMENTOS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                    </div>
+                    <!--FAIXAS-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Faixas</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-caedu-carteira', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Carteira';
+        dadosPagina.descricao = 'Caedu'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            segmento: '',
+            faixa: '',
+        }
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        $scope.grafico = {
+            indicador: 'ativo'
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/caedu/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.segmento = r.data.Table;
+            $scope.dashFiltros.faixa = r.data.Table1;
+        });
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/caedu/dashboard/carteira",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.carteira, y: obj.ativo })) }];
+                $scope.dashboard.dia = r.data.Table2;
+
+                $scope.carregarGrafico();
+            });
+
+            // carrega o mapa de acordo com o indicador escolhido
+            $scope.carregarGrafico = function () {
+                let dados = $scope.dashboard.dia;
+                let indicador = $scope.grafico.indicador;
+
+                $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
+                $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
+            }
+
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+
+</script>
