@@ -36,6 +36,7 @@
             <div class="timeline-item">
 
                 <span class="time">
+                    <i class="fa fa-users"></i> <span style="padding-right:5px;">{{d.grupo}}</span>
                     <i class="fa fa-user"></i> <span style="padding-right:5px;">{{d.usuario}}</span>
                     <i class="fa fa-calendar-o"></i> <span style="padding-right:5px;">{{d.data}}</span>
                     <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{d.hora}}</span>
@@ -92,22 +93,29 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="diario.grupo" ng-options="g.id_grupo as g.grupo for g in opcoes.grupos">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="diario.grupo">
                             <label>Empresa</label>
-                            <select class="form-control" ng-model="diario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas">
+                            <select class="form-control" ng-model="diario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas | filter:{id_grupo: diario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" ng-show="diario.grupo">
                             <label>Carteira</label>
-                            <select class="form-control" ng-model="diario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras">
+                            <select class="form-control" ng-model="diario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras | filter:{id_grupo: diario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" ng-show="diario.grupo">
                             <label>Ocorrência</label>
-                            <select class="form-control" ng-model="diario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias">
+                            <select class="form-control" ng-model="diario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias | filter:{id_grupo: diario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
@@ -123,7 +131,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia()">Inserir</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -168,22 +176,29 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="editdiario.grupo" ng-options="g.id_grupo as g.grupo for g in opcoes.grupos">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-if="editdiario.grupo">
                             <label>Empresa</label>
-                            <select class="form-control" ng-model="editdiario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas">
+                            <select class="form-control" ng-model="editdiario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas | filter:{id_grupo: editdiario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" ng-if="editdiario.grupo">
                             <label>Carteira</label>
-                            <select class="form-control" ng-model="editdiario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras">
+                            <select class="form-control" ng-model="editdiario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras | filter:{id_grupo: editdiario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" ng-if="editdiario.grupo">
                             <label>Ocorrência</label>
-                            <select class="form-control" ng-model="editdiario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias">
+                            <select class="form-control" ng-model="editdiario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias | filter:{id_grupo: editdiario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
@@ -199,7 +214,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarOcorrencia()">Salvar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarOcorrencia($event)">Salvar</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="removerOcorrencia()">Remover</button>
                 </div>
             </div>
@@ -241,6 +256,12 @@
                         </div>
                         <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                     </div>
+                </div>
+
+                <!--GRUPOS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Grupos</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupos" dados="opcoes.grupos"></select2>
                 </div>
 
                 <!--EMPRESAS-->
@@ -297,6 +318,7 @@
         $scope.filtros = {
             dtini: $filter('date')(ini, "yyyy-MM-dd"),
             dtfim: $filter('date')(fim, "yyyy-MM-dd"),
+            grupos: null,
             carteiras: null,
             empresas: null,
             ocorrencias: null,
@@ -308,7 +330,7 @@
 
         // dados para inserir uma nova ocorrencia
         $scope.diario = {
-            data: $filter('date')(new Date(), "yyyy-MM-dd")
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
         };
 
         // dados para editar uma ocorrencia
@@ -325,10 +347,11 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.opcoes.status = r.status;
-            $scope.opcoes.empresas = r.data.Table;
-            $scope.opcoes.carteiras = r.data.Table1;
-            $scope.opcoes.ocorrencias = r.data.Table2;
-            $scope.opcoes.usuarios = r.data.Table3;
+            $scope.opcoes.grupos = r.data.Table;
+            $scope.opcoes.empresas = r.data.Table1;
+            $scope.opcoes.carteiras = r.data.Table2;
+            $scope.opcoes.ocorrencias = r.data.Table3;
+            $scope.opcoes.usuarios = r.data.Table4;
         });
 
         // carregar a lista de ocorrencias
@@ -344,7 +367,31 @@
         }
 
         // inserir nova ocorrencia
-        $scope.inserirOcorrencia = function () {
+        $scope.inserirOcorrencia = function ($event) {
+
+            if (!$scope.diario.grupo) {
+                $('[ng-model="diario.grupo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.empresa) {
+                $('[ng-model="diario.empresa"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.carteira) {
+                $('[ng-model="diario.carteira"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.ocorrencia) {
+                $('[ng-model="diario.ocorrencia"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
 
             $http({
                 method: 'POST',
@@ -365,16 +412,39 @@
             $scope.editdiario.id = r.id_diario_bordo;
             $scope.editdiario.data = r.data;
             $scope.editdiario.hora = r.hora;
+            $scope.editdiario.grupo = r.id_grupo;
             $scope.editdiario.empresa = r.id_empresa;
             $scope.editdiario.carteira = r.id_carteira;
             $scope.editdiario.ocorrencia = r.id_ocorrencia;
             $scope.editdiario.descricao = r.descricao;
         }
 
-        $scope.editarOcorrencia = function () {
-            $scope.editdiario.empresa = $scope.editdiario.empresa || 0;
-            $scope.editdiario.carteira = $scope.editdiario.carteira || 0;
-            $scope.editdiario.ocorrencia = $scope.editdiario.ocorrencia || 0;
+        // editar uma ocorrencia
+        $scope.editarOcorrencia = function ($event) {
+
+            if (!$scope.editdiario.grupo) {
+                $('[ng-model="editdiario.grupo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.empresa) {
+                $('[ng-model="editdiario.empresa"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.carteira) {
+                $('[ng-model="editdiario.carteira"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.ocorrencia) {
+                $('[ng-model="editdiario.ocorrencia"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
 
             $http({
                 method: 'POST',

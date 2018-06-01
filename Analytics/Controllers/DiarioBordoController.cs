@@ -21,8 +21,11 @@ namespace Analytics.Controllers
         {
             try
             {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
+                string grupos = form["grupos"];
                 string empresas = form["empresas"];
                 string carteiras = form["carteiras"];
                 string ocorrencias = form["ocorrencias"];
@@ -31,6 +34,7 @@ namespace Analytics.Controllers
                 DateTime _dtini = Convert.ToDateTime(dtini);
                 DateTime _dtfim = Convert.ToDateTime(string.Concat(dtfim, " 23:59:59"));
 
+                DataTable _grupos = JsonConvert.DeserializeObject<DataTable>(grupos);
                 DataTable _empresas = JsonConvert.DeserializeObject<DataTable>(empresas);
                 DataTable _carteiras = JsonConvert.DeserializeObject<DataTable>(carteiras);
                 DataTable _ocorrencias = JsonConvert.DeserializeObject<DataTable>(ocorrencias);
@@ -40,8 +44,10 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
+                    parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("dtini", _dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", _dtfim.ToString("yyyy-MM-dd HH:mm:ss"));
+                    parametros.Add("grupos", _grupos);
                     parametros.Add("empresas", _empresas);
                     parametros.Add("carteiras", _carteiras);
                     parametros.Add("ocorrencias", _ocorrencias);
@@ -64,9 +70,15 @@ namespace Analytics.Controllers
         {
             try
             {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_diario_bordo");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", sessao.id_usuario);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_diario_bordo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -83,14 +95,17 @@ namespace Analytics.Controllers
         {
             try
             {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
                 string data = form["data"];
                 string hora = form["hora"];
+                int id_grupo = Convert.ToInt32(form["grupo"]);
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 string descricao = form["descricao"];
 
-                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+                
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -102,6 +117,7 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("data", _data);
+                    parametros.Add("id_grupo", id_grupo);
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
@@ -125,15 +141,16 @@ namespace Analytics.Controllers
         {
             try
             {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
                 int id_diario_bordo = Convert.ToInt32(form["id"]);
                 string data = form["data"];
                 string hora = form["hora"];
+                int id_grupo = Convert.ToInt32(form["grupo"]);
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 string descricao = form["descricao"];
-
-                Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -146,6 +163,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("id_diario_bordo", id_diario_bordo);
                     parametros.Add("data", _data);
+                    parametros.Add("id_grupo", id_grupo);
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
@@ -169,12 +187,15 @@ namespace Analytics.Controllers
         {
             try
             {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
                 int id_diario_bordo = Convert.ToInt32(form["id"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
+                    parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("id_diario_bordo", id_diario_bordo);
 
                     sql.ExecuteProcedureDataSet("sp_del_diario_bordo", parametros);
