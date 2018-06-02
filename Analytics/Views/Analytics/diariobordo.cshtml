@@ -456,13 +456,15 @@
         }
 
         $scope.removerOcorrencia = function () {
-            $http({
-                method: 'POST',
-                url: "/api/diariobordo/remover",
-                data: $scope.editdiario,
-            }).then(function success(r) {
-                $scope.carregarDashboard();
-            });
+            if (confirm('Tem certeza que deseja remover essa ocorrência?')) {
+                $http({
+                    method: 'POST',
+                    url: "/api/diariobordo/remover",
+                    data: $scope.editdiario,
+                }).then(function success(r) {
+                    $scope.carregarDashboard();
+                });
+            }        
         }
 
         $scope.carregarDashboard();
