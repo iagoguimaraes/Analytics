@@ -2,82 +2,225 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-if="dadosPagina.ok">
 
-    <div class="row">
+<div ng-controller="ctrl-paginainicial">
 
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/dashboard.gif" />
-            </div>
-            <div class="col-xs-6">
-                <h4>Dashboard</h4>
-                <p>
-                    As informações da sua operação na palma da sua mão.
-                </p>
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Bem-Vindo {{dashboard.usuario.nome}}!</h3>
             </div>
         </div>
 
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/dados.gif" />
+        <!-- GRAFICOS DE REQUISIÇÕES-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Consultas por Dia</h3>
+                <high-chart series="dashboard.reqdia" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
             </div>
-            <div class="col-xs-6">
-                <h4>Dados</h4>
-                <p>
-                    Acompanhe os indicadores da sua operação.
-                </p>
-            </div>
-        </div>
-
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/produtividade.gif" />
-            </div>
-            <div class="col-xs-6">
-                <h4>Insights</h4>
-                <p>
-                    Identifique oportunidades e pontos de melhoria
-                </p>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Meus Dashboards Mais Acessados</h3>
+                <high-chart series="dashboard.reqdash" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
             </div>
         </div>
 
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/necessario.gif" />
-            </div>
-            <div class="col-xs-6">
-                <h4>Necessário</h4>
-                <p>
-                    É impresindível ter as informações da sua operação de maneira fácil.
-                </p>
+        <!-- TABELA DE ATUALIZAÇÕES -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">Tabela de Atualização do Analytics</h3>
+                <table class="table table-striped table-bordered table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Ordem</th>
+                            <th>Horário da Atualização</th>
+                            <th>Período Referencia dos Dados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>D-1</td>
+                            <td>07:00</td>
+                            <td>00:00 até 23:59 do dia anterior</td>
+                        </tr>
+                        <tr>
+                            <td>1º</td>
+                            <td>09:40</td>
+                            <td>00:00 até 08:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>2º</td>
+                            <td>10:40</td>
+                            <td>00:00 até 09:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>3º</td>
+                            <td>11:40</td>
+                            <td>00:00 até 10:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>4º</td>
+                            <td>12:40</td>
+                            <td>00:00 até 11:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>5º</td>
+                            <td>13:40</td>
+                            <td>00:00 até 12:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>6º</td>
+                            <td>14:40</td>
+                            <td>00:00 até 13:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>7º</td>
+                            <td>15:40</td>
+                            <td>00:00 até 14:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>8º</td>
+                            <td>16:40</td>
+                            <td>00:00 até 15:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>9º</td>
+                            <td>17:40</td>
+                            <td>00:00 até 16:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>10º</td>
+                            <td>18:40</td>
+                            <td>00:00 até 17:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>11º</td>
+                            <td>19:40</td>
+                            <td>00:00 até 18:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>12º</td>
+                            <td>20:40</td>
+                            <td>00:00 até 19:59 do dia atual</td>
+                        </tr>
+                        <tr>
+                            <td>13º</td>
+                            <td>21:40</td>
+                            <td>00:00 até 20:59 do dia atual</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/responsivo.gif" />
+        <!--
+
+        <div class="row">
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/dashboard.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Dashboard</h4>
+                    <p>
+                        As informações da sua operação na palma da sua mão.
+                    </p>
+                </div>
             </div>
-            <div class="col-xs-6">
-                <h4>Responsivo</h4>
-                <p>
-                    Experimente o utilizar o Analytics no seu celular, tablet, netbook. O design se adpta a qualquer tamanho de tela.
-                </p>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/dados.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Dados</h4>
+                    <p>
+                        Acompanhe os indicadores da sua operação.
+                    </p>
+                </div>
             </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/produtividade.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Insights</h4>
+                    <p>
+                        Identifique oportunidades e pontos de melhoria
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/necessario.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Necessário</h4>
+                    <p>
+                        É impresindível ter as informações da sua operação de maneira fácil.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/responsivo.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Responsivo</h4>
+                    <p>
+                        Experimente o utilizar o Analytics no seu celular, tablet, netbook. O design se adpta a qualquer tamanho de tela.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-6">
+                    <img width="100%" src="/Content/Images/Home/qualquerlugar.gif" />
+                </div>
+                <div class="col-xs-6">
+                    <h4>Qualquer Lugar</h4>
+                    <p>
+                        Acesse o Analytics de qualquer lugar!
+                    </p>
+                </div>
+            </div>
+
         </div>
 
-        <div class="col-xs-12 col-md-6 margin-bottom">
-            <div class="col-xs-6">
-                <img width="100%" src="/Content/Images/Home/qualquerlugar.gif" />
-            </div>
-            <div class="col-xs-6">
-                <h4>Qualquer Lugar</h4>
-                <p>
-                    Acesse o Analytics de qualquer lugar!
-                </p>
-            </div>
-        </div>
+        -->
 
     </div>
 
 </div>
+
+<script>
+    angular.module('app').controller('ctrl-paginainicial', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Página Inicial';
+        dadosPagina.descricao = 'Analytics Credit Cash'
+            
+        $scope.dashboard = {};
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/analytics/paginainicial",
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                console.log(r);
+                $scope.dashboard.usuario = r.data.Table[0];
+                $scope.dashboard.grupos = r.data.Table1;
+                $scope.dashboard.totalreq = r.data.Table2[0];
+
+                $scope.dashboard.datas = r.data.Table3.map(obj => obj.data);
+                $scope.dashboard.reqdia = [{ name: 'Requisições', data: r.data.Table3.map(obj => obj.quantidade )}];
+                $scope.dashboard.reqdash = [{ name: 'Requisições', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.dashboard, y: obj.quantidade })) }];
+            });
+        }
+
+        $scope.carregarDashboard();
+    });
+</script>

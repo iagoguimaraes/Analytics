@@ -14,7 +14,7 @@ namespace Analytics.Controllers
     public class AnalyticsController : ApiController
     {
         [Route("getPaginas")]
-        [HttpGet]
+        [HttpPost]
         [Autorizar]
         [Gravar]
         public HttpResponseMessage GetPagina()
@@ -39,7 +39,31 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("paginainicial")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage PaginaInicial()
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
+                using (SqlHelper sql = new SqlHelper())
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", sessao.id_usuario.ToString());
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_paginainicial", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
 
 
