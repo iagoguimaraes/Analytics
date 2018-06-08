@@ -5,6 +5,7 @@
 
 <div ng-controller="ctrl-cpfl-horahora">
     <div ng-if="dashboard.status == 200">
+
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
             <div class="widget-user-header bg-black" style="background: url('/Content/Images/Cpfl/cpfl-banner.jpg') center center;">
@@ -245,14 +246,6 @@
             </div>
         </div>
 
-        <!--PRODUÇÃO POR OPERADOR-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <h3 class="box-title">Análise por Operador</h3>
-                <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[4,'desc']]"></d-table>
-            </div>
-        </div>
-
         <!-- SIDE BAR CONTROL -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Create the tabs -->
@@ -297,8 +290,6 @@
 
     </div>
 </div>
-
-
 <script>
     angular.module('app').controller('ctrl-cpfl-horahora', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Hora Hora';
@@ -334,7 +325,6 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.carteira = r.data.Table2;
-                $scope.dashboard.operador = r.data.Table3;
 
                 $scope.carregarGrafico();
             });
