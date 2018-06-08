@@ -86,8 +86,8 @@
 
                 <!--SEGMENTACOES-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Segmentações</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                    <label class="control-sidebar-subheading">Produtos</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                 </div>
 
                 <!--BOTÃO-->
@@ -120,7 +120,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            segmentacoes: ''
+            produtos: ''
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -133,7 +133,7 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.segmentacoes = data.Table1;
+            $scope.dashFiltros.produtos = data.Table2;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

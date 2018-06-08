@@ -20,7 +20,8 @@
             plotOptionsLineDataLabel: '@',
             plotOptionsSplineDataLabel: '@',
             plotOptionsBarDataLabel: '@',
-            tooltipPointFormat: '@'
+            tooltipPointFormat: '@',
+            tooltipShared: '@'
         },
         template: '<div></div>',
         link: function (scope, element) {
@@ -84,7 +85,7 @@
                         }
                     },
                     tooltip: {
-                        shared: true,
+                        shared: scope.tooltipShared == 'false' ? false: true,
                         pointFormat: scope.tooltipPointFormat || '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>'
                     },
                     credits: {

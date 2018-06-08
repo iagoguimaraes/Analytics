@@ -137,7 +137,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
                 {
@@ -145,7 +145,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
+                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -167,7 +167,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
                 {
@@ -175,7 +175,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmentacoes", segmentacoes);
+                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -324,6 +324,38 @@ namespace Analytics.Controllers
                     parametros.Add("campanhas", campanhas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_relatorio_navegacao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/lote")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardLote(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                int situacao = Convert.ToInt32(form["situacao"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+                    parametros.Add("situacao", situacao);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_lote", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

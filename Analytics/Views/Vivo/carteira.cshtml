@@ -12,7 +12,7 @@
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6 margin-bottom">
 
-                <h3 class="text-center">Inclusão, Devoluçaõ e Carteira Ativa</h3>
+                <h3 class="text-center">Inclusão, Devolução e Carteira Ativa</h3>
 
                 <div class="info-box bg-green">
                     <span class="info-box-icon"><i class="fa fa-plus-square"></i></span>
@@ -140,12 +140,14 @@
         </div>
 
         <!--GRAFICO CARTEIRA x MAILING-->
+        <!--
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <h3 class="text-center">Carteira Ativa x Mailing</h3>
                 <high-chart series="dashboard.mailing" axis-Categories="dashboard.dias" type="column" plot-Options-Column-Data-Label="true"></high-chart>
             </div>
         </div>
+        -->
 
         <!-- SIDE BAR CONTROL -->
         <aside class="control-sidebar control-sidebar-dark">
@@ -181,8 +183,8 @@
 
                     <!--SEGMENTACOES-->
                     <div class="form-group">
-                        <label class="control-sidebar-subheading">Segmentacoes</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes"></select2>
+                        <label class="control-sidebar-subheading">Produtos</label>
+                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                     </div>
 
                     <!--BOTÃO-->
@@ -217,7 +219,7 @@
             $scope.filtros = {
                 dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                segmentacoes: ''
+                produtos: ''
             };
             $scope.dashFiltros = {};
             $scope.dashboard = {};
@@ -229,11 +231,10 @@
             $http({
                 method: 'GET',
                 url: "/api/vivo/dashboard/filtros",
-                data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
                 $scope.dashFiltros.status = r.status;
-                $scope.dashFiltros.segmentacoes = data.Table1;
+                $scope.dashFiltros.produtos = data.Table2;
             });
 
             // obtem filtros do escopo e carrega os dados do dashboard
@@ -251,10 +252,10 @@
                     $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
                     $scope.dashboard.dia = r.data.Table2;
 
-                    $scope.dashboard.mailing = [
-                         { name: 'Carteira', data: r.data.Table2.map(obj => obj.ativo) }
-                        ,{ name: 'Mailing', data: r.data.Table2.map(obj => obj.mailing) }
-                    ];
+                    //$scope.dashboard.mailing = [
+                    //     { name: 'Carteira', data: r.data.Table2.map(obj => obj.ativo) }
+                    //    ,{ name: 'Mailing', data: r.data.Table2.map(obj => obj.mailing) }
+                    //];
 
                     $scope.carregarGrafico();
                 });
