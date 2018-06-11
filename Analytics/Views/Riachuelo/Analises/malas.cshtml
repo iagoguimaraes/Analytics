@@ -128,36 +128,46 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupo" dados="dashFiltros.grupo"></select2>
                         </div>
 
-                        <!--DATA INCIAL-->
+                        <!--VISÃO-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial Acao</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                            <label class="control-sidebar-subheading">Visão</label>
+                            <select class="form-control" ng-model="filtros.visao">
+                                <option value="selecione">Selecione</option>
+                                <option value="vencimento">Vencimento</option>
+                                <option value="andamento" selected>Andamento</option>
+                            </select>
+                        </div>
+
+                                <!--DATA INCIAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial Acao</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                    </div>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                            </div>
-                        </div>
 
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final Acao</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                                <!--DATA FINAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final Acao</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                            </div>
-                        </div>
 
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                        </div>
+                                <!--BOTÃO-->
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                </div>
 
+                        </div>
+                        <!-- /.tab-pane -->
                     </div>
-                    <!-- /.tab-pane -->
-                </div>
             </aside>
 
         </div>
@@ -178,7 +188,8 @@
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
                 empresa: '',
                 carteira: '',
-                grupo: ''
+                grupo: '',
+                visao: 'andamento',
             };
             $scope.dashFiltros = {};
             $scope.dashboard = {};

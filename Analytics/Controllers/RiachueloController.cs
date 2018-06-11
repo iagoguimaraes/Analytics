@@ -464,6 +464,13 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable grupo = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
+                string procedure = "sp_dashboard_grupo";
+
+                if (form["visao"] == "andamento")
+                    procedure = "sp_dashboard_grupo";
+                if (form["visao"] == "vencimento")
+                    procedure = "sp_dashboard_grupoVencimento";
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
 
@@ -476,7 +483,7 @@ namespace Analytics.Controllers
                     parametros.Add("grupo", grupo);
 
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_grupo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
