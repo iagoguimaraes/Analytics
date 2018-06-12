@@ -252,7 +252,7 @@ namespace Analytics.Controllers
                 DataTable _campanhas = new DataTable();
                 _campanhas.Columns.Add();
                 _campanhas.Rows.Add(new object[] { 267 });
-                _campanhas.Rows.Add(new object[] { 593 });
+                //_campanhas.Rows.Add(new object[] { 593 });
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
