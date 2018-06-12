@@ -308,6 +308,28 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/paggerencial")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagGerencial(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_paggerencial");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
