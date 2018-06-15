@@ -252,7 +252,7 @@ namespace Analytics.Controllers
                 DataTable _campanhas = new DataTable();
                 _campanhas.Columns.Add();
                 _campanhas.Rows.Add(new object[] { 267 });
-                _campanhas.Rows.Add(new object[] { 593 });
+                //_campanhas.Rows.Add(new object[] { 593 });
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
@@ -299,6 +299,28 @@ namespace Analytics.Controllers
                     parametros.Add("funcionario", funcionario);                    
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_gerencial", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/paggerencial")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagGerencial(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_paggerencial");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

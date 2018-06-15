@@ -1,0 +1,79 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-riachuelo-paggerencial">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- BANNER -->
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header" style="background: url('/Content/Images/Riachuelo/banner-bia.png') center center; height: 200px">
+            </div>
+        </div>
+
+        <!-- ULTIMO MES -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">Referência de {{dashboard.ultimomes.minData}} até {{dashboard.ultimomes.maxData}}</div>
+            <div class="col-xs-12 col-md-6">
+                <div class="small-box bg-black">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.ultimomes.quantidade | number"></h3>
+                        <p>Quantidade Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card" style="color: white"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="small-box bg-black">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.ultimomes.valor | currency:'R$'"></h3>
+                        <p>Valor Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money" style="color: white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <high-chart series="dashboard.grafico" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-riachuelo-paggerencial', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Pagamento';
+        dadosPagina.descricao = 'Riachuelo'
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/paggerencial",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                
+                $scope.dashboard.ultimomes = r.data.Table.filter(o => o.n == 1)[0];
+
+                $scope.dashboard.meses = r.data.Table.map(obj => obj.mesNome);
+                $scope.dashboard.grafico = [{ name: 'Valor', data: r.data.Table.map(obj => (obj.valor)), color: 'black'}];
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
