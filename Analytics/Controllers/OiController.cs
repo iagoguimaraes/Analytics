@@ -207,5 +207,49 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/grupo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardGrupo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
+
+                string procedure = "sp_dashboard_grupo";
+
+                //if (form["visao"] == "andamento")
+                //    procedure = "sp_dashboard_grupo";
+                //if (form["visao"] == "vencimento")
+                //    procedure = "sp_dashboard_grupoVencimento";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("produtos", produtos);
+                    parametros.Add("grupos", grupos);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
