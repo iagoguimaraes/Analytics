@@ -64,11 +64,34 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
-                
+
                 $scope.dashboard.ultimomes = r.data.Table.filter(o => o.n == 1)[0];
 
                 $scope.dashboard.meses = r.data.Table.map(obj => obj.mesNome);
-                $scope.dashboard.grafico = [{ name: 'Valor', data: r.data.Table.map(obj => (obj.valor)), color: 'black'}];
+                $scope.dashboard.grafico = [{
+                    name: 'Valor',
+                    data: r.data.Table.map(obj => (obj.valor)),
+                    color: 'black',
+                    dataLabels: {
+                        style: {
+                            fontSize: '16px'
+                        },
+                        formatter: function () {
+                            var ret = '',
+                                multi,
+                                axis = this.series.yAxis,
+                                numericSymbols = ['k', 'M', 'G', 'T', 'P', 'E'],
+                                i = numericSymbols.length;
+                            while (i-- && ret === '') {
+                                multi = Math.pow(1000, i + 1);
+                                if (axis.tickInterval >= multi && numericSymbols[i] !== null) {
+                                    ret = (this.y / multi).toFixed(1) + numericSymbols[i];
+                                }
+                            }
+                            return ret;
+                        }
+                    },                 
+                }];
             });
         }
 
