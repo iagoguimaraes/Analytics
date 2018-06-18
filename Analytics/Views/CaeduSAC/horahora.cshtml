@@ -65,7 +65,7 @@
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <span class="description-text">Tempo Médio em Fila</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.tmf"></h5>                            
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tmf"></h5>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Análise por Hora</h3>                    
+                        <h3 class="box-title">Análise por Hora</h3>
                     </div>
                     <div class="box-body">
 
@@ -203,54 +203,77 @@
             </div>
         </div>
 
-    </div>
 
+        <!-- SIDE BAR CONTROL -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Filtros -->
+                <div class="tab-pane active" id="control-sidebar-filters-tab">
 
-    <!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                         </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                     </div>
-                </div>
 
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
+                    <!--HORA INCIAL-->
+                    <div class="form-group">
+                        <label>Hora Inicial</label>
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <time-picker class="form-control pull-right" placeholder="hh:mm" ng-model="filtros.hrini"></time-picker>
                         </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                     </div>
-                </div>
 
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                </div>
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
 
+                    <!--HORA FINAL-->
+                    <div class="form-group">
+                        <label>Hora Final</label>
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <div class="input-group-addon">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <time-picker class="form-control pull-right" placeholder="hh:mm" ng-model="filtros.hrfim"></time-picker>
+                        </div>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                    </div>
+
+                </div>
+                <!-- /.tab-pane -->
             </div>
-            <!-- /.tab-pane -->
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </div>
 
 </div>
 
@@ -266,6 +289,8 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            hrini: '00:00',
+            hrfim: '21:00'
         };
 
         $scope.carregarDashboard = function () {
