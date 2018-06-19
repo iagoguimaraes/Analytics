@@ -5,10 +5,9 @@
 <div ng-controller="ctrl-riachuelo-multicanal">
     <!-- DASHBOARD -->
     <div ng-if="dashboard.status === 200">
-
         <!--RESUMO-->
         <div class="row">
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].atendimento | megaNumber"></h3>
@@ -19,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].finalizado | megaNumber"></h3>
@@ -27,11 +26,11 @@
                         <p>Finalizado</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-comments-o"></i>
+                        <i class="fa fa-comment-o"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].interacao | megaNumber"></h3>
@@ -43,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].cpc | number"></h3>
@@ -55,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].cpca | number"></h3>
@@ -67,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-2">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.data.Table[0].negociacao | number"></h3>
@@ -76,6 +75,29 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].negociacao_paga | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.data.Table[0].negociacao_paga / dashboard.data.Table[0].negociacao | percentage: 1"></h4>
+                        <p>Negociação Paga</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.data.Table[0].valor_pago | currency:'R$'"></h3>
+                        <p>Valor Recuperado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
                     </div>
                 </div>
             </div>
@@ -117,7 +139,7 @@
                         </select>
                     </small>
                 </h3>
-                <mapa-brasil style="height: 600px" width="100%" dados="mapa.dados"></mapa-brasil>
+                <mapa-brasil style="height: 400px" width="100%" dados="mapa.dados"></mapa-brasil>
             </div>
         </div>
 
@@ -127,10 +149,6 @@
                 <h3 class="box-title">
                     Gráfico por Dia
                     <small class="pull-right">
-                        <select ng-model="grafico.eixo" ng-change="carregarGrafico()">
-                            <option value="dataentrada">Data Entrada</option>
-                            <option value="datafinalizado">Data Finalização</option>
-                        </select>
                         <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                             <option value="atendimento">Atendimento</option>
                             <option value="finalizado">Finalizado</option>
@@ -152,7 +170,7 @@
         <!--ANALISE POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
-                <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table8" scroll-collapse="true" scroll-y="324px" order="[[6,'desc']]"></d-table>
+                <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.data.Table7" scroll-collapse="true" scroll-y="324px" order="[[6,'desc']]"></d-table>
             </div>
         </div>
 
@@ -171,48 +189,26 @@
 
                 <!--DATA INCIAL-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Data de Finalização Inicial</label>
+                    <label class="control-sidebar-subheading">Data Inicial</label>
                     <div class="input-group date">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.fDtini"></date-picker>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                     </div>
                 </div>
 
                 <!--DATA FINAL-->
                 <div class="form-group">
-                    <label class="control-sidebar-subheading">Data de Finalização Final</label>
+                    <label class="control-sidebar-subheading">Data Final</label>
                     <div class="input-group date">
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.fDtfim"></date-picker>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                     </div>
                 </div>
-
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data de Entrada Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.eDtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data de Entrada Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.eDtfim"></date-picker>
-                    </div>
-                </div>
-              
+         
                 <!--BOTÃO-->
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -233,18 +229,19 @@
         dadosPagina.titulo = 'Dashboard MultiCanal';
         dadosPagina.descricao = 'Riachuelo';
 
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
         $scope.filtros = {
-            fDtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            fDtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            eDtini: "",
-            eDtfim: "",
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 
         $scope.mapa = {
             indicador: 'atendimento'
         };
         $scope.grafico = {
-            eixo: 'dataentrada',
             indicador: 'atendimento'
         };
 
@@ -291,13 +288,7 @@
         }
 
         $scope.carregarGrafico = function () {
-            let dados;
-
-            if ($scope.grafico.eixo == 'dataentrada')
-                dados = $scope.dashboard.data.Table6;
-            else if ($scope.grafico.eixo == 'datafinalizado')
-                dados = $scope.dashboard.data.Table7;
-
+            let dados = $scope.dashboard.data.Table6;
             $scope.dashboard.datas = dados.map(obj => obj.data);
 
             switch ($scope.grafico.indicador) {
@@ -305,13 +296,13 @@
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.finalizado * 100 / obj.atendimento).toFixed(1)/1) }];
                     break;
                 case '%interacao':
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1 / 1)) }];
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1)/1) }];
                     break;
                 case '%cpc':
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1) / 1) }];
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1)/ 1) }];
                     break;
                 case '%negociado':
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) / 1) }];
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1)/ 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
