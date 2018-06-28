@@ -46,8 +46,8 @@
                 <div class="row" style="background-color: #c2c030">
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <span class="description-text">Agentes</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.agente | number"></h5>
+                            <span class="description-text">NS (20s)</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1"></h5>
                         </div>
                     </div>
                     <div class="col-sm-3 border-right">
@@ -73,7 +73,17 @@
             </div>
         </div>
 
-        <!--POR HORA-->
+        <!--POR HORA GRAFICO-->
+        <div class="row">
+            <div class="col-xs-12">
+                <h3 class="text-center">Gráfico por Hora</h3>
+                <high-chart series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
+                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                            y-Axis1-Max="100"></high-chart>
+            </div>
+        </div>
+
+        <!--POR HORA TABELA-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
@@ -89,6 +99,7 @@
                                     <tr>
                                         <th>Hora</th>
                                         <th>Agente</th>
+                                        <th>NS (20s)</th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -99,8 +110,9 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="hora in dashboard.horahora">
-                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.hora}}</td>                                       
                                         <td>{{hora.agente | number}}</td>
+                                        <td>{{hora.sla_ok / hora.chamada | percentage:1}}</td>
                                         <td>{{hora.chamada | number}}</td>
                                         <td>{{hora.atendido | number}}</td>
                                         <td>{{hora.abandonado | number}}</td>
@@ -113,6 +125,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.agente | number}}</th>
+                                        <th>{{dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
@@ -144,6 +157,7 @@
                                     <tr>
                                         <th>Fila</th>
                                         <th>Agente</th>
+                                        <th>NS (20s)</th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -156,6 +170,7 @@
                                     <tr ng-repeat="f in dashboard.fila">
                                         <td>{{f.fila}}</td>
                                         <td>{{f.agente | number}}</td>
+                                        <td>{{f.sla_ok / f.chamada | percentage:1}}</td>
                                         <td>{{f.chamada | number}}</td>
                                         <td>{{f.atendido | number}}</td>
                                         <td>{{f.abandonado | number}}</td>
@@ -168,6 +183,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.agente | number}}</th>
+                                        <th>{{dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
@@ -183,15 +199,15 @@
             </div>
         </div>
 
-        <!--OCUPACAO E UF-->
+        <!--OCUPACAO E TEMPO DE FILA-->
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <h3 class="text-center">Ocupação da Operação</h3>
                 <high-chart series="dashboard.ocupacao" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
             </div>
             <div class="col-xs-12 col-md-6">
-                <h3 class="text-center">Chamadas por Região</h3>
-                <mapa-brasil style="height: 300px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                <h3 class="text-center">Tempo de Fila</h3>
+                <high-chart series="dashboard.tempofila" axis-Categories="dashboard.tempos" plot-Options-Column-Data-Label="true" type="column"></high-chart>
             </div>
         </div>
 
@@ -353,9 +369,21 @@
                 $scope.dashboard.status = r.status;
 
                 $scope.dashboard.resumo = r.data.Table[0];
+
                 $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.graficohora = [
+                                    { name: 'atendido', type: 'column', data: r.data.Table1.map(obj => obj.atendido) },
+                                    { name: 'abandonado', type: 'column', data: r.data.Table1.map(obj => obj.abandonado) },
+                                    { name: 'NS (20s)', type: 'spline', yAxis: 1, data: r.data.Table1.map(obj => (obj.sla_ok * 100 / obj.chamada).toFixed(1) / 1) },
+                ];
+
                 $scope.dashboard.fila = r.data.Table2;
-                $scope.dashboard.mapa = r.data.Table3.map(obj => ({ id: 'BR-' + obj.uf, value: obj.chamada }));
+
+                $scope.dashboard.tempos = r.data.Table3.map(obj => obj.tempo_fila);
+                $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table3.map(obj => obj.chamada) }]
+                    
+
                 $scope.dashboard.ocupacao = [{ name: 'Qtd', data: r.data.Table4.map(obj => ({ name: obj.tipo_pausa, y: obj.duracao })) }];
                 $scope.dashboard.operador = r.data.Table5;
             });
