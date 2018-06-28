@@ -10,20 +10,18 @@ using System.Web.Http;
 
 namespace Analytics.Controllers
 {
-    [RoutePrefix("api/cpfl")]
-
-
-    public class CpflController : ApiController
+    [RoutePrefix("api/net")]
+    public class NetController : ApiController
     {
         [Route("dashboard/filtros")]
         [HttpGet]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardFiltrosHumano()
+        public HttpResponseMessage DashboardFiltros()
         {
             try
             {
-                using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -39,20 +37,22 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardHoraHoraHumano(FormDataCollection form)
+        public HttpResponseMessage DashboardHoraHora(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
 
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("carteira", carteira);
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -68,21 +68,22 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardProducaoHumano(FormDataCollection form)
+        public HttpResponseMessage DashboardProducao(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("carteira", carteira);
+                    parametros.Add("empresas", empresas);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -94,38 +95,6 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/lote")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardLote(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                //int situacao = Convert.ToInt32(form["situacao"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("carteiras", carteiras);
-                    //parametros.Add("situacao", situacao);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_lote", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-
+       
     }
 }

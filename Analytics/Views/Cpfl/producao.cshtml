@@ -15,8 +15,8 @@
                 <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-gray">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.carteira_ativa | megaNumber"></h3>
-                            <p>Carteira Acumulada</p>
+                            <h3 ng-bind="dashboard.resumo.sms + dashboard.resumo.ura + dashboard.resumo.email + dashboard.resumo.massivo | megaNumber"></h3>
+                            <p>Total Ação</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-briefcase"></i>
@@ -178,7 +178,7 @@
                                     <thead>
                                         <tr>
                                             <th>Carteira</th>
-                                            <th>Qtd Carteira</th>
+
                                             <th>Discado</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
@@ -198,7 +198,7 @@
                                     <tbody>
                                         <tr ng-repeat="c in dashboard.carteira">
                                             <td>{{c.ds_carteira}}</td>
-                                            <td>{{c.carteira_ativa | number}}</td>
+
                                             <td>{{c.discado | number}}</td>
                                             <td>{{c.contato | number}}</td>
                                             <td>{{c.cpc | number}}</td>
@@ -238,7 +238,7 @@
                                     <thead>
                                         <tr>
                                             <th>Dia</th>
-                                            <th>Carteira</th>
+                                       
                                             <th>Discado</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
@@ -258,7 +258,7 @@
                                     <tbody>
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                            <td>{{dia.carteira_ativa | number}}</td>
+                                           
                                             <td>{{dia.discado | number}}</td>
                                             <td>{{dia.contato | number}}</td>
                                             <td>{{dia.cpc | number}}</td>
@@ -294,17 +294,18 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="discado">Discado</option>
+                                <option value="promessa">Promessa</option>
+
+                                @*<option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
+                                <option value="cpca">CPCA</option>    
                                 <option value="sms">SMS</option>
                                 <option value="ura">URA</option>
                                 <option value="email">EMAIL</option>
                                 <option value="massivo">Massivo</option>
-                                <option value="carteira_ativa">Carteira</option>
-                                <option value="ticket_medio">Ticket Médio Promessa</option>
+                              
+                                <option value="ticket_medio">Ticket Médio Promessa</option>*@
                             </select>
                         </small>
                     </h3>
@@ -444,6 +445,9 @@
                     break;
                 case 'conversao':
                     $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                case 'promessa':
+                    $scope.dashboard.grafico = [{ name: 'promessa', data: dados.map(obj => (obj.promessa )) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
