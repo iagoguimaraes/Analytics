@@ -103,6 +103,7 @@ namespace Analytics.Controllers
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
+                int id_horario = Convert.ToInt32(form["periodo"]);
                 string descricao = form["descricao"];
 
                 
@@ -123,6 +124,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_ocorrencia", id_ocorrencia);
                     parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("descricao", descricao);
+                    parametros.Add("id_horario", id_horario);
 
                     sql.ExecuteProcedureDataSet("sp_ins_diario_bordo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -150,6 +152,7 @@ namespace Analytics.Controllers
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
+                int id_horario = Convert.ToInt32(form["periodo"]);
                 string descricao = form["descricao"];
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
@@ -167,6 +170,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
+                    parametros.Add("id_horario", id_horario);
                     parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("descricao", descricao);
 

@@ -46,7 +46,7 @@
 
                 <div class="timeline-body">
                     <i class="fa fa-exclamation-circle"></i>
-                    {{d.ocorrencia}}
+                    {{d.ocorrencia}} | Duração problema: <b> {{d.horario}} </b>
                 </div>
 
                 <div class="timeline-footer">
@@ -116,6 +116,13 @@
                         <div class="form-group" ng-show="diario.grupo">
                             <label>Ocorrência</label>
                             <select class="form-control" ng-model="diario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias | filter:{id_grupo: diario.grupo}:true">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="diario.grupo">
+                            <label>Período Problema</label>
+                            <select class="form-control" ng-model="diario.periodo" ng-options="p.id_horario as p.horario for p in opcoes.periodo">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
@@ -202,6 +209,14 @@
                                 <option value="">Selecione</option>
                             </select>
                         </div>
+
+                        <div class="form-group" ng-if="editdiario.grupo">
+                            <label>Período Problema</label>
+                            <select class="form-control" ng-model="editdiario.periodo" ng-options="g.id_horario as g.horario for g in opcoes.periodo ">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
 
                         <div class="form-group">
                             <label>Descrição</label>
@@ -322,7 +337,8 @@
             carteiras: null,
             empresas: null,
             ocorrencias: null,
-            usuarios: null
+            usuarios: null,
+            periodo: null
         };
 
         // possiveis opcoes de escolha do formulario
@@ -352,6 +368,8 @@
             $scope.opcoes.carteiras = r.data.Table2;
             $scope.opcoes.ocorrencias = r.data.Table3;
             $scope.opcoes.usuarios = r.data.Table4;
+            $scope.opcoes.periodo = r.data.Table5; 
+
         });
 
         // carregar a lista de ocorrencias
@@ -393,6 +411,12 @@
                 return false;
             }
 
+            if (!$scope.diario.periodo) {
+                $('[ng-model="diario.periodo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
             $http({
                 method: 'POST',
                 url: "/api/diariobordo/inserir",
@@ -417,6 +441,7 @@
             $scope.editdiario.carteira = r.id_carteira;
             $scope.editdiario.ocorrencia = r.id_ocorrencia;
             $scope.editdiario.descricao = r.descricao;
+            $scope.editdiario.periodo = r.id_horario;
         }
 
         // editar uma ocorrencia
@@ -442,6 +467,12 @@
 
             if (!$scope.editdiario.ocorrencia) {
                 $('[ng-model="editdiario.ocorrencia"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.periodo) {
+                $('[ng-model="editdiario.periodo"]').focus();
                 $event.stopPropagation();
                 return false;
             }
