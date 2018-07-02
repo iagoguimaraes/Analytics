@@ -10,8 +10,8 @@ using System.Web.Http;
 
 namespace Analytics.Controllers
 {
-    [RoutePrefix("api/diariobordo")]
-    public class DiarioBordoController : ApiController
+    [RoutePrefix("api/monitoria")]
+    public class MonitoriaController : ApiController
     {
 
         [Route("consultar")]
@@ -53,7 +53,7 @@ namespace Analytics.Controllers
                     parametros.Add("ocorrencias", _ocorrencias);
                     parametros.Add("usuarios", _usuarios);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_diario_bordo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -78,7 +78,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("id_usuario", sessao.id_usuario);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_diario_bordo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -103,10 +103,13 @@ namespace Analytics.Controllers
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
-                int id_horario = Convert.ToInt32(form["periodo"]);
+                int id_campanha = Convert.ToInt32(form["campanha"]);
                 string descricao = form["descricao"];
+                string cpf = form["cpf"];
+                string tel = form["tel"];
+                string persona = form["persona"];
+                string link = form["link"];
 
-                
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -122,11 +125,16 @@ namespace Analytics.Controllers
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
+                    parametros.Add("id_campanha", id_campanha);
                     parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("descricao", descricao);
-                    parametros.Add("id_horario", id_horario);
+                    parametros.Add("cpf", cpf);
+                    parametros.Add("tel", tel);
+                    parametros.Add("persona", persona);
+                    parametros.Add("link", link);
 
-                    sql.ExecuteProcedureDataSet("sp_ins_diario_bordo", parametros);
+
+                    sql.ExecuteProcedureDataSet("sp_ins_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }
@@ -145,15 +153,19 @@ namespace Analytics.Controllers
             {
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
-                int id_diario_bordo = Convert.ToInt32(form["id"]);
+                int id_monitoria = Convert.ToInt32(form["id"]);
                 string data = form["data"];
                 string hora = form["hora"];
                 int id_grupo = Convert.ToInt32(form["grupo"]);
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
-                int id_horario = Convert.ToInt32(form["periodo"]);
+                int id_campanha = Convert.ToInt32(form["campanha"]);
+                string cpf = (form["cpf"]);
+                string tel = (form["tel"]);
+                string persona = (form["persona"]);
                 string descricao = form["descricao"];
+                string link = form["link"];
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -164,17 +176,21 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("id_diario_bordo", id_diario_bordo);
+                    parametros.Add("id_monitoria", id_monitoria);
                     parametros.Add("data", _data);
                     parametros.Add("id_grupo", id_grupo);
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
-                    parametros.Add("id_horario", id_horario);
                     parametros.Add("id_usuario", sessao.id_usuario);
+                    parametros.Add("id_campanha", id_campanha);
+                    parametros.Add("cpf", cpf);
+                    parametros.Add("tel", tel);
+                    parametros.Add("persona", persona);
                     parametros.Add("descricao", descricao);
+                    parametros.Add("link", descricao);
 
-                    sql.ExecuteProcedureDataSet("sp_upd_diario_bordo", parametros);
+                    sql.ExecuteProcedureDataSet("sp_upd_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }
@@ -200,9 +216,9 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("id_usuario", sessao.id_usuario);
-                    parametros.Add("id_diario_bordo", id_diario_bordo);
+                    parametros.Add("id_monitoria", id_diario_bordo);
 
-                    sql.ExecuteProcedureDataSet("sp_del_diario_bordo", parametros);
+                    sql.ExecuteProcedureDataSet("sp_del_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }

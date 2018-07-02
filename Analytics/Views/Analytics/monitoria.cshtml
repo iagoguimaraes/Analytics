@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-diariobordo">
+<div ng-controller="ctrl-monitoria">
 
 
 
@@ -42,11 +42,11 @@
                     <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{d.hora}}</span>
                 </span>
 
-                <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} | {{d.carteira}}</b></h3>
+                <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} | {{d.ds_carteira}} | {{d.ds_cpf}} </b></h3>
 
                 <div class="timeline-body">
                     <i class="fa fa-exclamation-circle"></i>
-                    {{d.ocorrencia}} | Duração problema: <b> {{d.horario}} </b>
+                    {{d.ds_ocorrencia}} | Campanha: <b> {{d.ds_campanha}} </b>
                 </div>
 
                 <div class="timeline-footer">
@@ -72,8 +72,8 @@
 
                     <form role="form">
 
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data</label>
+                        <div class="col-md-6">
+                            <b><label class="control-sidebar-subheading">Data</label></b>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
@@ -82,7 +82,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label>Hora</label>
                             <div class="input-group bootstrap-timepicker timepicker">
                                 <div class="input-group-addon">
@@ -92,51 +92,70 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-12">
                             <label>Grupo</label>
                             <select class="form-control" ng-model="diario.grupo" ng-options="g.id_grupo as g.grupo for g in opcoes.grupos">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
+                        <br>
 
-                        <div class="form-group" ng-show="diario.grupo">
+                        <div class="col-md-6" ng-show="diario.grupo">
                             <label>Empresa</label>
                             <select class="form-control" ng-model="diario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas | filter:{id_grupo: diario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-show="diario.grupo">
+                        <div class="col-md-6" ng-show="diario.empresa">
                             <label>Carteira</label>
-                            <select class="form-control" ng-model="diario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras | filter:{id_grupo: diario.grupo}:true">
+                            <select class="form-control" ng-model="diario.carteira" ng-options="c.id_carteira as c.ds_carteira for c in opcoes.carteiras | filter:{id_empresa: diario.empresa}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-show="diario.grupo">
+                        <div class="col-md-6" ng-show="diario.empresa">
+                            <label>Campanha</label>
+                            <select class="form-control" ng-model="diario.campanha" ng-options="d.id_campanha as d.ds_campanha for d in opcoes.campanhas | filter:{id_empresa: diario.empresa}:true">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-show="diario.empresa">
                             <label>Ocorrência</label>
-                            <select class="form-control" ng-model="diario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias | filter:{id_grupo: diario.grupo}:true">
+                            <select class="form-control" ng-model="diario.ocorrencia" ng-options="o.id_ocorrencia as o.ds_ocorrencia for o in opcoes.ocorrencias | filter:{id_empresa: diario.empresa}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-show="diario.grupo">
-                            <label>Período Problema</label>
-                            <select class="form-control" ng-model="diario.periodo" ng-options="p.id_horario as p.horario for p in opcoes.periodo">
-                                <option value="">Selecione</option>
-                            </select>
+                        <div class="col-md-6" ng-show="diario.empresa">
+                            <label>CPF</label> <input ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6" ng-show="diario.empresa">
+                            <label>Telefone</label> <input class="form-control"  ng-model="diario.tel" type="text" name="tel" onkeydown="javascript: fMasc( this, mTel );">
+                        </div>
+
+                        <div class="col-md-12" ng-show="diario.empresa">
+                            <label>Persona</label> <input class="form-control"  ng-model="diario.persona" type="text" name="persona">
+                        </div>
+
+                        <div class="col-md-12" ng-show="diario.empresa">
+                            <label>Link Da Gravação</label> <input class="form-control" ng-model="diario.link" type="text" name="persona">
+                        </div>
+
+
+                        <div class="col-md-12 margin-bottom">
                             <label>Descrição</label>
                             <textarea class="form-control" rows="3" placeholder="Descrever a ocorrência" ng-model="diario.descricao"></textarea>
                         </div>
 
                     </form>
-
+                    
 
                 </div>
                 <div class="modal-footer">
+                    <br>
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
                 </div>
@@ -162,7 +181,7 @@
 
                         <input type="hidden" ng-model="editdiario.id" />
 
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label class="control-sidebar-subheading">Data</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
@@ -172,7 +191,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label>Hora</label>
                             <div class="input-group bootstrap-timepicker timepicker">
                                 <div class="input-group-addon">
@@ -182,43 +201,60 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-12">
                             <label>Grupo</label>
                             <select class="form-control" ng-model="editdiario.grupo" ng-options="g.id_grupo as g.grupo for g in opcoes.grupos">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-if="editdiario.grupo">
+                        <div class="col-md-6" ng-if="editdiario.grupo">
                             <label>Empresa</label>
                             <select class="form-control" ng-model="editdiario.empresa" ng-options="e.id_empresa as e.empresa for e in opcoes.empresas | filter:{id_grupo: editdiario.grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-if="editdiario.grupo">
+                        <div class="col-md-6" ng-if="editdiario.empresa">
                             <label>Carteira</label>
-                            <select class="form-control" ng-model="editdiario.carteira" ng-options="c.id_carteira as c.carteira for c in opcoes.carteiras | filter:{id_grupo: editdiario.grupo}:true">
+                            <select class="form-control" ng-model="editdiario.carteira" ng-options="c.id_carteira as c.ds_carteira for c in opcoes.carteiras | filter:{id_empresa: editdiario.empresa}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-if="editdiario.grupo">
+                        <div class="col-md-6" ng-if="editdiario.empresa">
+                            <label>Campanha</label>
+                            <select class="form-control" ng-model="editdiario.campanha" ng-options="c.id_campanha as c.ds_campanha for c in opcoes.campanhas | filter:{id_empresa: editdiario.empresa}:true">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-if="editdiario.empresa">
                             <label>Ocorrência</label>
-                            <select class="form-control" ng-model="editdiario.ocorrencia" ng-options="o.id_ocorrencia as o.ocorrencia for o in opcoes.ocorrencias | filter:{id_grupo: editdiario.grupo}:true">
+                            <select class="form-control" ng-model="editdiario.ocorrencia" ng-options="o.id_ocorrencia as o.ds_ocorrencia for o in opcoes.ocorrencias | filter:{id_empresa: editdiario.empresa}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" ng-if="editdiario.grupo">
-                            <label>Período Problema</label>
-                            <select class="form-control" ng-model="editdiario.periodo" ng-options="g.id_horario as g.horario for g in opcoes.periodo ">
-                                <option value="">Selecione</option>
-                            </select>
+                        <div class="col-md-6" ng-show="editdiario.empresa">
+                            <label>CPF</label> <input ng-model="editdiario.cpf" class="form-control" type="text" id="cpf" onclick="javascript: fMasc( this, mCPF );">
+                        </div>
+
+                        <div class="col-md-6" ng-show="editdiario.empresa">
+                            <label>Telefone</label> <input class="form-control" ng-model="editdiario.tel" type="text" id="tel" onclick="javascript: fMasc( this, mTel );">
+                        </div>
+
+                        <div class="col-md-12" ng-show="editdiario.empresa">
+                            <label>Persona</label> <input class="form-control" ng-model="editdiario.persona" type="text" name="persona">
                         </div>
 
 
-                        <div class="form-group">
+                        <div class="col-md-12" ng-show="editdiario.empresa">
+                            <label>Link Da Gravação</label> <input class="form-control" ng-model="editdiario.link" type="text" name="link">
+                        </div>
+
+
+                        <div class="col-md-12 margin-bottom">
                             <label>Descrição</label>
                             <textarea class="form-control" rows="3" placeholder="Descrever a ocorrência" ng-model="editdiario.descricao"></textarea>
                         </div>
@@ -320,8 +356,8 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-diariobordo', function ($scope, $http, $filter, dadosPagina) {
-        dadosPagina.titulo = 'Diario de Bordo';
+    angular.module('app').controller('ctrl-monitoria', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Monitoria';
         dadosPagina.descricao = 'Digital'
 
         // filtros iniciais
@@ -359,16 +395,17 @@
         // carregar as opções do diario de bordo
         $http({
             method: 'POST',
-            url: "/api/diariobordo/opcoes",
+            url: "/api/monitoria/opcoes",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.opcoes.status = r.status;
             $scope.opcoes.grupos = r.data.Table;
             $scope.opcoes.empresas = r.data.Table1;
-            $scope.opcoes.carteiras = r.data.Table2;
-            $scope.opcoes.ocorrencias = r.data.Table3;
-            $scope.opcoes.usuarios = r.data.Table4;
-            $scope.opcoes.periodo = r.data.Table5; 
+            $scope.opcoes.campanhas = r.data.Table2;
+            $scope.opcoes.carteiras = r.data.Table3;
+            $scope.opcoes.ocorrencias = r.data.Table4;
+            $scope.opcoes.usuarios = r.data.Table5;
+
 
         });
 
@@ -376,7 +413,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/diariobordo/consultar",
+                url: "/api/monitoria/consultar",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -393,11 +430,15 @@
                 return false;
             }
 
+            console.log($scope.diario.grupo);
+
             if (!$scope.diario.empresa) {
                 $('[ng-model="diario.empresa"]').focus();
                 $event.stopPropagation();
                 return false;
             }
+
+            console.log($scope.diario.empresa);
 
             if (!$scope.diario.carteira) {
                 $('[ng-model="diario.carteira"]').focus();
@@ -405,21 +446,51 @@
                 return false;
             }
 
+            console.log($scope.diario.carteira);
+
             if (!$scope.diario.ocorrencia) {
                 $('[ng-model="diario.ocorrencia"]').focus();
                 $event.stopPropagation();
                 return false;
             }
 
-            if (!$scope.diario.periodo) {
-                $('[ng-model="diario.periodo"]').focus();
+            console.log($scope.diario.ocorrencia);
+
+            if (!$scope.diario.campanha) {
+                $('[ng-model="diario.campanha"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.diario.campanhas);
+
+            if (!$scope.diario.cpf) {
+                $('[ng-model="diario.cpf"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.tel) {
+                $('[ng-model="diario.tel"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.persona) {
+                $('[ng-model="diario.persona"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.link) {
+                $('[ng-model="diario.link"]').focus();
                 $event.stopPropagation();
                 return false;
             }
 
             $http({
                 method: 'POST',
-                url: "/api/diariobordo/inserir",
+                url: "/api/monitoria/inserir",
                 data: $scope.diario,
             }).then(function success(r) {
                 $scope.diario = {
@@ -433,7 +504,7 @@
 
         // popular pop up de editar ocorrencia
         $scope.popularEdit = function (r) {
-            $scope.editdiario.id = r.id_diario_bordo;
+            $scope.editdiario.id = r.id_monitoria;
             $scope.editdiario.data = r.data;
             $scope.editdiario.hora = r.hora;
             $scope.editdiario.grupo = r.id_grupo;
@@ -441,7 +512,13 @@
             $scope.editdiario.carteira = r.id_carteira;
             $scope.editdiario.ocorrencia = r.id_ocorrencia;
             $scope.editdiario.descricao = r.descricao;
-            $scope.editdiario.periodo = r.id_horario;
+            $scope.editdiario.campanha = r.id_campanha;
+            $scope.editdiario.cpf = r.ds_cpf;
+            $scope.editdiario.tel = r.ds_tel;
+            $scope.editdiario.persona = r.ds_persona;
+            $scope.editdiario.link = r.ds_link;
+
+
         }
 
         // editar uma ocorrencia
@@ -453,11 +530,15 @@
                 return false;
             }
 
+            console.log($scope.editdiario.grupo);
+
             if (!$scope.editdiario.empresa) {
                 $('[ng-model="editdiario.empresa"]').focus();
                 $event.stopPropagation();
                 return false;
             }
+
+            console.log($scope.editdiario.empresa);
 
             if (!$scope.editdiario.carteira) {
                 $('[ng-model="editdiario.carteira"]').focus();
@@ -465,21 +546,57 @@
                 return false;
             }
 
+            console.log($scope.editdiario.carteira);
+
             if (!$scope.editdiario.ocorrencia) {
                 $('[ng-model="editdiario.ocorrencia"]').focus();
                 $event.stopPropagation();
                 return false;
             }
 
-            if (!$scope.editdiario.periodo) {
-                $('[ng-model="editdiario.periodo"]').focus();
+            console.log($scope.editdiario.ocorrencia);
+
+            if (!$scope.editdiario.campanha) {
+                $('[ng-model="editdiario.campanha"]').focus();
                 $event.stopPropagation();
                 return false;
             }
 
+            console.log($scope.editdiario.campanha);
+
+            if (!$scope.editdiario.cpf) {
+                $('[ng-model="editdiario.cpf"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.cpf);
+
+            if (!$scope.editdiario.tel) {
+                $('[ng-model="editdiario.tel"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.tel);
+
+            if (!$scope.editdiario.persona) {
+                $('[ng-model="editdiario.persona"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.link) {
+                $('[ng-model="editdiario.link"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.persona);
+
             $http({
                 method: 'POST',
-                url: "/api/diariobordo/editar",
+                url: "/api/monitoria/editar",
                 data: $scope.editdiario,
             }).then(function success(r) {
                 $scope.carregarDashboard();
@@ -490,15 +607,65 @@
             if (confirm('Tem certeza que deseja remover essa ocorrência?')) {
                 $http({
                     method: 'POST',
-                    url: "/api/diariobordo/remover",
+                    url: "/api/monitoria/remover",
                     data: $scope.editdiario,
                 }).then(function success(r) {
                     $scope.carregarDashboard();
                 });
-            }        
+            }
         }
 
         $scope.carregarDashboard();
 
     });
+
+    function fMasc(objeto, mascara) {
+        obj = objeto
+        masc = mascara
+        setTimeout("fMascEx()", 1)
+    }
+    function fMascEx() {
+        obj.value = masc(obj.value)
+    }
+    function mTel(tel) {
+        tel = tel.replace(/\D/g, "")
+        tel = tel.replace(/^(\d)/, "($1")
+        tel = tel.replace(/(.{3})(\d)/, "$1)$2")
+        if (tel.length == 9) {
+            tel = tel.replace(/(.{1})$/, "-$1")
+        } else if (tel.length == 10) {
+            tel = tel.replace(/(.{2})$/, "-$1")
+        } else if (tel.length == 11) {
+            tel = tel.replace(/(.{3})$/, "-$1")
+        } else if (tel.length == 12) {
+            tel = tel.replace(/(.{4})$/, "-$1")
+        } else if (tel.length > 12) {
+            tel = tel.replace(/(.{4})$/, "-$1")
+        }
+        return tel;
+    }
+    function mCNPJ(cnpj) {
+        cnpj = cnpj.replace(/\D/g, "")
+        cnpj = cnpj.replace(/^(\d{2})(\d)/, "$1.$2")
+        cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+        cnpj = cnpj.replace(/\.(\d{3})(\d)/, ".$1/$2")
+        cnpj = cnpj.replace(/(\d{4})(\d)/, "$1-$2")
+        return cnpj
+    }
+    function mCPF(cpf) {
+        cpf = cpf.replace(/\D/g, "")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        return cpf
+    }
+
+    window.onload = function () {
+        document.getElementById("cpf").click();
+        document.getElementById("tel").click();
+    }
+
 </script>
+
+
+
