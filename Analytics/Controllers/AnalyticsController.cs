@@ -65,7 +65,31 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("carregarMenu")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CarregarMenu()
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
+                using (SqlHelper sql = new SqlHelper())
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", sessao.id_usuario.ToString());
+
+                    DataSet menu = sql.ExecuteProcedureDataSet("sp_sel_carregarMenu", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, menu);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
     }
 }
