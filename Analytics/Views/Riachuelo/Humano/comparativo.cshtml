@@ -2,159 +2,298 @@
     Layout = "~/Views/master.cshtml";
 }
 
-
-
 <div ng-controller="ctrl-riachuelo-hum-comparativo">
     <div ng-if="dashboard.status == 200">
 
-        <!--GRAFICO-->
-        <div class="row" id="grafico">
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Comparativo</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+
+            <div id="filtros-window" class="card display-none">
+
+                <div class="card-header">
+                    <span class="card-header-title">Filtros</span>
+                    <div class="card-header-button card-header-close">
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+
+
+                    <!-- Create the tabs -->
+                    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab">Período 1</a></li>
+                        <li><a data-target="#control-sidebar-filters2-tab" data-toggle="tab">Período 2</a></li>
+                    </ul>
+
+                    <!-- PERIODO 1 -->
+                    <div class="tab-pane active" id="control-sidebar-filters-tab">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--EMPRESA 1-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                        </div>
+
+                        <!--CARTEIRA 1-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteiras</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--VISÃO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Visão</label>
+                            <select class="form-control" ng-model="filtros.visao">
+                                <option value="hora" selected="selected">Hora</option>
+                                <option value="dia">Dia do Mês</option>
+                                <option value="dia_semana">Dia da Semana</option>
+                                <option value="semana">Semana do Mês</option>
+                                <option value="mes">Mês do Ano</option>
+                            </select>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                        </div>
+
+                    </div>
+
+                    <!-- PERIODO 2 -->
+                    <div class="tab-pane" id="control-sidebar-filters2-tab">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini_2"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim_2"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--EMPRESA 2-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresas</label>
+                            <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresas_2" dados="dashFiltros.empresas_2"></select2>
+                        </div>
+
+                        <!--CARTEIRA 2-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteiras</label>
+                            <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteiras_2" dados="dashFiltros.carteiras_2"></select2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+            <!--GRAFICO-->
+        <div class="row margin-bottom" id="grafico">
             <div class="col-xs-12">
-                <h4 class="text-center">{{grafico.indicador | uppercase}}</h4>
-                <high-chart series="dashboard.series" axis-Categories="dashboard.categories" type="line" plot-Options-Line-Data-Label="true"></high-chart>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">{{grafico.indicador | uppercase}}</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.series" axis-Categories="dashboard.categories" type="line" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- QUADROS -->
-        <div class="row">
+            <!-- QUADROS -->
+            <div class="row">
 
-            <!--INDICADORES ABSOLUTOS-->
-            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
-                <div class="small-box" ng-class="dashboard.discado.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.discado.vs | percentage:1"></h3>
-                        <p>{{dashboard.discado.p1 | megaNumber}} vs {{dashboard.discado.p2 | megaNumber}}</p>
+                <!--INDICADORES ABSOLUTOS-->
+                <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                    <div class="small-box" ng-class="dashboard.discado.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.discado.vs | percentage:1"></h3>
+                            <p>{{dashboard.discado.p1 | megaNumber}} vs {{dashboard.discado.p2 | megaNumber}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'discado'" class="small-box-footer">Discado <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'discado'" class="small-box-footer">Discado <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.contato.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.contato.vs | percentage:1"></h3>
-                        <p>{{dashboard.contato.p1 | megaNumber}} vs {{dashboard.contato.p2 | megaNumber}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.contato.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.contato.vs | percentage:1"></h3>
+                            <p>{{dashboard.contato.p1 | megaNumber}} vs {{dashboard.contato.p2 | megaNumber}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'contato'" class="small-box-footer">Contato <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-headphones"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'contato'" class="small-box-footer">Contato <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.cpc.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.cpc.vs | percentage:1"></h3>
-                        <p>{{dashboard.cpc.p1 | number}} vs {{dashboard.cpc.p2 | number}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.cpc.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.cpc.vs | percentage:1"></h3>
+                            <p>{{dashboard.cpc.p1 | number}} vs {{dashboard.cpc.p2 | number}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-male"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-male"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.cpca.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.cpca.vs | percentage:1"></h3>
-                        <p>{{dashboard.cpca.p1 | number}} vs {{dashboard.cpca.p2 | number}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.cpca.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.cpca.vs | percentage:1"></h3>
+                            <p>{{dashboard.cpca.p1 | number}} vs {{dashboard.cpca.p2 | number}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-street-view"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-street-view"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.promessa.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.promessa.vs | percentage:1"></h3>
-                        <p>{{dashboard.promessa.p1 | number}} vs {{dashboard.promessa.p2 | number}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.promessa.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.promessa.vs | percentage:1"></h3>
+                            <p>{{dashboard.promessa.p1 | number}} vs {{dashboard.promessa.p2 | number}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <!--INDICADORES PERCENTUAIS-->
-            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
-                <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.hitrate.vs | percentage:1"></h3>
-                        <p>{{dashboard.hitrate.p1 | percentage:1}} vs {{dashboard.hitrate.p2 | percentage:1}}</p>
+                <!--INDICADORES PERCENTUAIS-->
+                <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                    <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.hitrate.vs | percentage:1"></h3>
+                            <p>{{dashboard.hitrate.p1 | percentage:1}} vs {{dashboard.hitrate.p2 | percentage:1}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-bullseye"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'hitrate'" class="small-box-footer">Hit Rate <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-bullseye"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'hitrate'" class="small-box-footer">Hit Rate <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.txloc.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.txloc.vs | percentage:1"></h3>
-                        <p>{{dashboard.txloc.p1 | percentage:1}} vs {{dashboard.txloc.p2 | percentage:1}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.txloc.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.txloc.vs | percentage:1"></h3>
+                            <p>{{dashboard.txloc.p1 | percentage:1}} vs {{dashboard.txloc.p2 | percentage:1}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'txloc'" class="small-box-footer">Tx Loc <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-search"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'txloc'" class="small-box-footer">Tx Loc <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.txapv.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.txapv.vs | percentage:1"></h3>
-                        <p>{{dashboard.txapv.p1 | percentage:1}} vs {{dashboard.txapv.p2 | percentage:1}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.txapv.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.txapv.vs | percentage:1"></h3>
+                            <p>{{dashboard.txapv.p1 | percentage:1}} vs {{dashboard.txapv.p2 | percentage:1}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'txapv'" class="small-box-footer">Tx Apv <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-check"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'txapv'" class="small-box-footer">Tx Apv <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.conversao.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.conversao.vs | percentage:1"></h3>
-                        <p>{{dashboard.conversao.p1 | percentage:1}} vs {{dashboard.conversao.p2 | percentage:1}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.conversao.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.conversao.vs | percentage:1"></h3>
+                            <p>{{dashboard.conversao.p1 | percentage:1}} vs {{dashboard.conversao.p2 | percentage:1}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
 
-            <div class="col-xs-12 col-sm-6 col-lg-2">
-                <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-green' : 'bg-red'">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
-                        <p>{{dashboard.esforco.p1 | number:1}} vs {{dashboard.esforco.p2 | number:1}}</p>
+                <div class="col-xs-12 col-sm-6 col-lg-2">
+                    <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-green' : 'bg-red'">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
+                            <p>{{dashboard.esforco.p1 | number:1}} vs {{dashboard.esforco.p2 | number:1}}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
-                    </div>
-                    <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
+
             </div>
 
         </div>
 
-    </div>
-
-    <!-- SIDE BAR CONTROL -->
+    @*<!-- SIDE BAR CONTROL -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -263,7 +402,7 @@
     <!-- /.control-sidebar -->
     <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
+    <div class="control-sidebar-bg"></div>*@
 
 </div>
 

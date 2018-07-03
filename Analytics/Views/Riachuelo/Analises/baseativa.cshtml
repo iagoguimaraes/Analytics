@@ -5,87 +5,203 @@
 
 <div ng-controller="ctrl-riachuelo-analise">
     <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Estratificação de Base</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresa</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa" style="width:100%"></select2>
+                        </div>
+
+                        <!--CARTEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                        </div>
+
+                        <!--GRUPOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Grupos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupo" dados="dashFiltros.grupo" style="width:100%"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="box box-widget widget-user">
             <div class="widget-user-header bg-black" style="background: url('/Content/Images/Riachuelo/Banner.jpg') center center;">
             </div>
          </div>
 
+        <div class="row margin-bottom">
+
+            <!--VALOR-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Faixa Valor</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--POR FAIXA DE ATRASO-->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
-
-                    <!--VALOR-->
-                    <div class="col-xs-12 col-md-12">
-                        <h3 class="text-center">Faixa Valor</h3>
-                        <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Faixa de Atraso</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('CarteiraAtraso','Table1')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.atraso" axis-Categories="dashboard.faixaAtraso" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <!--POR FAIXA DE ATRASO-->
-                    <div class="col-xs-12">
-                        <h3 class="text-center">Faixa de Atraso</h3>
-                        <high-chart series="dashboard.atraso" axis-Categories="dashboard.faixaAtraso" plot-Options-Line-Data-Label="true" type="line"></high-chart>
-                    </div>
-
-                    <!--VALOR-->
-                    <div class="col-xs-12 col-md-12">
-                        <h3 class="text-center">Faixa Idade</h3>
-                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                    </div>
-
-                    <!--GRUPOS-->
-                    <div class="col-xs-12 col-md-6">
-                        <h3 class="text-center">Grupos</h3>
-                        <high-chart series="dashboard.grupo" axis-Categories="dashboard.faixaGrupo" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
-                    </div>
-
-                    <!--LOCALIZACAO-->
-                    <div class="col-xs-12 col-md-6">
-                        <h3 class="text-center">Localização</h3>
-                        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+            <!--VALOR-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Faixa Idade</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        </div>
                     </div>
 
                 </div>
-
-                <!-- SIDE BAR CONTROL -->
-                <aside class="control-sidebar control-sidebar-dark" ng-if="dashFiltros.status === 200">
-                    <!-- Create the tabs -->
-                    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <!-- Filtros -->
-                        <div class="tab-pane active" id="control-sidebar-filters-tab">
-
-                            <!--EMPRESA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Empresa</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
-                            </div>
-
-                            <!--CARTEIRA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
-                            </div>
-
-                            <!--GRUPOS-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Grupos</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupo" dados="dashFiltros.grupo"></select2>
-                            </div>
-
-                            <!--BOTÃO-->
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                            </div>
-
-                        </div>
-                        <!-- /.tab-pane -->
-                    </div>
-                </aside>
-
             </div>
+
+            <!--GRUPOS-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-12">
+                    <div class="card col-md-6">
+                        <div class="card-header">
+                            <span class="card-header-title">Grupos</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('CarteiraGrupo','Table5')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.grupo" axis-Categories="dashboard.faixaGrupo" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                        </div>
+                    </div>
+                    <div class="card col-md-6">
+                        <div class="card-header">
+                            <span class="card-header-title">Localização</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+                    @*<!-- SIDE BAR CONTROL -->
+            <aside class="control-sidebar control-sidebar-dark" ng-if="dashFiltros.status === 200">
+                <!-- Create the tabs -->
+                <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                    <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- Filtros -->
+                    <div class="tab-pane active" id="control-sidebar-filters-tab">
+
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresa</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
+                        </div>
+
+                        <!--CARTEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                        </div>
+
+                        <!--GRUPOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Grupos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupo" dados="dashFiltros.grupo"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+            </aside>*@
+
+                </div>
 </div>
 
 <script>
@@ -126,6 +242,7 @@
                 }).then(function success(r) {
                     $scope.dashboard.status = r.status;
                     let data = r.data;
+                    $scope.dashboard.dados = r.data;
                     $scope.dashboard.resumo = data.Table[0];
 
                     $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixaAtraso);
@@ -147,6 +264,11 @@
             }
 
             $scope.carregarDashboard();
+
+            // extrair dados para excel
+            $scope.extrair = function (nomeArquivo, tabela) {
+                alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+            }
 
         });
 </script>
