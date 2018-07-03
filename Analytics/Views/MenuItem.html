@@ -1,9 +1,15 @@
-﻿<!--PASTA-->
-<a ng-if="item.subpath" class="has-arrow" href="#"><span>{{item.path}}</span></a>
-<ul ng-if="item.subpath" class="nav-sub collapse">
-    <li ng-repeat="item in item.subpath" ng-include="'/Views/menuitem.html'" ng-class="{'nav-dropdown active': item.subpath}"></li>
+﻿<a href="{{path.url}}">
+
+    <i class="{{path.icone || 'fa fa-folder'}}" ng-if="!path.root"></i>
+    <img ng-src="{{path.imagem}}" height="20" width="20" style="margin-right: 3px" ng-if="path.root" />
+
+    <span ng-bind="path.nome || path.path"></span>
+
+    <span class="pull-right-container" ng-if="!path.icone">
+        <i class="fa fa-angle-left pull-right"></i>
+    </span>
+</a>
+<ul class="treeview-menu">
+    <li ng-repeat="path in path.subpath" ng-class="{'treeview': !path.url}" ng-include="'/Views/MenuItem.html?v=2'">
+    </li>
 </ul>
-
-<!--PAGINA-->
-<a ng-if="item.id_pagina" href="{{item.url}}"><i class="{{item.icone}}"></i><span>{{item.nome}}</span></a>
-

@@ -1,41 +1,49 @@
 ﻿<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html>
 <head>
-    <title>Analytics Credit Cash</title>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Credit Cash Analytics</title>
+    <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 
-    <!--STYLES-->    
+    <!--STYLES-->
     <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/google-fonts.css" rel="stylesheet" />
     <link href="/Content/Styles/font-awesome.min.css" rel="stylesheet" />
     <link href="/Content/Styles/ionicons.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/adminlte.min.css" rel="stylesheet" />
+    <link href="/Content/Styles/skin-black.min.css" rel="stylesheet" />
     <link href="/Content/Styles/loading.css" rel="stylesheet" />
     <link href="/Content/Styles/bootstrap-datepicker.min.css" rel="stylesheet" />
     <link href="/Content/Styles/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="/Content/Styles/select2.min.css" rel="stylesheet" />
-    <link href="/Content/Styles/datatables.min.css" rel="stylesheet" />
     <link href="/Content/Styles/app.css" rel="stylesheet" />
+    <link href="/Content/Styles/datatables.min.css" rel="stylesheet" />
 
     <!--SCRIPTS-->
     <script src="/Content/Scripts/jquery.min.js"></script>
     <script src="/Content/Scripts/bootstrap.min.js"></script>
+    <script src="/Content/Scripts/adminlte.js"></script>
     <script src="~/Content/Scripts/jquery.slimscroll.min.js"></script>
     <script src="/Content/Scripts/angular.min.js"></script>
     <script src="/Content/Scripts/angular-filter.min.js"></script>
-    <script src="/Content/Scripts/sweetalert.min.js"></script>
     <script src="/Content/Scripts/highcharts.js"></script>
     <script src="/Content/Scripts/sankey.js"></script>
     <script src="/Content/Scripts/funnel.js"></script>
     <script src="/Content/Scripts/bootstrap-datepicker.min.js"></script>
     <script src="/Content/Scripts/bootstrap-timepicker.min.js"></script>
     <script src="/Content/Scripts/select2.full.min.js"></script>
-    <script src="/Content/Scripts/jquery.dataTables.min.js"></script>
+    <script src="/Content/Scripts/jquery.dataTables.min.js"></script>    
     <script src="/Content/Libs/amcharts/amcharts.js"></script>
     <script src="/Content/Libs/ammap/ammap.js"></script>
     <script src="/Content/Libs/amcharts/themes/light.js"></script>
     <script src="/Content/Scripts/alasql.min.js"></script>
-    <script src="/Content/Scripts/xlsx.core.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -66,185 +74,174 @@
     <script src="/App/Directives/mapaBrasil.js"></script>
 
 </head>
-<body class="menu-opened" ng-app="app" ng-controller="ctrl-master">
-
-    <!--CREDOR WINDOW-->
-    <div class="main-credorwindow">
-        <div class="main-credorwindow-button cursor-pointer" onclick="toggleCredorWindow()">
-            <i class="fa fa-close"></i>
-        </div>
-        <div class="row main-credorlist">
-
-            <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="c in credores" ng-click="acessarCredor(c)">
-                <div class="main-credor-item" ng-style="{'background-color': c.cor_primaria, 'color': c.cor_fonte_primaria}">
-                    <img ng-src="{{c.logo}}" />
-                    <div>{{c.nome}}</div>
+<body class="hold-transition skin-black sidebar-mini sidebar-collapse fixed" ng-app="app" ng-controller="ctrl-master">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+            <!-- Logo -->
+            <a class="logo" href="#!/">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+                    <img src="/Content/Images/ccashlogo.png" height="30" width="30" />
+                </span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <img src="/Content/Images/ccashlogo.png" height="30" width="30" /> Analytics
+                </span>
+            </a>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a data-target="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="/Login.html" onclick="return confirm('Deseja Sair?')"><i class="fa fa-power-off"></i> Deslogar</a>
+                        </li>
+                        <li>
+                            <a data-target="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
                 </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- search form (Optional) -->
+                <form class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Buscar..." ng-model="busca">
+                        <span class="input-group-btn">
+                            <button type="button" name="search" id="search-btn" class="btn btn-flat">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+                <!-- /.search form -->
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">MENU</li>
+
+                    <!-- esquema do menu dinâmico -->
+                    <li ng-repeat="path in paginas.subpath | filter:busca" ng-class="{'treeview': !path.url}" ng-include="'/Views/MenuItem.html?v=3'"></li>
+
+                </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    <span ng-bind="dadosPagina.titulo"></span>
+                    <small ng-bind="dadosPagina.descricao"></small>
+                </h1>
+            </section>
+            <!-- Main content -->
+            <section class="content container-fluid">
+                <!--------------------------
+                  | Your Page Content Here |
+                  -------------------------->
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                ICG
             </div>
-
-        </div>
-    </div>
-
-    <!--BACKGROUND-->
-    <div class="main-background" ng-style="{'background': credor.background}"></div>
-
-    <!--MAIN HEADER-->
-    <div class="main-header" ng-style="{'background-color': credor.cor_primaria}">
-        <div class="main-menu-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" onclick="toggleMenu()">
-            <i class="fa fa-angle-up main-menu-button-close"></i>
-            <i class="fa fa-angle-down main-menu-button-open"></i>
-        </div>
-        <div class="main-logo" ng-style="{'background-image': 'url('+ credor.logo + ')'}"></div>
-        <div class="main-title" ng-style="{'color': credor.cor_fonte_primaria}" ng-bind="credor.nome"></div>
-        <div class="main-credorwindow-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" onclick="toggleCredorWindow()">
-            <i class="fa fa-th"></i>
-        </div>
-    </div>
-
-    <!--CONTAINER-->
-    <div class="main-container">
-
-        <!--MAIN MENU-->
-        <div class="main-menu" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}">
-            <ul class="nav metismenu">
-                <li ng-if="menu.subpath" ng-repeat="item in menu.subpath" ng-include="'/Views/menuitem.html'" ng-class="{'nav-dropdown active': item.subpath}"></li>
-            </ul>
-        </div>
-
-        <!--WRAPPER-->
-        <div class="main-wrapper">
-            @RenderBody()
-        </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; CreditCash Digital.</strong> Todos Direitos Reservados.
+        </footer>
+        <!-- Control Sidebar -->
 
     </div>
-
+    <!-- ./wrapper -->
     <!--LOADING-->
-    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div> 
+    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
+
+    <script>
+        angular.module('app').controller('ctrl-master', function ($scope, $http, $window, dadosPagina) {
+
+            // dados da pagina (título, descrição etc) reusável em outros Ctrl
+            $scope.dadosPagina = dadosPagina;
+
+            // obtendo as paginas
+            $http({
+                method: 'POST',
+                url: "/api/analytics/getPaginas",
+            }).then(function success(r) {
+                $scope.paginas = formatarMenu(r.data);
+
+                // libera visualização na pagina depois de ter certeza que o usuario está permitido
+                $scope.dadosPagina.ok = true;
+            });
+
+            // formata o menu hierarquicamente para usar no ng-repeat
+            function formatarMenu(paginas) {
+                // inicializa o menu formatado
+                let menu = { path: 'menu', subpath: [] };
+
+                // varre todas as paginas da lista
+                paginas.forEach(function (pagina) {
+                    // quebra cada item da hierarquia
+                    let hierarquia = pagina.path.split('/');
+
+                    // varre toda a hierarquia da pagina (inicializa o diretoria atual com o menu root)
+                    for (let i = 0, atual = menu; i < hierarquia.length; i++) {
+
+                        // popula verificando se é uma pagina, root ou uma pasta
+                        let item;
+
+                        // pagina
+                        if (i == hierarquia.length - 1)
+                            item = pagina;
+                            // root
+                        else if (i == 0)
+                            item = { path: hierarquia[i], subpath: [], imagem: pagina.imagem, root: 1 };
+                            // pasta
+                        else
+                            item = { path: hierarquia[i], subpath: [] };
+
+                        // procura este item dentro da hierarquia
+                        let find = atual.subpath.find(f => f.path === item.path);
+
+                        // se não encontrar adiciona
+                        if (find === undefined)
+                            atual.subpath.push(item);
+
+                        // seta o diretorio atual de pesquisa para o item adicionado (ou ja existente)
+                        atual = atual.subpath.find(f => f.path === item.path);
+                    }
+                });
+                // retorna
+                return menu;
+            }
+
+        });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114966040-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-114966040-1');
+    </script>
 
 </body>
 </html>
-
-<!--CONTROLLER MAIN-->
-<script>
-    angular.module('app').controller('ctrl-master', function ($scope, $http, $window, dadosPagina) {
-        $scope.dadosPagina = dadosPagina;
-
-        $http({
-            method: 'POST',
-            url: "/api/analytics/carregarMenu",
-        }).then(function success(r) {
-            $scope.credores = r.data.Table;
-            $scope.paginas = r.data.Table1;
-
-            // setar credor atual
-            let pagina = $scope.paginas.filter(p => p.url == window.location.pathname)[0];
-            if (pagina != undefined) {
-                let credor = $scope.credores.filter(c => c.id_credor == pagina.id_credor)[0];
-                $scope.alterarMenu(credor);
-            }
-        });
-
-        $scope.alterarMenu = function (c) {
-            $scope.credor = c;
-            let menu = $scope.paginas.filter(p => p.id_credor == c.id_credor);
-            $scope.menu = formatarMenu(menu);
-            document.body.classList.remove("credorwindow-opened");
-
-        };
-
-        $scope.acessarCredor = function (c) {
-            if (c.paginas > 0) {
-                window.location.href = c.pagina_inicial;
-            }
-            else {
-                swal("Você não possui acesso a essa empresa");
-            }
-        }
-
-        // formata o menu hierarquicamente para usar no ng-repeat
-        function formatarMenu(paginas) {
-            // inicializa o menu formatado
-            let menu = { path: 'menu', subpath: [] };
-
-            // varre todas as paginas da lista
-            paginas.forEach(function (pagina) {
-                // quebra cada item da hierarquia
-                let hierarquia = pagina.path.split('/');
-
-                // varre toda a hierarquia da pagina (inicializa o diretoria atual com o menu root)
-                for (let i = 1, atual = menu; i < hierarquia.length; i++) {
-
-                    // popula verificando se é uma pagina, root ou uma pasta
-                    let item;
-
-                    // pagina
-                    if (i == hierarquia.length - 1)
-                        item = pagina;
-                        // root
-                    else if (i == 0)
-                        item = { path: hierarquia[i], subpath: [], root: 1 };
-                        // pasta
-                    else
-                        item = { path: hierarquia[i], subpath: [] };
-
-                    // procura este item dentro da hierarquia
-                    let find = atual.subpath.find(f => f.path === item.path);
-
-                    // se não encontrar adiciona
-                    if (find === undefined)
-                        atual.subpath.push(item);
-
-                    // seta o diretorio atual de pesquisa para o item adicionado (ou ja existente)
-                    atual = atual.subpath.find(f => f.path === item.path);
-                }
-            });
-            // retorna
-            return menu;
-        }
-
-    });
-
-    function toggleMenu() {
-        document.body.classList.toggle("menu-opened");
-    }
-
-    function toggleCredorWindow() {
-        document.body.classList.toggle("credorwindow-opened");
-    }
-
-    $('.metismenu').on('click', '.nav-dropdown a', function () {
-        $(this).parent()[0].classList.toggle('active');
-    });
-
-    function removeDisplayNone(element_id) {
-        document.getElementById(element_id).classList.remove('display-none');
-    }
-
-    function addDisplayNone(element_id) {
-        document.getElementById(element_id).classList.add('display-none');
-    }
-
-    function toggleDisplayNone(element_id) {
-        document.getElementById(element_id).classList.toggle('display-none');
-    }
-
-    $(document).on('click', '.card-header-close', function () {
-        $(this).parent().parent().addClass('display-none');   
-    });
-
-    $(document).on('click', '.card-header-expand', function () {
-        let card = $(this).parent().parent();
-        card.toggleClass('expanded');
-        window.dispatchEvent(new Event('resize'));
-    });
-
-</script>
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114966040-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'UA-114966040-1');
-</script>
