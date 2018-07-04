@@ -8,197 +8,103 @@
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
 
-        <!-- HEADER-->
-        <header class="page-header">
-            <div class="page-name">Efetividade</div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
-                <i class="fa fa-filter"></i>
-                FILTROS
-            </div>
-        </header>
-
-        <!-- FILTROS -->
         <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Efetividade por Carteira</h3>
+                <high-chart series="dashboard.efetividadeCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Promessa Paga por Carteira</h3>
+                <high-chart series="dashboard.promessaPagaCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
             <div class="col-xs-12">
-                <div id="filtros-window" class="card display-none">
-                    <div class="card-header">
-                        <span class="card-header-title">Filtros</span>
-                        <div class="card-header-button card-header-close">
-                            <i class="fa fa-close"></i>
-                        </div>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--CAMPANHAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Campanhas</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
-                        </div>
-
-                        <!--FUNCIONARIO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Funcionário</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario" style="width:100%"></select2>
-                        </div>
-
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                        </div>
-
-                    </div>
-                </div>
+                <h3 class="text-center">Promessa Paga por Dia</h3>
+                <high-chart series="dashboard.promessaPagaDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Efetividade por Dia</h3>
+                <high-chart series="dashboard.efetividadeDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
             </div>
         </div>
 
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Efetividade por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.efetividadeCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
-                    </div>
-                </div>
+                <h3 class="text-center">Lote Pago por Carteira</h3>
+                <high-chart series="dashboard.efetividadeLoteCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
             </div>
-            <div class="col-xs-12 col-md-6 row margin-bottom">      
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Promessa Paga por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('PromessaPaga','Table')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.promessaPagaCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
+            <div class="col-xs-12 col-md-6">
+                <h3 class="text-center">Pagamento Lote por Carteira</h3>
+                <high-chart series="dashboard.pagamentoLoteCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
             </div>
-            <div class="col-xs-12 row margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Promessa Paga por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('PromessaDia','Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.promessaPagaDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                    </div>
-                </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">Pagamentos Lotes</h3>
+                <high-chart series="dashboard.pagamentoLoteDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
             </div>
-            <div class="col-xs-12 row margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Efetividade por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.efetividadeDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6">   
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Lote Pago por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('PagLoteCarteira','Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.efetividadeLoteCarteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6 row margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Pagamento Lote por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.pagamentoLoteCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 row margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Pagamentos Lotes</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('PagLoteDia','Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.pagamentoLoteDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 row margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">% Pago Lotes</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.efetividadeLoteDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
-                    </div>
-                </div>
+            <div class="col-xs-12">
+                <h3 class="text-center">% Pago Lotes</h3>
+                <high-chart series="dashboard.efetividadeLoteDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
             </div>
         </div>
 
     </div>
+
+    <!-- SIDE BAR CONTROL -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Filtros -->
+            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Campanhas</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                </div>
+
+                <!--CAMPANHAS-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Funcionário</label>
+                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario"></select2>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
 
 </div>
 
@@ -242,7 +148,6 @@
             }).then(function success(r) {
                 let data = r.data;
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
                 $scope.dashboard.carteiras = r.data.Table.map(obj => obj.carteira);
@@ -263,11 +168,6 @@
         }
 
         $scope.carregarDashboard();
-
-        // extrair dados para excel
-        $scope.extrair = function (nomeArquivo, tabela) {
-            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-        }
 
     });
 

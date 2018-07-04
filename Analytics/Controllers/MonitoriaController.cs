@@ -188,7 +188,7 @@ namespace Analytics.Controllers
                     parametros.Add("tel", tel);
                     parametros.Add("persona", persona);
                     parametros.Add("descricao", descricao);
-                    parametros.Add("link", link);
+                    parametros.Add("link", descricao);
 
                     sql.ExecuteProcedureDataSet("sp_upd_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
