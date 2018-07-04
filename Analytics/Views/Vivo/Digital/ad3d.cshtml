@@ -9,29 +9,38 @@
 
         <!-- RESUMO -->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.atendimento | megaNumber"></h3>
-                        <p>Atendimento</p>
+                        <h3 ng-bind="dashboard.resumo.acesso | megaNumber"></h3>
+                        <p>Acesso</p>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.interacao | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.interacao / dashboard.resumo.atendimento | percentage: 1"></h4>
-                        <p>Interação</p>
+                        <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.acesso | percentage: 1"></h4>
+                        <p>CPC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.validou | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.validou / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <p>Validou CPF</p>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-md-3">
-                <div class="small-box bg-aqua">
+                <div class="small-box bg-red">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.interacao | percentage: 1"></h4>
-                        <p>CPC</p>
+                        <h3 ng-bind="dashboard.resumo.alega | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.alega / dashboard.resumo.validou | percentage: 1"></h4>
+                        <p>Alega Pagamento</p>
                     </div>
                 </div>
             </div>
@@ -39,7 +48,7 @@
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.validou | percentage: 1"></h4>
                         <p>Promessa</p>
                     </div>
                     <div class="icon">
@@ -62,37 +71,43 @@
                                 <thead>
                                     <tr>
                                         <th>Data</th>
-                                        <th>Atendimento</th>
-                                        <th>Interação</th>
+                                        <th>Acesso</th>
                                         <th>CPC</th>
+                                        <th>Validou CPF</th>
+                                        <th>Validou Pagamento</th>
                                         <th>Promessa</th>
-                                        <th>% Interagiu</th>
                                         <th>% CPC</th>
+                                        <th>% Validou CPF</th>
+                                        <th>% Alega</th>
                                         <th>% Promessa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="d in dashboard.dia">
                                         <td>{{d.data}}</td>
-                                        <td>{{d.atendimento | number}}</td>
-                                        <td>{{d.interacao | number}}</td>
+                                        <td>{{d.acesso | number}}</td>
                                         <td>{{d.cpc | number}}</td>
+                                        <td>{{d.validou | number}}</td>
+                                        <td>{{d.alega | number}}</td>
                                         <td>{{d.promessa | number}}</td>
-                                        <td>{{d.interacao / d.atendimento | percentage:1}}</td>
-                                        <td>{{d.cpc / d.interacao | percentage:1}}</td>
-                                        <td>{{d.promessa / d.cpc | percentage:1}}</td>
+                                        <td>{{d.cpc / d.acesso | percentage:1}}</td>
+                                        <td>{{d.validou / d.cpc | percentage:1}}</td>
+                                        <td>{{d.alega / d.validou | percentage:1}}</td>
+                                        <td>{{d.promessa / d.validou | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.atendimento | number}}</th>
-                                        <th>{{dashboard.resumo.interacao | number}}</th>
+                                        <th>{{dashboard.resumo.acesso | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.validou | number}}</th>
+                                        <th>{{dashboard.resumo.alega | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.interacao / dashboard.resumo.atendimento | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.interacao | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpc | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.acesso | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.validou / dashboard.resumo.cpc | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.alega / dashboard.resumo.validou | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.validou | percentage:1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -114,38 +129,44 @@
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.hora">
                                 <thead>
                                     <tr>
-                                        <th>Hora</th>
-                                        <th>Atendimento</th>
-                                        <th>Interação</th>
+                                        <th>Data</th>
+                                        <th>Acesso</th>
                                         <th>CPC</th>
+                                        <th>Validou CPF</th>
+                                        <th>Validou Pagamento</th>
                                         <th>Promessa</th>
-                                        <th>% Interagiu</th>
                                         <th>% CPC</th>
+                                        <th>% Validou CPF</th>
+                                        <th>% Alega</th>
                                         <th>% Promessa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="d in dashboard.hora">
                                         <td>{{d.hora}}</td>
-                                        <td>{{d.atendimento | number}}</td>
-                                        <td>{{d.interacao | number}}</td>
+                                        <td>{{d.acesso | number}}</td>
                                         <td>{{d.cpc | number}}</td>
+                                        <td>{{d.validou | number}}</td>
+                                        <td>{{d.alega | number}}</td>
                                         <td>{{d.promessa | number}}</td>
-                                        <td>{{d.interacao / d.atendimento | percentage:1}}</td>
-                                        <td>{{d.cpc / d.interacao | percentage:1}}</td>
-                                        <td>{{d.promessa / d.cpc | percentage:1}}</td>
+                                        <td>{{d.cpc / d.acesso | percentage:1}}</td>
+                                        <td>{{d.validou / d.cpc | percentage:1}}</td>
+                                        <td>{{d.alega / d.validou | percentage:1}}</td>
+                                        <td>{{d.promessa / d.validou | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.atendimento | number}}</th>
-                                        <th>{{dashboard.resumo.interacao | number}}</th>
+                                        <th>{{dashboard.resumo.acesso | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.validou | number}}</th>
+                                        <th>{{dashboard.resumo.alega | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.interacao / dashboard.resumo.atendimento | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.interacao | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpc | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.acesso | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.validou / dashboard.resumo.cpc | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.alega / dashboard.resumo.validou | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.validou | percentage:1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -217,8 +238,6 @@
         <!-- Add the sidebar's background. This div must be placed
         immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
-
-
 
     </div>
 </div>
