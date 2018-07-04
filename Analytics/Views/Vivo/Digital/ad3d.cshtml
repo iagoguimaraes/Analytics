@@ -7,62 +7,6 @@
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
 
-        <!-- HEADER-->
-        <header class="page-header">
-            <div class="page-name">Atendimento AD3D</div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
-                <i class="fa fa-filter"></i>
-                FILTROS
-            </div>
-        </header>
-
-        <!-- FILTROS -->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div id="filtros-window" class="card display-none">
-                    <div class="card-header">
-                        <span class="card-header-title">Filtros</span>
-                        <div class="card-header-button card-header-close">
-                            <i class="fa fa-close"></i>
-                        </div>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- RESUMO -->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-3">
@@ -90,7 +34,7 @@
                         <p>CPC</p>
                     </div>
                 </div>
-            </div>       
+            </div>
             <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
@@ -102,7 +46,7 @@
                         <i class="fa fa-thumbs-up"></i>
                     </div>
                 </div>
-            </div>       
+            </div>
         </div>
 
         <!-- DIA -->
@@ -111,12 +55,6 @@
                 <div id="filtros-window" class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('analise_por_dia','Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -170,12 +108,6 @@
                 <div id="filtros-window" class="card">
                     <div class="card-header">
                         <span class="card-header-title">Diagrama de Finalizações</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('diagrama','Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
                     </div>
                     <div class="card-body">
                         <sankey-chart dados="dashboard.diagrama" series-name="Quantidade"></sankey-chart>
@@ -187,6 +119,57 @@
 
     </div>
 </div>
+
+
+    <!-- SIDE BAR CONTROL -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- Filtros -->
+        <div class="tab-pane active" id="control-sidebar-filters-tab">
+            <!--DATA INCIAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Inicial</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                </div>
+            </div>
+
+            <!--DATA FINAL-->
+            <div class="form-group">
+                <label class="control-sidebar-subheading">Data Final</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                </div>
+            </div>
+
+            <!--BOTÃO-->
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDados()">Carregar Dados</button>
+            </div>
+
+        </div>
+        <!-- /.tab-pane -->
+
+    </div>
+</aside>
+<!-- /.control-sidebar -->
+<!-- Add the sidebar's background. This div must be placed
+immediately after the control sidebar -->
+<div class="control-sidebar-bg"></div>
+
+
+
 
 <script>
 
