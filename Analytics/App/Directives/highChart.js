@@ -6,6 +6,10 @@
             type: '@',
             height: '@',
             bgcolor: '@',
+            gridLineColorX: '@',
+            gridLineColorY: '@',
+            colorCatX: '@',
+            sizeCatX: '@',
             series: '=',
             titleText: '@',
             axisCategories: '=',
@@ -27,30 +31,59 @@
         template: '<div></div>',
         link: function (scope, element) {
             scope.$watch('series', function () {
+
                 Highcharts.chart(element[0], {
+      
                     chart: {
                         type: scope.type,
                         height: scope.height,
-                        backgroundColor: scope.bgcolor
+                        backgroundColor: scope.bgcolor,
+                        
                     },
+
                     series: scope.series,
                     title: {
                         text: scope.titleText
                     },
+
                     xAxis: [
-                        {
-                            categories: scope.axisCategories,
-                        },
-                        {
-                            categories: scope.axis1Categories,
-                            opposite: true
-                        }
+                         {
+                             categories: scope.axisCategories,
+                             gridLineColor: scope.gridLineColorX,
+                             
+                             //labels: {
+                             //    style: {
+                             //        color: scope.colorCatX,
+                             //        fontSize: scope.sizeCatX,
+                             //    }
+
+                             //}
+
+                         },
+                         {
+                             categories: scope.axis1Categories,
+                             gridLineColor: scope.gridLineColorX,
+                             //labels: {
+                             //    style: {
+                             //        color: scope.colorCatX,
+                             //        fontSize: scope.sizeCatX,
+                             //    }
+
+                             //},
+                             opposite: true
+                         },
+
+                          
                     ],
+
                     yAxis: [
                         {
+                            gridLineColor: scope.gridLineColorY,
+
                             title: {
                                 text: scope.yAxisTitle
                             },
+
                             min: scope.yAxisMin,
                             max: scope.yAxisMax,
                         },
@@ -63,6 +96,8 @@
                             opposite: true
                         }
                     ],
+
+
                     plotOptions: {
                         column: {
                             dataLabels: {

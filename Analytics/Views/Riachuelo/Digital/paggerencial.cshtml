@@ -8,7 +8,7 @@
 
             <!-- BANNER -->
             <div class="box box-widget widget-user">
-                <div class="widget-user-header" style="background: url('/Content/Images/Riachuelo/banner-bia.png') center center; height: 200px">
+                <div class="widget-user-header" style="background: url('/Content/Images/Riachuelo/Banner Riachuelo1.png') center center; height: 200px">
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="small-box bg-black" style="border:1px; border-style: solid;left: 7px;">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.ultimomes.quantidade | number"></h3>
+                            <h3 style="font-size:60px" ng-bind="dashboard.ultimomes.quantidade | number"></h3>
                             <p>Quantidade Pagamento</p>
                         </div>
                         <div class="icon">
@@ -29,7 +29,7 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="small-box bg-black" style="border:1px; border-style: solid;right: 7px">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.ultimomes.valor | currency:'R$'"></h3>
+                            <h3 style="font-size:60px" ng-bind="dashboard.ultimomes.valor | currency:'R$'"></h3>
                             <p>Valor Pagamento</p>
                         </div>
                         <div class="icon">
@@ -43,7 +43,7 @@
             <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <center><h2 style="color:white"><b>Financeiro Mês</b></h2></center>
-                    <high-chart series="dashboard.grafico" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    <high-chart series="dashboard.grafico" axis-Categories="dashboard.meses" colorCatX="red" sizeCatX="10px" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                 </div>
             </div>
 
@@ -75,15 +75,48 @@
                         name: 'Valor',
                         data: r.data.Table.map(obj => (obj.valor)),
                         color: 'white',
+                        
                         dataLabels: {
                             style: {
                                 fontSize: '25px',
                                 color: 'white',
                             },
+
+
                         chart: {
                                 borderWidth: 1,
                                 backgroundColor: 'black'
-                            },
+                        },
+
+                        xAxis: {
+                            
+                            gridLineColor: 'transparent',
+                            //labels: {
+                            //    style: {
+                            //        color: 'red',
+                            //        fontSize: '50px',
+                            //    }
+
+                            //}
+                        },
+
+                   //xAxis: [
+                   //      {
+                   //          categories: r.data.Table.map(obj => obj.mesNome),
+                   //          gridLineColor: 'transparent',
+
+                   //      },
+                   //      {
+                   //          categories: r.data.Table.map(obj => obj.mesNome),
+                   //          gridLineColor: 'transparent',
+                   //          opposite: true
+                   //      },
+                   //],
+
+                        yAxis: {
+                            gridLineColor: 'transparent'
+                    },
+                        
                             formatter: function () {
                                 var ret = '',
                                     multi,
