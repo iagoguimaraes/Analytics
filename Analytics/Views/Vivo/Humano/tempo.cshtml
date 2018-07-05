@@ -6,10 +6,90 @@
 <div ng-controller="ctrl-vivo-tempo">
     <div ng-if="dashboard.status == 200">
 
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Tempos</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--SABADOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Sábados</label>
+                            <input type="checkbox" ng-model="check" ng-change="checked(check == true ? '0' : '7')" />
+                        </div>
+
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresa</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
+                        </div>
+
+                        <!--CARTEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                        </div>
+
+                        <!--AGING-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Aging</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- QUADROS -->
-        <div class="row">
+        <div class="row margin-bottom">
             <!--INDICADORES ABSOLUTOS-->
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_pa"></h3>
@@ -33,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato_pa "></h3>
@@ -56,7 +136,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa_pa "></h3>
@@ -80,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tma | formatTimer"></h3>
@@ -104,7 +184,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tmo | formatTimer"></h3>
@@ -128,7 +208,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-1 col-lg-2">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tmp_pausa_NR17 | formatTimer"></h3>
@@ -152,24 +232,21 @@
                 </div>
             </div>
         </div>
-
-        <!--GRAFICO-->
-        <!--<div class="row" id="grafico">
-            <div class="col-xs-12">
-                <h4 class="text-center">{{grafico.indicador | uppercase}}</h4>
-                <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" type="line" plot-Options-Line-Data-Label="true"></high-chart>
-            </div>
-        </div>-->
         
         <!--TEMPOS OPERACIONAIS DIA - HORA-->
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h1 class="box-title" style="color:midnightblue "><b>Análise dos Tempos</b></h1>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise dos Tempos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
-                    <div class="box-body">
-
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horaHora">
                                 <thead>
@@ -224,21 +301,22 @@
 
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
         <!--TEMPOS PAUSAS DIA - HORA-->
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title" style="color:midnightblue"><b>Análise de Pausas</b></h3>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise de Pausas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
                     </div>
-                    <div class="box-body">
-
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horaHora">
                                 <thead>
@@ -299,91 +377,16 @@
 
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-        <!-- SIDE BAR CONTROL -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Create the tabs -->
-            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab">Período 1</a></li>
-            </ul>
-
-            <div class="tab-content" ng-if="dashFiltros.status === 200">
-
-                <!-- PERIODO 1 -->
-                <div class="tab-pane active" id="control-sidebar-filters-tab">
-
-                    <!--DATA INCIAL-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Data Inicial</label>
-                        <div class="input-group date">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                        </div>
-                    </div>
-
-                    <!--DATA FINAL-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Data Final</label>
-                        <div class="input-group date">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                        </div>
-                    </div>
-
-                    <!--SABADOS-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Sábados</label>
-                        <input type="checkbox" ng-model="check" ng-change="checked(check == true ? '0' : '7')" />
-                    </div>
-
-                    <!--EMPRESA-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Empresa</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
-                    </div>
-
-                    <!--CARTEIRA-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Carteira</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
-                    </div>
-
-                    <!--AGING-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Aging</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
-                    </div>
-
-                    <!--BOTÃO-->
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                    </div>
-
-                </div>
-
-            </div>
-        </aside>
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-vivo-tempo', function ($scope, $http, $filter, dadosPagina) {
-        dadosPagina.titulo = 'Tempo';
-        dadosPagina.descricao = 'Vivo Humano'
-
+    angular.module('app').controller('ctrl-vivo-tempo', function ($scope, $http, $filter) {
         // filtros iniciais
         let _dt1 = new Date();
         _dt1.setDate(_dt1.getDate());
@@ -533,6 +536,10 @@
             if ($scope.dashboard.status == 200)
             $scope.carregarGrafico();
         });
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>

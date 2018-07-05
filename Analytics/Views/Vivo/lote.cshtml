@@ -3,11 +3,7 @@
 }
 
 <script>
-    angular.module('app').controller('ctrl-vivo-lote', function ($scope, $http, $filter, dadosPagina) {
-
-        dadosPagina.titulo = 'Análise de Lote';
-        dadosPagina.descricao = 'Vivo'
-
+    angular.module('app').controller('ctrl-vivo-lote', function ($scope, $http, $filter) {
         // variaveis
         $scope.filtros = {
             dtini: $filter('date')(new Date(new Date().getFullYear(), new Date().getMonth(), 1), "yyyy-MM-dd"),
@@ -15,16 +11,15 @@
             produtos: '',
             situacao: '-1',
         };
+        $scope.dashboard = {};
         $scope.dashFiltros = {};
         $scope.lotes = [];
         $scope.visao = 'atual';
-        $scope.atual = {
-            indicador: '%estoque',
-        }
+        $scope.configuracao = {indicador: '%estoque'};
+        $scope.atual = {}
         $scope.permanencia = {
             de: 0,
-            ate: 10,
-            indicador: '%estoque',
+            ate: 10
         };
 
         // carregar os filtros
@@ -43,28 +38,28 @@
                 method: 'POST',
                 url: "/api/vivo/dashboard/lote",
                 data: $scope.filtros,
-            }).then(function success(r) {              
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
                 $scope.lotes = [...new Set(r.data.Table.map(o => o.data_lote))];
 
                 $scope.atual.tabela = r.data.Table;
                 $scope.atual.media = r.data.Table1[0];
-                $scope.montarGraficoAtual();
-
                 $scope.permanencia.dados = r.data.Table2;
-                $scope.montarVisaoPermanencia();
 
-                $scope.dashboard_status = r.status;           
+                $scope.atualizarGraficos();
             });
         }
 
-        $scope.montarGraficoAtual = function () {
-            $scope.atual.grafico = [
-                    { name: 'Contrato', data: $scope.atual.tabela.map(o => (o.contrato)) },
-                    { name: $scope.atual.indicador, type: 'spline', yAxis: 1, data: $scope.atual.tabela.map(o => obterIndicador(o,$scope.atual.indicador)) },
-            ];
-        }
+        $scope.atualizarGraficos = function () {
 
-        $scope.montarVisaoPermanencia = function () {
+            // grafico atual
+            $scope.atual.grafico = [
+        { name: 'Contrato', data: $scope.atual.tabela.map(o => (o.contrato)) },
+        { name: $scope.configuracao.indicador, type: 'spline', yAxis: 1, data: $scope.atual.tabela.map(o => obterIndicador(o, $scope.configuracao.indicador)) },
+            ];
+
             // montar colunas
             $scope.permanencia.coluna = [];
             for (var i = $scope.permanencia.de; i <= $scope.permanencia.ate; i++) { $scope.permanencia.coluna.push(i) }
@@ -75,15 +70,15 @@
             for (n in $scope.lotes) {
                 let registros_lote = $scope.permanencia.dados.filter(o => o.data_lote == $scope.lotes[n]);
                 let obj_tb = { data_lote: $scope.lotes[n], contrato: registros_lote[0].contrato };
-                let obj_gf = { name: $scope.lotes[n], data: [], lineWidth:1,  marker: {enabled: false} }
+                let obj_gf = { name: $scope.lotes[n], data: [], lineWidth: 1, marker: { enabled: false } }
                 for (var i = $scope.permanencia.de; i <= $scope.permanencia.ate; i++) {
                     let d = registros_lote.filter(o => o.dia == i);
-                    if (d.length > 0){
-                        let indicador = obterIndicador(d[0], $scope.permanencia.indicador);
+                    if (d.length > 0) {
+                        let indicador = obterIndicador(d[0], $scope.configuracao.indicador);
                         obj_tb[i] = indicador;
                         obj_gf.data.push(indicador)
                     }
-                        
+
                 }
                 $scope.permanencia.tabela.push(obj_tb);
                 $scope.permanencia.grafico.push(obj_gf);
@@ -95,12 +90,12 @@
                 let d = $scope.permanencia.dados.filter(o => o.dia == i);
                 let soma = 0;
                 for (var j = 0; j < d.length; j++) {
-                    soma += obterIndicador(d[j], $scope.permanencia.indicador);
+                    soma += obterIndicador(d[j], $scope.configuracao.indicador);
                 }
                 $scope.permanencia.media.push((soma / d.length).toFixed(1) * 1);
             }
             $scope.permanencia.grafico.unshift({ name: 'Média', data: $scope.permanencia.media, color: 'black', zIndex: 999 });
-            
+
         }
 
         function obterIndicador(registro, indicador) {
@@ -116,225 +111,242 @@
 
         $scope.carregarDashboard();
 
-    });
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
+    });
 </script>
 
 <!-- HTML -->
 <div ng-controller="ctrl-vivo-lote">
-    <div ng-if="dashboard_status == 200">
+    <div ng-if="dashboard.status == 200">
 
-        <!-- ESCOLHER VISÃO -->
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Lote</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--PRODUTOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Produtos</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produtos"></select2>
+                        </div>
+
+                        <!--SITUACAO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Situação</label>
+                            <select class="form-control" data-placeholder="Selecione" ng-model="filtros.situacao">
+                                <option value="-1">Tudo</option>
+                                <option value="0">Aberto</option>
+                                <option value="1">Fechado</option>
+                            </select>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CONFIGURAÇÕES-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 text-center">
-                <label><input type="radio" name="visao" ng-model="visao" value="atual" /> Atual </label>
-                <label><input type="radio" name="visao" ng-model="visao" value="permanencia" /> Permanencia </label>
-            </div>
-        </div>
-
-        <!-- VISÃO ATUAL-->
-        <div class="row" ng-if="visao == 'atual'">
-
-            <!--GRAFICO ATUAL-->
             <div class="col-xs-12">
-                <small class="pull-left">
-                    <label>Indicador:</label>
-                    <select ng-model="atual.indicador" ng-change="montarGraficoAtual()">
-                        <option value="%estoque">% Estoque</option>
-                        <option value="%discado">% Discado</option>
-                        <option value="%contato">% Contato</option>
-                        <option value="%cpc">% CPC</option>
-                        <option value="%cpca">% CPCA</option>
-                        <option value="%promessa">% Promessa</option>
-                    </select>
-                </small>
-            </div>
-            <div class="col-xs-12">
-                <high-chart series="atual.grafico" axis-Categories="lotes" type="column"
-                            plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal"
-                            y-Axis1-Min="0" y-Axis1-Max="100"></high-chart>
-            </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Configurações</span>
+                    </div>
+                    <div class="card-body">
 
-            <!--TABELA ATUAL-->
-            <div class="col-xs-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" style="width:100%;" ng-if="atual.tabela">
-                        <thead>
-                            <tr>
-                                <th>Lote</th>
-                                <th>Contrato</th>
-                                <th>%Estoque</th>
-                                <th>%Discado</th>
-                                <th>%Contato</th>
-                                <th>%CPC</th>
-                                <th>%CPCA</th>
-                                <th>%Promessa</th>
-                                <th>Spin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="d in atual.tabela" data-compare-group="group1">
-                                <td>{{d.data_lote}}</td>
-                                <td>{{d.contrato | number}}</td>
-                                <td>{{d.estoque / d.contrato | percentage:1}}</td>
-                                <td>{{d.discado / d.contrato | percentage:1}}</td>
-                                <td>{{d.contato / d.contrato | percentage:1}}</td>
-                                <td>{{d.cpc / d.contrato | percentage:1}}</td>
-                                <td>{{d.cpca / d.contrato | percentage:1}}</td>
-                                <td>{{d.promessa / d.contrato | percentage:1}}</td>
-                                <td>{{d.discado_tt / d.contrato | number:1}}</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Média</th>
-                                <th>{{atual.media.contrato | number}}</th>
-                                <th>{{atual.media.estoque / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.discado / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.contato / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.cpc / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.cpca / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.promessa / atual.media.contrato | percentage:1}}</th>
-                                <th>{{atual.media.discado_tt / atual.media.contrato | number:1}}</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                        <div class="form-group">
+                            <label><input type="radio" name="visao" ng-model="visao" value="atual" /> Atual </label>
+                            <label><input type="radio" name="visao" ng-model="visao" value="permanencia" /> Permanencia </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Indicador:</label>
+                            <select ng-model="configuracao.indicador" ng-change="atualizarGraficos();">
+                                <option value="%estoque">% Estoque</option>
+                                <option value="%discado">% Discado</option>
+                                <option value="%contato">% Contato</option>
+                                <option value="%cpc">% CPC</option>
+                                <option value="%cpca">% CPCA</option>
+                                <option value="%promessa">% Promessa</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-if="visao == 'permanencia'">
+                            <label>Permanencia: de </label>
+                            <input type="number" min="0" max="180" ng-model="permanencia.de" ng-change="atualizarGraficos()" />
+                            <label> até </label>
+                            <input type="number" min="0" max="180" ng-model="permanencia.ate" ng-change="atualizarGraficos()" />
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
 
-
-        <!-- VISÃO PERMANENCIA-->
-        <div class="row" ng-if="visao == 'permanencia'">
-
-            <!--CONFIGURAÇÕES-->
+        <!--GRAFICO-->
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <small class="pull-left">
-                    <label>Indicador:</label>
-                    <select ng-model="permanencia.indicador" ng-change="montarVisaoPermanencia()">
-                        <option value="%estoque">% Estoque</option>
-                        <option value="%discado">% Discado</option>
-                        <option value="%contato">% Contato</option>
-                        <option value="%cpc">% CPC</option>
-                        <option value="%cpca">% CPCA</option>
-                        <option value="%promessa">% Promessa</option>
-                        <option value="spin">Spin</option>
-                        <option value="estoque">Qt Estoque</option>
-                        <option value="discado">Qt Discado</option>
-                        <option value="contato">Qt Contato</option>
-                        <option value="cpc">Qt CPC</option>
-                        <option value="cpca">Qt CPCA</option>
-                        <option value="promessa">Qt Promessa</option>
-                        <option value="discado_tt">Total Discado</option>
-                    </select>
-                </small>
-                <small class="pull-right">
-                    <label>Permanencia: de </label>
-                    <input type="number" min="0" max="180" ng-model="permanencia.de" ng-change="montarVisaoPermanencia()" />
-                    <label> até </label>
-                    <input type="number" min="0" max="180" ng-model="permanencia.ate" ng-change="montarVisaoPermanencia()" />
-                </small>
-            </div>
-
-            <!--GRAFICO PERMANENCIA-->
-            <div class="col-xs-12">
-                <high-chart series="permanencia.grafico" axis-Categories="permanencia.coluna" tooltip-Shared="false"></high-chart>
-            </div>
-
-            <!--TABELA PERMANENCIA-->
-            <div class="col-xs-12">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" style="width:100%;" ng-if="permanencia.tabela">
-                        <thead>
-                            <tr>
-                                <th>Lote</th>
-                                <th>Contrato</th>
-                                <th ng-repeat="c in permanencia.coluna">{{c}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="d in permanencia.tabela">
-                                <td>{{d.data_lote}}</td>
-                                <td>{{d.contrato | number}}</td>
-                                <td ng-repeat="c in permanencia.coluna">{{d[c]}}</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Média</th>
-                                <th>{{atual.media.contrato | number}}</th>
-                                <th ng-repeat="m in permanencia.media track by $index">{{m | number}}</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">GRAFICO</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--ATUAL-->
+                        <high-chart ng-if="visao == 'atual'" series="atual.grafico" axis-Categories="lotes" type="column"
+                                    plot-Options-Spline-Data-Label="true" plot-Options-Column-Stacking="normal"
+                                    y-Axis1-Min="0" y-Axis1-Max="100"></high-chart>
+                        <!--PERMANENCIA-->
+                        <high-chart ng-if="visao == 'permanencia'" series="permanencia.grafico" axis-Categories="permanencia.coluna" tooltip-Shared="false"></high-chart>
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <!--TABELA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">TABELA</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-if="visao == 'atual'" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="card-header-button" ng-if="visao == 'permanencia'" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--ATUAL-->
+                        <div class="table-responsive" ng-if="visao == 'atual'">
+                            <table class="table table-striped table-bordered" style="width:100%;" ng-if="atual.tabela">
+                                <thead>
+                                    <tr>
+                                        <th>Lote</th>
+                                        <th>Contrato</th>
+                                        <th>%Estoque</th>
+                                        <th>%Discado</th>
+                                        <th>%Contato</th>
+                                        <th>%CPC</th>
+                                        <th>%CPCA</th>
+                                        <th>%Promessa</th>
+                                        <th>Spin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in atual.tabela" data-compare-group="group1">
+                                        <td>{{d.data_lote}}</td>
+                                        <td>{{d.contrato | number}}</td>
+                                        <td>{{d.estoque / d.contrato | percentage:1}}</td>
+                                        <td>{{d.discado / d.contrato | percentage:1}}</td>
+                                        <td>{{d.contato / d.contrato | percentage:1}}</td>
+                                        <td>{{d.cpc / d.contrato | percentage:1}}</td>
+                                        <td>{{d.cpca / d.contrato | percentage:1}}</td>
+                                        <td>{{d.promessa / d.contrato | percentage:1}}</td>
+                                        <td>{{d.discado_tt / d.contrato | number:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Média</th>
+                                        <th>{{atual.media.contrato | number}}</th>
+                                        <th>{{atual.media.estoque / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.discado / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.contato / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.cpc / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.cpca / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.promessa / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.discado_tt / atual.media.contrato | number:1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!--PERMANENCIA-->
+                        <div class="table-responsive" ng-if="visao == 'permanencia'">
+                            <table class="table table-striped table-bordered" style="width:100%;" ng-if="permanencia.tabela">
+                                <thead>
+                                    <tr>
+                                        <th>Lote</th>
+                                        <th>Contrato</th>
+                                        <th ng-repeat="c in permanencia.coluna">{{c}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in permanencia.tabela">
+                                        <td>{{d.data_lote}}</td>
+                                        <td>{{d.contrato | number}}</td>
+                                        <td ng-repeat="c in permanencia.coluna">{{d[c]}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Média</th>
+                                        <th>{{atual.media.contrato | number}}</th>
+                                        <th ng-repeat="m in permanencia.media track by $index">{{m | number}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
-
-    <!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-
-            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                    </div>
-                </div>
-
-                <!--SEGMENTACOES-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Produtos</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
-                </div>
-
-                <!--SEGMENTACOES-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Situação</label>
-                    <select class="form-control" data-placeholder="Selecione" ng-model="filtros.situacao">
-                        <option value="-1">Tudo</option>
-                        <option value="0">Aberto</option>
-                        <option value="1">Fechado</option>                    
-                    </select>
-                </div>
-
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                </div>
-
-            </div>
-            <!-- /.tab-pane -->
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-     immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
-
 </div>
