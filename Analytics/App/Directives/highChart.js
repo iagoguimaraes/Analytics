@@ -5,6 +5,7 @@
         scope: {
             type: '@',
             height: '@',
+            bgcolor: '@',
             series: '=',
             titleText: '@',
             axisCategories: '=',
@@ -29,7 +30,8 @@
                 Highcharts.chart(element[0], {
                     chart: {
                         type: scope.type,
-                        height: scope.height
+                        height: scope.height,
+                        backgroundColor: scope.bgcolor
                     },
                     series: scope.series,
                     title: {
