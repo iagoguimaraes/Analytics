@@ -398,6 +398,8 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard = r;
+                $scope.dashboard.dados = r.data;
+
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
                 $scope.dashboard.horas = r.data.Table5.map(obj => obj.hora);
                 $scope.dashboard.grafico = [{ name: 'promessa', data: r.data.Table5.map(obj => obj.promessa) }];
