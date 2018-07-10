@@ -5,8 +5,68 @@
 
 <div ng-controller="ctrl-vivo-respostasms">
 
-    <!--FILTROS-->
-    <div class="row">
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Resposta SMS</div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+            <i class="fa fa-filter"></i>
+            FILTROS
+        </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="extrair('Table')">
+            <i class="fa fa-file-excel-o"></i>
+            EXTRAIR
+        </div>
+    </header>
+
+    <!-- FILTROS -->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div id="filtros-window" class="card display-none">
+                <div class="card-header">
+                    <span class="card-header-title">Filtros</span>
+                    <div class="card-header-button card-header-close">
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--FILTROS 2-->
+    <div class="row margin-bottom">
         <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.tabulacao">
             <label class="control-sidebar-subheading">Tabulações</label>
             <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tabulacao" dados="dashboard.dimensao.tabulacao" ng-change="aplicarFiltros()"></select22>
@@ -37,11 +97,22 @@
             <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.adimplente" dados="dashboard.dimensao.adimplente" ng-change="aplicarFiltros()"></select22>
         </div>
     </div>
-   
+
+
     <!--TABULACAO-->
     <div class="col-xs-12 col-md-8">
-        <h3 class="text-center">Tabulação</h3>
-        <high-chart series="dashboard.tabulacao" axis-Categories="dimensao.tabulacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Tabulação</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.tabulacao" axis-Categories="dimensao.tabulacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
+
     </div>
 
     <!--ADIMPLENTE-->
@@ -86,59 +157,10 @@
         <high-chart series="dashboard.carteira" axis-Categories="dimensao.carteira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
     </div>
 
-    <!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                    </div>
-                </div>
-
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                </div>
-
-            </div>
-            <!-- /.tab-pane -->
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
-
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-vivo-respostasms', function ($scope, $http, $filter, dadosPagina, cubo) {
-        dadosPagina.titulo = 'Respostas SMS';
-        dadosPagina.descricao = 'Vivo'
-
+    angular.module('app').controller('ctrl-vivo-respostasms', function ($scope, $http, $filter, cubo) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -157,6 +179,7 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.status;
                 cubo.carregar(r.data.Table);
                 $scope.popularDashboard();
                 $scope.popularFiltros();
@@ -226,6 +249,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>
