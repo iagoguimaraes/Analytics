@@ -120,86 +120,82 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row margin-bottom"">
             <div class="col-xs-12 col-md-6">
-                <h4 class="text-center">Pagamento por Produto</h4>
-                <high-chart series="dashboard.produtoPgto" type="pie"></high-chart>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Pagamento por Produto</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('PagamentoProduto','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.produtoPgto" type="pie"></high-chart>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-md-6">
-                <h4 class="text-center">Efetividade por Produto</h4>
-                <high-chart series="dashboard.produtoEftv" axis-Categories="dashboard.produtos" type="bar" plot-Options-Bar-Data-Label="true"></high-chart>
+            <div class="col-xs-12 col-md-6">               
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por Produto</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('EfetividadeProduto','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.produtoEftv" axis-Categories="dashboard.produtos" type="bar" plot-Options-Bar-Data-Label="true"></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <h4 class="text-center">Pagamento por Dia</h4>
-                <high-chart series="dashboard.diaPgto" axis-Categories="dashboard.dias" type="line" axis-></high-chart>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Pagamento por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('PagamentoDia','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.diaPgto" axis-Categories="dashboard.dias" type="line" axis-></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row margin-bottom"">
             <div class="col-xs-12">
-                <h4 class="text-center">Efetividade por Dia</h4>
-                <high-chart series="dashboard.diaProm" axis-Categories="dashboard.dias" type="column"
-                            plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
-                            y-Axis1-Max="100"></high-chart>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('EfetividadeDia','Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.diaProm" axis-Categories="dashboard.dias" type="column"
+                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
-
-    @*<!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashFiltros.status === 200">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                    </div>
-                </div>
-
-                <!--FILAS-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Produtos</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
-                </div>
-
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                </div>
-
-            </div>
-            <!-- /.tab-pane -->
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>*@
 
 </div>
 
@@ -240,6 +236,7 @@
             }).then(function success(r) {
                 let data = r.data;
                 $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.dias = data.Table.map(o => o.data);
                 $scope.dashboard.produtos = data.Table1.map(o => o.produto);
@@ -260,6 +257,11 @@
         }
 
         $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>
