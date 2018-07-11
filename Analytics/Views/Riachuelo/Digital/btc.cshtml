@@ -5,7 +5,7 @@
 
 <div ng-controller="ctrl-riachuelo-btc">
 
-    <div ng-if="dashboard.r.status === 200">
+    <div ng-if="dashboard.status === 200">
 
         <!-- HEADER-->
         <header class="page-header">
@@ -294,7 +294,7 @@
                         data: $scope.filtros,
                     }).then(function success(r) {
                         $scope.dashboard.r = r;
-
+                        $scope.dashboard.status = r.status;
                         $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_descricao);
                         $scope.dashboard.rotas = r.data.Table2.map(obj => obj.rota);
                         $scope.dashboard.tipos = r.data.Table3.map(obj => obj.tipo_telefone);

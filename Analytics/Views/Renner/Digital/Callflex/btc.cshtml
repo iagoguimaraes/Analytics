@@ -4,122 +4,228 @@
 
 <div ng-controller="ctrl-renner-btc">
 
-    <div ng-if="dashboard.r.status === 200">
+    <div ng-if="dashboard.status === 200">
 
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <h3 class="text-center">Análise por Hora</h3>
-                <high-chart series="dashboard.hitratePorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
-                <high-chart series="dashboard.txlocPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
-                <high-chart series="dashboard.conversaoPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">BTC</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
             </div>
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <h3>
-                    Análise por Região
-                    <small class="pull-right">
-                        <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                            <option value="hitrate">Hit Rate</option>
-                            <option value="txloc">Tx Loc</option>
-                            <option value="txapv">Tx Apv</option>
-                            <option value="conversao">Conversão</option>
-                            <option value="discado">Discado</option>
-                            <option value="contato">Contato</option>
-                            <option value="cpc">CPC</option>
-                            <option value="cpca">CPCA</option>
-                            <option value="promessa">Promessa</option>
-                        </select>
-                    </small>
-                </h3>
-                <mapa-brasil style="height: 600px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+
+            <div class="col-xs-12" >
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--PRODUTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Produto</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Volume por Rota</h4>
-                <high-chart series="dashboard.quantidadePorRota" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+
+            <!-- ANALISE HORA -->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('AnaliseHora','Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.hitratePorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                        <high-chart series="dashboard.txlocPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                        <high-chart series="dashboard.conversaoPorHora" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Hit Rate por Rota</h4>
-                <high-chart series="dashboard.hitratePorRota" axis-Categories="dashboard.rotas" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+
+            <!-- ANALISE REGIAO -->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Região</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Regiao','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <h4>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                                <option value="discado">Discado</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                            </select>
+                        </small>
+                    </h4>
+                    <div class="card-body">
+                        <mapa-brasil style="height: 600px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Tx Loc por Rota</h4>
-                <high-chart series="dashboard.txlocPorRota" axis-Categories="dashboard.rotas" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
-            </div>
+
         </div>
 
+
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Volume por Tipo de Telefone</h4>
-                <high-chart series="dashboard.quantidadePorTel" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+
+            <!-- ROTA -->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Volume por Rota</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.quantidadePorRota" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Hit Rate por Tipo de Telefone</h4>
-                <high-chart series="dashboard.hitratePorTel" axis-Categories="dashboard.tipos" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Hit Rate por Rota</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.hitratePorRota" axis-Categories="dashboard.rotas" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-md-4">
-                <h4 class="text-center">Tx Loc por Tipo de Telefone</h4>
-                <high-chart series="dashboard.txlocPorTel" axis-Categories="dashboard.tipos" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tx Loc por Rota</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.txlocPorRota" axis-Categories="dashboard.rotas" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+                    </div>
+                </div>
             </div>
+
+
+        </div>
+
+        <!-- TIPO TEL -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Volume por Tipo de Telefone</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.quantidadePorTel" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Hit Rate por Tipo de Telefone</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.hitratePorTel" axis-Categories="dashboard.tipos" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tx Loc por Tipo de Telefone</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.txlocPorTel" axis-Categories="dashboard.tipos" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
-
-
-
-    <!-- SIDE BAR CONTROL -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <!-- Filtros -->
-            <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
-                <!--DATA INCIAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Inicial</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                    </div>
-                </div>
-
-                <!--DATA FINAL-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Data Final</label>
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                    </div>
-                </div>
-
-                <!--PRODUTOS-->
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">Produtos</label>
-                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashboardFiltros.data.Table"></select2>
-                </div>
-
-                <!--BOTÃO-->
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDados()">Carregar Dados</button>
-                </div>
-
-            </div>
-            <!-- /.tab-pane -->
-
-        </div>
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
 
 
 </div>
@@ -144,13 +250,19 @@
             produtos: null,
         };
 
+        $scope.dashFiltros = {
+
+        };
+
         // carrega os filtros e colocar no scope
         $scope.carregarFiltros = function () {
             $http({
                 method: 'GET',
                 url: "/api/renner/dashboard/filtros",
             }).then(function success(r) {
-                $scope.dashboardFiltros = r;
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.produtos = r.data.Table;
+                
             });
         }
 
@@ -163,6 +275,8 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.r = r;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_nome);
                 $scope.dashboard.rotas = r.data.Table2.map(obj => obj.rota);
@@ -205,6 +319,12 @@
                     $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
             }
         }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
 
         $scope.carregarFiltros();
         $scope.carregarDados();
