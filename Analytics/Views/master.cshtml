@@ -76,7 +76,7 @@
         <div class="row main-credorlist">
 
             <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="c in credores" ng-click="acessarCredor(c)">
-                <div class="main-credor-item" ng-style="{'background-color': c.cor_primaria, 'color': c.cor_fonte_primaria}">
+                <div class="main-credor-item">
                     <img ng-src="{{c.logo}}" />
                     <div>{{c.nome}}</div>
                 </div>
@@ -137,7 +137,7 @@
             $scope.paginas = r.data.Table1;
 
             // setar credor atual
-            let pagina = $scope.paginas.filter(p => p.url == window.location.pathname)[0];
+            let pagina = $scope.paginas.filter(p => p.url == decodeURI(window.location.pathname))[0];
             if (pagina != undefined) {
                 let credor = $scope.credores.filter(c => c.id_credor == pagina.id_credor)[0];
                 $scope.alterarMenu(credor);
@@ -148,8 +148,7 @@
             $scope.credor = c;
             let menu = $scope.paginas.filter(p => p.id_credor == c.id_credor);
             $scope.menu = formatarMenu(menu);
-            document.body.classList.remove("credorwindow-opened");
-
+            document.body.classList.remove("credorwindow-opened");           
         };
 
         $scope.acessarCredor = function (c) {
