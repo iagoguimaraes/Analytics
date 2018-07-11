@@ -55,7 +55,7 @@
                         <!--PRODUTOS-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Produtos</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -265,6 +265,7 @@
                     data: $scope.filtros,
                 }).then(function success(r) {
                     $scope.dashboard.status = r.status;
+                    $scope.dashboard.dados = r.data;
 
                     $scope.dashboard.resumo = r.data.Table[0];
                     $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.segmentacao, y: obj.mediaAtivo })) }];
