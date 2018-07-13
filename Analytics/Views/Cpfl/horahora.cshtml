@@ -6,6 +6,61 @@
 <div ng-controller="ctrl-cpfl-horahora">
     <div ng-if="dashboard.status == 200">
 
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini" style="width:100%"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
             <div class="widget-user-header bg-black" style="background: url('/Content/Images/Cpfl/cpfl-banner.jpg') center center;">
@@ -47,13 +102,13 @@
                     </div>
                 </div>
 
-                <div class="row bg-blue-gradient"> 
+                <div class="row bg-blue-gradient" style="background-color:#00bbcc; color:white">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number: 1 "></h5>
                             <span class="description-text">Esforço</span>
                         </div>
-                    </div>                 
+                    </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
@@ -90,14 +145,19 @@
         </div>
 
         <!-- TABELA HORA HORA-->
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <div class="box box-primary" style="border-top-color: #ff0000">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Análise por Hora</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
-                    <div class="box-body">
-
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
                                 <thead>
@@ -154,14 +214,19 @@
         </div>
 
         <!--TABELA CARTEIRA-->
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <div class="box box-primary" style="border-top-color: #007cc7">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Análise por Carteira</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
-                    <div class="box-body">
-
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
                                 <thead>
@@ -225,137 +290,111 @@
         <!--GRAFICO POR HORA-->
         <div class="row">
             <div class="col-xs-12">
-                <h3 class="box-title">
-                    Gráfico por Hora
-                    <small class="pull-right">
-                        <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                            <option value="hitrate">Hit Rate</option>
-                            <option value="txloc">Tx Loc</option>
-                            <option value="txapv">Tx Apv</option>
-                            <option value="conversao">Conversão</option>
-                            <option value="discado">Discado</option>
-                            <option value="contato">Contato</option>
-                            <option value="cpc">CPC</option>
-                            <option value="cpca">CPCA</option>
-                            <option value="promessa">Promessa</option>
-                            <option value="ticket_medio">Ticket Médio Promessa</option>
-                        </select>
-                    </small>
-                </h3>
-                <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                                <option value="discado">Discado</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="ticket_medio">Ticket Médio Promessa</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- SIDE BAR CONTROL -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Create the tabs -->
-            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab"><i class="fa fa-filter"></i></a></li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <!-- Filtros -->
-                <div class="tab-pane active" id="control-sidebar-filters-tab">
-
-                    <!--DATA INCIAL-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Data Inicial</label>
-                        <div class="input-group date">
-                            <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                        </div>
-                    </div>
-                    
-                    <!--CARTEIRA-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Carteira</label>
-                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteiras"></select2>
-                    </div>
-
-                    <!--BOTÃO-->
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                    </div>
-
-                </div>
-                <!-- /.tab-pane -->
-            </div>
-        </aside>
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
-
     </div>
 </div>
-<script>
-    angular.module('app').controller('ctrl-cpfl-horahora', function ($scope, $http, $filter, dadosPagina) {
-        dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'CPFL'
-        $scope.showTbody = false;
 
-        $scope.dashboard = {};
-        $scope.dashFiltros = {};
-        $scope.filtros = {
-            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),      
-            carteira: '',
-        }
-        $scope.grafico = { indicador: 'promessa' };
+    <script>
+        angular.module('app').controller('ctrl-cpfl-horahora', function ($scope, $http, $filter, dadosPagina) {
+            dadosPagina.titulo = 'Hora Hora';
+            dadosPagina.descricao = 'CPFL'
+            $scope.showTbody = false;
 
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/cpfl/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            $scope.dados = r.status;
-            $scope.dashFiltros.carteiras = r.data.Table;
-        });
-        // obtem filtros do escopo e carrega os dados do dashboard
-        $scope.carregarDashboard = function () {
+            $scope.dashboard = {};
+            $scope.dashFiltros = {};
+            $scope.filtros = {
+                dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+                carteira: '',
+            }
+            $scope.grafico = { indicador: 'promessa' };
+
+            // carregar os filtros
             $http({
-                method: 'POST',
-                url: "/api/cpfl/dashboard/horahora",
+                method: 'GET',
+                url: "/api/cpfl/dashboard/filtros",
                 data: $scope.filtros,
             }).then(function success(r) {
-                $scope.dashboard.status = r.status;
-
-                $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.horahora = r.data.Table1;
-                $scope.dashboard.carteira = r.data.Table2;
-
-                $scope.carregarGrafico();
+                $scope.dados = r.status;
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.carteiras = r.data.Table;
             });
-        }
+            // obtem filtros do escopo e carrega os dados do dashboard
+            $scope.carregarDashboard = function () {
+                $http({
+                    method: 'POST',
+                    url: "/api/cpfl/dashboard/horahora",
+                    data: $scope.filtros,
+                }).then(function success(r) {
+                    $scope.dashboard.status = r.status;
+                    $scope.dashboard.dados = r.data;
+                    $scope.dashboard.resumo = r.data.Table[0];
+                    $scope.dashboard.horahora = r.data.Table1;
+                    $scope.dashboard.carteira = r.data.Table2;
 
-        // carrega o grafico de acordo com o indicador escolhido
-        $scope.carregarGrafico = function () {
-            let dados = $scope.dashboard.horahora;
-            $scope.dashboard.horas = dados.map(obj => obj.hora);
-            switch ($scope.grafico.indicador) {
-                case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
-                    break;
-                case 'txloc':
-                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
-                    break;
-                case 'txapv':
-                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
-                    break;
-                case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;
-                default:
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+                    $scope.carregarGrafico();
+                });
             }
 
-        }
+            // carrega o grafico de acordo com o indicador escolhido
+            $scope.carregarGrafico = function () {
+                let dados = $scope.dashboard.horahora;
+                $scope.dashboard.horas = dados.map(obj => obj.hora);
+                switch ($scope.grafico.indicador) {
+                    case 'hitrate':
+                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                        break;
+                    case 'txloc':
+                        $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                        break;
+                    case 'txapv':
+                        $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                        break;
+                    case 'conversao':
+                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                        break;
+                    default:
+                        $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+                }
 
-        $scope.carregarDashboard();
+            }
 
-    });
+            // extrair dados para excel
+            $scope.extrair = function (tabela) {
+                alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+            }
 
-</script>
+            $scope.carregarDashboard();
+
+        });
+
+    </script>
 
