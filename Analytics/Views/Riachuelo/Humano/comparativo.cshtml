@@ -15,129 +15,128 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
-
-
-            <div id="filtros-window" class="card display-none">
-
-                <div class="card-header">
-                    <span class="card-header-title">Filtros</span>
-                    <div class="card-header-button card-header-close">
-                        <i class="fa fa-close"></i>
-                    </div>
-                    <div class="card-header-button card-header-expand">
-                        <i class="fa fa-expand"></i>
-                    </div>
-                </div>
-                <div class="card-body">
-
-
-
-                    <!-- Create the tabs -->
-                    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                        <li class="active"><a data-target="#control-sidebar-filters-tab" data-toggle="tab">Período 1</a></li>
-                        <li><a data-target="#control-sidebar-filters2-tab" data-toggle="tab">Período 2</a></li>
-                    </ul>
-
-                    <!-- PERIODO 1 -->
-                    <div class="tab-pane active" id="control-sidebar-filters-tab">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                            </div>
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
                         </div>
-
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--EMPRESA 1-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Empresas</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
-                        </div>
-
-                        <!--CARTEIRA 1-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteiras</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
-                        </div>
-
-                        <!--VISÃO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Visão</label>
-                            <select class="form-control" ng-model="filtros.visao">
-                                <option value="hora" selected="selected">Hora</option>
-                                <option value="dia">Dia do Mês</option>
-                                <option value="dia_semana">Dia da Semana</option>
-                                <option value="semana">Semana do Mês</option>
-                                <option value="mes">Mês do Ano</option>
-                            </select>
-                        </div>
-
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
-                        </div>
-
-                    </div>
-
-                    <!-- PERIODO 2 -->
-                    <div class="tab-pane" id="control-sidebar-filters2-tab">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini_2"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim_2"></date-picker>
-                            </div>
-                        </div>
-
-                        <!--EMPRESA 2-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Empresas</label>
-                            <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresas_2" dados="dashFiltros.empresas_2"></select2>
-                        </div>
-
-                        <!--CARTEIRA 2-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteiras</label>
-                            <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteiras_2" dados="dashFiltros.carteiras_2"></select2>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="row">
 
+                            <!-- PERIODO 1 -->
+                            <div class="col-xs-12 col-sm-6">
+                                <fieldset>
+                                    <legend>Periodo 1</legend>
+
+                                    <!--DATA INCIAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Inicial</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                        </div>
+                                    </div>
+
+                                    <!--DATA FINAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Final</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                        </div>
+                                    </div>
+
+                                    <!--EMPRESA 1-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Empresas</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--CARTEIRA 1-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Carteiras</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+
+                            <!-- PERIODO 2 -->
+                            <div class="col-xs-12 col-sm-6">
+                                <fieldset>
+                                    <legend>Periodo 2</legend>
+
+                                    <!--DATA INCIAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Inicial</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini_2"></date-picker>
+                                        </div>
+                                    </div>
+
+                                    <!--DATA FINAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Final</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim_2"></date-picker>
+                                        </div>
+                                    </div>
+
+                                    <!--EMPRESA 2-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Empresas</label>
+                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresas_2" dados="dashFiltros.empresas_2"></select2>
+                                    </div>
+
+                                    <!--CARTEIRA 2-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Carteiras</label>
+                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteiras_2" dados="dashFiltros.carteiras_2"></select2>
+                                    </div>
+
+                                    <!--VISÃO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Visão</label>
+                                        <select class="form-control" ng-model="filtros.visao">
+                                            <option value="hora" selected="selected">Hora</option>
+                                            <option value="dia">Dia do Mês</option>
+                                            <option value="dia_semana">Dia da Semana</option>
+                                            <option value="semana">Semana do Mês</option>
+                                            <option value="mes">Mês do Ano</option>
+                                        </select>
+                                    </div>
+
+                                    <!--BOTÃO-->
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-            <!--GRAFICO-->
+       <!--GRAFICO-->
         <div class="row margin-bottom" id="grafico">
             <div class="col-xs-12">
                 <div class="card">
