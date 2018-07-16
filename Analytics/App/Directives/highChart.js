@@ -6,6 +6,11 @@
             type: '@',
             height: '@',
             series: '=',
+            bgcolor: '@',
+            gridLineColorX: '@',
+            gridLineColorY: '@',
+            colorCatX: '@',
+            sizeCatX: '@',
             titleText: '@',
             axisCategories: '=',
             axis1Categories: '=',
@@ -29,7 +34,8 @@
                 Highcharts.chart(element[0], {
                     chart: {
                         type: scope.type,
-                        height: scope.height
+                        height: scope.height,
+                        backgroundColor: scope.bgcolor,
                     },
                     series: scope.series,
                     title: {
@@ -38,14 +44,18 @@
                     xAxis: [
                         {
                             categories: scope.axisCategories,
+                            gridLineColor: scope.gridLineColorX,
                         },
                         {
                             categories: scope.axis1Categories,
+                            gridLineColor: scope.gridLineColorX,
                             opposite: true
                         }
                     ],
                     yAxis: [
                         {
+                            gridLineColor: scope.gridLineColorY,
+
                             title: {
                                 text: scope.yAxisTitle
                             },
