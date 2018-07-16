@@ -5,6 +5,8 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: Poppins,sans-serif;
+    height: 100%;
+    width: 100%;
 }
 
 .main-background {
@@ -42,9 +44,10 @@ html, body {
 }
 
 .main-container {
-    height: auto;
+    min-height: 100%;
     width: 100%;
     display: flex;
+    margin: 0 -10px;
 }
 
 .main-menu {
@@ -52,23 +55,8 @@ html, body {
     width: 260px;
     border-right: 1px solid #eaeaea;
     animation: go-right 0.5s;
-    flex: 1;
+    margin: 0 10px;
 }
-
-.main-wrapper {
-    position: relative;
-    width: 100%;
-    padding: 0 20px 20px 20px;
-}
-
-.main-footer {
-    background: #fff;
-    padding: 15px;
-    color: #444;
-    border-top: 1px solid #d2d6de;
-    clear: both;
-}
-
 
 /* MENU */
 .main-menu-button {
@@ -205,24 +193,38 @@ body.menu-opened .main-menu {
     }
 
 /* WRAPPER */
+.main-wrapper {
+    position: relative;
+    width: 100%;
+    padding: 0 20px 20px 20px;
+    margin: 0 10px;
+}
+
 body.menu-opened .main-wrapper {
     width: calc(100% - 260px);
 }
 
+/* MAIN NAV */
 
-/* CREDOR WINDOW */
-body.credorwindow-opened {
-    overflow-y: hidden;
+.main-nav {
+    float: right;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    text-align: center;
+    margin-right: 20px;
 }
 
-@keyframes go-left {
-    0% {
-        transform: translate(100%,0);
-    }
+/* CREDOR WINDOW */
+body.credorwindow-opened .main-wrapper {
+    display: none;
+}
 
-    100% {
-        transform: translate(0,0);
-    }
+.main-credorwindow {
+    position: relative;
+    width: 100%;
+    display: none;
+    margin: 0 10px;
 }
 
 .main-credorwindow-button {
@@ -240,25 +242,16 @@ body.credorwindow-opened {
 
 body.credorwindow-opened .main-credorwindow {
     display: block;
-    animation: go-left 0.5s;
 }
 
-.main-credorwindow {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: 9999;
-    background: url(/Content/Images/CreditCash/1523011-geometry-wallpaper.png); 
-    display: none;
-    overflow-y: scroll;
+body.menu-opened .main-credorwindow {
+    width: calc(100% - 260px);
 }
 
 .main-credorlist {
-    margin-top: 55px;
-    padding-bottom: 30px;
     width: 100%;
     height: 100%;
-    padding: 0 30px 0 30px;
+    padding: 20px 0 20px 50px;
 }
 
 .main-credor-item {

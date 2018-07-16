@@ -68,22 +68,7 @@
 </head>
 <body class="menu-opened" ng-app="app" ng-controller="ctrl-master">
 
-    <!--CREDOR WINDOW-->
-    <div class="main-credorwindow">
-        <div class="main-credorwindow-button cursor-pointer" onclick="toggleCredorWindow()">
-            <i class="fa fa-close"></i>
-        </div>
-        <div class="row main-credorlist">
 
-            <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="c in credores" ng-click="acessarCredor(c)">
-                <div class="main-credor-item">
-                    <img ng-src="{{c.logo}}" />
-                    <div>{{c.nome}}</div>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     <!--BACKGROUND-->
     <div class="main-background" ng-style="{'background': credor.background}"></div>
@@ -96,8 +81,14 @@
         </div>
         <div class="main-logo" ng-style="{'background-image': 'url('+ credor.logo + ')'}"></div>
         <div class="main-title" ng-style="{'color': credor.cor_fonte_primaria}" ng-bind="credor.nome"></div>
-        <div class="main-credorwindow-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" onclick="toggleCredorWindow()">
+        <div class="main-credorwindow-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" onclick="openCredorWindow()">
             <i class="fa fa-th"></i>
+        </div>
+        <div class="main-nav cursor-pointer">
+            <a href="/Login.html" onclick="return confirm('Deseja Sair?')"><i  ng-style="{'color': credor.cor_fonte_primaria}" class="fa fa-power-off"></i></a>
+        </div>
+        <div class="main-nav cursor-pointer">
+            <a href="/Views/Home/home.cshtml"><i ng-style="{'color': credor.cor_fonte_primaria}" class="fa fa-home"></i></a>
         </div>
     </div>
 
@@ -109,6 +100,19 @@
             <ul class="nav metismenu">
                 <li ng-if="menu.subpath" ng-repeat="item in menu.subpath" ng-include="'/Views/menuitem.html'" ng-class="{'nav-dropdown active': item.subpath}"></li>
             </ul>
+        </div>
+
+        <!--CREDOR WINDOW-->
+        <div class="main-credorwindow">
+            <div class="row main-credorlist">
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="c in credores" ng-click="acessarCredor(c)">
+                    <div class="main-credor-item">
+                        <img ng-src="{{c.logo}}" />
+                        <div>{{c.nome}}</div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <!--WRAPPER-->
@@ -148,12 +152,12 @@
             $scope.credor = c;
             let menu = $scope.paginas.filter(p => p.id_credor == c.id_credor);
             $scope.menu = formatarMenu(menu);
-            document.body.classList.remove("credorwindow-opened");           
+            
         };
 
         $scope.acessarCredor = function (c) {
             if (c.paginas > 0) {
-                window.location.href = c.pagina_inicial;
+                $scope.alterarMenu(c);               
             }
             else {
                 swal("Você não possui acesso a essa empresa");
@@ -208,8 +212,8 @@
         window.dispatchEvent(new Event('resize'));
     }
 
-    function toggleCredorWindow() {
-        document.body.classList.toggle("credorwindow-opened");
+    function openCredorWindow() {
+        document.body.classList.add("credorwindow-opened");
     }
 
     $('.metismenu').on('click', '.nav-dropdown a', function () {
