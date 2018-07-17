@@ -73,48 +73,57 @@
             </div>
         </div>
 
+        <!--RESUMO E MEDIA CARTEIRA-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6 margin-bottom">
 
-                <h3 class="text-center">Inclusão, Devoluçaõ e Carteira Ativa</h3>
-
-                <div class="info-box bg-green">
-                    <span class="info-box-icon"><i class="fa fa-plus-square"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Inclusão</span>
-                        <span class="info-box-number">{{dashboard.resumo.inclusao | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.vlInclusao | currency:'R$'}}
-                        </span>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Inclusão, Devolução e Carteira Ativa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
+                    <div class="card-body">
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="fa fa-plus-square"></i></span>
 
-                <div class="info-box bg-yellow">
-                    <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Inclusão</span>
+                                <span class="info-box-number">{{dashboard.resumo.inclusao | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.vlInclusao | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">Devolução</span>
-                        <span class="info-box-number">{{dashboard.resumo.devolucao | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.vlDevolucao | currency:'R$'}}
-                        </span>
+                        <div class="info-box bg-yellow">
+                            <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Devolução</span>
+                                <span class="info-box-number">{{dashboard.resumo.devolucao | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.vlDevolucao | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-red">
+                            <span class="info-box-icon"><i class="fa fa-archive"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Média de Carteira Ativa</span>
+                                <span class="info-box-number">{{dashboard.resumo.ativo | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.vlAtivo | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
-
-                <div class="info-box bg-red">
-                    <span class="info-box-icon"><i class="fa fa-archive"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Média de Carteira Ativa</span>
-                        <span class="info-box-number">{{dashboard.resumo.ativo | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.vlAtivo | currency:'R$'}}
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
                 </div>
             </div>
 
@@ -136,59 +145,40 @@
             </div>
         </div>
 
+        <!--GRAFICO POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <h3 class="box-title">
-                    Gráfico por Dia
-                    <small class="pull-right">
-                        <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                            <option value="inclusao">Inclusão</option>
-                            <option value="devolucao">Devolução</option>
-                            <option value="ativo">Ativo</option>
-                        </select>
-                    </small>
-                </h3>  
+            <div class="col-xs-12 margin-bottom"> 
                 <div class="card">
                     <div class="card-header">
+                        <span class="card-header-title">Gráfico por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('VolumeDia','Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficoQtd" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12">
-                
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
                         <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
                     </div>
                 </div>
-            </div>
+            </div>         
         </div>
 
-
-
     </div>
-
 </div>
 
 <script>
 
-    angular.module('app').controller('ctrl-renner-carteira', function ($scope, $http, $filter, $interval, dadosPagina) {
-        dadosPagina.titulo = 'Carteira';
-        dadosPagina.descricao = 'Renner'
-
+    angular.module('app').controller('ctrl-renner-carteira', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);

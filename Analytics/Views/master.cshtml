@@ -15,7 +15,7 @@
     <link href="/Content/Styles/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="/Content/Styles/select2.min.css" rel="stylesheet" />
     <link href="/Content/Styles/datatables.min.css" rel="stylesheet" />
-    <link href="/Content/Styles/app.css" rel="stylesheet" />
+    <link href="/Content/Styles/app.css?3" rel="stylesheet" />
 
     <!--SCRIPTS-->
     <script src="/Content/Scripts/jquery.min.js"></script>
@@ -81,7 +81,7 @@
         </div>
         <div class="main-logo" ng-style="{'background-image': 'url('+ credor.logo + ')'}"></div>
         <div class="main-title" ng-style="{'color': credor.cor_fonte_primaria}" ng-bind="credor.nome"></div>
-        <div class="main-credorwindow-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" onclick="openCredorWindow()">
+        <div class="main-credorwindow-button cursor-pointer" ng-style="{'background-color': credor.cor_secundaria, 'color': credor.cor_fonte_secundaria}" ng-click="toggleCredorWindow()">
             <i class="fa fa-th"></i>
         </div>
         <div class="main-nav cursor-pointer">
@@ -104,14 +104,15 @@
 
         <!--CREDOR WINDOW-->
         <div class="main-credorwindow">
-            <div class="row main-credorlist">
-                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="c in credores" ng-click="acessarCredor(c)">
-                    <div class="main-credor-item">
-                        <img ng-src="{{c.logo}}" />
-                        <div>{{c.nome}}</div>
+            <div class="main-credorlist">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-lg-4" ng-repeat="c in credores" ng-click="acessarCredor(c)">
+                        <div class="main-credor-item">
+                            <img ng-src="{{c.logo}}" />
+                            <div>{{c.nome}}</div>
+                        </div>
                     </div>
-                </div>
-
+                </div>                
             </div>
         </div>
 
@@ -164,6 +165,21 @@
             }
         }
 
+        $scope.toggleCredorWindow = function() {
+            if (document.body.classList.contains('credorwindow-opened')) {
+                document.body.classList.remove("credorwindow-opened");
+                // setar credor atual
+                let pagina = $scope.paginas.filter(p => p.url == decodeURI(window.location.pathname))[0];
+                if (pagina != undefined) {
+                    let credor = $scope.credores.filter(c => c.id_credor == pagina.id_credor)[0];
+                    $scope.alterarMenu(credor);
+                }
+            }
+            else {
+                document.body.classList.add("credorwindow-opened");
+            }
+        }
+
         // formata o menu hierarquicamente para usar no ng-repeat
         function formatarMenu(paginas) {
             // inicializa o menu formatado
@@ -210,10 +226,6 @@
     function toggleMenu() {
         document.body.classList.toggle("menu-opened");
         window.dispatchEvent(new Event('resize'));
-    }
-
-    function openCredorWindow() {
-        document.body.classList.add("credorwindow-opened");
     }
 
     $('.metismenu').on('click', '.nav-dropdown a', function () {

@@ -66,41 +66,52 @@
     </div>
 
     <!--FILTROS 2-->
-    <div class="row margin-bottom">
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.tabulacao">
-            <label class="control-sidebar-subheading">Tabulações</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tabulacao" dados="dashboard.dimensao.tabulacao" ng-change="aplicarFiltros()"></select22>
-        </div>
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Filtros</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.tabulacao">
+                        <label class="control-sidebar-subheading">Tabulações</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tabulacao" dados="dashboard.dimensao.tabulacao" ng-change="aplicarFiltros()"></select22>
+                    </div>
 
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.agencia">
-            <label class="control-sidebar-subheading">Agencia</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.agencia" dados="dashboard.dimensao.agencia" ng-change="aplicarFiltros()"></select22>
-        </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.agencia">
+                        <label class="control-sidebar-subheading">Agencia</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.agencia" dados="dashboard.dimensao.agencia" ng-change="aplicarFiltros()"></select22>
+                    </div>
 
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.operacao">
-            <label class="control-sidebar-subheading">Operação</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operacao" dados="dashboard.dimensao.operacao" ng-change="aplicarFiltros()"></select22>
-        </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.operacao">
+                        <label class="control-sidebar-subheading">Operação</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operacao" dados="dashboard.dimensao.operacao" ng-change="aplicarFiltros()"></select22>
+                    </div>
 
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.produto">
-            <label class="control-sidebar-subheading">Produto</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.produto" dados="dashboard.dimensao.produto" ng-change="aplicarFiltros()"></select22>
-        </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.produto">
+                        <label class="control-sidebar-subheading">Produto</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.produto" dados="dashboard.dimensao.produto" ng-change="aplicarFiltros()"></select22>
+                    </div>
 
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.carteira">
-            <label class="control-sidebar-subheading">Carteira</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
-        </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.carteira">
+                        <label class="control-sidebar-subheading">Carteira</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
+                    </div>
 
-        <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.adimplente">
-            <label class="control-sidebar-subheading">Adimplente</label>
-            <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.adimplente" dados="dashboard.dimensao.adimplente" ng-change="aplicarFiltros()"></select22>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.adimplente">
+                        <label class="control-sidebar-subheading">Adimplente</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.adimplente" dados="dashboard.dimensao.adimplente" ng-change="aplicarFiltros()"></select22>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-
     <!--TABULACAO-->
-    <div class="col-xs-12 col-md-8">
+    <div class="col-xs-12 col-md-8 margin-bottom">
         <div class="card">
             <div class="card-header">
                 <span class="card-header-title">Tabulação</span>
@@ -112,49 +123,111 @@
                 <high-chart series="dashboard.tabulacao" axis-Categories="dimensao.tabulacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
             </div>
         </div>
-
     </div>
 
     <!--ADIMPLENTE-->
-    <div class="col-xs-12 col-md-4">
-        <h3 class="text-center">Adimplente x Inadimplente</h3>
-        <high-chart series="dashboard.adimplente" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+    <div class="col-xs-12 col-md-4 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Adimplente x Inadimplente</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.adimplente" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
     </div>
 
     <!--AGENCIA-->
-    <div class="col-xs-12 col-md-6">
-        <h3 class="text-center">Agencias</h3>
-        <high-chart series="dashboard.agencia" axis-Categories="dimensao.agencia" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+    <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Agencias</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.agencia" axis-Categories="dimensao.agencia" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+        </div>
     </div>
 
     <!--LOCALIZACAO-->
-    <div class="col-xs-12 col-md-6">
-        <h3 class="text-center">Localização</h3>
-        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+    <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Localização</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+            </div>
+        </div>
     </div>
 
     <!--POR DIA-->
-    <div class="col-xs-12">
-        <h3 class="text-center">Respostas por Dia</h3>
-        <high-chart series="dashboard.data" axis-Categories="dimensao.data" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Respostas por Dia</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.data" axis-Categories="dimensao.data" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+            </div>
+        </div>
     </div>
 
     <!--OPERACAO-->
-    <div class="col-xs-12 col-md-3">
-        <h3 class="text-center">Operacao</h3>
-        <high-chart series="dashboard.operacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+    <div class="col-xs-12 col-md-4 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Operacao</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.operacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
     </div>
 
     <!--PRODUTO-->
-    <div class="col-xs-12 col-md-3">
-        <h3 class="text-center">Produto</h3>
-        <high-chart series="dashboard.produto" axis-Categories="dimensao.produto" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+    <div class="col-xs-12 col-md-8 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Produto</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.produto" axis-Categories="dimensao.produto" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+            </div>
+        </div>
     </div>
 
     <!--CARTEIRA-->
-    <div class="col-xs-12 col-md-6">
-        <h3 class="text-center">Carteira</h3>
-        <high-chart series="dashboard.carteira" axis-Categories="dimensao.carteira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Carteira</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.carteira" axis-Categories="dimensao.carteira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
     </div>
 
 </div>

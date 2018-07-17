@@ -15,7 +15,6 @@
             </div>
         </header>
 
-
         <!-- FILTROS -->
         <div class="row margin-bottom">
 
@@ -92,48 +91,55 @@
             </div>
         </div>
 
-        <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Oi/banner-oi-mala.jpg') center center;">
-            </div>
-        </div>
+        <!--RESUMO E SEMANA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 margin-bottom">
-                <h3 class="text-center">Resumos do Período</h3>
-                <div class="info-box" style="background-color:#ffcc33">
-                    <span class="info-box-icon"><i class="fa fa-percent"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">EFETIVIDADE</span>
-                        <span class="info-box-number">{{dashboard.resumo.EFETIVIDADE }}%</span>
+            <!--RESUMO-->
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumos do Período</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <div class="info-box" style="background-color:#ffcc66">
-                    <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+                    <div class="card-body">
+                        <div class="info-box" style="background-color:#ffcc33">
+                            <span class="info-box-icon"><i class="fa fa-percent"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">MALA DIRETA</span>
-                        <span class="info-box-number">{{dashboard.resumo.MALA | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.MALAVLR | currency:'R$'}} (Custo Ação)
-                        </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">EFETIVIDADE</span>
+                                <span class="info-box-number">{{dashboard.resumo.EFETIVIDADE }}%</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box" style="background-color:#ffcc66">
+                            <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">MALA DIRETA</span>
+                                <span class="info-box-number">{{dashboard.resumo.MALA | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.MALAVLR | currency:'R$'}} (Custo Ação)
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box" style="background-color:#ffff99">
+                            <span class="info-box-icon"><i class="fa fa-archive"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">PAGAMENTO</span>
+                                <span class="info-box-number">{{dashboard.resumo.PAGAMENTO | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.PAGVLR | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
                     </div>
-                    <!-- /.info-box-content -->
-                </div>
-
-                <div class="info-box" style="background-color:#ffff99">
-                    <span class="info-box-icon"><i class="fa fa-archive"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">PAGAMENTO</span>
-                        <span class="info-box-number">{{dashboard.resumo.PAGAMENTO | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.PAGVLR | currency:'R$'}}
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
                 </div>
             </div>
+            <!--SEMANA-->
             <div class="col-xs-12 col-md-8">
                 <div class="card">
                     <div class="card-header">
@@ -147,14 +153,13 @@
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividadeNew" type="column"
-                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal"></high-chart>
+                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" height="315"></high-chart>
                     </div>
                 </div>
             </div>
         </div>
 
-
-
+        <!--ANALISE GRAFICA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -172,7 +177,7 @@
 
 
                         <!--VALOR-->
-                        <div class="row">
+                        <div class="row margin-bottom">
                             <div class="col-xs-12 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -192,7 +197,7 @@
                         </div>
 
                         <!--POR FAIXA DE ATRASO-->
-                        <div class="row">
+                        <div class="row margin-bottom">
                             <div class="col-xs-12 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -257,111 +262,108 @@
     </div>
 </div>
 
-    <script>
-        angular.module('app').controller('ctrl-oi-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
-            dadosPagina.titulo = 'Analise Mala Direta';
-            dadosPagina.descricao = 'Oi Telecomunicações'
+<script>
+    angular.module('app').controller('ctrl-oi-analise', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth() - 1, 1);
 
-            // filtros iniciais
-            let newdate = new Date();
-            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth() - 1, 1);
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
+            segmentos: '',
+            produtos: '',
+            grupo: '',
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = {
+            indicador: 'PAGAMENTO'
+        };
 
-            $scope.filtros = {
-                dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-                dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                campanhas: '',
-                segmentos: '',
-                produtos: '',
-                grupo: '',
-            };
-            $scope.dashFiltros = {};
-            $scope.dashboard = {};
-            $scope.grafico = {
-                indicador: 'PAGAMENTO'
-            };
-
-            //carregar os filtros
-            $http({
-                method: 'GET',
-                url: "/api/oi/dashboard/filtros",
-            }).then(function success(r) {
-                let data = r.data;
-                $scope.dashFiltros.status = r.status;
-                $scope.dashFiltros.campanhas = r.data.Table1;
-                $scope.dashFiltros.segmentos = r.data.Table2;
-                $scope.dashFiltros.produtos = r.data.Table3;
-                $scope.dashFiltros.grupo = r.data.Table4;
-                console.log($scope.dashFiltros.grupo);
-
-            });
-
-            $scope.carregarDashboard = function () {
-                $http({
-                    method: 'POST',
-                    url: "/api/oi/dashboard/grupo",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    $scope.dashboard.status = r.status;
-                    let data = r.data;
-
-                    $scope.dashboard.resumo = data.Table[0];
-                    $scope.dashboard.dados = r.data;
-
-                    $scope.dashboard.dadoAtraso = data.Table1;
-                    $scope.dashboard.dadoMapa = data.Table4;
-                    $scope.dashboard.dadoGrupo = data.Table5;
-                    $scope.dashboard.dadoValor = data.Table3;
-                    $scope.dashboard.dadoIdade = data.Table2;
-                    console.log(data.Table5);
-
-                    $scope.dashboard.diaProm = [
-                    { name: 'pagamento', type: 'column', data: data.Table6.map(obj => obj.PAGAMENTO), color: '#8fe98f' },
-                    { name: 'mala', type: 'column', data: data.Table6.map(obj => obj.MALA), color: '#00a65a' },
-
-                    ];
-
-                    $scope.dashboard.diasEfetividadeNew = data.Table6.map(obj => obj.periodo);
-
-
-                    $scope.carregarGrafico();
-                });
-            }
-
-
-            // carrega o mapa de acordo com o indicador escolhido
-            $scope.carregarGrafico = function () {
-
-                let dadosMapa = $scope.dashboard.dadoMapa;
-
-
-                let indicador = $scope.grafico.indicador;
-                let dadosValor = $scope.dashboard.dadoValor.sort(function (a, b) { return b[indicador] - a[indicador] });
-                let dadosAtraso = $scope.dashboard.dadoAtraso.sort(function (a, b) { return b[indicador] - a[indicador] });
-                let dadosGrupo = $scope.dashboard.dadoGrupo.sort(function (a, b) { return b[indicador] - a[indicador] });
-
-                $scope.dashboard.faixaAtraso = dadosAtraso.map(obj => obj.ds_atraso);
-                $scope.dashboard.faixaValor = dadosValor.map(obj => obj.ds_saldo);
-                $scope.dashboard.faixaGrupo = dadosGrupo.map(obj => obj.GRUPO);
-
-
-                $scope.dashboard.valor = [{ name: [indicador], data: dadosValor.map(obj => (obj[indicador])), color: '#8fe98f' }];
-                $scope.dashboard.grupo = [{ name: [indicador], data: dadosGrupo.map(obj => (obj[indicador])), color: '#8fe98f' }];
-                $scope.dashboard.atraso = [{ name: [indicador], data: dadosAtraso.map(obj => (obj[indicador])), color: '#8fe98f' }];
-                $scope.dashboard.mapa = dadosMapa.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador] }));
-
-                //$scope.myFunction();
-            }
-
-            // extrair dados para excel
-            $scope.extrair = function (tabela) {
-                alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-            }
-
-            $scope.carregarDashboard();
-
-
+        //carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/oi/dashboard/filtros",
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = r.data.Table1;
+            $scope.dashFiltros.segmentos = r.data.Table2;
+            $scope.dashFiltros.produtos = r.data.Table3;
+            $scope.dashFiltros.grupo = r.data.Table4;
+            console.log($scope.dashFiltros.grupo);
 
         });
 
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/oi/dashboard/grupo",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
 
-    </script>
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.dadoAtraso = data.Table1;
+                $scope.dashboard.dadoMapa = data.Table4;
+                $scope.dashboard.dadoGrupo = data.Table5;
+                $scope.dashboard.dadoValor = data.Table3;
+                $scope.dashboard.dadoIdade = data.Table2;
+                console.log(data.Table5);
+
+                $scope.dashboard.diaProm = [
+                { name: 'pagamento', type: 'column', data: data.Table6.map(obj => obj.PAGAMENTO), color: '#8fe98f' },
+                { name: 'mala', type: 'column', data: data.Table6.map(obj => obj.MALA), color: '#00a65a' },
+
+                ];
+
+                $scope.dashboard.diasEfetividadeNew = data.Table6.map(obj => obj.periodo);
+
+
+                $scope.carregarGrafico();
+            });
+        }
+
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+
+            let dadosMapa = $scope.dashboard.dadoMapa;
+
+
+            let indicador = $scope.grafico.indicador;
+            let dadosValor = $scope.dashboard.dadoValor.sort(function (a, b) { return b[indicador] - a[indicador] });
+            let dadosAtraso = $scope.dashboard.dadoAtraso.sort(function (a, b) { return b[indicador] - a[indicador] });
+            let dadosGrupo = $scope.dashboard.dadoGrupo.sort(function (a, b) { return b[indicador] - a[indicador] });
+
+            $scope.dashboard.faixaAtraso = dadosAtraso.map(obj => obj.ds_atraso);
+            $scope.dashboard.faixaValor = dadosValor.map(obj => obj.ds_saldo);
+            $scope.dashboard.faixaGrupo = dadosGrupo.map(obj => obj.GRUPO);
+
+
+            $scope.dashboard.valor = [{ name: [indicador], data: dadosValor.map(obj => (obj[indicador])), color: '#8fe98f' }];
+            $scope.dashboard.grupo = [{ name: [indicador], data: dadosGrupo.map(obj => (obj[indicador])), color: '#8fe98f' }];
+            $scope.dashboard.atraso = [{ name: [indicador], data: dadosAtraso.map(obj => (obj[indicador])), color: '#8fe98f' }];
+            $scope.dashboard.mapa = dadosMapa.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador] }));
+
+            //$scope.myFunction();
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+
+
+    });
+
+
+</script>
