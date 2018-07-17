@@ -219,8 +219,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
-                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
-                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
                 string procedure = "sp_dashboard_grupo";
