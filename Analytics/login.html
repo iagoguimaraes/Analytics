@@ -1,76 +1,90 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Credit Cash Analytics</title>
-    <meta charset="utf-8" />
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="Content/Images/ccashlogo.png" />
+    <!--===============================================================================================-->
     <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
-    <link href="/Content/Styles/adminlte.min.css" rel="stylesheet" />
-    <link href="/Content/Styles/google-fonts.css" rel="stylesheet" />
-    <link href="/Content/Styles/loading.css" rel="stylesheet" />
-
-    <script src="/Content/Scripts/jquery.min.js"></script>
-    <script src="/Content/Scripts/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/css/util.css">
+    <link rel="stylesheet" type="text/css" href="Content/Login_v12/css/main.css">
     <script src="/Content/Scripts/angular.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?hl=pt-BR"></script>
-
-    <style>
-        .bg {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            background: url('/Content/Images/ccashbg.jpg') no-repeat right top;
-        }
-
-        .login-box {
-            border: 1px solid gray;
-            -webkit-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
-            -moz-box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
-            box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.75);
-            opacity: 0.98;
-        }
-    </style>
+    <link href="/Content/Styles/loading.css" rel="stylesheet" />
+    <!--===============================================================================================-->
 </head>
-<body class="hold-transition login-page" ng-app="analytics" ng-controller="loginController">
-    <div class="bg">
-        <div class="login-box">
-            <!-- /.login-logo -->
-            <div class="login-box-body">
-                <p class="login-box-msg">Entre com seu login e senha</p>
-                <form name="loginForm" autocomplete="off">
-                    <div class="form-group has-feedback">
-                        <input type="text" class="form-control" placeholder="Usuário" ng-model="usuario.login" ng-required="true">
-                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+<body ng-app="analytics" ng-controller="loginController">
+
+    <div class="limiter">
+        <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') no-repeat right top">
+
+            <div id="teste" class="col-xs-12 col-sm-10 col-md-6 col-lg-5 ">
+                <form>
+                    <div>
+                        <img style="width:200px;height:200px; top: 100px; margin-left: auto;margin-right: auto;display: block;" src="Content/Images/credit_cash_digital_-01.png" alt="AVATAR">
                     </div>
-                    <div class="form-group has-feedback">
-                        <input type="password" class="form-control" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
-                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+                    <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
+                        <input class="input100" type="text" name="username" placeholder="Usuario" ng-model="usuario.login" ng-required="true">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-user"></i>
+                        </span>
                     </div>
-                    <div class="row margin-bottom">
-                        <div class="col-xs-8">
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-xs-4">
-                            <button type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid" class="btn btn-primary btn-block btn-flat">Entrar</button>
-                        </div>
-                        <!-- /.col -->
+
+                    <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
+                        <input class="input100" type="password" name="pass" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock"></i>
+                        </span>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="g-recaptcha" data-callback="imNotARobot" data-sitekey="6LdmFjYUAAAAABiYObPUYcZ90GZfHhQWIwUaHuTr"></div>
-                        </div>
+
+                    <div class="container-login100-form-btn p-t-10">
+                        <button style="width:80%" class="login100-form-btn" type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid">
+                            Login
+                        </button>
                     </div>
+
                 </form>
             </div>
-            <!-- /.login-box-body -->
+
         </div>
     </div>
-    <!-- /.login-box -->
+    <style>
+        #teste {
+            background-color: black;
+            padding: 10px;
+            border-radius: 25px;
+            height: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        #img {
+            width: 200px;
+            height: 200px;
+            top: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }     
+    </style>
     <!--LOADING-->
     <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
-
     <script>
 
         localStorage.removeItem('token');
@@ -116,6 +130,17 @@
             }
         });
     </script>
+
+
+    <!--===============================================================================================-->
+    <script src="/Content/Scripts/jquery.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="Content/Login_v12/vendor/bootstrap/js/popper.js"></script>
+    <script src="/Content/Scripts/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="Content/Login_v12/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="Content/Login_v12/js/main.js"></script>
 
 </body>
 </html>
