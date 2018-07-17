@@ -32,9 +32,6 @@
                     </div>
                     <div class="card-body">
 
-                        <!-- Filtros -->
-                        <div class="tab-pane active" id="control-sidebar-filters-tab">
-
                             <!--CAMPANHAS-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Campanhas</label>
@@ -92,33 +89,11 @@
                                 </div>
                             </div>
 
-                            <!-- Configurações -->
-                            <!-- Settings tab content -->
-                            <div class="tab-pane" id="control-sidebar-settings-tab">
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">
-                                        Atualizar
-                                        <input type="checkbox" class="pull-right" ng-model="atualizar.check" ng-change="atualizarDash(atualizar.check)">
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">A cada quantos minutos</label>
-                                    <div class="input-group" style="width:120px">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-clock-o"></i>
-                                        </div>
-                                        <input type="number" class="form-control pull-right" ng-model="atualizar.tempo" />
-                                    </div>
-                                </div>
-                            </div>
-
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
                             </div>
 
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -426,6 +401,7 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard = r;
+                $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.campanhas = r.data.Table2.map(obj => obj.campanha);
                 $scope.dashboard.setores = r.data.Table3.map(obj => obj.setor);
@@ -488,6 +464,10 @@
             }
         }
 
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
         $scope.carregarFiltros();
         $scope.carregarDashboard();
