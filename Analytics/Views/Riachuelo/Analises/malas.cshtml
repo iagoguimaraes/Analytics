@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/master.cshtml";
 }
-    <!-- DAHSBOARD -->
+<!-- DAHSBOARD -->
 
 <div ng-controller="ctrl-riachuelo-analise">
     <div ng-if="dashboard.status == 200">
@@ -90,64 +90,87 @@
         </div>
 
 
-        <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Riachuelo/Banner.jpg') center center;">
+
+        <div class="row margin-bottom">
+            <!--RESUMO-->
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumos do Período</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-box bg-black">
+                            <span class="info-box-icon"><i class="fa fa-percent"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">EFETIVIDADE</span>
+                                <span class="info-box-number">{{dashboard.resumo.EFETIVDADE | percent }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box bg-black color-palette">
+                            <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">MALA DIRETA</span>
+                                <span class="info-box-number">{{dashboard.resumo.MALA | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.MALAVLR | currency:'R$'}} (Custo Ação)
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-black color-palette">
+                            <span class="info-box-icon"><i class="fa fa-archive"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">PAGAMENTO</span>
+                                <span class="info-box-number">{{dashboard.resumo.PAGAMENTO | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.PAGVLR | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-black color-palette">
+                            <span class="info-box-icon"><i class="fa fa-money"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">COMISSÃO</span>
+                                <span class="info-box-number">{{dashboard.resumo.COMISSAO | currency:'R$'}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--SEMANA-->
+            <div class="col-xs-12 col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Malas x Pagamentos (Semana)</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividadeNew" type="column"
+                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" height="418"></high-chart>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-4 margin-bottom">
+        
 
-            <h3 class="text-center">Malas e Pagamentos</h3>
-            <div class="info-box bg-black">
-                <span class="info-box-icon"><i class="fa fa-percent"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">EFETIVIDADE</span>
-                    <span class="info-box-number">{{dashboard.resumo.EFETIVDADE | percent }}</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-                <div class="info-box bg-black color-palette">
-                    <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">MALA DIRETA</span>
-                        <span class="info-box-number">{{dashboard.resumo.MALA | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.MALAVLR | currency:'R$'}} (Custo Ação)
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-
-                <div class="info-box bg-black color-palette">
-                    <span class="info-box-icon"><i class="fa fa-archive"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">PAGAMENTO</span>
-                        <span class="info-box-number">{{dashboard.resumo.PAGAMENTO | number}}</span>
-                        <span class="progress-description">
-                            {{dashboard.resumo.PAGVLR | currency:'R$'}}
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-
-            <div class="info-box bg-black color-palette">
-                <span class="info-box-icon"><i class="fa fa-money"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">COMISSÃO</span>
-                    <span class="info-box-number">{{dashboard.resumo.COMISSAO | currency:'R$'}}</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-
-            </div>
-        <div class="col-xs-12 col-md-8">
-            <h4 class="text-center">Cascata por Semana</h4>
-            <high-chart series="dashboard.diaProm" axis-Categories="dashboard.diasEfetividadeNew" type="column"
-                        plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" height="500px"></high-chart>
-        </div>
 
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -164,7 +187,7 @@
             </div>
         </div>
 
-                <!--VALOR-->
+        <!--VALOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12">
                 <div class="card">
@@ -185,7 +208,7 @@
         </div>
 
 
-            <!--POR FAIXA DE ATRASO-->
+        <!--POR FAIXA DE ATRASO-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -205,7 +228,7 @@
             </div>
         </div>
 
-            <!--VALOR-->
+        <!--VALOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12">
                 <div class="card">
@@ -225,7 +248,7 @@
             </div>
         </div>
 
-            <!--GRUPOS-->
+        <!--GRUPOS-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12">
                 <div class="card col-md-6">
@@ -259,123 +282,123 @@
             </div>
         </div>
 
-        </div>
     </div>
+</div>
 
 
-    <script>
-        angular.module('app').controller('ctrl-riachuelo-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
-            dadosPagina.titulo = 'Analise Mala Direta';
-            dadosPagina.descricao = 'Riachuelo'
+<script>
+    angular.module('app').controller('ctrl-riachuelo-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Analise Mala Direta';
+        dadosPagina.descricao = 'Riachuelo'
 
-            // filtros iniciais
-            let newdate = new Date();
-            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth()-1, 1);
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth() - 1, 1);
 
-            $scope.filtros = {
-                dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-                dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                empresa: '',
-                carteira: '',
-                grupo: '',
-                visao: 'andamento',
-            };
-            $scope.dashFiltros = {};
-            $scope.dashboard = {};
-            $scope.grafico = {
-                indicador: 'PAGAMENTO'
-            };
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresa: '',
+            carteira: '',
+            grupo: '',
+            visao: 'andamento',
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = {
+            indicador: 'PAGAMENTO'
+        };
 
-            //carregar os filtros
-            $http({
-                method: 'GET',
-                url: "/api/riachuelo/dashboard/humano/filtros",
-            }).then(function success(r) {
-                let data = r.data;
-                $scope.dashFiltros.status = r.status;
-                $scope.dashFiltros.empresa = data.Table;
-                $scope.dashFiltros.carteira = data.Table1;
-                $scope.dashFiltros.grupo = data.Table2;
-
-
-            });
-
-            $scope.carregarDashboard = function () {
-                $http({
-                    method: 'POST',
-                    url: "/api/riachuelo/dashboard/humano/grupo",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    $scope.dashboard.status = r.status;
-                    let data = r.data;
-
-                    $scope.dashboard.resumo = data.Table[0];
-                    $scope.dashboard.dados = r.data;
-
-                    $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixaAtraso);
-                    $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_faixaSaldo);
-                    $scope.dashboard.faixaGrupo = data.Table5.map(obj => obj.GRUPO);
-                    $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
-
-                    $scope.dashboard.dadoAtraso = data.Table1;
-                    $scope.dashboard.dadoMapa = data.Table4;
-                    $scope.dashboard.dadoGrupo = data.Table5;
-                    $scope.dashboard.dadoValor = data.Table3;
-                    $scope.dashboard.dadoIdade = data.Table2;
-
-                    $scope.dashboard.diaProm = [
-                    { name: 'pagamento', type: 'column', data: data.Table6.map(obj => obj.PAGAMENTO), color: '#bcbcbc' },
-                    { name: 'mala', type: 'column', data: data.Table6.map(obj => obj.MALA), color: '#000000' },
-                  
-                    ];
-
-                    $scope.dashboard.diasEfetividadeNew = data.Table6.map(obj => obj.periodo);
-
-
-                    $scope.carregarGrafico();
-                });
-            }
-
-
-            // carrega o mapa de acordo com o indicador escolhido
-            $scope.carregarGrafico = function () {
-                let dadosMapa = $scope.dashboard.dadoMapa;
-
-                //let dadosAtraso = $scope.dashboard.dadoAtraso;
-                //let dadosGrupo = $scope.dashboard.dadoGrupo;
-                //let dadosValor = $scope.dashboard.dadoValor;
-                //let dadosIdade = $scope.dashboard.dadoIdade;
-
-                let indicador = $scope.grafico.indicador;
-
-                //let indicador = $scope.grafico.indicador;            
-                let dadosValor = $scope.dashboard.dadoValor.sort(function (a, b) { return b[indicador] - a[indicador] });
-                let dadosAtraso = $scope.dashboard.dadoAtraso.sort(function (a, b) { return b[indicador] - a[indicador] });
-                let dadosGrupo = $scope.dashboard.dadoGrupo.sort(function (a, b) { return b[indicador] - a[indicador] });
-                let dadosIdade = $scope.dashboard.dadoIdade.sort(function (a, b) { return b[indicador] - a[indicador] });
-
-                $scope.dashboard.faixaAtraso = dadosAtraso.map(obj => obj.ds_faixaAtraso);
-                $scope.dashboard.faixaValor = dadosValor.map(obj => obj.ds_faixaSaldo);
-                $scope.dashboard.faixaGrupo = dadosGrupo.map(obj => obj.GRUPO);
-                $scope.dashboard.faixaIdade = dadosIdade.map(obj => obj.ds_faixaIdade);
-
-                $scope.dashboard.valor = [{ name: [indicador], data: dadosValor.map(obj => (obj[indicador])), color: '#000000' }];
-                $scope.dashboard.grupo = [{ name: [indicador], data: dadosGrupo.map(obj => (obj[indicador])), color: '#000000' }];
-                $scope.dashboard.atraso = [{ name: [indicador], data: dadosAtraso.map(obj => (obj[indicador])), color: '#000000' }];
-                $scope.dashboard.idade = [{ name: [indicador], data: dadosIdade.map(obj => (obj[indicador])), color: '#000000' }];
-                $scope.dashboard.mapa = dadosMapa.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador] }));
-
-
-            }
-
-
-            $scope.carregarDashboard();
-
-            // extrair dados para excel
-            $scope.extrair = function (nomeArquivo, tabela) {
-                alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-            }
+        //carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresa = data.Table;
+            $scope.dashFiltros.carteira = data.Table1;
+            $scope.dashFiltros.grupo = data.Table2;
 
 
         });
-    </script>
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/grupo",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixaAtraso);
+                $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_faixaSaldo);
+                $scope.dashboard.faixaGrupo = data.Table5.map(obj => obj.GRUPO);
+                $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
+
+                $scope.dashboard.dadoAtraso = data.Table1;
+                $scope.dashboard.dadoMapa = data.Table4;
+                $scope.dashboard.dadoGrupo = data.Table5;
+                $scope.dashboard.dadoValor = data.Table3;
+                $scope.dashboard.dadoIdade = data.Table2;
+
+                $scope.dashboard.diaProm = [
+                { name: 'pagamento', type: 'column', data: data.Table6.map(obj => obj.PAGAMENTO), color: '#bcbcbc' },
+                { name: 'mala', type: 'column', data: data.Table6.map(obj => obj.MALA), color: '#000000' },
+
+                ];
+
+                $scope.dashboard.diasEfetividadeNew = data.Table6.map(obj => obj.periodo);
+
+
+                $scope.carregarGrafico();
+            });
+        }
+
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dadosMapa = $scope.dashboard.dadoMapa;
+
+            //let dadosAtraso = $scope.dashboard.dadoAtraso;
+            //let dadosGrupo = $scope.dashboard.dadoGrupo;
+            //let dadosValor = $scope.dashboard.dadoValor;
+            //let dadosIdade = $scope.dashboard.dadoIdade;
+
+            let indicador = $scope.grafico.indicador;
+
+            //let indicador = $scope.grafico.indicador;
+            let dadosValor = $scope.dashboard.dadoValor.sort(function (a, b) { return b[indicador] - a[indicador] });
+            let dadosAtraso = $scope.dashboard.dadoAtraso.sort(function (a, b) { return b[indicador] - a[indicador] });
+            let dadosGrupo = $scope.dashboard.dadoGrupo.sort(function (a, b) { return b[indicador] - a[indicador] });
+            let dadosIdade = $scope.dashboard.dadoIdade.sort(function (a, b) { return b[indicador] - a[indicador] });
+
+            $scope.dashboard.faixaAtraso = dadosAtraso.map(obj => obj.ds_faixaAtraso);
+            $scope.dashboard.faixaValor = dadosValor.map(obj => obj.ds_faixaSaldo);
+            $scope.dashboard.faixaGrupo = dadosGrupo.map(obj => obj.GRUPO);
+            $scope.dashboard.faixaIdade = dadosIdade.map(obj => obj.ds_faixaIdade);
+
+            $scope.dashboard.valor = [{ name: [indicador], data: dadosValor.map(obj => (obj[indicador])), color: '#000000' }];
+            $scope.dashboard.grupo = [{ name: [indicador], data: dadosGrupo.map(obj => (obj[indicador])), color: '#000000' }];
+            $scope.dashboard.atraso = [{ name: [indicador], data: dadosAtraso.map(obj => (obj[indicador])), color: '#000000' }];
+            $scope.dashboard.idade = [{ name: [indicador], data: dadosIdade.map(obj => (obj[indicador])), color: '#000000' }];
+            $scope.dashboard.mapa = dadosMapa.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador] }));
+
+
+        }
+
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+
+    });
+</script>
