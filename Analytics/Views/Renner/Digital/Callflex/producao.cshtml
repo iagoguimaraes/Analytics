@@ -150,7 +150,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('analise_por_produto','Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -218,9 +218,6 @@
                                 <div class="card-header-button card-header-expand">
                                     <i class="fa fa-expand"></i>
                                 </div>
-                                <div class="card-header-button" ng-click="extrair('Analitico','Table1')">
-                                    <i class="fa fa-file-excel-o"></i>
-                                </div>
                             </div>
                             <div class="card-body">
                                 <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
@@ -274,7 +271,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.dados = data.Table1;
+                $scope.dashboard.dados = r.data;
 
                 $scope.carregarGrafico();
 
@@ -303,12 +300,14 @@
             }
         }
 
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("Analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
         $scope.carregarDashboard();
 
-        // extrair dados para excel
-        $scope.extrair = function (nomeArquivo, tabela) {
-            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-        }
+
 
     });
 </script>

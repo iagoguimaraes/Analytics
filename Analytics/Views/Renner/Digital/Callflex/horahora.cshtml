@@ -159,7 +159,7 @@
                                 <div class="card-header-button card-header-expand">
                                     <i class="fa fa-expand"></i>
                                 </div>
-                                <div class="card-header-button" ng-click="extrair('analise_por_produto','Table2')">
+                                <div class="card-header-button" ng-click="extrair('Table2')">
                                     <i class="fa fa-file-excel-o"></i>
                                 </div>
                             </div>
@@ -216,7 +216,7 @@
                                 <div class="card-header-button card-header-expand">
                                     <i class="fa fa-expand"></i>
                                 </div>
-                                <div class="card-header-button" ng-click="extrair('AnaliseHora','Table3')">
+                                <div class="card-header-button" ng-click="extrair('Table3')">
                                     <i class="fa fa-file-excel-o"></i>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Diagrama','Table4')">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -300,6 +300,9 @@
                         <span class="card-header-title">Insucesso no Contato</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -348,6 +351,7 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
+                $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.carteiraativa = data.Table1[0];
@@ -356,6 +360,11 @@
                 $scope.dashboard.diagrama = data.Table4;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table5.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
             });
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
 
         $scope.carregarDashboard();
