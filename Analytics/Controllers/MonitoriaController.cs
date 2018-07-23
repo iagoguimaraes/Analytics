@@ -33,6 +33,7 @@ namespace Analytics.Controllers
                 string carteiras = form["carteiras"];
                 string ocorrencias = form["ocorrencias"];
                 string usuarios = form["usuarios"];
+                string problemas = form["problemas"];
 
                 DateTime _dtini = Convert.ToDateTime(dtini);
                 DateTime _dtfim = Convert.ToDateTime(string.Concat(dtfim, " 23:59:59"));
@@ -42,6 +43,7 @@ namespace Analytics.Controllers
                 DataTable _carteiras = JsonConvert.DeserializeObject<DataTable>(carteiras);
                 DataTable _ocorrencias = JsonConvert.DeserializeObject<DataTable>(ocorrencias);
                 DataTable _usuarios = JsonConvert.DeserializeObject<DataTable>(usuarios);
+                DataTable _problemas = JsonConvert.DeserializeObject<DataTable>(problemas);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
@@ -55,6 +57,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", _carteiras);
                     parametros.Add("ocorrencias", _ocorrencias);
                     parametros.Add("usuarios", _usuarios);
+                    parametros.Add("problemas", _problemas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
