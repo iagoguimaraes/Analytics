@@ -121,7 +121,11 @@
                 <div class="timeline-body">
                     <i class="fa fa-exclamation-circle"></i>
                     Campanha: <b> {{d.ds_campanha}} </b> <br>
-                    <a href="{{d.ds_link}}" download> Download Chamada</a> 
+                 
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">Ouvir</button>
+                    </div>
                 </div>
 
                 <div class="timeline-footer">
@@ -203,6 +207,32 @@
                             </select>
                         </div>
 
+                        <div class="col-md-12" ng-show="diario.empresa">
+                            <label>Problema</label>
+                            <select class="form-control" ng-model="diario.problemas" ng-options="o.id_problema as o.ds_problema for o in opcoes.problemas">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-show="diario.empresa" >
+                            <label>Plataforma</label>
+                            <select class="form-control" ng-model="diario.fornecedores" ng-options="o.id_fornecedor as o.ds_fornecedor for o in opcoes.fornecedores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-show="diario.empresa">
+                            <label>Nivel de Problema</label>
+                            <select class="form-control" ng-model="diario.nvproblema">
+                                <option value="">Selecione</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+
                         <div class="col-md-6" ng-show="diario.empresa">
                             <label>CPF</label> <input ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
                         </div>
@@ -215,8 +245,14 @@
                             <label>Persona</label> <input class="form-control"  ng-model="diario.persona" type="text" name="persona">
                         </div>
 
-                        <div class="col-md-12" ng-show="diario.empresa">
+                        @*<div class="col-md-12" ng-show="diario.empresa">
                             <label>Link Da Gravação</label> <input class="form-control" ng-model="diario.link" type="text" name="persona">
+                        </div>*@
+                        <div class="col-md-12" ng-show="diario.empresa">
+                            <label>Upload</label>
+                            <input class="form-control" type="file"  uploadfile="diario.link"/>
+                            <input class="form-control" type="hidden" ng-model="diario.link" />
+                            
                         </div>
 
 
@@ -308,6 +344,32 @@
                             <label>Ocorrência</label>
                             <select class="form-control" ng-model="editdiario.ocorrencia" ng-options="o.id_ocorrencia as o.ds_ocorrencia for o in opcoes.ocorrencias | filter:{id_empresa: editdiario.empresa}:true">
                                 <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12" ng-show="editdiario.empresa">
+                            <label>Problema</label>
+                            <select class="form-control" ng-model="editdiario.problemas" ng-options="o.id_problema as o.ds_problema for o in opcoes.problemas">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-show="editdiario.empresa">
+                            <label>Plataforma</label>
+                            <select class="form-control" ng-model="editdiario.fornecedores" ng-options="o.id_fornecedor as o.ds_fornecedor for o in opcoes.fornecedores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-show="editdiario.empresa">
+                            <label>Nivel de Problema</label>
+                            <select class="form-control" ng-model="editdiario.nvproblema">
+                                <option value="">Selecione</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </select>
                         </div>
 
@@ -403,6 +465,8 @@
             $scope.opcoes.carteiras = r.data.Table3;
             $scope.opcoes.ocorrencias = r.data.Table4;
             $scope.opcoes.usuarios = r.data.Table5;
+            $scope.opcoes.problemas = r.data.Table6;
+            $scope.opcoes.fornecedores = r.data.Table7;
 
 
         });
@@ -436,7 +500,7 @@
                 return false;
             }
 
-            console.log($scope.diario.empresa);
+            
 
             if (!$scope.diario.carteira) {
                 $('[ng-model="diario.carteira"]').focus();
@@ -444,7 +508,7 @@
                 return false;
             }
 
-            console.log($scope.diario.carteira);
+            
 
             if (!$scope.diario.ocorrencia) {
                 $('[ng-model="diario.ocorrencia"]').focus();
@@ -452,7 +516,7 @@
                 return false;
             }
 
-            console.log($scope.diario.ocorrencia);
+            
 
             if (!$scope.diario.campanha) {
                 $('[ng-model="diario.campanha"]').focus();
@@ -460,7 +524,7 @@
                 return false;
             }
 
-            console.log($scope.diario.campanhas);
+            
 
             if (!$scope.diario.cpf) {
                 $('[ng-model="diario.cpf"]').focus();
@@ -468,11 +532,15 @@
                 return false;
             }
 
+            
+
             if (!$scope.diario.tel) {
                 $('[ng-model="diario.tel"]').focus();
                 $event.stopPropagation();
                 return false;
             }
+
+           
 
             if (!$scope.diario.persona) {
                 $('[ng-model="diario.persona"]').focus();
@@ -480,11 +548,36 @@
                 return false;
             }
 
+            
+
             if (!$scope.diario.link) {
-                $('[ng-model="diario.link"]').focus();
+                
+                $('[uploadfile="diario.link"]').focus();
                 $event.stopPropagation();
                 return false;
             }
+
+            
+
+            if (!$scope.diario.fornecedores) {
+                $('[ng-model="diario.fornecedores"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.problemas) {
+                $('[ng-model="diario.problemas"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.nvproblema) {
+                $('[ng-model="diario.nvproblema"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            //$scope.niveis = [{ 1: 1 }, { 2: 2 }, { 3: 3 }, { 4: 4 }, { 5: 5 }];
 
             $http({
                 method: 'POST',
@@ -515,8 +608,38 @@
             $scope.editdiario.tel = r.ds_tel;
             $scope.editdiario.persona = r.ds_persona;
             $scope.editdiario.link = r.ds_link;
+            $scope.editdiario.problemas = r.id_problema;
+            $scope.editdiario.fornecedores = r.id_fornecedor;
+            $scope.editdiario.nvproblema = r.nivel_problema+'';
 
 
+        }
+
+        // carregar a lista de ocorrencias
+        $scope.downloadAudio = function (caminho) {
+            $http({
+                method: 'POST',
+                url: "/api/monitoria/download",
+                data: {caminho: caminho },
+                responseType: 'arraybuffer',
+            }).then(function success(r) {
+                
+                var blob = new Blob([r.data], { type: "audio/x-wav" });
+                var objectUrl = URL.createObjectURL(blob);
+                window.open(objectUrl);
+            });
+        }
+
+        $scope.add = function () {
+            var f = document.getElementById('file').files[0],
+                r = new FileReader();
+
+            r.onloadend = function (e) {
+                var data = e.target.result;
+                //send your binary data via $http or $resource or do anything else with it
+            }
+
+            r.readAsBinaryString(f);
         }
 
         // editar uma ocorrencia
@@ -590,7 +713,29 @@
                 return false;
             }
 
-            console.log($scope.editdiario.persona);
+            if (!$scope.editdiario.problemas) {
+                $('[ng-model="editdiario.problemas"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.problemas);
+
+            if (!$scope.editdiario.fornecedores) {
+                $('[ng-model="editdiario.forncecedores"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.fornecedores);
+
+            if (!$scope.editdiario.nvproblema) {
+                $('[ng-model="editdiario.nvproblema"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            console.log($scope.editdiario.nvproblema);
 
             $http({
                 method: 'POST',

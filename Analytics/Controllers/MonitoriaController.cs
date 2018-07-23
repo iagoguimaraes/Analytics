@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -97,10 +100,16 @@ namespace Analytics.Controllers
             {
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
+                int id_empresa = Convert.ToInt32(form["empresa"]);
+
+                string nomeCredor = CredorName(id_empresa);
+
+                string teste = historico(nomeCredor);
+
                 string data = form["data"];
                 string hora = form["hora"];
                 int id_grupo = Convert.ToInt32(form["grupo"]);
-                int id_empresa = Convert.ToInt32(form["empresa"]);
+                //int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 int id_campanha = Convert.ToInt32(form["campanha"]);
@@ -109,7 +118,23 @@ namespace Analytics.Controllers
                 string tel = form["tel"];
                 string persona = form["persona"];
                 string link = form["link"];
+                int id_problema = Convert.ToInt32(form["problemas"]);
+                int id_fornecedor = Convert.ToInt32(form["fornecedores"]);
+                int nivel = Convert.ToInt32(form["nvproblema"]);
 
+                link = link.Substring(link.IndexOf(',') + 1);
+
+                byte[] Arquivo = Convert.FromBase64String(link);
+                string arquivo2 = System.Text.Encoding.Default.GetString(Arquivo);
+                string teltratado = tel.Replace(")", "").Replace("(","").Replace("-","");
+                string nameFile = teste + '\\' + nomeCredor + '_' + id_campanha + '_' + teltratado;
+                nameFile = nameFile + ".mp3";
+
+
+
+                File.WriteAllBytes(nameFile, Convert.FromBase64String(link));
+
+                
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -131,7 +156,10 @@ namespace Analytics.Controllers
                     parametros.Add("cpf", cpf);
                     parametros.Add("tel", tel);
                     parametros.Add("persona", persona);
-                    parametros.Add("link", link);
+                    parametros.Add("link", nameFile);
+                    parametros.Add("problema", id_problema);
+                    parametros.Add("fornecedor", id_fornecedor);
+                    parametros.Add("nivel", nivel);
 
 
                     sql.ExecuteProcedureDataSet("sp_ins_monitoria", parametros);
@@ -166,6 +194,9 @@ namespace Analytics.Controllers
                 string persona = (form["persona"]);
                 string descricao = form["descricao"];
                 string link = form["link"];
+                int id_problema = Convert.ToInt32(form["problemas"]);
+                int id_fornecedor = Convert.ToInt32(form["fornecedores"]);
+                int nivel = Convert.ToInt32(form["nvproblema"]);
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -189,6 +220,9 @@ namespace Analytics.Controllers
                     parametros.Add("persona", persona);
                     parametros.Add("descricao", descricao);
                     parametros.Add("link", link);
+                    parametros.Add("problema", id_problema);
+                    parametros.Add("fornecedor", id_fornecedor);
+                    parametros.Add("nivel", nivel);
 
                     sql.ExecuteProcedureDataSet("sp_upd_monitoria", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -226,6 +260,172 @@ namespace Analytics.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+
+        [Route("download")]
+        [HttpPost]
+        public HttpResponseMessage gerarFile(FormDataCollection form)
+        {
+
+            string caminho = (form["caminho"]);
+
+            using (MemoryStream ms = new MemoryStream())
+            using (FileStream file = new FileStream(caminho, FileMode.Open, FileAccess.Read))
+            {
+                byte[] bytes = new byte[file.Length];
+                file.Read(bytes, 0, (int)file.Length);
+                ms.Write(bytes, 0, (int)file.Length);
+
+
+                // processing the stream.
+                var result = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(ms.ToArray())
+                };
+                result.Content.Headers.ContentDisposition =
+                    new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "Som.wav"
+                    };
+
+                result.Content.Headers.ContentType =
+                    new MediaTypeHeaderValue("application/octet-stream");
+
+                return result;
+            }
+
+        }
+
+        public static string CredorName(int id_credor)
+        {
+            try
+            {
+
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    string nomeCredor = null;
+                    parametros.Add("id_credor", id_credor);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_credor_nome", parametros);
+
+                    nomeCredor = resultado.Tables[0].Rows[0]["empresa"].ToString();
+
+                    return nomeCredor;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+        }
+
+        public static string historico(string credor)
+        {
+            //Tratativas para envio ao historico.
+            string data = System.DateTime.Now.ToString("yyyyMMdd");
+            string ano = data.Substring(0, 4);
+            string mesInt = data.Substring(4, 2);
+            string dia = data.Substring(6, 2);
+            string mesTxt = null;
+            bool validador = false;
+
+            switch (mesInt)
+            {
+                case "01":
+                    mesTxt = "01 Jan";
+                    break;
+                case "02":
+                    mesTxt = "02 Fev";
+                    break;
+                case "03":
+                    mesTxt = "03 Mar";
+                    break;
+                case "04":
+                    mesTxt = "04 Abr";
+                    break;
+                case "05":
+                    mesTxt = "05 Mai";
+                    break;
+                case "06":
+                    mesTxt = "06 Jun";
+                    break;
+                case "07":
+                    mesTxt = "07 Jul";
+                    break;
+                case "08":
+                    mesTxt = "08 Ago";
+                    break;
+                case "09":
+                    mesTxt = "09 Set";
+                    break;
+                case "10":
+                    mesTxt = "10 Out";
+                    break;
+                case "11":
+                    mesTxt = "11 Nov";
+                    break;
+                case "12":
+                    mesTxt = "12 Dez";
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
+            }
+
+            bool validadorDia = true;
+            string pathDestDay = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "";
+            string pathDest = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\";
+
+            string pathDestCredor = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "\\" + credor;
+            string newPath2 = newPath2 = System.IO.Path.Combine(pathDestDay, credor);
+            string[] entries = Directory.GetFileSystemEntries(pathDest, "*"); /*Verifxa pasta do dia*/
+            for (int i = 0; i < entries.Length; i++)
+            {
+                if (entries[i].Equals(pathDestDay)) 
+                {
+                    Console.WriteLine("Pasta do dia ja existe.");
+                    validadorDia = false;
+
+                    string[] files2 = Directory.GetFileSystemEntries(pathDestDay, "*");
+                    for (int j = 1; j <= files2.Length; j++) /*Verifxa pasta do credor*/
+                    {
+
+                        if (files2[(j-1)].Equals(pathDestCredor))
+                        {
+                            Console.WriteLine("Pasta do credor ja existe.");
+                            validador = true;
+                            break;
+                        }
+
+                    }
+
+                    if (validador == false)
+                    {
+                        newPath2 = System.IO.Path.Combine(pathDestDay, credor);
+                        System.IO.Directory.CreateDirectory(newPath2);
+                        Console.WriteLine("Criou pasta " + credor);
+                    }
+
+                }
+            }
+
+            if (validadorDia == true)
+            {
+                Console.WriteLine("Pasta do dia não existe.");
+                string newPath = System.IO.Path.Combine(pathDest, dia);
+                System.IO.Directory.CreateDirectory(newPath);
+                Console.WriteLine("Pasta do dia criada.");
+
+                newPath2 = System.IO.Path.Combine(pathDestDay, credor);
+                System.IO.Directory.CreateDirectory(newPath2);
+                Console.WriteLine("Criou pasta " + credor);
+
+            }
+            return newPath2;
         }
 
 
