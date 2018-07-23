@@ -119,18 +119,22 @@
                 <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} |</b> Carteira: <b>{{d.ds_carteira}} </b><b>|</b> CPF: <b>{{d.ds_cpf}} </b></h3>
 
                 <div class="timeline-body">
-                    <i class="fa fa-exclamation-circle"></i>
-                    Campanha: <b> {{d.ds_campanha}} </b> <br>
+                    
+                    Campanha: <b> {{d.ds_campanha}}. </b> <br>
+                    
+                    Problema: <b> {{d.ds_problema}}. </b> <br>
+                    Nivel: <b> {{d.nivel_problema}}. </b> <br>
+                    Fornecedor: <b> {{d.ds_fornecedor}}. </b> <br>
                  
                     <!--BOTÃO-->
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">Ouvir</button>
+                        <img src="~/Content/Images/phone.jpg" alt="Ouvir Chamada" style="width:50px;height:50px" data-toggle="control-sidebar" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">
                     </div>
                 </div>
 
                 <div class="timeline-footer">
                     <i class="fa fa-commenting-o"></i>
-                    {{d.descricao}}
+                    Descrição: {{d.descricao}}
                 </div>
 
             </div>
@@ -234,15 +238,15 @@
                         </div>
 
                         <div class="col-md-6" ng-show="diario.empresa">
-                            <label>CPF</label> <input ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
+                            <label>CPF</label> <input maxlength="14"  ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
                         </div>
 
                         <div class="col-md-6" ng-show="diario.empresa">
-                            <label>Telefone</label> <input class="form-control"  ng-model="diario.tel" type="text" name="tel" onkeydown="javascript: fMasc( this, mTel );">
+                            <label>Telefone</label> <input maxlength="14"  class="form-control"  ng-model="diario.tel" type="text" name="tel" onkeydown="javascript: fMasc( this, mTel );">
                         </div>
 
                         <div class="col-md-12" ng-show="diario.empresa">
-                            <label>Persona</label> <input class="form-control"  ng-model="diario.persona" type="text" name="persona">
+                            <label>Persona</label> <input maxlength="14" class="form-control"  ng-model="diario.persona" type="text" name="persona">
                         </div>
 
                         @*<div class="col-md-12" ng-show="diario.empresa">
@@ -374,20 +378,22 @@
                         </div>
 
                         <div class="col-md-6" ng-show="editdiario.empresa">
-                            <label>CPF</label> <input ng-model="editdiario.cpf" class="form-control" type="text" id="cpf" onclick="javascript: fMasc( this, mCPF );">
+                            <label>CPF</label> <input ng-model="editdiario.cpf" class="form-control" type="text" maxlength="14"  id="cpf" onclick="javascript: fMasc( this, mCPF );">
                         </div>
 
                         <div class="col-md-6" ng-show="editdiario.empresa">
-                            <label>Telefone</label> <input class="form-control" ng-model="editdiario.tel" type="text" id="tel" onclick="javascript: fMasc( this, mTel );">
+                            <label>Telefone</label> <input maxlength="14"  class="form-control" ng-model="editdiario.tel" type="text" id="tel" onclick="javascript: fMasc( this, mTel );">
                         </div>
 
                         <div class="col-md-12" ng-show="editdiario.empresa">
-                            <label>Persona</label> <input class="form-control" ng-model="editdiario.persona" type="text" name="persona">
+                            <label>Persona</label> <input maxlength="14" class="form-control" ng-model="editdiario.persona" type="text" name="persona">
                         </div>
 
 
                         <div class="col-md-12" ng-show="editdiario.empresa">
-                            <label>Link Da Gravação</label> <input class="form-control" ng-model="editdiario.link" type="text" name="link">
+                            <label>Link Da Gravação</label> <br>
+                            <div style="font-size:13px">{{editdiario.link}}</div>
+                            @*<input class="form-control" ng-model="editdiario.link" type="text" name="link">*@
                         </div>
 
 
