@@ -119,17 +119,18 @@
                 <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} |</b> Carteira: <b>{{d.ds_carteira}} </b><b>|</b> CPF: <b>{{d.ds_cpf}} </b></h3>
 
                 <div class="timeline-body">
-                    
                     Campanha: <b> {{d.ds_campanha}}. </b> <br>
-                    
                     Problema: <b> {{d.ds_problema}}. </b> <br>
-                    Nivel: <b> {{d.nivel_problema}}. </b> <br>
+                    Nivel Problema: <b> {{d.nivel_problema}}. </b> <br>
                     Fornecedor: <b> {{d.ds_fornecedor}}. </b> <br>
-                 
+
                     <!--BOTÃO-->
-                    <div class="form-group">
-                        <img src="~/Content/Images/phone.jpg" alt="Ouvir Chamada" style="width:50px;height:50px" data-toggle="control-sidebar" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">
+                    <div button type="button" class="btn btn-primary" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">
+                        <b>  Escutar</b>
+                        <div class="fa fa-headphones" data-toggle="control-sidebar">
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="timeline-footer">
@@ -218,7 +219,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6" ng-show="diario.empresa" >
+                        <div class="col-md-6" ng-show="diario.empresa">
                             <label>Plataforma</label>
                             <select class="form-control" ng-model="diario.fornecedores" ng-options="o.id_fornecedor as o.ds_fornecedor for o in opcoes.fornecedores">
                                 <option value="">Selecione</option>
@@ -238,25 +239,25 @@
                         </div>
 
                         <div class="col-md-6" ng-show="diario.empresa">
-                            <label>CPF</label> <input maxlength="14"  ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
+                            <label>CPF</label> <input maxlength="14" ng-model="diario.cpf" class="form-control" type="text" name="cpf" onkeydown="javascript: fMasc( this, mCPF );">
                         </div>
 
                         <div class="col-md-6" ng-show="diario.empresa">
-                            <label>Telefone</label> <input maxlength="14"  class="form-control"  ng-model="diario.tel" type="text" name="tel" onkeydown="javascript: fMasc( this, mTel );">
+                            <label>Telefone</label> <input maxlength="14" class="form-control" ng-model="diario.tel" type="text" name="tel" onkeydown="javascript: fMasc( this, mTel );">
                         </div>
 
                         <div class="col-md-12" ng-show="diario.empresa">
-                            <label>Persona</label> <input maxlength="14" class="form-control"  ng-model="diario.persona" type="text" name="persona">
+                            <label>Persona</label> <input maxlength="14" class="form-control" ng-model="diario.persona" type="text" name="persona">
                         </div>
 
                         @*<div class="col-md-12" ng-show="diario.empresa">
-                            <label>Link Da Gravação</label> <input class="form-control" ng-model="diario.link" type="text" name="persona">
-                        </div>*@
+                                <label>Link Da Gravação</label> <input class="form-control" ng-model="diario.link" type="text" name="persona">
+                            </div>*@
                         <div class="col-md-12" ng-show="diario.empresa">
                             <label>Upload</label>
-                            <input class="form-control" type="file"  uploadfile="diario.link"/>
+                            <input class="form-control" type="file" uploadfile="diario.link" />
                             <input class="form-control" type="hidden" ng-model="diario.link" />
-                            
+
                         </div>
 
 
@@ -266,13 +267,13 @@
                         </div>
 
                     </form>
-                    
+
 
                 </div>
                 <div class="modal-footer">
                     <br>
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -378,11 +379,11 @@
                         </div>
 
                         <div class="col-md-6" ng-show="editdiario.empresa">
-                            <label>CPF</label> <input ng-model="editdiario.cpf" class="form-control" type="text" maxlength="14"  id="cpf" onclick="javascript: fMasc( this, mCPF );">
+                            <label>CPF</label> <input ng-model="editdiario.cpf" class="form-control" type="text" maxlength="14" id="cpf" onclick="javascript: fMasc( this, mCPF );">
                         </div>
 
                         <div class="col-md-6" ng-show="editdiario.empresa">
-                            <label>Telefone</label> <input maxlength="14"  class="form-control" ng-model="editdiario.tel" type="text" id="tel" onclick="javascript: fMasc( this, mTel );">
+                            <label>Telefone</label> <input maxlength="14" class="form-control" ng-model="editdiario.tel" type="text" id="tel" onclick="javascript: fMasc( this, mTel );">
                         </div>
 
                         <div class="col-md-12" ng-show="editdiario.empresa">
@@ -506,7 +507,7 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.carteira) {
                 $('[ng-model="diario.carteira"]').focus();
@@ -514,7 +515,7 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.ocorrencia) {
                 $('[ng-model="diario.ocorrencia"]').focus();
@@ -522,7 +523,7 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.campanha) {
                 $('[ng-model="diario.campanha"]').focus();
@@ -530,7 +531,7 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.cpf) {
                 $('[ng-model="diario.cpf"]').focus();
@@ -538,7 +539,7 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.tel) {
                 $('[ng-model="diario.tel"]').focus();
@@ -546,7 +547,7 @@
                 return false;
             }
 
-           
+
 
             if (!$scope.diario.persona) {
                 $('[ng-model="diario.persona"]').focus();
@@ -554,16 +555,16 @@
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.link) {
-                
+
                 $('[uploadfile="diario.link"]').focus();
                 $event.stopPropagation();
                 return false;
             }
 
-            
+
 
             if (!$scope.diario.fornecedores) {
                 $('[ng-model="diario.fornecedores"]').focus();
@@ -616,7 +617,7 @@
             $scope.editdiario.link = r.ds_link;
             $scope.editdiario.problemas = r.id_problema;
             $scope.editdiario.fornecedores = r.id_fornecedor;
-            $scope.editdiario.nvproblema = r.nivel_problema+'';
+            $scope.editdiario.nvproblema = r.nivel_problema + '';
 
 
         }
@@ -626,10 +627,10 @@
             $http({
                 method: 'POST',
                 url: "/api/monitoria/download",
-                data: {caminho: caminho },
+                data: { caminho: caminho },
                 responseType: 'arraybuffer',
             }).then(function success(r) {
-                
+
                 var blob = new Blob([r.data], { type: "audio/x-wav" });
                 var objectUrl = URL.createObjectURL(blob);
                 window.open(objectUrl);
