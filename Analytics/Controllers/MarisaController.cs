@@ -69,6 +69,34 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/multicanal")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardMultiCanal(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_mktzap", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/humano/filtros")]
         [HttpGet]
         [Autorizar]
@@ -88,7 +116,6 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
 
         [Route("dashboard/humano/horahora")]
         [HttpPost]
