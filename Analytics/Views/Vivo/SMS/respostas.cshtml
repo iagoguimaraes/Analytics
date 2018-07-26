@@ -101,9 +101,9 @@
                         <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
                     </div>
 
-                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.adimplente">
-                        <label class="control-sidebar-subheading">Adimplente</label>
-                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.adimplente" dados="dashboard.dimensao.adimplente" ng-change="aplicarFiltros()"></select22>
+                    <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.fornecedor">
+                        <label class="control-sidebar-subheading">Fornecedor</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.fornecedor" dados="dashboard.dimensao.fornecedor" ng-change="aplicarFiltros()"></select22>
                     </div>
                 </div>
             </div>
@@ -265,7 +265,7 @@
             $scope.dashboard.dimensao.operacao = cubo.obterDimensao('OPERACAO');
             $scope.dashboard.dimensao.produto = cubo.obterDimensao('PRODUTO');
             $scope.dashboard.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
-            $scope.dashboard.dimensao.adimplente = cubo.obterDimensao('ADIMPLENTE');
+            $scope.dashboard.dimensao.fornecedor = cubo.obterDimensao('FORNECEDOR');
         }
 
         $scope.popularDashboard = function () {
@@ -276,6 +276,7 @@
             $scope.dimensao.operacao = cubo.obterDimensao('OPERACAO');
             $scope.dimensao.produto = cubo.obterDimensao('PRODUTO');
             $scope.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
+            $scope.dimensao.fornecedor = cubo.obterDimensao('FORNECEDOR');
             $scope.dimensao.data = cubo.obterDimensao('DATA');
 
             // CARREGAR AS VISUALIZAÇÕES
@@ -314,7 +315,7 @@
             cubo.filtrar('OPERACAO', $scope.dashboard.filtros.operacao);
             cubo.filtrar('PRODUTO', $scope.dashboard.filtros.produto);
             cubo.filtrar('CARTEIRA', $scope.dashboard.filtros.carteira);
-            cubo.filtrar('ADIMPLENTE', $scope.dashboard.filtros.adimplente);
+            cubo.filtrar('FORNECEDOR', $scope.dashboard.filtros.fornecedor);
 
             cubo.aplicarFiltros();
 

@@ -1,0 +1,284 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-vivo-retornosms">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Retorno SMS - Promessa e Quer Boleto</div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+            <i class="fa fa-filter"></i>
+            FILTROS
+        </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="extrair('Table')">
+            <i class="fa fa-file-excel-o"></i>
+            EXTRAIR
+        </div>
+    </header>
+
+    <!-- FILTROS -->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div id="filtros-window" class="card display-none">
+                <div class="card-header">
+                    <span class="card-header-title">Filtros</span>
+                    <div class="card-header-button card-header-close">
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--FILTROS 2-->
+    <div class="card margin-bottom">
+        <div class="card-header">
+            <span class="card-header-title">Filtros</span>
+            <div class="card-header-button card-header-expand">
+                <i class="fa fa-expand"></i>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.tabulacao">
+                    <label class="control-sidebar-subheading">Tabulação</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tabulacao" dados="dashboard.dimensao.tabulacao" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.agencia">
+                    <label class="control-sidebar-subheading">Agencia</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.agencia" dados="dashboard.dimensao.agencia" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.operacao">
+                    <label class="control-sidebar-subheading">Operação</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operacao" dados="dashboard.dimensao.operacao" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.produto">
+                    <label class="control-sidebar-subheading">Produto</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.produto" dados="dashboard.dimensao.produto" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.carteira">
+                    <label class="control-sidebar-subheading">Carteira</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+                <div class="col-xs-12 col-sm-4 col-md-2" ng-if="dashboard.dimensao.fornecedor">
+                    <label class="control-sidebar-subheading">Fornecedor</label>
+                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.fornecedor" dados="dashboard.dimensao.fornecedor" ng-change="aplicarFiltros()"></select22>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--RESUMO-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <div class="small-box bg-gray">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
+                    <p>Quantidade</p>
+                    <div class="icon">
+                        <i class="fa fa-comments-o"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <div class="small-box bg-gray">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.pago | megaNumber"></h3>
+                    <p>Quantidade Pago</p>
+                    <div class="icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <div class="small-box bg-gray">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.pago / dashboard.resumo.qtd | percentage: 1"></h3>
+                    <p>% Pago</p>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.valor | megaNumber"></h3>
+                    <p>Valor Recuperado</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-money"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--VALOR POR DIA-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Recupração por Dia</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <high-chart series="dashboard.dia_valor" axis-Categories="dimensao.data" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+                </div>
+            </div>
+        </div>
+    </div>   
+
+    <!--EFETIVIDADE-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Efetividade por Dia</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <high-chart series="dashboard.efetividade" axis-Categories="dimensao.data" type="column"
+                                plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                y-Axis1-Max="100"></high-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-retornosms', function ($scope, $http, $filter, cubo) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+        $scope.dashboard = { dimensao: {}, filtros: {} };
+        $scope.dimensao = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/retornosms",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.status;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+            });
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.tabulacao = cubo.obterDimensao('TABULACAO');
+            $scope.dashboard.dimensao.agencia = cubo.obterDimensao('AGENCIA');
+            $scope.dashboard.dimensao.operacao = cubo.obterDimensao('OPERACAO');
+            $scope.dashboard.dimensao.produto = cubo.obterDimensao('PRODUTO');
+            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
+            $scope.dashboard.dimensao.fornecedor = cubo.obterDimensao('FORNECEDOR');
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.tabulacao = cubo.obterDimensao('TABULACAO');
+            $scope.dimensao.agencia = cubo.obterDimensao('AGENCIA');
+            $scope.dimensao.operacao = cubo.obterDimensao('OPERACAO');
+            $scope.dimensao.produto = cubo.obterDimensao('PRODUTO');
+            $scope.dimensao.carteira = cubo.obterDimensao('CARTEIRA');
+            $scope.dimensao.fornecedor = cubo.obterDimensao('FORNECEDOR');
+            $scope.dimensao.data = cubo.obterDimensao('DATA');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            $scope.dashboard.resumo = alasql('select sum(QTD) qtd, sum(case when PAGO = "PAGO" then QTD else 0 end) pago, sum(case when PAGO = "PAGO" then VALOR else 0 end) valor from ?', [dados])[0];
+
+            let pordia = alasql('select data, sum(QTD) qtd, sum(case when PAGO = "PAGO" then QTD else 0 end) pago, sum(case when PAGO = "PAGO" then VALOR else 0 end) valor from ? group by DATA', [dados]);
+
+            $scope.dashboard.dia_valor = [{ name: 'respostas', data: pordia.map(obj => obj.valor) }];
+            $scope.dashboard.efetividade = [
+                { name: 'qtd', type: 'column', data: pordia.map(obj => obj.qtd - obj.pago) },
+                { name: 'pago', type: 'column', data: pordia.map(obj => obj.pago) },
+                { name: 'efetividade', type: 'spline', yAxis: 1, data: pordia.map(obj => (obj.pago*100/obj.qtd).toFixed(1)/1) },
+            ];
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('TABULACAO', $scope.dashboard.filtros.tabulacao);
+            cubo.filtrar('AGENCIA', $scope.dashboard.filtros.agencia);
+            cubo.filtrar('OPERACAO', $scope.dashboard.filtros.operacao);
+            cubo.filtrar('PRODUTO', $scope.dashboard.filtros.produto);
+            cubo.filtrar('CARTEIRA', $scope.dashboard.filtros.carteira);
+            cubo.filtrar('FORNECEDOR', $scope.dashboard.filtros.fornecedor);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
