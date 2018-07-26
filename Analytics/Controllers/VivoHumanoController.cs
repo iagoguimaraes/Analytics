@@ -148,16 +148,23 @@ namespace Analytics.Controllers
                 DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
                 DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
 
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
+                int horaini_2 = Convert.ToInt16(form["horaini_2"]);
+                int horafim_2 = Convert.ToInt16(form["horafim_2"]);
+
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
-                DataTable empresa_2= JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
+                DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
                 DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
 
-                string procedure = "sp_dashboard_comparativo_hora";
 
+
+                string procedure = "sp_dashboard_comparativo_hora";
                 if (form["visao"] == "hora")
                     procedure = "sp_dashboard_comparativo_hora";
                 if (form["visao"] == "dia")
@@ -177,6 +184,12 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+
+                    parametros.Add("horaini_2", horaini_2);
+                    parametros.Add("horafim_2", horafim_2);
 
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);

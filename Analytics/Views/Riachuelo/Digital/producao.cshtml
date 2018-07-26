@@ -84,6 +84,7 @@
             </div>
         </div>
 
+        <!--RESUMO-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-black-active">
@@ -151,8 +152,7 @@
             </div>
         </div>
 
-
-
+        <!--POR DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
 
@@ -201,6 +201,22 @@
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>-</th>
+                                        <th>-</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
 
@@ -209,6 +225,7 @@
             </div>
         </div>
 
+        <!--GRAFICO-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
@@ -223,19 +240,19 @@
                     </div>
                     <div class="card-body">
                         <h3>
-                        <small class="pull-right">
-                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="hitrate">Hit Rate</option>
-                                <option value="txloc">Tx Loc</option>
-                                <option value="txapv">Tx Apv</option>
-                                <option value="conversao">Conversão</option>
-                                <option value="discado">Discado</option>
-                                <option value="contato">Contato</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
-                            </select>
-                        </small>
+                            <small class="pull-right">
+                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                    <option value="hitrate">Hit Rate</option>
+                                    <option value="txloc">Tx Loc</option>
+                                    <option value="txapv">Tx Apv</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="cpca">CPCA</option>
+                                    <option value="promessa">Promessa</option>
+                                </select>
+                            </small>
                         </h3>
                         <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
                     </div>
@@ -245,14 +262,13 @@
 
 
 
-</div>
+        </div>
 
+    </div>
+</div>
 <script>
 
-    angular.module('app').controller('ctrl-riachuelo-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
-        dadosPagina.titulo = 'Produção';
-        dadosPagina.descricao = 'Riachuelo'
-
+    angular.module('app').controller('ctrl-riachuelo-producao', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
