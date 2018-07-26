@@ -154,12 +154,13 @@ namespace Analytics.Controllers
                 int horaini_2 = Convert.ToInt16(form["horaini_2"]);
                 int horafim_2 = Convert.ToInt16(form["horafim_2"]);
 
-
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
+                DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
-                DataTable segmentacao_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao_2"]);
+                DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
 
 
 
@@ -190,11 +191,13 @@ namespace Analytics.Controllers
                     parametros.Add("horaini_2", horaini_2);
                     parametros.Add("horafim_2", horafim_2);
 
+                    parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
-                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("aging", aging);
 
+                    parametros.Add("empresa_2", empresa_2);
                     parametros.Add("carteira_2", carteira_2);
-                    parametros.Add("segmentacao_2", segmentacao_2);
+                    parametros.Add("aging_2", aging_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
