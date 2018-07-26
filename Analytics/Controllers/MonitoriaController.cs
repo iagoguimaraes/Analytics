@@ -11,6 +11,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 
+
+
 namespace Analytics.Controllers
 {
     [RoutePrefix("api/monitoria")]
@@ -131,7 +133,7 @@ namespace Analytics.Controllers
                 string arquivo2 = System.Text.Encoding.Default.GetString(Arquivo);
                 string teltratado = tel.Replace(")", "").Replace("(","").Replace("-","");
                 string nameFile = teste + '\\' + nomeCredor + '_' + id_campanha + '_' + teltratado;
-                nameFile = nameFile + ".mp3";
+                nameFile = nameFile + ".wav";
 
 
 
@@ -268,6 +270,7 @@ namespace Analytics.Controllers
 
         [Route("download")]
         [HttpPost]
+        [Autorizar]
         public HttpResponseMessage gerarFile(FormDataCollection form)
         {
 
@@ -277,6 +280,7 @@ namespace Analytics.Controllers
             using (FileStream file = new FileStream(caminho, FileMode.Open, FileAccess.Read))
             {
                 byte[] bytes = new byte[file.Length];
+                string arquivo2 = System.Text.Encoding.Default.GetString(bytes);
                 file.Read(bytes, 0, (int)file.Length);
                 ms.Write(bytes, 0, (int)file.Length);
 

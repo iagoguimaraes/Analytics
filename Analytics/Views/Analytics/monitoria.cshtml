@@ -134,8 +134,8 @@
 
                     <!--BOTÃO-->
                     <div button type="button" class="btn btn-primary" ng-click="downloadAudio(d.ds_link)" onclick="addDisplayNone('filtros-window')">
-                        <b>  Escutar</b>
-                        <div class="fa fa-headphones" data-toggle="control-sidebar">
+                        <b>  Download</b>
+                        <div class="fa fa-download" data-toggle="control-sidebar">
                         </div>
                     </div>
 
@@ -640,10 +640,22 @@
                 data: { caminho: caminho },
                 responseType: 'arraybuffer',
             }).then(function success(r) {
-
-                var blob = new Blob([r.data], { type: "audio/x-wav" });
+                console.log(caminho);
+                var a = document.createElement('a');
+                a.style = "display: none";
+                var blob = new Blob([r.data], { type: "audio/x-wav"});
                 var objectUrl = URL.createObjectURL(blob);
-                window.open(objectUrl);
+                a.href = objectUrl;
+                var n = caminho.lastIndexOf("\\");
+                var nome = caminho.substring(n+1, 9999);
+                console.log(nome);
+                a.download = nome;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(objectUrl);
+                //window.open(objectUrl);
+
             });
         }
 
