@@ -29,45 +29,58 @@
                         </div>
                     </div>
                     <div class="card-body">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="row margin-bottom">
+                            <!--DATA INCIAL-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                             </div>
-                        </div>
 
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                            <!--DATA FINAL-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
-                        </div>
 
-                        <!--EMPRESA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Empresa</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
-                        </div>
+                            <!--EMPRESA-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
+                            </div>
 
-                        <!--CARTEIRA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteira</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                        </div>
+                            <!--CARTEIRA-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                            </div>
 
-                        <!--AGING-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Aging</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                            <!--AGING-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Aging</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                            </div>
+
+                            <!--SUPERVISOR-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                            </div>
+
+                            <!--EQUIPE-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Equipe</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe"></select2>
+                            </div>
                         </div>
 
                         <!--BOTÃO-->
@@ -242,6 +255,71 @@
             </div>
         </div>
 
+        <!--TABELA SUPERVISOR/EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor/Equipe</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'ds_supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_equipe}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- ANÁLISE POR OCORRENCIA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -279,6 +357,8 @@
             empresas: '',
             carteiras: '',
             aging: '',
+            equipe: '',
+            supervisor: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -297,6 +377,8 @@
             $scope.dashFiltros.empresas = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.aging = r.data.Table2;
+            $scope.dashFiltros.supervisor = r.data.Table3;
+            $scope.dashFiltros.equipe = r.data.Table4;
 
         });
 
@@ -312,7 +394,7 @@
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.tabulacao = data.Table2;
-
+                $scope.dashboard.supervisor = data.Table3;
                 $scope.carregarGrafico();
 
             });
