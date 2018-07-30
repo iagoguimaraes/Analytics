@@ -223,6 +223,8 @@ namespace Analytics.Controllers
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -233,6 +235,9 @@ namespace Analytics.Controllers
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("aging", aging);
+                    parametros.Add("equipes", equipe);
+                    parametros.Add("supervisor", supervisor);
+                    
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -257,6 +262,8 @@ namespace Analytics.Controllers
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -267,6 +274,8 @@ namespace Analytics.Controllers
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("aging", aging);
+                    parametros.Add("equipes", equipe);
+                    parametros.Add("supervisor", supervisor);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
