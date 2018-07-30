@@ -61,6 +61,18 @@
                             <select2  style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
                         </div>
 
+                        <!--SUPERVISOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Supervisor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                        </div>
+
+                        <!--EQUIPE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Equipe</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -70,7 +82,6 @@
                 </div>
             </div>
         </div>
-
 
         <!--BANNER-->
         <div class="box box-widget widget-user">
@@ -361,6 +372,71 @@
             </div>
         </div>
 
+        <!--PRODUÇÃO POR EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.equipe">
+                                <thead>
+                                    <tr>
+                                        <th>Equipe</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.equipe | groupBy: 'supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].supervisor}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{c | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{c | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{c | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.equipe}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.cpc / p.contato | percentage:1}}</td>
+                                        <td>{{p.cpca / p.cpc | percentage:1}}</td>
+                                        <td>{{p.promessa / p.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>        
+
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -370,7 +446,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -394,6 +470,9 @@
             empresa: '',
             carteira: '',
             aging: '',
+
+            supervisor: '',
+            equipe: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -410,6 +489,8 @@
             $scope.dashFiltros.empresa = data.Table;
             $scope.dashFiltros.carteira = data.Table1;
             $scope.dashFiltros.aging = data.Table2;
+            $scope.dashFiltros.supervisor = data.Table3;
+            $scope.dashFiltros.equipe = data.Table4;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -426,7 +507,8 @@
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.empresa = data.Table1;
                 $scope.dashboard.horahora = data.Table2;
-                $scope.dashboard.operador = data.Table3;
+                $scope.dashboard.equipe = data.Table3;
+                $scope.dashboard.operador = data.Table4;
 
                 $scope.carregarGrafico();
             });
