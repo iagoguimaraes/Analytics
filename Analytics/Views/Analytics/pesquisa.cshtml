@@ -1,0 +1,342 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-pesquisa">
+
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Pesquisa de Satisfação</div>
+    </header>
+
+    <div>
+        <label>
+            Com intuito de melhorarmos a interação da ferramenta com a operação, montamos um pequeno questionário composto de 8 questões sobre a usabilidade e recursos disponíveis nos dashboards do Analytics.
+        </label>
+    </div><br>
+
+
+    <!-- MODAL INSERIR-->
+    <form action="">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">1) Entre as funcionalidades abaixo, qual você acha que poderíamos melhorar ?</span>
+            </div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta1" ng-true-value="'Estou satisfeito com todas.'" id="outros">
+                    Estou satisfeito com todas.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta2" ng-true-value="'Filtros.'" id="filtro">
+                    Filtros.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta3" ng-true-value="'Graficos.'" id="grafico">
+                    Graficos.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta4" ng-true-value="'Tabela com os Resumos.'" id="tabela">
+                    Tabela com os Resumos.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta5" ng-true-value="'Tempo de atualização.'" id="tempo">
+                    Tempo de atualização.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta6" ng-true-value="'Dados do Chamaleon.'" id="chamaleon">
+                    Dados do Chamaleon.<br>
+                    <input name="teste" type="checkbox" ng-model="questao.questao1.resposta7" ng-true-value="'Outros.'" id="outros">
+                    Outros.<br>
+                </div><br>
+                <label>
+                    Por gentileza, nos detalhe as que vocês escolheu ...
+                    <textarea rows="4" cols="142" ng-model="questao.questao1.complemento"></textarea>
+                </label>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">2) Quando você precisa buscar os dados de produção da ultima hora, oque costuma fazer ?</span>
+            </div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta1" ng-true-value="'Nectar.'" id="filtro">
+                    Nectar.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta2" ng-true-value="'Hora Hora MIS.'" id="grafico">
+                    Hora Hora MIS.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta3" ng-true-value="'Analytics.'" id="tabela">
+                    Analytics.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta4" ng-true-value="'Hora Hora Operação.'" id="tempo">
+                    Hora Hora Operação.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta5" ng-true-value="'Hora Hora Estrategia.'" id="chamaleon">
+                    Hora Hora Estrategia.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta6" ng-true-value="'Hora Hora Chamaleon.'" id="chamaleon">
+                    Hora Hora Chamaleon.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao2.resposta7" ng-true-value="'Outros.'" id="outros">
+                    Outros.<br>
+                </div><br>
+                <label>
+                    Caso tenha marcado algo diferente do Analytics, descreva oque este meio lhe oferece a mais:
+                    <textarea rows="4" cols="142" ng-model="questao.questao2.complemento"></textarea>
+                </label>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">3) Qual a frequência que você costuma acessar a ferramenta?</span>
+            </div>
+            <div class="card-body">
+                <div>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta1" value="A cada hora." id="filtro">
+                    A cada hora.<br>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta2" value="3 vezes por dia." id="grafico">
+                    3 vezes por dia.<br>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta3" value="1 vezes por dia." id="tabela">
+                    1 vezes por dia.<br>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta4" value="A cada dois dias." id="tempo">
+                    A cada dois dias.<br>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta5" value="Um vez por semana." id="chamaleon">
+                    Um vez por semana.<br>
+                    <input type="radio" name="teste" ng-model="questao.questao3.resposta6" value="Não costumo acessar." id="outros">
+                    Não costumo acessar.<br>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">4) Quais relatorios do Nectar você usa que não existem no Analytics?</span>
+            </div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao4.resposta1" ng-true-value="'Acionamentos.'" id="filtro">
+                    Acionamentos.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao4.resposta2" ng-true-value="'Entradas, devoluções e contratos ativos.'" id="grafico">
+                    Entradas, devoluções e contratos ativos.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao4.resposta3" ng-true-value="'Pagamentos.'" id="tabela">
+                    Pagamentos.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao4.resposta4" ng-true-value="'Estratificação de Base.'" id="tempo">
+                    Estratificação de Base.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao4.resposta5" ng-true-value="'Outros.'" id="chamaleon">
+                    Outros.<br>
+                </div>
+                <br>
+                <label>
+                    Caso não seja nenhum desses, poderia nos detalhar...
+                    <textarea rows="4" cols="142" ng-model="questao.questao4.complemento"></textarea>
+                </label>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">5) Como o Analytics poderia agregar mais no seu trabalho?</span>
+            </div>
+            <div class="card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao5.resposta1" ng-true-value="'Mais informação.'" id="filtro">
+                    Mais informação.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao5.resposta2" ng-true-value="'Uma atualização mais rapida.'" id="grafico">
+                    Uma atualização mais rapida.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao5.resposta3" ng-true-value="'Um tutorial de como usar.'" id="tabela">
+                    Um tutorial de como usar.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao5.resposta4" ng-true-value="'Um layout mais amigavel.'" id="tempo">
+                    Um layout mais amigavel.<br>
+                    <input class="form-check-input" type="checkbox" ng-model="questao.questao5.resposta5" ng-true-value="'Mais suporte da equipe que desenvolve.'" id="chamaleon">
+                    Mais suporte da equipe que desenvolve.<br>
+                </div><br>
+                <label>
+                    Fique a vontade para complementar...
+                    <textarea rows="4" cols="142" ng-model="questao.questao5.complemento"></textarea>
+                </label>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">6) Quais relatorios/visões você gostaria de acrescentar em sua carteira?</span>
+            </div>
+            <div class="card-body">
+                <textarea ng-model="questao.questao6.complemento" placeholder="Exem.: Volume das ações de Sms por região." rows="4" cols="142"></textarea>
+            </div>
+        </div>
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">7) De 0 à 10, qual nota você daria ao Analytics?</span>
+            </div>
+            <div class="card-body">
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta0" value="0">0
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta1" value="1">1
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta2" value="2">2
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta3" value="3">3
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta4" value="4">4
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta5" value="5" checked>5
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta6" value="6">6
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta7" value="7">7
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta8" value="8">8
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta9" value="9">9
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="optradio" ng-model="questao.questao7.resposta10" value="10">10
+                </label>
+            </div>
+        </div>
+        <br>
+
+
+    </form>
+
+
+    <div class="modal-footer">
+        <br>
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
+    </div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-pesquisa', function ($scope, $http) {
+
+
+        $scope.questao = {};
+
+
+
+        // inserir nova ocorrencia
+        $scope.inserirOcorrencia = function ($event) {
+
+            //if (!$scope.diario.grupo) {
+            //    $('[ng-model="diario.grupo"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+            //console.log($scope.diario.grupo);
+
+            //if (!$scope.diario.empresa) {
+            //    $('[ng-model="diario.empresa"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.carteira) {
+            //    $('[ng-model="diario.carteira"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.ocorrencia) {
+            //    $('[ng-model="diario.ocorrencia"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.campanha) {
+            //    $('[ng-model="diario.campanha"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.cpf) {
+            //    $('[ng-model="diario.cpf"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.tel) {
+            //    $('[ng-model="diario.tel"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.persona) {
+            //    $('[ng-model="diario.persona"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.link) {
+
+            //    $('[uploadfile="diario.link"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+
+
+            //if (!$scope.diario.fornecedores) {
+            //    $('[ng-model="diario.fornecedores"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+            //if (!$scope.diario.problemas) {
+            //    $('[ng-model="diario.problemas"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+            //if (!$scope.diario.nvproblema) {
+            //    $('[ng-model="diario.nvproblema"]').focus();
+            //    $event.stopPropagation();
+            //    return false;
+            //}
+
+            console.log($scope.questao);
+            console.log($scope.questao.questao1.resposta1);
+
+            $http({
+                method: 'POST',
+                url: "/api/monitoria/pesquisa",
+                data: $scope.questao,
+            }).then(function success(r) {
+
+
+            });
+        }
+
+
+
+
+    });
+
+</script>
+
+
+

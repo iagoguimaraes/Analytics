@@ -131,7 +131,7 @@ namespace Analytics.Controllers
 
                 byte[] Arquivo = Convert.FromBase64String(link);
                 string arquivo2 = System.Text.Encoding.Default.GetString(Arquivo);
-                string teltratado = tel.Replace(")", "").Replace("(","").Replace("-","");
+                string teltratado = tel.Replace(")", "").Replace("(", "").Replace("-", "");
                 string nameFile = teste + '\\' + nomeCredor + '_' + id_campanha + '_' + teltratado;
                 nameFile = nameFile + ".wav";
 
@@ -139,7 +139,7 @@ namespace Analytics.Controllers
 
                 File.WriteAllBytes(nameFile, Convert.FromBase64String(link));
 
-                
+
 
                 DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
 
@@ -304,6 +304,72 @@ namespace Analytics.Controllers
 
         }
 
+
+        [Route("pesquisa")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirPesquisa(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                string teste = form["questao1[resposta1]"];
+
+                int id_usuario = sessao.id_usuario;
+                string resposta1 = null;
+                string complemento1 = null;
+                string resposta2 = null;
+                string complemento2 = null;
+                string resposta3 = null;
+                string complemento3 = null;
+                string resposta4 = null;
+                string complemento4 = null;
+                string resposta5 = null;
+                string complemento5 = null;
+                string resposta6 = null;
+                string complemento6 = null;
+                string resposta7 = null;
+                string complemento7 = null;
+                string resposta8 = null;
+                string complemento8 = null;
+
+                string questao;
+
+
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_grupo", id_usuario);
+                    parametros.Add("resposta1", id_usuario);
+                    parametros.Add("complemento1", id_usuario);
+                    parametros.Add("resposta2", id_usuario);
+                    parametros.Add("complemento2", id_usuario);
+                    parametros.Add("resposta3", id_usuario);
+                    parametros.Add("complemento3", id_usuario);
+                    parametros.Add("resposta4", id_usuario);
+                    parametros.Add("complemento4", id_usuario);
+                    parametros.Add("resposta5", id_usuario);
+                    parametros.Add("complemento5", id_usuario);
+                    parametros.Add("resposta6", id_usuario);
+                    parametros.Add("complemento6", id_usuario);
+                    parametros.Add("resposta7", id_usuario);
+                    parametros.Add("complemento7", id_usuario);
+                    parametros.Add("resposta8", id_usuario);
+                    parametros.Add("complemento8", id_usuario);
+
+                    sql.ExecuteProcedureDataSet("sp_ins_pesquisa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         public static string CredorName(int id_credor)
         {
             try
@@ -385,14 +451,14 @@ namespace Analytics.Controllers
 
             bool validadorDia = true;
             string pathDestDay = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "";
-            string pathDest = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\";
-
+            string pathDest = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt;
+            string path = @"\\venezuela\GravacoesDigital\" + ano;
             string pathDestCredor = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "\\" + credor;
             string newPath2 = newPath2 = System.IO.Path.Combine(pathDestDay, credor);
-            string[] entries = Directory.GetFileSystemEntries(pathDest, "*"); /*Verifxa pasta do dia*/
+            string[] entries = Directory.GetFileSystemEntries(path, "*"); /*Verifxa pasta do dia*/
             for (int i = 0; i < entries.Length; i++)
             {
-                if (entries[i].Equals(pathDestDay)) 
+                if (entries[i].Equals(pathDest))
                 {
                     Console.WriteLine("Pasta do dia ja existe.");
                     validadorDia = false;
@@ -401,7 +467,7 @@ namespace Analytics.Controllers
                     for (int j = 1; j <= files2.Length; j++) /*Verifxa pasta do credor*/
                     {
 
-                        if (files2[(j-1)].Equals(pathDestCredor))
+                        if (files2[(j - 1)].Equals(pathDestCredor))
                         {
                             Console.WriteLine("Pasta do credor ja existe.");
                             validador = true;
@@ -419,6 +485,14 @@ namespace Analytics.Controllers
 
                 }
             }
+
+            if (validadorDia == true)
+            {
+                System.IO.Directory.CreateDirectory(pathDest);
+                Console.WriteLine("Pasta do mes.");
+            }
+
+
 
             if (validadorDia == true)
             {
