@@ -314,27 +314,20 @@ namespace Analytics.Controllers
             {
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
 
-                string teste = form["questao1[resposta1]"];
+
 
                 int id_usuario = sessao.id_usuario;
-                string resposta1 = null;
-                string complemento1 = null;
-                string resposta2 = null;
-                string complemento2 = null;
-                string resposta3 = null;
-                string complemento3 = null;
-                string resposta4 = null;
-                string complemento4 = null;
-                string resposta5 = null;
-                string complemento5 = null;
-                string resposta6 = null;
-                string complemento6 = null;
-                string resposta7 = null;
-                string complemento7 = null;
-                string resposta8 = null;
-                string complemento8 = null;
-
-                string questao;
+                string resposta1 = (form["questao1[resposta1]"]) + form["questao1[resposta2]"] + form["questao1[resposta3]"] + form["questao1[resposta4]"] + form["questao1[resposta5]"] + form["questao1[resposta6]"] + form["questao1[resposta7]"];
+                string complemento1 = form["questao1[complemento]"];
+                string resposta2 = (form["questao2[resposta1]"]) + form["questao2[resposta2]"] + form["questao2[resposta3]"] + form["questao2[resposta4]"] + form["questao2[resposta5]"] + form["questao2[resposta6]"] + form["questao2[resposta7]"];
+                string complemento2 = form["questao2[complemento]"]; 
+                string resposta3 = (form["questao3[resposta1]"]) + form["questao3[resposta2]"] + form["questao3[resposta3]"] + form["questao3[resposta4]"] + form["questao3[resposta5]"] + form["questao3[resposta6]"];
+                string resposta4 = (form["questao4[resposta1]"]) + form["questao4[resposta2]"] + form["questao4[resposta3]"] + form["questao4[resposta4]"] + form["questao4[resposta5]"];
+                string complemento4 = form["questao4[complemento]"]; 
+                string resposta5 = (form["questao5[resposta1]"]) + form["questao5[resposta2]"] + form["questao5[resposta3]"] + form["questao5[resposta4]"] + form["questao5[resposta5]"]; ;
+                string complemento5 = form["questao5[complemento]"];
+                string resposta6 = form["questao6[complemento]"];
+                string resposta7 = (form["questao7[resposta1]"]) + form["questao7[resposta2]"] + form["questao7[resposta3]"] + form["questao7[resposta4]"] + form["questao7[resposta5]"] + form["questao7[resposta6]"] + form["questao7[resposta7]"] + form["questao7[resposta8]"] + form["questao7[resposta9]"] + form["questao7[resposta10]"];
 
 
 
@@ -342,23 +335,18 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("id_grupo", id_usuario);
-                    parametros.Add("resposta1", id_usuario);
-                    parametros.Add("complemento1", id_usuario);
-                    parametros.Add("resposta2", id_usuario);
-                    parametros.Add("complemento2", id_usuario);
-                    parametros.Add("resposta3", id_usuario);
-                    parametros.Add("complemento3", id_usuario);
-                    parametros.Add("resposta4", id_usuario);
-                    parametros.Add("complemento4", id_usuario);
-                    parametros.Add("resposta5", id_usuario);
-                    parametros.Add("complemento5", id_usuario);
-                    parametros.Add("resposta6", id_usuario);
-                    parametros.Add("complemento6", id_usuario);
-                    parametros.Add("resposta7", id_usuario);
-                    parametros.Add("complemento7", id_usuario);
-                    parametros.Add("resposta8", id_usuario);
-                    parametros.Add("complemento8", id_usuario);
+                    parametros.Add("iduser", id_usuario);
+                    parametros.Add("resposta1", resposta1);
+                    parametros.Add("complemento1", complemento1);
+                    parametros.Add("resposta2", resposta2);
+                    parametros.Add("complemento2", complemento2);
+                    parametros.Add("resposta3", resposta3);
+                    parametros.Add("resposta4", resposta4);
+                    parametros.Add("complemento4", complemento4);
+                    parametros.Add("resposta5", resposta5);
+                    parametros.Add("complemento5", complemento5);
+                    parametros.Add("resposta6", resposta6);
+                    parametros.Add("resposta7", resposta7);
 
                     sql.ExecuteProcedureDataSet("sp_ins_pesquisa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK);
