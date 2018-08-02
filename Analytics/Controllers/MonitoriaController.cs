@@ -320,10 +320,10 @@ namespace Analytics.Controllers
                 string resposta1 = (form["questao1[resposta1]"]) + form["questao1[resposta2]"] + form["questao1[resposta3]"] + form["questao1[resposta4]"] + form["questao1[resposta5]"] + form["questao1[resposta6]"] + form["questao1[resposta7]"];
                 string complemento1 = form["questao1[complemento]"];
                 string resposta2 = (form["questao2[resposta1]"]) + form["questao2[resposta2]"] + form["questao2[resposta3]"] + form["questao2[resposta4]"] + form["questao2[resposta5]"] + form["questao2[resposta6]"] + form["questao2[resposta7]"];
-                string complemento2 = form["questao2[complemento]"]; 
+                string complemento2 = form["questao2[complemento]"];
                 string resposta3 = (form["questao3[resposta1]"]) + form["questao3[resposta2]"] + form["questao3[resposta3]"] + form["questao3[resposta4]"] + form["questao3[resposta5]"] + form["questao3[resposta6]"];
                 string resposta4 = (form["questao4[resposta1]"]) + form["questao4[resposta2]"] + form["questao4[resposta3]"] + form["questao4[resposta4]"] + form["questao4[resposta5]"];
-                string complemento4 = form["questao4[complemento]"]; 
+                string complemento4 = form["questao4[complemento]"];
                 string resposta5 = (form["questao5[resposta1]"]) + form["questao5[resposta2]"] + form["questao5[resposta3]"] + form["questao5[resposta4]"] + form["questao5[resposta5]"]; ;
                 string complemento5 = form["questao5[complemento]"];
                 string resposta6 = form["questao6[complemento]"];
@@ -392,7 +392,7 @@ namespace Analytics.Controllers
             string mesInt = data.Substring(4, 2);
             string dia = data.Substring(6, 2);
             string mesTxt = null;
-            bool validador = false;
+
 
             switch (mesInt)
             {
@@ -436,48 +436,53 @@ namespace Analytics.Controllers
                     Console.WriteLine("Default case");
                     break;
             }
-
+            bool validadorMes = true;
             bool validadorDia = true;
+            bool validadorCredor = true;
             string pathDestDay = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "";
-            string pathDest = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt;
-            string path = @"\\venezuela\GravacoesDigital\" + ano;
+            string pathDestMonth = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt;
+            string pathYear = @"\\venezuela\GravacoesDigital\" + ano;
             string pathDestCredor = @"\\venezuela\GravacoesDigital\" + ano + "\\" + mesTxt + "\\" + dia + "\\" + credor;
             string newPath2 = newPath2 = System.IO.Path.Combine(pathDestDay, credor);
-            string[] entries = Directory.GetFileSystemEntries(path, "*"); /*Verifxa pasta do dia*/
-            for (int i = 0; i < entries.Length; i++)
+            string[] entries = Directory.GetFileSystemEntries(pathYear, "*"); /*Verifxa pasta do mes*/
+            for (int i = 0; i < entries.Length; i++) //Varre o diretorio
             {
-                if (entries[i].Equals(pathDest))
+                if (entries[i].Equals(pathDestMonth)) //Valida mes
                 {
-                    Console.WriteLine("Pasta do dia ja existe.");
-                    validadorDia = false;
+                    validadorMes = false;
+                    string[] filesDia = Directory.GetFileSystemEntries(pathDestMonth, "*");
 
-                    string[] files2 = Directory.GetFileSystemEntries(pathDestDay, "*");
-                    for (int j = 1; j <= files2.Length; j++) /*Verifxa pasta do credor*/
+                    for (int k = 0; k < filesDia.Length; k++)
                     {
 
-                        if (files2[(j - 1)].Equals(pathDestCredor))
+                        if (filesDia[k].Equals(pathDestDay)) //Valida day
                         {
-                            Console.WriteLine("Pasta do credor ja existe.");
-                            validador = true;
-                            break;
+                            validadorDia = false;
+                            string[] filesCredor = Directory.GetFileSystemEntries(pathDestDay, "*");
+
+                            for (int l = 0; l < filesCredor.Length; l++)
+                            {
+
+                                if (filesCredor[l].Equals(pathDestCredor))
+                                {
+                                    validadorCredor = false;
+
+                                }
+
+                            }
+
                         }
 
-                    }
-
-                    if (validador == false)
-                    {
-                        newPath2 = System.IO.Path.Combine(pathDestDay, credor);
-                        System.IO.Directory.CreateDirectory(newPath2);
-                        Console.WriteLine("Criou pasta " + credor);
                     }
 
                 }
             }
 
-            if (validadorDia == true)
+            if (validadorMes == true)
             {
-                System.IO.Directory.CreateDirectory(pathDest);
-                Console.WriteLine("Pasta do mes.");
+                Console.WriteLine("Pasta do mes não existe.");
+                System.IO.Directory.CreateDirectory(pathDestMonth);
+                Console.WriteLine("Pasta do mes criada.");
             }
 
 
@@ -485,15 +490,19 @@ namespace Analytics.Controllers
             if (validadorDia == true)
             {
                 Console.WriteLine("Pasta do dia não existe.");
-                string newPath = System.IO.Path.Combine(pathDest, dia);
-                System.IO.Directory.CreateDirectory(newPath);
+                System.IO.Directory.CreateDirectory(pathDestDay);
                 Console.WriteLine("Pasta do dia criada.");
 
-                newPath2 = System.IO.Path.Combine(pathDestDay, credor);
-                System.IO.Directory.CreateDirectory(newPath2);
+            }
+
+            if (validadorCredor == true)
+            {
+                Console.WriteLine("Pasta do credor não existe.");
+                System.IO.Directory.CreateDirectory(pathDestCredor);
                 Console.WriteLine("Criou pasta " + credor);
 
             }
+
             return newPath2;
         }
 
