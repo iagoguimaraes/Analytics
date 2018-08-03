@@ -22,7 +22,6 @@ namespace Analytics.Controllers
         [Route("consultar")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage ConsultarMonitoria(FormDataCollection form)
         {
             try
@@ -75,7 +74,6 @@ namespace Analytics.Controllers
         [Route("opcoes")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage OpcoesMonitoria()
         {
             try
@@ -101,7 +99,6 @@ namespace Analytics.Controllers
         [Route("inserir")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage InserirMonitoria(FormDataCollection form)
         {
             try
@@ -183,7 +180,6 @@ namespace Analytics.Controllers
         [Route("editar")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage EditarMonitoria(FormDataCollection form)
         {
             try
@@ -246,7 +242,6 @@ namespace Analytics.Controllers
         [Route("remover")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage RemoverMonitoria(FormDataCollection form)
         {
             try
@@ -276,7 +271,6 @@ namespace Analytics.Controllers
         [Route("download")]
         [HttpPost]
         [Autorizar]
-        [Gravar]
         public HttpResponseMessage gerarFile(FormDataCollection form)
         {
 
@@ -328,13 +322,13 @@ namespace Analytics.Controllers
                 string complemento1 = form["questao1[complemento]"];
                 string resposta2 = (form["questao2[resposta1]"]) + form["questao2[resposta2]"] + form["questao2[resposta3]"] + form["questao2[resposta4]"] + form["questao2[resposta5]"] + form["questao2[resposta6]"] + form["questao2[resposta7]"];
                 string complemento2 = form["questao2[complemento]"];
-                string resposta3 = (form["questao3[resposta1]"]) + form["questao3[resposta2]"] + form["questao3[resposta3]"] + form["questao3[resposta4]"] + form["questao3[resposta5]"] + form["questao3[resposta6]"];
+                string resposta3 = (form["questao3[resposta]"]);
                 string resposta4 = (form["questao4[resposta1]"]) + form["questao4[resposta2]"] + form["questao4[resposta3]"] + form["questao4[resposta4]"] + form["questao4[resposta5]"];
                 string complemento4 = form["questao4[complemento]"];
                 string resposta5 = (form["questao5[resposta1]"]) + form["questao5[resposta2]"] + form["questao5[resposta3]"] + form["questao5[resposta4]"] + form["questao5[resposta5]"]; ;
                 string complemento5 = form["questao5[complemento]"];
                 string resposta6 = form["questao6[complemento]"];
-                string resposta7 = (form["questao7[resposta0]"]) + (form["questao7[resposta1]"]) + form["questao7[resposta2]"] + form["questao7[resposta3]"] + form["questao7[resposta4]"] + form["questao7[resposta5]"] + form["questao7[resposta6]"] + form["questao7[resposta7]"] + form["questao7[resposta8]"] + form["questao7[resposta9]"] + form["questao7[resposta10]"];
+                string resposta7 = (form["questao7[resposta]"]);
 
                 if(string.IsNullOrEmpty(complemento1))
                 {
