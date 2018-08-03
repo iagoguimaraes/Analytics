@@ -327,7 +327,7 @@ namespace Analytics.Controllers
                 string resposta5 = (form["questao5[resposta1]"]) + form["questao5[resposta2]"] + form["questao5[resposta3]"] + form["questao5[resposta4]"] + form["questao5[resposta5]"]; ;
                 string complemento5 = form["questao5[complemento]"];
                 string resposta6 = form["questao6[complemento]"];
-                string resposta7 = (form["questao7[resposta1]"]) + form["questao7[resposta2]"] + form["questao7[resposta3]"] + form["questao7[resposta4]"] + form["questao7[resposta5]"] + form["questao7[resposta6]"] + form["questao7[resposta7]"] + form["questao7[resposta8]"] + form["questao7[resposta9]"] + form["questao7[resposta10]"];
+                string resposta7 = (form["questao7[resposta0]"]) + (form["questao7[resposta1]"]) + form["questao7[resposta2]"] + form["questao7[resposta3]"] + form["questao7[resposta4]"] + form["questao7[resposta5]"] + form["questao7[resposta6]"] + form["questao7[resposta7]"] + form["questao7[resposta8]"] + form["questao7[resposta9]"] + form["questao7[resposta10]"];
 
                 if(string.IsNullOrEmpty(complemento1))
                 {
