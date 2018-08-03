@@ -22,7 +22,8 @@ namespace Analytics.Controllers
         [Route("consultar")]
         [HttpPost]
         [Autorizar]
-        public HttpResponseMessage ConsultarDiarioBordo(FormDataCollection form)
+        [Gravar]
+        public HttpResponseMessage ConsultarMonitoria(FormDataCollection form)
         {
             try
             {
@@ -74,7 +75,8 @@ namespace Analytics.Controllers
         [Route("opcoes")]
         [HttpPost]
         [Autorizar]
-        public HttpResponseMessage OpcoesDiarioBordo()
+        [Gravar]
+        public HttpResponseMessage OpcoesMonitoria()
         {
             try
             {
@@ -99,7 +101,8 @@ namespace Analytics.Controllers
         [Route("inserir")]
         [HttpPost]
         [Autorizar]
-        public HttpResponseMessage InserirDiarioBordo(FormDataCollection form)
+        [Gravar]
+        public HttpResponseMessage InserirMonitoria(FormDataCollection form)
         {
             try
             {
@@ -180,7 +183,8 @@ namespace Analytics.Controllers
         [Route("editar")]
         [HttpPost]
         [Autorizar]
-        public HttpResponseMessage EditarDiarioBordo(FormDataCollection form)
+        [Gravar]
+        public HttpResponseMessage EditarMonitoria(FormDataCollection form)
         {
             try
             {
@@ -242,7 +246,8 @@ namespace Analytics.Controllers
         [Route("remover")]
         [HttpPost]
         [Autorizar]
-        public HttpResponseMessage RemoverDiarioBordo(FormDataCollection form)
+        [Gravar]
+        public HttpResponseMessage RemoverMonitoria(FormDataCollection form)
         {
             try
             {
@@ -271,6 +276,7 @@ namespace Analytics.Controllers
         [Route("download")]
         [HttpPost]
         [Autorizar]
+        [Gravar]
         public HttpResponseMessage gerarFile(FormDataCollection form)
         {
 
@@ -308,6 +314,7 @@ namespace Analytics.Controllers
         [Route("pesquisa")]
         [HttpPost]
         [Autorizar]
+        [Gravar]
         public HttpResponseMessage InserirPesquisa(FormDataCollection form)
         {
             try
