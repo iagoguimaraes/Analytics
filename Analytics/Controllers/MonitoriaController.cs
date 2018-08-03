@@ -329,7 +329,31 @@ namespace Analytics.Controllers
                 string resposta6 = form["questao6[complemento]"];
                 string resposta7 = (form["questao7[resposta1]"]) + form["questao7[resposta2]"] + form["questao7[resposta3]"] + form["questao7[resposta4]"] + form["questao7[resposta5]"] + form["questao7[resposta6]"] + form["questao7[resposta7]"] + form["questao7[resposta8]"] + form["questao7[resposta9]"] + form["questao7[resposta10]"];
 
+                if(string.IsNullOrEmpty(complemento1))
+                {
+                    complemento1 = "Sem complemento.";
+                }
 
+
+                if (string.IsNullOrEmpty(complemento2))
+                {
+                    complemento2 = "Sem complemento.";
+                }
+
+                if (string.IsNullOrEmpty(complemento4))
+                {
+                    complemento4 = "Sem complemento.";
+                }
+
+                if (string.IsNullOrEmpty(complemento5))
+                {
+                    complemento5 = "Sem complemento.";
+                }
+
+                if (string.IsNullOrEmpty(resposta6))
+                {
+                    resposta6 = "Sem Resposta.";
+                }
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
