@@ -11,7 +11,8 @@
                 format: 'yyyy-mm-dd'
                 ,autoclose: true
                 ,ignoreReadonly: true
-                ,allowInputToggle: true
+                , allowInputToggle: true
+                , orientation: 'bottom'
             });
         }
     }
