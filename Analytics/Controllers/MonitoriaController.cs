@@ -401,7 +401,7 @@ namespace Analytics.Controllers
                     return nomeCredor;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
