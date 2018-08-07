@@ -79,5 +79,38 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("negociador")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Negociador(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string campanhas = form["campanhas"];
+
+                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanhas", _campanhas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("dashboard_negociador", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
