@@ -1,0 +1,365 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-mktzap-negociador">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Auto Negociador</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INICIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--CAMPANHAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanha</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.quantidade | megaNumber"></h3>
+                        <p>Clientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.atendimento | number"></h3>
+                        <p>Atendimento</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3>R${{dashboard.resumo.valor | megaNumber}}</h3>
+                        <p>Valor Total</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>R${{dashboard.resumo.promessa | megaNumber}}</h3>
+                        <p>Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.nao_validou_cpf | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.nao_validou_cpf / dashboard.resumo.atendimento | percentage: 1"></h4>
+                        <p>Não Validou CPF</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-minus-square"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.validou_cpf | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.validou_cpf / dashboard.resumo.atendimento | percentage: 1"></h4>
+                        <p>Validou CPF</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check-square"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.nao_emitiu | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.nao_emitiu / dashboard.resumo.validou_cpf | percentage: 1"></h4>
+                        <p>Não Emitiu</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.emitiu | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.emitiu / dashboard.resumo.validou_cpf | percentage: 1"></h4>
+                        <p>Emitiu Boleto</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--GRAFICOS-->
+        <div class="row">
+
+            <!--POR CANAL-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Atendimento por Canal</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.canal" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>             
+            </div>
+
+            <!--DIAGRAMA-->
+            <div class="col-xs-12 col-md-8 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Fluxo do Atendimento</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Quantidade"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--ANALISE POR CAMPANHA-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Campanha</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.campanha">
+                                <thead>
+                                    <tr>
+                                        <th>Campanha</th>
+                                        <th>Clientes</th>
+                                        <th>Valor</th>
+                                        <th>Atendimento</th>
+                                        <th>Não Validou CPF</th>
+                                        <th>Validou CPF</th>
+                                        <th>Não Emitiu</th>
+                                        <th>Emitiu</th>
+                                        <th>Promessa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.campanha">
+                                        <td>{{c.campanha}}</td>
+                                        <td>{{c.quantidade | number}}</td>
+                                        <td>{{c.valor | megaNumber}}</td>
+                                        <td>{{c.atendimento | number}}</td>
+                                        <td>{{c.nao_validou_cpf}}</td>
+                                        <td>{{c.validou_cpf}}</td>
+                                        <td>{{c.nao_emitiu}}</td>
+                                        <td>{{c.emitiu}}</td>
+                                        <td>{{c.promessa | currency:'R$'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR DIA-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Clientes</th>
+                                        <th>Valor</th>
+                                        <th>Atendimento</th>
+                                        <th>Não Validou CPF</th>
+                                        <th>Validou CPF</th>
+                                        <th>Não Emitiu</th>
+                                        <th>Emitiu</th>
+                                        <th>Promessa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.dia">
+                                        <td>{{c.data}}</td>
+                                        <td>{{c.quantidade | number}}</td>
+                                        <td>{{c.valor | megaNumber}}</td>
+                                        <td>{{c.atendimento | number}}</td>
+                                        <td>{{c.nao_validou_cpf}}</td>
+                                        <td>{{c.validou_cpf}}</td>
+                                        <td>{{c.nao_emitiu}}</td>
+                                        <td>{{c.emitiu}}</td>
+                                        <td>{{c.promessa | currency:'R$'}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.quantidade}}</th>
+                                        <th>{{dashboard.resumo.valor | megaNumber}}</th>
+                                        <th>{{dashboard.resumo.atendimento | number}}</th>
+                                        <th>{{dashboard.resumo.nao_validou_cpf}}</th>
+                                        <th>{{dashboard.resumo.validou_cpf}}</th>
+                                        <th>{{dashboard.resumo.nao_emitiu}}</th>
+                                        <th>{{dashboard.resumo.emitiu}}</th>
+                                        <th>{{dashboard.resumo.promessa | currency:'R$'}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    angular.module('app').controller('ctrl-mktzap-negociador', function ($scope, $http, $filter) {
+
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $http({
+            method: 'GET',
+            url: "/api/mktzap/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = r.data.Table;
+        });
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/mktzap/negociador",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.campanha = r.data.Table1;
+                $scope.dashboard.dia = r.data.Table2;
+                $scope.dashboard.canal = [{ name: 'Atendimento', data: r.data.Table3.map(obj => ({ name: obj.canal, y: obj.atendimento })) }];
+                $scope.dashboard.diagrama = r.data.Table4;
+            });
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
