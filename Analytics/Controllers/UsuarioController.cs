@@ -65,6 +65,7 @@ namespace Analytics.Controllers
             {
                 string nome = form["nome"];
                 string login = form["login"];
+                string cpf = form["cpf"];
                 bool cliente = Convert.ToBoolean(form["cliente"]);
                 DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
@@ -74,6 +75,7 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
                     parametros.Add("nome", nome);
                     parametros.Add("login", login);
+                    parametros.Add("cpf", cpf);
                     parametros.Add("cliente", cliente ? 1 : 0);
                     DataTable result = sql.ExecuteProcedureDataTable("sp_ins_usuario", parametros);
                     string id_usuario = result.Rows[0]["id_usuario"].ToString();
@@ -104,6 +106,7 @@ namespace Analytics.Controllers
                 int id_usuario = Convert.ToInt32(form["id_usuario"]);
                 string nome = form["nome"];
                 string login = form["login"];
+                string cpf = form["cpf"];
                 bool cliente = Convert.ToBoolean(form["cliente"]);
                 bool ativo = Convert.ToBoolean(form["ativo"]);
                 DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
@@ -115,6 +118,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_usuario", id_usuario);
                     parametros.Add("nome", nome);
                     parametros.Add("login", login);
+                    parametros.Add("cpf", cpf);
                     parametros.Add("cliente", cliente ? 1 : 0);
                     parametros.Add("ativo", ativo ? 1 : 0);
                     sql.ExecuteProcedure("sp_upd_usuario", parametros);

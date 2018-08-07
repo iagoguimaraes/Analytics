@@ -70,6 +70,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label>CPF</label>
+                            <input maxlength="11" type="text" class="form-control" placeholder="CPF" ng-model="usuario.cpf" />
+                        </div>
+
+                        <div class="form-group">
                             <label>Cliente: </label>
                             <input type="checkbox" ng-model="usuario.cliente" />
                         </div>
@@ -117,6 +122,11 @@
                             <div>
                                 <select2 id="editusuario-select2" class="form-control" data-placeholder="Selecione" ng-model="editusuario.grupo" dados="grupos" style="width:100%;"></select2>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>CPF</label>
+                            <input maxlength="11" type="text" class="form-control" placeholder="CPF" ng-model="editusuario.cpf" />
                         </div>
 
                         <div class="form-group">
@@ -173,6 +183,7 @@
         $scope.usuario = {
             nome: '',
             login: '',
+            cpf: '',
             grupo: null,
             cliente: false
         }; // objeto para inserir usuario
@@ -185,6 +196,7 @@
                 $scope.usuario = {
                     nome: '',
                     login: '',
+                    cpf: '',
                     grupo: null,
                     cliente: false
                 };
@@ -217,6 +229,7 @@
             }).then(function success(r) {
                 $scope.editusuario.id_usuario = r.data.Table[0].id_usuario;
                 $scope.editusuario.nome = r.data.Table[0].nome;
+                $scope.editusuario.cpf = r.data.Table[0].ds_cpf;
                 $scope.editusuario.login = r.data.Table[0].login;
                 $scope.editusuario.cliente = r.data.Table[0].cliente;
                 $scope.editusuario.ativo = r.data.Table[0].ativo;
