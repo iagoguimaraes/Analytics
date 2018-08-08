@@ -209,5 +209,43 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/btc")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["alunos"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                int id_empresa = Convert.ToInt16(form["id_empresa"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("statusAluno", statusAluno);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("empresa", id_empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
