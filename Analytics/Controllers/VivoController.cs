@@ -420,5 +420,25 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/convergencia")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardConvergencia()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_convergencia");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
