@@ -487,7 +487,11 @@
                 case 'conversao':
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1);
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.promessa2 * 100 / obj.cpca2).toFixed(1) * 1);
-                    break;                
+                    break;
+                case 'esforco':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado * 100 / obj.promessa).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.discado2 * 100 / obj.promessa2).toFixed(1) * 1);
+                    break;
                 default:
                     series1 = $scope.dashboard.dados.Table.map(obj => obj[indicador]);
                     series2 = $scope.dashboard.dados.Table.map(obj => obj[indicador + '2']);
