@@ -30,6 +30,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
+
                             <!--DATA INCIAL-->
                             <div class="form-group col-md-6">
                                 <label class="control-sidebar-subheading">Data Inicial</label>
@@ -95,6 +96,7 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
+
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <div class="small-box bg-gray">
                         <div class="inner">
@@ -132,6 +134,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <div class="small-box bg-aqua">
                         <div class="inner">
@@ -169,6 +172,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
         <!--ANALISE POR DIA-->
@@ -278,6 +282,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Valor Promessa</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -294,6 +299,7 @@
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ ' }}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -305,6 +311,7 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
+                                        <td>{{c.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -329,7 +336,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -371,9 +378,8 @@
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
+           
             $scope.dashFiltros.status = r.status;
-            $scope.dashboard.dados = r.data;
-
             $scope.dashFiltros.empresas = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.aging = r.data.Table2;
@@ -390,11 +396,14 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
+
                 $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+               
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.tabulacao = data.Table2;
-                $scope.dashboard.supervisor = data.Table3;
+                $scope.dashboard.supervisor = data.Table2;
+                $scope.dashboard.tabulacao = data.Table3;
                 $scope.carregarGrafico();
 
             });
