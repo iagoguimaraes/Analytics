@@ -45,6 +45,7 @@ namespace Analytics.Controllers
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -54,6 +55,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteira", carteira);
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("tenure", tenure);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -78,6 +80,7 @@ namespace Analytics.Controllers
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -88,6 +91,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteira", carteira);
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("tenure", tenure);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -193,6 +197,37 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao", segmentacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_robo_sky", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("tenure", tenure);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
