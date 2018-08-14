@@ -1,0 +1,122 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-vivo-convergencia">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Convergência</div>
+        </header>
+
+        <!--TOTAIS-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">% Convergente</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Segmentação</th>
+                                        <th>Clientes</th>
+                                        <th>Convergentes</th>
+                                        <th>% Convergente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.total">
+                                        <td>{{r.segmentacao}}</td>
+                                        <td>{{r.qtd | number}}</td>
+                                        <td>{{r.qtd_convergente | number}}</td>
+                                        <td>{{r.qtd_convergente / r.qtd | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Média</th>
+                                        <th>{{dashboard.total | sumByColumn: 'qtd'| number}}</th>
+                                        <th>{{dashboard.total | sumByColumn: 'qtd_convergente'| number}}</th>
+                                        <th>{{dashboard.total | divideSumColumns: 'qtd_convergente':'qtd' | percentage:1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--DIAGRAMA-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Convergência</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="filtro.segmentacao" ng-options="r as r for r in dashboard.segmentacao" ng-change="carregarDiagrama()"></select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Clientes"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-convergencia', function ($scope, $http, $filter) {
+
+        $scope.filtro = {};
+        $scope.dashboard = {};
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/convergencia",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.total = r.data.Table;
+                $scope.dashboard.segmentacao = alasql('select distinct de from ?', [r.data.Table1]).map(r => r["de"]);
+                $scope.filtro.segmentacao = 'MOVEL M1'
+                $scope.carregarDiagrama();
+            });
+        }
+
+        $scope.carregarDiagrama = function () {
+            $scope.dashboard.diagrama = $scope.dashboard.dados.Table1.filter(r => r.de == $scope.filtro.segmentacao);
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
