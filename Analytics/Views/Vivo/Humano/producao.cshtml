@@ -97,8 +97,14 @@
         <div class="row margin-bottom">
             <!-- BANNER -->
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: #7e2595">
+                @*<div class="small-box" style="background-color: #7e2595">
                     <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
+                </div>*@
+                <div class="small-box bg-black">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing | megaNumber"></h3>
+                        <p>Mailing</p>
+                    </div>
                 </div>
 
                 <div class="small-box bg-purple">
@@ -233,6 +239,7 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
+                                        <th>Mailing</th>
                                         <th>PA</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
@@ -244,11 +251,13 @@
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
+                                        <th>Mailing / PA </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr align="center" ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.dt | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.mailing | number}}</td>
                                         <td>{{dia.pa | number }}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
@@ -260,6 +269,7 @@
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                        <td>{{dia.mailing / dia.pa | number : 0 }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -284,6 +294,7 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
+                                <option value="mailing">Mailing</option>
                                 <option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
