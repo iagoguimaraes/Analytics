@@ -182,6 +182,12 @@
                         <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
@@ -233,6 +239,11 @@
             segmentacao: '',
             tenure: '',
         };
+
+        $scope.mapa = {
+            indicador: 'percentual'
+        };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
 
@@ -272,12 +283,30 @@
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table1.map(obj => (obj[indicador])), color: '#b90404' }];
                 $scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#b90404' }];
                 $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#b90404' }];
-                $scope.dashboard.mapa = data.Table4.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador] }));
+                //$scope.dashboard.mapa = data.Table4.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[indicador], value2: obj.QTD }));
                 $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table5.map(obj => ({ name: obj.ds_carteira, y: obj.CONTRATO })) }];
                 $scope.dashboard.tenure = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#b90404' }];
 
+                $scope.carregarMapa();
+
             });
         }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.dados.Table4;
+            switch ($scope.mapa.indicador) {
+                case 'percentual':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.percentual) }));
+                    break;
+                case 'quantidade':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.quantidade) }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
 
         $scope.carregarDashboard();
 
