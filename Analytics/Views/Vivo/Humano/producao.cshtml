@@ -239,14 +239,17 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
+                                        <th>Penetrado</th>
                                         <th>Mailing</th>
+                                        <th>Penetração</th>
                                         <th>PA</th>
+                                        <th>SPIN</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Promessa / PA </th>
+                                        <th>Prom / PA </th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -257,8 +260,11 @@
                                 <tbody>
                                     <tr align="center" ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.dt | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.penetrado | number}}</td>
                                         <td>{{dia.mailing | number}}</td>
+                                        <td>{{dia.penetrado / dia.mailing | percentage:1}}</td>
                                         <td>{{dia.pa | number }}</td>
+                                        <td>{{dia.discado / dia.mailing | number:1}}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
@@ -290,11 +296,13 @@
                         </div>
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="penetracao">Penetração</option>
+                                <option value="mailing">Mailing</option>
+                                <option value="penetrado">Penetrado</option>
                                 <option value="hitrate">Hit Rate</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="mailing">Mailing</option>
                                 <option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
@@ -460,16 +468,19 @@
             $scope.dashboard.datas = dados.map(obj => obj.dt);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Hit Rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
-                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Taxa de Localização', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
                     break;
                 case 'txapv':
-                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Taxa de Aproveitamento', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Conversão', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                case 'penetracao':
+                    $scope.dashboard.grafico = [{ name: 'Penetração', data: dados.map(obj => (obj.penetrado * 100 / obj.mailing).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
