@@ -206,6 +206,38 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/carteira")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("segmentacoes", segmentacoes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/humano/baseativa")]
         [HttpPost]
         [Autorizar]
