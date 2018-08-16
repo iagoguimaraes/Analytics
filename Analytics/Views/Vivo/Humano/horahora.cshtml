@@ -4,10 +4,10 @@
 
 
 <div ng-controller="ctrl-vivo-horahora">
-    
+
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status === 200">
-                
+
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Hora Hora Humano</div>
@@ -46,7 +46,7 @@
                         <!--EMPRESA-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Empresa</label>
-                            <select2  style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
                         </div>
 
                         <!--CARTEIRA-->
@@ -58,7 +58,7 @@
                         <!--AGING-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Aging</label>
-                            <select2  style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
                         </div>
 
                         <!--SUPERVISOR-->
@@ -98,6 +98,20 @@
                 <div class="row">
                     <div class="col-sm-1 col-sm-offset-1 border-right">
                         <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.penetrado | megaNumber"></h5>
+                            <span class="description-text">Penetrado</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" "></h5>
+                            <span class="description-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.mailing | megaNumber"></h5>
                             <span class="description-text">Mailing</span>
                         </div>
@@ -114,13 +128,13 @@
                             <span class="description-text">Contato</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
                             <span class="description-text">CPC</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
                             <span class="description-text">CPCA</span>
@@ -135,10 +149,25 @@
                 </div>
 
                 <div class="row" style="background-color: #7e2595; color: white; opacity: 0.8">
+
                     <div class="col-sm-1 col-sm-offset-1 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.mailing | number : 0"></h5>
-                            <span class="description-text">SPIN</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.penetrado / dashboard.resumo.mailing | percentage: 1"></h5>
+                            <span class="description-text">Penetração</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" "></h5>
+                            <span class="description-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.mailing | number : 1 "></h5>
+                            <span class="description-text">Spin</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
@@ -153,13 +182,13 @@
                             <span class="description-text">Hit Rate</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
                             <span class="description-text">Tx Loc</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
                             <span class="description-text">Tx Apv</span>
@@ -177,10 +206,26 @@
                 <div class="row" style="background-color: #f59120; color:white; opacity: 0.8">
                     <div class="col-sm-1 col-sm-offset-1 border-right">
                         <div class="description-block">
+                            <h5 class="description-header" - "></h5>
+                            <span class="description-text"></span>
+                        </div>
+                    </div>
+
+                    <!-- Vazio -->
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" - "></h5>
+                            <span class="description-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.mailing / dashboard.resumo.pa | number : 0"></h5>
                             <span class="description-text">Mailing PA</span>
                         </div>
-                    </div>
+                    </div>                    
+
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado_pa | megaNumber"></h5>
@@ -193,13 +238,13 @@
                             <span class="description-text">Contato PA</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h5>
                             <span class="description-text">CPC PA</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca_pa | number"></h5>
                             <span class="description-text">CPCA PA</span>
@@ -208,7 +253,7 @@
                     <div class="col-sm-1">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa_pa | number"></h5>
-                            <span class="description-text">Promessa PA</span>
+                            <span class="description-text">Prom PA</span>
                         </div>
                     </div>
                 </div>
@@ -235,8 +280,11 @@
                                 <thead>
                                     <tr>
                                         <th>Empresa</th>
+                                        <th>Penetrado</th>
                                         <th>Mailing</th>
+                                        <th>Penetração</th>
                                         <th>PA</th>
+                                        <th>SPIN</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -246,17 +294,20 @@
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
+                                        <th>Mailing PA</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.empresa | groupBy: 'empresa'">
-
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].empresa}}
                                         </td>
+                                        <td>{{c | sumByColumn: 'penetrado'| number}}</td>
                                         <td>{{c | sumByColumn: 'mailing'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'penetrado':'mailing' | percentage:1}}</td>
                                         <td>{{c | sumByColumn: 'pa' | number}}</td>
+                                        <td>{{c | divideSumColumns: 'discado':'mailing' | number:1}}</td>
                                         <td>{{c | sumByColumn: 'discado'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
@@ -266,12 +317,16 @@
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'mailing':'pa' | number:0}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.aging}}</td>
+                                        <td>{{p.penetrado | number}}</td>
                                         <td>{{p.mailing | number}}</td>
+                                        <td>{{p.penetrado / p.mailing | percentage:1}}</td>
                                         <td>{{p.pa | number}}</td>
+                                        <td>{{p.discado / p.mailing | number:1}}</td>
                                         <td>{{p.discado | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.cpc | number}}</td>
@@ -281,6 +336,7 @@
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
+                                        <td>{{p.mailing / p.pa | number:0}}</td>
                                     </tr>
 
                                 </tbody>
@@ -460,7 +516,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -501,7 +557,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'promessa' };    
+        $scope.grafico = { indicador: 'promessa' };
 
         //carregar os filtros
         $http({
@@ -562,11 +618,11 @@
         }
 
         $scope.carregarDashboard();
-         
+
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
 
     });
-   
+
 </script>
