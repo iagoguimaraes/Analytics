@@ -11,7 +11,7 @@
     <div class="row margin-bottom">
 
         <!--VENDAS-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Vendas</span>
@@ -26,8 +26,8 @@
                         <div class="col-xs-6">
                             <div class="small-box bg-blue">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.qtd_venda"></h3>
-                                    <p>Quantidade</p>
+                                    <h3 ng-bind="dashboard.parcial"></h3>
+                                    <p>Parcial Outubro</p>
                                 </div>
                                 <div class="icon">
                                     <i class="fa fa-thumbs-o-up"></i>
@@ -38,18 +38,18 @@
                         <div class="col-xs-6">
                             <div class="small-box bg-green">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.vlr_venda"></h3>
-                                    <p>Valor</p>
+                                    <h3 ng-bind="dashboard.projecao"></h3>
+                                    <p>Projeção Outubro</p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-money"></i>
+                                    <i class="fa fa-line-chart"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <h4 class="text-center">Vendas por Mês ($)</h4>
+                        <h4 class="text-center">Vendas por Mês</h4>
                         <high-chart series="dashboard.vendas.dados" axis-Categories="dashboard.vendas.categorias" plot-Options-Line-Data-Label="true" height="200"></high-chart>
                     </div>
 
@@ -58,7 +58,7 @@
         </div>
 
         <!--QTD PA-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Quantidade de P.A</span>
@@ -110,7 +110,7 @@
         </div>
 
         <!--BTC-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Best Time to Call</span>
@@ -119,16 +119,17 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <p><small>Média dos últimos 3 meses por P.A</small></p>
                     <h4 class="text-center">Alô</h4>
-                    <high-chart series="dashboard.btc.atendimentos" axis-Categories="dashboard.btc.categorias" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    <high-chart series="dashboard.btc.atendimentos" axis-Categories="dashboard.btc.categorias" type="column" height="200"></high-chart>
                     <h4 class="text-center">Venda</h4>
-                    <high-chart series="dashboard.btc.vendas" axis-Categories="dashboard.btc.categorias" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    <high-chart series="dashboard.btc.vendas" axis-Categories="dashboard.btc.categorias" type="column" height="200"></high-chart>
                 </div>
             </div>
         </div>
 
         <!--REGIÃO-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Vendas por Região</span>
@@ -137,13 +138,14 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <p><small>Média dos últimos 3 meses por Mês (Milhares)</small></p>
                     <mapa-brasil style="height: 480px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                 </div>
             </div>
         </div>
 
         <!--STATUS-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Status</span>
@@ -152,13 +154,14 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <p><small>Vendas de Outubro (Milhares)</small></p>
                     <high-chart series="dashboard.status.dados" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="300"></high-chart>
                 </div>
             </div>
         </div>
 
         <!--ATENDIMENTO POR DIA-->
-        <div class="col-xs-12 col-md-6 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Atendimento por Dia</span>
@@ -167,94 +170,134 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <high-chart series="dashboard.dia.dados" axis-Categories="dashboard.dia.categorias" type="column"
-                                plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" height="300"></high-chart>
+                    <p><small>Atendimentos de Outubro (Milhares)</small></p>
+                    <high-chart series="dashboard.dia.dados" axis-Categories="dashboard.dia.categorias" type="column" plot-Options-Column-Stacking="normal" height="300"></high-chart>
                 </div>
             </div>
         </div>
 
         <!--TEMPOS-->
-        <div class="col-xs-12 margin-bottom">
+        <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-title">Tempos</span>
+                    <span class="card-header-title">Tempos Humano</span>
                     <div class="card-header-button card-header-expand">
                         <i class="fa fa-expand"></i>
                     </div>
                 </div>
                 <div class="card-body">
-                   <div class="row">
-                       <div class="col-xs-6 col-md-3">
+                    <div class="row">
 
-                           <div class="small-box bg-gray">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.logado"></h3>
-                                   <p>Logado</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>
+                        <div class="col-xs-6">
 
-                           <div class="small-box bg-gray">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.tma"></h3>
-                                   <p>TMA</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>Logado:</b> <span ng-bind="dashboard.tempos_h.logado"></span>
+                                </div>
+                            </div>
 
-                           <div class="small-box bg-gray">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.tme"></h3>
-                                   <p>TME</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>                         
-                       </div>
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>TMA:</b> <span ng-bind="dashboard.tempos_h.tma"></span>
+                                </div>
+                            </div>
 
-                       <div class="col-xs-6 col-md-3">
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>TME:</b> <span ng-bind="dashboard.tempos_h.tme"></span>
+                                </div>
+                            </div>
 
-                           <div class="small-box bg-green">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.conversado"></h3>
-                                   <p>Conversado</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>
+                        </div>
 
-                           <div class="small-box bg-yellow">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.pausas"></h3>
-                                   <p>Pausas</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>
+                        <div class="col-xs-6">
 
-                           <div class="small-box bg-red">
-                               <div class="inner">
-                                   <h3 ng-bind="dashboard.tempos.disponivel"></h3>
-                                   <p>Disponível</p>
-                               </div>
-                               <div class="icon">
-                                   <i class="fa fa-clock-o"></i>
-                               </div>
-                           </div>
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <b>Conversado:</b> <span ng-bind="dashboard.tempos_h.conversado"></span>
+                                </div>
+                            </div>
 
-                       </div>
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <b>Pausas:</b> <span ng-bind="dashboard.tempos_h.pausas"></span>
+                                </div>
+                            </div>
 
-                       <div class="col-xs-12 col-md-6">
-                           <high-chart series="dashboard.tempos.ocupacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="300"></high-chart>
-                       </div>
-                   </div>
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <b>Disponível:</b> <span ng-bind="dashboard.tempos_h.disponivel"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <high-chart series="dashboard.tempos_h.ocupacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="180"></high-chart>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TEMPOS-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Tempos Digital</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-xs-6">
+
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>Logado:</b> <span ng-bind="dashboard.tempos_d.logado"></span>
+                                </div>
+                            </div>
+
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>TMA:</b> <span ng-bind="dashboard.tempos_d.tma"></span>
+                                </div>
+                            </div>
+
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <b>TME:</b> <span ng-bind="dashboard.tempos_d.tme"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-6">
+                            
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <b>Conversado:</b> <span ng-bind="dashboard.tempos_d.conversado"></span>
+                                </div>
+                            </div>
+
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <b>Pausas:</b> <span ng-bind="dashboard.tempos_d.pausas"></span>
+                                </div>
+                            </div>
+
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <b>Disponível:</b> <span ng-bind="dashboard.tempos_d.disponivel"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <high-chart series="dashboard.tempos_d.ocupacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="180"></high-chart>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -273,69 +316,86 @@
             btc: {},
             status: {},
             dia: {},
-            tempos: {},
+            tempos_h: {},
+            tempos_d: {},
         };
 
-        $scope.dashboard.qtd_venda = "385K";
-        $scope.dashboard.vlr_venda = "R$ 21.7M";
+        $scope.dashboard.parcial = "619.3 K";
+        $scope.dashboard.projecao = "1.07 M";
         $scope.dashboard.vendas.categorias = ["Junho", "Julho", "Agosto (Projeção)"]
-        $scope.dashboard.vendas.dados = [{ name: 'Valor Milhões', color: 'green',  data: [ 42.8, 40.1, 44.5] }];
+        $scope.dashboard.vendas.dados = [{ name: 'Qtd Milhões', color: 'green', data: [1.01, 0.98, 1.07] }];
 
         $scope.dashboard.pa_humano = 200;
         $scope.dashboard.pa_digital = 300;
         $scope.dashboard.comparativo.categorias = ["Humano", "Digital"];
-        $scope.dashboard.comparativo.atendimentos = [{ name: 'Md Alô por Dia', data: [{ y: 142, color: '#f39c12' }, { y: 195, color: '#605ca8' }] }];
-        $scope.dashboard.comparativo.vendas = [{ name: 'Md Vendas por Dia', data: [{ y: 25, color: '#f39c12' }, { y: 74, color: '#605ca8' }] }];
+        $scope.dashboard.comparativo.atendimentos = [{ name: 'Md Alô por Dia', data: [{ y: 571, color: '#f39c12' }, { y: 1099, color: '#605ca8' }] }];
+        $scope.dashboard.comparativo.vendas = [{ name: 'Md Vendas por Dia', data: [{ y: 37, color: '#f39c12' }, { y: 98, color: '#605ca8' }] }];
 
         $scope.dashboard.btc.categorias = ["08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h"];
-        $scope.dashboard.btc.atendimentos = [{ name: 'Média Alô PA', data: [9, 13, 12, 14, 15, 17, 13, 14, 10, 10, 14, 15, 8, 6] }];
-        $scope.dashboard.btc.vendas = [{ name: 'Média Vendas PA', data: [2, 4, 4, 4, 5, 5, 4, 4, 3, 3, 4, 5, 2, 1] }];
-      
-        $scope.dashboard.mapa = [
-  { id: 'BR-AC', value: 115.5 }
-, { id: 'BR-AL', value: 77.0 }
-, { id: 'BR-AM', value: 154.0 }
-, { id: 'BR-AP', value: 115.5 }
-, { id: 'BR-BA', value: 269.5 }
-, { id: 'BR-CE', value: 192.5 }
-, { id: 'BR-DF', value: 770.1 }
-, { id: 'BR-ES', value: 423.5 }
-, { id: 'BR-GO', value: 770.1 }
-, { id: 'BR-MA', value: 385.0 }
-, { id: 'BR-MG', value: 885.6 }
-, { id: 'BR-MS', value: 462.0 }
-, { id: 'BR-MT', value: 423.5 }
-, { id: 'BR-PA', value: 269.5 }
-, { id: 'BR-PB', value: 154.0 }
-, { id: 'BR-PE', value: 308.0 }
-, { id: 'BR-PI', value: 154.0 }
-, { id: 'BR-PR', value: 231.0 }
-, { id: 'BR-RJ', value: 654.5 }
-, { id: 'BR-RN', value: 539.0 }
-, { id: 'BR-RO', value: 231.0 }
-, { id: 'BR-RR', value: 154.0 }
-, { id: 'BR-RS', value: 385.0 }
-, { id: 'BR-SC', value: 731.6 }
-, { id: 'BR-SE', value: 269.5 }
-, { id: 'BR-SP', value: 962.6 }
-, { id: 'BR-TO', value: 308.0 }
-]
 
-        $scope.dashboard.status.dados = [{ data: [{ name: "Ativado", y: 103.9 }, { name: "Reprovado", y: 211.7 }, { name: "Pendente", y: 69.3 }] }];
-
-        $scope.dashboard.dia.categorias = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15"];
-        $scope.dashboard.dia.dados = [
-            { name: 'Atendimento (Milhares)', color: '#99ffcc', type: 'column', data: [90.7, 83.5, 84.1, 86.5, 87.6, 83.9, 85.8, 85.9, 86.6, 93.9, 87.1, 84.0, 91.5, 84.2, 90.0] },
-            { name: 'Venda (Milhares)', color: '#006633', type: 'column', data: [27.3, 27.6, 26.7, 31.0, 29.7, 28.7, 30.2, 28.6, 24.3, 31.5, 26.0, 24.5, 31.7, 24.2, 23.7] }
+        $scope.dashboard.btc.atendimentos = [
+            { name: 'Humano', data: [32.7, 32.7, 49.0, 49.0, 49.0, 44.9, 40.8, 44.9, 32.7, 36.7, 49.0, 40.8, 36.7, 32.7] },
+            { name: 'Digital', data: [70.7, 70.7, 86.4, 86.4, 78.5, 86.4, 78.5, 86.4, 78.5, 78.5, 78.5, 78.5, 70.7, 70.7] }
         ];
 
-        $scope.dashboard.tempos.logado = "06:20";
-        $scope.dashboard.tempos.conversado = "03:53";
-        $scope.dashboard.tempos.disponivel = "00:53";
-        $scope.dashboard.tempos.pausas = "01:34";
-        $scope.dashboard.tempos.tma = "00:01:40";
-        $scope.dashboard.tempos.tme = "00:00:17";
-        $scope.dashboard.tempos.ocupacao = [{ name: 'Minutos', innerSize: '60%', data: [{ name: "Conversando", y: 582.5, color: "#00a65a" }, { name: "Pausa", y: 235, color: "#f39c12" }, { name: "Disponivel", y: 132.5, color: "#dd4b39" }] }];
+        $scope.dashboard.btc.vendas = [
+            { name: 'Humano', data: [1.6, 2.2, 3.5, 4.0, 3.8, 2.7, 2.4, 2.7, 2.2, 2.4, 4.0, 2.7, 1.9, 1.6] },
+            { name: 'Digital', data: [6.4, 6.4, 7.8, 7.8, 7.1, 7.8, 7.1, 7.8, 7.1, 7.1, 7.1, 7.1, 6.4, 6.4] },
+        ];
+
+        $scope.dashboard.mapa = [
+  { id: 'BR-AC', value: 12.6 }
+, { id: 'BR-AL', value: 8.4 }
+, { id: 'BR-AM', value: 16.8 }
+, { id: 'BR-AP', value: 12.6 }
+, { id: 'BR-BA', value: 29.5 }
+, { id: 'BR-CE', value: 21.0 }
+, { id: 'BR-DF', value: 84.2 }
+, { id: 'BR-ES', value: 46.3 }
+, { id: 'BR-GO', value: 84.2 }
+, { id: 'BR-MA', value: 42.1 }
+, { id: 'BR-MG', value: 96.8 }
+, { id: 'BR-MS', value: 50.5 }
+, { id: 'BR-MT', value: 46.3 }
+, { id: 'BR-PA', value: 29.5 }
+, { id: 'BR-PB', value: 16.8 }
+, { id: 'BR-PE', value: 33.7 }
+, { id: 'BR-PI', value: 16.8 }
+, { id: 'BR-PR', value: 25.3 }
+, { id: 'BR-RJ', value: 71.6 }
+, { id: 'BR-RN', value: 58.9 }
+, { id: 'BR-RO', value: 25.3 }
+, { id: 'BR-RR', value: 16.8 }
+, { id: 'BR-RS', value: 42.1 }
+, { id: 'BR-SC', value: 80.0 }
+, { id: 'BR-SE', value: 29.5 }
+, { id: 'BR-SP', value: 105.2 }
+, { id: 'BR-TO', value: 33.7 }
+        ]
+
+        $scope.dashboard.status.dados = [{ innerSize: '60%', data: [{ name: "Ativado", y: 670.6 }, { name: "Reprovado", y: 261.4 }, { name: "Pendente", y: 204.6 }] }];
+
+        $scope.dashboard.dia.categorias = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"];
+        $scope.dashboard.dia.dados = [
+            { name: 'Atendimento (Milhares)', color: '#99ffcc', type: 'column', data: [290.6, 301.4, 292.1, 283.2, 295.1, 290.9, 285.9, 260.4, 275.6, 284.3, 277.5, 295.6, 295.0, 271.2, 288.1, 259.9, 266.6, 273.6, 302.2] },
+            { name: 'Venda (Milhares)', color: '#006633', type: 'column', data: [31.1, 26.3, 30.0, 23.2, 36.5, 39.1, 39.2, 29.3, 22.8, 20.0, 32.8, 24.7, 36.4, 44.5, 50.9, 36.2, 30.7, 47.0, 18.7] }
+        ];
+
+        $scope.dashboard.tempos_h.logado = "12:40";
+        $scope.dashboard.tempos_h.conversado = "07:46";
+        $scope.dashboard.tempos_h.disponivel = "01:45";
+        $scope.dashboard.tempos_h.pausas = "03:07";
+        $scope.dashboard.tempos_h.tma = "00:00:49";
+        $scope.dashboard.tempos_h.tme = "00:00:11";
+        $scope.dashboard.tempos_h.ocupacao = [{ data: [{ name: "Conversando", y: 61.4, color: "#00a65a" }, { name: "Pausa", y: 24.7, color: "#f39c12" }, { name: "Disponivel", y: 13.9, color: "#dd4b39" }] }];
+
+        $scope.dashboard.tempos_d.logado = "12:40";
+        $scope.dashboard.tempos_d.conversado = "11:17";
+        $scope.dashboard.tempos_d.disponivel = "01:22";
+        $scope.dashboard.tempos_d.pausas = "00:00";
+        $scope.dashboard.tempos_d.tma = "00:00:37";
+        $scope.dashboard.tempos_d.tme = "00:00:08";
+        $scope.dashboard.tempos_d.ocupacao = [{ data: [{ name: "Conversando", y: 89.2, color: "#00a65a" }, { name: "Disponivel", y: 10.8, color: "#dd4b39" }] }];
 
     });
 </script>
