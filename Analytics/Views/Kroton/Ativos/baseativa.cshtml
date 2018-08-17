@@ -5,7 +5,7 @@
 
 <!-- DAHSBOARD -->
 
-<div ng-controller="ctrl-tim-analise">
+<div ng-controller="ctrl-kroton-analise">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -34,14 +34,14 @@
 
                         <!--EMPRESA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Empresa</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresa" style="width:100%"></select2>
+                            <label class="control-sidebar-subheading">Carteiras</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                         </div>
 
                         <!--CARTEIRA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteira</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteira" style="width:100%"></select2>
+                            <label class="control-sidebar-subheading">Status alunos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.statusaln" dados="dashFiltros.statusaluno" style="width:100%"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -112,7 +112,7 @@
         </div>
 
         <!--POR FAIXA DE ATRASO-->
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -129,23 +129,30 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
 
         <div class="row margin-bottom">
-            <div class="col-xs-6 col-md-6">
+            <!--REGIAO-->
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Empresas</span>
+                        <span class="card-header-title">Localização</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                        <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.empresa" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -171,34 +178,10 @@
 
         <!--TENURE-->
         <div class="row margin-bottom">
-            <!--REGIAO-->
-            <div class="col-xs-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Localização</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                        <small class="pull-right">
-                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                <option value="quantidade">Quantidade</option>
-                                <option value="percentual">Percentual</option>
-                            </select>
-                        </small>
-                    </div>
-                    <div class="card-body">
-                        <mapa-brasil style="height:550px" width="100%" dados="dashboard.mapa"></mapa-brasil>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-xs-6 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Situações de Contratos</span>
+                        <span class="card-header-title">Sexo</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -207,29 +190,83 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.situacao" height="550" axis-Categories="dashboard.faixaSituacao" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                        <high-chart series="dashboard.sexo" axis-Categories="dashboard.faixaSexo" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Idade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
+        <!--ALUNO E ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Status Alunos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.alunos"  axis-Categories="dashboard.faixaAluno" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Situações Contratos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.situacao" axis-Categories="dashboard.faixaSituacao" plot-Options-Column-Data-Label="true" type="bar"></high-chart>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
 
     </div>
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-tim-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-kroton-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Estratificação de Base';
-        dadosPagina.descricao = 'Tim Telecomunicações'
+        dadosPagina.descricao = 'Kroton Ativos'
 
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
-            empresas: '',
             carteiras: '',
+            statusaln: '',
+            id_empresa: '1',
         };
 
         $scope.mapa = {
@@ -241,20 +278,21 @@
 
         //carregar os filtros
         $http({
-            method: 'GET',
-            url: "/api/tim/dashboard/humano/filtros",
+            method: 'POST',
+            url: "/api/kroton/dashboard/filtros",
+            data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.empresa = r.data.Table;
-            $scope.dashFiltros.carteira = r.data.Table1;
+            $scope.dashFiltros.carteiras = r.data.Table;
+            $scope.dashFiltros.statusaluno = r.data.Table1;
 
         });
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/dashboard/humano/baseativa",
+                url: "/api/kroton/dashboard/baseativa",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -264,21 +302,23 @@
 
 
                 $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.empresa);
-                $scope.dashboard.faixaEmpresa = data.Table2.map(obj => obj.ds_empresa);
-                $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_fx_saldo);
-                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_faixaAtraso);
-                $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
+                $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_idade);
+                $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_saldo);
+                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_atraso);
+                $scope.dashboard.faixaSexo = data.Table6.map(obj => obj.ds_sexo);
+                $scope.dashboard.faixaAluno = data.Table7.map(obj => obj.ds_status);
+                $scope.dashboard.faixaSituacao = data.Table8.map(obj => obj.ds_situacao);
 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#0073b7' }];
-                //$scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#0073b7' }];
-                $scope.dashboard.empresa = [{ name: 'Quantidade', innerSize: '60%', data: data.Table2.map(obj => ({ name: obj.ds_empresa, y: obj.CONTRATO })) }];
+                $scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#0073b7' }];
                 $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#0073b7' }];
                 $scope.dashboard.carteira = [{ name: 'Quantidade', data: r.data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
-                //$scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
-                $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
-
+                $scope.dashboard.sexo = [{ name: 'Quantidade', innerSize: '60%', data: data.Table6.map(obj => ({ name: obj.ds_sexo, y: obj.CONTRATO })) }];
+                //$scope.dashboard.sexo = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
+                $scope.dashboard.alunos = [{ name: 'Quantidade', data: data.Table7.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
+                $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table8.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
                 $scope.carregarMapa();
 
             });
