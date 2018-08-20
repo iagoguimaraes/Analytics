@@ -304,6 +304,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_OI"))
                 {
@@ -312,6 +314,9 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
