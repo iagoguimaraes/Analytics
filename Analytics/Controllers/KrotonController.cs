@@ -247,5 +247,36 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable statusaln = JsonConvert.DeserializeObject<DataTable>(form["statusaln"]);
+                int id_empresa = Convert.ToInt16(form["id_empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("statusAluno", statusaln);
+                    parametros.Add("empresa", id_empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
