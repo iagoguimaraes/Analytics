@@ -290,6 +290,33 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtivaDigital(FormDataCollection form)
+        {
+            try
+            {
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteiras", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/paggerencial")]
         [HttpPost]
         [Autorizar]
