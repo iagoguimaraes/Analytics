@@ -94,8 +94,10 @@
                                 <th>Fila</th>
                                 <th>NS (20s)</th>
                                 <th>Chamada</th>
+                                <th>% do Total</th>
                                 <th>Atendida</th>
                                 <th>Abandonada</th>
+                                <th>% Abandono</th>
                                 <th>Tempo Médio Atendimento</th>
                                 <th>Tempo Médio em Fila</th>
                             </tr>
@@ -105,8 +107,10 @@
                                 <td>{{f.fila}}</td>
                                 <td>{{f.ns}}</td>
                                 <td>{{f.chamada}}</td>
+                                <td>{{f.perctt}}</td>
                                 <td>{{f.atendido}}</td>
                                 <td>{{f.abandonado}}</td>
+                                <td>{{f.percaban}}</td>
                                 <td>{{f.tma}}</td>
                                 <td>{{f.tmf}}</td>
                             </tr>
@@ -319,19 +323,19 @@
 
         $scope.dashboard.grafico_fila = [{
             name: 'Atendimento', data: [
-                    { y: 542915 },
-                    { y: 144777 },
-                    { y: 325749 },
-                    { y: 579109 },
-                    { y: 615303 },
-                    { y: 506720 },
-                    { y: 470526 },
-                    { y: 180972 },
-                    { y: 398137 },
-                    { y: 361943 },
-                    { y: 289554 },
-                    { y: 108583 },
-                    { y: 180972 },
+                    { y: 537964 },
+                    { y: 143466 },
+                    { y: 322778 },
+                    { y: 573279 },
+                    { y: 609303 },
+                    { y: 501395 },
+                    { y: 466414 },
+                    { y: 179241 },
+                    { y: 394481 },
+                    { y: 358208 },
+                    { y: 286987 },
+                    { y: 107428 },
+                    { y: 179127 },
             ]
         }];
         
@@ -342,19 +346,19 @@
         $scope.dashboard.comparativo.ns = [{ name: 'Nível de Serviço', data: [{ y: 96.6, color: '#605ca8' }, { y: 98.4, color: 'black' }] }];
 
         $scope.dashboard.fila = [
-            { fila: 'solicitação de 2 via', ns: '98.1%', chamada: '557092', atendido: '555405', abandonado: '1687', tma: '00:03:21', tmf: '00:00:14' },
-            { fila: 'cancelamento', ns: '97.5%', chamada: '148558', atendido: '148108', abandonado: '450', tma: '00:03:39', tmf: '00:00:14' },
-            { fila: 'melhor data para pagamento', ns: '97.8%', chamada: '334255', atendido: '333243', abandonado: '1012', tma: '00:02:57', tmf: '00:00:14' },
-            { fila: 'consulta de saldo', ns: '97.5%', chamada: '594232', atendido: '592432', abandonado: '1800', tma: '00:03:39', tmf: '00:00:12' },
-            { fila: 'consulta de limite', ns: '98.2%', chamada: '631371', atendido: '629459', abandonado: '1912', tma: '00:03:11', tmf: '00:00:13' },
-            { fila: 'alteração de vencimento', ns: '97.6%', chamada: '519953', atendido: '518378', abandonado: '1575', tma: '00:03:43', tmf: '00:00:12' },
-            { fila: 'reclamação', ns: '96.9%', chamada: '482813', atendido: '481351', abandonado: '1462', tma: '00:02:55', tmf: '00:00:13' },
-            { fila: 'consulta de lojas', ns: '97.1%', chamada: '185697', atendido: '185135', abandonado: '562', tma: '00:03:21', tmf: '00:00:14' },
-            { fila: 'renegociação', ns: '97.6%', chamada: '408534', atendido: '407297', abandonado: '1237', tma: '00:03:41', tmf: '00:00:14' },
-            { fila: 'duvidas sobre produtos', ns: '98.2%', chamada: '371395', atendido: '370270', abandonado: '1125', tma: '00:03:33', tmf: '00:00:14' },
-            { fila: 'solicitação de cartão adicional', ns: '96.8%', chamada: '297116', atendido: '296216', abandonado: '900', tma: '00:03:09', tmf: '00:00:14' },
-            { fila: 'trocas e devoluções', ns: '96.9%', chamada: '111418', atendido: '111081', abandonado: '337', tma: '00:03:41', tmf: '00:00:13' },
-            { fila: 'rastreamento de pedidos', ns: '97.4%', chamada: '185697', atendido: '185135', abandonado: '562', tma: '00:03:07', tmf: '00:00:16' },
+            { fila: 'solicitação de 2 via', ns: '98,2%', chamada: '539542', perctt: '11,5%', atendido: '537964', abandonado: '1579', percaban: '0,29%', tma: '00:03:51', tmf: '00:00:14' },
+            { fila: 'cancelamento', ns: '97,6%', chamada: '143878', perctt: '3,1%', atendido: '143466', abandonado: '412', percaban: '0,29%', tma: '00:03:07', tmf: '00:00:15' },
+            { fila: 'melhor data para pagamento', ns: '98,2%', chamada: '323725', perctt: '6,9%', atendido: '322778', abandonado: '947', percaban: '0,29%', tma: '00:02:59', tmf: '00:00:15' },
+            { fila: 'consulta de saldo', ns: '96,9%', chamada: '575512', perctt: '12,3%', atendido: '573279', abandonado: '2233', percaban: '0,39%', tma: '00:03:35', tmf: '00:00:15' },
+            { fila: 'consulta de limite', ns: '96,9%', chamada: '611481', perctt: '13,1%', atendido: '609303', abandonado: '2178', percaban: '0,36%', tma: '00:03:15', tmf: '00:00:15' },
+            { fila: 'alteração de vencimento', ns: '97,4%', chamada: '503573', perctt: '10,8%', atendido: '501395', abandonado: '2178', percaban: '0,43%', tma: '00:03:07', tmf: '00:00:13' },
+            { fila: 'reclamação', ns: '97,7%', chamada: '467603', perctt: '10,0%', atendido: '466414', abandonado: '1190', percaban: '0,25%', tma: '00:03:19', tmf: '00:00:13' },
+            { fila: 'consulta de lojas', ns: '96,8%', chamada: '179847', perctt: '3,8%', atendido: '179241', abandonado: '606', percaban: '0,34%', tma: '00:03:31', tmf: '00:00:12' },
+            { fila: 'renegociação', ns: '97,1%', chamada: '395664', perctt: '8,5%', atendido: '394481', abandonado: '1183', percaban: '0,30%', tma: '00:03:01', tmf: '00:00:14' },
+            { fila: 'duvidas sobre produtos', ns: '97,1%', chamada: '359695', perctt: '7,7%', atendido: '358208', abandonado: '1487', percaban: '0,41%', tma: '00:03:15', tmf: '00:00:12' },
+            { fila: 'solicitação de cartão adicional', ns: '97,8%', chamada: '287756', perctt: '6,2%', atendido: '286987', abandonado: '769', percaban: '0,27%', tma: '00:03:49', tmf: '00:00:14' },
+            { fila: 'trocas e devoluções', ns: '97,4%', chamada: '107908', perctt: '2,3%', atendido: '107428', abandonado: '480', percaban: '0,45%', tma: '00:03:45', tmf: '00:00:14' },
+            { fila: 'rastreamento de pedidos', ns: '97,1%', chamada: '179847', perctt: '3,8%', atendido: '179127', abandonado: '721', percaban: '0,40%', tma: '00:02:53', tmf: '00:00:12' },
         ];
 
         $scope.dashboard.horas = ["08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h"];
