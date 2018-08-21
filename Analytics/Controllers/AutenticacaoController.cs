@@ -23,6 +23,16 @@ namespace Analytics.Controllers
                 string senha = form["senha"];
                 string recaptcha = form["recaptcha"];
 
+                var req = System.Web.HttpContext.Current;
+
+                if (req.Request.Browser.Type.ToUpper() == "INTERNETEXPLORER11" || req.Request.Browser.Type.ToUpper() == "INTERNETEXPLORER10" || req.Request.Browser.Type.ToUpper() == "INTERNETEXPLORER9")
+                {
+                    throw new Exception("Está aplicação não está homologado para o Internet Explorer." 
+                        + " Por gentileza, acesse por outro Browser.");                  
+
+                }
+
+
                 // valida o captcha
                 //Captcha captcha = new Captcha();
                 //if (!captcha.ValidarCaptcha(recaptcha))
@@ -66,9 +76,13 @@ namespace Analytics.Controllers
                     sessao = new Sessao(dtSessao.Rows[0]);
                 }
 
+                
                 string token = new EncryptHelper().Encrypt(sessao.ToString());
 
                 return Request.CreateResponse(HttpStatusCode.OK, token);
+
+
+
             }
             catch (Exception e)
             {

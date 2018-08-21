@@ -4,6 +4,7 @@
     <title>Credit Cash Analytics</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=11; IE=9; IE=8; IE=7" />
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="Content/Images/ccashlogo.png" />
     <!--===============================================================================================-->
@@ -27,42 +28,46 @@
 </head>
 <body ng-app="analytics" ng-controller="loginController">
 
-    <div class="limiter">
-        <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') no-repeat right top">
+    <div>
+        <div class="limiter">
 
-            <div id="teste" class="col-xs-12 col-sm-10 col-md-6 col-lg-5 ">
-                <form name="loginForm" autocomplete="off">
-                    <div>
-                        <img style="width:200px;height:200px; top: 100px; margin-left: auto;margin-right: auto;display: block;" src="Content/Images/credit_cash_digital_-01.png" alt="AVATAR">
-                    </div>
+            <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') no-repeat right top; position: absolute;">
+                <div id="teste" class="col-xs-12 col-sm-10 col-md-6 col-lg-5 ">
+                    <form name="loginForm" autocomplete="off">
+                        <div>
+                            <img style="width:200px;height:200px; top: 100px; margin-left: auto;margin-right: auto;display: block;" src="Content/Images/credit_cash_digital_-01.png" alt="AVATAR">
+                        </div>
 
-                    <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
-                        <input class="input100" type="text" name="username" placeholder="Usuario" ng-model="usuario.login" ng-required="true">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-user"></i>
-                        </span>
-                    </div>
+                        <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
+                            <input class="input100" type="text" name="username" placeholder="Usuario" ng-model="usuario.login" ng-required="true">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>
 
-                    <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
-                        <input class="input100" type="password" name="pass" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
-                        <span class="focus-input100"></span>
-                        <span class="symbol-input100">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                    </div>
+                        <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
+                            <input class="input100" type="password" name="pass" placeholder="Senha" ng-model="usuario.senha" ng-required="true">
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                        </div>
 
-                    <div class="container-login100-form-btn p-t-10">
-                        <button style="width:80%" class="login100-form-btn" type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid">
-                            Login
-                        </button>
-                    </div>
+                        <div class="container-login100-form-btn p-t-10">
+                            <button style="width:80%" class="login100-form-btn" type="submit" ng-click="logar(usuario)" ng-disabled="loginForm.$invalid">
+                                Login
+                            </button>
+                        </div>
 
-                </form>
+                    </form>
+                </div>
             </div>
-
         </div>
+
     </div>
+
+
     <style>
         #teste {
             background-color: black;
@@ -81,7 +86,7 @@
             margin-left: auto;
             margin-right: auto;
             display: block;
-        }     
+        }
     </style>
     <!--LOADING-->
     <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
@@ -91,6 +96,20 @@
 
         var app = angular.module('analytics', []);
         app.controller('loginController', function ($scope, $http, $window) {
+           
+
+            if (/MSIE 10/i.test(navigator.userAgent)) {
+                window.open("./ie.html");
+                window.close();
+
+            }
+
+            if (/MSIE 9/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
+                window.open("./ie.html");
+                window.close();
+
+            } 
+
 
             $scope.dadosPagina = {
                 loading: false
@@ -128,7 +147,26 @@
                     }
                 });
             }
+
+           
         });
+
+        //if (/MSIE 10/i.test(navigator.userAgent)) {
+        //    // This is internet explorer 10
+        //    document.body.innerHTML = 'aplicação não homologada para IE'
+
+        //    //$scope.navegador.valor = false;
+
+        //}
+
+        //if (/MSIE 9/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
+        //    // This is internet explorer 9 or 11
+        //    document.body.innerHTML = 'aplicação não homologada para IE'
+
+        //    //$scope.navegador.valor = false;
+
+        //}
+
     </script>
 
 

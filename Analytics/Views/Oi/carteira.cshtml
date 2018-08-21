@@ -57,6 +57,18 @@
                                 </div>
                             </div>
 
+                            <!--CAMPANHA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas" style="width:100%"></select2>
+                            </div>
+
+                            <!--SEGMENTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmentos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
+                            </div>
+
                             <!--PRODUTOS-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Produtos</label>
@@ -187,6 +199,8 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             produtos: '',
+            campanhas: '',
+            segmentos: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -202,6 +216,8 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = data.Table1;
+            $scope.dashFiltros.segmentos = data.Table2;
             $scope.dashFiltros.produtos = data.Table3;
         });
 
