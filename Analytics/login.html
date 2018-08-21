@@ -28,7 +28,7 @@
 </head>
 <body ng-app="analytics" ng-controller="loginController">
 
-    <div ng-if="navegador.valor">
+    <div>
         <div class="limiter">
 
             <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') no-repeat right top; position: absolute;">
@@ -67,17 +67,6 @@
 
     </div>
 
-    <div ng-if="navegador.valor == false">
-        <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') repeat right top; position: absolute;">
-            <div style="padding:20px; margin: 5%;border: 5px solid black;background-color:white;">
-                <h4>
-                    Está aplicação não está homologada para o Internet Explorer. Por gentileza, acesse de outro navegador.<br>
-                    Em caso de duvidas, entre em contato com a equipe de BI ( businessintelligence@creditcash.com.br ), obrigado!
-                </h4>
-            </div>
-        </div>
-    </div><br>
-
 
     <style>
         #teste {
@@ -109,9 +98,21 @@
         app.controller('loginController', function ($scope, $http, $window) {
            
 
+            if (/MSIE 10/i.test(navigator.userAgent)) {
+                window.open("./ie.html");
+                window.close();
+
+            }
+
+            if (/MSIE 9/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
+                window.open("./ie.html");
+                window.close();
+
+            } 
+
+
             $scope.dadosPagina = {
                 loading: false
-                , validaBrowser: ''
             }
 
             $scope.usuario = {
@@ -145,29 +146,6 @@
                         alert(r.responseText);
                     }
                 });
-            }
-
-
-            $scope.navegador = { valor: null };
-
-            if (/MSIE 10/i.test(navigator.userAgent)) {
-                // This is internet explorer 10
-                //document.body.innerHTML = 'aplicação não homologada para IE'
-               
-                $scope.navegador.valor = false;
-
-            }
-
-            if (/MSIE 9/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
-                // This is internet explorer 9 or 11
-                //document.body.innerHTML = 'aplicação não homologada para IE'
-
-                $scope.navegador.valor = false;
-
-            } else {
-
-                $scope.navegador.valor = true;
-
             }
 
            
