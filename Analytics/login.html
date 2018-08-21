@@ -68,7 +68,7 @@
     </div>
 
     <div ng-if="navegador.valor == false">
-        <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') repeat right top">
+        <div class="container-login100" style="background: url('/Content/Images/ccashbg.jpg') repeat right top; position: absolute;">
             <div style="padding:20px; margin: 5%;border: 5px solid black;background-color:white;">
                 <h4>
                     Está aplicação não está homologada para o Internet Explorer. Por gentileza, acesse de outro navegador.<br>
@@ -107,7 +107,7 @@
 
         var app = angular.module('analytics', []);
         app.controller('loginController', function ($scope, $http, $window) {
-            $scope.navegador = { valor: true };
+           
 
             $scope.dadosPagina = {
                 loading: false
@@ -148,11 +148,12 @@
             }
 
 
+            $scope.navegador = { valor: null };
 
             if (/MSIE 10/i.test(navigator.userAgent)) {
                 // This is internet explorer 10
                 //document.body.innerHTML = 'aplicação não homologada para IE'
-
+               
                 $scope.navegador.valor = false;
 
             }
@@ -163,7 +164,13 @@
 
                 $scope.navegador.valor = false;
 
+            } else {
+
+                $scope.navegador.valor = true;
+
             }
+
+           
         });
 
         //if (/MSIE 10/i.test(navigator.userAgent)) {
