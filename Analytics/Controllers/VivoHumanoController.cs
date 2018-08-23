@@ -1,5 +1,5 @@
-﻿using Analytics.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,12 +15,10 @@ using System.Web.Services.Description;
 namespace Analytics.Controllers
 {
 
-
     [RoutePrefix("api/vivo/humano")]
     public class VivoHumanoController : ApiController
     {
-        GeneratedExcel ge = new GeneratedExcel();
-
+        
         [Route("dashboard/filtros")]
         [HttpGet]
         [Autorizar]
@@ -286,7 +284,6 @@ namespace Analytics.Controllers
                     parametros.Add("chkAging", chkAging);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
-                   
 
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
@@ -357,8 +354,15 @@ namespace Analytics.Controllers
                     parametros.Add("chkAging", chkAging);
 
                     DataTable resultado = sql.ExecuteProcedureDataSet("sp_dashboard_download", parametros).Tables[0];
-                   
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+
+                    string path = AppDomain.CurrentDomain.BaseDirectory+@"\Content\Excel\arquivo.xlsx";
+                    SLDocument excel = new SLDocument(path);
+                    excel.ImportDataTable(0, 0, resultado, true);
+                    excel.Save();
+                    // download
+                    //File.Delete(path);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }
             catch (Exception e)
