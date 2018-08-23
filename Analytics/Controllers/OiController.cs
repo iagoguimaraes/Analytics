@@ -259,5 +259,73 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable proposta = JsonConvert.DeserializeObject<DataTable>(form["proposta"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("campanhas", campanha);
+                    parametros.Add("segmentos", segmentacao);
+                    parametros.Add("produtos", produto);
+                    parametros.Add("propostas", proposta);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/carteira")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }

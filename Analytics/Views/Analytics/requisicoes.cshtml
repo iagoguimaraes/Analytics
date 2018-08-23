@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-requisicoes">
+    <div id="reportContainer" style="position: absolute; height: calc(100% - 20px); width: calc(100% - 20px);"></div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-requisicoes', function ($scope, $http) {
+        $http({
+            method: 'POST',
+            url: "/api/analytics/requisicoes",
+            data: $scope.model,
+        }).then(function success(r) {
+
+            let accessToken = r.data.EmbedToken.token;
+            let embedUrl = r.data.EmbedUrl;
+            let embedReportId = r.data.Id;
+            let models = window['powerbi-client'].models;
+            let config = {
+                type: 'report',
+                tokenType: models.TokenType.Embed,
+                accessToken: accessToken,
+                embedUrl: embedUrl,
+                id: embedReportId,
+                permissions: models.Permissions.All,
+                settings: {
+                    filterPaneEnabled: true,
+                    navContentPaneEnabled: true
+                },
+                viewMode: models.ViewMode.View,
+            };
+            let reportContainer = $('#reportContainer')[0];
+            let report = powerbi.embed(reportContainer, config);
+
+        });
+    });
+
+</script>
