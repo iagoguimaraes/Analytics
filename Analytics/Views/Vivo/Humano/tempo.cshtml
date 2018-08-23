@@ -55,7 +55,7 @@
                         <!--SABADOS-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Sábados</label>
-                            <input type="checkbox" ng-model="check" ng-change="checked(check == true ? '0' : '7')" />
+                            <input type="checkbox" ng-model="filtros.sabado" ng-checked="true" ng-true-value="'0'" ng-false-value="'7'" />
                         </div>
 
                         <!--EMPRESA-->
@@ -89,7 +89,7 @@
         <!-- QUADROS -->
         <div class="row margin-bottom">
             <!--INDICADORES ABSOLUTOS-->
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_pa"></h3>
@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato_pa "></h3>
@@ -136,7 +136,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa_pa "></h3>
@@ -160,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tma | formatTimer"></h3>
@@ -184,7 +184,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tmo | formatTimer"></h3>
@@ -208,7 +208,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-2">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.tmp_pausa_NR17 | formatTimer"></h3>
@@ -396,12 +396,6 @@
         /*let _dt2 = new Date();
         _dt2.setDate(_dt2.getDate() - 2);
         _dt2 = $filter('date')(_dt2, "yyyy-MM-dd");*/
-
-        $scope.checked = function (name) {
-
-            $scope.filtros.sabado = name;
-            console.log($scope.filtros.sabado)
-        };
 
         $scope.filtros = {
             dtini: _dt1,
