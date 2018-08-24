@@ -395,6 +395,40 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/pesquisa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPesquisa(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
+                DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("funcionario", funcionario);
+                    parametros.Add("ocorrencia", ocorrencia);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pesquisa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO

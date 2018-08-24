@@ -1,0 +1,318 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<div ng-controller="ctrl-riachuelo-pesquisa">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Pesquisa Inadimplência Digital</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--CAMPANHAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanhas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--FUNCIONARIO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Funcionário</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario" style="width:100%"></select2>
+                        </div>
+
+                        <!--OCORRENCIA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Ocorrencias</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ocorrencia" dados="dashFiltros.ocorrencia" style="width:100%"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        @*<div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-6">
+                <div class="small-box bg-gray-active" style="border-radius: 15px; text-align: center">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_total | megaNumber"></h3>
+                        <p>Quantidade</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-6">
+                <div class="small-box bg-gray-active" style="border-radius: 15px; text-align: center">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_total | currency:'R$ '"></h3>
+                        <p>Saldo Contratos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+        <div class="row margin-bottom">
+
+            <!-- BANDEIRA -->
+            <div class="col-xs-12 col-lg-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Bandeira','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-xs-12 col-md-4 col-lg-12">
+                            <div class="small-box bg-black" style="border-radius: 15px">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.resumo.vlr_total | currency:'R$ '"></h3>
+                                    <p>Saldo Contratos</p>
+                                </div>
+                                <div class="icon">
+                                    <i style="color:white" class="fa fa-money"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 col-lg-6">
+                            <div class="small-box bg-gray" style="border-radius: 15px">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.resumo.qtd_total | megaNumber"></h3>
+                                    <p>Quantidade Total</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 col-lg-6">
+                            <div class="small-box bg-red" style="border-radius: 15px">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.resumo.duracao | formatTimer"></h3>
+                                    <p>Média Duracao</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-headphones"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <high-chart series="dashboard.bandeira" height="307px" axis-Categories="dashboard.fxaBandeira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--REGIAO-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Localização</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height:550px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row margin-bottom">
+
+            <!-- GRAFICO PIZZA -->
+            <div class="col-xs-12 col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Empresa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Empresa','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.produto" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAFICO LINHA -->
+            <div class="col-xs-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Dia a Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Periodo','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.periodo" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-riachuelo-pesquisa', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Pesquisa Inadimplência';
+        dadosPagina.descricao = 'Riachuelo'
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteiras: '',
+            funcionario: '',
+            ocorrencia: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $scope.mapa = {
+            indicador: 'percentual'
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteiras = data.Table;
+            $scope.dashFiltros.funcionario = data.Table1;
+            $scope.dashFiltros.ocorrencia = data.Table2;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/pesquisa",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+
+                $scope.dashboard.datas = data.Table3.map(obj => obj.data);
+                $scope.dashboard.fxaBandeira = data.Table1.map(obj => obj.ds_pes_tratado);
+                $scope.dashboard.fxaCartao = data.Table2.map(obj => obj.ds_pes_tratado);
+
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.bandeira = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.qtd_total)), color: '#000000' }];
+                $scope.dashboard.cartao = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.qtd_total)), color: '#000000' }];
+                $scope.dashboard.periodo = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.quantidade)), color: '#000000' }];
+                $scope.dashboard.produto = [{ name: 'Quantidade', innerSize: '60%', data: data.Table4.map(obj => ({ name: obj.ds_produto, y: obj.quantidade })) }];
+                $scope.carregarMapa();
+            });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.dados.Table5;
+            switch ($scope.mapa.indicador) {
+                case 'percentual':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.percentual) }));
+                    break;
+                case 'quantidade':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.quantidade) }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
