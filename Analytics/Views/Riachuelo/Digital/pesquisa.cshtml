@@ -83,40 +83,13 @@
             </div>
         </div>
 
-        <!--RESUMO-->
-        @*<div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-6">
-                <div class="small-box bg-gray-active" style="border-radius: 15px; text-align: center">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_total | megaNumber"></h3>
-                        <p>Quantidade</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-6">
-                <div class="small-box bg-gray-active" style="border-radius: 15px; text-align: center">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_total | currency:'R$ '"></h3>
-                        <p>Saldo Contratos</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-
         <div class="row margin-bottom">
 
             <!-- BANDEIRA -->
-            <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="col-xs-12 col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Resumo</span>
+                        <span class="card-header-title">Resumo (Chamadas)</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -125,22 +98,27 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="col-xs-12 col-md-4 col-lg-12">
-                            <div class="small-box bg-black" style="border-radius: 15px">
+                        <div class="col-xs-12 col-md-6 col-lg-6">
+                            <div class="small-box bg-black" style="border-radius: 15px;text-align:center">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.resumo.vlr_total | currency:'R$ '"></h3>
-                                    <p>Saldo Contratos</p>
+                                    <h3 ng-bind="dashboard.resumo.qtd_total | number"></h3>
+                                    <p>Chegaram a Pesquisa</p>
                                 </div>
-                                <div class="icon">
-                                    <i style="color:white" class="fa fa-money"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 col-lg-6">
+                            <div class="small-box bg-black" style="border-radius: 15px;text-align:center">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.resumo.qtd_pesquisa | number "></h3>
+                                    <p>Interagiram</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4 col-lg-6">
-                            <div class="small-box bg-gray" style="border-radius: 15px">
+                            <div class="small-box bg-gray" style="border-radius: 15px;text-align:center">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.resumo.qtd_total | megaNumber"></h3>
-                                    <p>Quantidade Total</p>
+                                    <h3 ng-bind="dashboard.resumo.percentual_total">%</h3>
+                                    <p>Percentual do Total</p>
                                 </div>
                                 <div class="icon">
                                     <i class="fa fa-phone"></i>
@@ -148,7 +126,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4 col-lg-6">
-                            <div class="small-box bg-red" style="border-radius: 15px">
+                            <div class="small-box bg-red" style="border-radius: 15px;text-align:center">
                                 <div class="inner">
                                     <h3 ng-bind="dashboard.resumo.duracao | formatTimer"></h3>
                                     <p>Média Duracao</p>
@@ -158,7 +136,11 @@
                                 </div>
                             </div>
                         </div>
-                        <high-chart series="dashboard.bandeira" height="307px" axis-Categories="dashboard.fxaBandeira" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <div class="row margin-bottom">
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.bandeira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,7 +164,7 @@
                         </small>
                     </div>
                     <div class="card-body">
-                        <mapa-brasil style="height:550px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                        <mapa-brasil style="height:664px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -191,38 +173,19 @@
 
         <div class="row margin-bottom">
 
-            <!-- GRAFICO PIZZA -->
-            <div class="col-xs-12 col-lg-4">
+            <!--ATENDIMENTO POR DIA-->
+            <div class="col-xs-12 col-lg-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Empresa</span>
+                        <span class="card-header-title">Respostas por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Empresa','Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.produto" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GRAFICO LINHA -->
-            <div class="col-xs-12 col-lg-8">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Dia a Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Periodo','Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.periodo" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                        <p><small>% por Ocorrencia</small></p>
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" type="column"
+                                    plot-Options-Column-Stacking="normal"></high-chart>
                     </div>
                 </div>
             </div>
@@ -248,7 +211,9 @@
             ocorrencia: ''
         };
         $scope.dashFiltros = {};
-        $scope.dashboard = {};
+
+        $scope.dashboard = { dados: [] };
+
 
         $scope.mapa = {
             indicador: 'percentual'
@@ -276,17 +241,44 @@
             }).then(function success(r) {
                 let data = r.data;
 
-                $scope.dashboard.datas = data.Table3.map(obj => obj.data);
-                $scope.dashboard.fxaBandeira = data.Table1.map(obj => obj.ds_pes_tratado);
+                $scope.dashboard.datas = data.Table6.map(obj => obj.data);
+
+                $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.ds_pes_tratado);
                 $scope.dashboard.fxaCartao = data.Table2.map(obj => obj.ds_pes_tratado);
+
 
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.bandeira = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.qtd_total)), color: '#000000' }];
+                //$scope.dashboard.bandeira = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.qtd_total)) }];
+                $scope.dashboard.bandeira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.ds_pes_tratado, y: obj.qtd_total })) }];
+
                 $scope.dashboard.cartao = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.qtd_total)), color: '#000000' }];
                 $scope.dashboard.periodo = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.quantidade)), color: '#000000' }];
                 $scope.dashboard.produto = [{ name: 'Quantidade', innerSize: '60%', data: data.Table4.map(obj => ({ name: obj.ds_produto, y: obj.quantidade })) }];
+
+                let colunas = data.Table8;
+                let qtdColuna = data.Table7[0];
+                var cores = ['#989898', '#a8a8a8', '#b9b9b9', '#cacaca', '#dcdcdc', '#ededed', '#989898', '#989898', '#7d7d7d', '#636363', '#4a4a4a', '#323232', '#1c1c1c', '#000000'];
+
+
+
+                $scope.dashboard.grafico = [
+                ];
+
+                for (let i = 0; i < (colunas.length) ; i++) {
+
+                    let campo = colunas[i];
+                    let cor = cores[i];
+                    
+                    let serie = { name: campo.name, color: cor, type: 'column', data: data.Table3.map(obj => obj[campo.name]) };
+                    console.log(serie);
+                    $scope.dashboard.grafico.push(serie);
+
+                }
+
+
+                console.log($scope.dashboard.grafico);
                 $scope.carregarMapa();
             });
         }
