@@ -407,7 +407,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
-                DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
+
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -417,7 +417,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
-                    parametros.Add("ocorrencia", ocorrencia);
+    
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pesquisa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
