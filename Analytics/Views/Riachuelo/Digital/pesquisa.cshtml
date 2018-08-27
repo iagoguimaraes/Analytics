@@ -149,7 +149,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Localização</span>
+                        <span class="card-header-title">Respostas por Estado</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -157,10 +157,7 @@
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                         <small class="pull-right">
-                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                <option value="quantidade">Quantidade</option>
-                                <option value="percentual">Percentual</option>
-                            </select>
+                            <select ng-model="mapa.indicador" ng-options="i.name as i.name for i in mapa.tabulacao" ng-change="carregarMapa()"></select> 
                         </small>
                     </div>
                     <div class="card-body">
@@ -216,8 +213,9 @@
 
 
         $scope.mapa = {
-            indicador: 'percentual'
+            indicador: 'Nao Informado'
         };
+
 
         // carregar os filtros
         $http({
@@ -241,27 +239,23 @@
             }).then(function success(r) {
                 let data = r.data;
 
-                $scope.dashboard.datas = data.Table3.map(obj => obj.data);
+                $scope.dashboard.datas = data.Table2.map(obj => obj.data);
 
                 $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.ds_pes_tratado);
                 $scope.dashboard.fxaCartao = data.Table2.map(obj => obj.ds_pes_tratado);
-
+                
 
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                //$scope.dashboard.bandeira = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.qtd_total)) }];
-                $scope.dashboard.bandeira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.ds_pes_tratado, y: obj.qtd_total })) }];
+                $scope.dashboard.bandeira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.ds_pes_tratado, y: obj.qtd_total })) }];        
+                        
+                let qtdColuna = data.Table4[0];
+                let colunas = data.Table5;
+                console.log(colunas);
+                $scope.mapa.tabulacao = colunas;
 
-                $scope.dashboard.cartao = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.qtd_total)), color: '#000000' }];
-                $scope.dashboard.periodo = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.quantidade)), color: '#000000' }];
-                $scope.dashboard.produto = [{ name: 'Quantidade', innerSize: '60%', data: data.Table4.map(obj => ({ name: obj.ds_produto, y: obj.quantidade })) }];
-
-                let colunas = data.Table8;
-                let qtdColuna = data.Table7[0];
                 var cores = ['#989898', '#a8a8a8', '#b9b9b9', '#cacaca', '#dcdcdc', '#ededed', '#989898', '#989898', '#7d7d7d', '#636363', '#4a4a4a', '#323232', '#1c1c1c', '#000000'];
-
-
 
                 $scope.dashboard.grafico = [
                 ];
@@ -271,8 +265,8 @@
                     let campo = colunas[i];
                     let cor = cores[i];
                     
-                    let serie = { name: campo.name, color: cor, type: 'column', data: data.Table3.map(obj => obj[campo.name]) };
-                    console.log(serie);
+                    let serie = { name: campo.name, color: cor, type: 'column', data: data.Table2.map(obj => obj[campo.name]) };
+                    
                     $scope.dashboard.grafico.push(serie);
 
                 }
@@ -285,17 +279,12 @@
 
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarMapa = function () {
-            let dados = $scope.dashboard.dados.Table5;
-            switch ($scope.mapa.indicador) {
-                case 'percentual':
-                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.percentual) }));
-                    break;
-                case 'quantidade':
-                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.quantidade) }));
-                    break;
-                default:
-                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
-            }
+
+
+            let dados = $scope.dashboard.dados.Table3;
+            $scope.dashboard.mapa = dados.filter(obj => obj.ds_pes_tratado == $scope.mapa.indicador).map(obj => ({ id: 'BR-' + obj.UF, value: obj.percentual }));
+            console.log($scope.mapa.indicador);
+            
         }
 
         $scope.carregarDashboard();
