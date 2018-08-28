@@ -9,31 +9,30 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Acionamentos</div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
-                <i class="fa fa-filter"></i>
-                FILTROS
-            </div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
-                <i class="fa fa-file-excel-o"></i>
-                EXTRAIR
-            </div>
+            @*<div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                    <i class="fa fa-filter"></i>
+                    FILTROS
+                </div>
+                <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
+                    <i class="fa fa-file-excel-o"></i>
+                    EXTRAIR
+                </div>*@
         </header>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
-                <div id="filtros-window" class="card display-none">
+                <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Filtros</span>
-                        <div class="card-header-button card-header-close">
-                            <i class="fa fa-close"></i>
-                        </div>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
+                        @*<div class="card-header-button card-header-close">
+                                <i class="fa fa-close"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>*@
                     </div>
                     <div class="card-body">
-
                         <!--DATA INCIAL-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Data Inicial</label>
@@ -171,7 +170,8 @@
 
                         <!--BOTÃO-->
                         <div class="form-group" style="margin-top:20px">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Preview</button>
+                            <button type="button" class="btn btn-primary" style="float: right;" data-toggle="control-sidebar" ng-click="extrair()">Extrair</button>
                         </div>
 
                     </div>
@@ -181,14 +181,13 @@
 
         <!-- AGRUPAMENTOS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
-            <div class="col-xs-12">           
+            <div class="col-xs-12">
 
             </div>
-
         </div>
 
 
-        <!--TABULACOES-->
+        <!--TABELA ACIONAMENTOS-->
         <div class="row">
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
@@ -198,8 +197,8 @@
                             <i class="fa fa-expand"></i>
                         </div>
                         @*<div class="card-header-button" ng-click="extrair('Table')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>*@
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>*@
                     </div>
                     <div class="card-body" style="overflow:auto;">
                         <table class="table table-striped table-bordered" style="width:100%; height:100%;" ng-if="dashboard.tabela">
@@ -226,7 +225,7 @@
     angular.module('app').controller('ctrl-vivo-acionamento', function ($scope, $http, $filter, $interval) {
         // filtros iniciais
         let hoje = new Date();
-        
+
         $scope.filtros = {
             dtini: $filter('date')(hoje, "yyyy-MM-dd"),
             dtfim: $filter('date')(hoje, "yyyy-MM-dd"),
@@ -275,24 +274,24 @@
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
 
-                $http({
-                    method: 'POST',
-                    url: "/api/vivo/humano/dashboard/acionamento",
-                    data: $scope.filtros,
-                }).then(function success(r) {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/humano/dashboard/acionamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
 
-                    $scope.dashboard.status = r.status;
-                    $scope.dashboard.dados = r.data;
-                    
-                    $scope.carregarAcionamentos();
-                    
-                });           
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.carregarAcionamentos();
+
+            });
         }
 
         $scope.carregarAcionamentos = function () {
 
             let dados = alasql(
-                 'SELECT top 10 '
+                 'SELECT '
                  + $scope.filtros.ano + ''
                  + $scope.filtros.mes + ''
                  + $scope.filtros.semana + ''
@@ -322,7 +321,7 @@
                  + ' order by PROM desc, CPCA, CPC, CTT'
                  , [$scope.dashboard.dados.Table]);
 
-            
+
             $scope.dashboard.tabela = dados;
 
             //console.log($scope.dashboard.tabela[0])
@@ -330,7 +329,8 @@
             $scope.dashboard.coluna = Object.keys($scope.dashboard.tabela[0]);
         }
 
-         //extrair dados para excel
+       
+        //extrair dados para excel
         $scope.extrair = function () {
             $http({
                 method: 'POST',
@@ -363,8 +363,8 @@
 
         $scope.carregarDashboard();
 
- 
-  
+
+
 
     });
 </script>

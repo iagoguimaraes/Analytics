@@ -380,8 +380,7 @@ namespace Analytics.Controllers
 
                     foreach (DataRow row in resultado.Rows)
                     {
-                        string[] fields = row.ItemArray.Select(field => field.ToString()).
-                                                        ToArray();
+                        string[] fields = row.ItemArray.Select(field => field.ToString()).ToArray();
                         sb.AppendLine(string.Join(";", fields));
                     }
 
