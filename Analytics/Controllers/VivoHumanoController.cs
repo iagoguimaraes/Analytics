@@ -9,6 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Web;
 using System.Web.Http;
 using System.Web.Services.Description;
 
@@ -19,6 +21,7 @@ namespace Analytics.Controllers
     public class VivoHumanoController : ApiController
     {
         
+
         [Route("dashboard/filtros")]
         [HttpGet]
         [Autorizar]
@@ -353,14 +356,43 @@ namespace Analytics.Controllers
                     parametros.Add("chkCarteira", chkCarteira);
                     parametros.Add("chkAging", chkAging);
 
-                    DataTable resultado = sql.ExecuteProcedureDataSet("sp_dashboard_download", parametros).Tables[0];
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
 
-                    string path = AppDomain.CurrentDomain.BaseDirectory+@"\Content\Excel\arquivo.xlsx";
-                    SLDocument excel = new SLDocument(path);
-                    excel.ImportDataTable(0, 0, resultado, true);
-                    excel.Save();
-                    // download
-                    //File.Delete(path);
+                    string path = AppDomain.CurrentDomain.BaseDirectory + @"\Content\Excel\arquivo.xlsx";
+                    string dt = DateTime.Now.ToString("yyyyMMdd HH:mm:ss").Replace(":", "_");
+
+                    //SLDocument excel = new SLDocument(path);
+                    //excel.ImportDataTable(1, 0, resultado, true);
+
+                    path = AppDomain.CurrentDomain.BaseDirectory + @"\Content\Excel\ACIONAMENTOS_ANALYTICS_VIVO_" + dt + ".csv";
+                    //excel.SaveAs(path);
+
+                    
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    StringBuilder sb = new StringBuilder();
+
+                    string[] columnNames = resultado.Columns.Cast<DataColumn>().
+                                  Select(column => column.ColumnName).
+                                  ToArray();
+                    sb.AppendLine(string.Join(";", columnNames));
+
+                    foreach (DataRow row in resultado.Rows)
+                    {
+                        string[] fields = row.ItemArray.Select(field => field.ToString()).ToArray();
+                        sb.AppendLine(string.Join(";", fields));
+                    }
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=teste.csv");
+
+                    Response.Write(sb.ToString());
+                    //Response.Flush();
+                    Response.End();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -369,6 +401,11 @@ namespace Analytics.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+        public void ProcessRequest(HttpContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
