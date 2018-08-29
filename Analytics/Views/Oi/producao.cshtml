@@ -164,6 +164,49 @@
                         </div>
                     </div>
                 </div>
+                @*<div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <p>Média Mailing</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.qtd_penetrado | number"></h3>
+                            <p>Média Penetração</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.qtd_penetrado / dashboard.resumo.qtd_mailing  | percentage: 1"></h3>
+                            <p>% Penetração</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.discado_media / dashboard.resumo.qtd_penetrado  | number: 1"></h3>
+                            <p>Média Spin</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>*@
             </div>
 
 
@@ -185,6 +228,10 @@
                                     <thead>
                                         <tr>
                                             <th>Dia</th>
+                                            <th>Penetrado</th>
+                                            <th>Mailing</th>
+                                            <th>Penetrado</th>
+                                            <th>Spin Dia</th>
                                             <th>Discado</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
@@ -199,6 +246,10 @@
                                     <tbody>
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                            <td>{{dia.qtd_penetrado | number}}</td>
+                                            <td>{{dia.qtd_mailing | number}}</td>
+                                            <td>{{dia.qtd_penetrado / dia.qtd_mailing | percentage:1}}</td>
+                                            <td>{{dia.discado / dia.qtd_penetrado | number:1 }}</td>
                                             <td>{{dia.discado | number}}</td>
                                             <td>{{dia.contato | number}}</td>
                                             <td>{{dia.cpc | number}}</td>

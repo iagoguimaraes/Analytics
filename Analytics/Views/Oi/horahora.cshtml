@@ -142,7 +142,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="background-color: #ec880a; color:white; opacity: 0.8">
+                <div class="row" style="background-color: #ffba62c7; color:black; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
@@ -171,6 +171,26 @@
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="background-color: #ec880a; color:white; opacity: 0.8">
+                    <div class="col-sm-4 col-md-4  border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.qtd_mailing | megaNumber"></h5>
+                            <span class="description-text">Total Mailing</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.qtd_penetrado | megaNumber "></h5>
+                            <span class="description-text">Total Penetrado</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4  border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.qtd_penetrado  | number : 1"></h5>
+                            <span class="description-text">Spin Dia</span>
                         </div>
                     </div>
                 </div>
@@ -263,6 +283,10 @@
                                 <thead>
                                     <tr>
                                         <th>Carteira</th>
+                                        <th>Penetrado</th>
+                                        <th>Mailing</th>
+                                        <th>Penetração</th>
+                                        <th>Spin Dia</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -281,6 +305,10 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{e[0].ds_campanha}}
                                         </td>
+                                        <td>{{e | sumByColumn: 'qtd_penetrado'| number}}</td>
+                                        <td>{{e | sumByColumn: 'qtd_mailing'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'qtd_penetrado':'qtd_mailing' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'discado':'qtd_penetrado'| number:1}}</td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
@@ -294,6 +322,10 @@
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
                                         <td>{{c.ds_segmento}}</td>
+                                        <td>{{c.qtd_penetrado | number}}</td>
+                                        <td>{{c.qtd_mailing | number}}</td>
+                                        <td>{{c.qtd_penetrado / c.qtd_mailing | percentage:1}}</td>
+                                        <td>{{c.discado /  c.qtd_penetrado | number:1}}</td>
                                         <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
