@@ -9,157 +9,152 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Acionamentos</div>
-            @*<div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
-                    <i class="fa fa-filter"></i>
-                    FILTROS
-                </div>
-                <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
-                    <i class="fa fa-file-excel-o"></i>
-                    EXTRAIR
-                </div>*@
         </header>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Filtros</span>
-                        @*<div class="card-header-button card-header-close">
-                                <i class="fa fa-close"></i>
-                            </div>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>*@
                     </div>
                     <div class="card-body">
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <!--DATA INCIAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                    </div>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                            </div>
-                        </div>
 
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                                <!--DATA FINAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+
+                                <!--EMPRESA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Empresa</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
+                                </div>
+
+                                <!--CARTEIRA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                                </div>
+
+                                <!--AGING-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Aging</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                                </div>
+
+                                <!--BOTÃO-->
+                                <div class="form-group" style="margin-top:20px">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Preview</button>
+                                    <button type="button" class="btn btn-primary" style="float: right;" data-toggle="control-sidebar" ng-click="extrair()">Extrair</button>
+                                </div>
+
                             </div>
-                        </div>
 
-                        <!--EMPRESA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Empresa</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
-                        </div>
+                            <div class="col-xs-12 col-md-6">
 
-                        <!--CARTEIRA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteira</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
-                        </div>
+                                <!--SUPERVISOR-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Supervisor</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                                </div>
 
-                        <!--AGING-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Aging</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
-                        </div>
-
-                        <!--SUPERVISOR-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Supervisor</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
-                        </div>
-
-                        <!--EQUIPE-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Equipe</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe"></select2>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <span class="card-header-title">Agrupamentos</span>
-                            </div>
-                            <div class="card-body">
+                                <!--EQUIPE-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Equipe</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe"></select2>
+                                </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Agrupamentos</label>
+                                    </div>
+                                    <div class="col-xs-6 col-md-3">
                                         <!--CHECKED ANO-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.ano" ng-true-value="'ANO,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.ano" ng-true-value="'ANO,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Ano</label>
                                         </div>
                                         <!--CHECKED MES-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.mes" ng-true-value="'MES,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.mes" ng-true-value="'MES,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Mês</label>
                                         </div>
                                         <!--CHECKED MES-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.semana" ng-true-value="'SEMANA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.semana" ng-true-value="'SEMANA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Semana</label>
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 col-lg-3">
+                                    <div class="col-xs-6 col-md-3">
                                         <!--CHECKED DIA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.data" ng-true-value="'DATA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.data" ng-true-value="'DATA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Data</label>
                                         </div>
                                         <!--CHECKED HORA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.hora" ng-true-value="'HORA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.hora" ng-true-value="'HORA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Hora</label>
                                         </div>
                                         <!--CHECKED OCORRENCIA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.ocorrencia" ng-true-value="'OCORRENCIA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.ocorrencia" ng-true-value="'OCORRENCIA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Ocorrencia</label>
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 col-lg-3">
+                                    <div class="col-xs-6 col-md-3">
                                         <!--CHECKED OPERADOR-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.operador" ng-true-value="'OPERADOR,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.operador" ng-true-value="'OPERADOR,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Operador</label>
                                         </div>
                                         <!--CHECKED SUPERVISOR-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.chkSupervisor" ng-true-value="'SUPERVISOR,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.chkSupervisor" ng-true-value="'SUPERVISOR,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Supervisor</label>
                                         </div>
                                         <!--CHECKED EQUIPE-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.chkEquipe" ng-true-value="'EQUIPE,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng-model="filtros.chkEquipe" ng-true-value="'EQUIPE,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Equipe</label>
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 col-lg-3">
+                                    <div class="col-xs-6 col-md-3">
                                         <!--CHECKED EMPRESA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkEmpresa" ng-true-value="'EMPRESA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkEmpresa" ng-true-value="'EMPRESA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Empresa</label>
                                         </div>
                                         <!--CHECKED CARTEIRA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkCarteira" ng-true-value="'CARTEIRA,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkCarteira" ng-true-value="'CARTEIRA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Carteira</label>
                                         </div>
                                         <!--CHECKED AGING-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkAging" ng-true-value="'AGING,'" ng-false-value="''" ng-click="carregarAcionamentos()" />
+                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkAging" ng-true-value="'AGING,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Aging</label>
                                         </div>
                                     </div>
@@ -167,25 +162,10 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!--BOTÃO-->
-                        <div class="form-group" style="margin-top:20px">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Preview</button>
-                            <button type="button" class="btn btn-primary" style="float: right;" data-toggle="control-sidebar" ng-click="extrair()">Extrair</button>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- AGRUPAMENTOS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
-            <div class="col-xs-12">
-
-            </div>
-        </div>
-
 
         <!--TABELA ACIONAMENTOS-->
         <div class="row">
@@ -196,9 +176,6 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        @*<div class="card-header-button" ng-click="extrair('Table')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>*@
                     </div>
                     <div class="card-body" style="overflow:auto;">
                         <table class="table table-striped table-bordered" style="width:100%; height:100%;" ng-if="dashboard.tabela">
@@ -271,6 +248,7 @@
             $scope.dashFiltros.equipe = data.Table4;
         });
 
+
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
 
@@ -329,31 +307,42 @@
             $scope.dashboard.coluna = Object.keys($scope.dashboard.tabela[0]);
         }
 
-       
+
         //extrair dados para excel
         $scope.extrair = function () {
-            $http({
-                method: 'POST',
-                url: "/api/vivo/humano/dashboard/download",
-                data: $scope.filtros,
-                responseType: 'arraybuffer',
 
-            }).then(function success(r) {
-                $scope.dashboard.status = r.status;
+            var dtini = $filter('date')($scope.filtros.dtini, "dd")
+            var dtfim = $filter('date')($scope.filtros.dtfim, "dd")
 
-                var file = new File([r.data], { type: "application/csv" });
-                var objectUrl = URL.createObjectURL(file);
+            if ((dtfim - dtini) < 0) {
 
-                var link = document.createElement('a');
-                link.style = "display: none";
-                link.href = objectUrl;
-                link.download = 'teste.csv';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(objectUrl);
+                alert("O período inserido no filtro deverá ser de 1 mês fechado!")
 
-            });
+            } else {
+
+                $http({
+                    method: 'POST',
+                    url: "/api/vivo/humano/dashboard/download",
+                    data: $scope.filtros,
+                    responseType: 'arraybuffer',
+
+                }).then(function success(r) {
+                    $scope.dashboard.status = r.status;
+
+                    var file = new File([r.data], { type: "application/csv" });
+                    var objectUrl = URL.createObjectURL(file);
+
+                    var link = document.createElement('a');
+                    link.style = "display: none";
+                    link.href = objectUrl;
+                    link.download = 'ACIONAMENTOS_ANALYTICS_VIVO_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(objectUrl);
+
+                });
+            }
 
             //let dados = alasql('select * from ?',[$scope.dashboard.dados.Table]);
             //$scope.dashboard.download = dados;
