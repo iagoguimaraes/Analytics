@@ -10,7 +10,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Efetividade</div>
+            <div class="page-name">Recebimento e Efetividade</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -79,73 +79,112 @@
         </div>
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_acordo | number"></h3>
-                        <p>Quantidade Acordos</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-credit-card"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.pagamento | number"></h3>
-                        <p>Quantidade Pagamentos</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-chevron-circle-down"></i>
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-md-6 col-lg-6">
+                    <div class="small-box bg-black" style="border-radius: 15px; background-color:white; text-align:center">
+                        <div class="inner" >
+                            <h3 ng-bind="dashboard.resumo.valor_pagamento | currency:'R$'"></h3>
+                            <p>Total Pagamentos</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.efetividade_acordo"></h3>
-                        <p>Efetividade Acordo</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-line-chart"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vl_acordo | currency:'R$'"></h3>
-                        <p>Valor Acordos</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
-                        <p>Valor Pagamentos</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-chevron-circle-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.efetividade_valor"></h3>
-                        <p>Efetividade Acordo Financeiro</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-line-chart"></i>
+                <div class="col-xs-12 col-md-6 col-lg-6">
+                    <div class="small-box bg-red" style="border-radius: 15px; background-color:white;text-align:center">
+                        <div class="inner" >
+                            <h3 ng-bind="dashboard.resumo.valor_direto | currency:'R$'"></h3>
+                            <p>Total Espontâneo</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumos Efetividade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.qtd_acordo | number"></h3>
+                                        <p>Quantidade Acordos</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.pagamento_acordo | number"></h3>
+                                        <p>Quantidade Pagamentos</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-chevron-circle-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.pagamento_acordo / dashboard.resumo.qtd_acordo | percentage: 1"></h3>
+                                        <p>Efetividade Acordo</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-line-chart"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.vl_acordo | currency:'R$'"></h3>
+                                        <p>Valor Acordos</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-money"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.valor_acordo | currency:'R$'"></h3>
+                                        <p>Valor Pagamentos</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-chevron-circle-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 col-lg-4">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.resumo.valor_acordo / dashboard.resumo.vl_acordo | percentage: 1"></h3>
+                                        <p>Efetividade Acordo Financeiro</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-line-chart"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
         <div class="row margin-bottom">
@@ -159,9 +198,16 @@
                         <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="vlr_pago">Total</option>
+                                <option value="pag_direto">Espontâneo</option>
+                                <option value="pag_acordo">Por acordo</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.diaFinanceiro" axis-Categories="dashboard.diasfinanceiro" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.diaFinanceiro" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -171,7 +217,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Efetividade por Dia</span>
+                        <span class="card-header-title">Efetividade dos Acordos</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -188,7 +234,7 @@
             </div>
         </div>
 
-         <!--PRODUÇÃO POR OPERADOR-->
+        <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -208,7 +254,7 @@
             </div>
         </div>
 
-     </div>
+    </div>
 </div>
 
 
@@ -228,6 +274,7 @@
             visao: 'andamento',
 
         };
+        $scope.grafico = { indicador: 'vlr_pago' };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
 
@@ -242,20 +289,47 @@
                 let data = r.data;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.diasPag = r.data.Table1.map(obj => obj.data);
-                $scope.dashboard.diasfinanceiro = r.data.Table4.map(obj => obj.data);
-                $scope.dashboard.diasEfetividade = r.data.Table5.map(obj => obj.data);
+                $scope.dashboard.diasEfetividade = r.data.Table3.map(obj => obj.data);
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.operador = r.data.Table3;
-                $scope.dashboard.diaFinanceiro = [{ name: 'Valor Pagamentos', data: r.data.Table4.map(obj => (obj.vl_pagto)) }];
+                $scope.dashboard.diasfinanceiro = r.data.Table1;
+                $scope.dashboard.operador = r.data.Table2;
                 $scope.dashboard.diaProm = [
-                    { name: 'acordo', type: 'column', data: data.Table5.map(obj => obj.qtd_acordo) },
-                    { name: 'pagamento', type: 'column', data: data.Table5.map(obj => obj.qtd_pagto) },
-                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table5.map(obj => obj.Efetividade) },
-                            ];
+                    { name: 'acordo', type: 'column', data: data.Table3.map(obj => obj.qtd_acordo) },
+                    { name: 'pagamento', type: 'column', data: data.Table3.map(obj => obj.qtd_pagto) },
+                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table3.map(obj => obj.Efetividade) },
+                ];
+                $scope.carregarGrafico();
 
             });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+
+            let dados = $scope.dashboard.diasfinanceiro;
+            console.log(dados);
+            $scope.dashboard.horas = dados.map(obj => obj.hora);
+
+            switch ($scope.grafico.indicador) {
+                case 'vlr_pago':
+                    //$scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.diaFinanceiro = [{ name: 'Valor Pagamentos', data: dados.map(obj => (obj.vlr_pago)) }];
+                    break;
+                case 'pag_direto':
+                    //$scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    $scope.dashboard.diaFinanceiro = [{ name: 'Valor Pagamentos', data: dados.map(obj => (obj.pag_direto)) }];
+                    break;
+                case 'pag_acordo':
+                    //$scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    $scope.dashboard.diaFinanceiro = [{ name: 'Valor Pagamentos', data: dados.map(obj => (obj.pag_acordo)) }];
+                    break;
+                default:
+                    //$scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+                    $scope.dashboard.diaFinanceiro = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            }
+
         }
 
         // extrair dados para excel
