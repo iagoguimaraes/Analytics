@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Analytics.Models;
+using Newtonsoft.Json;
 using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
@@ -357,42 +358,17 @@ namespace Analytics.Controllers
                     parametros.Add("chkAging", chkAging);
 
                     DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
-
-                    string path = AppDomain.CurrentDomain.BaseDirectory + @"\Content\Excel\arquivo.xlsx";
-                    string dt = DateTime.Now.ToString("yyyyMMdd HH:mm:ss").Replace(":", "_");
-
-                    //SLDocument excel = new SLDocument(path);
-                    //excel.ImportDataTable(1, 0, resultado, true);
-
-                    path = AppDomain.CurrentDomain.BaseDirectory + @"\Content\Excel\ACIONAMENTOS_ANALYTICS_VIVO_" + dt + ".csv";
-                    //excel.SaveAs(path);
-
-                    
+                  
 
                     HttpResponse Response = HttpContext.Current.Response;
-
-                    StringBuilder sb = new StringBuilder();
-
-                    string[] columnNames = resultado.Columns.Cast<DataColumn>().
-                                  Select(column => column.ColumnName).
-                                  ToArray();
-                    sb.AppendLine(string.Join(";", columnNames));
-
-                    foreach (DataRow row in resultado.Rows)
-                    {
-                        string[] fields = row.ItemArray.Select(field => field.ToString()).ToArray();
-                        sb.AppendLine(string.Join(";", fields));
-                    }
 
                     Response.ClearContent();
                     Response.ClearHeaders();
                     Response.Clear();
                     Response.ContentType = "application/csv";
-                    Response.AddHeader("Content-Disposition", "attachment;filename=teste.csv");
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_VIVO_");
 
-                    Response.Write(sb.ToString());
-                    //Response.Flush();
-                    Response.End();
+                    new GerarArquivo(Response, resultado);                    
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
