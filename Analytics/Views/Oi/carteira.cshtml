@@ -158,7 +158,7 @@
         </div>
 
         <!--GRAFICO POR DIA-->
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12 margin-bottom"> 
                 <div class="card">
                     <div class="card-header">
@@ -183,6 +183,72 @@
                     </div>
                 </div>
             </div>         
+        </div>*@
+
+        <!--TABELA EMPRESA/CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Empresa/Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Analitco','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Ativo</th>
+                                        <th>Ativo R$</th>
+                                        <th>Devolução</th>
+                                        <th>Devoluçaõ R$</th>
+                                        <th>Inclusão</th>                                      
+                                        <th>Inclusão R$</th>
+                                        
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.carteiraTable | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].data}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'ativo'| number}}</td>
+                                        <td>{{e | sumByColumn: 'ativoVlr'| currency:'R$'}}</td>
+                                        <td>{{e | sumByColumn: 'devolucao'| number}}</td>
+                                        <td>{{e | sumByColumn: 'devolucaoVlr'| currency:'R$'}}</td>
+                                        <td>{{e | sumByColumn: 'inclusao'| number}}</td>                                                                              
+                                        <td>{{e | sumByColumn: 'inclusaoVlr'| currency:'R$'}}</td>
+                                        
+                                        
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.campanha}}</td>
+                                        <td>{{c.ativo | number}}</td>
+                                        <td>{{c.ativoVlr | currency:'R$'}}</td>
+                                        <td>{{c.devolucao | number}}</td>
+                                        <td>{{c.devolucaoVlr | currency:'R$'}}</td>
+                                        <td>{{c.inclusao}}</td>
+                                        <td>{{c.inclusaoVlr | currency:'R$'}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -235,6 +301,7 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
+                $scope.dashboard.carteiraTable = r.data.Table3;
 
                 $scope.carregarGrafico();
             });
