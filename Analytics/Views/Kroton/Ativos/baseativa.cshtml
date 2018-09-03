@@ -230,6 +230,26 @@
             </div>
         </div>
 
+        <!--AGING-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.aging" axis-Categories="dashboard.faixaAtraso" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
@@ -284,14 +304,14 @@
                 $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.empresa);
                 $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_idade);
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_saldo);
-                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_atraso);
+                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_aging);
                 $scope.dashboard.faixaSexo = data.Table6.map(obj => obj.ds_sexo);
                 $scope.dashboard.faixaAluno = data.Table7.map(obj => obj.ds_status);
                 $scope.dashboard.faixaSituacao = data.Table8.map(obj => obj.ds_situacao);
 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.atraso = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#0073b7' }];
+                $scope.dashboard.aging = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#0073b7' }];
                 $scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#0073b7' }];
                 $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#0073b7' }];
                 $scope.dashboard.carteira = [{ name: 'Quantidade', data: r.data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
