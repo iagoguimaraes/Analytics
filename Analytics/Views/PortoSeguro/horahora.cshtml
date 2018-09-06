@@ -62,72 +62,98 @@
             </div>
         </div>
 
-        <!--RESUMO-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
-                        <p>Discado</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-aqua">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
-                        <p>Contato</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-headphones"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
-                        <p>CPC</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-male"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
-                        <p>CPCA</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-street-view"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Promessa</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- DASHBOARD -->
+        <div class="row">
 
-        <!--HORA HORA-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <!--RESUMO-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-box bg-gray">
+                            <div class="inner">
+                                <b>Discado:</b><span class="pull-right" ng-bind="dashboard.resumo.discado | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <b>Contato:</b><span class="pull-right" ng-bind="dashboard.resumo.contato | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <b>CPC:</b><span class="pull-right" ng-bind="dashboard.resumo.cpc | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-yellow">
+                            <div class="inner">
+                                <b>CPCA:</b><span class="pull-right" ng-bind="dashboard.resumo.cpca | number"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <b>Promessa:</b><span class="pull-right" ng-bind="dashboard.resumo.promessa | number"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--DIAGRAMA-->
+            <div class="col-xs-12 col-md-8 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação" height="300"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--FUNIL-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvasjs config="dashboard.funil" style="width: 100%; height: 250px"></canvasjs>
+                    </div>
+                </div>
+            </div>
+
+            <!--DISCADOR-->
+            <div class="col-xs-12 col-md-8 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Insucesso no Contato</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="250"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--HORA HORA-->
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Hora</span>
@@ -186,47 +212,8 @@
                     </div>
                 </div>
             </div>
+
         </div>
-
-        <!--DIAGRAMA E DISCADOR-->
-        <div class="row margin-bottom">
-            <!--DIAGRAMA-->
-            <div class="col-xs-12 col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Diagrama de Finalizações</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação" height="400"></sankey-chart>
-                    </div>
-                </div>
-            </div>
-
-            <!--DISCADOR-->
-            <div class="col-xs-12 col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Insucesso no Contato</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="400"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -251,6 +238,24 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.resumo = data.Table[0];
+
+                // FUNIL
+                let resumo = data.Table[0];
+                $scope.dashboard.funil = {
+                    animationEnabled: true,
+                    data: [{
+                        type: "funnel",
+                        toolTipContent: "<b>{label}</b>: {y} <b>({percentage}%)</b>",
+                        indexLabel: "{label} ({percentage}%)",
+                        dataPoints: [
+                            { y: resumo.contato, label: "Contato", percentage: 100 },
+                            { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1 },
+                            { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1 },
+                            { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1 },
+                        ]
+                    }]
+                };
+
                 $scope.dashboard.horahora = data.Table1;
                 $scope.dashboard.diagrama = data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table3.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
