@@ -143,11 +143,10 @@
         </div>
 
         <!--GRAFICOS POR DIA-->
-        <div class="row margin-bottom">
             <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Gráfico por Dia</span>
+                <div class="card margin-bottom"">
+                    <div class="card-header margin-bottom"">
+                        <span class="card-header-title">Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -160,16 +159,49 @@
                         </small>
                     </div>
                     <div class="card-body">
-                        <h4>Volume por Dia</h4>
                         <high-chart series="dashboard.graficoQtd" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
-                        <h4>Volume por Atraso</h4>
+                    </div>
+                </div>
+
+                <div class="card margin-bottom"">
+                    <div class="card-header margin-bottom"">
+                        <span class="card-header-title">Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
                         <high-chart series="dashboard.graficoAtrasoQtd" axis-Categories="dashboard.aging" type="column" height="300"></high-chart>
-                        <h4>Valor por Atraso</h4>
+                    </div>
+                </div>
+
+                <div class="card margin-bottom"">
+                    <div class="card-header margin-bottom">
+                        <span class="card-header-title">Valor por Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
                         <high-chart series="dashboard.graficoAtrasoVlr" axis-Categories="dashboard.aging" height="300"></high-chart>
                     </div>
                 </div>
             </div>
-        </div>
+
 
     </div>
 </div>
