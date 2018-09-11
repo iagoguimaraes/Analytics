@@ -13,6 +13,7 @@ namespace Analytics
         public string login { get; set; }
         public DateTime data_criacao { get; set; }
         public bool ativo { get; set; }
+        public string senha { get; set; }
 
         public Usuario(DataRow row)
         {
@@ -21,6 +22,7 @@ namespace Analytics
             login = Convert.ToString(row["login"]);
             data_criacao = Convert.ToDateTime(row["data_criacao"]);
             ativo = Convert.ToBoolean(row["ativo"]);
+            senha = Convert.ToString(row["senha"]);
         }
     }
 }

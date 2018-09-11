@@ -21,6 +21,7 @@ namespace Analytics.Controllers
             {
                 string login = form["login"];
                 string senha = form["senha"];
+                string acesso = form["acesso"];
                 string recaptcha = form["recaptcha"];
 
                 var req = System.Web.HttpContext.Current;
@@ -39,13 +40,16 @@ namespace Analytics.Controllers
                 //    throw new Exception("Captcha não fornecido");
 
                 // verica as credencias do AD
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "creditcash.com.br"))
+                if(acesso == "interno")
                 {
-                    bool isValid = pc.ValidateCredentials(login, senha);
-                    if (!isValid)
-                        throw new Exception("Usuário e/ou senha incorreto(s)");
+                    using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, "creditcash.com.br"))
+                    {
+                        bool isValid = pc.ValidateCredentials(login, senha);
+                        if (!isValid)
+                            throw new Exception("Usuário e/ou senha incorreto(s)");
+                    }
                 }
-
+                
                 // recupera o usuário analytics
                 Usuario usuario;
                 using (SqlHelper sql = new SqlHelper())
@@ -58,8 +62,17 @@ namespace Analytics.Controllers
 
                     if (dtUsuario.Rows.Count == 0)
                         throw new Exception("Usuário não cadastrado ou desativado no Analytics");
-
+                  
                     usuario = new Usuario(dtUsuario.Rows[0]);
+
+                    if (acesso == "cliente")
+                    {
+                        if (string.IsNullOrEmpty(usuario.senha))
+                            throw new Exception("Usuário sem acesso externo/cliente");
+
+                        if (senha != usuario.senha)
+                            throw new Exception("Usuário e/ou senha incorreto(s)");
+                    }
                 }
 
                 // inserir um registro de sessão no banco de dados
