@@ -67,7 +67,7 @@
 
             <!--RESUMO-->
             <div class="col-xs-12 margin-bottom">
-                
+
                 <div class="row">
                     <div class="col-xs-12 col-md-3">
                         <div class="small-box bg-gray">
@@ -126,9 +126,40 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right" ng-init="graficoHora.exibir = 'grafico'">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="grafico" checked="checked" />
+                                Grafico
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="tabela" />
+                                Tabela
+                            </label>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-charts config="dashboard.hora" style="height: 300px;"></high-charts>
+                        <div ng-show="graficoHora.exibir == 'grafico'">
+                            <high-charts config="dashboard.hora" style="height: 300px;"></high-charts>
+                        </div>
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'tabela'">
+                            <table class="table table-striped table-bordered" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Operadora</th>
+                                        <th ng-repeat="c in dashboard.horaColunas">{{c}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in dashboard.horaTabela">
+                                        <td>{{d.operadora}}</td>
+                                        <td ng-repeat="c in dashboard.horaColunas">{{d[c]}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,6 +171,9 @@
                         <span class="card-header-title">Valor por Operadora</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -157,6 +191,9 @@
                         <span class="card-header-title">Operadora e Rota</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -204,6 +241,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <sankey-chart dados="dashboard.sankey" series-name="Valor" style="height: 600px"></sankey-chart>
@@ -219,6 +259,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <high-charts config="dashboard.fila" style="height: 600px;"></high-charts>
@@ -233,6 +276,9 @@
                         <span class="card-header-title">Tipo de Chamada</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -250,6 +296,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <mapa-brasil style="height: 400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
@@ -264,6 +313,9 @@
                         <span class="card-header-title">Performance Operadora</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                         <small class="pull-right">
                             <select ng-model="dashboard.indicador_performance" ng-change="graficoPerformance()">
@@ -332,7 +384,7 @@
                 $scope.graficoTipoChamada();
                 $scope.graficoTipoTelefone();
                 $scope.graficoMapa();
-                $scope.graficoPerformance();             
+                $scope.graficoPerformance();
             });
         }
 
@@ -343,8 +395,17 @@
             let horas = [...new Set(dados.map(o => o.hora))];
 
             let series = []
-            for (op in operadoras) {
-                series.push({ name: operadoras[op], data: dados.filter(o => o.operadora == operadoras[op]).map(o => o.valor) });
+            for (operadora in operadoras) {
+                let dados_op = dados.filter(o => o.operadora == operadoras[operadora]);
+                let op = { name: operadoras[operadora], data: [] };
+                for (hora in horas) {
+                    let hrfiltro = dados_op.filter(obj => obj.hora == horas[hora])[0];
+                    if (hrfiltro != undefined)
+                        op.data.push(hrfiltro.valor);
+                    else
+                        op.data.push(0);
+                }
+                series.push(op);
             }
 
             $scope.dashboard.hora = {
@@ -361,10 +422,26 @@
                     categories: horas
                 },
                 yAxis: {
-                    visible: false,
+                    title: {
+                        text: 'valor'
+                    }
                 },
                 series: series
             }
+
+            // TABELA
+            $scope.dashboard.horaTabela = [];
+            for (operadora in operadoras) {
+                let dados_op = dados.filter(obj => obj.operadora == operadoras[operadora]);
+                let op = { operadora: operadoras[operadora] };
+                for (hora in horas) {
+                    let hrfiltro = dados_op.filter(obj => obj.hora == horas[hora])[0];
+                    if (hrfiltro != undefined)
+                        op[horas[hora]] = hrfiltro.valor;
+                }
+                $scope.dashboard.horaTabela.push(op);
+            }
+            $scope.dashboard.horaColunas = horas;
         }
         $scope.graficoOperadora = function () {
             let dados = $scope.dashboard.dados.Table1;
@@ -428,7 +505,7 @@
                 xAxis: {
                     categories: categorias
                 },
-                yAxis:{
+                yAxis: {
                     title: {
                         enabled: false,
                     },
@@ -496,6 +573,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>
