@@ -52,10 +52,10 @@
                             </div>
                         </div>
 
-                        <!--CREDORES-->
+                        <!--SEGMENTO-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Credores</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores"></select2>
+                            <label class="control-sidebar-subheading">Segmento</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -253,17 +253,17 @@
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.grupo">
                                 <thead>
                                     <tr>
-                                        <th>Credor</th>
+                                        <th>Segmentação</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Acordo</th>
-                                        <th>Vlr Acordo</th>
-                                        <th>Vlr Risco</th>
+                                        <th>$ Acordo</th>
+                                        <th>$ Risco</th>
                                         <th>Acordo Exceção</th>
-                                        <th>Vlr Risco Exceção</th>
-                                        <th>Vlr Risco Total</th>
+                                        <th>$ Risco Exceção</th>
+                                        <th>$ Risco Total</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -282,11 +282,11 @@
                                         <td>{{g | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{g | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{g | sumByColumn: 'acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_acordo'| currency: ''}}</td>
+                                        <td>{{g | sumByColumn: 'valor_risco'| currency: ''}}</td>
                                         <td>{{g | sumByColumn: 'acordo_excecao'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_ex'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_total_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_riscoex'| currency: ''}}</td>
+                                        <td>{{g | sumByColumn: 'valor_total_risco'| currency: ''}}</td>
                                         <td>{{g | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -303,7 +303,7 @@
                                         <td>{{c.valor_acordo | number}}</td>
                                         <td>{{c.valor_risco | number}}</td>
                                         <td>{{c.acordo_excecao | number}}</td>
-                                        <td>{{c.valor_ex | number}}</td>
+                                        <td>{{c.valor_riscoex | number}}</td>
                                         <td>{{c.valor_total_risco | number}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
@@ -380,7 +380,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            credores: '',
+            segmento: '',
         };
 
         $scope.dashboard = {};
@@ -394,7 +394,7 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.credores = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

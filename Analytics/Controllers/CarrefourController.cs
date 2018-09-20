@@ -73,7 +73,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CARREFOUR"))
                 {
@@ -81,7 +81,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("credores", credores);
+                    parametros.Add("segmento", segmento);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -103,7 +103,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
 
                 string procedure = "sp_dashboard_efetividade_vencimento";
 
@@ -118,7 +118,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("credores", credores);
+                    parametros.Add("segmento", segmento);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
