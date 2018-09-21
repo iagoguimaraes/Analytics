@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Analytics.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -122,6 +124,127 @@ namespace Analytics.Controllers
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/acionamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Acionamento(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSegmento = form["chkSegmento"];
+                string chkClasse = form["chkClasse"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CARREFOUR"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+
+                    parametros.Add("chkSegmento", chkSegmento);
+                    parametros.Add("chkClasse", chkClasse);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+
+        }
+
+        [Route("dashboard/download")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadExcel(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSegmento = form["chkSegmento"];
+                string chkClasse = form["chkClasse"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CARREFOUR"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+
+                    parametros.Add("chkSegmento", chkSegmento);
+                    parametros.Add("chkClasse", chkClasse);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_CARREFOUR_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
             }
             catch (Exception e)
