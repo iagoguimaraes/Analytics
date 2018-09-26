@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Produção</div>
+            <div class="page-name">Produção - P1</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -189,6 +189,8 @@
                                             <th>CPCA</th>
                                             <th>Promessa</th>
                                             <th>Valor Promessa</th>
+                                            <th>Negociação</th>
+                                            <th>Valor Negociação</th>
                                             <th>Hit Rate</th>
                                             <th>Tx Loc</th>
                                             <th>Tx Apv</th>
@@ -204,6 +206,8 @@
                                             <td>{{d.cpca | number}}</td>
                                             <td>{{d.promessa | number}}</td>
                                             <td>{{d.vlr_promessa | currency: 'R$ '}}</td>
+                                            <td>{{d.negociacao | number}}</td>
+                                            <td>{{d.vlr_negociacao | currency: 'R$ '}}</td>
                                             <td>{{d.contato / d.discado | percentage:1}}</td>
                                             <td>{{d.cpc / d.contato | percentage:1}}</td>
                                             <td>{{d.cpca / d.cpc | percentage:1}}</td>
@@ -219,6 +223,8 @@
                                             <th>{{dashboard.resumo.cpca | number}}</th>
                                             <th>{{dashboard.resumo.promessa | number}}</th>
                                             <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
+                                            <th>{{dashboard.resumo.negociacao | number}}</th>
+                                            <th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>
                                             <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -242,6 +248,8 @@
                                         <option value="cpca">CPCA</option>
                                         <option value="promessa">Promessa</option>
                                         <option value="vlr_promessa">Valor Promessa</option>
+                                        <option value="negociacao">Negociação</option>
+                                        <option value="vlr_negociacao">Valor Negociação</option>
                                     </select>
                                 </span>
                                 <high-chart series="graficoDia.dados" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
@@ -277,10 +285,12 @@
                                             <th>CPC</th>
                                             <th>CPCA</th>
                                             <th>Promessa</th>
-                                            <th>Valor Promessa</th>
+                                            <th>$ Promessa</th>
+                                            <th>Negociação</th>
+                                            <th>$ Negociação</th>
                                             <th>HitRate</th>
-                                            <th>Txa.Localicação</th>
-                                            <th>Txa.Aproveitamento</th>
+                                            <th>Txa Loc</th>
+                                            <th>Txa Apv</th>
                                             <th>Conversão</th>
                                         </tr>
                                     </thead>
@@ -297,6 +307,8 @@
                                             <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{c | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                            <td>{{c | sumByColumn: 'negociacao'| number}}</td>
+                                            <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
                                             <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -311,6 +323,8 @@
                                             <td>{{f.cpca | number}}</td>
                                             <td>{{f.promessa| number}}</td>
                                             <td>{{f.vlr_promessa| currency: 'R$ '}}</td>
+                                            <td>{{f.negociacao| number}}</td>
+                                            <td>{{f.vlr_negociacao| currency: 'R$ '}}</td>
                                             <td>{{f.contato / f.discado | percentage:1}}</td>
                                             <td>{{f.cpc / f.contato | percentage:1}}</td>
                                             <td>{{f.cpca / f.cpc | percentage:1}}</td>
