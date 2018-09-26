@@ -29,14 +29,25 @@
                     </div>
                     <div class="card-body">
 
-                        <!--DATA-->
+                        <!--DTINI-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Data</label>
+                            <label class="control-sidebar-subheading">Data Inicial</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DTFIM-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
                         </div>
 
@@ -129,46 +140,61 @@
                 </div>
             </div>
 
-            <!--OPERADORA HORA-->
+            <!--OPERADORA DIA-->
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Valor por Operadora/Hora</span>
+                        <span class="card-header-title">Valor por Operadora/Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right" ng-init="graficoHora.exibir = 'grafico'">
+                        <small class="pull-right" ng-init="graficoDia.exibir = 'grafico'">
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="grafico" checked="checked" />
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="grafico" checked="checked" />
                                 Grafico
                             </label>
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="tabela" />
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="tabela" />
                                 Tabela
                             </label>
                         </small>
                     </div>
                     <div class="card-body">
-                        <div ng-show="graficoHora.exibir == 'grafico'">
-                            <high-charts config="dashboard.hora" style="height: 300px;"></high-charts>
+                        <div ng-show="graficoDia.exibir == 'grafico'">
+                            <high-charts config="dashboard.dia" style="height: 300px;"></high-charts>
                         </div>
-                        <div class="table-responsive" ng-show="graficoHora.exibir == 'tabela'">
-                            <table class="table table-striped table-bordered" style="width:100%;">
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'tabela'">
+                            <table class="table table-striped table-bordered" style="width:100%;">   
                                 <thead>
                                     <tr>
-                                        <th>Operadora</th>
-                                        <th ng-repeat="c in dashboard.horaColunas">{{c}}</th>
+                                        <th>Data/Operadora</th>
+                                        <th>Quantidade</th>
+                                        <th>Duração</th>
+                                        <th>Valor</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr ng-repeat="d in dashboard.horaTabela">
-                                        <td>{{d.operadora}}</td>
-                                        <td ng-repeat="c in dashboard.horaColunas">{{d[c]}}</td>
+                                <tbody ng-repeat="c in dashboard.diaTabela | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody2 = !showTbody2" ng-class="showTbody2 ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'duracao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor'| currency:'R$'}}</td>
                                     </tr>
-                                </tbody>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody2">
+                                        <td>{{p.operadora}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.duracao | number}}</td>
+                                        <td>{{p.valor | currency:'R$'}}</td>
+                                    </tr>
+                                </tbody>                        
                             </table>
                         </div>
                     </div>
@@ -352,18 +378,23 @@
 <script>
     angular.module('app').controller('ctrl-telecom-horahora', function ($scope, $http, $filter) {
 
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
         $scope.dashboard = {
             indicador_performance: 'LOC'
         };
         $scope.dashFiltros = {};
         $scope.filtros = {
-            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             fornecedor: '',
             plataforma: '',
             operadora: '',
             tipochamada: '',
         };
-        $scope.showTbody = false;
+        $scope.showTbody, $scope.showTbody2 = false;
 
         //carregar os filtros
         $http({
@@ -381,14 +412,15 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/telecom/horahora",
+                url: "/api/telecom/historico",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
 
                 $scope.dashboard.resumo = r.data.Table9[0];
-                $scope.graficoHora();
+                $scope.dashboard.diaTabela = r.data.Table;
+                $scope.graficoDia();
                 $scope.graficoOperadora();
                 $scope.dashboard.operadoraRota = r.data.Table2;
                 $scope.dashboard.sankey = r.data.Table3;
@@ -400,27 +432,27 @@
             });
         }
 
-        $scope.graficoHora = function () {
+        $scope.graficoDia = function () {
             let dados = $scope.dashboard.dados.Table;
 
             let operadoras = [...new Set(dados.map(o => o.operadora))];
-            let horas = [...new Set(dados.map(o => o.hora))];
+            let dias = [...new Set(dados.map(o => o.data))];
 
             let series = []
             for (operadora in operadoras) {
                 let dados_op = dados.filter(o => o.operadora == operadoras[operadora]);
                 let op = { name: operadoras[operadora], data: [] };
-                for (hora in horas) {
-                    let hrfiltro = dados_op.filter(obj => obj.hora == horas[hora])[0];
-                    if (hrfiltro != undefined)
-                        op.data.push(hrfiltro.valor);
+                for (dia in dias) {
+                    let diafiltro = dados_op.filter(obj => obj.data == dias[dia])[0];
+                    if (diafiltro != undefined)
+                        op.data.push(diafiltro.valor);
                     else
                         op.data.push(0);
                 }
                 series.push(op);
             }
 
-            $scope.dashboard.hora = {
+            $scope.dashboard.dia = {
                 title: {
                     text: ''
                 },
@@ -428,10 +460,10 @@
                     enabled: false
                 },
                 chart: {
-                    type: 'column'
+                    type: 'line'
                 },
                 xAxis: {
-                    categories: horas
+                    categories: dias
                 },
                 yAxis: {
                     title: {
@@ -440,20 +472,6 @@
                 },
                 series: series
             }
-
-            // TABELA
-            $scope.dashboard.horaTabela = [];
-            for (operadora in operadoras) {
-                let dados_op = dados.filter(obj => obj.operadora == operadoras[operadora]);
-                let op = { operadora: operadoras[operadora] };
-                for (hora in horas) {
-                    let hrfiltro = dados_op.filter(obj => obj.hora == horas[hora])[0];
-                    if (hrfiltro != undefined)
-                        op[horas[hora]] = hrfiltro.valor;
-                }
-                $scope.dashboard.horaTabela.push(op);
-            }
-            $scope.dashboard.horaColunas = horas;
         }
         $scope.graficoOperadora = function () {
             let dados = $scope.dashboard.dados.Table1;
