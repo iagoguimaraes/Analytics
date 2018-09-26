@@ -3,7 +3,7 @@
         var total = 0;
 
         collection.forEach(function (item) {
-            total += parseInt(item[column]) || 0;
+            total += (parseInt(item[column]) || 0);
         });
 
         return total;
