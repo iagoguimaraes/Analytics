@@ -69,6 +69,11 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -151,12 +156,40 @@
             </div>
         </div>
 
-        <!--GRAFICO POR DIA-->
+        <!--ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Atraso por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('FaixaAtraso','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.atrasoQtd" axis-Categories="dashboard.faixas" plot-Options-Line-Data-Label="true" height="300"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--QUANTIDADE POR DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12 margin-bottom"> 
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Gráfico por Dia</span>
+                        <span class="card-header-title">Quantidade por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -173,11 +206,39 @@
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficoQtd" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
-                        <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
-                    </div>
+                        
+                    </div>                    
                 </div>
             </div>         
         </div>
+
+        <!--VALOR POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Valor por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('VolumeDia','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
@@ -194,6 +255,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             empresas: '',
             carteiras: '',
+            faixaAtraso: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -211,6 +273,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.empresas = data.Table;
             $scope.dashFiltros.carteiras = data.Table1;
+            $scope.dashFiltros.faixaAtraso = data.Table2;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -219,14 +282,20 @@
                 method: 'POST',
                 url: "/api/semparar/dashboard/humano/carteira",
                 data: $scope.filtros,
-            }).then(function success(r) {
-                $scope.dashboard.status = r.status;
-                $scope.dashboard.dados = r.data;
-                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
+            }).then(function success(r) {                
+                $scope.dashboard.status = r.status;                
+                $scope.dashboard.dados = r.data;              
+                
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
+                $scope.dashboard.atraso = r.data.Table3;
+                
+                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
+                $scope.dashboard.faixas = r.data.Table3.map(obj => obj.faixaAtraso);
+                
+
 
                 $scope.carregarGrafico();
             });
@@ -236,10 +305,12 @@
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dia;
+            let atraso = $scope.dashboard.atraso;
             let indicador = $scope.grafico.indicador;
 
+            $scope.dashboard.atrasoQtd = [{ name: 'Quantidade', data: atraso.map(obj => (obj[indicador])) }];
             $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
-            $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
+            $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador +'Vlr'])) }];
         }
 
 
