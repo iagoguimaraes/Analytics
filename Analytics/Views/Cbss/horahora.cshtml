@@ -3,12 +3,12 @@
 }
 
 
-<div ng-controller="ctrl-caedu-horahora">
+<div ng-controller="ctrl-cbss-horahora">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora Humano</div>
+            <div class="page-name">Hora Hora</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -52,15 +52,10 @@
                             </div>
                         </div>
 
-                        <!--SEGMENTOS-->
+                        <!--CARTEIRA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Segmento</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
-                        </div>
-                        <!--FAIXAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Faixas</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -75,14 +70,14 @@
 
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header" style="background: url('/Content/Images/Caedu/Logo-banner2.png') center center; ">
+            <div class="widget-user-header" style="background: url('/Content/Images/Cbss/banner_cbss.png') center center; ">
             </div>
-            <div class="widget-user-image">
+            @*<div class="widget-user-image">
                 <img class="img-circle" src="/Content/Images/Caedu/LOGO VERDE02.png" style="background-color: white">
-            </div>
+            </div>*@
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -106,29 +101,16 @@
                             <span class="description-text">CPCA</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
                             <span class="description-text">Promessa</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.negociacao | number"></h5>
-                            <span class="description-text">Negociação</span>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="row" style="background-color: #c3b900; color:white; opacity: 0.8">
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
-                            <span class="description-text">Esforço</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
+                <div class="row" style="background-color: #84a5dc; color:black; opacity: 0.8">                   
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
@@ -152,10 +134,10 @@
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.preventivo | number"></h5>
-                            <span class="description-text">Preventiva</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$ '"></h5>
+                            <span class="description-text">Valor de Promessa</span>
                         </div>
                     </div>
                 </div>
@@ -187,8 +169,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Negociação</th>
-                                        <th>Preventiva</th>
+                                        <th>Valor Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -203,8 +184,7 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.negociacao | number}}</td>
-                                        <td>{{hora.preventivo | number}}</td>
+                                        <td>{{hora.vlr_promessa | currency : 'R$ '}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -219,8 +199,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.negociacao | number}}</th>
-                                        <th>{{dashboard.resumo.preventivo | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_promessa | currency : 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -239,7 +218,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Empresa/Carteira</span>
+                        <span class="card-header-title">Análise por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -258,48 +237,30 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Negociação</th>
-                                        <th>Preventiva</th>
+                                        <th>Valor Promessa</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'grupo'">
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'carteira'">
 
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].grupo}}
+                                    <tr class="text-black">
+                                        <td>                                            
+                                            {{e[0].carteira}}
                                         </td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa' | number}}</td>
-                                        <td>{{e | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{e | sumByColumn: 'preventivo' | number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
-                                    </tr>
-
-                                    <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_faixa}}</td>
-                                        <td>{{c.discado | number}}</td>
-                                        <td>{{c.contato | number}}</td>
-                                        <td>{{c.cpc | number}}</td>
-                                        <td>{{c.cpca | number}}</td>
-                                        <td>{{c.promessa | number}}</td>
-                                        <td>{{c.negociacao | number}}</td>
-                                        <td>{{c.preventivo | number}}</td>
-                                        <td>{{c.contato / c.discado | percentage:1}}</td>
-                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
-                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
-                                    </tr>
+                                    </tr>                                    
 
                                 </tbody>
 
@@ -330,8 +291,7 @@
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
-                                <option value="negociacao">Negociação</option>
-                                <option value="preventivo">Preventiva</option>
+                                <option value="vlr_promessa">Valor de Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -367,7 +327,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-caedu-horahora', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-cbss-horahora', function ($scope, $http, $filter) {
         $scope.showTbody = false;
 
         $scope.dashboard = {};
@@ -375,21 +335,19 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            segmento: '',
-            faixa: '',
+            carteira: '',
         }
         $scope.grafico = { indicador: 'promessa' };
 
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/caedu/dashboard/humano/filtros",
+            url: "/api/cbss/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
-            $scope.dashFiltros.status = r.status;
 
-            $scope.dashFiltros.segmento = r.data.Table;
-            $scope.dashFiltros.faixa = r.data.Table1;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = r.data.Table;
         });
 
        
@@ -397,7 +355,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/caedu/dashboard/humano/horahora",
+                url: "/api/cbss/dashboard/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -446,3 +404,4 @@
 
 
 </script>
+
