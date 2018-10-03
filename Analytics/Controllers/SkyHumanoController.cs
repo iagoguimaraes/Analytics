@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Analytics.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -269,6 +271,151 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/acionamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Acionamento(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSupervisor = form["chkSupervisor"];
+                string chkEquipe = form["chkEquipe"];
+                string chkCarteira = form["chkCarteira"];
+                string chkSegmentacao = form["chkSegmentacao"];
+                string chkTenure = form["chkTenure"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);                    
+
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("tenure", tenure);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+                    parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkEquipe", chkEquipe);
+                    parametros.Add("chkCarteira", chkCarteira);
+                    parametros.Add("chkSegmentacao", chkSegmentacao);
+                    parametros.Add("chkTenure", chkTenure);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+
+        }
+
+        [Route("dashboard/humano/download")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadExcel(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSupervisor = form["chkSupervisor"];
+                string chkEquipe = form["chkEquipe"];
+                string chkCarteira = form["chkCarteira"];
+                string chkSegmentacao = form["chkSegmentacao"];
+                string chkTenure = form["chkTenure"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);
+
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("tenure", tenure);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+                    parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkEquipe", chkEquipe);
+                    parametros.Add("chkCarteira", chkCarteira);
+                    parametros.Add("chkSegmentacao", chkSegmentacao);
+                    parametros.Add("chkTenure", chkTenure);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_SKY_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }        
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
@@ -324,6 +471,6 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+       
     }
 }

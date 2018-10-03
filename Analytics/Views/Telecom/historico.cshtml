@@ -1,0 +1,612 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-telecom-horahora">
+    <div ng-if="dashboard.status == 200">
+
+        <!--HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div id="filtros-window" class="row margin-bottom display-none" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DTINI-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DTFIM-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--FORNECEDOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fornecedor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedor" dados="dashFiltros.fornecedor" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--PLATAFORMA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Plataforma</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plataforma" dados="dashFiltros.plataforma" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--OPERADORA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Operadora</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operadora" dados="dashFiltros.operadora" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--TIPO DE CHAMADA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo de Chamada</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tipochamada" dados="dashFiltros.tipochamada" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!--RESUMO-->
+            <div class="col-xs-12 margin-bottom">
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-3">
+                        <div class="small-box bg-gray">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
+                                <h4 class="pull-right" ng-bind="dashboard.resumo.qtd / dashboard.resumo.valor | number: 1"></h4>
+                                <p>Quantidade</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="small-box bg-gray">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.duracao | megaNumber"></h3>
+                                <h4 class="pull-right" ng-bind="dashboard.resumo.duracao / dashboard.resumo.valor | number: 1"></h4>
+                                <p>Duração</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-headphones"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
+                                <p>Valor</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-money"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.filas | number"></h3>
+                                <p>Filas</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--OPERADORA DIA-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Valor por Operadora/Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right" ng-init="graficoDia.exibir = 'grafico'">
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="grafico" checked="checked" />
+                                Grafico
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="tabela" />
+                                Tabela
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div ng-show="graficoDia.exibir == 'grafico'">
+                            <high-charts config="dashboard.dia" style="height: 300px;"></high-charts>
+                        </div>
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'tabela'">
+                            <table class="table table-striped table-bordered" style="width:100%;">   
+                                <thead>
+                                    <tr>
+                                        <th>Data/Operadora</th>
+                                        <th>Quantidade</th>
+                                        <th>Duração</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.diaTabela | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody2 = !showTbody2" ng-class="showTbody2 ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'duracao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor'| currency:'R$'}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody2">
+                                        <td>{{p.operadora}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.duracao | number}}</td>
+                                        <td>{{p.valor | currency:'R$'}}</td>
+                                    </tr>
+                                </tbody>                        
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--OPERADORA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Valor por Operadora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <high-charts config="dashboard.operadora" style="height: 300px;"></high-charts>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--OPERADORA E ROTA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Operadora e Rota</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="height: 300px;">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Operadora/Rota</th>
+                                        <th>Quantidade</th>
+                                        <th>Duração</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.operadoraRota | groupBy: 'operadora'">
+
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].operadora}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'duracao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor'| currency:'R$'}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.rota}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.duracao | number}}</td>
+                                        <td>{{p.valor | currency:'R$'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--OPERADORA x PLATAFORMA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Operadora x Plataforma</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.sankey" series-name="Valor" style="height: 600px"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--FILA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Fila</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.fila" style="height: 600px;"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--TIPO DE CHAMADA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tipo de Chamada</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.tipo_chamada" style="height: 200px;"></high-charts>
+                        <high-charts config="dashboard.tipo_telefone" style="height: 200px;"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--MAPA-->
+            <div class="col-xs-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Localização Geográfica</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height: 400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>
+
+            <!--PERFORMANCE-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Performance Operadora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="dashboard.indicador_performance" ng-change="graficoPerformance()">
+                                <option value="LDE">LDE</option>
+                                <option value="LDN">LDN</option>
+                                <option value="LOC">LOC</option>
+                                <option value="VC1">VC1</option>
+                                <option value="VC2">VC2</option>
+                                <option value="VC3">VC3</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.performance" style="height: 400px;"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-telecom-horahora', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.dashboard = {
+            indicador_performance: 'LOC'
+        };
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            fornecedor: '',
+            plataforma: '',
+            operadora: '',
+            tipochamada: '',
+        };
+        $scope.showTbody, $scope.showTbody2 = false;
+
+        //carregar os filtros
+        $http({
+            method: 'POST',
+            url: "/api/telecom/filtros",
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.fornecedor = r.data.Table;
+            $scope.dashFiltros.plataforma = r.data.Table1;
+            $scope.dashFiltros.operadora = r.data.Table2;
+            $scope.dashFiltros.tipochamada = r.data.Table3;
+        });
+
+        // carregar dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/telecom/historico",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.resumo = r.data.Table9[0];
+                $scope.dashboard.diaTabela = r.data.Table;
+                $scope.graficoDia();
+                $scope.graficoOperadora();
+                $scope.dashboard.operadoraRota = r.data.Table2;
+                $scope.dashboard.sankey = r.data.Table3;
+                $scope.graficoFila();
+                $scope.graficoTipoChamada();
+                $scope.graficoTipoTelefone();
+                $scope.graficoMapa();
+                $scope.graficoPerformance();
+            });
+        }
+
+        $scope.graficoDia = function () {
+            let dados = $scope.dashboard.dados.Table;
+
+            let operadoras = [...new Set(dados.map(o => o.operadora))];
+            let dias = [...new Set(dados.map(o => o.data))];
+
+            let series = []
+            for (operadora in operadoras) {
+                let dados_op = dados.filter(o => o.operadora == operadoras[operadora]);
+                let op = { name: operadoras[operadora], data: [] };
+                for (dia in dias) {
+                    let diafiltro = dados_op.filter(obj => obj.data == dias[dia])[0];
+                    if (diafiltro != undefined)
+                        op.data.push(diafiltro.valor);
+                    else
+                        op.data.push(0);
+                }
+                series.push(op);
+            }
+
+            $scope.dashboard.dia = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'line'
+                },
+                xAxis: {
+                    categories: dias
+                },
+                yAxis: {
+                    title: {
+                        text: 'valor'
+                    }
+                },
+                series: series
+            }
+        }
+        $scope.graficoOperadora = function () {
+            let dados = $scope.dashboard.dados.Table1;
+
+            let series = dados.map(o => ({ name: o.operadora, y: o.valor }));
+
+            $scope.dashboard.operadora = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'pie'
+                },
+                series: [{ name: 'Valor', data: series }]
+            }
+        }
+        $scope.graficoFila = function () {
+            let dados = $scope.dashboard.dados.Table4;
+
+            let filas = [...new Set(dados.map(o => o.fila))];
+            let series = dados.map(o => o.valor);
+
+            $scope.dashboard.fila = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'bar'
+                },
+                xAxis: {
+                    categories: filas
+                },
+                yAxis: {
+                    visible: false,
+                },
+                series: [{ name: 'Valor', data: series, showInLegend: false }]
+            }
+        }
+        $scope.graficoTipoChamada = function () {
+            let dados = $scope.dashboard.dados.Table5;
+
+            let categorias = [...new Set(dados.map(o => o.tipo_chamada))];
+            let series = dados.map(o => o.valor);
+
+            $scope.dashboard.tipo_chamada = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'column'
+                },
+                xAxis: {
+                    categories: categorias
+                },
+                yAxis: {
+                    title: {
+                        enabled: false,
+                    },
+                },
+                series: [{ name: 'Valor', data: series, showInLegend: false }]
+            }
+        }
+        $scope.graficoTipoTelefone = function () {
+            let dados = $scope.dashboard.dados.Table6;
+
+            let series = dados.map(o => ({ name: o.tipo_telefone, y: o.valor }));
+
+            $scope.dashboard.tipo_telefone = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'pie'
+                },
+                series: [{ name: 'Valor', data: series }]
+            }
+        }
+        $scope.graficoMapa = function () {
+            let dados = $scope.dashboard.dados.Table7;
+            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj.valor }));
+        }
+        $scope.graficoPerformance = function () {
+            let dados = $scope.dashboard.dados.Table8;
+            let indicador = $scope.dashboard.indicador_performance;
+            let operadoras = [...new Set(dados.filter(o => o.tipo_chamada == indicador).map(o => o.operadora))];
+            let series = []
+            for (op in operadoras) {
+                series.push({ name: operadoras[op], data: dados.filter(o => o.operadora == operadoras[op] && o.tipo_chamada == indicador).map(o => ([o.duracao, o.qtd])) });
+            }
+
+            $scope.dashboard.performance = {
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                chart: {
+                    type: 'scatter'
+                },
+                xAxis: {
+                    title: {
+                        text: 'Segundos com 1 real'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Chamadas com 1 real'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x} segundos, {point.y} chamadas'
+                },
+                series: series
+            }
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>

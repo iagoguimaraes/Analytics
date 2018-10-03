@@ -163,13 +163,13 @@
                                     <!--CARTEIRA-->
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Carteira</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira_2" dados="dashFiltros.carteira" style="width:100%"></select2>
                                     </div>
 
                                     <!--SEGMENTACAO-->
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Segmentacao</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao_2" dados="dashFiltros.segmentacao" style="width:100%"></select2>
                                     </div>
 
                                     <div class="form-group">
@@ -368,7 +368,7 @@
                                 <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-red' : 'bg-green'">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
-                                        <p>{{dashboard.esforco.p1 | number}} vs {{dashboard.esforco.p2 | number}}</p>
+                                        <p>{{dashboard.esforco.p1 | megaNumber }} vs {{dashboard.esforco.p2 | megaNumber }}</p>
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-thumbs-o-up"></i>
@@ -511,10 +511,10 @@
             $scope.dashboard.cpca = { p1: dados1.cpca, p2: dados2.cpca, vs: dados1.cpca / dados2.cpca - 1 };
             $scope.dashboard.promessa = { p1: dados1.promessa, p2: dados2.promessa, vs: dados1.promessa / dados2.promessa - 1 };
 
-            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 - calculo.hitrate2 };
-            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 - calculo.txloc2 };
-            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 - calculo.txapv2 };
-            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 - calculo.conversao2 };
+            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 / calculo.hitrate2 -1 };
+            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 / calculo.txloc2 - 1 };
+            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 / calculo.txapv2 - 1 };
+            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 / calculo.conversao2 - 1};
 
             $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 / calculo.esforco2 - 1 };
 
@@ -526,6 +526,10 @@
             if ($scope.dashboard.status == 200)
                 $scope.carregarGrafico();
         });
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("comparativo_analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>

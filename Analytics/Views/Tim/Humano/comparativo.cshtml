@@ -544,5 +544,9 @@
                 $scope.carregarGrafico();
         });
 
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("comparativo_analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
     });
 </script>

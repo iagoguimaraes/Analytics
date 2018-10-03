@@ -4,8 +4,8 @@
         var totalB = 0;
 
         collection.forEach(function (item) {
-            totalA += parseInt(item[columnA]);
-            totalB += parseInt(item[columnB]);
+            totalA += (parseFloat(item[columnA]) || 0);
+            totalB += (parseFloat(item[columnB]) || 0);
         });
 
         return totalA / totalB;

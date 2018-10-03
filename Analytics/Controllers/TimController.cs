@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Analytics.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -117,6 +119,72 @@ namespace Analytics.Controllers
                     parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
+                int horaini_2 = Convert.ToInt16(form["horaini_2"]);
+                int horafim_2 = Convert.ToInt16(form["horafim_2"]);
+
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+
+                DataTable produtos_2 = JsonConvert.DeserializeObject<DataTable>(form["produtos_2"]);
+
+
+
+                string procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_comparativo_mes";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+
+                    parametros.Add("horaini_2", horaini_2);
+                    parametros.Add("horafim_2", horafim_2);
+
+                    parametros.Add("produtos", produtos);
+
+                    parametros.Add("produtos_2", produtos_2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -291,7 +359,7 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        public HttpResponseMessage DashboardComparativoHumano(FormDataCollection form)
         {
             try
             {
@@ -392,7 +460,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/carteira")]
+        [Route("dashboard/humano/carteira")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -421,6 +489,156 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/humano/acionamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Acionamento(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSupervisor = form["chkSupervisor"];
+                string chkEquipe = form["chkEquipe"];
+                string chkEmpresa = form["chkEmpresa"];
+                string chkCarteira = form["chkCarteira"];
+                string chkAging = form["chkAging"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("aging", aging);
+
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+                    parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkEquipe", chkEquipe);
+                    parametros.Add("chkEmpresa", chkEmpresa);
+                    parametros.Add("chkCarteira", chkCarteira);
+                    parametros.Add("chkAging", chkAging);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+
+        }
+
+        [Route("dashboard/humano/download")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadExcel(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkSupervisor = form["chkSupervisor"];
+                string chkEquipe = form["chkEquipe"];
+                string chkEmpresa = form["chkEmpresa"];
+                string chkCarteira = form["chkCarteira"];
+                string chkAging = form["chkAging"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("aging", aging);
+
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+                    parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkEquipe", chkEquipe);
+                    parametros.Add("chkEmpresa", chkEmpresa);
+                    parametros.Add("chkCarteira", chkCarteira);
+                    parametros.Add("chkAging", chkAging);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_TIM_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
         #endregion
 

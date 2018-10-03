@@ -75,12 +75,7 @@
         </div>
 
         <!--RESUMO-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: white">
-                    <img class="center-block" src="~/Content/Images/Caedu/LOGO VERDE02.png" height="100" width="100" />
-                </div>
-            </div>
+        <div class="row margin-bottom">           
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -133,10 +128,21 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Acordo</p>
+                        <p>Promessa</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-purple-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.preventivo | number"></h3>
+                        <p>Preventiva</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check-circle"></i>
                     </div>
                 </div>
             </div>
@@ -166,6 +172,8 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Negociação</th>
+                                        <th>Preventiva</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -180,12 +188,30 @@
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.negociacao | number}}</td>
+                                        <td>{{dia.preventivo | number}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.negociacao | number}}</th>
+                                        <th>{{dashboard.resumo.preventivo | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -213,6 +239,8 @@
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
+                                <option value="negociacao">Negociação</option>
+                                <option value="preventivo">Preventiva</option>
                             </select>
                         </small>
                     </div>

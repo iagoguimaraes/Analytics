@@ -53,10 +53,10 @@
                             </div>
                         </div>
 
-                        <!--CREDORES-->
+                        <!--SEGMENTO-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Credores</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores"></select2>
+                            <label class="control-sidebar-subheading">Segmento</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                         </div>
 
                         <!--VISÃO-->
@@ -320,7 +320,7 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             visao: 'andamento',
-            credores: '',
+            segmento: '',
 
         };
         $scope.dashFiltros = {};
@@ -333,7 +333,7 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.credores = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table;
         });
 
 

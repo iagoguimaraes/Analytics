@@ -9,7 +9,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora</div>
+            <div class="page-name">Hora Hora - P2</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -83,7 +83,7 @@
         <div class="box box-widget widget-user">
             <div class="box-footer">
                 <div class="row" style="background-color: #cd072f; color: white;">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -109,14 +109,20 @@
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo | number"></h5>
-                            <span class="description-text">Acordo</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
+                            <span class="description-text">Promessa</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.negociacao | number"></h5>
+                            <span class="description-text">Negociação</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="row" style="background-color: white; color: black;">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
@@ -136,14 +142,20 @@
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_acordo | currency: 'R$'"></h5>
-                            <span class="description-text">Valor Acordo</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency: 'R$ '"></h5>
+                            <span class="description-text">Valor Promessa</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_negociacao | currency: 'R$ '"></h5>
+                            <span class="description-text">Valor Negociação</span>
                         </div>
                     </div>
                 </div>
@@ -174,8 +186,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Acordo</th>
-                                        <th>Vlr Acordo</th>
+                                        <th>Promessa</th>
+                                        <th>Vlr Promessa</th>
+                                        <th>Negociação</th>
+                                        <th>Vlr Negociação</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Conversão</th>
@@ -188,11 +202,13 @@
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
-                                        <td>{{hora.acordo | number}}</td>
-                                        <td>{{hora.valor_acordo | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.valor_promessa | currency: 'R$ '}}</td>
+                                        <td>{{hora.negociacao | number}}</td>
+                                        <td>{{hora.valor_negociacao | currency: 'R$ '}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
-                                        <td>{{hora.acordo / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -202,11 +218,13 @@
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
-                                        <th>{{dashboard.resumo.acordo | number}}</th>
-                                        <th>{{dashboard.resumo.valor_acordo | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.negociacao | number}}</th>
+                                        <th>{{dashboard.resumo.valor_negociacao | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -240,8 +258,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Acordo</th>
-                                        <th>Vlr Acordo</th>
+                                        <th>Promessa</th>
+                                        <th>Valor Promessa</th>
+                                        <th>Negociação</th>
+                                        <th>Valor Negociação</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
@@ -258,11 +278,13 @@
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
-                                        <td>{{c | sumByColumn: 'acordo'| number}}</td>
-                                        <td>{{c | sumByColumn: 'valor_acordo'| number}}</td>
+                                        <td>{{c | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor_promessa' | currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'negociacao' | number}}</td>
+                                        <td>{{c | sumByColumn: 'valor_negociacao'| currency: 'R$ '}}</td>
                                         <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="f in c" ng-show="showTbody">
@@ -271,11 +293,13 @@
                                         <td>{{f.contato | number}}</td>
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
-                                        <td>{{f.acordo | number}}</td>
-                                        <td>{{f.valor_acordo | number}}</td>
+                                        <td>{{f.promessa | number}}</td>
+                                        <td>{{f.valor_promessa | currency: 'R$ '}}</td>
+                                        <td>{{f.negociacao | number}}</td>
+                                        <td>{{f.valor_negociacao | currency: 'R$ '}}</td>
                                         <td>{{f.contato / f.discado | percentage:1}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
-                                        <td>{{f.acordo / f.cpca | percentage:1}}</td>
+                                        <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -307,8 +331,10 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="acordo">Acordo</option>
-                                <option value="valor_acordo">Valor Acordo</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="valor_promessa">Valor Promessa</option>
+                                <option value="negociacao">Negociação</option>
+                                <option value="valor_negociacao">Valor Negociação</option>
                             </select>
                         </small>
                     </div>
@@ -362,7 +388,7 @@
 
         $scope.dashboard = {};
         $scope.dashFiltros = {};
-        $scope.grafico = { indicador: 'acordo' };
+        $scope.grafico = { indicador: 'promessa' };
 
         // carregar os filtros
         $http({
@@ -409,7 +435,7 @@
                     $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];

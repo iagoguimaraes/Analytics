@@ -1,0 +1,964 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-riachuelovendas">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Dashboard</div>
+    </header>
+
+    <div class="row">
+
+
+        <!--ROBOS DE VENDAS-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">PERFORMANCE ROBOS</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row margin-bottom">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="small-box bg-gray">
+                                <div class="inner">
+                                    <h3>{{dashboard.resumo.robo}}</h3>
+                                    <p>Robô Logado</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-headphones"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <div style="margin-bottom: 5px">
+                                <i class="fa fa-phone fa-2x"></i>&nbsp<span><b>RECEBIDO/ROBO:</b>&nbsp{{dashboard.resumo.recebido / dashboard.resumo.robo | number:0}}</span>
+                            </div>
+                            <div style="margin-bottom: 5px">
+                                <i class="fa fa-headphones fa-2x"></i>&nbsp<span><b>ATENDIDO/ROBO:</b>&nbsp{{dashboard.resumo.atendido / dashboard.resumo.robo | number:0}}</span>
+                            </div>
+                            <div style="margin-bottom: 5px;">
+                                <i class="fa fa-thumbs-up fa-2x"></i>&nbsp<span><b>SUCESSO/ROBO:</b>&nbsp{{dashboard.resumo.venda / dashboard.resumo.robo | number:0}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom">
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <div><b>CONVERSÃO:</b>&nbsp{{dashboard.resumo.perc_convercao_digital | percentage: 1}}</div>
+                            <gauge style="height: 100px" config="dashboard.conversao"></gauge>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 text-center">
+                            <div><b>NÍVEL DE SERVIÇO:</b>&nbsp{{dashboard.resumo.ns | percentage: 1}}</div>
+                            <gauge style="height: 100px" config="dashboard.ns"></gauge>
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom">
+                        <div class="col-xs-12 text-center">
+                            <div><b>NOTA DA PESQUISA DE SATISFAÇÃO:</b>&nbsp{{dashboard.resumo.nota | number: 1}}</div>
+                            <div style="color: #FFBC0B;font-size: 30px;">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scroller">
+                        <span>
+                            atualização das {{dashboard.resumo.horario}} &nbsp &nbsp &nbsp
+                            <b style="color: #00a65a">+ {{dashboard.resumo.inc_venda | number:0}} Sucessos!</b> &nbsp &nbsp &nbsp
+                            <b style="color: #0073b7">+ {{dashboard.resumo.inc_atendimento | number:0}} Atendimentos</b> &nbsp &nbsp &nbsp
+                            atendimento: {{dashboard.resumo.atendido | number:0}} <i class="fa fa-caret-up" style="color: #00a65a"></i> &nbsp &nbsp &nbsp
+                            sucesso: {{dashboard.resumo.venda | number: 0}} <i class="fa fa-caret-up" style="color: #00a65a"></i> &nbsp &nbsp &nbsp
+                            nível de serviço: {{dashboard.resumo.ns | percentage: 1}} <i class="fa fa-caret-up"></i> &nbsp &nbsp &nbsp
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--TRANSBORDO-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">TRANSBORDO HUMANO</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <!--DIGITAL-->
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                    <h3>{{dashboard.resumo.atendido_humano | number}}</h3>
+                                    <h4 class="pull-right">+{{dashboard.resumo.inc_trtansbordo | number:0}}</h4>
+                                    <p>Transbordo</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="small-box bg-black">
+                                <div class="inner">
+                                    <h3>{{dashboard.resumo.perc_transbordo | percentage: 1}}</h3>
+                                    <p>% dos Atendimentos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TEMPOS-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">TEMPOS</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <i class="fa fa-clock-o"></i>
+                            <b>Tempo Médio Logado:</b> <span ng-bind="dashboard.resumo.tml"></span>
+                        </div>
+                    </div>
+
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <i class="fa fa-clock-o"></i>
+                            <b>Tempo Médio Atendimento:</b> <span ng-bind="dashboard.resumo.tma"></span>
+                        </div>
+                    </div>
+
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <i class="fa fa-clock-o"></i>
+                            <b>Tempo Médio Sucesso:</b> <span ng-bind="dashboard.resumo.tmv"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUTO-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">SUCESSO POR PRODUTO</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!--QUANTIDADES-->
+                    <div class="row margin-bottom">
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h4>{{dashboard.resumo.emprestimo | number}}</h4>
+                                    <h5 class="pull-right">+{{dashboard.resumo.inc_emprestimo | number:0}}</h5>
+                                    <p>Emprestimo</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="small-box bg-blue">
+                                <div class="inner">
+                                    <h4>{{dashboard.resumo.servico | number}}</h4>
+                                    <h5 class="pull-right">+{{dashboard.resumo.inc_servico | number:0}}</h5>
+                                    <p>Serviço</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            <div class="small-box bg-black">
+                                <div class="inner">
+                                    <h4>{{dashboard.resumo.cartao | number}}</h4>
+                                    <h5 class="pull-right">+{{dashboard.resumo.inc_cartao | number:0}}</h5>
+                                    <p>Cartão</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--GRAFICO-->
+                    <high-chart series="dashboard.produto" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)" height="280"></high-chart>
+                </div>
+            </div>
+        </div>
+
+        <!--POR HORA-->
+        <div class="col-xs-12 col-lg-6 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">HORA HORA</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>          
+                </div>
+                <div class="card-body">
+                    <!--TOTAIS-->
+                    <div class="row margin-bottom">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="small-box bg-blue">
+                                <div class="inner">
+                                    <h3>{{dashboard.resumo.atendido | number:0}}</h3>
+                                    <h4 class="pull-right">+{{dashboard.resumo.inc_atendimento | number:0}}</h4>
+                                    <p>Atendimento</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-headphones"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>{{dashboard.resumo.venda | number:0}}</h3>
+                                    <h4 class="pull-right">+{{dashboard.resumo.inc_venda | number:0}}</h4>
+                                    <p>Sucesso</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-thumbs-up"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--GRAFICO-->
+                    <high-chart class="margin-bottom" series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
+                                plot-Options-Column-Stacking="normal" y-Axis1-Min="90"
+                                y-Axis1-Max="100" height="250"></high-chart>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA-->
+        <div class="col-xs-12 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Análise Dia Dia (Histórico)</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Hoje</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Data</th>
+                                    <th>Atendidas</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
+                                    <th>Conversão Humano</th>
+                                    <th>Conversão Digital</th>
+                                    <th>NS (80-20)</th>
+                                    <th>Nota Pesquisa Satisfação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>QUA</td>
+                                    <td>03/10/2018</td>
+                                    <td>{{dashboard.resumo.atendido | number: 0}}</td>
+                                    <td>{{dashboard.resumo.venda_humano | number: 0}}</td>
+                                    <td>{{dashboard.resumo.venda_digital | number: 0}}</td>
+                                    <td>{{dashboard.resumo.venda | number: 0}}</td>
+                                    <td>{{dashboard.resumo.perc_convercao_humano | percentage: 1}}</td>
+                                    <td>{{dashboard.resumo.perc_convercao_digital | percentage: 1}}</td>
+                                    <td>{{dashboard.resumo.ns | percentage: 1}}</td>
+                                    <td>{{dashboard.resumo.nota | number: 1}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Outubro / 2018</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Data</th>
+                                    <th>Atendidas</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
+                                    <th>Conversão Humano</th>
+                                    <th>Conversão Digital</th>
+                                    <th>NS (80-20)</th>
+                                    <th>Nota Pesquisa Satisfação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="r in dashboard.tabela_out">
+                                    <td>{{r.DIA}}</td>
+                                    <td>{{r.DATA}}</td>
+                                    <td>{{r.ATENDIDAS | number: 0}}</td>
+                                    <td>{{r.VENDA_HUMANO | number: 0}}</td>
+                                    <td>{{r.VENDA_DIGITAL | number: 0}}</td>
+                                    <td>{{r.VENDA_TOTAL | number: 0}}</td>
+                                    <td>{{r.CONVERSAO_HUMANO | percentage: 1}}</td>
+                                    <td>{{r.CONVERSAO_DIGITAL | percentage: 1}}</td>
+                                    <td>{{r.NS | percentage: 1}}</td>
+                                    <td>{{r.NOTA | number: 1}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Total</th>
+                                    <th>{{dashboard.totais_out.atendidas | number:0}}</th>
+                                    <th>{{dashboard.totais_out.venda_humano | number:0}}</th>
+                                    <th>{{dashboard.totais_out.venda_digital | number:0}}</th>
+                                    <th>{{dashboard.totais_out.venda_total | number:0}}</th>
+                                    <th>{{dashboard.totais_out.conversao_humano | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_out.conversao_digital | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_out.ns | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_out.nota | number: 1}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <h3>Setembro / 2018</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Dia</th>
+                                    <th>Data</th>
+                                    <th>Atendidas</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
+                                    <th>Conversão Humano</th>
+                                    <th>Conversão Digital</th>
+                                    <th>NS (80-20)</th>
+                                    <th>Nota Pesquisa Satisfação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="r in dashboard.tabela_set">
+                                    <td>{{r.DIA}}</td>
+                                    <td>{{r.DATA}}</td>
+                                    <td>{{r.ATENDIDAS | number: 0}}</td>
+                                    <td>{{r.VENDA_HUMANO | number: 0}}</td>
+                                    <td>{{r.VENDA_DIGITAL | number: 0}}</td>
+                                    <td>{{r.VENDA_TOTAL | number: 0}}</td>
+                                    <td>{{r.CONVERSAO_HUMANO | percentage: 1}}</td>
+                                    <td>{{r.CONVERSAO_DIGITAL | percentage: 1}}</td>
+                                    <td>{{r.NS | percentage: 1}}</td>
+                                    <td>{{r.NOTA | number: 1}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Total</th>
+                                    <th>{{dashboard.totais_set.atendidas | number:0}}</th>
+                                    <th>{{dashboard.totais_set.venda_humano | number:0}}</th>
+                                    <th>{{dashboard.totais_set.venda_digital | number:0}}</th>
+                                    <th>{{dashboard.totais_set.venda_total | number:0}}</th>
+                                    <th>{{dashboard.totais_set.conversao_humano | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_set.conversao_digital | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_set.ns | percentage: 1}}</th>
+                                    <th>{{dashboard.totais_set.nota | number: 1}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style type="text/css">
+    .scroller {
+        position: relative;
+        background-color: black;
+        height: 50px;
+        line-height: 50px;
+        width: 100%;
+        padding: 0 10px 0 10px;
+        overflow: hidden;
+    }
+
+        .scroller span {
+            margin: 0;
+            position: absolute;
+            color: white;
+            overflow: hidden;
+            text-overflow: clip;
+            white-space: nowrap;
+            -moz-transform: translateX(100%);
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+            -moz-animation: scroll-left 30s linear infinite;
+            -webkit-animation: scroll-left 30s linear infinite;
+            animation: scroll-left 30s linear infinite;
+        }
+
+    @@-moz-keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%);
+        }
+    }
+
+    @@-webkit-keyframes scroll-left {
+        0% {
+            -webkit-transform: translateX(100%);
+        }
+
+        100% {
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @@keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%); /* Browser bug fix */
+            -webkit-transform: translateX(100%); /* Browser bug fix */
+            transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%); /* Browser bug fix */
+            -webkit-transform: translateX(-100%); /* Browser bug fix */
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+<script>
+    angular.module('app').controller('ctrl-riachuelovendas', function ($scope, $http, $filter, $interval) {
+        $scope.dashboard = {};
+
+        function timeNow() {
+            let d = new Date(),
+                h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+                m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
+                s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+            return h + ':' + m + ':' + s;
+        }
+        function obterDados() {
+            $http({
+                method: 'GET',
+                url: "dados.json?3",
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data
+                atualizar();
+            });
+        }
+        function atualizar() {
+            let now = timeNow();
+            $scope.dashboard.resumo = $scope.dashboard.dados.find(d => d.horario >= now);
+            plotarGauges();
+            graficoProduto();
+            graficoHora(now);
+        };
+        function plotarGauges() {
+            $scope.dashboard.conversao = {
+                angle: -0.02, // The span of the gauge arc
+                lineWidth: 0.25, // The line thickness
+                radiusScale: 0.56, // Relative radius
+                pointer: {
+                    length: 0.36, // // Relative to gauge radius
+                    strokeWidth: 0.011, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6FADCF',   // Colors
+                colorStop: '#8FC0DA',    // just experiment with them
+                strokeColor: '#E0E0E0',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                minValue: 0,
+                maxValue: 1,
+                value: $scope.dashboard.resumo.perc_convercao_digital,
+            };
+
+            $scope.dashboard.ns = {
+                angle: -0.02, // The span of the gauge arc
+                lineWidth: 0.25, // The line thickness
+                radiusScale: 0.56, // Relative radius
+                pointer: {
+                    length: 0.36, // // Relative to gauge radius
+                    strokeWidth: 0.011, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6FADCF',   // Colors
+                colorStop: '#8FC0DA',    // just experiment with them
+                strokeColor: '#E0E0E0',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                minValue: 0,
+                maxValue: 1,
+                value: $scope.dashboard.resumo.ns,
+            };
+        }
+        function graficoProduto() {
+            $scope.dashboard.produto = [{
+                name: 'Produto', data: [
+                    { name: 'SERVIÇO', y: parseInt($scope.dashboard.resumo.servico) },
+                    { name: 'CARTÃO', y: parseInt($scope.dashboard.resumo.cartao) },
+                    { name: 'EMPRESTIMO', y: parseInt($scope.dashboard.resumo.emprestimo) },
+                ]
+            }];
+        }
+        function graficoHora(now) {
+            let dados = $scope.dashboard.dados.filter(r => r.horario < now);
+            let agrupado = alasql('select hora, sum(cast(inc_atendimento as int)) atendido, sum(cast(inc_venda as int)) venda, avg(cast(ns as number)) ns from ? group by hora', [dados]);
+       
+            $scope.dashboard.horas = ["08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h"]
+            $scope.dashboard.graficohora = [
+                { name: 'atendido', type: 'column', data: agrupado.map(d => d.atendido) },
+                { name: 'sucesso', type: 'area', color: '#00a65a', data: agrupado.map(d => d.venda) },
+                { name: 'NS (20s)', yAxis: 1, type: 'spline', data: agrupado.map(d => (d.ns*100).toFixed(1)/1) }
+            ];
+        }
+
+        $interval(function () {
+            atualizar();
+        }, 30 * 1000);
+
+        $scope.dashboard.totais_out = {
+            atendidas: 397236,
+            venda_humano: 1276,
+            venda_digital: 203327,
+            venda_total: 204604,
+            conversao_humano: 0.146,
+            conversao_digital: 0.512,
+            ns: 0.9819,
+            nota: 4.8,
+        }
+        $scope.dashboard.totais_set = {
+            atendidas: 4723322,
+            venda_humano: 16051,
+            venda_digital: 2434723,
+            venda_total: 2450774,
+            conversao_humano: 0.154,
+            conversao_digital: 0.510,
+            ns: 0.955,
+            nota: 4.7,
+        }
+        $scope.dashboard.tabela_out = [
+    {
+        "DIA": "SEG",
+        "DATA": "01/10/2018",
+        "ATENDIDAS": "199871",
+        "VENDA_HUMANO": "155",
+        "VENDA_DIGITAL": "97373",
+        "VENDA_TOTAL": "98418",
+        "CONVERSAO_HUMANO": "0.155",
+        "CONVERSAO_DIGITAL": "0.489",
+        "NS": "0.9854",
+        "NOTA": "4.9"
+    },
+    {
+        "DIA": "TER",
+        "DATA": "02/10/2018",
+        "ATENDIDAS": "197365",
+        "VENDA_HUMANO": "137",
+        "VENDA_DIGITAL": "105590",
+        "VENDA_TOTAL": "106185",
+        "CONVERSAO_HUMANO": "0.137",
+        "CONVERSAO_DIGITAL": "0.535",
+        "NS": "0.9784",
+        "NOTA": "4.7"
+    },
+        ]
+        $scope.dashboard.tabela_set = [
+    {
+        "DIA": "SÁB",
+        "DATA": "01/09/2018",
+        "ATENDIDAS": "112565",
+        "VENDA_HUMANO": "316.98304",
+        "VENDA_DIGITAL": "47164.735",
+        "VENDA_TOTAL": "47481.71804",
+        "CONVERSAO_HUMANO": "0.128",
+        "CONVERSAO_DIGITAL": "0.41899999999999998",
+        "NS": "0.9684",
+        "NOTA": "4.8"
+    },
+    {
+        "DIA": "DOM",
+        "DATA": "02/09/2018",
+        "ATENDIDAS": "59909",
+        "VENDA_HUMANO": "241.193634",
+        "VENDA_DIGITAL": "28217.139",
+        "VENDA_TOTAL": "28458.332634",
+        "CONVERSAO_HUMANO": "0.183",
+        "CONVERSAO_DIGITAL": "0.47099999999999997",
+        "NS": "0.9598",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "SEG",
+        "DATA": "03/09/2018",
+        "ATENDIDAS": "192847",
+        "VENDA_HUMANO": "568.512956",
+        "VENDA_DIGITAL": "98737.664",
+        "VENDA_TOTAL": "99306.176956",
+        "CONVERSAO_HUMANO": "0.13400000000000001",
+        "CONVERSAO_DIGITAL": "0.51200000000000001",
+        "NS": "0.9479",
+        "NOTA": "4.8"
+    },
+    {
+        "DIA": "TER",
+        "DATA": "04/09/2018",
+        "ATENDIDAS": "182062",
+        "VENDA_HUMANO": "736.986976",
+        "VENDA_DIGITAL": "104867.712",
+        "VENDA_TOTAL": "105604.698976",
+        "CONVERSAO_HUMANO": "0.184",
+        "CONVERSAO_DIGITAL": "0.57599999999999996",
+        "NS": "0.9780",
+        "NOTA": "4.9000000000000004"
+    },
+    {
+        "DIA": "QUA",
+        "DATA": "05/09/2018",
+        "ATENDIDAS": "190361",
+        "VENDA_HUMANO": "519.304808",
+        "VENDA_DIGITAL": "107934.687",
+        "VENDA_TOTAL": "108453.991808",
+        "CONVERSAO_HUMANO": "0.124",
+        "CONVERSAO_DIGITAL": "0.56699999999999995",
+        "NS": "0.9980",
+        "NOTA": "4.8"
+    },
+    {
+        "DIA": "QUI",
+        "DATA": "06/09/2018",
+        "ATENDIDAS": "192584",
+        "VENDA_HUMANO": "728.737856",
+        "VENDA_DIGITAL": "116705.904",
+        "VENDA_TOTAL": "117434.641856",
+        "CONVERSAO_HUMANO": "0.17199999999999999",
+        "CONVERSAO_DIGITAL": "0.60599999999999998",
+        "NS": "0.9413",
+        "NOTA": "4.5"
+    },
+    {
+        "DIA": "SEX",
+        "DATA": "07/09/2018",
+        "ATENDIDAS": "184852",
+        "VENDA_HUMANO": "577.477648",
+        "VENDA_DIGITAL": "79671.212",
+        "VENDA_TOTAL": "80248.689648",
+        "CONVERSAO_HUMANO": "0.14199999999999999",
+        "CONVERSAO_DIGITAL": "0.43099999999999999",
+        "NS": "0.9203",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "SÁB",
+        "DATA": "08/09/2018",
+        "ATENDIDAS": "117757",
+        "VENDA_HUMANO": "349.73829",
+        "VENDA_DIGITAL": "70889.714",
+        "VENDA_TOTAL": "71239.45229",
+        "CONVERSAO_HUMANO": "0.13500000000000001",
+        "CONVERSAO_DIGITAL": "0.60199999999999998",
+        "NS": "0.9304",
+        "NOTA": "4.8"
+    },
+    {
+        "DIA": "DOM",
+        "DATA": "09/09/2018",
+        "ATENDIDAS": "76885",
+        "VENDA_HUMANO": "262.17785",
+        "VENDA_DIGITAL": "49283.285",
+        "VENDA_TOTAL": "49545.46285",
+        "CONVERSAO_HUMANO": "0.155",
+        "CONVERSAO_DIGITAL": "0.64100000000000001",
+        "NS": "0.9709",
+        "NOTA": "4.5999999999999996"
+    },
+    {
+        "DIA": "SEG",
+        "DATA": "10/09/2018",
+        "ATENDIDAS": "200378",
+        "VENDA_HUMANO": "758.230352",
+        "VENDA_DIGITAL": "91572.746",
+        "VENDA_TOTAL": "92330.976352",
+        "CONVERSAO_HUMANO": "0.17199999999999999",
+        "CONVERSAO_DIGITAL": "0.45700000000000002",
+        "NS": "0.9245",
+        "NOTA": "4.5"
+    },
+    {
+        "DIA": "TER",
+        "DATA": "11/09/2018",
+        "ATENDIDAS": "197105",
+        "VENDA_HUMANO": "810.88997",
+        "VENDA_DIGITAL": "110575.905",
+        "VENDA_TOTAL": "111386.79497",
+        "CONVERSAO_HUMANO": "0.187",
+        "CONVERSAO_DIGITAL": "0.56100000000000005",
+        "NS": "0.9789",
+        "NOTA": "4.8"
+    },
+    {
+        "DIA": "QUA",
+        "DATA": "12/09/2018",
+        "ATENDIDAS": "196717",
+        "VENDA_HUMANO": "809.293738",
+        "VENDA_DIGITAL": "82621.14",
+        "VENDA_TOTAL": "83430.433738",
+        "CONVERSAO_HUMANO": "0.187",
+        "CONVERSAO_DIGITAL": "0.42",
+        "NS": "0.9468",
+        "NOTA": "4.9000000000000004"
+    },
+    {
+        "DIA": "QUI",
+        "DATA": "13/09/2018",
+        "ATENDIDAS": "172668",
+        "VENDA_HUMANO": "501.427872",
+        "VENDA_DIGITAL": "84089.316",
+        "VENDA_TOTAL": "84590.743872",
+        "CONVERSAO_HUMANO": "0.13200000000000001",
+        "CONVERSAO_DIGITAL": "0.48699999999999993",
+        "NS": "0.9678",
+        "NOTA": "4.9000000000000004"
+    },
+    {
+        "DIA": "SEX",
+        "DATA": "14/09/2018",
+        "ATENDIDAS": "190863",
+        "VENDA_HUMANO": "625.648914",
+        "VENDA_DIGITAL": "122534.046",
+        "VENDA_TOTAL": "123159.694914",
+        "CONVERSAO_HUMANO": "0.14899999999999999",
+        "CONVERSAO_DIGITAL": "0.64200000000000002",
+        "NS": "0.9549",
+        "NOTA": "4.7"
+    },
+    {
+        "DIA": "SÁB",
+        "DATA": "15/09/2018",
+        "ATENDIDAS": "121598",
+        "VENDA_HUMANO": "355.795748",
+        "VENDA_DIGITAL": "60677.402",
+        "VENDA_TOTAL": "61033.197748",
+        "CONVERSAO_HUMANO": "0.13300000000000001",
+        "CONVERSAO_DIGITAL": "0.499",
+        "NS": "0.9877",
+        "NOTA": "4.5"
+    },
+    {
+        "DIA": "DOM",
+        "DATA": "16/09/2018",
+        "ATENDIDAS": "75349",
+        "VENDA_HUMANO": "276.832226",
+        "VENDA_DIGITAL": "33304.258",
+        "VENDA_TOTAL": "33581.090226",
+        "CONVERSAO_HUMANO": "0.16700000000000001",
+        "CONVERSAO_DIGITAL": "0.442",
+        "NS": "0.9112",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "SEG",
+        "DATA": "17/09/2018",
+        "ATENDIDAS": "193809",
+        "VENDA_HUMANO": "690.735276",
+        "VENDA_DIGITAL": "98648.781",
+        "VENDA_TOTAL": "99339.516276",
+        "CONVERSAO_HUMANO": "0.16200000000000001",
+        "CONVERSAO_DIGITAL": "0.50900000000000001",
+        "NS": "0.9679",
+        "NOTA": "4.5"
+    },
+    {
+        "DIA": "TER",
+        "DATA": "18/09/2018",
+        "ATENDIDAS": "185169",
+        "VENDA_HUMANO": "574.394238",
+        "VENDA_DIGITAL": "107953.527",
+        "VENDA_TOTAL": "108527.921238",
+        "CONVERSAO_HUMANO": "0.14099999999999999",
+        "CONVERSAO_DIGITAL": "0.58299999999999996",
+        "NS": "0.9542",
+        "NOTA": "4.9000000000000004"
+    },
+    {
+        "DIA": "QUA",
+        "DATA": "19/09/2018",
+        "ATENDIDAS": "192678",
+        "VENDA_HUMANO": "606.164988",
+        "VENDA_DIGITAL": "120231.072",
+        "VENDA_TOTAL": "120837.236988",
+        "CONVERSAO_HUMANO": "0.14299999999999999",
+        "CONVERSAO_DIGITAL": "0.624",
+        "NS": "0.9723",
+        "NOTA": "4.5"
+    },
+    {
+        "DIA": "QUI",
+        "DATA": "20/09/2018",
+        "ATENDIDAS": "163233",
+        "VENDA_HUMANO": "563.806782",
+        "VENDA_DIGITAL": "72475.452",
+        "VENDA_TOTAL": "73039.258782",
+        "CONVERSAO_HUMANO": "0.157",
+        "CONVERSAO_DIGITAL": "0.44400000000000001",
+        "NS": "0.9215",
+        "NOTA": "4.4000000000000004"
+    },
+    {
+        "DIA": "SEX",
+        "DATA": "21/09/2018",
+        "ATENDIDAS": "184647",
+        "VENDA_HUMANO": "584.961696",
+        "VENDA_DIGITAL": "74782.035",
+        "VENDA_TOTAL": "75366.996696",
+        "CONVERSAO_HUMANO": "0.14399999999999999",
+        "CONVERSAO_DIGITAL": "0.40500000000000003",
+        "NS": "0.9413",
+        "NOTA": "4.4000000000000004"
+    },
+    {
+        "DIA": "SÁB",
+        "DATA": "22/09/2018",
+        "ATENDIDAS": "114741",
+        "VENDA_HUMANO": "406.412622",
+        "VENDA_DIGITAL": "50256.558",
+        "VENDA_TOTAL": "50662.970622",
+        "CONVERSAO_HUMANO": "0.161",
+        "CONVERSAO_DIGITAL": "0.438",
+        "NS": "0.9710",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "DOM",
+        "DATA": "23/09/2018",
+        "ATENDIDAS": "66668",
+        "VENDA_HUMANO": "195.070568",
+        "VENDA_DIGITAL": "28867.244",
+        "VENDA_TOTAL": "29062.314568",
+        "CONVERSAO_HUMANO": "0.13300000000000001",
+        "CONVERSAO_DIGITAL": "0.433",
+        "NS": "0.9314",
+        "NOTA": "4.9000000000000004"
+    },
+    {
+        "DIA": "SEG",
+        "DATA": "24/09/2018",
+        "ATENDIDAS": "200008",
+        "VENDA_HUMANO": "721.628864",
+        "VENDA_DIGITAL": "104204.168",
+        "VENDA_TOTAL": "104925.796864",
+        "CONVERSAO_HUMANO": "0.16400000000000001",
+        "CONVERSAO_DIGITAL": "0.52100000000000002",
+        "NS": "0.9789",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "TER",
+        "DATA": "25/09/2018",
+        "ATENDIDAS": "198682",
+        "VENDA_HUMANO": "668.763612",
+        "VENDA_DIGITAL": "91989.766",
+        "VENDA_TOTAL": "92658.529612",
+        "CONVERSAO_HUMANO": "0.153",
+        "CONVERSAO_DIGITAL": "0.46300000000000002",
+        "NS": "0.9655",
+        "NOTA": "5"
+    },
+    {
+        "DIA": "QUA",
+        "DATA": "26/09/2018",
+        "ATENDIDAS": "195387",
+        "VENDA_HUMANO": "726.448866",
+        "VENDA_DIGITAL": "120749.166",
+        "VENDA_TOTAL": "121475.614866",
+        "CONVERSAO_HUMANO": "0.16900000000000001",
+        "CONVERSAO_DIGITAL": "0.61799999999999999",
+        "NS": "0.9822",
+        "NOTA": "4.7"
+    },
+    {
+        "DIA": "QUI",
+        "DATA": "27/09/2018",
+        "ATENDIDAS": "195663",
+        "VENDA_HUMANO": "533.768664",
+        "VENDA_DIGITAL": "85896.057",
+        "VENDA_TOTAL": "86429.825664",
+        "CONVERSAO_HUMANO": "0.12400000000000001",
+        "CONVERSAO_DIGITAL": "0.439",
+        "NS": "0.9479",
+        "NOTA": "4.7"
+    },
+    {
+        "DIA": "SEX",
+        "DATA": "28/09/2018",
+        "ATENDIDAS": "196793",
+        "VENDA_HUMANO": "697.040806",
+        "VENDA_DIGITAL": "109220.115",
+        "VENDA_TOTAL": "109917.155806",
+        "CONVERSAO_HUMANO": "0.161",
+        "CONVERSAO_DIGITAL": "0.55500000000000005",
+        "NS": "0.9312",
+        "NOTA": "4.7"
+    },
+    {
+        "DIA": "SÁB",
+        "DATA": "29/09/2018",
+        "ATENDIDAS": "113606",
+        "VENDA_HUMANO": "437.3831",
+        "VENDA_DIGITAL": "52599.578",
+        "VENDA_TOTAL": "53036.9611",
+        "CONVERSAO_HUMANO": "0.17499999999999999",
+        "CONVERSAO_DIGITAL": "0.46300000000000002",
+        "NS": "0.9802",
+        "NOTA": "4.4000000000000004"
+    },
+    {
+        "DIA": "DOM",
+        "DATA": "30/09/2018",
+        "ATENDIDAS": "57738",
+        "VENDA_HUMANO": "205.778232",
+        "VENDA_DIGITAL": "28002.93",
+        "VENDA_TOTAL": "28208.708232",
+        "CONVERSAO_HUMANO": "0.16200000000000001",
+        "CONVERSAO_DIGITAL": "0.48499999999999999",
+        "NS": "0.9469",
+        "NOTA": "5"
+    },
+        ]
+     
+        obterDados();
+    });
+</script>

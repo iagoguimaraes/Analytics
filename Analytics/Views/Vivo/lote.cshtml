@@ -105,6 +105,7 @@
             else if (indicador == '%cpc') { return (registro['cpc'] * 100 / registro['contrato']).toFixed(1) * 1 }
             else if (indicador == '%cpca') { return (registro['cpca'] * 100 / registro['contrato']).toFixed(1) * 1 }
             else if (indicador == '%promessa') { return (registro['promessa'] * 100 / registro['contrato']).toFixed(1) * 1 }
+            else if (indicador == '%pagamento') { return (registro['pagamento'] * 100 / registro['contrato']).toFixed(1) * 1 }
             else if (indicador == 'spin') { return (registro['discado_tt'] / registro['contrato']).toFixed(1) * 1 }
             else { return registro[indicador] }
         }
@@ -217,6 +218,7 @@
                                 <option value="%cpc">% CPC</option>
                                 <option value="%cpca">% CPCA</option>
                                 <option value="%promessa">% Promessa</option>
+                                <option value="%pagamento">% Pagamento</option>
                             </select>
                         </div>
 
@@ -285,6 +287,7 @@
                                         <th>%CPC</th>
                                         <th>%CPCA</th>
                                         <th>%Promessa</th>
+                                        <th>%Pagamento</th>
                                         <th>Spin</th>
                                     </tr>
                                 </thead>
@@ -298,6 +301,7 @@
                                         <td>{{d.cpc / d.contrato | percentage:1}}</td>
                                         <td>{{d.cpca / d.contrato | percentage:1}}</td>
                                         <td>{{d.promessa / d.contrato | percentage:1}}</td>
+                                        <td>{{d.pagamento / d.contrato | percentage:1}}</td>
                                         <td>{{d.discado_tt / d.contrato | number:1}}</td>
                                     </tr>
                                 </tbody>
@@ -311,6 +315,7 @@
                                         <th>{{atual.media.cpc / atual.media.contrato | percentage:1}}</th>
                                         <th>{{atual.media.cpca / atual.media.contrato | percentage:1}}</th>
                                         <th>{{atual.media.promessa / atual.media.contrato | percentage:1}}</th>
+                                        <th>{{atual.media.pagamento / atual.media.contrato | percentage:1}}</th>
                                         <th>{{atual.media.discado_tt / atual.media.contrato | number:1}}</th>
                                     </tr>
                                 </tfoot>
