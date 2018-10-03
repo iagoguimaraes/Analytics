@@ -16,7 +16,7 @@
         <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-title">ROBOS DE VENDAS</span>
+                    <span class="card-header-title">PERFORMANCE ROBOS</span>
                     <div class="card-header-button card-header-expand">
                         <i class="fa fa-expand"></i>
                     </div>
@@ -43,7 +43,7 @@
                                 <i class="fa fa-headphones fa-2x"></i>&nbsp<span><b>ATENDIDO/ROBO:</b>&nbsp{{dashboard.resumo.atendido / dashboard.resumo.robo | number:0}}</span>
                             </div>
                             <div style="margin-bottom: 5px;">
-                                <i class="fa fa-thumbs-up fa-2x"></i>&nbsp<span><b>VENDA/ROBO:</b>&nbsp{{dashboard.resumo.venda / dashboard.resumo.robo | number:0}}</span>
+                                <i class="fa fa-thumbs-up fa-2x"></i>&nbsp<span><b>SUCESSO/ROBO:</b>&nbsp{{dashboard.resumo.venda / dashboard.resumo.robo | number:0}}</span>
                             </div>
                         </div>
                     </div>
@@ -74,11 +74,11 @@
 
                     <div class="scroller">
                         <span>
-                            atualização das {{dashboard.resumo.horario}} | &nbsp &nbsp &nbsp
-                            <b style="color: #00a65a">+ {{dashboard.resumo.inc_venda | number:0}} Vendas!</b> &nbsp &nbsp &nbsp
+                            atualização das {{dashboard.resumo.horario}} &nbsp &nbsp &nbsp
+                            <b style="color: #00a65a">+ {{dashboard.resumo.inc_venda | number:0}} Sucessos!</b> &nbsp &nbsp &nbsp
                             <b style="color: #0073b7">+ {{dashboard.resumo.inc_atendimento | number:0}} Atendimentos</b> &nbsp &nbsp &nbsp
                             atendimento: {{dashboard.resumo.atendido | number:0}} <i class="fa fa-caret-up" style="color: #00a65a"></i> &nbsp &nbsp &nbsp
-                            venda: {{dashboard.resumo.venda | number: 0}} <i class="fa fa-caret-up" style="color: #00a65a"></i> &nbsp &nbsp &nbsp
+                            sucesso: {{dashboard.resumo.venda | number: 0}} <i class="fa fa-caret-up" style="color: #00a65a"></i> &nbsp &nbsp &nbsp
                             nível de serviço: {{dashboard.resumo.ns | percentage: 1}} <i class="fa fa-caret-up"></i> &nbsp &nbsp &nbsp
                         </span>
                     </div>
@@ -152,7 +152,7 @@
                     <div class="small-box bg-green">
                         <div class="inner">
                             <i class="fa fa-clock-o"></i>
-                            <b>Tempo Médio Venda:</b> <span ng-bind="dashboard.resumo.tmv"></span>
+                            <b>Tempo Médio Sucesso:</b> <span ng-bind="dashboard.resumo.tmv"></span>
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
         <div class="col-xs-12 col-lg-6 margin-bottom">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-title">VENDA POR PRODUTO</span>
+                    <span class="card-header-title">SUCESSO POR PRODUTO</span>
                     <div class="card-header-button card-header-expand">
                         <i class="fa fa-expand"></i>
                     </div>
@@ -234,7 +234,7 @@
                                 <div class="inner">
                                     <h3>{{dashboard.resumo.venda | number:0}}</h3>
                                     <h4 class="pull-right">+{{dashboard.resumo.inc_venda | number:0}}</h4>
-                                    <p>Vendas</p>
+                                    <p>Sucesso</p>
                                 </div>
                                 <div class="icon">
                                     <i class="fa fa-thumbs-up"></i>
@@ -268,9 +268,9 @@
                                     <th>Dia</th>
                                     <th>Data</th>
                                     <th>Atendidas</th>
-                                    <th>Vendas Humano</th>
-                                    <th>Vendas Digital</th>
-                                    <th>Vendas Total</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
                                     <th>Conversão Humano</th>
                                     <th>Conversão Digital</th>
                                     <th>NS (80-20)</th>
@@ -302,9 +302,9 @@
                                     <th>Dia</th>
                                     <th>Data</th>
                                     <th>Atendidas</th>
-                                    <th>Vendas Humano</th>
-                                    <th>Vendas Digital</th>
-                                    <th>Vendas Total</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
                                     <th>Conversão Humano</th>
                                     <th>Conversão Digital</th>
                                     <th>NS (80-20)</th>
@@ -349,9 +349,9 @@
                                     <th>Dia</th>
                                     <th>Data</th>
                                     <th>Atendidas</th>
-                                    <th>Vendas Humano</th>
-                                    <th>Vendas Digital</th>
-                                    <th>Vendas Total</th>
+                                    <th>Sucesso Humano</th>
+                                    <th>Sucesso Digital</th>
+                                    <th>Sucesso Total</th>
                                     <th>Conversão Humano</th>
                                     <th>Conversão Digital</th>
                                     <th>NS (80-20)</th>
@@ -541,7 +541,7 @@
             $scope.dashboard.horas = ["08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h"]
             $scope.dashboard.graficohora = [
                 { name: 'atendido', type: 'column', data: agrupado.map(d => d.atendido) },
-                { name: 'venda', type: 'area', color: '#00a65a', data: agrupado.map(d => d.venda) },
+                { name: 'sucesso', type: 'area', color: '#00a65a', data: agrupado.map(d => d.venda) },
                 { name: 'NS (20s)', yAxis: 1, type: 'spline', data: agrupado.map(d => (d.ns*100).toFixed(1)/1) }
             ];
         }
