@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-sky-producao">
+<div ng-controller="ctrl-claro-producao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -72,7 +72,7 @@
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box">
-                    <img class="img-responsive center-block" src="~/Content/Images/Net/logo-producao.jpg" style="height:102px" />
+                    <img class="img-responsive center-block" src="~/Content/Images/Claro/icone-claro.png" style="height:102px" />
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
@@ -298,9 +298,9 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-sky-producao', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-claro-producao', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Produção';
-        dadosPagina.descricao = 'Sky Digital'
+        dadosPagina.descricao = 'Claro Digital'
 
         // filtros iniciais
         let newdate = new Date();
@@ -319,7 +319,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/net/dashboard/digital/producao",
+                url: "/api/claro/dashboard/digital/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
