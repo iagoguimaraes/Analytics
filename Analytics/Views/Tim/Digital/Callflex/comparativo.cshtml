@@ -57,22 +57,10 @@
                                         </div>
                                     </div>
 
-                                    <!--EMPRESA-->
+                                    <!--PRODUTO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Empresa</label>
-                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
-                                    </div>
-
-                                    <!--CARTEIRA-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Carteira</label>
-                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
-                                    </div>
-
-                                    <!--AGING-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Aging</label>
-                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                                        <label class="control-sidebar-subheading">Produto</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                                     </div>
 
                                     <!--HORA INCIAL-->
@@ -168,22 +156,10 @@
                                         </div>
                                     </div>
 
-                                    <!--EMPRESA-->
+                                    <!--PRODUTO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Empresa</label>
-                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresa_2" dados="dashFiltros.empresa"></select2>
-                                    </div>
-
-                                    <!--CARTEIRA-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Carteira</label>
-                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteira_2" dados="dashFiltros.carteira"></select2>
-                                    </div>
-
-                                    <!--AGING-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Aging</label>
-                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.aging_2" dados="dashFiltros.aging"></select2>
+                                        <label class="control-sidebar-subheading">Produto</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos_2" dados="dashFiltros.produtos"></select2>
                                     </div>
 
                                     <!--HORA INCIAL-->
@@ -230,8 +206,7 @@
                                             <option value="21">21h</option>
                                             <option value="22" selected="selected">22h</option>
                                         </select>
-                                    </div>    
-                                    
+                                    </div>                                   
                                 </fieldset>
                             </div>
                         </div>
@@ -424,13 +399,9 @@
             horaini_2: '7',
             horafim_2: '22',
 
-            empresa: '',
-            carteira: '',
-            aging: '',
+            produtos: '',
 
-            empresa_2: '',
-            carteira_2: '',
-            aging_2: '',
+            produtos_2: '',
             visao: 'hora',
         };
         $scope.dashFiltros = {};
@@ -440,21 +411,19 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/tim/dashboard/humano/filtros",
+            url: "/api/tim/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.empresa = data.Table;
-            $scope.dashFiltros.carteira = data.Table1;
-            $scope.dashFiltros.aging = data.Table2;
+            $scope.dashFiltros.produtos = data.Table;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/dashboard/humano/comparativo",
+                url: "/api/tim/dashboard/comparativo",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -505,8 +474,8 @@
         }
 
         $scope.carregarComparativo = function () {
-            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(vlr_promessa) vlrPromessa from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa, sum(vlr_promessa2) vlrPromessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa from ?', [$scope.dashboard.dados.Table])[0];
 
             let calculo = {
                 hitrate1: dados1.contato / dados1.discado,
@@ -526,13 +495,12 @@
             $scope.dashboard.cpc = { p1: dados1.cpc, p2: dados2.cpc, vs: dados1.cpc / dados2.cpc - 1 };
             $scope.dashboard.cpca = { p1: dados1.cpca, p2: dados2.cpca, vs: dados1.cpca / dados2.cpca - 1 };
             $scope.dashboard.promessa = { p1: dados1.promessa, p2: dados2.promessa, vs: dados1.promessa / dados2.promessa - 1 };
-            $scope.dashboard.vlrPromessa = { p1: dados1.vlrPromessa, p2: dados2.vlrPromessa, vs: dados1.vlrPromessa / dados2.vlrPromessa - 1 };
+            // $scope.dashboard.vlrPromessa = { p1: dados1.vlrPromessa, p2: dados2.vlrPromessa, vs: dados1.vlrPromessa / dados2.vlrPromessa - 1 };
 
-            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 - calculo.hitrate2 };
-            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 - calculo.txloc2 };
-            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 - calculo.txapv2 };
-            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 - calculo.conversao2 };
-
+            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 / calculo.hitrate2 - 1};
+            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 / calculo.txloc2 - 1};
+            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 / calculo.txapv2 - 1};
+            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 / calculo.conversao2 - 1};
             $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 / calculo.esforco2 - 1 };
 
         }
@@ -547,6 +515,7 @@
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("comparativo_analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
+
 
     });
 </script>
