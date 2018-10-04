@@ -17,7 +17,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
 
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -56,11 +56,15 @@
                                 </div>
                             </div>
 
-
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
+                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -234,6 +238,75 @@
             </div>
         </div>
 
+        <!--ANALISE POR CAMPANHA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Campanha</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.campanha">
+                                <thead>
+                                    <tr>
+                                        <th>Campanha</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="campanha in dashboard.campanha">
+                                        <td>{{campanha.ds_campanha}}</td>
+                                        <td>{{campanha.discado | number}}</td>
+                                        <td>{{campanha.contato | number}}</td>
+                                        <td>{{campanha.cpc | number}}</td>
+                                        <td>{{campanha.cpca | number}}</td>
+                                        <td>{{campanha.promessa | number}}</td>
+                                        <td>{{campanha.contato / campanha.discado | percentage:1}}</td>
+                                        <td>{{campanha.cpc / campanha.contato | percentage:1}}</td>
+                                        <td>{{campanha.cpca / campanha.cpc | percentage:1}}</td>
+                                        <td>{{campanha.promessa / campanha.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
         <!--DIAGRAMA DE FINALIZAÇÕES & FINALIZAÇÕES DO DISCADOR-->
         <div class="row margin-bottom">
             <div class="col-lg-6 margin-bottom">
@@ -305,12 +378,27 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        $scope.dashFiltros = {};
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanha: '',
 
         };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/claro/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanha = r.data.Table;
+
+        });
+
         $scope.dashboard = {};
         $scope.graficoDia = { indicador: 'promessa', dados: [], exibir: 'false' };
 
@@ -330,6 +418,7 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.ocorrencia = data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.descricao, y: obj.quantidade })) }];
+                $scope.dashboard.campanha = r.data.Table4;
 
                 let funil = data.Table[0];
                 let dadosFunil = [];

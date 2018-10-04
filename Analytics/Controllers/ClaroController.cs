@@ -13,7 +13,27 @@ namespace Analytics.Controllers
     [RoutePrefix("api/claro")]
     public class ClaroController : ApiController
     {
-       
+
+        [Route("dashboard/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
@@ -24,6 +44,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -31,6 +52,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -52,6 +74,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -59,6 +82,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
