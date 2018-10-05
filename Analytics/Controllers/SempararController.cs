@@ -110,6 +110,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
 
                 string procedure = "sp_dashboard_efetividade_humano_vencimento";
 
@@ -124,6 +126,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
