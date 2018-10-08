@@ -46,6 +46,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CARREFOUR"))
                 {
@@ -54,6 +56,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmento", segmento);
+                    parametros.Add("supervisor", supervisores);
+                    parametros.Add("equipe", equipes);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -76,6 +80,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CARREFOUR"))
                 {
@@ -84,6 +90,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmento", segmento);
+                    parametros.Add("supervisor", supervisores);
+                    parametros.Add("equipe", equipes);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

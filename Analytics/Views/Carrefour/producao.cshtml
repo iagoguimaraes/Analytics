@@ -58,6 +58,18 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                         </div>
 
+                        <!--SUPERVISOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Supervisor</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores"></select2>
+                        </div>
+
+                        <!--EQUIPE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Equipe</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -332,6 +344,85 @@
             </div>
         </div>
 
+        <!--ANALISE POR SUPERVISOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Acordo</th>
+                                        <th>Vlr Acordo</th>
+                                        <th>Vlr Risco</th>
+                                        <th>Acordo Exceção</th>
+                                        <th>Vlr Risco Exceção</th>
+                                        <th>Vlr Risco Total</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="g in dashboard.supervisor | groupBy: 'ds_supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{g[0].ds_supervisor}}
+                                        </td>
+                                        <td>{{g | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{g | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{g | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{g | sumByColumn: 'acordo'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_acordo'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'acordo_ex'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_riscoex'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_total_risco' | number}}</td>
+                                        <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{g | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in g" ng-show="showTbody">
+                                        <td>{{c.ds_equipe}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.acordo | number}}</td>
+                                        <td>{{c.valor_acordo | number}}</td>
+                                        <td>{{c.valor_risco | number}}</td>
+                                        <td>{{c.acordo_ex | number}}</td>
+                                        <td>{{c.valor_riscoex | number}}</td>
+                                        <td>{{c.valor_riscoex + c.valor_risco | number}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -393,6 +484,8 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             segmento: '',
+            supervisores: '',
+            equipes: '',
         };
 
         $scope.dashboard = {};
@@ -407,6 +500,8 @@
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.segmento = r.data.Table;
+            $scope.dashFiltros.equipes = r.data.Table1;
+            $scope.dashFiltros.supervisores = r.data.Table2;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -425,6 +520,7 @@
                 $scope.dashboard.grupo = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.tabulacao = data.Table4;
+                $scope.dashboard.supervisor = data.Table5;
 
                 $scope.dashboard.ocorrencias = r.data.Table4.map(obj => obj.ocorrencia);
                 $scope.dashboard.tabulacaoGraf = [{ name: 'Quantidade', data: r.data.Table4.map(obj => obj.quantidade) }];
