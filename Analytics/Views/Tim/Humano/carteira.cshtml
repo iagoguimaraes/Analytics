@@ -57,10 +57,22 @@
                                 </div>
                             </div>
 
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa" style="width:100%"></select2>
+                            </div>
+
                             <!--CARTEIRAS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <label class="control-sidebar-subheading">Carteira</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                            </div>
+
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Aging</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -186,7 +198,9 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresa: '',
             carteiras: '',
+            faixaAtraso: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -201,7 +215,11 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.empresa = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.faixaAtraso = r.data.Table2;
+            
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
