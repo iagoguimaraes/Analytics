@@ -178,11 +178,15 @@ namespace Analytics.Controllers
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
                 DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
                 DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
 
-
+                DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
+                DataTable equipe_2 = JsonConvert.DeserializeObject<DataTable>(form["equipe_2"]);
 
                 string procedure = "sp_dashboard_comparativo_hora";
                 if (form["visao"] == "hora")
@@ -214,10 +218,14 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
                     parametros.Add("aging", aging);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
 
                     parametros.Add("empresa_2", empresa_2);
                     parametros.Add("carteira_2", carteira_2);
                     parametros.Add("aging_2", aging_2);
+                    parametros.Add("supervisor_2", supervisor_2);
+                    parametros.Add("equipe_2", equipe_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
