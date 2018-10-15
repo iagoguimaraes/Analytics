@@ -127,9 +127,17 @@ namespace Analytics.Controllers
 
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
-                
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
                 DataTable segmentacao_2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao_2"]);
+                DataTable tenure_2 = JsonConvert.DeserializeObject<DataTable>(form["tenure_2"]);
+
+                DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
+                //DataTable equipe_2 = JsonConvert.DeserializeObject<DataTable>(form["equipe_2"]);
 
 
 
@@ -162,9 +170,13 @@ namespace Analytics.Controllers
 
                     parametros.Add("carteira", carteira);
                     parametros.Add("segmentacao", segmentacao);
-                    
+                    parametros.Add("tenure", tenure);
+                    parametros.Add("supervisor", supervisor);
+
                     parametros.Add("carteira_2", carteira_2);
                     parametros.Add("segmentacao_2", segmentacao_2);
+                    parametros.Add("tenure_2", tenure_2);
+                    parametros.Add("supervisor_2", supervisor_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
