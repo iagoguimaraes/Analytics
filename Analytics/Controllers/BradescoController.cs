@@ -169,6 +169,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_imp = Convert.ToDateTime(form["dtini_inc"]);
+                DateTime dtfim_imp = Convert.ToDateTime(form["dtfim_inc"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
 
@@ -185,6 +187,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_imp", dtini_imp.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_imp", dtfim_imp.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("fases", fases);
 

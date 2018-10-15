@@ -30,56 +30,87 @@
                         </div>
                     </div>
                     <div class="card-body">
-
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                        <div class="row">
+                            <!--DATA INCIAL-->
+                            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Periodo Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                             </div>
                         </div>
 
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                            <!--DATA FINAL-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Periodo Final</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+
+                            <!--DATA INCIAL IMPORTACAO-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial Inclusão</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini_inc"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL IMPORTACAO-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final Inclusão</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim_inc"></date-picker>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!--CARTEIRAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteiras</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                        </div>
+                            <!--CARTEIRAS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
+                            </div>
 
-                        <!--FASES-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Fases</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases"></select2>
-                        </div>
+                            <!--FASES-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Fases</label>
+                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases"></select2>
+                            </div>
 
-                        <!--VISÃO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Visão</label>
-                            <select class="form-control" ng-model="filtros.visao">
-                                <option value="vencimento">Vencimento</option>
-                                <option value="andamento" selected="selected">Andamento</option>
-                            </select>
-                        </div>
+                            <!--VISÃO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Visão</label>
+                                <select class="form-control" ng-model="filtros.visao">
+                                    <option value="vencimento">Vencimento</option>
+                                    <option value="andamento" selected="selected">Andamento</option>
+                                </select>
+                            </div>
 
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                        </div>
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
 
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -285,10 +316,13 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        let dataInc = new Date(newdate.getFullYear(), newdate.getMonth(), -60);
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            dtini_inc: $filter('date')(dataInc, "yyyy-MM-dd"),
+            dtfim_inc: $filter('date')(newdate, "yyyy-MM-dd"),
             visao: 'andamento',
             carteiras: '',
             fases: '',
