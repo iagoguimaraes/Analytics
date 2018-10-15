@@ -159,6 +159,46 @@ namespace Analytics.Controllers
         }
 
 
+        [Route("dashboard/efetividade")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEfetvidade(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
+
+                string procedure = "sp_dashboard_efetividade_vencimento";
+
+                if (form["visao"] == "andamento")
+                    procedure = "sp_dashboard_efetividade_andamento";
+                if (form["visao"] == "vencimento")
+                    procedure = "sp_dashboard_efetividade_vencimento";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("fases", fases);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
 
     }
 }
