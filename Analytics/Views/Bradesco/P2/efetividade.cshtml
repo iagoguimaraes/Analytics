@@ -4,7 +4,7 @@
 
 
 
-<div ng-controller="ctrl-bradesco-efetividade">
+<div ng-controller="ctrl-ibi-efetividade">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -33,16 +33,16 @@
                         <div class="row">
                             <!--DATA INCIAL-->
                             <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Periodo Inicial</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Periodo Inicial</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                     </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
                             </div>
-                        </div>
 
                             <!--DATA FINAL-->
                             <div class="col-md-6">
@@ -84,33 +84,33 @@
                             </div>
                         </div>
 
-                            <!--CARTEIRAS-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteiras</label>
-                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                            </div>
-
-                            <!--FASES-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Fases</label>
-                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases"></select2>
-                            </div>
-
-                            <!--VISÃO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Visão</label>
-                                <select class="form-control" ng-model="filtros.visao">
-                                    <option value="vencimento">Vencimento</option>
-                                    <option value="andamento" selected="selected">Andamento</option>
-                                </select>
-                            </div>
-
-                            <!--BOTÃO-->
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                            </div>
-
+                        <!--CARTEIRAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Credores</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores"></select2>
                         </div>
+
+                        <!--FASES-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fases</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases"></select2>
+                        </div>
+
+                        <!--VISÃO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Visão</label>
+                            <select class="form-control" ng-model="filtros.visao">
+                                <option value="vencimento">Vencimento</option>
+                                <option value="andamento" selected="selected">Andamento</option>
+                            </select>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,7 +120,7 @@
 
             <!--RESUMO-->
             <div class="col-xs-12 col-md-4 margin-bottom">
-                <div class="card">
+                <div class="card" style="height:500px">
                     <div class="card-header">
                         <span class="card-header-title">Resumo</span>
                     </div>
@@ -143,16 +143,6 @@
                         <div class="small-box bg-green">
                             <div class="inner">
                                 <b>Pagamento R$:</b><span class="pull-right" ng-bind="dashboard.resumo.saldo_pago |  currency:'R$'"></span>
-                            </div>
-                        </div>
-                        <div class="small-box bg-green">
-                            <div class="inner">
-                                <b>Demais Parcelas R$:</b><span class="pull-right" ng-bind="dashboard.resumo.saldo_demais |  currency:'R$'"></span>
-                            </div>
-                        </div>
-                        <div class="small-box bg-blue">
-                            <div class="inner">
-                                <b>Efetividade R$:</b><span class="pull-right" ng-bind="dashboard.resumo.saldo_demais /  dashboard.resumo.saldo_acordo |  percentage:1 "></span>
                             </div>
                         </div>
                         <div class="small-box bg-blue">
@@ -178,7 +168,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.saldoRisco" height="418" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.saldoRisco"  axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -210,12 +200,12 @@
                                         <th>Efetividade Qtd</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="g in dashboard.grupo | groupBy: 'ds_carteira'">
+                                <tbody ng-repeat="g in dashboard.grupo | groupBy: 'credor'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{g[0].ds_carteira}}
+                                            {{g[0].credor}}
                                         </td>
                                         <td>{{g | sumByColumn: 'qtd_acordos'| number}}</td>
                                         <td>{{g | sumByColumn: 'saldo_acordo'| currency:'R$'}}</td>
@@ -225,7 +215,7 @@
                                     </tr>
 
                                     <tr ng-repeat="c in g" ng-show="showTbody">
-                                        <td>{{c.ds_fase}}</td>
+                                        <td>{{c.fase}}</td>
                                         <td>{{c.qtd_acordos | number}}</td>
                                         <td>{{c.saldo_acordo | number }}</td>
                                         <td>{{c.qtd_pagamentos | number}}</td>
@@ -245,23 +235,23 @@
 
         <!--SALDO RISCO-->
         @*<div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Saldo Risco - Pagamentos</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Saldo Risco - Pagamentos</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table1')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
-                            <i class="fa fa-file-excel-o"></i>
+                        <div class="card-body">
+                            <high-chart series="dashboard.saldoRisco" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.saldoRisco" axis-Categories="dashboard.diasPag" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
 
         <!--EFETIVIDADE-->
         <div class="row margin-bottom">
@@ -281,13 +271,13 @@
                                     plot-Options-Column-Data-Label="true" y-Axis1-Min="0"
                                     y-Axis1-Max="100"></high-chart>
                     </div>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--OPERADOR-->
-        <div class="row margin-bottom">
+    <!--OPERADOR-->
+    <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -306,13 +296,13 @@
             </div>
         </div>
 
-    </div>
+</div>
 
 
 
 <script>
 
-    angular.module('app').controller('ctrl-bradesco-efetividade', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-ibi-efetividade', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -324,7 +314,7 @@
             dtini_inc: $filter('date')(dataInc, "yyyy-MM-dd"),
             dtfim_inc: $filter('date')(newdate, "yyyy-MM-dd"),
             visao: 'andamento',
-            carteiras: '',
+            credores: '',
             fases: '',
 
         };
@@ -334,11 +324,11 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/bradesco/dashboard/filtros",
+            url: "/api/ibi/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = r.data.Table;
+            $scope.dashFiltros.credores = r.data.Table;
             $scope.dashFiltros.fases = r.data.Table1;
         });
 
@@ -347,7 +337,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/bradesco/dashboard/efetividade",
+                url: "/api/ibi/dashboard/efetividade",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -362,7 +352,7 @@
 
                 $scope.dashboard.grupo = r.data.Table4;
 
-
+                console.log($scope.dashboard.grupo);
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.saldoRisco = [{ name: 'Demais Parcelas', data: r.data.Table1.map(obj => (obj.valor_risco)) }];
                 $scope.dashboard.operador = r.data.Table3;
@@ -370,7 +360,7 @@
                         { name: 'acordo', type: 'column', data: r.data.Table2.map(obj => obj.qtd_acordo) },
                         { name: 'pagamento', type: 'column', data: r.data.Table2.map(obj => obj.qtd_pagto) },
                         { name: 'efetividade', type: 'spline', yAxis: 1, data: r.data.Table2.map(obj => (obj.qtd_pagto * 100.0 / obj.qtd_acordo).toFixed(2)/1 ) },
-                        
+
                 ];
             });
         }
@@ -384,4 +374,5 @@
     });
 
 </script>
+
 

@@ -158,5 +158,48 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/efetividade")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEfetvidade(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_imp = Convert.ToDateTime(form["dtini_inc"]);
+                DateTime dtfim_imp = Convert.ToDateTime(form["dtfim_inc"]);
+                DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
+                DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
+
+                string procedure = "sp_dashboard_efetividade_vencimento";
+
+                if (form["visao"] == "andamento")
+                    procedure = "sp_dashboard_efetividade_andamento";
+                if (form["visao"] == "vencimento")
+                    procedure = "sp_dashboard_efetividade_vencimento";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_IBI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_imp", dtini_imp.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_imp", dtfim_imp.ToString("yyyy-MM-dd"));
+                    parametros.Add("credores", credores);
+                    parametros.Add("fases", fases);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
