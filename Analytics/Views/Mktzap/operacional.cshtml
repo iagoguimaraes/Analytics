@@ -1,0 +1,230 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-mktzap-operacional">
+    <div ng-if="dashboard.status == 200">
+
+        <header class="page-header">
+            <div class="page-name">Dashboard Operacional</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12" ng-if="dadosFiltros.status === 200">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <br />
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--CAMPANHAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanhas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dadosFiltros.campanhas" style="width:100%"></select2>
+                        </div>
+
+                        <!--SETORES-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Setores</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.setores" dados="dadosFiltros.setores" style="width:100%"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--VISAO GERAL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">
+                            Produção por Operador
+                        </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <div class="col-xs-12">
+                                <d-table id="tabela" class="table table-striped table-bordered" style="width:100%" dados="dashboard.resumo"></d-table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL-->
+        <div class="modal fade" id="modal" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Detalhamento - <span ng-bind="dashboard.operadorSelecionado"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <high-chart series="dashboard.ocorrencia" type="pie" height="200" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+
+                            <div class="col-xs-12">
+                                <h4>PRODUCAO</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Atendido</th>
+                                                <th>Finalizado</th>
+                                                <th>CPC</th>
+                                                <th>CPCA</th>
+                                                <th>Negociação</th>
+                                                <th>Conversão</th>
+                                                <th>% Finalizado</th>
+                                                <th>TMA</th>
+                                                <th>TME</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="r in dashboard.tboperador">
+                                                <td>{{r.data}}</td>
+                                                <td>{{r.atendimento | number}}</td>
+                                                <td>{{r.finalizado | number}}</td>
+                                                <td>{{r.cpc | number}}</td>
+                                                <td>{{r.cpca | number}}</td>
+                                                <td>{{r.negociacao | number}}</td>
+                                                <td>{{r.negociacao / r.cpca | percentage:1}}</td>
+                                                <td>{{r.finalizado / r.atendimento | percentage:1}}</td>
+                                                <td>{{r.tma}}</td>
+                                                <td>{{r.tme}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-mktzap-operacional', function ($scope, $http, $filter) {
+
+        let newdate = new Date(new Date().setDate(new Date().getDate() - 1));
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.dadosFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
+            setores: '',
+        };
+        $scope.dashboard = {};
+
+        // carrega os filtros e colocar no scope
+        $http({
+            method: 'GET',
+            url: "/api/mktzap/filtros",
+        }).then(function success(r) {
+            $scope.dadosFiltros.status = r.status;
+
+            $scope.dadosFiltros.campanhas = r.data.Table;
+            $scope.dadosFiltros.setores = r.data.Table1;
+        });
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/mktzap/operacional",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = r.data.Table;
+            });
+        }
+
+        $(document).on('click', '#tabela tbody tr', function () {
+            let id = $(this).find('td:nth-child(1)').html();
+            $scope.dashboard.operadorSelecionado = $(this).find('td:nth-child(2)').html();
+
+            $scope.$apply(function () {
+                $scope.dashboard.tboperador = $scope.dashboard.dados.Table1.filter(r => r.id_usuario == id);
+                let ocorrencia = $scope.dashboard.dados.Table3.filter(r => r.id_usuario == id);
+                $scope.dashboard.ocorrencia = [{ name: 'Qtd', data: ocorrencia.map(obj => ({ name: obj.status, y: obj.qtd })) }];
+            });
+
+            $('#modal').modal('show');
+        });
+
+        $scope.carregarDashboard();
+
+    });
+</script>
+
+<style>
+    #tabela tbody tr {
+        cursor: pointer;
+    }
+
+        #tabela tbody tr:hover {
+            font-weight: bold;
+        }
+</style>
