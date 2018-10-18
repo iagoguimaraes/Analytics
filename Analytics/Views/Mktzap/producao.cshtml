@@ -92,10 +92,16 @@
                                         <b>Atendimento:</b><span class="pull-right" ng-bind="dashboard.resumo.atendimento | number"></span>
                                     </div>
                                 </div>
-                                <div class="small-box bg-aqua">
+                                <div class="small-box bg-blue">
                                     <div class="inner">
                                         <b>Finalizado:</b>
                                         <span class="pull-right" ng-bind="dashboard.resumo.finalizado | number"></span>
+                                    </div>
+                                </div>
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <b>Interação:</b>
+                                        <span class="pull-right" ng-bind="dashboard.resumo.interacao | number"></span>
                                     </div>
                                 </div>
                                 <div class="small-box bg-red">
@@ -121,15 +127,21 @@
                                         <b>NOVOS:</b><span class="pull-right" ng-bind="dashboard.resumo.atendimento_unq | number"></span>
                                     </div>
                                 </div>
-                                <div class="small-box bg-aqua">
+                                <div class="small-box bg-blue">
                                     <div class="inner">
                                         <b>%</b>
                                         <span class="pull-right" ng-bind="dashboard.resumo.finalizado / dashboard.resumo.atendimento | percentage:1"></span>
                                     </div>
                                 </div>
+                                <div class="small-box bg-aqua">
+                                    <div class="inner">
+                                        <b>%</b>
+                                        <span class="pull-right" ng-bind="dashboard.resumo.interacao / dashboard.resumo.finalizado | percentage:1"></span>
+                                    </div>
+                                </div>
                                 <div class="small-box bg-red">
                                     <div class="inner">
-                                        <b>%</b><span class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.finalizado | percentage:1"></span>
+                                        <b>%</b><span class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.interacao | percentage:1"></span>
                                     </div>
                                 </div>
                                 <div class="small-box bg-yellow">
@@ -160,7 +172,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvasjs config="dashboard.tabulacao" style="width: 100%; height: 300px"></canvasjs>
+                        <canvasjs config="dashboard.tabulacao" style="width: 100%; height: 360px"></canvasjs>
                     </div>
                 </div>
             </div>
@@ -171,7 +183,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Dia</span>
+                        <span class="card-header-title">Análise por Hora</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -198,6 +210,7 @@
                                         <th>Data</th>
                                         <th>Atendimento</th>
                                         <th>Finalizado</th>
+                                        <th>Interação</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Negociação</th>
@@ -211,6 +224,7 @@
                                         <td>{{hora.data}}</td>
                                         <td>{{hora.atendimento | number}}</td>
                                         <td>{{hora.finalizado | number}}</td>
+                                        <td>{{hora.interacao | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.negociacao | number}}</td>
@@ -224,6 +238,7 @@
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.atendimento | number}}</th>
                                         <th>{{dashboard.resumo.finalizado | number}}</th>
+                                        <th>{{dashboard.resumo.interacao | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
@@ -233,18 +248,21 @@
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>                        
+                        </div>
                         <!--GRAFICO-->
                         <div ng-show="graficoHora.exibir == 'true'">
                             <span class="pull-right">
                                 <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
                                     <option value="atendimento">Atendimento</option>
                                     <option value="finalizado">Finalizado</option>
+                                    <option value="interacao">Interação</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="negociacao">Negociação</option>
                                     <option value="%finalizado">% Finalizado</option>
-                                    <option value="conversao">Conversão</option>
+                                    <option value="%interacao">% Interação</option>
+                                    <option value="%cpc">% CPC</option>
+                                    <option value="%negociacao">% Negociacao</option>
                                     <option value="tme">TME</option>
                                 </select>
                             </span>
@@ -271,12 +289,14 @@
                             <select ng-model="mapa.indicador" ng-change="carregarMapa()">
                                 <option value="atendimento">Atendimento</option>
                                 <option value="finalizado">Finalizado</option>
+                                <option value="interacao">Interação</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="negociacao">Negociação</option>
                                 <option value="%finalizado">% Finalizado</option>
+                                <option value="%interacao">% Interação</option>
                                 <option value="%cpc">% CPC</option>
-                                <option value="%negociado">% Negociacao</option>
+                                <option value="%negociacao">% Negociacao</option>
                             </select>
                         </small>
                     </div>
@@ -349,11 +369,17 @@
             let dados = $scope.dashboard.hora;
             $scope.dashboard.horas = dados.map(obj => obj.data);
             switch ($scope.graficoHora.indicador) {
-                case 'conversao':
-                    $scope.graficoHora.dados = [{ name: 'conversao', data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;
                 case '%finalizado':
                     $scope.graficoHora.dados = [{ name: '%finalizado', data: dados.map(obj => (obj.finalizado * 100 / obj.atendimento).toFixed(1) * 1) }];
+                    break;
+                case '%interacao':
+                    $scope.graficoHora.dados = [{ name: '%interacao', data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1) * 1) }];
+                    break;
+                case '%cpc':
+                    $scope.graficoHora.dados = [{ name: '%cpc', data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1) * 1) }];
+                    break;
+                case '%negociacao':
+                    $scope.graficoHora.dados = [{ name: '%negociacao', data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.graficoHora.dados = [{ name: $scope.graficoHora.indicador, data: dados.map(obj => obj[$scope.graficoHora.indicador]) }];
@@ -367,10 +393,13 @@
                 case '%finalizado':
                     $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.finalizado * 100 / obj.atendimento).toFixed(1) }));
                     break;
-                case '%cpc':
-                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.finalizado).toFixed(1) }));
+                case '%interacao':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.interacao * 100 / obj.finalizado).toFixed(1) }));
                     break;
-                case '%negociado':
+                case '%cpc':
+                    $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.interacao).toFixed(1) }));
+                    break;
+                case '%negociacao':
                     $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.negociacao * 100 / obj.cpca).toFixed(1) }));
                     break;
                 default:
