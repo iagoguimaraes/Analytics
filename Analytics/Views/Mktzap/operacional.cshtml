@@ -86,6 +86,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
@@ -207,7 +210,7 @@
 
             $scope.$apply(function () {
                 $scope.dashboard.tboperador = $scope.dashboard.dados.Table1.filter(r => r.id_usuario == id);
-                let ocorrencia = $scope.dashboard.dados.Table3.filter(r => r.id_usuario == id);
+                let ocorrencia = $scope.dashboard.dados.Table2.filter(r => r.id_usuario == id);
                 $scope.dashboard.ocorrencia = [{ name: 'Qtd', data: ocorrencia.map(obj => ({ name: obj.status, y: obj.qtd })) }];
             });
 
@@ -215,6 +218,10 @@
         });
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>

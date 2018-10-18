@@ -182,5 +182,75 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage HoraHora(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string campanhas = form["campanhas"];
+                string setores = form["setores"];
+
+                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
+                DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanhas", _campanhas);
+                    parametros.Add("setores", _setores);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Producao(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string campanhas = form["campanhas"];
+                string setores = form["setores"];
+
+                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
+                DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanhas", _campanhas);
+                    parametros.Add("setores", _setores);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
