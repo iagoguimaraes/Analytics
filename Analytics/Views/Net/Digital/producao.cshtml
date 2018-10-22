@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-sky-producao">
+<div ng-controller="ctrl-net-producao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -56,11 +56,17 @@
                                 </div>
                             </div>
 
+                            <!--CAMPANHAS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
+                            </div>
+
 
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -298,19 +304,35 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-sky-producao', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-net-producao', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Produção';
-        dadosPagina.descricao = 'Sky Digital'
+        dadosPagina.descricao = 'Net Digital'
 
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
+        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanha: '',
 
         };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/net/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanha = r.data.Table1;
+
+        });
+
+
         $scope.dashboard = {};
         $scope.graficoDia = { indicador: 'promessa', dados: [], exibir: 'false' };
 

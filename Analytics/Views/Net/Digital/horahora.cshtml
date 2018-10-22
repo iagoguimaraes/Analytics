@@ -17,7 +17,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
 
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -56,11 +56,16 @@
                                 </div>
                             </div>
 
+                            <!--CAMPANHAS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
+                            </div>
 
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -311,10 +316,24 @@
         dadosPagina.descricao = 'Net Digital'
         $scope.showTbody = false;
 
+        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            campanha: '',
         };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/net/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanha = r.data.Table1;
+
+        });
 
         $scope.dashboard = {};
         $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };

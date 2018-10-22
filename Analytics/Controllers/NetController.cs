@@ -172,6 +172,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -179,6 +180,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanha", campanhas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -200,6 +202,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -207,8 +210,39 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanha", campanhas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_digital", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/btc")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanha", campanha);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
