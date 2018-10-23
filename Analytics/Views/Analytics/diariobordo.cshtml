@@ -69,6 +69,12 @@
                         <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="opcoes.carteiras"></select2>
                     </div>
 
+                    <!--FORNECEDOR-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Fornecedores</label>
+                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedores" dados="opcoes.fornecedores"></select2>
+                    </div>
+
                     <!--OCORRENCIAS-->
                     <div class="form-group">
                         <label class="control-sidebar-subheading">Ocorrencias</label>
@@ -127,7 +133,7 @@
                     <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{d.hora}}</span>
                 </span>
 
-                <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} | {{d.carteira}}</b></h3>
+                <h3 class="timeline-header bg-gray-light"><b>{{d.empresa}} | {{d.carteira}} | {{d.ds_fornecedor}} </b></h3>
 
                 <div class="timeline-body">
                     <i class="fa fa-exclamation-circle"></i>
@@ -208,6 +214,13 @@
                         <div class="form-group" ng-show="diario.grupo">
                             <label>Período Problema</label>
                             <select class="form-control" ng-model="diario.periodo" ng-options="p.id_horario as p.horario for p in opcoes.periodo">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="diario.grupo">
+                            <label>Fornecedor</label>
+                            <select class="form-control" ng-model="diario.fornecedor" ng-options="p.id_fornecedor as p.ds_fornecedor for p in opcoes.fornecedores">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
@@ -302,6 +315,12 @@
                             </select>
                         </div>
 
+                        <div class="form-group" ng-if="editdiario.grupo">
+                            <label>Fornecedor</label>
+                            <select class="form-control" ng-model="editdiario.fornecedor" ng-options="g.id_fornecedor as g.ds_fornecedor for g in opcoes.fornecedores ">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
 
                         <div class="form-group">
                             <label>Descrição</label>
@@ -340,6 +359,7 @@
             grupos: null,
             carteiras: null,
             empresas: null,
+            fornecedores: null,
             ocorrencias: null,
             usuarios: null,
             periodo: null
@@ -372,7 +392,8 @@
             $scope.opcoes.carteiras = r.data.Table2;
             $scope.opcoes.ocorrencias = r.data.Table3;
             $scope.opcoes.usuarios = r.data.Table4;
-            $scope.opcoes.periodo = r.data.Table5; 
+            $scope.opcoes.periodo = r.data.Table5;
+            $scope.opcoes.fornecedores = r.data.Table6;
 
         });
 
@@ -421,6 +442,12 @@
                 return false;
             }
 
+            if (!$scope.diario.fornecedor) {
+                $('[ng-model="diario.fornecedor"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
             $http({
                 method: 'POST',
                 url: "/api/diariobordo/inserir",
@@ -446,6 +473,7 @@
             $scope.editdiario.ocorrencia = r.id_ocorrencia;
             $scope.editdiario.descricao = r.descricao;
             $scope.editdiario.periodo = r.id_horario;
+            $scope.editdiario.fornecedor = r.id_fornecedor;
         }
 
         // editar uma ocorrencia
@@ -477,6 +505,12 @@
 
             if (!$scope.editdiario.periodo) {
                 $('[ng-model="editdiario.periodo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.fornecedor) {
+                $('[ng-model="editdiario.fornecedor"]').focus();
                 $event.stopPropagation();
                 return false;
             }

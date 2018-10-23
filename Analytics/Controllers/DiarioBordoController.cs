@@ -28,6 +28,7 @@ namespace Analytics.Controllers
                 string grupos = form["grupos"];
                 string empresas = form["empresas"];
                 string carteiras = form["carteiras"];
+                string fornecedores = form["fornecedores"];
                 string ocorrencias = form["ocorrencias"];
                 string usuarios = form["usuarios"];
 
@@ -38,6 +39,7 @@ namespace Analytics.Controllers
                 DataTable _empresas = JsonConvert.DeserializeObject<DataTable>(empresas);
                 DataTable _carteiras = JsonConvert.DeserializeObject<DataTable>(carteiras);
                 DataTable _ocorrencias = JsonConvert.DeserializeObject<DataTable>(ocorrencias);
+                DataTable _fornecedores = JsonConvert.DeserializeObject<DataTable>(fornecedores);
                 DataTable _usuarios = JsonConvert.DeserializeObject<DataTable>(usuarios);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
@@ -50,6 +52,7 @@ namespace Analytics.Controllers
                     parametros.Add("grupos", _grupos);
                     parametros.Add("empresas", _empresas);
                     parametros.Add("carteiras", _carteiras);
+                    parametros.Add("fornecedores", _fornecedores);
                     parametros.Add("ocorrencias", _ocorrencias);
                     parametros.Add("usuarios", _usuarios);
 
@@ -102,6 +105,7 @@ namespace Analytics.Controllers
                 int id_grupo = Convert.ToInt32(form["grupo"]);
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
+                int id_fornecedor = Convert.ToInt32(form["fornecedor"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 int id_horario = Convert.ToInt32(form["periodo"]);
                 string descricao = form["descricao"];
@@ -122,6 +126,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
+                    parametros.Add("id_fornecedor", id_fornecedor);
                     parametros.Add("id_usuario", sessao.id_usuario);
                     parametros.Add("descricao", descricao);
                     parametros.Add("id_horario", id_horario);
@@ -151,6 +156,7 @@ namespace Analytics.Controllers
                 int id_grupo = Convert.ToInt32(form["grupo"]);
                 int id_empresa = Convert.ToInt32(form["empresa"]);
                 int id_carteira = Convert.ToInt32(form["carteira"]);
+                int id_fornecedor = Convert.ToInt32(form["fornecedor"]);
                 int id_ocorrencia = Convert.ToInt32(form["ocorrencia"]);
                 int id_horario = Convert.ToInt32(form["periodo"]);
                 string descricao = form["descricao"];
@@ -169,6 +175,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_grupo", id_grupo);
                     parametros.Add("id_empresa", id_empresa);
                     parametros.Add("id_carteira", id_carteira);
+                    parametros.Add("id_fornecedor", id_fornecedor);
                     parametros.Add("id_ocorrencia", id_ocorrencia);
                     parametros.Add("id_horario", id_horario);
                     parametros.Add("id_usuario", sessao.id_usuario);
