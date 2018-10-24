@@ -8,19 +8,27 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Gráfico Comparativo</div>
+            <div class="page-name">Gráfico Comparativo {{conceito.string}}</div>
+            
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
+            <div class="page-menu-button" ng-click="carregarDashboard()">
+                <input type="button" class="btn btn-danger" ng-click="filtros.conceito = '_uniq'" value="UNIQ" />                
+            </div>
+            <div class="page-menu-button" ng-click="carregarDashboard()">
+                <input type="button" class="btn btn-danger" ng-click="filtros.conceito = ''" value="TOTAL" />
+            </div>                
         </header>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
-                    <div class="card-header">
+                    <div class="card-header">                        
                         <span class="card-header-title">Filtros</span>
+
                         <div class="card-header-button card-header-close">
                             <i class="fa fa-close"></i>
                         </div>
@@ -141,8 +149,6 @@
                                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
                                     </div>
 
-
-
                                     <!--BOTÃO-->
                                     <div class="form-group">
                                         <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -260,7 +266,6 @@
 
                                 </fieldset>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -427,8 +432,8 @@
                                 <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-red' : 'bg-green'">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
-                                        <p>{{dashboard.esforco.p1 | megaNumber }} vs {{dashboard.esforco.p2 | megaNumber }}</p>
-                                        <p><h5> Dif : {{dashboard.difesforco.dif | number : 2 }} </h5></p>
+                                        <p>{{dashboard.esforco.p1 | number : 0 }} vs {{dashboard.esforco.p2 | number : 0 }}</p>
+                                        <p><h5> Dif : {{dashboard.difesforco.dif | number : 0 }} </h5></p>
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-thumbs-o-up"></i>
@@ -482,10 +487,13 @@
             supervisor_2: '',
 
             visao: 'hora',
+            conceito: '',
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
+        $scope.conceito = {string : ''}
 
         // carregar os filtros
         $http({
@@ -499,6 +507,8 @@
             $scope.dashFiltros.segmentacao = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.tenure = data.Table3;
+
+            
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -513,6 +523,15 @@
 
                 $scope.carregarGrafico();
                 $scope.carregarComparativo();
+
+                console.log($scope.filtros.conceito)
+
+                if ($scope.filtros.conceito == '') {
+                    $scope.conceito.string = '- Total';
+                } else {
+                    $scope.conceito.string = '- Uniq';
+                }
+                
             });
         }
 
