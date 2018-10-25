@@ -210,6 +210,7 @@
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
+                                <option value="ocupacao">Ocupação</option>
                             </select>
                         </small>
                     </div>
@@ -307,6 +308,9 @@
                     break;
                 case 'conversao':
                     $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                case 'ocupacao':
+                    $scope.dashboard.grafico = [{ name: 'ocupacao', data: dados.map(obj => (obj.falado * 100 / obj.logado).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
