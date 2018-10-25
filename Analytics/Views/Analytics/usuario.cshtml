@@ -65,7 +65,7 @@
                         <div class="form-group" ng-if="grupos">
                             <label>Grupo</label>
                             <div>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="usuario.grupo" dados="grupos" style="width:100%;"></select2>
+                                <select2 id="insert-select2"  class="form-control" data-placeholder="Selecione" ng-model="usuario.grupo" dados="grupos" style="width:100%;"></select2>
                             </div>                            
                         </div>
 
@@ -96,14 +96,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" ng-click="refresh()" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                     <h4 class="modal-title">Editar Usuário</h4>
                 </div>
                 <div class="modal-body">
 
-                    <form role="form">
+                    <form role="form" id="teste">
 
                         <input type="hidden" ng-model="editdiario.id_usuario" />
 
@@ -166,17 +166,25 @@
                 method: 'GET',
                 url: "/api/usuario/obter",
             }).then(function success(r) {
+
                 $scope.usuarios = r.data.Table;
+                
             });
+
+            
         }
         $scope.carregarUsuarios();
+
+        $scope.refresh = function () {
+            location.reload();
+        }
 
         // carregar os grupos
         $http({
             method: 'GET',
             url: "/api/acessogrupo/grupo/consultar",
         }).then(function success(r) {            
-            $scope.grupos = r.data.Table.map(g => ({ id_usuario: g.id_grupo, descricao: g.descricao }));
+            $scope.grupos = r.data.Table.map(g => ({ id_grupo: "" + g.id_grupo, descricao: g.descricao }));
         });
 
         // INSERIR USUARIO
@@ -187,6 +195,7 @@
             grupo: null,
             cliente: false
         }; // objeto para inserir usuario
+
         $scope.inserirUsuario = function () {
             $http({
                 method: 'POST',
@@ -200,7 +209,11 @@
                     grupo: null,
                     cliente: false
                 };
+                
+                location.reload();//eliminar o cache dos grupos
                 $scope.carregarUsuarios();
+               
+                
             });
         }
 
@@ -216,10 +229,12 @@
             });
         }
 
+
         // ao clicar em um usuário, carregar modal
         $(document).on('click', '.table tbody tr', function () {
             // obtem o id da usuário para buscar
             let id = $(this).find('td:nth-child(1)').html();
+            
 
             // consultar dados do usuario
             $http({
@@ -227,23 +242,37 @@
                 url: "/api/usuario/consultar",
                 data: { id_usuario: id }
             }).then(function success(r) {
+
                 $scope.editusuario.id_usuario = r.data.Table[0].id_usuario;
                 $scope.editusuario.nome = r.data.Table[0].nome;
                 $scope.editusuario.cpf = r.data.Table[0].ds_cpf;
                 $scope.editusuario.login = r.data.Table[0].login;
                 $scope.editusuario.cliente = r.data.Table[0].cliente;
                 $scope.editusuario.ativo = r.data.Table[0].ativo;
+                let valida = r.data.Table[0].grupos;
+                //console.log(valida);
 
-                let grupos = r.data.Table[0].grupos.split(',');
-                $scope.editusuario.grupo = JSON.stringify(grupos.map(g => ({ id: g })));
-                $('#editusuario-select2').val(grupos).trigger('change.select2');
+                if (!(valida === null)) {
 
-                $('#modal-edit').modal('show');
+                    let grupos = r.data.Table[0].grupos.split(',');
+                    $scope.editusuario.grupo = JSON.stringify(grupos.map(g => ({ id: g })));
+                    //console.log($scope.editusuario.grupo);
+                    //console.log(grupos);
+                    $('#editusuario-select2').val(grupos).trigger('change.select2');
+                };
+                    
+              
+                 $('#modal-edit').modal('show');
+                
+
+               
             });
 
         });
 
     });
+
+
 </script>
 
 <style>

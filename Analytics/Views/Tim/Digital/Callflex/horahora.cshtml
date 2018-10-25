@@ -85,19 +85,19 @@
                             <span class="description-text">Discado</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.data.Table[0].contato | megaNumber"></h5>
                             <span class="description-text">Contato</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.data.Table[0].cpc | megaNumber"></h5>
                             <span class="description-text">CPC</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.data.Table[0].cpca | number"></h5>
                             <span class="description-text">CPCA</span>
@@ -109,6 +109,12 @@
                             <span class="description-text">Promessa</span>
                         </div>
                     </div>
+                    @*<div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.data.Table[0].valor_promessa | currency: 'R$ '"></h5>
+                            <span class="description-text">R$ Promessa</span>
+                        </div>
+                    </div>*@
                 </div>
 
                 <div class="row" style="background-color: rgb(1, 70, 145); color: white" >
@@ -136,12 +142,18 @@
                             <span class="description-text">CPCA PA</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2  border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.data.Table[0].promessa_pa | number"></h5>
                             <span class="description-text">Promessa PA</span>
                         </div>
                     </div>
+                    @*<div class="col-sm-2  border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.data.Table[0].valor_pa | currency: 'R$ '"></h5>
+                            <span class="description-text">R$ Promessa PA</span>
+                        </div>
+                    </div>*@
                 </div>
 
                 <div class="row">
@@ -205,6 +217,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        @*<th>R$ Promessa</th>*@
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -219,6 +232,7 @@
                                         <td>{{produto.cpc | number}}</td>
                                         <td>{{produto.cpca | number}}</td>
                                         <td>{{produto.promessa | number}}</td>
+                                        <!-- <td>{{produto.valor_promessa | currency: 'R$ '}}</td>  -->
                                         <td>{{produto.contato / produto.discado | percentage:1}}</td>
                                         <td>{{produto.cpc / produto.contato | percentage:1}}</td>
                                         <td>{{produto.cpca / produto.cpc | percentage:1}}</td>
@@ -233,6 +247,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                       <!--  <th>{{dashboard.resumo.valor_promessa | currency: 'R$ '}}</th>  -->
                                         <th>{{dashboard.resumo.contato / dashboard.data.Table[0].discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.data.Table[0].contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.data.Table[0].cpc | percentage: 1}}</th>
@@ -283,6 +298,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        @*<th>R$ Promessa</th>*@
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -297,6 +313,7 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
+                                        @*<td>{{hora.valor_promessa | currency: 'R$ '}}</td>*@
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -311,6 +328,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        @*<th>{{dashboard.resumo.valor_promessa | currency: 'R$ '}}</th>*@
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -333,6 +351,7 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
+                                    @*<option value="valor_promessa">R$ Promessa</option>*@
                                 </select>
                             </span>
                             <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>

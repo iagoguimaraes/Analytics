@@ -141,17 +141,17 @@ namespace Analytics.Controllers
 
 
 
-                string procedure = "sp_dashboard_comparativo_hora";
+                string procedure = "sp_dashboard_comparativo_hora" + form["conceito"] + "";
                 if (form["visao"] == "hora")
-                    procedure = "sp_dashboard_comparativo_hora";
+                    procedure = "sp_dashboard_comparativo_hora" + form["conceito"] + "";
                 if (form["visao"] == "dia")
-                    procedure = "sp_dashboard_comparativo_dia";
+                    procedure = "sp_dashboard_comparativo_dia" + form["conceito"] + "";
                 if (form["visao"] == "dia_semana")
-                    procedure = "sp_dashboard_comparativo_dia_semana";
+                    procedure = "sp_dashboard_comparativo_dia_semana" + form["conceito"] + "";
                 if (form["visao"] == "semana")
-                    procedure = "sp_dashboard_comparativo_semana";
+                    procedure = "sp_dashboard_comparativo_semana" + form["conceito"] + "";
                 if (form["visao"] == "mes")
-                    procedure = "sp_dashboard_comparativo_mes";
+                    procedure = "sp_dashboard_comparativo_mes" + form["conceito"] + "";
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
