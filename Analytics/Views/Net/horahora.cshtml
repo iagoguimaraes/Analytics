@@ -7,7 +7,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora</div>
+            <div class="page-name">Hora Hora - Net Tele</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -55,10 +55,16 @@
                                 </div>
                             </div>
 
-                            <!--EMPRESA-->
+                            <!--SUPERVISOR-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Empresa</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores" style="width:100%"></select2>
+                            </div>
+
+                            <!--EQUIPES-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Equipes</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -161,7 +167,7 @@
         </div>
 
         <!--TABELA SUPERVISOR/EQUIPE-->
-        <div ng-if="dashboard.gridCh" class="row margin-bottom" >
+        <div class="row margin-bottom" >
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -298,7 +304,7 @@
         </div>
 
         <!--TABELA EMPRESA/CARTEIRA-->
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -369,7 +375,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!--GRAFICO POR HORA-->
         <div class="row margin-bottom">
@@ -391,6 +397,7 @@
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
+                                <option value="valor_promessa">R$ Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -437,9 +444,20 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            empresas: '',
+            empresas: '[{ "id": "5" }]',
+            equipes: '',
+            supervisores: ''
         }
+        //console.log($scope.filtros);
         $scope.grafico = { indicador: 'promessa' };
+
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
 
         // carregar os filtros
         $http({
@@ -451,7 +469,14 @@
             $scope.dashFiltros.status = r.status;
 
             $scope.dashFiltros.empresas = r.data.Table;
-            
+            $scope.dashFiltros.supervisores = r.data.Table2;
+            $scope.dashFiltros.equipes = r.data.Table3;
+
+            delay(function () {
+                $scope.filtros.empresas = '[{ "id": "5" }]';
+                $('#empresas').val('5').trigger('change.select2');
+            }, 5000);
+
 
         });
 

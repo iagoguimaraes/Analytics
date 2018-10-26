@@ -9,7 +9,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Produção</div>
+            <div class="page-name">Produção - Net Tele</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -57,10 +57,16 @@
                                 </div>
                             </div>
 
-                            <!--EMPRESA-->
+                            <!--SUPERVISOR-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Empresa</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores" style="width:100%"></select2>
+                            </div>
+
+                            <!--EQUIPES-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Equipes</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -209,7 +215,7 @@
 
 
             <!--TABELA SUPERVISOR/EQUIPE-->
-            <div ng-if="dashboard.gridCh" class="row margin-bottom">
+            <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
@@ -345,7 +351,9 @@
             $scope.filtros = {
                 dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                empresas: '',
+                empresas: '[{ "id": "5" }]',
+                equipes: '',
+                supervisores: ''
             };
 
             $scope.dashboard = { gridCh: false };
@@ -363,8 +371,23 @@
                 $scope.dashFiltros.status = r.status;
 
                 $scope.dashFiltros.empresas = data.Table;
+                $scope.dashFiltros.supervisores = r.data.Table2;
+                $scope.dashFiltros.equipes = r.data.Table3;
+
+                delay(function () {
+                    $scope.filtros.empresas = '[{ "id": "5" }]';
+                    $('#empresas').val('5').trigger('change.select2');
+                }, 5000);
 
             });
+
+            var delay = (function () {
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
 
             // obtem filtros do escopo e carrega os dados do dashboard
             $scope.carregarDashboard = function () {
