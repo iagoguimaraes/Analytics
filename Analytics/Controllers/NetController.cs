@@ -44,6 +44,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
@@ -53,6 +55,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresas", empresas);
+                    parametros.Add("supervisores", supervisores);
+                    parametros.Add("equipes", equipes);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -75,6 +79,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -83,6 +89,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresas", empresas);
+                    parametros.Add("supervisores", supervisores);
+                    parametros.Add("equipes", equipes);
 
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
@@ -153,6 +161,38 @@ namespace Analytics.Controllers
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_mktzapFiltros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/carteira")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardCarteira(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
