@@ -385,6 +385,40 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/receptivo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardReceptivo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                string hrini = form["hrini"];
+                string hrfim = form["hrfim"];
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString(string.Format("yyyy-MM-dd {0}:00", hrini)));
+                    parametros.Add("dtfim", dtfim.ToString(string.Format("yyyy-MM-dd {0}:59", hrfim)));
+                    parametros.Add("produtos", produtos);
+                    parametros.Add("faixas", atrasos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_horahora_rec", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 
 
