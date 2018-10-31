@@ -253,6 +253,32 @@
                 </div>
             </div>
         </div>
+
+        <!--ANALISE POR HORA-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.demanda.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true" type="area"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
     </div>
 </div>
 
@@ -268,6 +294,9 @@
         };
 
         $scope.dashboard = {};
+        $scope.hora = {
+            indicador: 'Nao Informado'
+        };
 
         $scope.carregarDashboard = function () {
             $http({
@@ -282,7 +311,17 @@
                 $scope.dashboard.dia = r.data.Table1;
                 $scope.dashboard.canal = [{ name: 'Atendimento', data: r.data.Table2.map(obj => ({ name: obj.canal, y: obj.atendimento })) }];
                 $scope.dashboard.diagrama = r.data.Table3;
+
+                // DEMANDA
+                let dados;
+                dados = $scope.dashboard.demanda = r.data.Table4;
+                $scope.dashboard.datas = dados.map(obj => obj.hora);
+                $scope.dashboard.demanda.grafico = [ { name: 'atendimento', data: dados.map(obj => (obj.atendimento)) }
+                                                   , { name: 'validou cpf', data: dados.map(obj => (obj.validou_cpf)) }
+                                                   , { name: 'emitiu boleto', data: dados.map(obj => (obj.emitiu)) }]
+
             });
+
         }
 
         // extrair dados para excel
