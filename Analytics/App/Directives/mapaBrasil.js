@@ -34,6 +34,7 @@
                     }).addListener("clickMapObject", function (event) {
                         //document.getElementById("info").innerHTML = 'Clicked ID: ' + event.mapObject.id + ' (' + event.mapObject.title + ')';
                         ngModelCtrl.$setViewValue(event.mapObject.id);
+
                     });                  
 
                 }               
