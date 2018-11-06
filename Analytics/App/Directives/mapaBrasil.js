@@ -2,11 +2,12 @@
     return {
         restrict: 'E',
         replace: true,
+        require: '^?ngModel',
         scope: {
             dados: '=',
         },
         template: '<div></div>',
-        link: function (scope, element) {
+        link: function (scope, element, attrs, ngModelCtrl) {
             scope.$watch('dados', function (dados) {
                 if (dados) {
                     AmCharts.makeChart(element[0], {
@@ -20,8 +21,9 @@
                             areas: dados
                         },
                         areasSettings: {
-                            autoZoom: true,
-                            balloonText: "[[title]]: <strong>[[value]]</strong>",
+                            autoZoom: false,
+                            selectable: true,
+                            balloonText: "[[title]]: <strong>[[value]] </strong>", //[[percent]]%
                         },
                         valueLegend: {
                             right: 10,                          
@@ -29,9 +31,14 @@
                         zoomControl: {
                             minZoomLevel: 0.9
                         },
-                    });
+                    }).addListener("clickMapObject", function (event) {
+                        //document.getElementById("info").innerHTML = 'Clicked ID: ' + event.mapObject.id + ' (' + event.mapObject.title + ')';
+                        ngModelCtrl.$setViewValue(event.mapObject.id);
+                    });                  
+
                 }               
             });
+
         }
     }
 });
