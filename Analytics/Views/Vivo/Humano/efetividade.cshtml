@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                         </div>
-                        <mapa-brasil style="height: 700px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        <mapa-brasil style="height: 500px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -200,8 +200,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-
-                        <high-chart series="dashboard.carteira" type="pie" height="700px" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
+                        @*<high-chart series="dashboard.carteira" type="bar" height="660px" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>*@
                     </div>
 
                 </div>
@@ -282,13 +282,14 @@
                 let data = r.data;
 
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.carteiras = r.data.Table3.map(obj => obj.carteira);
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [value], efet_porcentagem [percent], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
-                $scope.dashboard.carteira = [{ name: 'Quantidade', data: data.Table3.map(obj => ({ name: obj.carteira, y: obj.qtd_pago })) }];
+                $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
 
                 $scope.dashboard.qtDia = [
                   { name: 'Promessa', type: "column", data: data.Table1.map(obj => (obj.qtd_promessa)) }
