@@ -200,8 +200,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
-                        @*<high-chart series="dashboard.carteira" type="bar" height="660px" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>*@
+                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>                       
                     </div>
 
                 </div>
@@ -288,7 +287,7 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [value], efet_porcentagem [percent], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
                 $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
 
                 $scope.dashboard.qtDia = [
