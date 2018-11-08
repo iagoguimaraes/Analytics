@@ -310,6 +310,26 @@
             </div>
         </div>
 
+        <!--OCORRENCIAS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Ocorrências Tabuladas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body" ng-if="dashboard.ocorrencia">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.ocorrencia" scroll-collapse="true" scroll-y="324px" order="[[2,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -343,6 +363,7 @@
                 $scope.dashboard.horahora = data.Table1;
                 $scope.dashboard.classe = data.Table2;
                 $scope.dashboard.operador = data.Table3;
+                $scope.dashboard.ocorrencia = data.Table4;
 
                 $scope.carregarGraficoHora();
             });
