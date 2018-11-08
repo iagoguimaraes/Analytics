@@ -467,7 +467,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/riachuelo/dashboard/humano/filtros",
+            url: "/api/net/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
@@ -482,7 +482,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/riachuelo/dashboard/humano/comparativo",
+                url: "/api/net/dashboard/comparativo",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -567,6 +567,7 @@
             $scope.dashboard.diftxapv = { dif: calculo.txapv1 - calculo.txapv2 };
             $scope.dashboard.difconversao = { dif: calculo.conversao1 - calculo.conversao2 };
             $scope.dashboard.difesforco = { dif: calculo.esforco1 - calculo.esforco2 };
+            console.log($scope.dashboard.difesforco);
 
         }
 
