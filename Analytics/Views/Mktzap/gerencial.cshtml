@@ -353,12 +353,18 @@
                 let webchat = canal.filter(c => c.canal == 'WebChat')[0];
                 let email = canal.filter(c => c.canal == 'Email')[0];
                 let facebook = canal.filter(c => c.canal == 'Facebook')[0];
-                $scope.dashboard.canal_tabela = [
-                    { canal: 'Whatsapp', atendimento: whatsapp.atendimento, tma: whatsapp.tma, tme: whatsapp.tme },
-                    { canal: 'Webchat', atendimento: webchat.atendimento, tma: webchat.tma, tme: webchat.tme },
-                    { canal: 'Email', atendimento: email.atendimento, tma: email.tma, tme: email.tme },
-                    { canal: 'Facebook', atendimento: facebook.atendimento, tma: facebook.tma, tme: facebook.tme },
-                ];
+
+                $scope.dashboard.canal_tabela = [];          
+
+                if (whatsapp)
+                    $scope.dashboard.canal_tabela.push({ canal: 'Whatsapp', atendimento: whatsapp.atendimento, tma: whatsapp.tma, tme: whatsapp.tme });
+                if (webchat)
+                    $scope.dashboard.canal_tabela.push({ canal: 'Webchat', atendimento: webchat.atendimento, tma: webchat.tma, tme: webchat.tme });
+                if (email)
+                    $scope.dashboard.canal_tabela.push({ canal: 'Email', atendimento: email.atendimento, tma: email.tma, tme: email.tme });
+                if (facebook)
+                    $scope.dashboard.canal_tabela.push({ canal: 'Facebook', atendimento: facebook.atendimento, tma: facebook.tma, tme: facebook.tme });
+
 
                 // OCORRENCIA
                 $scope.dashboard.tabulacao = {
