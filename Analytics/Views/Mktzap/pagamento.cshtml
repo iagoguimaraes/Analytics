@@ -1,0 +1,254 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<div ng-controller="ctrl-mktzap-pagamento">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Pagamento</div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+            <i class="fa fa-filter"></i>
+            FILTROS
+        </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="extrair('Table')">
+            <i class="fa fa-file-excel-o"></i>
+            EXTRAIR
+        </div>
+    </header>
+
+    <!-- FILTROS -->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div id="filtros-window" class="card display-none">
+                <div class="card-header">
+                    <span class="card-header-title">Filtros</span>
+                    <div class="card-header-button card-header-close">
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--FILTROS 2-->
+    <div class="col-xs-12 col-md-8 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Filtros</span>
+            </div>
+            <div class="card-body" style="height: 130px">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4" ng-if="dashboard.dimensao.empresa">
+                        <label class="control-sidebar-subheading">Empresa</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.empresa" dados="dashboard.dimensao.empresa" ng-change="aplicarFiltros()"></select22>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4" ng-if="dashboard.dimensao.tipo">
+                        <label class="control-sidebar-subheading">Tipo</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.tipo" dados="dashboard.dimensao.tipo" ng-change="aplicarFiltros()"></select22>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4" ng-if="dashboard.dimensao.operador">
+                        <label class="control-sidebar-subheading">Operador</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operador" dados="dashboard.dimensao.operador" ng-change="aplicarFiltros()"></select22>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--VALOR TOTAL-->
+    <div class="col-xs-12 col-md-4 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Pagamento Total</span>
+            </div>
+            <div class="card-body">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>R$ {{dashboard.total | number:0}}</h3>                    
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+
+    <!--OPERADOR-->
+    <div class="col-xs-12 col-md-8 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Operador</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.operador" axis-Categories="dimensao.operador" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
+    </div>
+
+    <!--TIPO-->
+    <div class="col-xs-12 col-md-4 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Tipo</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.tipo" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+            </div>
+        </div>
+    </div>
+
+    <!--POR DIA-->
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Pagamento por Dia</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.dia" axis-Categories="dimensao.dia" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+            </div>
+        </div>
+    </div>
+
+    <!--EMPRESA-->
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Empresa</span>
+                <div class="card-header-button card-header-expand">
+                    <i class="fa fa-expand"></i>
+                </div>
+            </div>
+            <div class="card-body">
+                <high-chart series="dashboard.empresa" axis-Categories="dimensao.empresa" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-mktzap-pagamento', function ($scope, $http, $filter, cubo) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+        $scope.dashboard = { dimensao: {}, filtros: {} };
+        $scope.dimensao = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/mktzap/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.status;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+            });
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.operador = cubo.obterDimensao('operador');
+            $scope.dashboard.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dashboard.dimensao.tipo = cubo.obterDimensao('tipo');
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.dia = cubo.obterDimensao('data');
+            $scope.dimensao.operador = cubo.obterDimensao('operador');
+            $scope.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dimensao.tipo = cubo.obterDimensao('tipo');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            $scope.dashboard.total = alasql('select sum(vlr) vlr from ?', [dados])[0].vlr
+
+            let operador = alasql('select operador, sum(vlr) vlr from ? group by operador order by 2 desc', [dados]);
+            $scope.dashboard.operador = [{ name: 'valor', data: operador.map(obj => obj.vlr) }];
+
+            let tipo = alasql('select tipo, sum(vlr) vlr from ? group by tipo', [dados]);
+            $scope.dashboard.tipo = [{ name: 'valor', data: tipo.map(obj => ({ name: obj.tipo, y: obj.vlr })) }];
+
+            let dia = alasql('select data, sum(vlr) vlr from ? group by data', [dados]);
+            $scope.dashboard.dia = [{ name: 'valor', data: dia.map(obj => obj.vlr) }];
+
+            let empresa = alasql('select empresa, sum(vlr) vlr from ? group by empresa', [dados]);
+            $scope.dashboard.empresa = [{ name: 'valor', data: empresa.map(obj => obj.vlr) }];
+                    
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('operador', $scope.dashboard.filtros.operador);
+            cubo.filtrar('empresa', $scope.dashboard.filtros.empresa);
+            cubo.filtrar('tipo', $scope.dashboard.filtros.tipo);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
