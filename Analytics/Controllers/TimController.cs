@@ -655,8 +655,8 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 string hrini = form["hrini"];
                 string hrfim = form["hrfim"];
-                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
+                //DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -664,8 +664,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString(string.Format("yyyy-MM-dd {0}:00", hrini)));
                     parametros.Add("dtfim", dtfim.ToString(string.Format("yyyy-MM-dd {0}:59", hrfim)));
-                    parametros.Add("empresas", empresas);
-                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("filas", filas);
+                    //parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rec", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
