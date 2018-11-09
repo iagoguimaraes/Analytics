@@ -104,18 +104,24 @@
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                                <span class="description-text">Discado</span>
+                            </div>
+                        </div>*@
+
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                            <span class="description-text">Discado</span>
+                           
                         </div>
-                    </div>*@
-                    <div class="col-sm-3 border-right">
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
                             <span class="description-text">Contato</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
                             <span class="description-text">CPC</span>
@@ -127,7 +133,7 @@
                             <span class="description-text">CPCA</span>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
                             <span class="description-text">Promessa</span>
@@ -137,18 +143,26 @@
 
                 <div class="row bg-blue">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                                <span class="description-text">Hit Rate</span>
+                            </div>
+                        </div>*@
+
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                            <span class="description-text">Hit Rate</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.qtd_op | number"></h5>
+                            <span class="description-text">Operadores</span>
                         </div>
-                    </div>*@
-                    <div class="col-sm-3 border-right">
+                    </div>
+
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
                             <span class="description-text">Tx Loc</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
                             <span class="description-text">Tx Apv</span>
@@ -160,10 +174,50 @@
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$ '"></h5>
                             <span class="description-text">Valor Promessa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
+                    @*<div class="col-sm-2 col-sm-offset-1 border-right">
+                <div class="description-block">
+                    <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                    <span class="description-text">Discado</span>
+                </div>
+            </div>*@
+
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.contato / dashboard.resumo.qtd_op) | number : 0"></h5>
+                            <span class="description-text">Contato OP</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.cpc / dashboard.resumo.qtd_op) | number : 0"></h5>
+                            <span class="description-text">CPC OP</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.cpca / dashboard.resumo.qtd_op) | number : 0"></h5>
+                            <span class="description-text">CPCA OP</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.promessa / dashboard.resumo.qtd_op) | number : 0"></h5>
+                            <span class="description-text">Promessa OP</span>
                         </div>
                     </div>
                 </div>
@@ -202,6 +256,7 @@
                                 <thead>
                                     <tr>
                                         <th>Hora</th>
+                                        <th>Operadores</th>
                                         @*<th>Discado</th>*@
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -217,6 +272,7 @@
                                 <tbody>
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
+                                        <td>{{hora.qtd_op}}</td>
                                         @*<td>{{hora.discado | number}}</td>*@
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
@@ -233,6 +289,7 @@
                                     <tr>
                                         <th>Total</th>
                                         @*<th>{{dashboard.resumo.discado | number}}</th>*@
+                                        <th>{{dashboard.resumo.qtd_op | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
@@ -270,7 +327,7 @@
                 </div>
             </div>
         </div>
-               
+
         <!--GRAFICO ALEGA PAGAMENTO-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
