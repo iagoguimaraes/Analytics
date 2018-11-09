@@ -3,7 +3,8 @@
 }
 
 
-<div ng-controller="ctrl-riachuelo-receptivo">
+
+<div ng-controller="ctrl-tim-receptivo">
     <div ng-if="dashboard.status === 200">
 
         <!-- HEADER-->
@@ -149,7 +150,7 @@
 
         <!--RESUMO-->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header" style="background: url('/Content/Images/Riachuelo/oscar_freire.jpg') center center; ">
+            <div class="widget-user-header" style="background: url('/Content/Images/Tim/bg.png') center center; ">
             </div>
             <div class="box-footer">
 
@@ -186,7 +187,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="background-color: black; color:white">
+                <div class="row" style="background-color: #014691; color:white">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <span class="description-text">NS (20s)</span>
@@ -410,9 +411,9 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-riachuelo-receptivo', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-tim-receptivo', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'Riachuelo - Humano'
+        dadosPagina.descricao = 'Tim - Humano'
 
         $scope.dashboard = {};
         $scope.dashFiltros = {};
@@ -435,7 +436,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/riachuelo/dashboard/humano/filtros",
+            url: "/api/tim/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
@@ -449,16 +450,16 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/riachuelo/dashboard/humano/receptivo",
+                url: "/api/tim/dashboard/humano/receptivo",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
-                
+
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
                 $scope.dashboard.diadia = r.data.Table3;
-                
+
                 $scope.dashboard.graficohora = [
                                     { name: 'atendido', type: 'column', data: r.data.Table1.map(obj => obj.atendido) },
                                     { name: 'abandonado', type: 'column', data: r.data.Table1.map(obj => obj.abandonado) },
@@ -466,7 +467,7 @@
                 ];
 
                 $scope.dashboard.fila = r.data.Table2;
-                $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: obj.atendido })) }];
+                $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_empresa, y: obj.atendido })) }];
                 $scope.dashboard.tempos = r.data.Table5.map(obj => obj.tempo_fila);
                 $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table5.map(obj => obj.chamada) }]
 
@@ -483,3 +484,4 @@
 
     });
 </script>
+
