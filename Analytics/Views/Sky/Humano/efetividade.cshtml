@@ -1,0 +1,311 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-sky-efetividade">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Efetividade</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATAS-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA INCIAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA FINAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Carteira-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                        </div>
+
+                        <!--Segmentacao-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentacao</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
+                        </div>
+
+                        <!--Tenure-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tenure</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure"></select2>
+                        </div>
+
+                        <!--SUPERVISOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Supervisor</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago | number"></h3>
+                        <h4 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h4>
+                        <p>Pagamentos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-maroon-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number"></h3>
+                        <h4 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$ '"></h4>
+                        <p>Promessas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="( dashboard.resumo.qtd_pago / dashboard.resumo.qtd_promessa ) | percentage : 1"></h3>
+                        <h4 ng-bind="( dashboard.resumo.vlr_pago / dashboard.resumo.vlr_promessa )  | percentage : 1"></h4>
+                        <p>Efetividade Total</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Efetividade por Estado </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-4">
+                                <div class="small-box bg-green-active">
+                                    <div class="inner">
+                                        <p><h4>Pagamentos</h4></p>
+                                        <h5 ng-bind="dashboard.mapa.qtd_pago | number"></h5>
+                                        <h5 ng-bind="dashboard.mapa.vlr_pago | currency: 'R$ '"></h5>
+                                        <p>{{ dashboard.mapa.estado }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4">
+                                <div class="small-box bg-maroon-active">
+                                    <div class="inner">
+                                        <p><h4>Promessas</h4></p>
+                                        <h5 ng-bind="dashboard.mapa.qtd_promessa | number"></h5>
+                                        <h5 ng-bind="dashboard.mapa.vlr_promessa | currency:'R$ '"></h5>
+                                        <p>{{ dashboard.mapa.estado }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-md-4">                                
+                                <div class="small-box bg-blue-active">
+                                    <div class="inner">
+                                        <p><h4>Efetividade</h4></p>
+                                        <h5 ng-bind="( dashboard.mapa.qtd_pago / dashboard.mapa.qtd_promessa ) | percentage : 1"> Quantidade</h5>
+                                        <h5 ng-bind="( dashboard.mapa.vlr_pago / dashboard.mapa.vlr_promessa ) | percentage : 1"> Valor</h5>
+                                        <p>{{ dashboard.mapa.estado }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mapa-brasil style="height: 500px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>                       
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-sky-efetividade', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
+
+
+        $scope.filtros = {
+
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteira: '',
+            segmentacao: '',            
+            tenure: '',
+            supervisor: '',
+
+        };
+
+        $scope.idSelecionadoMapa = '';
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = data.Table;
+            $scope.dashFiltros.segmentacao = data.Table1;
+            $scope.dashFiltros.supervisor = data.Table2;
+            $scope.dashFiltros.tenure = data.Table3;
+            
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/dashboard/humano/efetividade",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.carteiras = r.data.Table3.map(obj => obj.carteira);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
+                $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+
+                $scope.dashboard.qtDia = [
+                  { name: 'Promessa', type: "column", data: data.Table1.map(obj => (obj.qtd_promessa)) }
+                , { name: 'Pago', type: "column", data: data.Table1.map(obj => (obj.qtd_pago)) }
+                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.Table1.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+
+                $scope.mudarEstado('BR-SP');
+
+            });
+        }
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, qtd_promessa, qtd_pago, vlr_promessa, vlr_pago, efet_porcentagem from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+
+            $scope.dashboard.mapa = dados;
+
+        }
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
