@@ -440,5 +440,25 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/score")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardScore()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_RELATORIO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_score");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
