@@ -320,7 +320,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.produtos" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        @*<high-chart series="dashboard.produtos" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>*@
+                        <high-chart series="dashboard.produtos" axis-Categories="dashboard.segmentos" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
             </div>
@@ -458,7 +459,8 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
                 $scope.dashboard.diadia = r.data.Table3;
-                
+                $scope.dashboard.segmentos = r.data.Table4.map(obj => obj.segmento);
+
                 $scope.dashboard.graficohora = [
                                     { name: 'atendido', type: 'column', data: r.data.Table1.map(obj => obj.atendido) },
                                     { name: 'abandonado', type: 'column', data: r.data.Table1.map(obj => obj.abandonado) },
@@ -466,7 +468,7 @@
                 ];
 
                 $scope.dashboard.fila = r.data.Table2;
-                $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: obj.atendido })) }];
+                $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: (obj.atendido * 100 / obj.total).toFixed(1) / 1 })) }];
                 $scope.dashboard.tempos = r.data.Table5.map(obj => obj.tempo_fila);
                 $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table5.map(obj => obj.chamada) }]
 
