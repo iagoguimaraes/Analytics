@@ -1,0 +1,395 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-vivo-score">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Score Collection</div>
+        </header>
+
+        <!--VISÃO GERAL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Visão Geral</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.resumo_agrupamento">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" style="vertical-align: middle;">Agrupamento</th>
+                                        <th style="background-color: #F2F2F2;">< 6 Meses</th>
+                                        <th colspan="3" style="background-color: #ECECEC;">Acima de 6 Meses</th>
+                                        <th rowspan="2" style="background-color: #E8E8E8; vertical-align: middle;">Total <i class="fa fa-th-list"></i></th>
+                                        <th rowspan="2" style="background-color: #E8E8E8; vertical-align: middle;">Estoque</th>
+                                        <th rowspan="2" style="background-color: #E8E8E8; vertical-align: middle; border-right: 1px solid gray;">Baixa</th>
+                                        <th colspan="4">
+                                            Acionamento
+                                            <select ng-model="dashboard.opt_acn" class="pull-right">
+                                                <option value="qtd">Quantidade</option>
+                                                <option value="esf">Esforço</option>
+                                            </select>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color: #F2F2F2;">Geral <i class="fa fa-circle" style="color: black;"></i></th>
+                                        <th style="background-color: #ECECEC;">Alto <i class="fa fa-circle" style="color: red;"></i></th>
+                                        <th style="background-color: #ECECEC;">Médio <i class="fa fa-circle" style="color: orange;"></i></th>
+                                        <th style="background-color: #ECECEC;">Baixo <i class="fa fa-circle" style="color: green;"></i></th>
+                                        <th><i class="fa fa-envelope-o"></i> E-mail</th>
+                                        <th><i class="fa fa-commenting"></i> SMS</th>
+                                        <th><i class="fa fa-phone"></i> URA</th>
+                                        <th><i class="fa fa-mobile"></i> SMG</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.resumo_agrupamento">
+                                        <td>{{r.agrupamento}}</td>
+                                        <td style="background-color: #F2F2F2;">{{r.menor6geral | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{r.maior6alto | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{r.maior6medio | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{r.maior6baixo | number}}</td>
+                                        <td style="background-color: #E8E8E8;">{{r.total | number}}</td>
+                                        <td style="background-color: #E8E8E8;">{{r.total - r.baixas | number}}</td>
+                                        <td style="background-color: #E8E8E8; border-right: 1px solid gray;" ng-style="{'background-color': obterCor(r.baixas / r.total)}">{{r.baixas / r.total | percentage:1}}</td>
+                                        <td>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="r.email | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="r.email / r.total | number: 1"></span>
+                                        </td>
+                                        <td>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="r.sms | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="r.sms / r.total | number: 1"></span>
+                                        </td>
+                                        <td>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="r.ura | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="r.ura / r.total | number: 1"></span>
+                                        </td>
+                                        <td>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="r.smg | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="r.smg / r.total | number: 1"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total Geral</th>
+                                        <th style="background-color: #F2F2F2;">{{dashboard.resumo.menor6geral | number}}</th>
+                                        <th style="background-color: #ECECEC;">{{dashboard.resumo.maior6alto | number}}</th>
+                                        <th style="background-color: #ECECEC;">{{dashboard.resumo.maior6medio | number}}</th>
+                                        <th style="background-color: #ECECEC;">{{dashboard.resumo.maior6baixo | number}}</th>
+                                        <th style="background-color: #E8E8E8;">{{dashboard.resumo.total | number}}</th>
+                                        <th style="background-color: #E8E8E8;">{{dashboard.resumo.total - dashboard.resumo.baixas | number}}</th>
+                                        <th style="background-color: #E8E8E8; border-right: 1px solid gray;">{{dashboard.resumo.baixas / dashboard.resumo.total | percentage:1}}</th>
+                                        <th>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="dashboard.resumo.email | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="dashboard.resumo.email / dashboard.resumo.total | number: 1"></span>
+                                        </th>
+                                        <th>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="dashboard.resumo.sms | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="dashboard.resumo.sms / dashboard.resumo.total | number: 1"></span>
+                                        </th>
+                                        <th>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="dashboard.resumo.ura | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="dashboard.resumo.ura / dashboard.resumo.total | number: 1"></span>
+                                        </th>
+                                        <th>
+                                            <span ng-show="dashboard.opt_acn == 'qtd'" ng-bind="dashboard.resumo.smg | number"></span>
+                                            <span ng-show="dashboard.opt_acn == 'esf'" ng-bind="dashboard.resumo.smg / dashboard.resumo.total | number: 1"></span>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FILTROS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-4">
+                <label>Agrupamento</label>
+                <select ng-model="dashboard.filtro_agrupamento" ng-change="popularDashboard();" style="width: 100%;">
+                    <option value="0">Tudo</option>
+                    <option value="1">Espontâneo</option>
+                    <option value="2">Super Amigável</option>
+                    <option value="3">Amigável</option>
+                    <option value="4">Baixa Hostilidade</option>
+                    <option value="5">Hostil</option>
+                    <option value="6">Super Hostilidade</option>
+                </select>
+            </div>
+            <div class="col-xs-4">
+                <label>Tempo de Casa</label>
+                <select ng-model="dashboard.filtro_tempocasa" ng-change="popularDashboard();" style="width: 100%;">
+                    <option value="0">Tudo</option>
+                    <option value="1">Abaixo de 6 Meses</option>
+                    <option value="2">Acima de 6 Meses</option>
+                </select>
+            </div>
+            <div class="col-xs-4">
+                <label>Risco</label>
+                <select ng-model="dashboard.filtro_risco" ng-change="popularDashboard();" style="width: 100%;">
+                    <option value="0">Tudo</option>
+                    <option value="1">Alto</option>
+                    <option value="2">Médio</option>
+                    <option value="3">Baixo</option>
+                </select>
+            </div>
+        </div>
+
+        <!--BAIXAS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Baixas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-4">
+                                <high-charts config="dashboard.baixa_tempocasa" style="height: 300px; width: 100%;"></high-charts>
+                            </div>
+
+                            <div class="col-xs-12 col-md-4">
+                                <high-charts config="dashboard.baixa_risco" style="height: 300px; width: 100%;"></high-charts>
+                            </div>
+
+                            <div class="col-xs-12 col-md-4">
+                                <high-chart series="dashboard.baixa_agrupamento" axis-Categories="dashboard.agrupamento" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--REGUA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Régua de Acionamento</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.regua">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Contas</th>
+                                        <th>Estoque</th>
+                                        <th>Baixa</th>
+                                        <th><i class="fa fa-envelope-o"></i> E-mail</th>
+                                        <th><i class="fa fa-commenting"></i> SMS</th>
+                                        <th><i class="fa fa-phone"></i> URA</th>
+                                        <th><i class="fa fa-mobile"></i> SMG</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.regua">
+                                        <td>{{r.dia}}</td>
+                                        <td>{{r.contas | number}}</td>
+                                        <td>{{r.contas - r.baixas | number}}</td>
+                                        <td>{{r.baixas / r.contas | percentage:1}}</td>
+                                        <td>{{r.email | number}}</td>
+                                        <td>{{r.sms | number}}</td>
+                                        <td>{{r.ura | number}}</td>
+                                        <td>{{r.smg | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-score', function ($scope, $http, $filter) {
+
+        $scope.filtro = {};
+        $scope.dashboard = {
+            opt_acn: 'qtd',
+            filtro_agrupamento: '0',
+            filtro_tempocasa: '0',
+            filtro_risco: '0',
+            baixa_min: 0,
+            baixa_max: 1,
+        };
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/score",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                //resumo
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.resumo_agrupamento = r.data.Table1;
+
+                // obtendo minimo e maximo de baixas (formatação condicional)
+                let minmax = r.data.Table1.map(o => o.baixas / o.total);
+                $scope.dashboard.baixa_min = Math.min.apply(null, minmax);
+                $scope.dashboard.baixa_max = Math.max.apply(null, minmax);
+
+                console.log($scope.dashboard.baixa_min);
+                console.log($scope.dashboard.baixa_max);
+
+                // popular dashbaord
+                $scope.popularDashboard();
+            });
+        }
+
+        $scope.popularDashboard = function () {
+
+            let baixas = $scope.dashboard.dados.Table2;
+            let regua = $scope.dashboard.dados.Table3;
+
+            // aplicar filtros
+            let filtro_agrupamento = $scope.dashboard.filtro_agrupamento;
+            let filtro_tempocasa = $scope.dashboard.filtro_tempocasa;
+            let filtro_risco = $scope.dashboard.filtro_risco;
+
+            if (filtro_agrupamento > 0) {
+                baixas = baixas.filter(o => o.id_agrupamento == filtro_agrupamento);
+                regua = regua.filter(o => o.id_agrupamento == filtro_agrupamento);
+            }
+            if (filtro_tempocasa > 0) {
+                baixas = baixas.filter(o => o.id_tempocasa == filtro_tempocasa);
+                regua = regua.filter(o => o.id_tempocasa == filtro_tempocasa);
+            }
+            if (filtro_risco > 0) {
+                baixas = baixas.filter(o => o.id_risco == filtro_risco);
+                regua = regua.filter(o => o.id_risco == filtro_risco);
+            }
+
+            // ## BAIXAS ##
+
+            // == tempo de casa ==
+            let tempocasa = alasql('select tempocasa, sum(contas) contas, sum(baixas) baixas from ? group by tempocasa', [baixas]);
+            $scope.dashboard.baixa_tempocasa = {
+                title: {
+                    text: undefined,
+                },
+                xAxis: {
+                    categories: [...new Set(tempocasa.map(o => o.tempocasa))]
+                },
+                yAxis: [
+                     { visible: false },
+                     { min: 0, max: 100, opposite: true, visible: false }
+                ],
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Contas',
+                        type: 'column',
+                        data: tempocasa.map(obj => obj.contas),
+                    },
+                    {
+                        name: 'Baixas',
+                        type: 'column',
+                        data: tempocasa.map(obj => obj.baixas),
+                    },
+                    {
+                        name: '% Baixado',
+                        type: 'spline',
+                        yAxis: 1,
+                        data: tempocasa.map(obj => (obj.baixas * 100.0 / obj.contas).toFixed(1) / 1),
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+            }
+
+    
+            // == risco ==
+            let risco = alasql('select risco, sum(contas) contas, sum(baixas) baixas from ? group by risco', [baixas]);
+            $scope.dashboard.baixa_risco = {
+                title: {
+                    text: undefined,
+                },
+                xAxis: {
+                    categories: [...new Set(risco.map(o => o.risco))]
+                },
+                yAxis: [
+                     { visible: false },
+                     { min: 0, max: 100, opposite: true, visible: false }
+                ],
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Contas',
+                        type: 'column',
+                        data: risco.map(obj => obj.contas),
+                    },
+                    {
+                        name: 'Baixas',
+                        type: 'column',
+                        data: risco.map(obj => obj.baixas),
+                    },
+                    {
+                        name: '% Baixado',
+                        type: 'spline',
+                        yAxis: 1,
+                        data: risco.map(obj => (obj.baixas * 100.0 / obj.contas).toFixed(1) / 1),
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+            }
+
+            let agrupamento = alasql('select agrupamento, sum(contas) contas, sum(baixas) baixas from ? group by agrupamento', [baixas]);
+            $scope.dashboard.agrupamento = [...new Set(agrupamento.map(o => o.agrupamento))];
+            $scope.dashboard.baixa_agrupamento = [{ name: '% Baixado', data: agrupamento.map(obj => (obj.baixas * 100.0 / obj.contas).toFixed(1) / 1) }];
+
+            //regua
+            $scope.dashboard.regua = alasql('select dia, sum(contas) contas, sum(baixas) baixas, sum(email) email, sum(sms) sms, sum(ura) ura, sum(smg) smg from ? group by dia', [regua]);
+        };
+
+        $scope.obterCor = function (value) {
+            let percent = (value - $scope.dashboard.baixa_min) / ($scope.dashboard.baixa_max - $scope.dashboard.baixa_min);
+            var hue = ((percent) * 120).toString(10);
+            return ["hsl(", hue, ",100%,50%)"].join("");
+        };
+
+        $scope.carregarDashboard();
+    });
+</script>
