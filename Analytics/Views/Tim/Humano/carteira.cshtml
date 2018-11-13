@@ -72,7 +72,13 @@
                             <!--FAIXA ATRASO-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Aging</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-change="log()" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
+
+                            <!--FAIXA ATRASO M1-->
+                            <div class="form-group" ng-if="validafiltro == true">
+                                <label class="control-sidebar-subheading">Faixa Atraso (M1)</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtrasoM1" dados="dashFiltros.faixaAtrasoM1" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -201,12 +207,16 @@
             empresa: '',
             carteiras: '',
             faixaAtraso: '',
+            faixaAtrasoM1: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = {
             indicador: 'ativo'
         };
+
+       
+        
 
         // carregar os filtros
         $http({
@@ -219,8 +229,29 @@
             $scope.dashFiltros.empresa = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.faixaAtraso = r.data.Table2;
+            $scope.dashFiltros.faixaAtrasoM1 = r.data.Table6;
             
         });
+
+        $scope.validafiltro = false;
+
+        $scope.log = function () {
+
+            if ($scope.filtros.faixaAtraso === null) {
+                $scope.validafiltro = false;
+                return;
+            } else {
+
+                if ($scope.filtros.faixaAtraso[0] === "1") {
+                    $scope.validafiltro = true;
+                    if ($scope.filtros.faixaAtraso.length > 1) {
+                        $scope.validafiltro = false;
+                    }
+                } 
+
+            }
+                // Se encontrar muda a flag para mostrar o filtros.
+        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
