@@ -8,6 +8,14 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Hora Hora - Net Tele</div>
+            <br>
+            <div class="inner">
+                <div ng-bind="dashboard.dataatz.data | date: 'yyyy-MM-dd HH:mm' "></div>
+                <p>Ultima atualização</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-refresh"></i>
+            </div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -429,6 +437,9 @@
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.supervisor = r.data.Table4;
                 $scope.dashboard.supervisorHora = r.data.Table5;
+
+                $scope.dashboard.dataatz = r.data.Table6[0];
+                console.log($scope.dashboard.dataatz);
 
                 $scope.dashboard.gridCh = false;
                 if(!($scope.filtros.empresas.search("5") === -1)) {
