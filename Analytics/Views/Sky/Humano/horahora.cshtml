@@ -94,10 +94,16 @@
             <div class="box-footer">
 
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.transferido | megaNumber"></h5>
+                            <span class="description-text">Transferidas</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
@@ -133,13 +139,19 @@
                             <span class="description-text">Hit Rate</span>
                         </div>
                     </div>
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1"></h5>
+                            <span class="description-text">Tx Tab</span>
+                        </div>
+                    </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
                             <span class="description-text">Tx Loc</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
                             <span class="description-text">Tx Apv</span>
@@ -164,10 +176,7 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
         </div>
 
         <!--PRODUÇÃO POR CARTEIRA-->
@@ -190,6 +199,7 @@
                                     <tr>
                                         <th>Carteira</th>
                                         <th>Discado</th>
+                                        <th>Transferidos</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -198,9 +208,10 @@
                                         <th>Promessa Migração</th>
                                         <th>% Cartão</th>
                                         <th>% Migração</th>
-                                        <th>HitRate</th>
-                                        <th>TxLoc</th>
-                                        <th>TxApv</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Tab</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -212,6 +223,7 @@
                                             {{c[0].carteira}}
                                         </td>
                                         <td>{{c | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{c | sumByColumn: 'transferido'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
@@ -221,6 +233,7 @@
                                         <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_migracao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'contato':'transferido' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -229,6 +242,7 @@
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.segmentacao}}</td>
                                         <td>{{p.discado | number}}</td>
+                                        <td>{{p.transferido | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.cpc | number}}</td>
                                         <td>{{p.cpca | number}}</td>
@@ -238,6 +252,7 @@
                                         <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
                                         <td>{{p.promessa_migracao / p.promessa | percentage:1}}</td>
                                         <td>{{p.contato / p.discado | percentage:1}}</td>
+                                        <td>{{p.contato / p.transferido | percentage:1}}</td>
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
@@ -274,6 +289,7 @@
                                         <tr>
                                             <th>Hora</th>
                                             <th>Discado</th>
+                                            <th>Transferidas</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>CPCA</th>
@@ -283,6 +299,7 @@
                                             <th>% Cartão</th>
                                             <th>% Migração</th>
                                             <th>Hit Rate</th>
+                                            <th>Tx Tab</th>
                                             <th>Tx Loc</th>
                                             <th>Tx Apv</th>
                                             <th>Conversão</th>
@@ -292,6 +309,7 @@
                                         <tr ng-repeat="hora in dashboard.horahora">
                                             <td>{{hora.hora}}</td>
                                             <td>{{hora.discado | number}}</td>
+                                            <td>{{hora.transferido | number}}</td>
                                             <td>{{hora.contato | number}}</td>
                                             <td>{{hora.cpc | number}}</td>
                                             <td>{{hora.cpca | number}}</td>
@@ -301,6 +319,7 @@
                                             <td>{{hora.promessa_cartao / hora.promessa | percentage:1}}</td>
                                             <td>{{hora.promessa_migracao / hora.promessa | percentage:1}}</td>
                                             <td>{{hora.contato / hora.discado | percentage:1}}</td>
+                                            <td>{{hora.contato / hora.transferido | percentage:1}}</td>
                                             <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                             <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
                                             <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
@@ -310,6 +329,7 @@
                                         <tr>
                                             <th>Total</th>
                                             <th>{{dashboard.resumo.discado | number}}</th>
+                                            <th>{{dashboard.resumo.transferido | number}}</th>
                                             <th>{{dashboard.resumo.contato | number}}</th>
                                             <th>{{dashboard.resumo.cpc | number}}</th>
                                             <th>{{dashboard.resumo.cpca | number}}</th>
@@ -319,6 +339,7 @@
                                             <th>{{dashboard.resumo.promessa_cartao / dashboard.resumo.promessa | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.promessa_migracao / dashboard.resumo.promessa | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -345,10 +366,12 @@
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="hitrate">Hit Rate</option>
+                                <option value="txtab">Tx Tabulação</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
+                                <option value="transferido">Transferidas</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -521,16 +544,19 @@
             $scope.dashboard.horas = dados.map(obj => obj.hora);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txtab':
+                    $scope.dashboard.grafico = [{ name: 'taxa tabulação', data: dados.map(obj => (obj.contato * 100 / obj.transferido).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
-                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'taxa localização', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
                     break;
                 case 'txapv':
-                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'taxa aproveitamento', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversão', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];

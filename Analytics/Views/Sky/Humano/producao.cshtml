@@ -190,12 +190,14 @@
                                         <tr>
                                             <th>Dia</th>
                                             <th>Discado</th>
+                                            <th>Transferido</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>CPCA</th>
                                             <th>Promessa</th>
                                             <th>Ticket Médio Promessa</th>
                                             <th>HitRate</th>
+                                            <th>TxTab</th>
                                             <th>TxLoc</th>
                                             <th>TxApv</th>
                                             <th>Conversão</th>
@@ -205,12 +207,14 @@
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                             <td>{{dia.discado | number}}</td>
+                                            <td>{{dia.transferido | number}}</td>
                                             <td>{{dia.contato | number}}</td>
                                             <td>{{dia.cpc | number}}</td>
                                             <td>{{dia.cpca | number}}</td>
                                             <td>{{dia.promessa | number}}</td>
                                             <td>{{dia.Ticket_Medio | number}}</td>
                                             <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                            <td>{{dia.transferido / dia.discado | percentage:1}}</td>
                                             <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                             <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                             <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -235,10 +239,12 @@
                             <small class="pull-right">
                                 <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                     <option value="hitrate">Hit Rate</option>
+                                    <option value="txtab">Tx Tab</option>
                                     <option value="txloc">Tx Loc</option>
                                     <option value="txapv">Tx Apv</option>
                                     <option value="conversao">Conversão</option>
                                     <option value="discado">Discado</option>
+                                    <option value="transferido">Transferido</option>
                                     <option value="contato">Contato</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
@@ -413,16 +419,19 @@
                 $scope.dashboard.datas = dados.map(obj => obj.data);
                 switch ($scope.grafico.indicador) {
                     case 'hitrate':
-                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                        break;
+                    case 'txtab':
+                        $scope.dashboard.grafico = [{ name: 'taxa tabulação', data: dados.map(obj => (obj.contato * 100 / obj.transferido).toFixed(1) * 1) }];
                         break;
                     case 'txloc':
-                        $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'taxa localização', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
                         break;
                     case 'txapv':
-                        $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'taxa aproveitamento', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                         break;
                     case 'conversao':
-                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'conversão', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
                         break;
                     default:
                         $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
