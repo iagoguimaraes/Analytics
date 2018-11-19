@@ -473,6 +473,7 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable faixaAtrasoM1 = JsonConvert.DeserializeObject<DataTable>(form["faixaAtrasoM1"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -483,6 +484,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("faixaAtraso", faixaAtraso);
+                    parametros.Add("faixaAtrasoM1", faixaAtrasoM1);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
