@@ -1,0 +1,506 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-carrefour-horahora">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora Digital</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--SEGMENTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmento</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CABEÇALHO-->
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Carrefour/carrefour-background.jpg'); background-size: cover;">
+            </div>
+            <div class="widget-user-image">
+                <img class="img-circle" src="~/Content/Images/Carrefour/logo-carrefour-solucoes-digitais.png" height="128" width="128" style="background-color: white;">
+            </div>
+            <div class="box-footer">
+                <div class="row" style="background-color: #003399; color: white;">
+                    <div class="col-sm-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                            <span class="description-text">Discado</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.atendido | number "></h5>
+                            <span class="description-text">Atendido</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato | number"></h5>
+                            <span class="description-text">Contato</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | number"></h5>
+                            <span class="description-text">CPC</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.alega | number"></h5>
+                            <span class="description-text">Alega Pagamento</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
+                            <span class="description-text">Promessa</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.preventivo | number"></h5>
+                            <span class="description-text">Preventivo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="background-color: #66cc33; color: white;">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.qtd_ad | number: 0"></h5>
+                            <span class="description-text">AD</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                            <span class="description-text">Hit Rate</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
+                            <span class="description-text">Tx Loc</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.alega / dashboard.resumo.cpc | percentage: 1"></h5>
+                            <span class="description-text">Tx Alega</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <span class="description-text">Conversao</span>
+                        </div>
+                    </div>
+                    @*<div class="col-sm-2 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
+                                <span class="description-text">Tx Apv</span>
+                            </div>
+                        </div>*@
+
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tma"></h5>
+                            <span class="description-text">TMA</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--ANALISE POR HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+
+                        <!--TABELA HORA HORA-->
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Discado</th>
+                                        <th>Atendido</th>
+                                        <th>TMA</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>Alega</th>
+                                        <th>Promessa</th>
+                                        <th>Preventivo</th>
+                                        <th>R$ Promessa</th>
+                                        <th>R$ Preventivo</th>
+                                        <th>R$ Alega</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Alega</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.discado | number}}</td>
+                                        <td>{{hora.atendido | number}}</td>
+                                        <td>{{hora.tma}}</td>
+                                        <td>{{hora.contato | number}}</td>
+                                        <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.alega | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.preventivo | number}}</td>
+                                        <td>{{hora.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{hora.vlr_preventivo | currency:'R$ '}}</td>
+                                        <td>{{hora.vlr_alega | currency:'R$ '}}</td>
+                                        <td>{{hora.contato / hora.discado | percentage:1}}</td>
+                                        <td>{{hora.cpc / hora.contato | percentage:1}}</td>
+                                        <td>{{hora.alega / hora.cpc | percentage:1}}</td>
+                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.atendido | number}}</th>
+                                        <th>{{dashboard.resumo.tma}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.alega | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.preventivo | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_promessa | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vlr_preventivo | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vlr_alega | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.alega / dashboard.resumo.cpc | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage:1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoHora.exibir == 'true'">
+                            <span class="pull-right">
+                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                    <option value="hitrate">Hit Rate</option>
+                                    <option value="txloc">Tx Loc</option>
+                                    <option value="txalega">Tx Alega Pagamento</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="alega">Alega Pagamento</option>
+                                    <option value="promessa">Promessa</option>
+                                    <option value="preventivo">Preventivo</option>
+                                    <option value="vlr_promessa">Valor Promessa</option>
+                                    <option value="vlr_preventivo">Valor Preventivo</option>
+                                    <option value="vlr_alega">Valor Alega</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR SEGMENTACAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Segmentação</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.grupo">
+                                <thead>
+                                    <tr>
+                                        <th>Credor</th>
+                                        <th>Discado</th>
+                                        <th>Atendido</th>
+                                        <th>TMA</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>Alega</th>
+                                        <th>Promessa</th>
+                                        <th>Preventivo</th>
+                                        <th>R$ Promessa</th>
+                                        <th>R$ Preventivo</th>
+                                        <th>R$ Alega</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Alega</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="g in dashboard.grupo | groupBy: 'grupo'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{g[0].grupo}}
+                                        </td>
+                                        <td>{{ g | sumByColumn: 'discado' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'atendido' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'tma' | formatTimer}}</td>
+                                        <td>{{ g | sumByColumn: 'contato' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'cpc' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'alega' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'promessa' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'preventivo' | number}}</td>
+                                        <td>{{ g | sumByColumn: 'vlr_promessa' | currency:'R$ '}}</td>
+                                        <td>{{ g | sumByColumn: 'vlr_preventivo' | currency:'R$ '}}</td>
+                                        <td>{{ g | sumByColumn: 'vlr_alega' | currency:'R$ '}}</td>
+                                        <td>{{ g | divideSumColumns : 'contato':'discado' | corrigePercent | percentage:1}}</td>
+                                        <td>{{ g | divideSumColumns : 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{ g | divideSumColumns : 'alega':'cpc' | percentage:1}}</td>
+                                        <td>{{ g | divideSumColumns : 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in g" ng-show="showTbody">
+                                        <td>{{c.credor}}</td>
+                                        <td>{{c.discado | number}}</td>
+                                        <td>{{c.atendido | number}}</td>
+                                        <td>{{c.tma | formatTimer }}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.alega | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.preventivo | number}}</td>
+                                        <td>{{c.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{c.vlr_preventivo | currency:'R$ '}}</td>
+                                        <td>{{c.vlr_alega | currency:'R$ '}}</td>
+                                        <td>{{c.contato / c.discado | corrigePercent | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.alega / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--DIAGRAMA FINALIZACOES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--INSUCESSO CONTATO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Insucesso no Contato</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.insucesso" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<script>
+    angular.module('app').controller('ctrl-carrefour-horahora', function ($scope, $http, $filter) {
+        $scope.showTbody = false;
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            segmento: '',
+        };
+
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/carrefour/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.segmento = data.Table;
+        });
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/carrefour/dashboard/sinergy/horahora",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                let data = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.horahora = data.Table1;
+                $scope.dashboard.grupo = data.Table2;
+                $scope.dashboard.diagrama = data.Table3;
+                $scope.dashboard.ocorrencia = data.Table4;
+                $scope.dashboard.insucesso = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table5.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
+
+                $scope.carregarGraficoHora();
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGraficoHora = function () {
+            let dados = $scope.dashboard.horahora;
+            $scope.dashboard.horas = dados.map(obj => obj.hora);
+            switch ($scope.graficoHora.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoHora = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoHora = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txalega':
+                    $scope.dashboard.graficoHora = [{ name: 'txalega', data: dados.map(obj => (obj.alega * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoHora = [{ name: 'conversao', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoHora = [{ name: $scope.graficoHora.indicador, data: dados.map(obj => obj[$scope.graficoHora.indicador]) }];
+            }
+
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
