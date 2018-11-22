@@ -40,6 +40,10 @@
                                     <label class="control-sidebar-subheading">Ano</label>
                                     <select ng-model="filtros.ano">
                                         <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
                                     </select>
                                 </div>
 
@@ -47,7 +51,18 @@
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Mês</label>
                                     <select ng-model="filtros.mes">
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevereiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
                                         <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
                                     </select>
                                 </div>
 
@@ -152,7 +167,7 @@
 
         $scope.filtros = {
             ano: '' + new Date().getFullYear(),
-            mes: '' + (new Date().getMonth()+1),
+            mes: '' + (new Date().getMonth() + 1),
             carteiras: '',
         };
 
@@ -256,20 +271,22 @@
                     xAxis: {
                         categories: dias
                     },
-                    series: [{
-                        type: 'area',
-                        name: 'Recebido',
-                        color: 'black',
-                        marker: { symbol: 'circle' },
-                        data: recebido
-                    }, {
-                        type: 'line',
-                        name: 'Projeção',
-                        color: 'black',
-                        dashStyle: 'dot',
-                        marker: { symbol: 'circle' },
-                        data: projecao
-                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: projecao
+                        },
+                        {
+                            type: 'area',
+                            name: 'Recebido',
+                            color: 'black',
+                            marker: { symbol: 'circle' },
+                            data: recebido
+                        },
                     ],
                     credits: {
                         enabled: false
