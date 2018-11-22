@@ -151,8 +151,8 @@
     angular.module('app').controller('ctrl-riachuelo-projecao', function ($scope, $http, $filter) {
 
         $scope.filtros = {
-            ano: '2018',
-            mes: '11',
+            ano: '' + new Date().getFullYear(),
+            mes: '' + (new Date().getMonth()+1),
             carteiras: '',
         };
 
@@ -230,7 +230,7 @@
                             text: 'Recebimento R$'
                         },
                         min: 0,
-                        max: meta < proj ? proj*1.15 : meta*1.15,
+                        max: meta < proj ? proj * 1.15 : meta * 1.15,
                         plotBands: [{
                             from: 0,
                             to: meta,
@@ -247,7 +247,7 @@
                             color: 'gray',
                             width: 1,
                             label: {
-                                text: 'Meta: R$ ' + meta,
+                                text: 'Meta: R$ ' + $filter('number')(meta, 0),
                                 align: 'left',
                             },
                             zIndex: 99,
@@ -260,7 +260,7 @@
                         type: 'area',
                         name: 'Recebido',
                         color: 'black',
-                        marker:{symbol: 'circle'},
+                        marker: { symbol: 'circle' },
                         data: recebido
                     }, {
                         type: 'line',
