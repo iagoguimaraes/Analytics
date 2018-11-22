@@ -444,13 +444,19 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardScore()
+        public HttpResponseMessage DashboardScore(FormDataCollection form)
         {
             try
             {
+                DataTable piloto = JsonConvert.DeserializeObject<DataTable>(form["piloto"]);
+
                 using (SqlHelper sql = new SqlHelper("DB_RELATORIO"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_score");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("piloto", piloto);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_score", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
