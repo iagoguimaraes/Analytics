@@ -9,7 +9,42 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Score Collection</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
         </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--PILOTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Piloto</label>
+                            <select2 id="piloto" style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.piloto" dados="dashFiltros.piloto"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--VISÃO GERAL-->
         <div class="row margin-bottom">
@@ -228,6 +263,23 @@
 <script>
     angular.module('app').controller('ctrl-vivo-score', function ($scope, $http, $filter) {
 
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+
+        $scope.dashFiltros = { piloto: [{ id: '1', name: '2018-10-31' }, { id: '2', name: '2018-11-19' }] }
+        $scope.filtros = { piloto: '[{id:"2"}]' };
+
+        delay(function () {
+            $scope.filtros.piloto = '[{id:"2"}]';
+            $('#piloto').val('2').trigger('change.select2');
+        }, 5000);
+
         $scope.filtro = {};
         $scope.dashboard = {
             opt_acn: 'qtd',
@@ -255,9 +307,6 @@
                 let minmax = r.data.Table1.map(o => o.baixas / o.total);
                 $scope.dashboard.baixa_min = Math.min.apply(null, minmax);
                 $scope.dashboard.baixa_max = Math.max.apply(null, minmax);
-
-                console.log($scope.dashboard.baixa_min);
-                console.log($scope.dashboard.baixa_max);
 
                 // popular dashbaord
                 $scope.popularDashboard();

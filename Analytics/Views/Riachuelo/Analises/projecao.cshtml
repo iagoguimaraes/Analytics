@@ -1,0 +1,303 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<div ng-controller="ctrl-riachuelo-projecao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Projeção de Recebimento</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!-- Filtros -->
+                            <div class="tab-pane active" id="control-sidebar-filters-tab">
+                                <!--ANO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Ano</label>
+                                    <select ng-model="filtros.ano">
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                    </select>
+                                </div>
+
+                                <!--MES-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Mês</label>
+                                    <select ng-model="filtros.mes">
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevereiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+
+                                <!--CAMPANHAS-->
+                                <div class="form-group" ng-if="dashFiltros.carteiras">
+                                    <label class="control-sidebar-subheading">Campanhas</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                </div>
+
+                                <!--BOTÃO-->
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3>R$ {{dashboard.resumo.meta | megaNumber}}</h3>
+                        <p>Meta</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>R$ {{dashboard.resumo.recebido | megaNumber}}</h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.recebido / dashboard.resumo.meta | percentage: 1"></h4>
+                        <p>Recebido</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>R$ {{dashboard.resumo.projecao | megaNumber}}</h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.projecao / dashboard.resumo.meta | percentage: 1"></h4>
+                        <p>Projeção</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-line-chart"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO PROJECAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Recebimento e Projeção</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.grafico_projecao" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO RECEBIMENTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Recebimento por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.grafico_recebido" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-riachuelo-projecao', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            ano: '' + new Date().getFullYear(),
+            mes: '' + (new Date().getMonth() + 1),
+            carteiras: '',
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteiras = data.Table;
+        });
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/projecao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+
+                $scope.dashboard.grafico_recebido = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Recebimento R$'
+                        },
+                    },
+                    xAxis: {
+                        categories: r.data.Table1.map(o => o.data)
+                    },
+                    series: [{
+                        type: 'area',
+                        name: 'Recebido',
+                        color: '#00a65a',
+                        dataLabels: {
+                            enabled: true,
+                        },
+                        data: r.data.Table1.map(o => o.recebido)
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                //soma acumulada
+                let somacumulada = 0;
+                let recebido = r.data.Table1.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.recebido + somacumulada }));
+                let projecao = r.data.Table2.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.projecao + somacumulada }));
+                projecao = recebido.concat(projecao);
+                let dias = projecao.map(o => o.data);
+
+                //habilitar label do ultimo ponto
+                recebido[recebido.length - 1].dataLabels = { enabled: true };
+                projecao[projecao.length - 1].dataLabels = { enabled: true };
+
+                let meta = data.Table[0].meta;
+                let proj = data.Table[0].projecao;
+
+                $scope.dashboard.grafico_projecao = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Recebimento R$'
+                        },
+                        min: 0,
+                        max: meta < proj ? proj * 1.15 : meta * 1.15,
+                        plotBands: [{
+                            from: 0,
+                            to: meta,
+                            color: 'rgba(239, 28, 28, 0.5)'
+                        },
+                        {
+                            from: meta,
+                            to: Number.MAX_VALUE,
+                            color: 'rgba(24, 173, 49, 0.5)'
+                        }
+                        ],
+                        plotLines: [{
+                            value: meta,
+                            color: 'gray',
+                            width: 1,
+                            label: {
+                                text: 'Meta: R$ ' + $filter('number')(meta, 0),
+                                align: 'left',
+                            },
+                            zIndex: 99,
+                        }]
+                    },
+                    xAxis: {
+                        categories: dias
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: projecao
+                        },
+                        {
+                            type: 'area',
+                            name: 'Recebido',
+                            color: 'black',
+                            marker: { symbol: 'circle' },
+                            data: recebido
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
