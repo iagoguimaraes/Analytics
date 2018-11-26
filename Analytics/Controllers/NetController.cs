@@ -46,6 +46,8 @@ namespace Analytics.Controllers
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
@@ -57,6 +59,8 @@ namespace Analytics.Controllers
                     parametros.Add("empresas", empresas);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("equipes", equipes);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
