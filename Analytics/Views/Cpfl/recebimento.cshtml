@@ -149,6 +149,7 @@
                             <div class="content">
                                 <div class="text">R$ Espontaneos</div>
                                 <div class="number" ng-bind="dashboard.resumo.vlr_espontaneo | megaNumber "></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_espontaneo/ dashboard.resumo.vlr_totalpag| percentage:1 "></div>
                             </div>
 
                         </div>
@@ -188,7 +189,7 @@
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
                             </div>
-                            <div class="card-header-button" ng-click="extrair('Table1')">
+                            <div class="card-header-button" ng-click="extrair('Table2')">
                                 <i class="fa fa-file-excel-o"></i>
                             </div>
                         </div>
@@ -257,13 +258,13 @@
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
                             </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
+                            <div class="card-header-button" ng-click="extrair('Table1')">
                                 <i class="fa fa-file-excel-o"></i>
                             </div>
                         </div>
                         <div class="card-body">
                             @*<high-charts config="dashboard.vlCarteira2"></high-charts>*@
-                            <high-chart series="dashboard.vlCarteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            <high-chart series="dashboard.vlSupervisor" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                         </div>
                     </div>
                 </div>
@@ -333,7 +334,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.tabela = r.data.Table2;
-                $scope.dashboard.vlCarteira = [{ name: 'Recebimento', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa })) }];
+                $scope.dashboard.vlSupervisor = [{ name: 'Recebimento', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa })) }];
                 $scope.dashboard.equipe = r.data.Table3.map(obj => obj.equipe);
                 $scope.dashboard.equipes = [{ name: 'Equipe', data: r.data.Table3.map(obj => (obj.valor_promessa)) }];
 
