@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-cpfl-recebimento">
+<div ng-controller="ctrl-riachuelo-recebimento">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -35,12 +35,17 @@
                         <!-- Filtros -->
                         <div class="tab-pane active" id="control-sidebar-filters-tab">
 
-                            <!--CARTEIRA-->
+                            <!--EMPRESA-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Empresas</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
                             </div>
 
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                            </div>
 
                             <!--DATA INCIAL-->
                             <div class="form-group">
@@ -98,12 +103,11 @@
                             <div class="icon">
                                 <i class="material-icons">done</i>
                             </div>
-
                             <div class="content">
                                 <div class="text">Espontaneos</div>
                                 <div class="number" ng-bind="dashboard.resumo.espontaneo | number"></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.espontaneo / dashboard.resumo.totalpag | percentage:1"></div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -115,18 +119,20 @@
                             <div class="content">
                                 <div class="text">Operação</div>
                                 <div class="number" ng-bind="dashboard.resumo.promessa | number"></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.promessa / dashboard.resumo.totalpag | percentage:1"></div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="info-box-new bg-new-light-green hover-expand-effect">
                             <div class="icon">
-                                <i class="material-icons col-blue">bar_chart</i>
+                                <i class="material-icons">done_all</i>
                             </div>
+
                             <div class="content">
-                                <div class="text">% Operação</div>
-                                <div class="number" ng-bind="dashboard.resumo.promessa/dashboard.resumo.totalpag | percentage:1"></div>
+                                <div class="text">Mala</div>
+                                <div class="number" ng-bind="dashboard.resumo.mala | number"></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.mala / dashboard.resumo.totalpag | percentage:1"></div>
                             </div>
                         </div>
                     </div>
@@ -149,7 +155,7 @@
                             <div class="content">
                                 <div class="text">R$ Espontaneos</div>
                                 <div class="number" ng-bind="dashboard.resumo.vlr_espontaneo | megaNumber "></div>
-                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_espontaneo/ dashboard.resumo.vlr_totalpag| percentage:1 "></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_espontaneo/dashboard.resumo.vlr_totalpag | percentage:1"></div>
                             </div>
 
                         </div>
@@ -163,20 +169,24 @@
                             <div class="content">
                                 <div class="text">R$ Operação</div>
                                 <div class="number" ng-bind="dashboard.resumo.vlr_promessa | megaNumber "></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_promessa/dashboard.resumo.vlr_totalpag | percentage:1"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="info-box-new bg-new-light-green hover-expand-effect">
                             <div class="icon">
-                                <i class="material-icons col-blue">bar_chart</i>
+                                <i class="material-icons">attach_money</i>
                             </div>
+
                             <div class="content">
-                                <div class="text">% Operação Financeiro</div>
-                                <div class="number" ng-bind="dashboard.resumo.vlr_promessa/dashboard.resumo.vlr_totalpag | percentage:1"></div>
+                                <div class="text">R$ Mala</div>
+                                <div class="number" ng-bind="dashboard.resumo.vlr_mala | megaNumber "></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_mala/dashboard.resumo.vlr_totalpag | percentage:1"></div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -200,26 +210,32 @@
                                         <tr>
                                             <th>Credor</th>
                                             <th>Total Pagamento</th>
-                                            <th>Total Pag Financeiro</th>
+                                            <th>Total Pag R$</th>
                                             <th>Espontâneo </th>
-                                            <th>Espontâneo Financeiro</th>
+                                            <th>Espontâneo R$</th>
+                                            <th>Mala</th>
+                                            <th>Mala R$</th>
                                             <th>Promessa</th>
-                                            <th>Promessa Financeiro</th>
+                                            <th>Promessa R$</th>
                                             <th>% Operação</th>
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="g in dashboard.tabela | groupBy: 'ds_carteira'">
+                                    <tbody ng-repeat="g in dashboard.tabela | groupBy: 'empresa'">
 
                                         <tr class="text-bold">
                                             <td>
                                                 <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                                {{g[0].ds_carteira}}
+                                                {{g[0].empresa}}
                                             </td>
                                             <td>{{g | sumByColumn: 'totalpag'| number}}</td>
                                             <td>{{g | sumByColumn: 'vlr_totalpag'| currency:'R$ '}}</td>
 
                                             <td>{{g | sumByColumn: 'espontaneo'| number}}</td>
                                             <td>{{g | sumByColumn: 'vlr_espontaneo'| currency:'R$ '}}</td>
+
+
+                                            <td>{{g | sumByColumn: 'mala'| number}}</td>
+                                            <td>{{g | sumByColumn: 'vlr_mala'| currency:'R$ '}}</td>
 
                                             <td>{{g | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{g | sumByColumn: 'vlr_promessa'| currency:'R$ '}}</td>
@@ -228,11 +244,13 @@
                                         </tr>
 
                                         <tr ng-repeat="c in g" ng-show="showTbody">
-                                            <td>{{c.dt_pagamento}}</td>
+                                            <td>{{c.produto}}</td>
                                             <td>{{c.totalpag | number}}</td>
                                             <td>{{c.vlr_totalpag | currency:'R$ ' }}</td>
                                             <td>{{c.espontaneo | number}}</td>
                                             <td>{{c.vlr_espontaneo | currency:'R$ '}}</td>
+                                            <td>{{c.mala | number}}</td>
+                                            <td>{{c.vlr_mala | currency:'R$ '}}</td>
                                             <td>{{c.promessa | number}}</td>
                                             <td>{{c.vlr_promessa | currency:'R$ '}}</td>
                                             <td>{{c.promessa/c.totalpag | percentage:1}}</td>
@@ -251,7 +269,7 @@
 
             <!--ANALISE POR SUPERVISOR E EQUIPE-->
             <div class="row">
-                <div class="col-xs-12 col-lg-6  col-md-6 margin-bottom">
+                <div class="col-xs-12 col-lg-12  col-md-12 margin-bottom">
                     <div class="card">
                         <div class="card-header">
                             <span class="card-header-title">Recebimento por Supervisor</span>
@@ -264,11 +282,11 @@
                         </div>
                         <div class="card-body">
                             @*<high-charts config="dashboard.vlCarteira2"></high-charts>*@
-                            <high-chart series="dashboard.vlSupervisor" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            <high-chart series="dashboard.Vlsupervisor" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="col-xs-12 col-md-12 margin-bottom">
                     <div class="card">
                         <div class="card-header">
                             <span class="card-header-title">Recebimento por Equipes</span>
@@ -291,96 +309,95 @@
 </div>
 
 <script>
+angular.module('app').controller('ctrl-riachuelo-recebimento', function ($scope, $http, $filter, $interval, dadosPagina) {
+            dadosPagina.titulo = 'Recebimento';
+            dadosPagina.descricao = 'Riachuelo Humano'
 
-    angular.module('app').controller('ctrl-cpfl-recebimento', function ($scope, $http, $filter, $interval, dadosPagina) {
-        dadosPagina.titulo = 'Recebimento';
-        dadosPagina.descricao = 'Oi Telecomunicações'
+            // filtros iniciais
+            let newdate = new Date();
+            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(),1);
 
-        // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(),1);
+            $scope.filtros = {
+                dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+                dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+                empresas: '',
+                carteiras: '',
+            };
 
+            $scope.dashFiltros = {};
+            $scope.dashboard = {};
+            $scope.grafico = { indicador: 'hitrate' };
 
-        $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: '',
-
-        };
-        $scope.dashFiltros = {};
-        $scope.dashboard = {};
-        $scope.grafico = { indicador: 'hitrate' };
-
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/cpfl/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            let data = r.data;
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = r.data.Table;
-
-        });
-
-        // obtem filtros do escopo e carrega os dados do dashboard
-        $scope.carregarDashboard = function () {
+            // carregar os filtros
             $http({
-                method: 'POST',
-                url: "/api/cpfl/dashboard/recebimento",
+                method: 'GET',
+                url: "/api/riachuelo/dashboard/humano/filtros",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
-                $scope.dashboard.status = r.status;
-                $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.tabela = r.data.Table2;
-                $scope.dashboard.vlSupervisor = [{ name: 'Recebimento', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa })) }];
-                $scope.dashboard.equipe = r.data.Table3.map(obj => obj.equipe);
-                $scope.dashboard.equipes = [{ name: 'Equipe', data: r.data.Table3.map(obj => (obj.valor_promessa)) }];
-
-                //        $scope.dashboard.vlCarteira2 =
-                //        {
-                //            chart: {
-                //                    plotBackgroundColor: null,
-                //                    plotBorderWidth: null,
-                //                    plotShadow: false,
-                //                    type: 'pie'
-                //            },
-                //            title: {
-                //                text: ''
-                //            },
-                //            tooltip: {
-                //                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                //            },
-                //            plotOptions: {
-                //                pie: {
-                //                        allowPointSelect: true,
-                //                        cursor: 'pointer',
-                //                        dataLabels: {
-                //                        enabled: false
-                //                        },
-                //                    showInLegend: true
-                //                }
-                //            },
-                //            series: [{
-                //                name: 'Brands',
-                //                colorByPoint: true,
-                //                data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa }))
-                //            }]
-                //        }
-
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.empresas = r.data.Table;
+                $scope.dashFiltros.carteiras = r.data.Table1;
 
             });
-        }
 
-        // extrair dados para excel
-        $scope.extrair = function (tabela) {
-            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-        }
+            // obtem filtros do escopo e carrega os dados do dashboard
+            $scope.carregarDashboard = function () {
+                $http({
+                    method: 'POST',
+                    url: "/api/riachuelo/dashboard/humano/recebimento",
+                    data: $scope.filtros,
+                }).then(function success(r) {
+                    let data = r.data;
+                    $scope.dashboard.status = r.status;
+                    $scope.dashboard.resumo = r.data.Table[0];
+                    $scope.dashboard.tabela = r.data.Table2;
+                    $scope.dashboard.Vlsupervisor = [{ name: 'Recebimento', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa })) }];
+                    $scope.dashboard.equipe = r.data.Table3.map(obj => obj.equipe);
+                    $scope.dashboard.equipes = [{ name: 'Equipe', data: r.data.Table3.map(obj => (obj.valor_promessa)) }];
 
-        $scope.carregarDashboard();
+                    //        $scope.dashboard.vlCarteira2 =
+                    //        {
+                    //            chart: {
+                    //                    plotBackgroundColor: null,
+                    //                    plotBorderWidth: null,
+                    //                    plotShadow: false,
+                    //                    type: 'pie'
+                    //            },
+                    //            title: {
+                    //                text: ''
+                    //            },
+                    //            tooltip: {
+                    //                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    //            },
+                    //            plotOptions: {
+                    //                pie: {
+                    //                        allowPointSelect: true,
+                    //                        cursor: 'pointer',
+                    //                        dataLabels: {
+                    //                        enabled: false
+                    //                        },
+                    //                    showInLegend: true
+                    //                }
+                    //            },
+                    //            series: [{
+                    //                name: 'Brands',
+                    //                colorByPoint: true,
+                    //                data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa }))
+                    //            }]
+                    //        }
 
-    });
+
+                });
+            }
+
+            // extrair dados para excel
+            $scope.extrair = function (tabela) {
+                alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+            }
+
+            $scope.carregarDashboard();
+
+        });
 
 </script>
-
