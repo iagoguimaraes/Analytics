@@ -1,0 +1,416 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-efetividade">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Efetividade</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATAS-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA INCIAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA FINAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--PRODUTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produto"></select2>
+                        </div>
+
+                        <!--AGING-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Aging</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_pago | number"></h3>
+                        <h4 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h4>
+                        <p>Pagamentos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-purple-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number"></h3>
+                        <h4 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$ '"></h4>
+                        <p>Promessas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="( dashboard.resumo.qtd_pago / dashboard.resumo.qtd_promessa ) | percentage : 1"></h3>
+                        <h4 ng-bind="( dashboard.resumo.vlr_pago / dashboard.resumo.vlr_promessa )  | percentage : 1"></h4>
+                        <p>Efetividade Total</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <!--POR ESTADO-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Efetividade por Estado </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" ng-model="graficoMapa.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" ng-model="graficoMapa.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive" ng-show="graficoMapa.exibir == 'true'">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-green-active">
+                                        <div class="inner">
+                                            <p><h4>Pagamentos</h4></p>
+                                            <h5 ng-bind="dashboard.mapa.qtd_pago | number"></h5>
+                                            <h5 ng-bind="dashboard.mapa.vlr_pago | currency: 'R$ '"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-purple-active">
+                                        <div class="inner">
+                                            <p><h4>Promessas</h4></p>
+                                            <h5 ng-bind="dashboard.mapa.qtd_promessa | number"></h5>
+                                            <h5 ng-bind="dashboard.mapa.vlr_promessa | currency:'R$ '"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p><h4>Efetividade</h4></p>
+                                            <h5 ng-bind="( dashboard.mapa.qtd_pago / dashboard.mapa.qtd_promessa ) | percentage : 1"> Quantidade</h5>
+                                            <h5 ng-bind="( dashboard.mapa.vlr_pago / dashboard.mapa.vlr_promessa ) | percentage : 1"> Valor</h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <mapa-brasil style="height: 500px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        </div>
+
+                        <div class="table-responsive" ng-show="graficoMapa.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>Pago</th>
+                                        <th>R$ Pago</th>
+                                        <th>Efetividade</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.estado | groupBy: 'regiao'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].regiao}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd_promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'qtd_pago'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_pago'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'qtd_pago':'qtd_promessa' | percentage:1}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.estado}}</td>
+                                        <td>{{p.qtd_promessa | number}}</td>
+                                        <td>{{p.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{p.qtd_pago | number}}</td>
+                                        <td>{{p.vlr_pago | currency: 'R$ '}}</td>
+                                        <td>{{p.qtd_pago / p.qtd_promessa | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--POR CARTEIRA-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" ng-model="graficoCarteira.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" ng-model="graficoCarteira.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" ng-show="graficoCarteira.exibir == 'true'">
+                            <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
+                        </div>
+                        <div class="table-responsive" ng-show="graficoCarteira.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.produto">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>Pago</th>
+                                        <th>R$ Pago</th>
+                                        <th>Efetividade</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.produto | groupBy: 'produto'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].produto}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd_promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'qtd_pago'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_pago'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'qtd_pago':'qtd_promessa' | percentage:1}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.aging}}</td>
+                                        <td>{{p.qtd_promessa | number}}</td>
+                                        <td>{{p.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{p.qtd_pago | number}}</td>
+                                        <td>{{p.vlr_pago | currency: 'R$ '}}</td>
+                                        <td>{{p.qtd_pago / p.qtd_promessa | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade por: </span>
+                        <div class="card-header-title">
+                            <select style="margin-left: 20px" class="form-control" ng-model="graficoDia.visao" ng-change="mudarGrafico(graficoDia.visao)">                                
+                                <option value="data" selected="selected">Dia</option>
+                                <option value="semana">Semana do Mês</option>
+                                <option value="mes">Mês do Ano</option>
+                            </select>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.visao" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-tim-efetividade', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
+
+
+        $scope.filtros = {
+
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            produto: '',
+            aging: '', 
+
+        };
+
+        $scope.idSelecionadoMapa = '';
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.graficoMapa = { exibir: 'true' };
+        $scope.graficoCarteira = { exibir: 'true' };
+        $scope.graficoDia = { visao: 'data' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/tim/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.produto = data.Table;
+            $scope.dashFiltros.aging = data.Table1;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/dashboard/efetividade",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+
+                
+                $scope.dashboard.carteiras = r.data.Table3.map(obj => obj.carteira);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.produto = data.Table3;
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, regiao, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
+                $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+
+               
+                $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [data.Table2])[0];
+                $scope.mudarEstado($scope.dashboard.maiorEfetividade);
+
+                $scope.mudarGrafico($scope.graficoDia.visao);
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, qtd_promessa, qtd_pago, vlr_promessa, vlr_pago, efet_porcentagem from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            $scope.dashboard.mapa = dados;
+        }
+
+        $scope.mudarGrafico = function (visao) {
+
+            let dados = alasql('select ' + visao + ' visao, sum(qtd_promessa) qtd_promessa, sum(qtd_pago) qtd_pago from ? group by ' + visao + '', [$scope.dashboard.dia]);
+
+            console.log(dados);
+            $scope.dashboard.visao = dados.map(obj => obj.visao);
+
+            $scope.dashboard.qtDia = [
+                 { name: 'Promessa', type: "column", data: dados.map(obj => (obj.qtd_promessa)) }
+               , { name: 'Pago', type: "column", data: dados.map(obj => (obj.qtd_pago)) }
+               , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: dados.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+
+        }
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
