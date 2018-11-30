@@ -242,31 +242,8 @@
 
 
         <!--DIAGRAMA DE FINALIZAÇÕES & FINALIZAÇÕES DO DISCADOR-->
-
         <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Análise por Produto</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row margin-bottom">
-                            <h3 class="text-center">Diagrama de Finalizações</h3>
-                            <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação"></sankey-chart>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-6 col-md-6">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Produto</span>
@@ -279,8 +256,26 @@
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
-                            <h3 class="text-center">Finalizações do Discador</h3>
                             <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.funil" type="funnel" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                         </div>
 
                     </div>
@@ -316,10 +311,21 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
-                $scope.dashboard.diagrama = r.data.Table2;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
+                //$scope.dashboard.diagrama = r.data.Table2;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table2.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
+
+                let funil = r.data.Table3[0];
+                let dadosFunil = [];
+                Object.keys(funil).map(function (key, index) {
+                    if (key != 'discado')
+                        dadosFunil.push([key, funil[key]]);
+                });
+
+                $scope.dashboard.funil = [{ name: 'Quantidade', data: dadosFunil }];
+
 
                 $scope.carregarGraficoHora();
+
             });
         }
 
