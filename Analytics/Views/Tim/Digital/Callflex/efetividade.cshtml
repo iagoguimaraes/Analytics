@@ -374,7 +374,7 @@
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.produto = data.Table3;
                 $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, regiao, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
-                $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+                $scope.dashboard.carteira = [{ name: 'Efetividade', color: '#014691', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
 
                
                 $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [data.Table2])[0];
