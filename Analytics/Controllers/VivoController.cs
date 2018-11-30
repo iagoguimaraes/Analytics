@@ -466,5 +466,27 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/score2")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardScore2(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_RELATORIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_score2", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
