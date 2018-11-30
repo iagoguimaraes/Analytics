@@ -288,11 +288,11 @@
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
-                $scope.dashboard.carteira = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+                $scope.dashboard.carteira = [{ name: 'Efetividade', color: 'rgba(160, 103, 175, 1)', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
 
                 $scope.dashboard.qtDia = [
-                  { name: 'Promessa', type: "column", data: data.Table1.map(obj => (obj.qtd_promessa)) }
-                , { name: 'Pago', type: "column", data: data.Table1.map(obj => (obj.qtd_pago)) }
+                  { name: 'Promessa', type: "column", color: 'rgba(160, 103, 175, 1)', data: data.Table1.map(obj => (obj.qtd_promessa)) }
+                , { name: 'Pago', type: "column", color: '#005384' , data: data.Table1.map(obj => (obj.qtd_pago)) }
                 , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.Table1.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
 
                 $scope.mudarEstado('BR-SP');

@@ -50,9 +50,9 @@
                                             Acionamento
                                             <select ng-model="dashboard.opt.acionamento" ng-change="carregarVisalGeral()" class="pull-right">
                                                 <option value="qtd">Qtd Total</option>
-                                                <!--<option value="unq">Qtd Unique</option>
+                                                <option value="unq">Qtd Unique</option>
                                                 <option value="esf">Esforço</option>
-                                                <option value="spin">Spin</option>-->
+                                                <option value="spin">Spin</option>
                                             </select>
                                         </th>
                                     </tr>
@@ -213,7 +213,7 @@
             $scope.carregarBaixas();
         };
 
-        $scope.carregarVisalGeral = function () {
+        $scope.carregarVisalGeral = function () {          
             let dados = $scope.dashboard.dados.filter(o => o.id_piloto == $scope.dashboard.opt.lote && o.dia == $scope.dashboard.opt.permanencia);
 
             $scope.dashboard.visaogeral = alasql(`
@@ -428,7 +428,7 @@
                 dados = dados.filter(o => o.id_agrupamento == filtro_agrupamento);
             if (filtro_tempocasa > 0)
                 dados = dados.filter(o => o.id_tempocasa == filtro_tempocasa);
-            if (filtro_risco > 0)
+            if (filtro_risco > 0) 
                 dados = dados.filter(o => o.id_risco == filtro_risco);
 
             // ## BAIXAS ##
