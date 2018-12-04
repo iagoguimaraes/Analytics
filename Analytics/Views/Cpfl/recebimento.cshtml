@@ -286,6 +286,52 @@
                 </div>
             </div>
 
+            <div class="row clearfix">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons col-light-blue">done_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Media Espontâneo Mês</div>
+                            <div class="number" ng-bind="dashboard.media.media_espontaneo | megaNumber "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons col-light-blue">done</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Media Operação Mês</div>
+                            <div class="number" ng-bind="dashboard.media.media_operacao | megaNumber "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--HISTORICO RECEBIMENTO-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Financeiro ultimos 12 mesês</span>
+
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table4')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.recebimentomes"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -338,36 +384,188 @@
                 $scope.dashboard.equipe = r.data.Table3.map(obj => obj.equipe);
                 $scope.dashboard.equipes = [{ name: 'Equipe', data: r.data.Table3.map(obj => (obj.valor_promessa)) }];
 
-                //        $scope.dashboard.vlCarteira2 =
-                //        {
-                //            chart: {
-                //                    plotBackgroundColor: null,
-                //                    plotBorderWidth: null,
-                //                    plotShadow: false,
-                //                    type: 'pie'
-                //            },
-                //            title: {
-                //                text: ''
-                //            },
-                //            tooltip: {
-                //                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                //            },
-                //            plotOptions: {
-                //                pie: {
-                //                        allowPointSelect: true,
-                //                        cursor: 'pointer',
-                //                        dataLabels: {
-                //                        enabled: false
-                //                        },
-                //                    showInLegend: true
-                //                }
-                //            },
-                //            series: [{
-                //                name: 'Brands',
-                //                colorByPoint: true,
-                //                data: r.data.Table1.map(obj => ({ name: obj.supervisor, y: obj.valor_promessa }))
-                //            }]
-                //        }
+                $scope.dashboard.meses = data.Table4.map(obj => obj.mesDoAnoNome);
+                $scope.dashboard.pagmeses = [{ name: 'Espontaneo', data: data.Table4.map(obj => (obj.valor_espontaneo)), color: '#FF4500' }
+                                            , { name: 'Operação', data: data.Table4.map(obj => (obj.promessa)), color: '#FF8C00' }];
+
+                $scope.dashboard.media = r.data.Table5[0];
+                $scope.dashboard.recebimentomes =
+                {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        categories: data.Table4.map(obj => obj.mesDoAnoNome)
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: ''
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
+                    legend: {
+                        align: 'right',
+                        x: -30,
+                        verticalAlign: 'top',
+                        y: 25,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                        borderColor: '#CCC',
+                        borderWidth: 1,
+                        shadow: false
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x}</b><br/>',
+                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                formatter: function () {
+                                    return $filter("megaNumber")(this.y)
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Espontaneo',
+                        data: data.Table4.map(obj => (obj.valor_espontaneo)),
+                        dataLabels: {
+                            formatter: function () {
+                                return $filter("megaNumber")(this.y)
+                            }
+                        }
+
+                    }, {
+                        name: 'Operação',
+                        data: data.Table4.map(obj => (obj.promessa)),
+                        dataLabels: {
+                            formatter: function () {
+                                return $filter("megaNumber")(this.y)
+                            }
+                        }
+                    }]
+                }
+
+                Highcharts.createElement('link', {
+                    href: 'https://fonts.googleapis.com/css?family=Signika:400,700',
+                    rel: 'stylesheet',
+                    type: 'text/css'
+                }, null, document.getElementsByTagName('head')[0]);
+
+                // Add the background image to the container
+                Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+                    proceed.call(this);
+                    this.container.style.background =
+                        'url(https://www.highcharts.com/samples/graphics/sand.png)';
+                });
+
+
+                Highcharts.theme = {
+                    colors: ['#00a7d9', '#00cbff', '#ebab64', '#61d4ff', '#ace5ff', '#caeeff'],
+                    chart: {
+                        backgroundColor: null,
+                        style: {
+                            fontFamily: 'Signika, serif'
+                        }
+                    },
+                    title: {
+                        style: {
+                            color: 'black',
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    subtitle: {
+                        style: {
+                            color: 'black'
+                        }
+                    },
+                    tooltip: {
+                        borderWidth: 0
+                    },
+                    legend: {
+                        itemStyle: {
+                            fontWeight: 'bold',
+                            fontSize: '13px'
+                        }
+                    },
+                    xAxis: {
+                        labels: {
+                            style: {
+                                color: '#6e6e70'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        labels: {
+                            style: {
+                                color: '#6e6e70'
+                            }
+                        }
+                    },
+                    plotOptions: {
+                        series: {
+                            shadow: true
+                        },
+                        candlestick: {
+                            lineColor: '#404048'
+                        },
+                        map: {
+                            shadow: false
+                        },
+                        column: {
+                            dataLabels: {
+                                formatter: function () {
+                                    return $filter("megaNumber")(this.y)
+                                }
+                            }
+                        }
+                    },
+
+                    // Highstock specific
+                    navigator: {
+                        xAxis: {
+                            gridLineColor: '#D0D0D8'
+                        }
+                    },
+                    rangeSelector: {
+                        buttonTheme: {
+                            fill: 'white',
+                            stroke: '#C0C0C8',
+                            'stroke-width': 1,
+                            states: {
+                                select: {
+                                    fill: '#D0D0D8'
+                                }
+                            }
+                        }
+                    },
+                    scrollbar: {
+                        trackBorderColor: '#C0C0C8'
+                    },
+
+                    // General
+                    background2: '#E0E0E8'
+
+                };
+
+                // Apply the theme
+                Highcharts.setOptions(Highcharts.theme);
+
 
 
             });
