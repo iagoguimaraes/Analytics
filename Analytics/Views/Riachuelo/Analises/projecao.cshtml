@@ -14,7 +14,98 @@
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('metas-window')">
+                <i class="fa fa-edit"></i>
+                CADASTRO DE META
+            </div>
         </header>
+
+        <!--CADASTRO DE META -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="metas-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Cadastro de Meta</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!-- Filtros -->
+                            <div class="tab-pane active" id="control-sidebar-filters-tab">
+                                <!--ANO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Ano</label>
+                                    <select ng-model="filtros.ano">
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                    </select>
+                                </div>
+
+                                <!--MES-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Mês</label>
+                                    <select ng-model="filtros.mes">
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevereiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+
+                                <!--BANDEIRA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Bandeira</label>
+                                    <input-mask class="mask" ng-model="filtros.meta_bandeira" mask="000.000.000.000.000,00" reverse="true" placeholder="150.000,00"></input-mask>
+                                </div>
+
+                                <!--PL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Private Label</label>
+                                    <input-mask id="mask_pl" ng-model="filtros.meta_pl" mask="000.000.000.000.000,00" reverse="true" placeholder="150.000,00"></input-mask>
+                                </div>
+
+                                <!--SAQUE-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Saque</label>
+                                    <input-mask ng-model="filtros.meta_saque" mask="000.000.000.000.000,00" reverse="true" placeholder="150.000,00"></input-mask>
+                                </div>
+
+                                <!--EMPRESTIMO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Empréstimo</label>
+                                    <input-mask ng-model="filtros.meta_emprestimo" mask="000.000.000.000.000,00" reverse="true" placeholder="150.000,00"></input-mask>
+                                </div>
+
+                                <!--BOTÃO-->
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="salvarMetas()" onclick="addDisplayNone('metas-window')">Salvar</button>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- FILTROS -->
         <div class="row margin-bottom">
@@ -74,7 +165,7 @@
 
                                 <!--BOTÃO-->
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -169,6 +260,10 @@
             ano: '' + new Date().getFullYear(),
             mes: '' + (new Date().getMonth() + 1),
             carteiras: '',
+            meta_bandeira: '',
+            meta_pl: '',
+            meta_saque: '',
+            meta_emprestimo: '',
         };
 
         $scope.dashFiltros = {};
@@ -196,6 +291,33 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
 
+                // setar os valores das metas nos campos
+                setTimeout(function () {
+                    if (data.Table2.find(o => o.idCarteira == 8) && data.Table2.find(o => o.idCarteira == 8)["valor"] > 0)
+                        $scope.filtros.meta_pl = $('.mask').masked(data.Table2.find(o => o.idCarteira == 8)["valor"].toFixed(2)); 
+                    else
+                        $scope.filtros.meta_pl = 0;
+                    if (data.Table2.find(o => o.idCarteira == 9) && data.Table2.find(o => o.idCarteira == 9)["valor"] > 0)
+                        $scope.filtros.meta_bandeira = $('.mask').masked(data.Table2.find(o => o.idCarteira == 9)["valor"].toFixed(2))
+                    else
+                        $scope.filtros.meta_bandeira = 0;
+
+                    if (data.Table2.find(o => o.idCarteira == 10) && data.Table2.find(o => o.idCarteira == 10)["valor"] > 0)
+                        $scope.filtros.meta_emprestimo = $('.mask').masked(data.Table2.find(o => o.idCarteira == 10)["valor"].toFixed(2))
+                    else
+                        $scope.filtros.meta_emprestimo = 0;
+
+                    if (data.Table2.find(o => o.idCarteira == 11) && data.Table2.find(o => o.idCarteira == 11)["valor"] > 0)
+                        $scope.filtros.meta_saque = $('.mask').masked(data.Table2.find(o => o.idCarteira == 11)["valor"].toFixed(2))
+                    else
+                        $scope.filtros.meta_saque = 0;
+
+                    $scope.$apply();
+                }, 2000);
+
+                // preencher graficos
+                let dias = r.data.Table1.map(o => o.data)
+
                 $scope.dashboard.grafico_recebido = {
                     title: {
                         text: ''
@@ -206,17 +328,28 @@
                         },
                     },
                     xAxis: {
-                        categories: r.data.Table1.map(o => o.data)
+                        categories: dias
                     },
-                    series: [{
-                        type: 'area',
-                        name: 'Recebido',
-                        color: '#00a65a',
-                        dataLabels: {
-                            enabled: true,
+                    series: [
+                        {
+                            type: 'area',
+                            name: 'Meta',
+                            color: 'rgba(0,115,183,0.4)',
+                            data: r.data.Table1.map(o => o.meta)
                         },
-                        data: r.data.Table1.map(o => o.recebido)
-                    }],
+                        {
+                            type: 'area',
+                            name: 'Recebido',
+                            color: '#00a65a',
+                            dataLabels: {
+                                enabled: true,
+                            },
+                            data: r.data.Table1.map(o => o.recebido)
+                        },
+                    ],
+                    tooltip: {
+                        shared: true,
+                    },
                     credits: {
                         enabled: false
                     }
@@ -224,10 +357,9 @@
 
                 //soma acumulada
                 let somacumulada = 0;
-                let recebido = r.data.Table1.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.recebido + somacumulada }));
-                let projecao = r.data.Table2.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.projecao + somacumulada }));
-                projecao = recebido.concat(projecao);
-                let dias = projecao.map(o => o.data);
+                let recebido = r.data.Table1.filter(o => o.recebido > 0).map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.recebido + somacumulada }));
+                somacumulada = 0;
+                let projecao = r.data.Table1.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.projecao + somacumulada }));
 
                 //habilitar label do ultimo ponto
                 recebido[recebido.length - 1].dataLabels = { enabled: true };
@@ -294,6 +426,16 @@
                 };
 
 
+            });
+        }
+
+        $scope.salvarMetas = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/projecao/cadmeta",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.carregarDashboard();
             });
         }
 

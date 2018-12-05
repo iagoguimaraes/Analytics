@@ -493,6 +493,43 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/projecao/cadmeta")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ProjecaoCadMeta(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                double meta_pl = Convert.ToDouble(form["meta_pl"].ToString().Replace(".",""));
+                double meta_bandeira = Convert.ToDouble(form["meta_bandeira"].ToString().Replace(".", ""));
+                double meta_saque = Convert.ToDouble(form["meta_saque"].ToString().Replace(".", ""));
+                double meta_emprestimo = Convert.ToDouble(form["meta_emprestimo"].ToString().Replace(".", ""));
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("meta_pl", meta_pl);
+                    parametros.Add("meta_bandeira", meta_bandeira);
+                    parametros.Add("meta_saque", meta_saque);
+                    parametros.Add("meta_emprestimo", meta_emprestimo);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
