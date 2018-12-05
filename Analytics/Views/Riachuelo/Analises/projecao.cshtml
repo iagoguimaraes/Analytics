@@ -357,9 +357,9 @@
 
                 //soma acumulada
                 let somacumulada = 0;
-                let recebido = r.data.Table1.filter(o => o.recebido > 0).map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.recebido + somacumulada }));
+                let recebido = r.data.Table1.filter(o => o.recebido > 0).map((curVal, index) => ({ data: curVal.data, y: somacumulada = (curVal.recebido + somacumulada).toFixed(0) / 1 }));
                 somacumulada = 0;
-                let projecao = r.data.Table1.map((curVal, index) => ({ data: curVal.data, y: somacumulada = curVal.projecao + somacumulada }));
+                let projecao = r.data.Table1.map((curVal, index) => ({ data: curVal.data, y: somacumulada = (curVal.projecao + somacumulada).toFixed(0)/1 }));
 
                 //habilitar label do ultimo ponto
                 recebido[recebido.length - 1].dataLabels = { enabled: true };
