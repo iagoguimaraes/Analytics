@@ -97,5 +97,37 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int ano2 = Convert.ToInt32(form["ano2"]);
+                int mes2 = Convert.ToInt32(form["mes2"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano2", ano2);
+                    parametros.Add("mes2", mes2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_comparativo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

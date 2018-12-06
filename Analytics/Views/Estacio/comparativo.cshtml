@@ -1,0 +1,208 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-estacio-comparativo">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Comparativo</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Período 1:</label>
+                            <select ng-model="filtros.mes">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                            <select ng-model="filtros.ano">
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                            </select>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Período 2:</label>
+                            <select ng-model="filtros.mes2">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                            <select ng-model="filtros.ano2">
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                            </select>                            
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Comparativo por Dia Útil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            Indicador
+                            <select ng-model="opcoes.indicador" ng-change="carregarGrafico()">
+                                <option value="qtd">Acordo</option>
+                                <option value="vlr">Acordo $</option>
+                                <option value="qtd_pago">Acordo Pago</option>
+                                <option value="vlr_pago">Acordo Pago $</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.grafico_comparativo" style="width: 100%; height: 450px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-estacio-comparativo', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            ano: '' + new Date().getFullYear(),
+            mes: '' + (new Date().getMonth()),
+            ano2: '' + new Date().getFullYear(),
+            mes2: '' + (new Date().getMonth()+1),
+        };
+
+        $scope.opcoes = {
+            indicador: 'vlr_pago'
+        }
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/estacio/comparativo",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.carregarGrafico();
+            });
+        }
+
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados.Table;
+            let indicador = $scope.opcoes.indicador;
+            let nome1 = $scope.filtros.mes + '/' + $scope.filtros.ano;
+            let nome2 = $scope.filtros.mes2 + '/' + $scope.filtros.ano2;
+
+            $scope.dashboard.grafico_comparativo = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: dados.map(o => o.dia)
+                },
+                series: [
+                    {
+                        type: 'column',
+                        name: nome1,
+                        color: 'rgba(0,115,183,1)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -30,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador])
+                    },
+                    {
+                        type: 'column',
+                        name: nome2,
+                        color: 'rgb(106, 194, 185,1)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -20,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador + '2'])
+                    },
+                ],
+                tooltip: {
+                    shared: true,
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
