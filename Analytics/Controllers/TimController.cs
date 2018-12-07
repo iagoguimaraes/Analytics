@@ -203,7 +203,7 @@ namespace Analytics.Controllers
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);                
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
@@ -288,7 +288,7 @@ namespace Analytics.Controllers
 
         #endregion
 
-    #region HUMANO
+        #region HUMANO
 
         [Route("dashboard/humano/filtros")]
         [HttpGet]
@@ -337,7 +337,7 @@ namespace Analytics.Controllers
                     parametros.Add("aging", aging);
                     parametros.Add("equipes", equipe);
                     parametros.Add("supervisor", supervisor);
-                    
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -472,6 +472,7 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -481,6 +482,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
                     parametros.Add("atraso", atraso);
+                    parametros.Add("saldo", saldo);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
