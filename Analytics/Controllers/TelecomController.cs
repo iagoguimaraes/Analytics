@@ -46,6 +46,7 @@ namespace Analytics.Controllers
                 DataTable plataforma = JsonConvert.DeserializeObject<DataTable>(form["plataforma"]);
                 DataTable operadora = JsonConvert.DeserializeObject<DataTable>(form["operadora"]);
                 DataTable tipochamada = JsonConvert.DeserializeObject<DataTable>(form["tipochamada"]);
+                DataTable rota = JsonConvert.DeserializeObject<DataTable>(form["rota"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
                 {
@@ -56,6 +57,7 @@ namespace Analytics.Controllers
                     parametros.Add("plataforma", plataforma);
                     parametros.Add("operadora", operadora);
                     parametros.Add("tipochamada", tipochamada);
+                    parametros.Add("rota", rota);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -81,6 +83,7 @@ namespace Analytics.Controllers
                 DataTable plataforma = JsonConvert.DeserializeObject<DataTable>(form["plataforma"]);
                 DataTable operadora = JsonConvert.DeserializeObject<DataTable>(form["operadora"]);
                 DataTable tipochamada = JsonConvert.DeserializeObject<DataTable>(form["tipochamada"]);
+                DataTable rota = JsonConvert.DeserializeObject<DataTable>(form["rota"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
                 {
@@ -92,6 +95,7 @@ namespace Analytics.Controllers
                     parametros.Add("plataforma", plataforma);
                     parametros.Add("operadora", operadora);
                     parametros.Add("tipochamada", tipochamada);
+                    parametros.Add("rota", rota);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_historico", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
