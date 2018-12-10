@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Analytics.Controllers
     [RoutePrefix("api/portoseguro")]
     public class PortoSeguroController : ApiController
     {
-        [Route("dashboard/horahora")]
+        [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -40,7 +41,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/producao")]
+        [Route("dashboard/digital/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -68,7 +69,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/promessa")]
+        [Route("dashboard/digital/promessa")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -96,7 +97,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/checkpromessa")]
+        [Route("dashboard/digital/checkpromessa")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -124,7 +125,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/pagamento")]
+        [Route("dashboard/digital/pagamento")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -144,6 +145,88 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/filtro")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraHumano(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducaoHumano(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
