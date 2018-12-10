@@ -79,10 +79,10 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <img class="img-responsive center-block" src="~/Content/Images/CreditCash/robo_200x200.png" height="100" width="100" />
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box" style="background-color: #cccccc">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.consulta | megaNumber"></h3>
@@ -93,7 +93,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box" style="background-color: #47d147">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.sucesso | megaNumber"></h3>
@@ -105,15 +105,39 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box" style="background-color: #47d147">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.adimplente | number"></h3>
+                        <h3 ng-bind="dashboard.resumo.adimplente | megaNumber"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.adimplente / dashboard.resumo.sucesso | percentage: 1"></h4>
                         <p>Adimplente</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-cc"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box" style="background-color: #47d147">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.parcelamento | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.parcelamento / dashboard.resumo.sucesso | percentage: 1"></h4>
+                        <p>Parcelamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box" style="background-color: #47d147">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.oferta | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.oferta / dashboard.resumo.sucesso | percentage: 1"></h4>
+                        <p>Desconto</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
                     </div>
                 </div>
             </div>
@@ -141,8 +165,12 @@
                                         <th>Consulta</th>
                                         <th>Sucesso</th>
                                         <th>Adimplente</th>
+                                        <th>Parcelamento</th>
+                                        <th>Desconto</th>
                                         <th>% Sucesso</th>
                                         <th>% Adimplente</th>
+                                        <th>% Parcelamento</th>
+                                        <th>% Desconto</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.carteira | groupBy: 'carteira'">
@@ -155,8 +183,12 @@
                                         <td>{{c | sumByColumn: 'consulta'| number}}</td>
                                         <td>{{c | sumByColumn: 'sucesso'| number}}</td>
                                         <td>{{c | sumByColumn: 'adimplente'| number}}</td>
+                                        <td>{{c | sumByColumn: 'parcelamento'| number}}</td>
+                                        <td>{{c | sumByColumn: 'oferta'| number}}</td>
                                         <td>{{c | divideSumColumns: 'sucesso':'consulta' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'adimplente':'sucesso' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'parcelamento':'sucesso' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'oferta':'sucesso' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -164,8 +196,11 @@
                                         <td>{{p.consulta | number}}</td>
                                         <td>{{p.sucesso | number}}</td>
                                         <td>{{p.adimplente | number}}</td>
+                                        <td>{{p.parcelamento | number}}</td>
                                         <td>{{p.sucesso / p.consulta | percentage:1}}</td>
                                         <td>{{p.adimplente / p.sucesso | percentage:1}}</td>
+                                        <td>{{p.parcelamento / p.sucesso | percentage:1}}</td>
+                                        <td>{{p.oferta / p.sucesso | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -200,8 +235,12 @@
                                         <th>Consulta</th>
                                         <th>Sucesso</th>
                                         <th>Adimplente</th>
+                                        <th>Parcelamento</th>
+                                        <th>Desconto</th>
                                         <th>% Sucesso</th>
                                         <th>% Adimplente</th>
+                                        <th>% Parcelamento</th>
+                                        <th>% Desconto</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,8 +249,12 @@
                                         <td>{{dia.consulta | number}}</td>
                                         <td>{{dia.sucesso | number}}</td>
                                         <td>{{dia.adimplente | number}}</td>
+                                        <td>{{dia.parcelamento | number}}</td>
+                                        <td>{{dia.oferta | number}}</td>
                                         <td>{{dia.sucesso / dia.consulta | percentage:1}}</td>
                                         <td>{{dia.adimplente / dia.sucesso | percentage:1}}</td>
+                                        <td>{{dia.parcelamento / dia.sucesso | percentage:1}}</td>
+                                        <td>{{dia.oferta / dia.sucesso | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
