@@ -288,7 +288,7 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region HUMANO
+    #region HUMANO
 
         [Route("dashboard/humano/filtros")]
         [HttpGet]
@@ -714,7 +714,41 @@ namespace Analytics.Controllers
         }
 
 
-        #endregion
+        [Route("dashboard/pagamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("aging", aging);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
     }
+    #endregion
+
 }
