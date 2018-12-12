@@ -52,6 +52,12 @@
                             </div>
                         </div>
 
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresa</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
+                        </div>
+
                         <!--CARTEIRA-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
@@ -213,12 +219,13 @@
             </div>
         </div>
 
+
         <!--TABELA EMPRESA/CARTEIRA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Carteira</span>
+                        <span class="card-header-title">Análise por Empresa/Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -237,35 +244,49 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'carteira'">
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_empresa'">
 
-                                    <tr class="text-black">
-                                        <td>                                            
-                                            {{e[0].carteira}}
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_empresa}}
                                         </td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
-                                        <td>{{e | sumByColumn: 'promessa' | number}}</td>
-                                        <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
-                                    </tr>                                    
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.carteira}}</td>
+                                        <td>{{c.discado /  c.qtd_penetrado | number:1}}</td>
+                                        <td>{{c.discado | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.contato / c.discado | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
 
                                 </tbody>
 
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -336,6 +357,7 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteira: '',
+            empresa: '',
         }
         $scope.grafico = { indicador: 'promessa' };
 
@@ -348,6 +370,7 @@
 
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.empresa = r.data.Table1;
         });
 
        
