@@ -174,6 +174,10 @@
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>Valor Promessa</th>
+                                        <th>Email</th>
+                                        <th>Sms</th>
+                                        <th>Carteira</th>
+                                        <th>Spin</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -189,6 +193,10 @@
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{dia.email | number}}</td>
+                                        <td>{{dia.sms | number}}</td>
+                                        <td>{{dia.qtd_carteira | megaNumber}}</td>
+                                        <td>{{dia.discado / dia.qtd_carteira | number:1}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
@@ -204,6 +212,10 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.email | number}}</th>
+                                        <th>{{dashboard.resumo.sms | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_carteira | number}}</th>
+                                        <th>{{dashboard.resumo.discado / dashboard.resumo.qtd_carteira | number: 1}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -229,6 +241,7 @@
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="hitrate">Hit Rate</option>
+                                <option value="spin">Spin</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
@@ -272,6 +285,9 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Sms</th>
+                                        <th>Email</th>
+                                        <th>Spin</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -290,6 +306,9 @@
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'sms'| number}}</td>
+                                        <td>{{e | sumByColumn: 'email'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'discado':'qtd_carteira' | number:1}}</td>
                                         <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -303,6 +322,9 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
+                                        <td>{{c.sms | number}}</td>
+                                        <td>{{c.email | number}}</td>
+                                        <td>{{c.discado / c.qtd_carteira | number:1}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
@@ -421,6 +443,9 @@
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
                     $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'spin':
+                    $scope.dashboard.grafico = [{ name: 'spin', data: dados.map(obj => (obj.discado / obj.qtd_carteira).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
