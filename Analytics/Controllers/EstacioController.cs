@@ -157,5 +157,33 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", dtini.ToString("yyyy-MM-dd"));
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_basecobranca", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
