@@ -347,7 +347,10 @@
             $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
             $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
 
-            $scope.dashboard.graficoSegmentacao = [{ name: 'Quantidade', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj[indicador] })) }];
+            $scope.dashboard.graficoSegmentacao = [
+                { name: 'Quantidade', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj[indicador] })) },
+                { name: 'Percentual', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj['percent_'+indicador] })) }
+            ];
             $scope.dashboard.graficoStatusSegmentacao = [{ name: 'Quantidade', innerSize: '10%', data: $scope.dashboard.statusSegmentacao.map(obj => ({ name: obj.st, y: obj[indicador] })) }];
         }
 
