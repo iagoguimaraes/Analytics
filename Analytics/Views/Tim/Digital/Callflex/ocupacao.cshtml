@@ -158,22 +158,33 @@
 
            
         </div>
-        
-        <!--TEMPOS OPERACIONAIS DIA - HORA-->
+        <!--ANALISE POR HORA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Dia</span>
+                        <span class="card-header-title">Análise por dia / hora</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                Gráfico
+                            </label>
+
+                        </small>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="grafico.exibir == 'true'">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horaHora">
                                 <thead>
                                     <tr>
@@ -185,6 +196,7 @@
                                         <th>Disponível</th>
                                         <th>TMA</th>
                                         <th>TME</th>
+                                        <th>% Ocupação</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.horaHora | groupBy: 'data'">
@@ -194,13 +206,14 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].data}}
                                         </td>
-                                        <td>{{c | avgColumn: 'qtd_ad' | number : 0 }}</td>                                        
+                                        <td>{{c | avgColumn: 'qtd_ad' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'atendido' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'logado'| formatTimer}}</td>
                                         <td>{{c | sumByColumn: 'falado'| formatTimer}}</td>
                                         <td>{{c | sumByColumn: 'disponivel'| formatTimer}}</td>
                                         <td>{{c | avgColumn: 'tma' | number : 0 | formatTimer}}</td>
                                         <td>{{c | avgColumn: 'tme' | number : 0 | formatTimer}}</td>
+                                        <td>{{c | divideSumColumns: 'falado':'logado' | percentage: 1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -212,14 +225,36 @@
                                         <td>{{p.disponivel | formatTimer }}</td>
                                         <td>{{p.tma | formatTimer}}</td>
                                         <td>{{p.tme | formatTimer}}</td>
+                                        <td>{{p.falado / p.logado | percentage: 1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="grafico.exibir == 'false'">
+                            <span class="pull-right">
+                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">                                    
+                                    <option value="atendido">Atendidas</option>
+                                    <option value="qtd_ad">AD</option>
+                                    <option value="logado">Logado</option>                                    
+                                    <option value="falado">Falado</option>
+                                    <option value="disponivel">Disponível</option>
+                                    <option value="tma">TMA</option>
+                                    <option value="tme">TME</option>
+                                    <option value="ocupacao">Ocupação</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
+
+
 
         <!--ANALISE POR PRODUTO-->
         <div class="row margin-bottom">
@@ -247,6 +282,7 @@
                                         <th>Disponível</th>  
                                         <th>TMA</th>
                                         <th>TME</th>
+                                        <th>$ Ocupação</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -259,6 +295,7 @@
                                         <td>{{produto.disponivel | formatTimer}}</td>
                                         <td>{{produto.tma | formatTimer}}</td>
                                         <td>{{produto.tme | formatTimer }}</td>
+                                        <td>{{produto.falado / produto.logado | percentage : 1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -287,7 +324,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'atendido' };
+        $scope.grafico = { indicador: 'atendido', exibir: 'true' };
 
         
         // carregar os filtros
@@ -326,43 +363,45 @@
 
         $scope.carregarGrafico = function () {
             let indicador = $scope.grafico.indicador;
-            let dados = $scope.dashboard.dia;
+            let dados = $scope.dashboard.horaHora;
 
-            $scope.dashboard.datas = dados.map(obj => obj.data)
-           /* $scope.dashboard.categories = dados.map(r => r.categoria);*/
+            $scope.dashboard.horas = dados.map(obj => obj.hora)
 
-            let series1;
             switch (indicador) {
                 case 'atendido':
-                    $scope.dashboard.grafico = [{ name: 'Atendidas', data: resumo.map(obj => obj.promessa_pa) }];
-
+                    $scope.dashboard.grafico = [{ name: 'Atendidas', data: dados.map(obj => obj.atendido) }];
                     break;
+
                 case 'qtd_ad':
-                    $scope.dashboard.grafico = [{ name: 'AD', data: resumo.map(obj => obj.qtd_ad) }];
-
+                    $scope.dashboard.grafico = [{ name: 'AD', data: dados.map(obj => obj.qtd_ad) }];
                     break;
+
                 case 'logado':
-                    $scope.dashboard.grafico = [{ name: 'Med. Logado AD', data: resumo.map(obj => obj.logado) }];
-
+                    $scope.dashboard.grafico = [{ name: 'Med. Logado AD', data: dados.map(obj => obj.logado) }];
                     break;
+
                 case 'falado':
-                    $scope.dashboard.grafico = [{ name: 'Med. Falado AD', data: resumo.map(obj => obj.falado) }];
-
+                    $scope.dashboard.grafico = [{ name: 'Med. Falado AD', data: dados.map(obj => obj.falado) }];
                     break;
+
                 case 'disponivel':
-                    $scope.dashboard.grafico = [{ name: 'Med. Disponível AD', data: resumo.map(obj => obj.disponivel) }];
+                    $scope.dashboard.grafico = [{ name: 'Med. Disponível AD', data: dados.map(obj => obj.disponivel) }];
 
                     break;
                 case 'tma':
-                    $scope.dashboard.grafico = [{ name: 'TMA', data: resumo.map(obj => obj.pausa_total) }];
-
+                    $scope.dashboard.grafico = [{ name: 'TMA', data: dados.map(obj => obj.tma) }];
                     break;
+
                 case 'tme':
-                    $scope.dashboard.grafico = [{ name: 'TME', data: resumo.map(obj => obj.pausa_total) }];
-
+                    $scope.dashboard.grafico = [{ name: 'TME', data: dados.map(obj => obj.tme) }];
                     break;
+
+                case 'ocupacao':
+                    $scope.dashboard.grafico = [{ name: 'Ocupação', data: dados.map(obj => (obj.falado * 100 / obj.logado).toFixed(1) * 1) }];
+                    break;
+
                 default:
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: resumo.map(obj => obj[$scope.grafico.indicador]) }];
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
                     
             }
 

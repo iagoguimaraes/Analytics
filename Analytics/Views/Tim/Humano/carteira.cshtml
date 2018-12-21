@@ -81,6 +81,13 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtrasoM1" dados="dashFiltros.faixaAtrasoM1" style="width:100%"></select2>
                             </div>
 
+                            <!--STATUS SEGMENTACAO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Status Segmentação</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.statusSegmentacao" dados="dashFiltros.statusSegmentacao" style="width:100%"></select2>
+                            </div>
+
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -157,7 +164,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.carteira" type="pie" height="315" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
@@ -191,6 +198,58 @@
             </div>         
         </div>
 
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Status Segmentação</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('StatusSegmentacao','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoStatusSegmentacao" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmentação</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('StatusSegmentacao','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="table-responsive">
+                        <high-chart series="dashboard.graficoSegmentacao" axis-Categories="dashboard.segmentacoes" plot-Options-Bar-Data-Label="true" type="bar" height="680px"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -208,6 +267,7 @@
             carteiras: '',
             faixaAtraso: '',
             faixaAtrasoM1: '',
+            statusSegmentacao: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -230,6 +290,7 @@
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.faixaAtraso = r.data.Table2;
             $scope.dashFiltros.faixaAtrasoM1 = r.data.Table6;
+            $scope.dashFiltros.statusSegmentacao = r.data.Table8;
             
         });
 
@@ -260,14 +321,19 @@
                 url: "/api/tim/dashboard/humano/carteira",
                 data: $scope.filtros,
             }).then(function success(r) {
+
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
+                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '30%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
+                $scope.dashboard.segmentacao = r.data.Table3;
+                
+                $scope.dashboard.statusSegmentacao = r.data.Table4
 
+                $scope.dashboard.segmentacoes = r.data.Table3.map(obj => obj.segmentacao);
                 $scope.carregarGrafico();
             });
         }
@@ -280,6 +346,12 @@
 
             $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
             $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
+
+            $scope.dashboard.graficoSegmentacao = [
+                { name: 'Quantidade', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj[indicador] })) },
+                { name: 'Percentual', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj['percent_'+indicador] })) }
+            ];
+            $scope.dashboard.graficoStatusSegmentacao = [{ name: 'Quantidade', innerSize: '10%', data: $scope.dashboard.statusSegmentacao.map(obj => ({ name: obj.st, y: obj[indicador] })) }];
         }
 
 
