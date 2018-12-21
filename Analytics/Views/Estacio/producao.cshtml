@@ -312,7 +312,7 @@
 
         <!--OCORRENCIAS-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-8">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Ocorrências Tabuladas</span>
@@ -323,13 +323,31 @@
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
-                    <div class="card-body" ng-if="dashboard.ocorrencia">
+                    <div class="card-body" ng-if="dashboard.ocorrencia" style="height:500px">
                         <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.ocorrencia" scroll-collapse="true" scroll-y="324px" order="[[2,'desc']]"></d-table>
                     </div>
                 </div>
             </div>
-        </div>
+  
+            <!-- INSUCESSO CONTATO -->
+            <div class="col-xs-12 col-lg-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Insucesso no Contato</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body" style="height:500px">
+                        <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
 
+      </div>
     </div>
 </div>
 
@@ -364,7 +382,7 @@
                 $scope.dashboard.classe = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.ocorrencia = data.Table4;
-
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table5.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
                 $scope.carregarGraficoHora();
             });
         }

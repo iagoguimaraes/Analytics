@@ -3,7 +3,9 @@
 }
 
 
-<div ng-controller="ctrl-tim-carteira">
+
+
+<div ng-controller="ctrl-cbss-carteira">
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
@@ -57,36 +59,17 @@
                                 </div>
                             </div>
 
-                            <!--EMPRESA-->
+                            <!--EMPRESAS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Empresa</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Empresas</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
                             </div>
 
                             <!--CARTEIRAS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
+                                <label class="control-sidebar-subheading">Carteiras</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
-
-                            <!--FAIXA ATRASO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Aging</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-change="log()" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
-                            </div>
-
-                            <!--FAIXA ATRASO M1-->
-                            <div class="form-group" ng-if="validafiltro == true">
-                                <label class="control-sidebar-subheading">Faixa Atraso (M1)</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtrasoM1" dados="dashFiltros.faixaAtrasoM1" style="width:100%"></select2>
-                            </div>
-
-                            <!--STATUS SEGMENTACAO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Status Segmentação</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.statusSegmentacao" dados="dashFiltros.statusSegmentacao" style="width:100%"></select2>
-                            </div>
-
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -100,11 +83,11 @@
 
         <!--RESUMO E MEDIA CARTEIRA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6 margin-bottom">
+            <div class="col-xs-12 col-md-4 margin-bottom">
 
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Inclusão, Devolução e Carteira Ativa</span>
+                        <span class="card-header-title">Movimentações</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -152,7 +135,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-6 margin-bottom">
+            <div class="col-xs-12 col-md-8 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Média Carteira Ativa por Produto</span>
@@ -164,7 +147,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" type="pie" height="315" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.carteira" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
@@ -172,7 +155,7 @@
 
         <!--GRAFICO POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 margin-bottom"> 
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Gráfico por Dia</span>
@@ -195,67 +178,15 @@
                         <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
                     </div>
                 </div>
-            </div>         
-        </div>
-
-
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-12 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Status Segmentação</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('StatusSegmentacao','Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                        <small class="pull-right">
-                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="inclusao">Inclusão</option>
-                                <option value="devolucao">Devolução</option>
-                                <option value="ativo">Ativo</option>
-                            </select>
-                        </small>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.graficoStatusSegmentacao" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-12 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Segmentação</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('StatusSegmentacao','Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                        <small class="pull-right">
-                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="inclusao">Inclusão</option>
-                                <option value="devolucao">Devolução</option>
-                                <option value="ativo">Ativo</option>
-                            </select>
-                        </small>
-                    </div>
-                    <div class="table-responsive">
-                        <high-chart series="dashboard.graficoSegmentacao" axis-Categories="dashboard.segmentacoes" plot-Options-Bar-Data-Label="true" type="bar" height="680px"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 <script>
 
-    angular.module('app').controller('ctrl-tim-carteira', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-cbss-carteira', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -263,11 +194,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            empresa: '',
+            empresas: '',
             carteiras: '',
-            faixaAtraso: '',
-            faixaAtrasoM1: '',
-            statusSegmentacao: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -275,65 +203,32 @@
             indicador: 'ativo'
         };
 
-       
-        
-
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/tim/dashboard/humano/filtros",
+            url: "/api/cbss/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
+            let data = r.data;
             $scope.dashFiltros.status = r.status;
-
-            $scope.dashFiltros.empresa = r.data.Table;
-            $scope.dashFiltros.carteiras = r.data.Table1;
-            $scope.dashFiltros.faixaAtraso = r.data.Table2;
-            $scope.dashFiltros.faixaAtrasoM1 = r.data.Table6;
-            $scope.dashFiltros.statusSegmentacao = r.data.Table8;
-            
+            $scope.dashFiltros.carteiras = data.Table;
         });
-
-        $scope.validafiltro = false;
-
-        $scope.log = function () {
-
-            if ($scope.filtros.faixaAtraso === null) {
-                $scope.validafiltro = false;
-                return;
-            } else {
-
-                if ($scope.filtros.faixaAtraso[0] === "1") {
-                    $scope.validafiltro = true;
-                    if ($scope.filtros.faixaAtraso.length > 1) {
-                        $scope.validafiltro = false;
-                    }
-                } 
-
-            }
-                // Se encontrar muda a flag para mostrar o filtros.
-        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/dashboard/humano/carteira",
+                url: "/api/cbss/dashboard/carteira",
                 data: $scope.filtros,
             }).then(function success(r) {
-
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '30%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
+                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
-                $scope.dashboard.segmentacao = r.data.Table3;
-                
-                $scope.dashboard.statusSegmentacao = r.data.Table4
 
-                $scope.dashboard.segmentacoes = r.data.Table3.map(obj => obj.segmentacao);
                 $scope.carregarGrafico();
             });
         }
@@ -346,9 +241,6 @@
 
             $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
             $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
-
-            $scope.dashboard.graficoSegmentacao = [{ name: 'Quantidade', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj[indicador] })) }];
-            $scope.dashboard.graficoStatusSegmentacao = [{ name: 'Quantidade', innerSize: '10%', data: $scope.dashboard.statusSegmentacao.map(obj => ({ name: obj.st, y: obj[indicador] })) }];
         }
 
 
