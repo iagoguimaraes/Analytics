@@ -217,7 +217,32 @@
                             </div>
 
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="row margin-bottom">
+            <!--REGIAO-->
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Distribuição por Estado - {{grafico.indicador}} </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraUf','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.valor" ng-change="carregarMapa()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height:550px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -247,6 +272,10 @@
                 indicador: 'ativo'
             };
 
+            $scope.mapa = {
+                valor: 'percentual'
+            };
+
             // carregar os filtros
             $http({
                 method: 'GET',
@@ -273,21 +302,45 @@
                     $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
                     $scope.dashboard.dia = r.data.Table2;
 
+
                     $scope.carregarGrafico();
                 });
             }
 
 
+
+
+
             // carrega o mapa de acordo com o indicador escolhido
             $scope.carregarGrafico = function () {
                 let dados = $scope.dashboard.dia;
+                let dados2 = $scope.dashboard.mapabase;
                 let indicador = $scope.grafico.indicador;
 
                 $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
                 $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
                 $scope.dashboard.graficoAgn = [{ name: 'Aging', data: dados.map(obj => (obj[indicador + 'Agn'])) }];
                 $scope.dashboard.tabela = dados.map(obj => ({ data: obj.data, quantidade: obj[indicador], valor: obj[indicador + 'Vlr'], aging: obj[indicador + 'Agn'] }));
+                
+                // carrega o mapa de acordo com o indicador escolhido
+                $scope.carregarMapa = function () {
+                    let dados = $scope.dashboard.dados.Table3;
+                    switch ($scope.mapa.valor) {
+                        case 'percentual':
+                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj[indicador + '_porcento']) }));
+                            break;
+                        case 'quantidade':
+                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj[indicador]) }));
+                            break;
+                        default:
+                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
+                    }
+                }
+
+                $scope.carregarMapa();
             }
+
+
 
 
             $scope.carregarDashboard();
