@@ -281,6 +281,27 @@
                                 </tfoot>
                             </table>
                         </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoHora.exibir == 'true'">
+                            <span class="pull-right">
+                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                    <option value="hitrate">Hit Rate</option>
+                                    <option value="txloc">Tx Loc</option>
+                                    <option value="txapv">Tx Apv</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="cpca">CPCA</option>
+                                    <option value="promessa">Promessa</option>
+                                    <option value="valor_promessa">R$ Promessa</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.hora" plot-Options-Line-Data-Label="true"></high-chart>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -462,6 +483,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.tab = r.data.Table3.map(obj => obj.tabulacao);
+                $scope.dashboard.hora = r.data.Table1.map(obj => obj.hora);
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
