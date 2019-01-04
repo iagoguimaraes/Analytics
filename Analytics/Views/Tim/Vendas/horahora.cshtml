@@ -1,0 +1,258 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-horahora">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.venda | number:0"></h3>
+                        <p>Vendas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.venda_vl | megaNumber"></h3>
+                        <p>Valor Vendas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.ativacao | number:0"></h3>
+                        <p>Ativações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.ativacao_vl | megaNumber"></h3>
+                        <p>Valor Ativações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!--GRAFICO POR HORA-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Vendas e Ativações por Hora</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.grafico_hora" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALISE POR PLANO-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Plano</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Plano</th>
+                                        <th>Vendas</th>
+                                        <th>Ativações</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.plano | groupBy: 'tipo'">
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].tipo}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'venda' | number}}</td>
+                                        <td>{{c | sumByColumn: 'ativacao'| number}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.plano}}</td>
+                                        <td>{{p.venda | number}}</td>
+                                        <td>{{p.ativacao | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--POR OPERADOR-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Operador</span>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="300px" order="[[1,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-tim-horahora', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/horahora",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                // #1 RESUMO
+                $scope.dashboard.resumo = r.data.Table[0];
+
+                // #2 HORA
+                $scope.dashboard.grafico_hora = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: r.data.Table1.map(obj => obj.hora)
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Venda',
+                            color: '#00a65a',
+                            dataLabels: {
+                                enabled: true,
+                            },
+                            data: r.data.Table1.map(obj => obj.venda)
+                        },
+                        {
+                            type: 'column',
+                            name: 'Ativação',
+                            color: 'rgba(0,115,183,0.4)',
+                            dataLabels: {
+                                enabled: true,
+                            },
+                            data: r.data.Table1.map(obj => obj.ativacao)
+                        },
+                    ],
+                    tooltip: {
+                        shared: true,
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // #3 PLANO
+                $scope.dashboard.plano = r.data.Table2;
+
+                // #6 OPERADOR
+                $scope.dashboard.operador = r.data.Table3;
+
+                // STATUS DASHBOARD OK
+                $scope.dashboard.status = r.status;
+
+            });
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>
