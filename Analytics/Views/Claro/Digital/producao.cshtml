@@ -56,9 +56,15 @@
                                 </div>
                             </div>
 
+                            <!--SEGMENTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                            </div>
+
                             <!--CARTEIRA-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <label class="control-sidebar-subheading">Campanha</label>
                                 <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
                             </div>
 
@@ -74,11 +80,6 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box">
-                    <img class="img-responsive center-block" src="~/Content/Images/Claro/icone-claro.png" style="height:102px" />
-                </div>
-            </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -138,6 +139,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
+                        <p>R$ Acordo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!--ANALISE POR DIA-->
@@ -176,7 +188,8 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>R$ Acordo</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -191,6 +204,7 @@
                                         <td>{{d.cpc | number}}</td>
                                         <td>{{d.cpca | number}}</td>
                                         <td>{{d.promessa | number}}</td>
+                                        <td>{{d.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{d.contato / d.discado | percentage:1}}</td>
                                         <td>{{d.cpc / d.contato | percentage:1}}</td>
                                         <td>{{d.cpca / d.cpc | percentage:1}}</td>
@@ -205,6 +219,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -227,6 +242,7 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
+                                    <option value="valor_promessa">R$ Promessa</option>
                                 </select>
                             </span>
                             <high-chart series="graficoDia.dados" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
@@ -262,7 +278,8 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>R$ Acordo</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -277,6 +294,7 @@
                                         <td>{{campanha.cpc | number}}</td>
                                         <td>{{campanha.cpca | number}}</td>
                                         <td>{{campanha.promessa | number}}</td>
+                                        <td>{{campanha.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{campanha.contato / campanha.discado | percentage:1}}</td>
                                         <td>{{campanha.cpc / campanha.contato | percentage:1}}</td>
                                         <td>{{campanha.cpca / campanha.cpc | percentage:1}}</td>
@@ -291,6 +309,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -384,6 +403,7 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             campanha: '',
+            segmento: '',
 
         };
 
@@ -396,6 +416,7 @@
 
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.campanha = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table1;
 
         });
 

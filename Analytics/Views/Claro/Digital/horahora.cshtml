@@ -58,6 +58,12 @@
 
                             <!--CARTEIRA-->
                             <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="form-group">
                                 <label class="control-sidebar-subheading">Campanhas</label>
                                 <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
                             </div>
@@ -83,7 +89,7 @@
             <div class="box-footer">
 
                 <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -113,10 +119,22 @@
                             <span class="description-text">Promessa</span>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency:'R$ '"></h5>
+                            <span class="description-text">R$ Promessa</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row"  style="background-color: #e21a1d; color:white; opacity: 0.8">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                <div class="row" style="background-color: #e21a1d; color:white; opacity: 0.8">
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.pa | number"></h5>
+                            <span class="description-text">AD</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 ">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
@@ -147,6 +165,44 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                <div class="col-sm-2">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.discado_pa | megaNumber"></h5>
+                        <span class="description-text">Discado AD</span>
+                    </div>
+                </div>
+                <div class="col-sm-2 border-right">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.contato_pa | megaNumber"></h5>
+                        <span class="description-text">Contato AD</span>
+                    </div>
+                </div>
+                <div class="col-sm-2 border-right">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h5>
+                        <span class="description-text">CPC AD</span>
+                    </div>
+                </div>
+                <div class="col-sm-2 border-right">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.cpca_pa | number"></h5>
+                        <span class="description-text">CPCA AD</span>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.promessa_pa | number"></h5>
+                        <span class="description-text">Promessa AD</span>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="description-block">
+                        <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa_pa | currency:'R$ '"></h5>
+                        <span class="description-text">R$ Promessa AD</span>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
 
@@ -186,6 +242,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -200,6 +257,7 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -214,6 +272,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -222,6 +281,27 @@
                                 </tfoot>
                             </table>
                         </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoHora.exibir == 'true'">
+                            <span class="pull-right">
+                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                    <option value="hitrate">Hit Rate</option>
+                                    <option value="txloc">Tx Loc</option>
+                                    <option value="txapv">Tx Apv</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="cpca">CPCA</option>
+                                    <option value="promessa">Promessa</option>
+                                    <option value="valor_promessa">R$ Promessa</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.hora" plot-Options-Line-Data-Label="true"></high-chart>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -252,6 +332,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -266,6 +347,7 @@
                                         <td>{{campanha.cpc | number}}</td>
                                         <td>{{campanha.cpca | number}}</td>
                                         <td>{{campanha.promessa | number}}</td>
+                                        <td>{{campanha.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{campanha.contato / campanha.discado | percentage:1}}</td>
                                         <td>{{campanha.cpc / campanha.contato | percentage:1}}</td>
                                         <td>{{campanha.cpca / campanha.cpc | percentage:1}}</td>
@@ -280,6 +362,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -369,6 +452,8 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             campanha: '',
+            segmento: '',
+
         };
 
         // carregar os filtros
@@ -380,6 +465,7 @@
 
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.campanha = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table1;
 
         });
 
@@ -397,6 +483,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.tab = r.data.Table3.map(obj => obj.tabulacao);
+                $scope.dashboard.hora = r.data.Table1.map(obj => obj.hora);
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
