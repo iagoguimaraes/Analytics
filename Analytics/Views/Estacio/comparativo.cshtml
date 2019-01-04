@@ -123,11 +123,15 @@
 
 <script>
     angular.module('app').controller('ctrl-estacio-comparativo', function ($scope, $http, $filter) {
+
+        let hoje = new Date(), mesPassado = new Date();
+        mesPassado.setDate(0);
+
         $scope.filtros = {
-            ano: '' + (new Date().getFullYear()),
-            mes: '' + (new Date().getMonth() +1),
-            ano2: '' + new Date().getFullYear(),
-            mes2: '' + (new Date().getMonth()+1),
+            ano: '' + mesPassado.getFullYear(),
+            mes: '' + (mesPassado.getMonth() +1),
+            ano2: '' + hoje.getFullYear(),
+            mes2: '' + (hoje.getMonth()+1),
         };
 
        
