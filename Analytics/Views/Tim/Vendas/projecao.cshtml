@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-projecao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Projecao</div>
+        </header>
+
+        <!--PROJECAO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção de Hoje</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_dia" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PROJECAO MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção do Mês</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-tim-projecao', function ($scope, $http, $filter) {
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/projecao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                // PROJECAO DO DIA
+                if (r.data.Table.length > 0) {
+                    let dia_venda = r.data.Table1.map(o => ({ y: o.venda }));
+                    let dia_projecao = r.data.Table.map(o => ({ y: o.venda }));
+                    dia_venda[dia_venda.length - 1].dataLabels = { enabled: true };
+                    dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+
+                    $scope.dashboard.projecao_dia = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
+                        },
+                        xAxis: {
+                            categories: r.data.Table1.map(o => o.hora)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'black',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: dia_venda
+                            },
+                            {
+                                type: 'area',
+                                name: 'Venda',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: dia_projecao
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                }
+                
+                let mes_venda = r.data.Table3.map(o => ({ y: o.venda }));
+                let mes_projecao = r.data.Table2.map(o => ({ y: o.venda }));
+                mes_venda[mes_venda.length - 1].dataLabels = { enabled: true };
+                mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+
+                $scope.dashboard.projecao_mes = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: r.data.Table3.map(o => o.data)
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: mes_venda
+                        },
+                        {
+                            type: 'area',
+                            name: 'Venda',
+                            color: 'black',
+                            marker: { symbol: 'circle' },
+                            data: mes_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // STATUS DASHBOARD OK
+                $scope.dashboard.status = r.status;
+
+            });
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>
