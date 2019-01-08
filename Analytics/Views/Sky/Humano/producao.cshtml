@@ -190,11 +190,13 @@
                                         <tr>
                                             <th>Dia</th>
                                             <th>Discado</th>
-                                            <th>Transferido</th>
+                                            <th>Atendido</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>CPCA</th>
                                             <th>Promessa</th>
+                                            <th>Pro. Cartão</th>
+                                            <th>Pro. Parcelada</th>
                                             <th>Ticket Médio Promessa</th>
                                             <th>HitRate</th>
                                             <th>TxTab</th>
@@ -212,6 +214,8 @@
                                             <td>{{dia.cpc | number}}</td>
                                             <td>{{dia.cpca | number}}</td>
                                             <td>{{dia.promessa | number}}</td>
+                                            <td>{{dia.promessa_cartao | number}}</td>
+                                            <td>{{dia.promessa_parc | number}}</td>
                                             <td>{{dia.Ticket_Medio | number}}</td>
                                             <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                             <td>{{dia.contato / dia.transferido | percentage:1}}</td>
@@ -244,11 +248,13 @@
                                     <option value="txapv">Tx Apv</option>
                                     <option value="conversao">Conversão</option>
                                     <option value="discado">Discado</option>
-                                    <option value="transferido">Transferido</option>
+                                    <option value="transferido">Atendido</option>
                                     <option value="contato">Contato</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
+                                    <option value="promessa_cartao">Promessa Cartão</option>
+                                    <option value="promessa_parc">Promessa Parcelada</option>
                                     <option value="Ticket_Medio">Ticket Médio Promessa</option>
                                 </select>
                             </small>
@@ -284,7 +290,7 @@
                                             <th>CPCA</th>
                                             <th>Promessa</th>
                                             <th>Promessa Cartão</th>
-                                            <th>Promessa Migração</th>
+                                            <th>Promessa Parcelada</th>
                                             <th>% Cartão</th>
                                             <th>% Migração</th>
                                             <th>TxLoc</th>
@@ -304,9 +310,9 @@
                                             <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
-                                            <td>{{c | sumByColumn: 'promessa_migracao'| number}}</td>
+                                            <td>{{c | sumByColumn: 'promessa_parc'| number}}</td>
                                             <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
-                                            <td>{{c | divideSumColumns: 'promessa_migracao':'promessa' | percentage:1}}</td>
+                                            <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -319,9 +325,9 @@
                                             <td>{{p.cpca | number}}</td>
                                             <td>{{p.promessa | number}}</td>
                                             <td>{{p.promessa_cartao | number}}</td>
-                                            <td>{{p.promessa_migracao | number}}</td>
+                                            <td>{{p.promessa_parc | number}}</td>
                                             <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
-                                            <td>{{p.promessa_migracao / p.promessa | percentage:1}}</td>
+                                            <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
                                             <td>{{p.cpc / p.contato | percentage:1}}</td>
                                             <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                             <td>{{p.promessa / p.cpca | percentage:1}}</td>
