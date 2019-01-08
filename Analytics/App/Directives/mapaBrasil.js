@@ -5,11 +5,19 @@
         require: '^?ngModel',
         scope: {
             dados: '=',
+            ballonText: '@',
         },
         template: '<div></div>',
         link: function (scope, element, attrs, ngModelCtrl) {
             scope.$watch('dados', function (dados) {
                 if (dados) {
+
+                    let ballonText = "[[title]]: <strong>[[value]] </strong>";
+                    if(scope.ballonText == 'both')
+                        ballonText = "[[title]]: <strong>[[value]] </strong> ([[percent]]%)";
+                    else if (ballonText == 'percent')
+                        ballonText = "[[title]]: <strong>[[percent]]% </strong>";
+
                     AmCharts.makeChart(element[0], {
                         type: "map",
                         theme: "light",
@@ -23,7 +31,7 @@
                         areasSettings: {
                             autoZoom: false,
                             selectable: true,
-                            balloonText: "[[title]]: <strong>[[value]] </strong>", //[[percent]]%
+                            balloonText: ballonText,
                         },
                         valueLegend: {
                             right: 10,                          
