@@ -169,7 +169,8 @@
 
         $scope.acessarCredor = function (c) {
             if (c.paginas > 0) {
-                $scope.alterarMenu(c);               
+                $scope.alterarMenu(c); 
+                document.body.classList.add('menu-opened');
             }
             else {
                 swal("Você não possui acesso a essa empresa");
@@ -265,6 +266,20 @@
         window.dispatchEvent(new Event('resize'));
     });
 
+</script>
+
+<script>
+    function checarTamanhoTela() {
+        if ($(window).width() < 768) { // se for mobile, manter menu fechado
+            document.body.classList.remove('menu-opened');
+        }
+    }
+
+    checarTamanhoTela();
+
+    $(window).resize(function () {
+        checarTamanhoTela();     
+    });
 </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
