@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 
-    <!--STYLES-->    
+    <!--STYLES-->
     <link href="/Content/Styles/bootstrap.min.css" rel="stylesheet" />
     <link href="/Content/Styles/font-awesome.min.css" rel="stylesheet" />
     <link href="/Content/Styles/ionicons.min.css" rel="stylesheet" />
@@ -96,7 +96,7 @@
             <i class="fa fa-th"></i>
         </div>
         <div class="main-nav cursor-pointer">
-            <a href="/Login.html" onclick="return confirm('Deseja Sair?')"><i  ng-style="{'color': credor.cor_fonte_primaria}" class="fa fa-power-off"></i></a>
+            <a href="/Login.html" onclick="return confirm('Deseja Sair?')"><i ng-style="{'color': credor.cor_fonte_primaria}" class="fa fa-power-off"></i></a>
         </div>
         <div class="main-nav cursor-pointer">
             <a href="/Views/Home/home.cshtml"><i ng-style="{'color': credor.cor_fonte_primaria}" class="fa fa-home"></i></a>
@@ -123,7 +123,7 @@
                             <div>{{c.nome}}</div>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
 
@@ -135,7 +135,7 @@
     </div>
 
     <!--LOADING-->
-    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div> 
+    <div ng-class="dadosPagina.loading ? 'loading' : ''"><div></div></div>
 
 </body>
 </html>
@@ -164,20 +164,21 @@
             $scope.credor = c;
             let menu = $scope.paginas.filter(p => p.id_credor == c.id_credor);
             $scope.menu = formatarMenu(menu);
-            
+
+            document.body.classList.add('menu-opened');
+            window.scrollTo(0, 0);
         };
 
         $scope.acessarCredor = function (c) {
             if (c.paginas > 0) {
-                $scope.alterarMenu(c); 
-                document.body.classList.add('menu-opened');
+                $scope.alterarMenu(c);
             }
             else {
                 swal("Você não possui acesso a essa empresa");
             }
         }
 
-        $scope.toggleCredorWindow = function() {
+        $scope.toggleCredorWindow = function () {
             if (document.body.classList.contains('credorwindow-opened')) {
                 document.body.classList.remove("credorwindow-opened");
                 // setar credor atual
@@ -211,10 +212,10 @@
                     // pagina
                     if (i == hierarquia.length - 1)
                         item = pagina;
-                        // root
+                    // root
                     else if (i == 0)
                         item = { path: hierarquia[i], subpath: [], root: 1 };
-                        // pasta
+                    // pasta
                     else
                         item = { path: hierarquia[i], subpath: [] };
 
@@ -257,7 +258,7 @@
     }
 
     $(document).on('click', '.card-header-close', function () {
-        $(this).parent().parent().addClass('display-none');   
+        $(this).parent().parent().addClass('display-none');
     });
 
     $(document).on('click', '.card-header-expand', function () {
@@ -269,17 +270,9 @@
 </script>
 
 <script>
-    function checarTamanhoTela() {
-        if ($(window).width() < 768) { // se for mobile, manter menu fechado
-            document.body.classList.remove('menu-opened');
-        }
+    if ($(window).width() < 768) { // se for mobile, manter menu fechado
+        document.body.classList.remove('menu-opened');
     }
-
-    checarTamanhoTela();
-
-    $(window).resize(function () {
-        checarTamanhoTela();     
-    });
 </script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
