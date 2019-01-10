@@ -149,7 +149,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Respostas por Estado</span>
+                        <span class="card-header-title">Retorno por UF          </span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -159,12 +159,53 @@
                         <small class="pull-right">
                             <select ng-model="mapa.indicador" ng-options="i.name as i.name for i in mapa.tabulacao" ng-change="carregarMapa()"></select> 
                         </small>
-                    </div>
+                            <label>
+                                <input type="radio" name="graficoMapaExibir" ng-model="mapa.exibir" value="false"  />
+                                Gráfico
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoMapaExibir" ng-model="mapa.exibir" value="true" checked="checked"/>
+                                Tabela      
+                            </label>
+                     </div>
                     <div class="card-body">
-                        <mapa-brasil style="height:664px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="mapa.exibir == 'true'" style="height:664px">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.tbmapa">
+                                <thead>
+                                    <tr>
+                                        <th>Estado</th>
+                                        <th>% No Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.tbmapa | groupBy: 'UF'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].UF}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'percentual' | number:0 }}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_pes_tratado}}</td>
+                                        <td>{{c.percentual }}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div ng-show="mapa.exibir == 'false'">
+                            <mapa-brasil style="height:664px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                        </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
 
 
@@ -212,7 +253,7 @@
 
 
         $scope.mapa = {
-            indicador: 'Nao Informado'
+            indicador: 'Nao Informado', exibir: 'false'
         };
 
 
@@ -242,7 +283,7 @@
 
                 $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.ds_pes_tratado);
                 $scope.dashboard.fxaCartao = data.Table2.map(obj => obj.ds_pes_tratado);
-                
+                $scope.dashboard.tbmapa = data.Table3;
 
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
@@ -251,13 +292,11 @@
                         
                 let qtdColuna = data.Table4[0];
                 let colunas = data.Table5;
-                console.log(colunas);
                 $scope.mapa.tabulacao = colunas;
 
                 var cores = ['#989898', '#a8a8a8', '#b9b9b9', '#cacaca', '#dcdcdc', '#ededed', '#989898', '#989898', '#7d7d7d', '#636363', '#4a4a4a', '#323232', '#1c1c1c', '#000000'];
 
-                $scope.dashboard.grafico = [
-                ];
+                $scope.dashboard.grafico = [];
 
                 for (let i = 0; i < (colunas.length) ; i++) {
 
@@ -270,8 +309,6 @@
 
                 }
 
-
-                console.log($scope.dashboard.grafico);
                 $scope.carregarMapa();
             });
         }
@@ -282,7 +319,7 @@
 
             let dados = $scope.dashboard.dados.Table3;
             $scope.dashboard.mapa = dados.filter(obj => obj.ds_pes_tratado == $scope.mapa.indicador).map(obj => ({ id: 'BR-' + obj.UF, value: obj.percentual }));
-            console.log($scope.mapa.indicador);
+
             
         }
 
