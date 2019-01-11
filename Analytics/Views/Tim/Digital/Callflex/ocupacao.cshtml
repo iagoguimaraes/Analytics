@@ -514,53 +514,12 @@
         }
       
         $scope.carregarGraficoFila = function () {
+
             let indicador = $scope.graficoFila.indicador;
             let dados = $scope.dashboard.horaHora;
-
-            $scope.dashboard.horas = dados.map(obj => obj.hora)
-
-            //switch (indicador) {
-            //    case 'atendido':
-            //    $scope.dashboard.graficoFila = [{ name: 'Atendidas', data: $scope.dashboard.dados.Table4.map(obj => obj.atendido)  }];
-            //        break;
-
-            //    case 'qtd_ad':
-            //        $scope.dashboard.graficoFila = [{ name: 'AD', data: $scope.dashboard.dados.Table4.map(obj => obj.qtd_ad) }];
-            //        break;
-
-            //    case 'logado':
-            //        $scope.dashboard.graficoFila = [{ name: 'Med. Logado AD', data: $scope.dashboard.dados.Table4.map(obj => obj.logado) }];
-            //        break;
-
-            //    case 'falado':
-            //        $scope.dashboard.graficoFila = [{ name: 'Med. Falado AD', data: $scope.dashboard.dados.Table4.map(obj => obj.falado) }];
-            //        break;
-
-            //    case 'disponivel':
-            //        $scope.dashboard.graficoFila = [{ name: 'Med. Disponível AD', data: $scope.dashboard.dados.Table4.map(obj => obj.disponivel) }];
-            //        break;
-
-            //    case 'tma':
-            //        $scope.dashboard.graficoFila = [{ name: 'TMA', data: $scope.dashboard.dados.Table4.map(obj => obj.tma) }];
-            //        break;
-
-            //    case 'tme':
-            //        $scope.dashboard.graficoFila = [{ name: 'TME', data: $scope.dashboard.dados.Table4.map(obj => obj.tme) }];
-            //        break;
-
-            //    case 'ocupacao':
-            //        $scope.dashboard.graficoFila = [{ name: $scope.dashboard.dados.Table4.map(obj => obj.fila), data: $scope.dashboard.dados.Table4.map(obj => (obj.falado * 100 / obj.logado).toFixed(1) * 1), dashStyle: 'shortdot' }];
-            //        break;
-
-            //    default:
-            //        $scope.dashboard.graficoFila = [
-            //            { name: $scope.graficoFila.indicador, data: $scope.dashboard.dados.Table4.map(obj => obj[$scope.graficoFila.indicador]) }];
-                    
-            //}
-
-
             let filas = $scope.dashboard.dados.Table5;
-       
+
+            $scope.dashboard.horas = dados.map(obj => obj.hora)       
 
             $scope.dashboard.graficoFila = [];
 
@@ -568,9 +527,7 @@
                 
                 let fila = filas[i];
 
-                let tabela = alasql('select fila, hora, qtd_ad, atendido, tma, tme, logado, falado, disponivel from ? where fila in ("' + fila.fila + '") ', [$scope.dashboard.fila]);
-
-                console.log(tabela)
+                let tabela = alasql('select fila, hora, qtd_ad, atendido, tma, tme, logado, falado, disponivel, ocupacao from ? where fila in ("' + fila.fila + '") ', [$scope.dashboard.fila]);                
 
                 let serie = { name: fila.fila, data: tabela.map(obj => obj[$scope.graficoFila.indicador]), dashStyle: 'shortdot' };
 
