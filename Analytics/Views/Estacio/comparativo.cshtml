@@ -56,7 +56,7 @@
                             </select>
                         </div>
 
-                        <!--DATA FINAL-->
+                        <!--DATA INTERMEDIARIA-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Período 2:</label>
                             <select ng-model="filtros.mes2">
@@ -74,6 +74,32 @@
                                 <option value="12">Dezembro</option>
                             </select>
                             <select ng-model="filtros.ano2">
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                            </select>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Período 3:</label>
+                            <select ng-model="filtros.mes3">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                            <select ng-model="filtros.ano3">
                                 <option value="2018">2018</option>
                                 <option value="2019">2019</option>
                                 <option value="2020">2020</option>
@@ -124,17 +150,21 @@
 <script>
     angular.module('app').controller('ctrl-estacio-comparativo', function ($scope, $http, $filter) {
 
-        let hoje = new Date(), mesPassado = new Date();
+        let hoje = new Date(), mesPassado = new Date(), mesRetrassado = new Date();
         mesPassado.setDate(0);
+        mesRetrassado.setDate(0);
 
         $scope.filtros = {
-            ano: '' + mesPassado.getFullYear(),
-            mes: '' + (mesPassado.getMonth() +1),
-            ano2: '' + hoje.getFullYear(),
-            mes2: '' + (hoje.getMonth()+1),
+            ano: '' + mesRetrassado.getFullYear(),
+            mes: '' + (mesRetrassado.getMonth()),
+            ano2: '' + mesPassado.getFullYear(),
+            mes2: '' + (mesPassado.getMonth() +1),
+            ano3: '' + hoje.getFullYear(),
+            mes3: '' + (hoje.getMonth()+1),
         };
 
-       
+        console.log($scope.filtros);
+
         $scope.opcoes = {
             indicador: 'vlr_pago'
         }
@@ -155,6 +185,7 @@
             let indicador = $scope.opcoes.indicador;
             let nome1 = $scope.filtros.mes + '/' + $scope.filtros.ano;
             let nome2 = $scope.filtros.mes2 + '/' + $scope.filtros.ano2;
+            let nome3 = $scope.filtros.mes3 + '/' + $scope.filtros.ano3;
             $scope.dashboard.grafico_comparativo = {
                 title: {
                     text: ''
@@ -192,6 +223,18 @@
                         },
                         data: dados.map(o => o[indicador + '2'])
                     },
+                   {
+                        type: 'column',
+                        name: nome3,
+                        color: 'rgb(9, 122, 110,1)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -20,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador + '3'])
+                   },
                 ],
                 tooltip: {
                     shared: true,
