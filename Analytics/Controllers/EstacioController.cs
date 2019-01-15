@@ -109,6 +109,8 @@ namespace Analytics.Controllers
                 int mes = Convert.ToInt32(form["mes"]);
                 int ano2 = Convert.ToInt32(form["ano2"]);
                 int mes2 = Convert.ToInt32(form["mes2"]);
+                int ano3 = Convert.ToInt32(form["ano3"]);
+                int mes3 = Convert.ToInt32(form["mes3"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
                 {
@@ -118,6 +120,8 @@ namespace Analytics.Controllers
                     parametros.Add("mes", mes);
                     parametros.Add("ano2", ano2);
                     parametros.Add("mes2", mes2);
+                    parametros.Add("ano3", ano3);
+                    parametros.Add("mes3", mes3);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_comparativo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
