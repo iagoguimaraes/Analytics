@@ -118,6 +118,46 @@
             </div>
         </div>
 
+        <div class="container-fluid">
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done_all</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Total Periodo 1</div>
+                            <div class="number" ng-bind="depara.campo1  | megaNumber"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="info-box-new bg-new-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">done_outline</i>
+                        </div>
+
+                        <div class="content">
+                            <div class="text">Total Periodo 2</div>
+                            <div class="number" ng-bind="depara.campo2 | megaNumber"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Total Periodo 3</div>
+                            <div class="number" ng-bind="depara.campo3 | megaNumber "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--GRAFICO-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -163,11 +203,18 @@
             mes3: '' + (hoje.getMonth()+1),
         };
 
-        console.log($scope.filtros);
-
         $scope.opcoes = {
             indicador: 'vlr_pago'
         }
+
+        //Objeto para alterar o ng bind
+        $scope.depara = {
+            campo1: $scope.opcoes.indicador
+            , campo2: $scope.opcoes.indicador + '2'
+            , campo3: $scope.opcoes.indicador + '3'
+        };
+
+
         $scope.dashboard = {};
         $scope.carregarDashboard = function () {
             $http({
@@ -177,12 +224,27 @@
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
+                $scope.dashboard.campo = r.data.Table1[0];
+                console.log($scope.dashboard.campo);
                 $scope.carregarGrafico();
             });
+
+           
+
         }
+
+
         $scope.carregarGrafico = function () {
-            let dados = $scope.dashboard.dados.Table;
             let indicador = $scope.opcoes.indicador;
+            $scope.dashboard.valor = $scope.dashboard.campo;
+
+            $scope.depara.campo1 = $scope.dashboard.valor[indicador];
+            $scope.depara.campo2 = $scope.dashboard.valor[indicador + '2'];
+            $scope.depara.campo3 = $scope.dashboard.valor[indicador + '3'];
+
+
+            let dados = $scope.dashboard.dados.Table;
+            
             let nome1 = $scope.filtros.mes + '/' + $scope.filtros.ano;
             let nome2 = $scope.filtros.mes2 + '/' + $scope.filtros.ano2;
             let nome3 = $scope.filtros.mes3 + '/' + $scope.filtros.ano3;
