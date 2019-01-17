@@ -33,7 +33,7 @@
                     <div class="card-body">
 
                         <!-- Filtros -->
-                        <div class="tab-pane active" id="control-sidebar-filters-tab" >
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
                             <!--DATA INCIAL-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Data Inicial</label>
@@ -41,7 +41,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini" ></date-picker>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
                             </div>
 
@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <div class="row margin-bottom"">
+        <div class="row margin-bottom" ">
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
@@ -137,7 +137,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6">               
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Efetividade por Produto</span>
@@ -174,20 +174,26 @@
             </div>
         </div>
 
-        <div class="row margin-bottom"">
+        <div class="row margin-bottom" ">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Efetividade por Dia</span>
+                        <span class="card-header-title">Efetividade por </span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('EfetividadeDia','Table6')">
+                        <div class="card-header-button" ng-click="extrair('EfetividadeCarteira','Table7')">
                             <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="card-header-title">
+                            <select style="margin-left: 20px" class="form-control" ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="Promessa" selected="selected">Promessa</option>
+                                <option value="Inclusao">Inclusões</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.diaProm" axis-Categories="dashboard.dias" type="column"
+                        <high-chart series="dashboard.diaProm" axis-Categories="campo.valor" type="column"
                                     plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
                                     y-Axis1-Max="100"></high-chart>
                     </div>
@@ -213,8 +219,12 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             produtos: ''
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+
+        $scope.grafico = { indicador: 'Promessa' };
+        $scope.campo = { valor: '' };
 
         // carregar os filtros
         $http({
@@ -239,6 +249,9 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.dias = data.Table.map(o => o.data);
+                $scope.dashboard.mes  = data.Table7.map(o => o.mes);
+
+
                 $scope.dashboard.produtos = data.Table1.map(o => o.produto);
 
                 $scope.dashboard.resumo = data.Table2[0];
@@ -247,13 +260,47 @@
                 $scope.dashboard.produtoEftv = [{ name: 'Valor', data: data.Table4.map(o => o.efetividade) }];
                 $scope.dashboard.diaPgto = [{ name: 'Valor', data: data.Table5.map(o => o.vl_pagamento) }];
 
-                $scope.dashboard.diaProm = [
-                    { name: 'promessa', type: 'column', data: data.Table6.map(obj => obj.promessa) },
-                    { name: 'recebido', type: 'column', data: data.Table6.map(obj => obj.recebido) },
-                    { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table6.map(obj => obj.efetividade) },
-                ];
+
+
+                $scope.carregarGrafico();
 
             });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados;
+
+            console.log($scope.grafico.indicador);
+            switch ($scope.grafico.indicador) {
+                case 'Promessa':
+
+                    $scope.campo.valor = $scope.dashboard.dias;
+                    $scope.dashboard.diaProm = [
+                            { name: 'promessa', type: 'column', data: dados.Table6.map(obj => obj.promessa) },
+                            { name: 'recebido', type: 'column', data: dados.Table6.map(obj => obj.recebido) },
+                            { name: 'efetividade', type: 'spline', yAxis: 1, data: dados.Table6.map(obj => obj.efetividade) },
+                    ];
+                    
+                    break;
+                case 'Inclusao':
+
+                    $scope.campo.valor = $scope.dashboard.mes;
+                    $scope.dashboard.diaProm = [
+                            { name: 'inclusao', type: 'column', data: dados.Table7.map(obj => obj.inclusao) },
+                            { name: 'recebido', type: 'column', data: dados.Table7.map(obj => obj.qtd_pago) },
+                            { name: 'efetividade', type: 'spline', color: 'rgba(232, 2, 39, 1)', yAxis: 1, data: dados.Table7.map(obj => obj.efetividade) },
+                    ];
+
+                    break;
+                default:
+                    $scope.campo.valor = $scope.dashboard.dias;
+                    $scope.dashboard.diaProm = [
+                            { name: 'promessa', type: 'column', data: data.Table6.map(obj => obj.promessa) },
+                            { name: 'recebido', type: 'column', data: data.Table6.map(obj => obj.recebido) },
+                            { name: 'efetividade', type: 'spline', yAxis: 1, data: data.Table6.map(obj => obj.efetividade) },
+                    ];
+            }
         }
 
         $scope.carregarDashboard();

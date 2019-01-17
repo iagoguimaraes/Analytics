@@ -276,6 +276,35 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        {
+            try
+            {
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("supervisor", supervisores);
+                    parametros.Add("equipe", equipes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
