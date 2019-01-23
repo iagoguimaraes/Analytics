@@ -305,6 +305,45 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/intersic/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraIntersic(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("supervisores", supervisores);
+                    parametros.Add("equipes", equipes);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_intersic_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]

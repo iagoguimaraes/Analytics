@@ -143,7 +143,7 @@
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo_total / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.acordo / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.acordo_total  / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -240,7 +240,7 @@
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.acordo_total / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -305,7 +305,7 @@
                                         <td>{{g | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{g | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        <td>{{g | divideSumColumns: 'acordo_total':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in g" ng-show="showTbody">
@@ -324,6 +324,7 @@
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                        <td>{{c.acordo_total / c.cpca | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -386,7 +387,7 @@
                                         <td>{{g | sumByColumn: 'valor_total_risco' | number}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{g | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        <td>{{g | divideSumColumns: 'acordo_total':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in g" ng-show="showTbody">
@@ -402,7 +403,7 @@
                                         <td>{{c.valor_riscoex + c.valor_risco | number}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                        <td>{{c.acordo_total / c.cpca | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -534,7 +535,7 @@
                     $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.acordo_total * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];

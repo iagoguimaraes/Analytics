@@ -1,0 +1,528 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-net-intersic-horahora">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora - Intersic</div>
+            <br>
+            <div class="inner">
+                <div ng-bind="dashboard.dataatz.data | date: 'yyyy-MM-dd HH:mm' "></div>
+                <p>Ultima atualização</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-refresh"></i>
+            </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Inicio</label>
+                                        <select class="form-control" ng-model="filtros.horaini">
+                                            <option value="7" selected="selected">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <!--HORA FIM-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Final</label>
+                                        <select class="form-control" ng-model="filtros.horafim">
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22" selected="selected">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                            </div>
+
+                            <!--SUPERVISOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores" style="width:100%"></select2>
+                            </div>
+
+                            <!--EQUIPES-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Equipes</label>
+                                <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMO INDICADORES -->
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Net/banner net.jpg') center center;">
+            </div>
+            <div class="widget-user-image">
+                <img class="img-circle" src="/Content/Images/Net/logo.png" style="background-color: rgba(255, 255, 255, 0.00)" height="160" width="200">
+            </div>
+            <div class="box-footer">
+                <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
+                            <span class="description-text">Contato</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
+                            <span class="description-text">CPC</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
+                            <span class="description-text">CPCA</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
+                            <span class="description-text">Promessa</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency:'R$ '"></h5>
+                            <span class="description-text">R$ Promessa</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa / dashboard.resumo.promessa | currency:'R$ ' "></h5>
+                            <span class="description-text">Tkt Médio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="background-color: #0298d5; color:white; opacity: 0.8">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
+                            <span class="description-text">Tx Loc</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
+                            <span class="description-text">Tx Apv</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <span class="description-text">Conversao</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.pa |number "></h5>
+                            <span class="description-text">Agentes</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.pa | number: 0"></h5>
+                            <span class="description-text">CPC Agentes</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.pa | number: 0"></h5>
+                            <span class="description-text">Promessa Agentes</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--TABELA SUPERVISOR/EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor</th>
+                                        <th>Agentes</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>R$ Tkt Médio</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'ds_supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'pa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'valor_promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'valor_promessa' : 'promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_equipe}}</td>
+                                        <td>{{c.pa | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.valor_promessa |  currency:'R$ '}}</td>
+                                        <td>{{c.valor_promessa / c.promessa |  currency:'R$ '}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABELA HORA HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Agentes</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>R$ Tkt Médio</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.pa | number}}</td>
+                                        <td>{{hora.contato | number}}</td>
+                                        <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.cpca | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.valor_promessa | currency:'R$ '}}</td>
+                                        <td>{{hora.valor_promessa / hora.promessa |  currency:'R$ '}}</td>
+                                        <td>{{hora.cpc / hora.contato | percentage:1}}</td>
+                                        <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
+                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.pa | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa / dashboard.resumo.promessa | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO POR HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                @*<option value="hitrate">Hit Rate</option>*@
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                                @*<option value="discado">Discado</option>*@
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="valor_promessa">R$ Promessa</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO POR OPERADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[3,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-net-intersic-horahora', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Hora Hora';
+        dadosPagina.descricao = 'Net'
+        $scope.showTbody = false;
+
+        $scope.dashboard = { gridCh: false };
+
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            empresas: '',
+            equipes: '',
+            supervisores: '',
+            horaini: '7',
+            horafim: '22',
+        }
+        //console.log($scope.filtros);
+        $scope.grafico = { indicador: 'promessa' };
+
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/net/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.empresas = r.data.Table;
+            $scope.dashFiltros.supervisores = r.data.Table2;
+            $scope.dashFiltros.equipes = r.data.Table3;
+
+
+        });
+
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/net/dashboard/intersic/horahora",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.carteira = r.data.Table2;
+                $scope.dashboard.operador = r.data.Table3;
+                $scope.dashboard.supervisor = r.data.Table4;
+                $scope.dashboard.supervisorHora = r.data.Table5;
+
+                $scope.dashboard.dataatz = r.data.Table6[0];
+
+                $scope.carregarGrafico();
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.horahora;
+            $scope.dashboard.horas = dados.map(obj => obj.hora);
+            switch ($scope.grafico.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            }
+
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
+
