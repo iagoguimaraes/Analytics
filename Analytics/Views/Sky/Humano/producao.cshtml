@@ -171,6 +171,7 @@
                 </div>
             </div>
 
+            <!--ANÁLISE POR DIA-->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
@@ -196,10 +197,10 @@
                                             <th>CPCA</th>
                                             <th>Promessa</th>
                                             <th>Pro. Cartão</th>
-                                            <th>Pro. Parcelada</th>
+                                            <th>Pro. Migração</th>
                                             <th>Ticket Médio Promessa</th>
                                             <th>HitRate</th>
-                                            <th>TxTab</th>
+                                            <th>TxAtd</th>
                                             <th>TxLoc</th>
                                             <th>TxApv</th>
                                             <th>Conversão</th>
@@ -215,7 +216,7 @@
                                             <td>{{dia.cpca | number}}</td>
                                             <td>{{dia.promessa | number}}</td>
                                             <td>{{dia.promessa_cartao | number}}</td>
-                                            <td>{{dia.promessa_parc | number}}</td>
+                                            <td>{{dia.migracao | number}}</td>
                                             <td>{{dia.Ticket_Medio | number}}</td>
                                             <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                             <td>{{dia.contato / dia.transferido | percentage:1}}</td>
@@ -232,6 +233,7 @@
                 </div>
             </div>
 
+            <!--GRÁFICO POR DIA-->
             <div class="row margin-bottom"">
                 <div class="col-xs-12">
                     <div class="card">
@@ -243,7 +245,7 @@
                             <small class="pull-right">
                                 <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                     <option value="hitrate">Hit Rate</option>
-                                    <option value="txtab">Tx Tab</option>
+                                    <option value="txtab">Tx Atendido</option>
                                     <option value="txloc">Tx Loc</option>
                                     <option value="txapv">Tx Apv</option>
                                     <option value="conversao">Conversão</option>
@@ -255,6 +257,7 @@
                                     <option value="promessa">Promessa</option>
                                     <option value="promessa_cartao">Promessa Cartão</option>
                                     <option value="promessa_parc">Promessa Parcelada</option>
+                                    <option value="migracao">Promessa Migração</option>
                                     <option value="Ticket_Medio">Ticket Médio Promessa</option>
                                 </select>
                             </small>
@@ -290,7 +293,7 @@
                                             <th>CPCA</th>
                                             <th>Promessa</th>
                                             <th>Promessa Cartão</th>
-                                            <th>Promessa Parcelada</th>
+                                            <th>Promessa Migração</th>
                                             <th>% Cartão</th>
                                             <th>% Migração</th>
                                             <th>TxLoc</th>
@@ -310,9 +313,9 @@
                                             <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
-                                            <td>{{c | sumByColumn: 'promessa_parc'| number}}</td>
+                                            <td>{{c | sumByColumn: 'migracao'| number}}</td>
                                             <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
-                                            <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
+                                            <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -325,9 +328,9 @@
                                             <td>{{p.cpca | number}}</td>
                                             <td>{{p.promessa | number}}</td>
                                             <td>{{p.promessa_cartao | number}}</td>
-                                            <td>{{p.promessa_parc | number}}</td>
+                                            <td>{{p.migracao | number}}</td>
                                             <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
-                                            <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
+                                            <td>{{p.migracao / p.promessa | percentage:1}}</td>
                                             <td>{{p.cpc / p.contato | percentage:1}}</td>
                                             <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                             <td>{{p.promessa / p.cpca | percentage:1}}</td>

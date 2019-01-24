@@ -1,0 +1,610 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-tv">
+    <div ng-if="dashboard.status == 200">
+        <div class="margin-bottom"></div>
+
+        <div class="row">
+
+            <!--RESUMO-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-xs-6">
+                                <div class="info-box-new bg-new-blue hover-zoom-effect">
+                                    <div class="icon">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </div>
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Vendas Hoje</div>
+                                        <div class="number">{{dashboard.resumo.vendahj}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="info-box-new bg-new-cyan hover-expand-effect">
+                                    <div class="icon">
+                                        <i class="material-icons">thumb_up</i>
+                                    </div>
+
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Ativações Hoje</div>
+                                        <div class="number">{{dashboard.resumo.ativacaohj}}</div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="info-box-new bg-new-indigo hover-zoom-effect" style="margin-bottom:0">
+                                    <div class="icon">
+                                        <i class="material-icons">add_shopping_cart</i>
+                                    </div>
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Vendas Mês</div>
+                                        <div class="number">{{dashboard.resumo.venda}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="info-box-new bg-new-teal hover-expand-effect" style="margin-bottom:0">
+                                    <div class="icon">
+                                        <i class="material-icons">thumb_up</i>
+                                    </div>
+
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Ativações Mês</div>
+                                        <div class="number">{{dashboard.resumo.ativacao}}</div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--PLANO-->
+            <div class="col-xs-6 col-md-2 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.plano" style="width: 100%; height: 190px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--PORTABILIDADE-->
+            <div class="col-xs-6 col-md-2 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.portabilidade" style="width: 100%; height: 190px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--DEBITO AUTOMATICO-->
+            <div class="col-xs-6 col-md-2 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.debito" style="width: 100%; height: 190px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--CONTA ONLINE-->
+            <div class="col-xs-6 col-md-2 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.contaonline" style="width: 100%; height: 190px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--VENDAS HOJE-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.venda_hoje" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--PROJECAO HOJE-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--ATIVOES HOJE-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.ativacao_hoje" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--VENDAS MES-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.venda_mes" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--PROJECAO MES-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--ATIVACOES MES-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.ativacao_mes" style="width: 100%; height: 247px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .scroller {
+        position: relative;
+        background-color: black;
+        height: 69px;
+        line-height: 69px;
+        width: 100%;
+        padding: 0 10px 0 10px;
+        overflow: hidden;
+        font-size: 18px;
+    }
+
+        .scroller span {
+            margin: 0;
+            position: absolute;
+            color: white;
+            overflow: hidden;
+            text-overflow: clip;
+            white-space: nowrap;
+            -moz-transform: translateX(100%);
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+            -moz-animation: scroll-left 30s linear infinite;
+            -webkit-animation: scroll-left 30s linear infinite;
+            animation: scroll-left 30s linear infinite;
+        }
+
+    @@-moz-keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%);
+        }
+    }
+
+    @@-webkit-keyframes scroll-left {
+        0% {
+            -webkit-transform: translateX(100%);
+        }
+
+        100% {
+            -webkit-transform: translateX(-100%);
+        }
+    }
+
+    @@keyframes scroll-left {
+        0% {
+            -moz-transform: translateX(100%); /* Browser bug fix */
+            -webkit-transform: translateX(100%); /* Browser bug fix */
+            transform: translateX(100%);
+        }
+
+        100% {
+            -moz-transform: translateX(-100%); /* Browser bug fix */
+            -webkit-transform: translateX(-100%); /* Browser bug fix */
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+<script>
+    angular.module('app').controller('ctrl-tim-tv', function ($scope, $http, $filter) {
+        document.body.classList.remove('menu-opened');
+
+        // carregar o dashboard a cada 20min (no minuto 02, 22, 42)
+        setInterval(function () {
+            let min = new Date().getMinutes();
+            if (min % 20 == 2)
+                $scope.carregarDashboard();
+        }, 60000);
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/tv",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                // #1 TOTAL
+                $scope.dashboard.resumo = r.data.Table[0];
+
+                // #2 PLANO
+                $scope.dashboard.plano = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Plano'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table1.map(obj => obj.tipo)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Venda', data: r.data.Table1.map(obj => ({ name: obj.tipo, y: obj.venda })) }]
+                };
+
+                // #3 PORTABILIDADE
+                $scope.dashboard.portabilidade = {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Portabilidade',
+                    },
+                    subtitle: {
+                        text: r.data.Table2[0].perc + '%',
+                        y: 24,
+                        verticalAlign: 'middle',
+                        floating: true,
+                        style: { 'font-size': '18px', 'font-weight': 'bold' },
+                    },
+                    tooltip: {
+                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            innerSize: '70%',
+                            dataLabels: {
+                                enabled: false,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ data: r.data.Table2.map(obj => ({ name: obj.portabilidade, y: obj.venda })) }]
+                };
+
+                // #4 DEBITO
+                $scope.dashboard.debito = {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'DébitoAut'
+                    },
+                    subtitle: {
+                        text: r.data.Table3[0].perc + '%',
+                        y: 24,
+                        verticalAlign: 'middle',
+                        floating: true,
+                        style: { 'font-size': '18px', 'font-weight': 'bold' },
+                    },
+                    tooltip: {
+                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            innerSize: '70%',
+                            dataLabels: {
+                                enabled: false,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ data: r.data.Table3.map(obj => ({ name: obj.debito_em_conta, y: obj.venda })) }]
+                };
+
+                // #5 CONTAONLINE
+                $scope.dashboard.contaonline = {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'ContaOnline'
+                    },
+                    subtitle: {
+                        text: r.data.Table4[0].perc + '%',
+                        y: 24,
+                        verticalAlign: 'middle',
+                        floating: true,
+                        style: { 'font-size': '18px', 'font-weight': 'bold' },
+                    },
+                    tooltip: {
+                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            innerSize: '70%',
+                            dataLabels: {
+                                enabled: false,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ data: r.data.Table4.map(obj => ({ name: obj.aceitou_conta_online, y: obj.venda })) }]
+                };
+
+                // #6 VENDA HOJE
+                $scope.dashboard.venda_hoje = {
+                    title: {
+                        text: 'Vendas de Hoje'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table5.map(obj => obj.hora_nome)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    series: [
+                        {
+                            type: 'area',
+                            name: 'Venda',
+                            color: '#2196F3',
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            },
+                            data: r.data.Table5.map(obj => obj.venda)
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // #6 ATIVACAO HOJE
+                $scope.dashboard.ativacao_hoje = {
+                    title: {
+                        text: 'Ativações de Hoje'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table5.map(obj => obj.hora_nome)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    series: [
+                        {
+                            type: 'area',
+                            name: 'Ativação',
+                            color: '#00BCD4',
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            },
+                            data: r.data.Table5.map(obj => obj.ativacao)
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // #7 VENDA MES
+                $scope.dashboard.venda_mes = {
+                    title: {
+                        text: 'Vendas deste Mês'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table6.map(obj => obj.data)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Venda',
+                            color: '#3F51B5',
+                            data: r.data.Table6.map(obj => obj.venda),
+                            dataLabels: {
+                                enabled: true,
+                            },
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // #8 ATIVACAO MES
+                $scope.dashboard.ativacao_mes = {
+                    title: {
+                        text: 'Ativações deste Mês'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table6.map(obj => obj.data)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Ativação',
+                            color: '#009688',
+                            data: r.data.Table6.map(obj => obj.ativacao),
+                            dataLabels: {
+                                enabled: true,
+                            },
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // #9 PROJECAO HOJE
+                if (r.data.Table7.length > 0) {
+                    let dia_venda = r.data.Table8.map(o => ({ y: o.venda }));
+                    let dia_projecao = r.data.Table7.map(o => ({ y: o.venda }));
+                    dia_venda[dia_venda.length - 1].dataLabels = { enabled: true, style: { fontSize: '16px' } };
+                    dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true, style: { fontSize: '18px' } };
+                    $scope.dashboard.projecao = {
+                        title: {
+                            text: 'Projeção de Hoje (H-1)'
+                        },
+                        yAxis: {
+                            visible: false,
+                        },
+                        legend: {
+                            enabled: false,
+                        },
+                        xAxis: {
+                            categories: r.data.Table8.map(o => o.hora)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: '#2196F3',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: dia_venda
+                            },
+                            {
+                                type: 'area',
+                                name: 'Venda',
+                                color: '#2196F3',
+                                marker: { symbol: 'circle' },
+                                data: dia_projecao
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                }
+
+                // #10 PROJECAO MES
+                let mes_venda = r.data.Table10.map(o => ({ y: o.venda }));
+                let mes_projecao = r.data.Table9.map(o => ({ y: o.venda }));
+                mes_venda[mes_venda.length - 1].dataLabels = { enabled: true, style: { fontSize: '16px' } };
+                mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true, style: { fontSize: '18px' } };
+
+                $scope.dashboard.projecao_mes = {
+                    title: {
+                        text: 'Projeção Mês (D-1)'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table10.map(o => o.data)
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: '#3F51B5',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: mes_venda
+                        },
+                        {
+                            type: 'area',
+                            name: 'Venda',
+                            color: '#3F51B5',
+                            marker: { symbol: 'circle' },
+                            data: mes_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // STATUS DASHBOARD OK
+                $scope.dashboard.status = r.status;
+
+            });
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>
