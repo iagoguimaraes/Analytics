@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora</div>
+            <div class="page-name">Hora Hora Digital</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -16,7 +16,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -50,6 +50,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--CARTEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -213,6 +219,70 @@
                 </div>
             </div>
 
+            <!--ANALISE POR CARTEIRA-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="carteira in dashboard.carteira">
+                                        <td>{{carteira.carteira}}</td>
+                                        <td>{{carteira.discado | number}}</td>
+                                        <td>{{carteira.contato | number}}</td>
+                                        <td>{{carteira.cpc | number}}</td>
+                                        <td>{{carteira.cpca | number}}</td>
+                                        <td>{{carteira.promessa | number}}</td>
+                                        <td>{{carteira.contato / carteira.discado | percentage:1}}</td>
+                                        <td>{{carteira.cpc / carteira.contato | percentage:1}}</td>
+                                        <td>{{carteira.cpca / carteira.cpc | percentage:1}}</td>
+                                        <td>{{carteira.promessa / carteira.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -222,9 +292,24 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+
+            carteira: '',
         };
 
         $scope.dashboard = {};
+        $scope.dashFiltros = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/portoseguro/dashboard/humano/filtro",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.carteira = r.data.Table1;
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -259,6 +344,7 @@
                 $scope.dashboard.horahora = data.Table1;
                 $scope.dashboard.diagrama = data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table3.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
+                $scope.dashboard.carteira = data.Table4;
             });
         }
 
