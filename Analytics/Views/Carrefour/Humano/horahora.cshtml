@@ -149,19 +149,19 @@
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_acordo | currency: 'R$'"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_acordo | currency: 'R$ '"></h5>
                             <span class="description-text">Valor Acordo</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_risco | currency: 'R$'"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_risco | currency: 'R$ '"></h5>
                             <span class="description-text">Valor Risco</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_riscoex | currency: 'R$'"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_riscoex | currency: 'R$ '"></h5>
                             <span class="description-text">Valor Exceção Risco</span>
                         </div>
                     </div>
@@ -213,11 +213,11 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.acordo | number}}</td>
-                                        <td>{{hora.valor_acordo | number}}</td>
-                                        <td>{{hora.valor_risco | number}}</td>
+                                        <td>{{hora.valor_acordo |  currency: 'R$ '}}</td>
+                                        <td>{{hora.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{hora.acordo_ex | number}}</td>
-                                        <td>{{hora.valor_riscoex | number}}</td>
-                                        <td>{{hora.valor_riscoex + hora.valor_risco | number}}</td>
+                                        <td>{{hora.valor_riscoex |  currency: 'R$ '}}</td>
+                                        <td>{{hora.valor_riscoex + hora.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -232,11 +232,11 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.acordo | number}}</th>
-                                        <th>{{dashboard.resumo.valor_acordo | number}}</th>
-                                        <th>{{dashboard.resumo.valor_risco | number}}</th>
+                                        <th>{{dashboard.resumo.valor_acordo |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.valor_risco |  currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.acordo_ex | number}}</th>
-                                        <th>{{dashboard.resumo.valor_riscoex | number}}</th>
-                                        <th>{{dashboard.resumo.valor_riscoex + dashboard.resumo.valor_risco | number}}</th>
+                                        <th>{{dashboard.resumo.valor_riscoex |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.valor_riscoex + dashboard.resumo.valor_risco |  currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -297,11 +297,11 @@
                                         <td>{{g | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{g | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{g | sumByColumn: 'acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_acordo'|  currency: 'R$ '}}</td>
+                                        <td>{{g | sumByColumn: 'valor_risco'|  currency: 'R$ '}}</td>
                                         <td>{{g | sumByColumn: 'acordo_ex'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_riscoex'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_total_risco' | number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_riscoex'|  currency: 'R$ '}}</td>
+                                        <td>{{g | sumByColumn: 'valor_total_risco' |  currency: 'R$ '}}</td>
                                         <td>{{g | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -315,15 +315,14 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.acordo | number}}</td>
-                                        <td>{{c.valor_acordo | number}}</td>
-                                        <td>{{c.valor_risco | number}}</td>
+                                        <td>{{c.valor_acordo |  currency: 'R$ '}}</td>
+                                        <td>{{c.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{c.acordo_ex | number}}</td>
-                                        <td>{{c.valor_riscoex | number}}</td>
-                                        <td>{{c.valor_riscoex + c.valor_risco | number}}</td>
+                                        <td>{{c.valor_riscoex |  currency: 'R$ '}}</td>
+                                        <td>{{c.valor_riscoex + c.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
                                         <td>{{c.acordo_total / c.cpca | percentage:1}}</td>
                                     </tr>
 
@@ -380,11 +379,11 @@
                                         <td>{{g | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{g | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{g | sumByColumn: 'acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_acordo'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_risco'| number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_acordo'|  currency: 'R$ '}}</td>
+                                        <td>{{g | sumByColumn: 'valor_risco'|  currency: 'R$ '}}</td>
                                         <td>{{g | sumByColumn: 'acordo_ex'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_riscoex'| number}}</td>
-                                        <td>{{g | sumByColumn: 'valor_total_risco' | number}}</td>
+                                        <td>{{g | sumByColumn: 'valor_riscoex'|  currency: 'R$ '}}</td>
+                                        <td>{{g | sumByColumn: 'valor_total_risco' |  currency: 'R$ '}}</td>
                                         <td>{{g | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{g | divideSumColumns: 'acordo_total':'cpca' | percentage:1}}</td>
@@ -396,11 +395,11 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.acordo | number}}</td>
-                                        <td>{{c.valor_acordo | number}}</td>
-                                        <td>{{c.valor_risco | number}}</td>
+                                        <td>{{c.valor_acordo |  currency: 'R$ '}}</td>
+                                        <td>{{c.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{c.acordo_ex | number}}</td>
-                                        <td>{{c.valor_riscoex | number}}</td>
-                                        <td>{{c.valor_riscoex + c.valor_risco | number}}</td>
+                                        <td>{{c.valor_riscoex |  currency: 'R$ '}}</td>
+                                        <td>{{c.valor_riscoex + c.valor_risco |  currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.acordo_total / c.cpca | percentage:1}}</td>
