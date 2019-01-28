@@ -558,6 +558,32 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/pf/cadmailing")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMailing(FormDataCollection form)
+        {
+            try
+            {
+                DataTable mailingPf = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("mailingPf", mailingPf);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_fatoMailingPF", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
