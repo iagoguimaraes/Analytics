@@ -19,7 +19,7 @@
         <!-- FILTROS -->
         <div class="row margin-bottom">
 
-            <div class="col-xs-12">
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
                         <span class="card-header-title">Filtros</span>
@@ -71,7 +71,7 @@
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -82,10 +82,10 @@
 
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Semparar/banner teste.png') no-repeat center;">
+            <div class="widget-user-header" style="background: url('/Content/Images/ViaVarejo/banner_new.jpg') no-repeat center;background-color:#003333">
             </div>
-            <div class="widget-user-image">
-                <img class="img-circle" src="~/Content/Images/semparar/center-semparar.png" style="background-color: #fab510; border-style: solid; border-color: black" height="160" width="200">
+            <div class="widget-user-image" >
+                <img class="img-circle" style="border-color:#2b5734; height:85px" src="~/Content/Images/ViaVarejo/logo_new.jpg">
             </div>
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
@@ -121,7 +121,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="background-color: #ff020a; color:white; opacity: 0.8">
+                <div class="row" style="background-color: #2b5734; color:white; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
@@ -253,12 +253,12 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_empresa'">
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_score'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_empresa}}
+                                            {{e[0].ds_score}}
                                         </td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
@@ -272,7 +272,7 @@
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_carteira}}</td>
+                                        <td>{{c.ds_regua}}</td>
                                         <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
@@ -372,8 +372,12 @@
         }).then(function success(r) {
             $scope.dados = r.status;
 
+            $scope.dashFiltros.status = r.status;
+
             $scope.dashFiltros.score = r.data.Table;
             $scope.dashFiltros.regua = r.data.Table1;
+
+            
         });
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {

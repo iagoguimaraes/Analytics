@@ -16,7 +16,7 @@ namespace Analytics.Controllers
 
         #region HUMANO
 
-        [Route("/filtros")]
+        [Route("filtros")]
         [HttpGet]
         [Autorizar]
         [Gravar]
@@ -36,7 +36,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("/horahora")]
+        [Route("horahora")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -55,8 +55,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("score", regua);
-                    parametros.Add("carteiras", score);
+                    parametros.Add("score", score);
+                    parametros.Add("regua", regua);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -68,7 +68,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("/producao")]
+        [Route("producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -87,8 +87,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("score", regua);
-                    parametros.Add("carteiras", score);
+                    parametros.Add("score", score);
+                    parametros.Add("regua", regua);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
