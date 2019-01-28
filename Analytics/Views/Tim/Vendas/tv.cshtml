@@ -369,110 +369,116 @@
                 };
 
                 // #3 PORTABILIDADE
-                $scope.dashboard.portabilidade = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Portabilidade',
-                    },
-                    subtitle: {
-                        text: r.data.Table2[0]['perc'] + '%',
-                        y: 24,
-                        verticalAlign: 'middle',
-                        floating: true,
-                        style: { 'font-size': '18px', 'font-weight': 'bold' },
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            innerSize: '70%',
-                            dataLabels: {
-                                enabled: false,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                if (r.data.Table2[0]) {
+                    $scope.dashboard.portabilidade = {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Portabilidade',
+                        },
+                        subtitle: {
+                            text: r.data.Table2[0].perc + '%',
+                            y: 24,
+                            verticalAlign: 'middle',
+                            floating: true,
+                            style: { 'font-size': '18px', 'font-weight': 'bold' },
+                        },
+                        tooltip: {
+                            pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                innerSize: '70%',
+                                dataLabels: {
+                                    enabled: false,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                }
                             }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table2.map(obj => ({ name: obj.portabilidade, y: obj.venda })) }]
-                };
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: [{ data: r.data.Table2.map(obj => ({ name: obj.portabilidade, y: obj.venda })) }]
+                    };
+                }               
 
                 // #4 DEBITO
-                $scope.dashboard.debito = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'DébitoAut'
-                    },
-                    subtitle: {
-                        text: r.data.Table3[0]['perc'] + '%',
-                        y: 24,
-                        verticalAlign: 'middle',
-                        floating: true,
-                        style: { 'font-size': '18px', 'font-weight': 'bold' },
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            innerSize: '70%',
-                            dataLabels: {
-                                enabled: false,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                if (r.data.Table3[0]) {
+                    $scope.dashboard.debito = {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'DébitoAut'
+                        },
+                        subtitle: {
+                            text: r.data.Table3[0].perc + '%',
+                            y: 24,
+                            verticalAlign: 'middle',
+                            floating: true,
+                            style: { 'font-size': '18px', 'font-weight': 'bold' },
+                        },
+                        tooltip: {
+                            pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                innerSize: '70%',
+                                dataLabels: {
+                                    enabled: false,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                }
                             }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table3.map(obj => ({ name: obj.debito_em_conta, y: obj.venda })) }]
-                };
-
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: [{ data: r.data.Table3.map(obj => ({ name: obj.debito_em_conta, y: obj.venda })) }]
+                    };
+                }
+                
                 // #5 CONTAONLINE
-                $scope.dashboard.contaonline = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'ContaOnline'
-                    },
-                    subtitle: {
-                        text: r.data.Table4[0]['perc'] + '%',
-                        y: 24,
-                        verticalAlign: 'middle',
-                        floating: true,
-                        style: { 'font-size': '18px', 'font-weight': 'bold' },
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            innerSize: '70%',
-                            dataLabels: {
-                                enabled: false,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                if (r.data.Table4[0]) {
+                    $scope.dashboard.contaonline = {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'ContaOnline'
+                        },
+                        subtitle: {
+                            text: r.data.Table4[0].perc + '%',
+                            y: 24,
+                            verticalAlign: 'middle',
+                            floating: true,
+                            style: { 'font-size': '18px', 'font-weight': 'bold' },
+                        },
+                        tooltip: {
+                            pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                innerSize: '70%',
+                                dataLabels: {
+                                    enabled: false,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                }
                             }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table4.map(obj => ({ name: obj.aceitou_conta_online, y: obj.venda })) }]
-                };
-
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: [{ data: r.data.Table4.map(obj => ({ name: obj.aceitou_conta_online, y: obj.venda })) }]
+                    };
+                }
+                
                 // #6 VENDA HOJE
                 $scope.dashboard.venda_hoje = {
                     title: {
