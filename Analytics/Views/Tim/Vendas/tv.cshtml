@@ -280,7 +280,7 @@
                         text: 'Meta Pós',
                     },
                     subtitle: {
-                        text: (resumo.vendapos * 100 / resumo.metapos).toFixed(0) + '%',
+                        text: (resumo.ativacaopos * 100 / resumo.metapos).toFixed(0) + '%',
                         y: 24,
                         verticalAlign: 'middle',
                         floating: true,
@@ -303,7 +303,7 @@
                     credits: {
                         enabled: false
                     },
-                    series: [{ data: [resumo.vendapos, (resumo.metapos - resumo.vendapos)] }]
+                    series: [{ data: [resumo.ativacaopos, (resumo.metapos - resumo.ativacaopos)] }]
                 };
                 $scope.dashboard.metactrl = {
                     chart: {
@@ -313,7 +313,7 @@
                         text: 'Meta Controle',
                     },
                     subtitle: {
-                        text: (resumo.vendactrl * 100 / resumo.metactrl).toFixed(0) + '%',
+                        text: (resumo.ativacaoactrl * 100 / resumo.metactrl).toFixed(0) + '%',
                         y: 24,
                         verticalAlign: 'middle',
                         floating: true,
@@ -336,7 +336,7 @@
                     credits: {
                         enabled: false
                     },
-                    series: [{ data: [resumo.vendactrl, (resumo.metactrl - resumo.vendactrl)] }]
+                    series: [{ data: [resumo.ativacaoctrl, (resumo.metactrl - resumo.ativacaoctrl)] }]
                 };
 
                 // #2 PLANO
@@ -345,7 +345,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Plano'
+                        text: 'Ativações por Plano'
                     },
                     yAxis: {
                         visible: false,
@@ -369,7 +369,7 @@
                     credits: {
                         enabled: false
                     },
-                    series: [{ name: 'Venda', data: r.data.Table1.map(obj => ({ name: obj.tipo, y: obj.venda })) }]
+                    series: [{ name: 'Ativação', data: r.data.Table1.map(obj => ({ name: obj.tipo, y: obj.ativacao })) }]
                 };
 
                 // #3 PORTABILIDADE
