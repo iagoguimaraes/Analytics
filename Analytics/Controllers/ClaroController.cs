@@ -46,6 +46,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -54,6 +55,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
+                    parametros.Add("origem", origem);
                     parametros.Add("campanhas", campanhas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_digital", parametros);
@@ -78,6 +80,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -86,6 +89,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
+                    parametros.Add("origem", origem);
                     parametros.Add("campanhas", campanhas);
 
 

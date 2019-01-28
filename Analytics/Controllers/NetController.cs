@@ -355,6 +355,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -363,6 +364,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("campanha", campanhas);
+                    parametros.Add("origem", origem);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -385,6 +387,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -393,6 +396,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("campanha", campanhas);
+                    parametros.Add("origem", origem);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
