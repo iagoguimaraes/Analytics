@@ -139,6 +139,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("classes", produtos);
+                    parametros.Add("faixas", atrasos);
                     parametros.Add("supervisores", supervisor);
                     parametros.Add("equipes", equipes);
 
