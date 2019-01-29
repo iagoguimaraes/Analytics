@@ -65,8 +65,8 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            
-            <div class="col-xs-12 col-md-4">
+
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
@@ -78,7 +78,20 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.discado / dashboard.resumo.mailing | number: 1"></h4>
+                        <p>Carteira</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-briefcase"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
@@ -91,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
@@ -103,13 +116,14 @@
                     </div>
                 </div>
             </div>
-                   
+
+           
+
         </div>
 
         <!--POR DIA/HORA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
-
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Dia</span>
@@ -134,40 +148,57 @@
                         </small>
                     </div>
                     <div class="card-body">
+                        <div class="margin-bottom" ng-if="opcoes.tabela == 'dia'">
+                            <small>
+                                <input type="button" class="btn btn-primary" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
+                            </small>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="opcoes.tabela == 'dia'">
+                            <table name="table1" class="table table-striped table-bordered" style="width:100%" ng-if="opcoes.tabela == 'dia'">
                                 <thead>
                                     <tr>
-                                        <th>Dia</th>   
+                                        <th>Dia</th>
+                                        <th>Carteira</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
+                                        <th>Spin</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="idtbody">
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data}}</td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.mailing}}" ng-disabled="!opcoes.edit" />
+                                        </td>
+                                        <td ng-if="!opcoes.edit">{{dia.mailing | number}}</td>
                                         <td>{{dia.discado | number}}</td>
-                                        <td>{{dia.contato | number}}</td> 
+                                        <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
-                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
-                                        <td>{{dia.cpc / dia.contato | percentage:1}}</td>
+                                        <td>{{dia.contato / dia.discado | percentage: 1}}</td>
+                                        <td>{{dia.cpc / dia.contato | percentage: 1}}</td>
+                                        <td>{{dia.discado / dia.mailing | number: 1 }}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
+                                        <th>{{dashboard.resumo.mailing | number}}</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.discado / dashboard.resumo.mailing | number: 1 }}</th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
+                        <small>
+                            <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit && opcoes.tabela == 'dia'" ng-click="salvar()" />
+                        </small>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="opcoes.tabela == 'hora'">
                                 <thead>
@@ -202,11 +233,13 @@
                                 </tfoot>
                             </table>
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
-      
+
         <div class="row margin-bottom">
             <!--UF-->
             <div class="col-xs-12 col-md-6">
@@ -266,11 +299,39 @@
 
         $scope.dashboard = {};
         $scope.opcoes = {
-            tabela: 'hora'
+            tabela: 'hora',
+            edit: false
         };
         $scope.mapa = {
             indicador: 'txloc'
         };
+
+
+
+        // Objeto MailingPf
+        $scope.mailingPf = [{
+            data: '',
+            qtd_mailing: ''
+        }];
+
+        $scope.cadastrarMailing = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/pf/cadmailing",
+                data: JSON.stringify($scope.mailingPf),
+            }).then(function success(r) {
+
+                $scope.mailingPf = [{
+                    data: '',
+                    qtd_mailing: ''
+                }];
+
+                //console.log($scope.mailingPf);
+                location.reload();
+                $scope.carregarDashboard();
+
+            });
+        }
 
         $scope.carregarDashboard = function () {
             $http({
@@ -298,10 +359,41 @@
                     break;
                 case 'txloc':
                     $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.contato).toFixed(1) }));
-                    break;              
+                    break;
                 default:
                     $scope.mapa.dados = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
             }
+        }
+
+        $scope.validarValor = function () {
+
+            if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}
+
+        }
+
+        $scope.editar = function () {
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+        }
+
+
+        $scope.salvar = function () {
+
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+
+            let tabela = document.getElementById('idtbody')
+
+            for (let i = 0; i < tabela.rows.length; i++) {
+
+                let dt = tabela.children[i].children[0].innerHTML
+                let txt = tabela.children[i].children[1].getElementsByTagName('input').item(0).value;
+
+                //let serie = [{ name: 'data', data: dt }, { name: 'qtd_mailing', data: txt, }];
+
+                $scope.mailingPf.push({ data: dt, qtd_mailing: txt });
+            }
+
+
+            $scope.cadastrarMailing();
         }
 
         $scope.carregarDashboard();
