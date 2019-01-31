@@ -30,6 +30,30 @@
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
+
+                            <!--DATA INCIAL-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Inclusão Inicio</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group col-md-6">
+                                <label class="control-sidebar-subheading">Inclusão Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+
                             <!--CARTEIRA-->
                             <div class="form-group col-md-6">
                                 <label class="control-sidebar-subheading">Carteiras</label>
@@ -243,6 +267,8 @@
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteiras: '',
             fases: '',
         };

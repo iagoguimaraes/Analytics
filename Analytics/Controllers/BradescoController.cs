@@ -145,6 +145,8 @@ namespace Analytics.Controllers
         {
             try
             {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
 
@@ -152,7 +154,8 @@ namespace Analytics.Controllers
                 {
 
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
-
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("fases", fases);
 
