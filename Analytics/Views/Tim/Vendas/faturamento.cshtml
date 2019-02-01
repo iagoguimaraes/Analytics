@@ -222,44 +222,45 @@
                 $scope.dashboard.resumo = r.data.Table4[0];
 
                 // #4 PROJECAO
-                let realizado = r.data.Table2.map(o => ({ y: o.faturamento }));
-                let projecao = r.data.Table3.map(o => ({ y: o.faturamento }));
-                realizado[realizado.length - 1].dataLabels = { enabled: true };
-                projecao[projecao.length - 1].dataLabels = { enabled: true };
-
-                $scope.dashboard.projecao = {
-                    title: {
-                        text: ''
-                    },
-                    yAxis: {
+                if (r.data.Table2.length > 0) {
+                    let realizado = r.data.Table2.map(o => ({ y: o.faturamento }));
+                    let projecao = r.data.Table3.map(o => ({ y: o.faturamento }));
+                    realizado[realizado.length - 1].dataLabels = { enabled: true };
+                    projecao[projecao.length - 1].dataLabels = { enabled: true };
+                    $scope.dashboard.projecao = {
                         title: {
                             text: ''
                         },
-                    },
-                    xAxis: {
-                        categories: r.data.Table3.map(o => o.data)
-                    },
-                    series: [
-                        {
-                            type: 'line',
-                            name: 'Projeção',
-                            color: 'black',
-                            dashStyle: 'dot',
-                            marker: { symbol: 'circle' },
-                            data: projecao
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
                         },
-                        {
-                            type: 'area',
-                            name: 'Realizado',
-                            color: 'black',
-                            marker: { symbol: 'circle' },
-                            data: realizado
+                        xAxis: {
+                            categories: r.data.Table3.map(o => o.data)
                         },
-                    ],
-                    credits: {
-                        enabled: false
-                    }
-                };
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'black',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: projecao
+                            },
+                            {
+                                type: 'area',
+                                name: 'Realizado',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: realizado
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                }
 
                 // STATUS DASHBOARD OK
                 $scope.dashboard.status = r.status;
