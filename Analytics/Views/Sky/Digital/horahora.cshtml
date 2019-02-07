@@ -280,6 +280,26 @@
 
         </div>
 
+        <!--DIAGRAMA OCORRENCIA DISCADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.dados.Table4" series-name="Qt Tabulação"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -307,6 +327,7 @@
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
+
                 $scope.dashboard.tab = r.data.Table3.map(obj => obj.tabulacao);
 
                 $scope.dashboard.resumo = r.data.Table[0];
