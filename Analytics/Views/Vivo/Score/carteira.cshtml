@@ -1,0 +1,239 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-vivo-score-carteira">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Carteira</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.total | megaNumber"></h3>
+                        <p>Base Ativa</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.m1 | megaNumber"></h3>
+                        <p>M1</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.m2 | number:0"></h3>
+                        <p>M2</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row margin-bottom">
+            <!--RISCO-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Base Ativa por Risco</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <high-chart series="dashboard.risco" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--AGRUPAMENTO-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Base Ativa por Agrupamento</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <high-chart series="dashboard.agrupamento" axis-Categories="dashboard.agrupamentos" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR LOTE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Lote</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Lote/Agrupamento</th>
+                                        <th style="border-right: 1px solid gray;">Total</th>
+                                        <th style="background-color: #F2F2F2;">M1</th>
+                                        <th style="background-color: #F2F2F2; border-right: 1px solid gray;">M2</th>
+                                        <th style="background-color: #ECECEC;">Muito Baixo</th>
+                                        <th style="background-color: #ECECEC;">Baixo</th>
+                                        <th style="background-color: #ECECEC;">Médio</th>
+                                        <th style="background-color: #ECECEC;">Alto</th>
+                                        <th style="background-color: #ECECEC;">Muito Alto</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.lote | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td style="border-right: 1px solid gray;">{{c | sumByColumn: 'total' | number : 0 }}</td>
+                                        <td style="background-color: #F2F2F2;">{{c | sumByColumn: 'm1' | number : 0 }}</td>
+                                        <td style="background-color: #F2F2F2; border-right: 1px solid gray;">{{c | sumByColumn: 'm2' | number : 0 }}</td>
+                                        <td style="background-color: #ECECEC;">{{c | sumByColumn: 'mtobaixo' | number : 0 }}</td>
+                                        <td style="background-color: #ECECEC;">{{c | sumByColumn: 'baixo' | number : 0 }}</td>
+                                        <td style="background-color: #ECECEC;">{{c | sumByColumn: 'medio' | number : 0 }}</td>
+                                        <td style="background-color: #ECECEC;">{{c | sumByColumn: 'alto' | number : 0 }}</td>
+                                        <td style="background-color: #ECECEC;">{{c | sumByColumn: 'mtoalto' | number : 0 }}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.agrupamento}}</td>
+                                        <td style="border-right: 1px solid gray;">{{p.total | number}}</td>
+                                        <td style="background-color: #F2F2F2;">{{p.m1 | number}}</td>
+                                        <td style="background-color: #F2F2F2; border-right: 1px solid gray;">{{p.m2 | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{p.mtobaixo | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{p.baixo | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{p.medio | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{p.alto | number}}</td>
+                                        <td style="background-color: #ECECEC;">{{p.mtoalto | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-score-carteira', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
+        };
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/score/carteira",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.resumo = r.data.Table[0];
+
+                $scope.dashboard.risco = [{ name: 'Qtd', data: r.data.Table1.map(obj => ({ name: obj.risco, y: obj.quantidade })) }];
+
+                $scope.dashboard.agrupamentos = r.data.Table2.map(obj => obj.agrupamento);
+                $scope.dashboard.agrupamento = [{ name: 'Qtd', data: r.data.Table2.map(obj => obj.quantidade) }];
+
+                $scope.dashboard.lote = r.data.Table3;
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>

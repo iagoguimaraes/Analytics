@@ -1,0 +1,352 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-vivo-score-producao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Produção</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--CAMPANHAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanhas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR DIA/HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia/Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="true" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="false" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Data/Hora</th>
+                                        <th>AD</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                        <th>Ocupação</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.diahora | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | avgColumn: 'ad' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'discado' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'contato' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'cpc' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'cpca' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'promessa' | number : 0 }}</td>
+                                        <td>{{c | divideSumColumns: 'contato':'discado' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpc':'contato' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'falado':'logado' | percentage: 1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.hora}}</td>
+                                        <td>{{p.ad | number}}</td>
+                                        <td>{{p.discado | number}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.contato / p.discado | percentage: 1}}</td>
+                                        <td>{{p.cpc / p.contato | percentage: 1}}</td>
+                                        <td>{{p.cpca / p.cpc | percentage: 1}}</td>
+                                        <td>{{p.promessa / p.cpca | percentage: 1}}</td>
+                                        <td>{{p.falado / p.logado | percentage: 1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoDia.exibir == 'false'">
+                            <span class="pull-right">
+                                <select ng-model="graficoDia.visao" ng-change="carregarGraficoDia()">
+                                    <option value="dia">DiaDia</option>
+                                    <option value="hora">HoraHora</option>
+                                </select>
+                            </span>
+                            <span class="pull-right">
+                                <select ng-model="graficoDia.indicador" ng-change="carregarGraficoDia()">
+                                    <option value="ad">AD</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="cpca">CPCA</option>
+                                    <option value="promessa">Promessa</option>
+                                    <option value="hitrate">HitRate</option>
+                                    <option value="txloc">TxLoc</option>
+                                    <option value="txapv">TxApv</option>
+                                    <option value="conversao">Conversao</option>
+                                    <option value="ocupacao">Ocupação</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.graficoDiaCategorias" plot-Options-Line-Data-Label="true"></high-chart>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR CAMPANHA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Campanha/Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Campanha/Hora</th>
+                                        <th>AD</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                        <th>Ocupação</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.campanha | groupBy: 'campanha'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].campanha}}
+                                        </td>
+                                        <td>{{c | avgColumn: 'ad' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'discado' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'contato' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'cpc' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'cpca' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'promessa' | number : 0 }}</td>
+                                        <td>{{c | divideSumColumns: 'contato':'discado' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpc':'contato' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'falado':'logado' | percentage: 1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.hora}}</td>
+                                        <td>{{p.ad | number}}</td>
+                                        <td>{{p.discado | number}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.contato / p.discado | percentage: 1}}</td>
+                                        <td>{{p.cpc / p.contato | percentage: 1}}</td>
+                                        <td>{{p.cpca / p.cpc | percentage: 1}}</td>
+                                        <td>{{p.promessa / p.cpca | percentage: 1}}</td>
+                                        <td>{{p.falado / p.logado | percentage: 1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABLACAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.tabulacao" paging="false" order="[[2,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-score-producao', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let newdate = new Date();
+
+        $scope.filtros = {
+            dtini: $filter('date')(newdate, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.graficoDia = { exibir: 'true', indicador: 'hitrate', visao: 'hora' }
+
+        $http({
+            method: 'POST',
+            url: "/api/vivo/dashboard/score/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = r.data.Table;
+        });
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/score/producao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.diahora = r.data.Table1;
+                $scope.dashboard.campanha = r.data.Table2;
+                $scope.dashboard.tabulacao = r.data.Table3;
+
+                $scope.carregarGraficoDia();
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarGraficoDia = function () {
+            let dados;
+
+            if ($scope.graficoDia.visao == 'dia')
+                dados = alasql('select data categoria,avg(ad)ad,sum(discado)discado,sum(contato)contato,sum(cpc)cpc,sum(cpca)cpca,sum(promessa)promessa,sum(falado)falado,sum(logado)logado from ? group by data', [$scope.dashboard.diahora]);
+            else
+                dados = alasql('select hora categoria,avg(ad)ad,sum(discado)discado,sum(contato)contato,sum(cpc)cpc,sum(cpca)cpca,sum(promessa)promessa,sum(falado)falado,sum(logado)logado from ? group by hora', [$scope.dashboard.diahora]);
+
+            $scope.dashboard.graficoDiaCategorias = dados.map(obj => obj.categoria);
+            switch ($scope.graficoDia.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoDia = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoDia = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoDia = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoDia = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                case 'ocupacao':
+                    $scope.dashboard.graficoDia = [{ name: 'ocupacao', data: dados.map(obj => (obj.falado / obj.logado * 100).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoDia = [{ name: $scope.graficoDia.indicador, data: dados.map(obj => obj[$scope.graficoDia.indicador].toFixed(0) / 1) }];
+            }
+
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
