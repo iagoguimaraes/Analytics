@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-localiza-promessasms">
+<div ng-controller="ctrl-localiza-retorno">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -67,38 +67,32 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Promessa SMS</span>
+                        <span class="card-header-title">Retorno de Clientes</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.promessa">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.retorno">
                                 <thead>
-                                    <tr>
-                                        <th>ID Chamada</th>
+                                    <tr>                                        
                                         <th>Data</th>
                                         <th>Hora</th>
-                                        <th>CPF</th>
-                                        <th>Contrato</th>
-                                        <th>Titulo</th>
-                                        <th>Produto</th>
+                                        <th>CPF</th>                                        
                                         <th>Telefone</th>
-                                        <th>SMS</th>
+                                        <th>Horário Retorno</th>
+                                        <th>Marcado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="p in dashboard.promessa">
-                                        <td>{{p.id_chamada}}</td>
+                                    <tr ng-repeat="p in dashboard.retorno">                                        
                                         <td>{{p.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{p.hora}}</td>
-                                        <td>{{p.cpf}}</td>
-                                        <td>{{p.contrato}}</td>
-                                        <td>{{p.titulo}}</td>                                        
-                                        <td>{{p.produto}}</td>
+                                        <td>{{p.hora}}</td>                                        
+                                        <td>{{p.cpf}}</td>  
                                         <td>{{p.telefone}}</td>
-                                        <td><input type="checkbox" ng-checked="{{p.sms}}" ng-model="p.sms" ng-click="checkSMS(p)" /></td>
+                                        <td>{{p.horaRetorno}}</td>
+                                        <td><input type="checkbox" ng-checked="{{p.marcado}}" ng-model="p.marcado" ng-click="checkRetorno(p)" /></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -112,7 +106,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-localiza-promessasms', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-localiza-retorno', function ($scope, $http, $filter) {
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
@@ -124,22 +118,22 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/localiza/dashboard/promessasms",
+                url: "/api/localiza/dashboard/retorno",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.promessa = data.Table;
+                $scope.dashboard.retorno = data.Table;
             });
         }
 
-        $scope.checkSMS = function (chamada) {
+        $scope.checkRetorno = function (chamada) {
             $http({
                 method: 'POST',
-                url: "/api/localiza/dashboard/checksms",
+                url: "/api/localiza/dashboard/checkretorno",
                 data: {
                     id_chamada: chamada.id_chamada,
-                    sms: chamada.sms
+                    retorno: chamada.marcado
                 },
             });
         }
