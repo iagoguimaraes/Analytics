@@ -506,7 +506,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -518,7 +518,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresas", empresas);
-                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("produto", produto);
                     parametros.Add("aging", aging);
                     parametros.Add("equipes", equipe);
                     parametros.Add("supervisor", supervisor);
@@ -545,7 +545,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -557,7 +557,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresas", empresas);
-                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("produto", produto);
                     parametros.Add("aging", aging);
                     parametros.Add("equipes", equipe);
                     parametros.Add("supervisor", supervisor);
