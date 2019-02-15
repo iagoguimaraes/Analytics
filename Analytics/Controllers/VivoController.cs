@@ -508,6 +508,32 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/score/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardScoreHoraHora(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["data"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_SCORE"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", dtini.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/score/producao")]
         [HttpPost]
         [Autorizar]
