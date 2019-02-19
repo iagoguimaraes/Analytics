@@ -181,7 +181,7 @@
                                             {{c[0].campanha}}
                                         </td>
                                         <td>{{c | avgColumn: 'ad' | number : 0 }}</td>
-                                        <td>{{c | sumByColumn: 'mailing' | number : 0 }}</td>
+                                        <td>{{dashboard.mailing | filter:{campanha:c[0].campanha} | sumByColumn:'mailing' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'discado' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'contato' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'cpc' | number : 0 }}</td>
@@ -192,7 +192,7 @@
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage: 1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage: 1}}</td>
                                         <td>{{c | divideSumColumns: 'falado':'logado' | percentage: 1}}</td>
-                                        <td>{{c | divideSumColumns: 'mailing':'ad' | number: 0}}</td>
+                                        <td>{{dashboard.mailing | filter:{campanha:c[0].campanha} | divideSumColumns:'mailing':'ad' | number : 0 }}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody" ng-if="p.hora">
@@ -273,6 +273,7 @@
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.campanha = r.data.Table2;
                 $scope.dashboard.tabulacao = r.data.Table3;
+                $scope.dashboard.mailing = r.data.Table4;
 
                 $scope.carregarGraficoHora();
 
