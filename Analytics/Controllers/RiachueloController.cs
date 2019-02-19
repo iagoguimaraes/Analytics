@@ -934,6 +934,36 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/ocupacao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoOcupacao(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_ocupacao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
         #endregion
 
     }
