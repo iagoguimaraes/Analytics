@@ -1,0 +1,307 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-localiza-pagamento">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Pagamento</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-yellow-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd | number"></h3>
+                        <p>Qtd Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-5">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr | currency:'R$ '"></h3>
+                        <p>Vlr Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="{{dashboard.resumo.vlr / dashboard.resumo.qtd }} | currency:'R$ ' "></h3>
+                        <p>Tkt Médio Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--QUANTIDADE POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Quantidade por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--VALOR POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Valor por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.vlDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--POR ESTADO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Efetividade por Estado </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" ng-model="graficoMapa.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" ng-model="graficoMapa.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive" ng-show="graficoMapa.exibir == 'true'">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-yellow-active">
+                                        <div class="inner">
+                                            <p><h4>Qtd Pagamento</h4></p>
+                                            <h3 ng-bind="dashboard.mapa.qtd | number"></h3>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-green-active">
+                                        <div class="inner">
+                                            <p><h4>Valor Pagamento</h4></p>
+                                            <h3 ng-bind="dashboard.mapa.vlr | currency:'R$ '"></h3>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p><h4>Ticket Médio Pagamento</h4></p>
+                                            <h3 ng-bind="( dashboard.mapa.vlr / dashboard.mapa.qtd ) | currency : 'R$ '"> Ticket Médio Pago</h3>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <mapa-brasil style="height: 505px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        </div>
+
+                        <div class="table-responsive" ng-show="graficoMapa.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Qtd Pagamento</th>
+                                        <th>R$ Pagamento</th>
+                                        <th>Ticket Médio Pagamento</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.estado | groupBy: 'regiao'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].regiao}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'vlr':'qtd' | currency:'R$ '}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.estado}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.vlr | currency: 'R$ '}}</td>
+                                        <td>{{p.vlr / p.qtd | currency:'R$ '}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-localiza-pagamento', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.idSelecionadoMapa = '';
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $scope.graficoMapa = { exibir: 'true' };
+        $scope.graficoCarteira = { exibir: 'true' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/localiza/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/localiza/dashboard/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.qtd)) }];
+                $scope.dashboard.vlDia = [{ name: 'Valor', data: r.data.Table1.map(obj => (obj.vlr)) }];
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd [percent], percent_pago [value] , uf, estado, regiao, qtd, vlr from ?', [data.Table2]);
+
+                $scope.dashboard.maiorPagamento = alasql('select top 1 "BR-" + uf id from ?', [data.Table2])[0];
+
+                $scope.mudarEstado($scope.dashboard.maiorPagamento);
+            });
+        }
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, qtd, vlr from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            $scope.dashboard.mapa = dados;
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
