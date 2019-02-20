@@ -84,7 +84,7 @@
             </div>
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -114,9 +114,15 @@
                             <span class="description-text">Promessa</span>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.novacao | number"></h5>
+                            <span class="description-text">Novação</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="row bg-black-gradient">
+                <div class="row bg-black-gradient" style="background-color:#8e8e8e">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.carteiraativa.qtd | number"></h5>
@@ -179,6 +185,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Novação</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -199,6 +206,7 @@
                                         <td>{{p | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{p | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{p | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{p | sumByColumn: 'novacao'| number}}</td>
                                         <td>{{p | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{p | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{p | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -214,6 +222,7 @@
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
                                         <td>{{f.promessa | number}}</td>
+                                        <td>{{f.novacao | number}}</td>
                                         <td>{{f.contato / f.discado | percentage:1}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.cpca / f.cpc | percentage:1}}</td>
@@ -252,6 +261,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Novação</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -266,6 +276,7 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.novacao | number}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -280,6 +291,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.novacao | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
