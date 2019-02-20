@@ -66,7 +66,7 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
 
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-purple">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.mailing | megaNumber"></h3>
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
@@ -113,6 +113,32 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.nao_confirma | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.nao_confirma  / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <p>N Confirma</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.confirma | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.confirma / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <p>Confirma</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-up"></i>
                     </div>
                 </div>
             </div>
@@ -162,6 +188,8 @@
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
+                                        <th>Não Confirma</th>
+                                        <th>Confirma</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Spin</th>
@@ -177,6 +205,8 @@
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
+                                        <td>{{dia.nao_confirma | number}}</td>
+                                        <td>{{dia.confirma | number}}</td>
                                         <td>{{dia.contato / dia.discado | percentage: 1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage: 1}}</td>
                                         <td>{{dia.discado / dia.mailing | number: 1 }}</td>
@@ -189,6 +219,8 @@
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.nao_confirma | number}}</th>
+                                        <th>{{dashboard.resumo.confirma | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.discado / dashboard.resumo.mailing | number: 1 }}</th>
@@ -207,6 +239,8 @@
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
+                                        <th>Não Confirma</th>
+                                        <th>Confirma</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                     </tr>
@@ -217,6 +251,8 @@
                                         <td>{{hora.discado | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.nao_confirma | number}}</td>
+                                        <td>{{hora.confirma | number}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                     </tr>
@@ -227,6 +263,8 @@
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.nao_confirma | number}}</th>
+                                        <th>{{dashboard.resumo.confirma | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                     </tr>
@@ -259,6 +297,8 @@
                                 <option value="cpc">CPC</option>
                                 <option value="hitrate">Hit Rate</option>
                                 <option value="txloc">Tx Loc</option>
+                                <option value="nao_confirma">N Confirma</option>
+                                <option value="confirma">Confirma</option>
                             </select>
                         </small>
                     </div>
