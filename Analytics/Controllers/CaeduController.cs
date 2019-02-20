@@ -316,6 +316,39 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/acordo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardAcordo(FormDataCollection form)
+        {
+            try
+            {
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("faixa", faixa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acordos_humano", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
     }
 }
