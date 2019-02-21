@@ -63,6 +63,44 @@
             </div>
         </div>
 
+
+        <!-- RESUMO -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.total | number"></h3>
+                        <p>Total Leads</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-dot-circle-o"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.aberto | number"></h3>
+                        <p>Quantidade em Aberto</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user-times"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.retornou | number"></h3>
+                        <p>Quantidade Retornada</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--TABELA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -143,6 +181,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.promessa = data.Table;
+                $scope.dashboard.resumo = data.Table1[0];
 
                 $scope.mudarBase($scope.grafico.indicador);
 
