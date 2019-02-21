@@ -1148,6 +1148,29 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("vendas/checkall")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CheckAll(FormDataCollection form)
+        {
+            try
+            {
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_retornoChamadaAll");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }

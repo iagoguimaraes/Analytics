@@ -81,6 +81,7 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.aberto | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.aberto / dashboard.resumo.total | percentage: 1"></h4>
                         <p>Quantidade em Aberto</p>
                     </div>
                     <div class="icon">
@@ -92,10 +93,32 @@
                 <div class="small-box bg-blue-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.retornou | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.retornou / dashboard.resumo.total | percentage: 1"></h4>
                         <p>Quantidade Retornada</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Marcar todos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza que deseja marcar todos os leads como retornados ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="checkAll()">Sim</button>
                     </div>
                 </div>
             </div>
@@ -107,6 +130,9 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Base Retorno</span>
+                        <div class="card-header-button" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fa fa-check-square-o"></i>
+                        </div>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -153,6 +179,8 @@
             </div>
         </div>
 
+        
+
     </div>
 </div>
 
@@ -191,6 +219,9 @@
 
         }
 
+
+
+
         $scope.checkSMS = function (chamada) {
             $http({
                 method: 'POST',
@@ -200,6 +231,19 @@
                     sms: chamada.sms
                 },
             });
+        }
+
+        $scope.checkAll = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/checkall",
+                //data: {
+                //    id_chamada: chamada.id_chamada,
+                //    sms: chamada.sms
+                //},
+            });
+
+            location.reload();
         }
 
         $scope.mudarBase = function (id) {
