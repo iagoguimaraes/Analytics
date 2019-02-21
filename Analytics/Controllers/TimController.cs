@@ -1156,12 +1156,18 @@ namespace Analytics.Controllers
         {
             try
             {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_retornoChamadaAll");
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_retornoChamadaAll", parametros);
+
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
