@@ -1,0 +1,415 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-sky-questionario">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Respostas Questionário FPD</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATAS-->
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA INCIAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Inicial</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                <!--DATA FINAL-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Data Final</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Resposta-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Resposta</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.resposta" dados="dashFiltros.resposta"></select2>
+                        </div>
+
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-md-1">
+
+                </div>
+                <div class="col-xs-12 col-md-5">
+                    <div class="small-box bg-blue-active">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.qtd | number"></h3>
+                            <p>Quantidade Total</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-5">
+                    <div class="small-box bg-green-active">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.vlr | currency:'R$ '"></h3>
+                            <p>Valor Total</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-money"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-1">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Percentual de respostas do período</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoRespostas.exibir" value="true" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoRespostas.exibir" value="false" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoRespostas.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.respostasDia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Quantidade</th>
+                                        <th>R$ Valor</th>
+                                        <th>Percentual</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.respostasDia | groupBy: 'data'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'vlr'| currency : 'R$ ' }}</td>
+                                        <td>{{c | sumByColumn : 'percentual' | number : 1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.respostas}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.vlr | currency : 'R$ '}}</td>
+                                        <td>{{p.percentual }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoRespostas.exibir == 'false'">
+                            <high-chart series="dashboard.resposta" axis-Categories="dashboard.respostas" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Respostas por estado </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-1">                               
+                            </div>
+                            <div class="col-xs-12 col-md-5">
+                                <div class="small-box bg-blue-active">
+                                    <div class="inner">
+                                        <p><h4>Quantidade Respostas - {{ dashboard.mapa.estado }}</h4></p>
+                                        <h3 ng-bind="dashboard.mapa.qtd | number" ></h3>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-5">
+                                <div class="small-box bg-green-active">
+                                    <div class="inner">
+                                        <p><h4>Valor Respostas - {{ dashboard.mapa.estado }}</h4></p>
+                                        <h3 ng-bind="dashboard.mapa.vlr | currency:'R$ '"></h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-1">
+                            </div>
+                        </div>
+                        <mapa-brasil style="height: 500px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        @*<div class="row margin-bottom">
+                <div class="col-xs-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Respostas</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table1')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.resposta" axis-Categories="dashboard.respostas" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>*@
+
+        <!--POR DIA-->
+        <!--ANALISE POR HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise respostas do período por dia / hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="grafico.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Quantidade</th>
+                                        <th>R$ Valor</th>
+                                        <th>Percentual</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.dia | groupBy: 'data'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'vlr'| currency : 'R$ ' }}</td>
+                                        <td>{{c | sumByColumn : 'percentual' | number : 1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.hora}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.vlr | currency : 'R$ '}}</td>
+                                        <td>{{p.percentual }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="grafico.exibir == 'false'">
+                            <span class="pull-right">
+                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                    <option value="qtd">Quantidade</option>
+                                    <option value="vlr">Valor</option>
+                                    <option value="percentual">Parcentual</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-sky-questionario', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
+
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            resposta: '',
+        };
+
+        $scope.idSelecionadoMapa = '';
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'percentual', exibir: 'false' };
+        $scope.graficoRespostas = { exibir: 'false' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.resposta = data.Table4;
+
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/dashboard/humano/questionario",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+
+                $scope.dashboard.horas = r.data.Table3.map(obj => obj.hora);
+                $scope.dashboard.respostas = r.data.Table1.map(obj => obj.respostas);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.resposta = [{ name: 'Resposta', data: data.Table1.map(obj => obj.percentual) }];
+                $scope.dashboard.dia = data.Table2;
+                $scope.dashboard.horaHora = data.Table3;
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd [percent], percentual [value], uf, estado, qtd, vlr from ?', [data.Table4]);
+                $scope.dashboard.respostasDia = data.Table5;
+
+                $scope.mudarEstado('BR-SP');
+                $scope.carregarGrafico();
+
+            });
+        }
+
+        $scope.carregarGrafico = function () {
+            let indicador = $scope.grafico.indicador;
+            let dados = $scope.dashboard.horaHora;
+
+            $scope.dashboard.horas = dados.map(obj => obj.hora)
+
+            switch (indicador) {
+                case 'qtd':
+                    $scope.dashboard.grafico = [{ name: 'Quantidade', data: dados.map(obj => obj.qtd) }];
+                    break;
+
+                case 'vlr':
+                    $scope.dashboard.grafico = [{ name: 'Valor', data: dados.map(obj => obj.vlr) }];
+                    break;
+
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+
+            }
+
+        }
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, qtd, vlr from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+
+            $scope.dashboard.mapa = dados;
+
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
