@@ -690,7 +690,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
                 DataTable faixaAtrasoM1 = JsonConvert.DeserializeObject<DataTable>(form["faixaAtrasoM1"]);
                 DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
@@ -702,7 +702,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresa", empresa);
-                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("produto", produto);
                     parametros.Add("faixaAtraso", faixaAtraso);
                     parametros.Add("faixaAtrasoM1", faixaAtrasoM1);
                     parametros.Add("statusSegmentacao", statusSegmentacao);
