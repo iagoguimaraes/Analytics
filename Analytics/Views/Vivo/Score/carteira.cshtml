@@ -104,6 +104,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -120,6 +123,9 @@
                         <span class="card-header-title">Base Ativa por Agrupamento</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -139,6 +145,9 @@
                         <span class="card-header-title">Análise por Lote</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -219,6 +228,8 @@
                 data: $scope.filtros,
             }).then(function success(r) {
 
+                $scope.dashboard.dados = r.data;
+
                 $scope.dashboard.resumo = r.data.Table[0];
 
                 $scope.dashboard.risco = [{ name: 'Qtd', data: r.data.Table1.map(obj => ({ name: obj.risco, y: obj.quantidade })) }];
@@ -233,6 +244,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 
