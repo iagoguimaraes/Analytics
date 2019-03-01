@@ -463,7 +463,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
-                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
                 {
@@ -472,7 +472,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
-                    parametros.Add("faixas", faixas);
+                    parametros.Add("faixas", atrasos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
