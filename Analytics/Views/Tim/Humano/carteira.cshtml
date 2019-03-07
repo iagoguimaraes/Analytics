@@ -65,14 +65,20 @@
 
                             <!--PRODUTO-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Produto</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produto" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento" style="width:100%"></select2>
                             </div>
 
                             <!--FAIXA ATRASO-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Aging</label>
+                                <label class="control-sidebar-subheading">Faixa</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-change="log()" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
+
+                            <!--PRODUTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Produto</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produto" style="width:100%"></select2>
                             </div>
 
                             <!--FAIXA ATRASO M1-->
@@ -264,8 +270,9 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             empresa: '',
-            produto: '',
+            segmento: '',
             faixaAtraso: '',
+            produto: '',
             faixaAtrasoM1: '',
             statusSegmentacao: '',
         };
@@ -287,8 +294,9 @@
             $scope.dashFiltros.status = r.status;
 
             $scope.dashFiltros.empresa = r.data.Table;
-            $scope.dashFiltros.produto = r.data.Table1;
+            $scope.dashFiltros.segmento = r.data.Table1;
             $scope.dashFiltros.faixaAtraso = r.data.Table2;
+            $scope.dashFiltros.produto = r.data.Table9;
             $scope.dashFiltros.faixaAtrasoM1 = r.data.Table6;
             $scope.dashFiltros.statusSegmentacao = r.data.Table8;
             

@@ -33,7 +33,7 @@
                             <!-- PERIODO 1 -->
                             <div class="col-xs-12 col-sm-6">
                                 <fieldset>
-                                    <legend>Periodo 1</legend>
+                                    <legend>Periodo 1 - Recente</legend>
 
                                     <!--DATAS-->
                                     <div class="row">
@@ -123,16 +123,22 @@
                                         <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
                                     </div>
 
-                                    <!--CARTEIRA-->
+                                    <!--SEGMENTO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Carteira</label>
-                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                                        <label class="control-sidebar-subheading">Segmento</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                                     </div>
 
-                                    <!--AGING-->
+                                    <!--FAIXA DE ATRASO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Aging</label>
-                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
+                                        <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso"></select2>
+                                    </div>
+
+                                    <!--PRODUTO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Produto</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produto"></select2>
                                     </div>
 
                                     <!--BOTÃO-->
@@ -146,7 +152,7 @@
                             <!-- PERIODO 2 -->
                             <div class="col-xs-12 col-sm-6">
                                 <fieldset>
-                                    <legend>Periodo 2</legend>
+                                    <legend>Periodo 2 - Antigo</legend>
 
                                     <!--DATAS-->
                                     <div class="row">
@@ -236,18 +242,24 @@
                                         <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.empresa_2" dados="dashFiltros.empresa"></select2>
                                     </div>
 
-                                    <!--CARTEIRA-->
+                                    <!--SEGMENTO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Carteira</label>
-                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.carteira_2" dados="dashFiltros.carteira"></select2>
+                                        <label class="control-sidebar-subheading">Segmento</label>
+                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.segmento_2" dados="dashFiltros.segmento"></select2>
                                     </div>
 
-                                    <!--AGING-->
+                                    <!--FAIXA DE ATRASO-->
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Aging</label>
-                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.aging_2" dados="dashFiltros.aging"></select2>
-                                    </div> 
+                                        <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.atraso_2" dados="dashFiltros.atraso"></select2>
+                                    </div>
                                     
+                                    <!--PRODUTO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Produto</label>
+                                        <select2 class="form-control" style="width: 100%;" data-placeholder="Selecione" ng-model="filtros.produto_2" dados="dashFiltros.produto"></select2>
+                                    </div>
+                                                                        
                                 </fieldset>
                             </div>
                         </div>
@@ -450,12 +462,14 @@
             horafim_2: '22',
 
             empresa: '',
-            carteira: '',
-            aging: '',
+            segmento: '',
+            atraso: '',
+            produto: '',
 
             empresa_2: '',
-            carteira_2: '',
-            aging_2: '',
+            segmento_2: '',
+            atraso_2: '',
+            produto_2: '',
             visao: 'hora',
         };
         $scope.dashFiltros = {};
@@ -471,8 +485,9 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.empresa = data.Table;
-            $scope.dashFiltros.carteira = data.Table1;
-            $scope.dashFiltros.aging = data.Table2;
+            $scope.dashFiltros.segmento = data.Table1;
+            $scope.dashFiltros.atraso = data.Table2;
+            $scope.dashFiltros.produto = data.Table9;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

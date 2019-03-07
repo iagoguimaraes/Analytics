@@ -46,19 +46,25 @@
                                 <!--EMPRESA-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Empresa</label>
-                                    <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
+                                    <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa"></select2>
                                 </div>
 
-                                <!--CARTEIRA-->
+                                <!--SEGMENTO-->
                                 <div class="form-group">
-                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <label class="control-sidebar-subheading">Segmento</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
+                                </div>
+
+                                <!--ATRASO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Atraso</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso"></select2>
+                                </div>
+
+                                <!--PRODUTO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Produto</label>
                                     <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashFiltros.produto"></select2>
-                                </div>
-
-                                <!--AGING-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">Aging</label>
-                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.aging" dados="dashFiltros.aging"></select2>
                                 </div>
                             </div>
 
@@ -180,12 +186,12 @@
 
         </div>
 
-        <!--ANALISE POR HORA-->
+        <!--ANALISE POR DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
+                        <span class="card-header-title">Produção por DIA</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -194,11 +200,11 @@
                         </div>
                         <small class="pull-right">
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="true" checked="checked" />
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="true" checked="checked" />
                                 Tabela
                             </label>
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="false" />
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="false" />
                                 Gráfico
                             </label>
 
@@ -276,6 +282,79 @@
 
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção por produto</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.produto">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira</th>
+                                        @*<th>Discado</th>*@
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Valor Promessa</th>
+                                        @*<th>HitRate</th>*@
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.produto | groupBy: 'ds_produto'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_produto}}
+                                        </td>
+                                        @*<td>{{e | sumByColumn: 'discado'| number}}</td>*@
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                        @*<td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>*@
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_aging}}</td>
+                                        @*<td>{{c.discado | number}}</td>*@
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.vlr_promessa| currency: 'R$ '}}</td>
+                                        @*<td>{{c.contato / c.discado | percentage:1}}</td>*@
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -412,9 +491,10 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            empresas: '',
+            empresa: '',
+            segmento: '',
+            atraso: '',
             produto: '',
-            aging: '',
             equipe: '',
             supervisor: '',
         };
@@ -432,9 +512,10 @@
             let data = r.data;
 
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.empresas = r.data.Table;
-            $scope.dashFiltros.produto = r.data.Table1;
-            $scope.dashFiltros.aging = r.data.Table2;
+            $scope.dashFiltros.empresa = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table1;
+            $scope.dashFiltros.atraso = r.data.Table2;
+            $scope.dashFiltros.produto = r.data.Table9;
             $scope.dashFiltros.supervisor = r.data.Table3;
             $scope.dashFiltros.equipe = r.data.Table4;
 
@@ -457,6 +538,7 @@
                 $scope.dashboard.supervisor = data.Table2;
                 $scope.dashboard.tabulacao = data.Table3;
                 $scope.dashboard.alega = data.Table4;
+                $scope.dashboard.produto = data.Table5;
 
                 $scope.carregarGraficoDia();
                 $scope.carregarGraficoAlega();
