@@ -63,8 +63,8 @@
 
                                 <!--PRODUTOS-->
                                 <div class="form-group">
-                                    <label class="control-sidebar-subheading">Classes</label>
-                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.classes" dados="dashFiltros.classes" style="width:100%"></select2>
+                                    <label class="control-sidebar-subheading">Atrasos</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
                                 </div>
 
                                 <!--SUPERVISOR-->
@@ -216,7 +216,7 @@
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_classe}}</td>
+                                        <td>{{c.ds_produto}}</td>
                                         <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
@@ -437,7 +437,7 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            classes: '',
+            atrasos: '',
             faixas: '',
             equipe: '',
             supervisor: '',
@@ -452,7 +452,7 @@
         }).then(function success(r) {
             $scope.dados = r.status;
 
-            $scope.dashFiltros.classes = r.data.Table;
+            $scope.dashFiltros.atrasos = r.data.Table4;
             $scope.dashFiltros.faixas = r.data.Table1;
             $scope.dashFiltros.supervisor = r.data.Table2;
             $scope.dashFiltros.equipes = r.data.Table3;
