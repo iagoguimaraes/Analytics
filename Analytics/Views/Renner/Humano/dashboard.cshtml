@@ -196,32 +196,40 @@
             </div>
         </div>
 
-        <!--Pagamento-->
+        <!--Discagens-->
         <div class="row">
-            
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="small-box bg-purple">
-                    <div class="inner">
-                        <h3> R$: {{dashboard.pagamento.qtd_direto | number}}</h3>
-                        <p>Pagamento</p>
+            <!--Gráfico por mes-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Discagens Mês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-users"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="small-box bg-green-active">
-                    <div class="inner">
-                        <h3> R$: {{dashboard.pagamento.vlr_direto | number}}</h3>
-                        <p>Financeiro</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
+                    <div class="card">
+                        <div class="card-body" style="height:400px">
+                            <div class="row margin-bottom">
+                                <high-chart series="dashboard.discagem" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.discagem.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                            </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <!--Diagrama Discagens-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama Discagens</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -229,90 +237,171 @@
 
 
 
-        <script>
-            angular.module('app').controller('ctrl-renner-dashboard-humano', function ($scope, $http, $filter) {
-                document.body.classList.remove('menu-opened');
-
-                $scope.dashFiltros = {};
-                $scope.dashboard = {};
-                //$scope.grafico = { indicador: 'qtd' };
-
-                // filtros iniciais
-                let newdate = new Date();
-                let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
-
-                $scope.filtros = {
-                    dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-                    dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                    produtos: '',
-                    faixas: ''
-
-                };
-
-                // carregar os filtros
-                $http({
-                    method: 'GET',
-                    url: "/api/renner/dashboard/humano/filtros",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    let data = r.data;
-                    $scope.dados = r.status;
-
-                    $scope.dashFiltros.status = r.status;
-                    $scope.dashFiltros.produtos = r.data.Table;
-                    $scope.dashFiltros.faixas = r.data.Table1;
-
-
-                });
-
-                // obtem filtros do escopo e carrega os dados do dashboard
-                $scope.carregarDashboard = function () {
-                    $http({
-                        method: 'POST',
-                        url: "/api/renner/dashboard/humano/dashboard",
-                        data: $scope.filtros,
-                    }).then(function success(r) {
-                        let data = r.data;
-                        $scope.dashboard.status = r.status;
-                        $scope.dashboard.dados = r.data;
-
-
-                        $scope.dashboard.pagamento = r.data.Table2[0];
-                        $scope.dashboard.meses = r.data.Table1.map(obj => obj.mes_do_ano_descricao);
-                        $scope.dashboard.media = r.data.Table1[2];
-
-                        $scope.carregarGrafico();
-                        $scope.carregarComparativo();
-
-                    });
-                }
-
-                $scope.carregarComparativo = function () {
-
-                    let dados1 = alasql('select contato_atual, cpc_atual, cpca_atual, promessa_atual from ?', [$scope.dashboard.dados.Table])[0];
-                    let dados2 = alasql('select contato_antes, cpc_antes, cpca_antes, promessa_antes from ?', [$scope.dashboard.dados.Table])[0];
-
-                    $scope.dashboard.contato = { p1: dados1.contato_atual, p2: dados2.contato_antes, vs: dados1.contato_atual / dados2.contato_antes - 1 };
-                    $scope.dashboard.cpc = { p1: dados1.cpc_atual, p2: dados2.cpc_antes, vs: dados1.cpc_atual / dados2.cpc_antes - 1 };
-                    $scope.dashboard.cpca = { p1: dados1.cpca_atual, p2: dados2.cpca_antes, vs: dados1.cpca_atual / dados2.cpca_antes - 1 };
-                    $scope.dashboard.promessa = { p1: dados1.promessa_atual, p2: dados2.promessa_antes, vs: dados1.promessa_atual / dados2.promessa_antes - 1 };
-
-
-                }
-
-                $scope.carregarGrafico = function () {
-                    let dados = $scope.dashboard.dados;
-
-
-                    $scope.dashboard.resultado = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
-                    $scope.dashboard.pa = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
-
-                }
+        <!--Pagamento-->
+        <div class="col-xs-12 col-lg-12 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Pagamentos</span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="small-box bg-new-blue-grey">
+                                <div class="inner">
+                                    <h3>{{dashboard.pagamento.qtd_direto | number}}</h3>
+                                    <p>Média Pagamento Dia</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-check-circle-o"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="small-box bg-olive-active">
+                                <div class="inner">
+                                    <h3>{{dashboard.pagamento.vlr_direto | currency:'R$ '}}</h3>
+                                    <p>Média Valor Pago Dia</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-usd"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="small-box bg-olive-active">
+                                <div class="inner">
+                                    <h3>{{dashboard.pagamento.tck_direto | currency:'R$ '}}</h3>
+                                    <p>Ticket Médio</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-bar-chart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!--GRAFICO MES-->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card-body">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
-                $scope.carregarDashboard();
+<script>
+    angular.module('app').controller('ctrl-renner-dashboard-humano', function ($scope, $http, $filter) {
+        document.body.classList.remove('menu-opened');
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        //$scope.grafico = { indicador: 'qtd' };
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            produtos: '',
+            faixas: ''
+
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/renner/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.produtos = r.data.Table;
+            $scope.dashFiltros.faixas = r.data.Table1;
+
+
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/renner/dashboard/humano/dashboard",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+
+                $scope.dashboard.pagamento = r.data.Table2[0];
+                $scope.dashboard.meses = r.data.Table1.map(obj => obj.mes_do_ano_descricao);
+                $scope.dashboard.media = r.data.Table1[2];
+
+                $scope.carregarGrafico();
+                $scope.carregarComparativo();
+                $scope.carregarGraficoPagamento();
+                $scope.carregarGraficoDiscagem();
 
             });
-        </script>
+        }
+
+        $scope.carregarComparativo = function () {
+
+            let dados1 = alasql('select contato_atual, cpc_atual, cpca_atual, promessa_atual from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select contato_antes, cpc_antes, cpca_antes, promessa_antes from ?', [$scope.dashboard.dados.Table])[0];
+
+            $scope.dashboard.contato = { p1: dados1.contato_atual, p2: dados2.contato_antes, vs: dados1.contato_atual / dados2.contato_antes - 1 };
+            $scope.dashboard.cpc = { p1: dados1.cpc_atual, p2: dados2.cpc_antes, vs: dados1.cpc_atual / dados2.cpc_antes - 1 };
+            $scope.dashboard.cpca = { p1: dados1.cpca_atual, p2: dados2.cpca_antes, vs: dados1.cpca_atual / dados2.cpca_antes - 1 };
+            $scope.dashboard.promessa = { p1: dados1.promessa_atual, p2: dados2.promessa_antes, vs: dados1.promessa_atual / dados2.promessa_antes - 1 };
+        }
+
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.resultado = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
+            $scope.dashboard.pa = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
+        }
+
+        $scope.carregarGraficoPagamento = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.qtDia = [
+                 { name: 'Valor', color: 'rgba(192, 192, 192, 0.8)', data: dados.Table3.map(obj => (obj.vlr_direto)) },
+                 { name: 'Evolução', yAxis: 1, type: 'spline', color: 'rgba(0, 153, 76, 1)', data: dados.Table3.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.dias = dados.Table3.map(obj => (obj.data));
+
+        }
+
+        $scope.carregarGraficoDiscagem = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.discagem = [
+                { name: 'Falha', data: dados.Table4.map(obj => (obj.falha)) },
+                { name: 'Atendido - URA', data: dados.Table4.map(obj => (obj.atendido)) },
+                { name: 'Transferido', data: dados.Table4.map(obj => (obj.transferido)) },
+                { name: 'Evolução Transf.', yAxis: 1, type: 'spline', data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.discagem.meses = dados.Table4.map(obj => obj.mes_do_ano_descricao);
+
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
 
