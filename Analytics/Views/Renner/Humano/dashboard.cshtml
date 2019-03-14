@@ -80,20 +80,20 @@
             <div class="col-xs-12 col-lg-6 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Pagamentos do mês</span>
+                        <span class="card-header-title">Média pagamentos do mês</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="height:450px">
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <div class="small-box bg-new-blue-grey">
                                     <div class="inner">
                                         <h6 class="right">Média Pagamento Dia</h6>
                                         <h3 class="right">{{dashboard.pagamentoAtual.qtd | number}}</h3>
-                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.qtd | number}}</h7>
                                         <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.qtd_evolucao > 0 ? 'white' : 'red'}}">{{dashboard.pagamentoAtual.qtd_evolucao | percentage: 1}}</h4>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.qtd | number}}</h7>                                        
                                     </div>
                                 </div>
                             </div>
@@ -102,8 +102,8 @@
                                     <div class="inner">
                                         <h6 class="right">Média Valor Pago Dia</h6>
                                         <h3 class="right">{{dashboard.pagamentoAtual.vlr | megaNumber}}</h3>
-                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.vlr | megaNumber }}</h7>
                                         <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.vlr_evolucao > 0 ? 'white' : 'red'}}">{{dashboard.pagamentoAtual.vlr_evolucao | percentage: 1}}</h4>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.vlr | megaNumber }}</h7>                                        
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +111,8 @@
                                 <div class="small-box bg-olive-active">
                                     <div class="inner">
                                         <h6 class="right">Ticket Médio</h6>
-                                        <h3>{{dashboard.pagamentoAtual.tck | currency: 'R$ '}}</h3>      
-                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.tck | currency }}</h7>                                                                          
+                                        <h3>{{dashboard.pagamentoAtual.tck | currency: 'R$ '}}</h3>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.tck | currency }}</h7>
                                     </div>
                                 </div>
                             </div>
@@ -132,16 +132,19 @@
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Projeção de pagamentos do mês</span>
+                        <span class="card-header-title">Projeção pagamentos do mês</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table5')">
+                        <div class="card-header-button" ng-click="extrair('Table7')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
-
+                        <high-charts config="dashboard.projecao_mes_vlr" style="width: 100%; height: 185px"></high-charts>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes_qtd" style="width: 100%; height: 185px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -269,7 +272,6 @@
 
         <!--Discagens-->
         <div class="row">
-            <!--Gráfico por mes-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
@@ -307,6 +309,54 @@
             </div>
         </div>
 
+        <!--CARTEIRA-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Média {{grafico.indicador}} por produto</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGraficoCarteira()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_atual" type="pie" height="440" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--Diagrama Discagens-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Média {{grafico.indicador}} por mes</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_meses" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_meses_vlr" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
@@ -323,6 +373,10 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.grafico = {
+            indicador: 'ativo'
+        };
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
@@ -358,19 +412,102 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
-                
+
                 $scope.dashboard.meses = r.data.Table1.map(obj => obj.mes_do_ano_descricao);
                 $scope.dashboard.media = r.data.Table1[2];
                 $scope.dashboard.pagamentoAtual = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Atual" ', [r.data.Table2])[0]
                 $scope.dashboard.pagamentoAnterior = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Anterior" ', [r.data.Table2])[0]
                 $scope.dashboard.diagrama = r.data.Table5;
 
-               
+                // PROJECAO DO MES
+                if (r.data.Table6.length > 0) {
+
+                    let mes_qtd = r.data.Table6.map(o => ({ y: o.qtd }));
+                    let mes_vlr = r.data.Table6.map(o => ({ y: o.vlr }));
+
+                    let mes_projecaoQtd = r.data.Table7.map(o => ({ y: o.qtd }));
+                    let mes_projecaoVlr = r.data.Table7.map(o => ({ y: o.vlr }));
+
+                    mes_qtd[mes_qtd.length - 1].dataLabels = { enabled: true };
+                    mes_projecaoQtd[mes_projecaoQtd.length - 1].dataLabels = { enabled: true };
+
+                    mes_vlr[mes_vlr.length - 1].dataLabels = { enabled: true };
+                    mes_projecaoVlr[mes_projecaoVlr.length - 1].dataLabels = { enabled: true };
+
+                    $scope.dashboard.projecao_mes_qtd = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
+                        },
+                        xAxis: {
+                            categories: r.data.Table7.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'green',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: mes_projecaoQtd
+                            },
+                            {
+                                type: 'area',
+                                name: 'Quantidade',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: mes_qtd
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+
+                    $scope.dashboard.projecao_mes_vlr = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
+                        },
+                        xAxis: {
+                            categories: r.data.Table7.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'green',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: mes_projecaoVlr
+                            },
+                            {
+                                type: 'area',
+                                name: 'Valor',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: mes_vlr
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                }
 
                 $scope.carregarGrafico();
                 $scope.carregarComparativo();
                 $scope.carregarGraficoPagamento();
                 $scope.carregarGraficoDiscagem();
+                $scope.carregarGraficoCarteira();
 
             });
         }
@@ -412,14 +549,35 @@
                 { name: 'Falha', data: dados.Table4.map(obj => (obj.falha)) },
                 { name: 'Atendido - URA', data: dados.Table4.map(obj => (obj.atendido)) },
                 { name: 'Transferido', data: dados.Table4.map(obj => (obj.transferido)) },
-                { name: '% Evolução Transf.', yAxis: 1, type: 'spline', data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
+                { name: '% Evolução Transf.', yAxis: 1, type: 'spline', color: 'yellow' , data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
 
             $scope.dashboard.discagem.meses = dados.Table4.map(obj => obj.mes_do_ano_descricao);
 
         }
 
+        $scope.carregarGraficoCarteira = function () {
+            let dados = $scope.dashboard.dados;
+            let indicador = $scope.grafico.indicador;
+
+            $scope.dashboard.meses = dados.Table9.map(obj => obj.mes);
+
+            $scope.dashboard.carteira_atual = [
+                { name: 'Contratos', innerSize: '30%', data: dados.Table8.map(obj => ({ name: obj.produto, y: obj[indicador] })) }];
+            
+            $scope.dashboard.carteira_meses = [
+                 { name: 'Qtd Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador])) }];
+            
+            $scope.dashboard.carteira_meses_vlr = [
+                 { name: 'Saldo Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador + "Vlr"])) }];
+
+        }
+
         $scope.carregarDashboard();
 
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX(".xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
     });
 </script>
 
