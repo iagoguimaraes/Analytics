@@ -649,6 +649,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
@@ -661,6 +662,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("supervisores", supervisores);
@@ -686,6 +688,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
@@ -697,6 +700,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("supervisores", supervisores);
@@ -994,7 +998,44 @@ namespace Analytics.Controllers
             }
         }
 
-        
+        [Route("dashboard/humano/cadmeta")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ProjecaoCadMetaHumano(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int meta_pl = Convert.ToInt32(form["meta_pl"].ToString().Replace(".", ""));
+                int meta_bandeira = Convert.ToInt32(form["meta_bandeira"].ToString().Replace(".", ""));
+                int meta_saque = Convert.ToInt32(form["meta_saque"].ToString().Replace(".", ""));
+                int meta_emprestimo = Convert.ToInt32(form["meta_emprestimo"].ToString().Replace(".", ""));
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("meta_pl", meta_pl);
+                    parametros.Add("meta_bandeira", meta_bandeira);
+                    parametros.Add("meta_saque", meta_saque);
+                    parametros.Add("meta_emprestimo", meta_emprestimo);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao_cadmetaia", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
 
 
         #endregion
