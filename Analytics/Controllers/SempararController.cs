@@ -119,6 +119,8 @@ namespace Analytics.Controllers
                     procedure = "sp_dashboard_efetividade_humano";
                 if (form["visao"] == "vencimento")
                     procedure = "sp_dashboard_efetividade_humano_vencimento";
+                if (form["visao"] == "pagamento")
+                    procedure = "sp_dashboard_efetividade_humano_pagamento";
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
                 {
