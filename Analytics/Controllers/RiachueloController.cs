@@ -1012,6 +1012,10 @@ namespace Analytics.Controllers
                 int meta_bandeira = Convert.ToInt32(form["meta_bandeira"].ToString().Replace(".", ""));
                 int meta_saque = Convert.ToInt32(form["meta_saque"].ToString().Replace(".", ""));
                 int meta_emprestimo = Convert.ToInt32(form["meta_emprestimo"].ToString().Replace(".", ""));
+                int meta_pl_promessa = Convert.ToInt32(form["meta_pl_promessa"].ToString().Replace(".", ""));
+                int meta_bandeira_promessa = Convert.ToInt32(form["meta_bandeira_promessa"].ToString().Replace(".", ""));
+                int meta_saque_promessa = Convert.ToInt32(form["meta_saque_promessa"].ToString().Replace(".", ""));
+                int meta_emprestimo_promessa = Convert.ToInt32(form["meta_emprestimo_promessa"].ToString().Replace(".", ""));
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
@@ -1024,8 +1028,42 @@ namespace Analytics.Controllers
                     parametros.Add("meta_bandeira", meta_bandeira);
                     parametros.Add("meta_saque", meta_saque);
                     parametros.Add("meta_emprestimo", meta_emprestimo);
+                    parametros.Add("meta_pl_promessa", meta_pl);
+                    parametros.Add("meta_bandeira_promessa", meta_bandeira);
+                    parametros.Add("meta_saque_promessa", meta_saque);
+                    parametros.Add("meta_emprestimo_promessa", meta_emprestimo);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao_cadmetaia", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/planejamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoPlanejamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("produtos", produtos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_planejamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

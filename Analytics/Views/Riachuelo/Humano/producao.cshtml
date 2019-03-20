@@ -12,98 +12,9 @@
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('metas-window')">
-                <i class="fa fa-edit"></i>
-                CADASTRO DE META
-            </div>
         </header>
 
-        <!--CADASTRO DE META -->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div id="metas-window" class="card display-none">
-                    <div class="card-header">
-                        <span class="card-header-title">Cadastro de Meta</span>
-                        <div class="card-header-button card-header-close">
-                            <i class="fa fa-close"></i>
-                        </div>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <!-- Filtros -->
-                            <div class="tab-pane active" id="control-sidebar-filters-tab">
-                                <!--ANO-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Ano</label>
-                                    <select ng-model="filtros.ano">
-                                        <option value="2018">2018</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2022">2022</option>
-                                    </select>
-                                </div>
-
-                                <!--MES-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Mês</label>
-                                    <select ng-model="filtros.mes">
-                                        <option value="1">Janeiro</option>
-                                        <option value="2">Fevereiro</option>
-                                        <option value="3">Março</option>
-                                        <option value="4">Abril</option>
-                                        <option value="5">Maio</option>
-                                        <option value="6">Junho</option>
-                                        <option value="7">Julho</option>
-                                        <option value="8">Agosto</option>
-                                        <option value="9">Setembro</option>
-                                        <option value="10">Outubro</option>
-                                        <option value="11">Novembro</option>
-                                        <option value="12">Dezembro</option>
-                                    </select>
-                                </div>
-
-                                <!--BANDEIRA-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Bandeira</label>
-                                    <input-mask class="mask" ng-model="filtros.meta_bandeira" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
-                                </div>
-
-                                <!--PL-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Private Label</label>
-                                    <input-mask id="mask_pl" ng-model="filtros.meta_pl" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
-                                </div>
-
-                                <!--SAQUE-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Saque</label>
-                                    <input-mask ng-model="filtros.meta_saque" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
-                                </div>
-
-                                <!--EMPRESTIMO-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading" style="width: 100px;">Empréstimo</label>
-                                    <input-mask ng-model="filtros.meta_emprestimo" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
-                                </div>
-
-                                <!--BOTÃO-->
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="salvarMetas()" onclick="addDisplayNone('metas-window')">Salvar</button>
-                                </div>
-                            </div>
-                            <!-- /.tab-pane -->
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div><!-- FILTROS -->
+        <!-- FILTROS -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -219,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
@@ -231,19 +142,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
-                <div class="small-box bg-blue-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.totalmeta.meta | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.totalmeta.meta | percentage: 1"></h4>
-                        <p>Meta CPCA</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-street-view"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
@@ -280,8 +179,6 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>META CPCA</th>
-                                        <th>% Feito</th>
                                         <th>Promessa</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
@@ -296,8 +193,6 @@
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
-                                        <td>{{dia.meta | number}}</td>
-                                        <td>{{dia.cpca / dia.meta | percentage:1}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
@@ -427,12 +322,6 @@
             carteiras: '',
             supervisores: '',
             equipes: '',
-            ano: '' + new Date().getFullYear(),
-            mes: '' + (new Date().getMonth() + 1),
-            meta_bandeira: '',
-            meta_pl: '',
-            meta_saque: '',
-            meta_emprestimo: '',
         };
 
         $scope.dashFiltros = {};
@@ -468,32 +357,7 @@
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.equipe = data.Table2;
-                $scope.dashboard.totalmeta = data.Table4[0];
                 
-
-                // setar os valores das metas nos campos
-                setTimeout(function () {
-                    if (data.Table3.find(o => o.id_produto == 1) && data.Table3.find(o => o.id_produto == 1)["valor"] > 0)
-                        $scope.filtros.meta_pl = $('.mask').masked(data.Table3.find(o => o.id_produto == 1)["valor"]);
-                    else
-                        $scope.filtros.meta_pl = 0;
-                    if (data.Table3.find(o => o.id_produto == 2) && data.Table3.find(o => o.id_produto == 2)["valor"] > 0)
-                        $scope.filtros.meta_bandeira = $('.mask').masked(data.Table3.find(o => o.id_produto == 2)["valor"])
-                    else
-                        $scope.filtros.meta_bandeira = 0;
-
-                    if (data.Table3.find(o => o.id_produto == 3) && data.Table3.find(o => o.id_produto == 3)["valor"] > 0)
-                        $scope.filtros.meta_emprestimo = $('.mask').masked(data.Table3.find(o => o.id_produto == 3)["valor"])
-                    else
-                        $scope.filtros.meta_emprestimo = 0;
-
-                    if (data.Table3.find(o => o.id_produto == 4) && data.Table3.find(o => o.id_produto == 4)["valor"] > 0)
-                        $scope.filtros.meta_saque = $('.mask').masked(data.Table3.find(o => o.id_produto == 4)["valor"])
-                    else
-                        $scope.filtros.meta_saque = 0;
-
-                    $scope.$apply();
-                }, 2000);
 
                 $scope.carregarGrafico();
 
@@ -531,15 +395,6 @@
             alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
 
-        $scope.salvarMetas = function () {
-            $http({
-                method: 'POST',
-                url: "/api/riachuelo/dashboard/humano/cadmeta",
-                data: $scope.filtros,
-            }).then(function success(r) {
-                $scope.carregarDashboard();
-            });
-        }
 
     });
 
