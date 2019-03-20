@@ -119,6 +119,8 @@ namespace Analytics.Controllers
                     procedure = "sp_dashboard_efetividade_humano";
                 if (form["visao"] == "vencimento")
                     procedure = "sp_dashboard_efetividade_humano_vencimento";
+                if (form["visao"] == "pagamento")
+                    procedure = "sp_dashboard_efetividade_humano_pagamento";
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
                 {
@@ -165,6 +167,66 @@ namespace Analytics.Controllers
                     parametros.Add("faixaAtraso", faixaAtraso);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/paglote")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagLote(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_paglote", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
