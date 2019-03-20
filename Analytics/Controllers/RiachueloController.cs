@@ -1043,7 +1043,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/humano/planejamento")]
+        [Route("dashboard/humano/metas")]
         [HttpPost]
         [Autorizar]
         [Gravar]
