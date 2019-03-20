@@ -93,7 +93,7 @@
                                         <h6 class="right">Média Pagamento Dia</h6>
                                         <h3 class="right">{{dashboard.pagamentoAtual.qtd | number}}</h3>
                                         <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.qtd_evolucao > 0 ? 'white' : 'red'}}">{{dashboard.pagamentoAtual.qtd_evolucao | percentage: 1}}</h4>
-                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.qtd | number}}</h7>                                        
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.qtd | number}}</h7>
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                         <h6 class="right">Média Valor Pago Dia</h6>
                                         <h3 class="right">{{dashboard.pagamentoAtual.vlr | megaNumber}}</h3>
                                         <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.vlr_evolucao > 0 ? 'white' : 'red'}}">{{dashboard.pagamentoAtual.vlr_evolucao | percentage: 1}}</h4>
-                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.vlr | megaNumber }}</h7>                                        
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.vlr | megaNumber }}</h7>
                                     </div>
                                 </div>
                             </div>
@@ -161,58 +161,104 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-body" style="height:400px">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="small-box bg-green">
-                                        <div class="inner">
-                                            <h5>Promessa</h5>
-                                            <h3>{{dashboard.promessa.p1 | number}}</h3>
-                                            <h7 class="right"> Média 3M anterior: {{dashboard.promessa.p2 | number}}</h7>
-                                            <h4 class="pull-right" ng-bind="dashboard.promessa.vs | percentage: 1" style="color:{{dashboard.promessa.vs > 0 ? 'white' : 'red'}}"></h4>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-handshake-o"></i>
-                                        </div>
+                        <div class="card-body" style="height:600px">
+                            <!--Promessa-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h5>Promessa</h5>
+                                        <h3 align="center">{{dashboard.promessa.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.promessa.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.promessa.vs | percentage: 1" style="color:{{dashboard.promessa.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-handshake-o"></i>
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <div class="small-box bg-new-blue">
-                                        <div class="inner">
-                                            <h5>CPCA</h5>
-                                            <h3>{{dashboard.cpca.p1 | number}}</h3>
-                                            <h7 class="right"> Média 3M anterior: {{dashboard.cpca.p2 | number}}</h7>
-                                            <h4 class="pull-right" ng-bind="dashboard.cpca.vs | percentage: 1" style="color:{{dashboard.cpca.vs > 0 ? 'white' : 'red'}}"></h4>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-bullseye"></i>
-                                        </div>
+                            </div>
+                            <!--Conversão-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-green" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Conversão</h5>
+                                        <h3 align="center">{{dashboard.conversao.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.conversao.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.conversao.vs | percentage: 1" style="color:{{dashboard.conversao.vs > 0 ? 'white' : 'red'}}"></h4>
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <div class="small-box bg-yellow-active">
-                                        <div class="inner">
-                                            <h5>CPC</h5>
-                                            <h3>{{dashboard.cpc.p1 | number}}</h3>
-                                            <h7 class="right"> Média 3M anterior: {{dashboard.cpc.p2 | number}}</h7>
-                                            <h4 class="pull-right" ng-bind="dashboard.cpc.vs | percentage: 1" style="color:{{dashboard.cpc.vs > 0 ? 'white' : 'red'}}"></h4>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-male"></i>
-                                        </div>
+                            </div>
+                            <!--CPCA-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-blue">
+                                    <div class="inner">
+                                        <h5>CPCA</h5>
+                                        <h3 align="center">{{dashboard.cpca.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpca.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.cpca.vs | percentage: 1" style="color:{{dashboard.cpca.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bullseye"></i>
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <div class="small-box bg-new-grey">
-                                        <div class="inner">
-                                            <h5>Contato</h5>
-                                            <h3>{{dashboard.contato.p1 | number}}</h3>
-                                            <h7 class="right"> Média 3M anterior: {{dashboard.contato.p2 | number}}</h7>
-                                            <h4 class="pull-right" ng-bind="dashboard.contato.vs | percentage: 1" style="color:{{dashboard.contato.vs > 0 ? 'white' : 'red'}}"></h4>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-comments-o"></i>
-                                        </div>
+                            </div>
+                            <!--Tx Apv-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-blue" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Tx Aproveitamento</h5>
+                                        <h3 align ="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.txapv.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.txapv.vs | percentage: 1" style="color:{{dashboard.txapv.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Cpc-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-yellow-active">
+                                    <div class="inner">
+                                        <h5>CPC</h5>
+                                        <h3 align="center">{{dashboard.cpc.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpc.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.cpc.vs | percentage: 1" style="color:{{dashboard.cpc.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-male"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Tx Loc-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-yellow-active" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Tx Localização</h5>
+                                        <h3 align="center">{{dashboard.txloc.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.txloc.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.txloc.vs | percentage: 1" style="color:{{dashboard.txloc.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Contato-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-grey">
+                                    <div class="inner">
+                                        <h5>Contato</h5>
+                                        <h3 align="center">{{dashboard.contato.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.contato.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.contato.vs | percentage: 1" style="color:{{dashboard.contato.vs > 0 ? 'white' : 'red'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-comments-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Hit Rate-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-grey" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Hit Rate</h5>
+                                        <h3 align="center">{{dashboard.hitrate.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.hitrate.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.hitrate.vs | percentage: 1" style="color:{{dashboard.hitrate.vs > 0 ? 'white' : 'red'}}"></h4>
                                     </div>
                                 </div>
                             </div>
@@ -231,39 +277,36 @@
                             <i class="fa fa-expand"></i>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="small-box bg-yellow">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.media.qtd_promessa"></h3>
-                                        <p>Promessa OP</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
+                    <div class="card-body" style="height:600px">
+                        <div class="col-xs-6">
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.media.qtd_promessa"></h3>
+                                    <p>Promessa OP</p>
                                 </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="small-box bg-purple">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.media.qtd_agente"></h3>
-                                        <p>Qtd Operador</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-users"></i>
-                                    </div>
+                                <div class="icon">
+                                    <i class="fa fa-user"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <h4 class="text-center">Comparativo de Produtividade</h4>
-                            <div class="col-xs-6">
-                                <high-chart series="dashboard.resultado" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                        <div class="col-xs-6">
+                            <div class="small-box bg-purple">
+                                <div class="inner">
+                                    <h3 ng-bind="dashboard.media.qtd_agente"></h3>
+                                    <p>Qtd Operador</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-users"></i>
+                                </div>
                             </div>
-                            <div class="col-xs-6">
-                                <high-chart series="dashboard.pa" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
-                            </div>
+                        </div>
+
+                        <h4 class="text-center">Comparativo de Produtividade</h4>
+                        <div class="col-xs-12">
+                            <high-chart series="dashboard.resultado" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                        </div>
+                        <div class="col-xs-12">
+                            <high-chart series="dashboard.pa" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
                         </div>
                     </div>
                 </div>
@@ -516,20 +559,37 @@
 
         $scope.carregarComparativo = function () {
 
-            let dados1 = alasql('select contato_atual, cpc_atual, cpca_atual, promessa_atual from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select contato_antes, cpc_antes, cpca_antes, promessa_antes from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select discado_atual,contato_atual, cpc_atual, cpca_atual, promessa_atual from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select discado_antes,contato_antes, cpc_antes, cpca_antes, promessa_antes from ?', [$scope.dashboard.dados.Table])[0];
 
+            let calculo = {
+                hitrate1: dados1.contato_atual / dados1.discado_atual,
+                hitrate2: dados2.contato_antes / dados2.discado_antes,
+                txloc1: dados1.cpc_atual / dados1.contato_atual,
+                txloc2: dados2.cpc_antes / dados2.contato_antes,
+                txapv1: dados1.cpca_atual / dados1.cpc_atual,
+                txapv2: dados2.cpca_antes / dados2.cpc_antes,
+                conversao1: dados1.promessa_atual / dados1.cpca_atual,
+                conversao2: dados2.promessa_antes / dados2.cpca_antes
+            }
+
+            $scope.dashboard.discado = { p1: dados1.discado_atual, p2: dados2.discado_antes, vs: dados1.discado_atual / dados2.discado_antes - 1 };
             $scope.dashboard.contato = { p1: dados1.contato_atual, p2: dados2.contato_antes, vs: dados1.contato_atual / dados2.contato_antes - 1 };
             $scope.dashboard.cpc = { p1: dados1.cpc_atual, p2: dados2.cpc_antes, vs: dados1.cpc_atual / dados2.cpc_antes - 1 };
             $scope.dashboard.cpca = { p1: dados1.cpca_atual, p2: dados2.cpca_antes, vs: dados1.cpca_atual / dados2.cpca_antes - 1 };
             $scope.dashboard.promessa = { p1: dados1.promessa_atual, p2: dados2.promessa_antes, vs: dados1.promessa_atual / dados2.promessa_antes - 1 };
+
+            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 / calculo.hitrate2 - 1 };
+            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 / calculo.txloc2 - 1 };
+            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 / calculo.txapv2 - 1 };
+            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 / calculo.conversao2 - 1 };
         }
 
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dados;
 
-            $scope.dashboard.resultado = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
-            $scope.dashboard.pa = [{ name: 'Mês', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
+            $scope.dashboard.resultado = [{ name: 'Qtd Operador', color: '#605ca8', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
+            $scope.dashboard.pa = [{ name: 'Promessa Op', color: '#f39c12', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
         }
 
         $scope.carregarGraficoPagamento = function () {
@@ -551,7 +611,7 @@
                 { name: 'Falha', data: dados.Table4.map(obj => (obj.falha)) },
                 { name: 'Atendido - URA', data: dados.Table4.map(obj => (obj.atendido)) },
                 { name: 'Transferido', data: dados.Table4.map(obj => (obj.transferido)) },
-                { name: '% Evolução Transf.', yAxis: 1, type: 'spline', color: 'yellow' , data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
+                { name: '% Evolução Transf.', yAxis: 1, type: 'spline', color: 'yellow', data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
 
             $scope.dashboard.discagem.meses = dados.Table4.map(obj => obj.mes_do_ano_descricao);
 
@@ -565,10 +625,10 @@
 
             $scope.dashboard.carteira_atual = [
                 { name: 'Contratos', innerSize: '30%', data: dados.Table8.map(obj => ({ name: obj.produto, y: obj[indicador] })) }];
-            
+
             $scope.dashboard.carteira_meses = [
                  { name: 'Qtd Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador])) }];
-            
+
             $scope.dashboard.carteira_meses_vlr = [
                  { name: 'Saldo Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador + "Vlr"])) }];
 
