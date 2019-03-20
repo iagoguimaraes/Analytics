@@ -515,6 +515,81 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/humano/cadmetas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMetaHumano(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int meta_pp = Convert.ToInt32(form["meta_pp"].ToString().Replace(".", ""));
+                int meta_cb1 = Convert.ToInt32(form["meta_cb1"].ToString().Replace(".", ""));
+                int meta_cb2 = Convert.ToInt32(form["meta_cb2"].ToString().Replace(".", ""));
+                int meta_cb3 = Convert.ToInt32(form["meta_cb3"].ToString().Replace(".", ""));
+                int meta_pp_promessa = Convert.ToInt32(form["meta_pp_promessa"].ToString().Replace(".", ""));
+                int meta_cb1_promessa = Convert.ToInt32(form["meta_cb1_promessa"].ToString().Replace(".", ""));
+                int meta_cb2_promessa = Convert.ToInt32(form["meta_cb2_promessa"].ToString().Replace(".", ""));
+                int meta_cb3_promessa = Convert.ToInt32(form["meta_cb3_promessa"].ToString().Replace(".", ""));
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("meta_pp", meta_pp);
+                    parametros.Add("meta_cb1", meta_cb1);
+                    parametros.Add("meta_cb2", meta_cb2);
+                    parametros.Add("meta_cb3", meta_cb3);
+                    parametros.Add("meta_pp_promessa", meta_pp_promessa);
+                    parametros.Add("meta_cb1_promessa", meta_cb1_promessa);
+                    parametros.Add("meta_cb2_promessa", meta_cb2_promessa);
+                    parametros.Add("meta_cb3_promessa", meta_cb3_promessa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_ins_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/metas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoPlanejamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RENNER"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("faixas", produtos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_metas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 
 
