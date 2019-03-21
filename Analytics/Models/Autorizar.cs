@@ -49,19 +49,18 @@ namespace Analytics
 
                     DataTable dtAcesso = sql.ExecuteProcedureDataTable("sp_sel_acessoRecurso", parametros);
 
-                    if(dtAcesso.Rows.Count > 0)
-                    {                       
-                        if (string.IsNullOrEmpty(dtAcesso.Rows[0]["id_recurso"].ToString()))
-                            throw new HttpResponseException(HttpStatusCode.Forbidden);
 
-                        // armazena o id do recurso na requisição
-                        actionContext.Request.Properties["id_recurso"] = Convert.ToInt32(dtAcesso.Rows[0]["id_recurso"]);
-                    }
+                    if (string.IsNullOrEmpty(dtAcesso.Rows[0]["id_recurso"].ToString()))
+                        throw new HttpResponseException(HttpStatusCode.Forbidden);
+                    
+                    // armazena o id do recurso na requisição
+                    actionContext.Request.Properties["id_recurso"] = Convert.ToInt32(dtAcesso.Rows[0]["id_recurso"]);
+
                 }
             }
-            catch (Exception)
+            catch(Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
         }
     }
