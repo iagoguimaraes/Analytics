@@ -1008,14 +1008,21 @@ namespace Analytics.Controllers
             {
                 int ano = Convert.ToInt32(form["ano"]);
                 int mes = Convert.ToInt32(form["mes"]);
-                int meta_pl = Convert.ToInt32(form["meta_pl"].ToString().Replace(".", ""));
-                int meta_bandeira = Convert.ToInt32(form["meta_bandeira"].ToString().Replace(".", ""));
-                int meta_saque = Convert.ToInt32(form["meta_saque"].ToString().Replace(".", ""));
-                int meta_emprestimo = Convert.ToInt32(form["meta_emprestimo"].ToString().Replace(".", ""));
-                int meta_pl_promessa = Convert.ToInt32(form["meta_pl_promessa"].ToString().Replace(".", ""));
-                int meta_bandeira_promessa = Convert.ToInt32(form["meta_bandeira_promessa"].ToString().Replace(".", ""));
-                int meta_saque_promessa = Convert.ToInt32(form["meta_saque_promessa"].ToString().Replace(".", ""));
-                int meta_emprestimo_promessa = Convert.ToInt32(form["meta_emprestimo_promessa"].ToString().Replace(".", ""));
+                int meta_menor30 = Convert.ToInt32(form["meta_menor30"].ToString().Replace(".", ""));
+                int meta_31a90 = Convert.ToInt32(form["meta_31a90"].ToString().Replace(".", ""));
+                int meta_91a180 = Convert.ToInt32(form["meta_91a180"].ToString().Replace(".", ""));
+                int meta_181a360 = Convert.ToInt32(form["meta_181a360"].ToString().Replace(".", ""));
+                int meta_361a720 = Convert.ToInt32(form["meta_361a720"].ToString().Replace(".", ""));
+                int meta_721a1080 = Convert.ToInt32(form["meta_721a1080"].ToString().Replace(".", ""));
+                int meta_1081a9999 = Convert.ToInt32(form["meta_1081a9999"].ToString().Replace(".", ""));
+
+                int meta_menor30_promessa = Convert.ToInt32(form["meta_menor30_promessa"].ToString().Replace(".", ""));
+                int meta_31a90_promessa = Convert.ToInt32(form["meta_31a90_promessa"].ToString().Replace(".", ""));
+                int meta_91a180_promessa = Convert.ToInt32(form["meta_91a180_promessa"].ToString().Replace(".", ""));
+                int meta_181a360_promessa = Convert.ToInt32(form["meta_181a360_promessa"].ToString().Replace(".", ""));
+                int meta_361a720_promessa = Convert.ToInt32(form["meta_361a720_promessa"].ToString().Replace(".", ""));
+                int meta_721a1080_promessa = Convert.ToInt32(form["meta_721a1080_promessa"].ToString().Replace(".", ""));
+                int meta_1081a9999_promessa = Convert.ToInt32(form["meta_1081a9999_promessa"].ToString().Replace(".", ""));
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
@@ -1024,14 +1031,21 @@ namespace Analytics.Controllers
 
                     parametros.Add("ano", ano);
                     parametros.Add("mes", mes);
-                    parametros.Add("meta_pl", meta_pl);
-                    parametros.Add("meta_bandeira", meta_bandeira);
-                    parametros.Add("meta_saque", meta_saque);
-                    parametros.Add("meta_emprestimo", meta_emprestimo);
-                    parametros.Add("meta_pl_promessa", meta_pl);
-                    parametros.Add("meta_bandeira_promessa", meta_bandeira);
-                    parametros.Add("meta_saque_promessa", meta_saque);
-                    parametros.Add("meta_emprestimo_promessa", meta_emprestimo);
+                    parametros.Add("meta_menor30", meta_menor30);
+                    parametros.Add("meta_31a90", meta_31a90);
+                    parametros.Add("meta_91a180", meta_91a180);
+                    parametros.Add("meta_181a360", meta_181a360);
+                    parametros.Add("meta_361a720", meta_361a720);
+                    parametros.Add("meta_721a1080", meta_721a1080);
+                    parametros.Add("meta_1081a9999", meta_1081a9999);
+
+                    parametros.Add("meta_menor30_promessa", meta_menor30_promessa);
+                    parametros.Add("meta_31a90_promessa", meta_31a90_promessa);
+                    parametros.Add("meta_91a180_promessa", meta_91a180_promessa);
+                    parametros.Add("meta_181a360_promessa", meta_181a360_promessa);
+                    parametros.Add("meta_361a720_promessa", meta_361a720_promessa);
+                    parametros.Add("meta_721a1080_promessa", meta_721a1080_promessa);
+                    parametros.Add("meta_1081a9999_promessa", meta_1081a9999_promessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_cadmeta", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1053,7 +1067,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -1061,7 +1075,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("produtos", produtos);
+                    parametros.Add("faixas", faixas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_planejamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
