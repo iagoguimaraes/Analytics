@@ -281,7 +281,7 @@
                         <div class="col-xs-6">
                             <div class="small-box bg-yellow">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.media.qtd_promessa"></h3>
+                                    <h3 ng-bind="dashboard.media.md_prom_op"></h3>
                                     <p>Promessa OP</p>
                                 </div>
                                 <div class="icon">
@@ -292,7 +292,7 @@
                         <div class="col-xs-6">
                             <div class="small-box bg-purple">
                                 <div class="inner">
-                                    <h3 ng-bind="dashboard.media.qtd_agente"></h3>
+                                    <h3 ng-bind="dashboard.media.md_op"></h3>
                                     <p>Qtd Operador</p>
                                 </div>
                                 <div class="icon">
@@ -459,7 +459,7 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.meses = r.data.Table1.map(obj => obj.mes_do_ano_descricao);
-                $scope.dashboard.media = r.data.Table1[2];
+                $scope.dashboard.media = r.data.Table10[0];
                 $scope.dashboard.pagamentoAtual = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Atual" ', [r.data.Table2])[0]
                 $scope.dashboard.pagamentoAnterior = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Anterior" ', [r.data.Table2])[0]
                 $scope.dashboard.diagrama = r.data.Table5;
