@@ -491,8 +491,9 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
-                $scope.dashboard.horas = r.data.Table5.map(obj => obj.hora);
+                $scope.dashboard.horas = r.data.Table6.map(obj => obj.hora);
 
+                $scope.dashboard.horahoraGrafico = r.data.Table6;
                 $scope.carregarGraficoHora();
 
                 // FUNIL
@@ -517,11 +518,11 @@
 
         // carrega o grafico conforme com o indicador escolhido
         $scope.carregarGraficoHora = function () {
-            let dados = $scope.dashboard.horahora;
+            let dados = $scope.dashboard.horahoraGrafico;
             $scope.dashboard.horas = dados.map(obj => obj.hora);
             switch ($scope.graficoHora.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.graficoHora = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.qtd_discado).toFixed(1) * 1) }];
+                    $scope.dashboard.graficoHora = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.dashboard.graficoHora = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
