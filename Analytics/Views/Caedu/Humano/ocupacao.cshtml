@@ -3,8 +3,7 @@
 }
 
 
-
-<div ng-controller="ctrl-marisa-tempo">
+<div ng-controller="ctrl-caedu-ocupacao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -33,7 +32,7 @@
 
                         <!--DATA INCIAL-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Data</label>
+                            <label class="control-sidebar-subheading">Data Inicial</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
@@ -131,7 +130,7 @@
 
             <div class="col-xs-12 col-sm-6 col-md-3">
 
-                <div class="small-box" style="background-color:hotpink">
+                <div class="small-box bg-yellow-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.logado | formatTimer "></h3>
                         <p>Média Logado Operador</p>
@@ -141,7 +140,7 @@
                     </div>
                 </div>
 
-                <div class="small-box" style="background-color:hotpink">
+                <div class="small-box bg-yellow-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.falado | formatTimer "></h3>
                         <p>Média Falado Operador</p>
@@ -151,7 +150,7 @@
                     </div>
                 </div>
 
-                <div class="small-box" style="background-color:hotpink">
+                <div class="small-box bg-yellow-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.disponivel | formatTimer "></h3>
                         <p>Média Disponível Operador</p>
@@ -176,6 +175,17 @@
                         <div class="card-header-button" ng-click="extrair('Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        @*<small class="pull-right">
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                    Tabela
+                                </label>
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                    Gráfico
+                                </label>
+
+                            </small>*@
                     </div>
                     <div class="card-body">
                         <!--TABELA-->
@@ -233,55 +243,6 @@
             </div>
         </div>
 
-
-
-        <!--ANALISE DIA-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Análise por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('AnaliticoDia','Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
-                                <thead>
-                                    <tr>
-                                        <th>Dia</th>
-                                        <th>Logado</th>
-                                        <th>Falado</th>
-                                        <th>Pausa</th>
-                                        <th>Disponível</th>
-                                        <th>TME</th>
-                                        <th>Atendido</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="dia in dashboard.dia">
-                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{dia.logado}}</td>
-                                        <td>{{dia.falado}}</td>
-                                        <td>{{dia.pausatotal}}</td>
-                                        <td>{{dia.disponivel}}</td>
-                                        <td>{{dia.tma}}</td>
-                                        <td>{{dia.tme}}</td>
-                                        <td>{{dia.atendido}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -307,11 +268,14 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-marisa-tempo', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-caedu-ocupacao', function ($scope, $http, $filter) {
 
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        var numberOfDaysToAdd = -1;
+        newdate.setDate(newdate.getDate() + numberOfDaysToAdd);
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
@@ -330,7 +294,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/marisa/dashboard/humano/filtros",
+            url: "/api/caedu/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
@@ -339,13 +303,15 @@
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.equipe = data.Table3;
 
+
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/humano/ocupacao",
+                url: "/api/caedu/dashboard/humano/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -355,9 +321,8 @@
                 $scope.dashboard.supervisor = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table1.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
-                $scope.dashboard.dia = r.data.Table4;
 
-               // $scope.carregarGrafico();
+                // $scope.carregarGrafico();
             });
         }
 
