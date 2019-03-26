@@ -374,13 +374,16 @@ namespace Analytics.Controllers
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipes);
 
