@@ -186,6 +186,7 @@ namespace Analytics.Controllers
             {
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
                 {
@@ -193,6 +194,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("faixaAtraso", faixaAtraso);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

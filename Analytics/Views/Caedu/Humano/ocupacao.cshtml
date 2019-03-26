@@ -163,7 +163,7 @@
             </div>
         </div>
 
-        <!--ANALISE POR HORA-->
+        <!--ANALISE POR SUPERVISOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -243,6 +243,55 @@
             </div>
         </div>
 
+        <!--ANALISE DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('AnaliticoDia','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Logado</th>
+                                        <th>Falado</th>
+                                        <th>Pausa</th>
+                                        <th>Disponível</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                        <th>Atendido</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.logado}}</td>
+                                        <td>{{dia.falado}}</td>
+                                        <td>{{dia.pausatotal}}</td>
+                                        <td>{{dia.disponivel}}</td>
+                                        <td>{{dia.tma}}</td>
+                                        <td>{{dia.tme}}</td>
+                                        <td>{{dia.atendido}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -321,7 +370,7 @@
                 $scope.dashboard.supervisor = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table1.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
-
+                $scope.dashboard.dia = r.data.Table4;
                 // $scope.carregarGrafico();
             });
         }
