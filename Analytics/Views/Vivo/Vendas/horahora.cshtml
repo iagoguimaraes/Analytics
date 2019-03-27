@@ -32,14 +32,26 @@
 
                         <!--DATA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Data</label>
+                            <label class="control-sidebar-subheading">Data Inicial</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtinicial"></date-picker>
                             </div>
                         </div>
+
+                        <!--DATA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfinal"></date-picker>
+                            </div>
+                        </div>
+
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -60,7 +72,7 @@
             </div>
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -72,16 +84,16 @@
                             <span class="description-text">Contato</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    @*<div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
                             <span class="description-text">CPC</span>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
-                            <span class="description-text">CPCA</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | number"></h5>
+                            <span class="description-text">CPC</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -117,16 +129,22 @@
                             <span class="description-text">Tx Loc</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    @*<div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage:1"></h5>
                             <span class="description-text">Tx Apv</span>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.venda / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.recusa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <span class="description-text">Rejeição</span>
                         </div>
                     </div>
                 </div>
@@ -191,7 +209,7 @@
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
-                                        <th>CPCA</th>
+                                        @*<th>CPCA</th>*@
                                         <th>Venda</th>
                                         <th>Recusa</th>
                                         <th>Hit Rate</th>
@@ -207,7 +225,7 @@
                                         <td>{{hora.discado | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
-                                        <td>{{hora.cpca | number}}</td>
+                                        @*<td>{{hora.cpca | number}}</td>*@
                                         <td>{{hora.venda | number}}</td>
                                         <td>{{hora.recusa | number}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
@@ -223,7 +241,7 @@
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
-                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        @*<th>{{dashboard.resumo.cpca | number}}</th>*@
                                         <th>{{dashboard.resumo.venda | number}}</th>
                                         <th>{{dashboard.resumo.recusa | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
@@ -284,7 +302,7 @@
                                 <option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
+                                @*<option value="cpca">CPCA</option>*@
                                 <option value="venda">Venda</option>
                                 <option value="recusa">Recusa</option>
                             </select>
@@ -309,7 +327,8 @@
         dadosPagina.descricao = 'Vivo Digital'
 
         $scope.filtros = {
-            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtinicial: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfinal: $filter('date')(new Date(), "yyyy-MM-dd")
         };
 
         $scope.dashFiltros = {};

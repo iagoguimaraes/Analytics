@@ -90,13 +90,15 @@ namespace Analytics.Controllers
         {
             try
             {
-                DateTime data = Convert.ToDateTime(form["data"]);
+                DateTime dtinicial = Convert.ToDateTime(form["dtinicial"]);
+                DateTime dtfinal = Convert.ToDateTime(form["dtfinal"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtinicial", dtinicial.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfinal", dtfinal.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
