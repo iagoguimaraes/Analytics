@@ -206,7 +206,7 @@
                                 <div class="small-box bg-new-blue" style="opacity: 0.75">
                                     <div class="inner">
                                         <h5>Tx Aproveitamento</h5>
-                                        <h3 align ="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
+                                        <h3 align="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
                                         <h7 class="right"> Média 3M anterior: {{dashboard.txapv.p2 | percentage:1}}</h7>
                                         <h4 class="pull-right" ng-bind="dashboard.txapv.vs | percentage: 1" style="color:{{dashboard.txapv.vs > 0 ? 'white' : 'red'}}"></h4>
                                     </div>
@@ -378,7 +378,7 @@
                 </div>
             </div>
 
-            <!--Diagrama Discagens-->
+            <!--CARTEIRA MES-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
@@ -400,6 +400,25 @@
             </div>
         </div>
 
+        <!--PAGAMENTO X CARTEIRA ATIVA-->
+        <div class="row">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Evolução Pagamento x Base Ativa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_pago_ativo" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
@@ -588,8 +607,8 @@
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dados;
 
-            $scope.dashboard.resultado = [{ name: 'Qtd Operador', color: '#605ca8', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
-            $scope.dashboard.pa = [{ name: 'Promessa Op', color: '#f39c12', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
+            $scope.dashboard.resultado = [{ name: 'Qtd Operador', color: '#605ca8', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
+            $scope.dashboard.pa = [{ name: 'Promessa Op', color: '#f39c12', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
         }
 
         $scope.carregarGraficoPagamento = function () {
@@ -622,6 +641,7 @@
             let indicador = $scope.grafico.indicador;
 
             $scope.dashboard.meses = dados.Table9.map(obj => obj.mes);
+            $scope.dashboard.dias = dados.Table11.map(obj => obj.data);
 
             $scope.dashboard.carteira_atual = [
                 { name: 'Contratos', innerSize: '30%', data: dados.Table8.map(obj => ({ name: obj.produto, y: obj[indicador] })) }];
@@ -631,6 +651,10 @@
 
             $scope.dashboard.carteira_meses_vlr = [
                  { name: 'Saldo Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador + "Vlr"])) }];
+
+            $scope.dashboard.carteira_pago_ativo = [
+                { name: 'Contrato Ativo', data: dados.Table11.map(obj => (obj.qtd_ativo)) }
+                , { name: '% Pagamento', yAxis: 1, type: 'spline', color: 'orange', data: dados.Table11.map(obj => (obj.percentual)) }];
 
         }
 
