@@ -238,5 +238,104 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/metas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoPlanejamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_IBI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("faixas", faixas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_metas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("dashboard/cadmetas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMetaHumano(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int meta_atraso2 = Convert.ToInt32(form["meta_atraso2"].ToString().Replace(".", ""));
+                int meta_atraso3  = Convert.ToInt32(form["meta_atraso3"].ToString().Replace(".", ""));
+                int meta_atraso4  = Convert.ToInt32(form["meta_atraso4"].ToString().Replace(".", ""));
+                int meta_atraso5  = Convert.ToInt32(form["meta_atraso5"].ToString().Replace(".", ""));
+                int meta_atraso6  = Convert.ToInt32(form["meta_atraso6"].ToString().Replace(".", ""));
+                int meta_atraso7  = Convert.ToInt32(form["meta_atraso7"].ToString().Replace(".", ""));
+                int meta_atraso8  = Convert.ToInt32(form["meta_atraso8"].ToString().Replace(".", ""));
+                int meta_atraso9  = Convert.ToInt32(form["meta_atraso9"].ToString().Replace(".", ""));
+                int meta_atraso10 = Convert.ToInt32(form["meta_atraso10"].ToString().Replace(".", ""));
+
+
+                int meta_pp_atraso2  = Convert.ToInt32(form["meta_pp_atraso2"].ToString().Replace(".", ""));
+                int meta_pp_atraso3  = Convert.ToInt32(form["meta_pp_atraso3"].ToString().Replace(".", ""));
+                int meta_pp_atraso4  = Convert.ToInt32(form["meta_pp_atraso4"].ToString().Replace(".", ""));
+                int meta_pp_atraso5  = Convert.ToInt32(form["meta_pp_atraso5"].ToString().Replace(".", ""));
+                int meta_pp_atraso6  = Convert.ToInt32(form["meta_pp_atraso6"].ToString().Replace(".", ""));
+                int meta_pp_atraso7  = Convert.ToInt32(form["meta_pp_atraso7"].ToString().Replace(".", ""));
+                int meta_pp_atraso8  = Convert.ToInt32(form["meta_pp_atraso8"].ToString().Replace(".", ""));
+                int meta_pp_atraso9  = Convert.ToInt32(form["meta_pp_atraso9"].ToString().Replace(".", ""));
+                int meta_pp_atraso10 = Convert.ToInt32(form["meta_pp_atraso10"].ToString().Replace(".", ""));
+
+                using (SqlHelper sql = new SqlHelper("CUBO_IBI"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("meta_atraso2", meta_atraso2);
+                    parametros.Add("meta_atraso3", meta_atraso3);
+                    parametros.Add("meta_atraso4", meta_atraso4);
+                    parametros.Add("meta_atraso5", meta_atraso5);
+                    parametros.Add("meta_atraso6", meta_atraso6);
+                    parametros.Add("meta_atraso7", meta_atraso7);
+                    parametros.Add("meta_atraso8", meta_atraso8);
+                    parametros.Add("meta_atraso9", meta_atraso9);
+                    parametros.Add("meta_atraso10", meta_atraso10);
+
+
+                    parametros.Add("meta_pp_atraso2", meta_pp_atraso2);
+                    parametros.Add("meta_pp_atraso3", meta_pp_atraso3);
+                    parametros.Add("meta_pp_atraso4", meta_pp_atraso4);
+                    parametros.Add("meta_pp_atraso5", meta_pp_atraso5);
+                    parametros.Add("meta_pp_atraso6", meta_pp_atraso6);
+                    parametros.Add("meta_pp_atraso7", meta_pp_atraso7);
+                    parametros.Add("meta_pp_atraso8", meta_pp_atraso8);
+                    parametros.Add("meta_pp_atraso9", meta_pp_atraso9);
+                    parametros.Add("meta_pp_atraso10", meta_pp_atraso10);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
