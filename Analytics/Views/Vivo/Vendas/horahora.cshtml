@@ -209,12 +209,10 @@
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
-                                        @*<th>CPCA</th>*@
                                         <th>Venda</th>
                                         <th>Recusa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
-                                        <th>Tx Apv</th>
                                         <th>Conversão</th>
                                         <th>Rejeição</th>
                                     </tr>
@@ -225,14 +223,12 @@
                                         <td>{{hora.discado | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
-                                        @*<td>{{hora.cpca | number}}</td>*@
                                         <td>{{hora.venda | number}}</td>
                                         <td>{{hora.recusa | number}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
-                                        <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.venda / hora.cpca | percentage:1}}</td>
-                                        <td>{{hora.recusa / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.venda / hora.cpc | percentage:1}}</td>
+                                        <td>{{hora.recusa / hora.cpc | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -241,14 +237,12 @@
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
-                                        @*<th>{{dashboard.resumo.cpca | number}}</th>*@
                                         <th>{{dashboard.resumo.venda | number}}</th>
                                         <th>{{dashboard.resumo.recusa | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.venda / dashboard.resumo.cpca | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.recusa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.venda / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.recusa / dashboard.resumo.cpc | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -296,13 +290,11 @@
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="hitrate">Hit Rate</option>
                                 <option value="txloc">Tx Loc</option>
-                                <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="ocupacao">Ocupação</option>
                                 <option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
-                                @*<option value="cpca">CPCA</option>*@
                                 <option value="venda">Venda</option>
                                 <option value="recusa">Recusa</option>
                             </select>
@@ -368,11 +360,8 @@
                 case 'txloc':
                     $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
                     break;
-                case 'txapv':
-                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
-                    break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.venda * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'ocupacao':
                     $scope.dashboard.grafico = [{ name: 'ocupacao', data: dados.map(obj => (obj.falado_ad * 100 / 3600).toFixed(1) * 1) }];
