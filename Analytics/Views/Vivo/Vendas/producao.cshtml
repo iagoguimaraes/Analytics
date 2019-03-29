@@ -1,0 +1,315 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-vivovendas-producao">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Produção Vendas</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtinicial"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfinal"></date-picker>
+                            </div>
+                        </div>
+
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--RESUMO-->
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo do Período</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-box bg-gray">
+                            <div class="inner">
+                                <b>Discado:</b><span class="pull-right" ng-bind="dashboard.resumo.discado | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <b>Contato:</b><span class="pull-right" ng-bind="dashboard.resumo.contato | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <b>CPC:</b><span class="pull-right" ng-bind="dashboard.resumo.cpc | megaNumber"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-yellow">
+                            <div class="inner">
+                                <b>Venda:</b><span class="pull-right" ng-bind="dashboard.resumo.venda | number"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-purple">
+                            <div class="inner">
+                                <b>Ativação:</b><span class="pull-right" ng-bind="dashboard.resumo.ativacao | number"></span>
+                            </div>
+                        </div>
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <b>Recusa:</b><span class="pull-right" ng-bind="dashboard.resumo.recusa | number"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--DIAGRAMA-->
+            <div class="col-xs-12 col-md-8 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação" height="350"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--BTC-->
+        <div class="row">
+
+
+            <div class="col-xs-12 col-lg-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Best Time to Call</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-center">Contato - Venda</h4>
+                        <high-chart series="dashboard.graficobtc" axis-Categories="dashboard.horas" type="column" height="200"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--INSUCESSO CONTATO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Insucesso no Contato</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--INSUCESSO RECUSA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Motivos da Recusa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.recusa" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!--ANALISE POR HORA-->
+            <div class="row">
+                <div class="col-xs-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Análise Dia a Dia</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table2')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diaadia">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Discado</th>
+                                            <th>Contato</th>
+                                            <th>CPC</th>
+                                            <th>Venda</th>
+                                            <th>Recusa</th>
+                                            <th>Hit Rate</th>
+                                            <th>Tx Loc</th>
+                                            <th>Conversão</th>
+                                            <th>Rejeição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in dashboard.diaadia">
+                                            <td>{{data.data}}</td>
+                                            <td>{{data.discado | number}}</td>
+                                            <td>{{data.contato | number}}</td>
+                                            <td>{{data.cpc | number}}</td>
+                                            <td>{{data.venda | number}}</td>
+                                            <td>{{data.recusa | number}}</td>
+                                            <td>{{data.contato / data.discado | percentage:1}}</td>
+                                            <td>{{data.cpc / data.contato | percentage:1}}</td>
+                                            <td>{{data.venda / data.cpc | percentage:1}}</td>
+                                            <td>{{data.recusa / data.cpc | percentage:1}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Total</th>
+                                            <th>{{dashboard.resumo.discado | number}}</th>
+                                            <th>{{dashboard.resumo.contato | number}}</th>
+                                            <th>{{dashboard.resumo.cpc | number}}</th>
+                                            <th>{{dashboard.resumo.venda | number}}</th>
+                                            <th>{{dashboard.resumo.recusa | number}}</th>
+                                            <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.venda / dashboard.resumo.cpc | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.recusa / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+</div>
+
+
+
+<script>
+    angular.module('app').controller('ctrl-vivovendas-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
+
+        dadosPagina.titulo = 'Hora Hora';
+        dadosPagina.descricao = 'Vivo Digital'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'hitrate' };
+        $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
+        $scope.showTbody = false;
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/vendas/producao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.diagrama = r.data.Table1;
+                $scope.dashboard.recusa = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table2.map(obj => ({ name: obj.recusa, y: obj.quantidade })) }];
+                $scope.dashboard.horas = r.data.Table3.map(obj => obj.hora);
+                $scope.dashboard.dados = r.data.Table3;
+                $scope.dashboard.graficobtc = [{ name: 'Contato', data: r.data.Table3.map(obj => (obj.contato)) },
+                                               { name: 'Venda', data: r.data.Table3.map(obj => (obj.venda)) }];
+
+
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table4.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
+                $scope.dashboard.diaadia = r.data.Table5;
+
+
+
+
+            });
+        }
+
+
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
