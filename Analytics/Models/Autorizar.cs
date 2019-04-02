@@ -51,17 +51,16 @@ namespace Analytics
 
                     if(dtAcesso.Rows.Count > 0)
                     {                       
-                        if (string.IsNullOrEmpty(dtAcesso.Rows[0]["id_recurso"].ToString()))
-                            throw new HttpResponseException(HttpStatusCode.Forbidden);
-
                         // armazena o id do recurso na requisição
                         actionContext.Request.Properties["id_recurso"] = Convert.ToInt32(dtAcesso.Rows[0]["id_recurso"]);
                     }
+                    else
+                        throw new HttpResponseException(HttpStatusCode.Forbidden);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                throw e;
             }
         }
     }

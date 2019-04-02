@@ -20,7 +20,7 @@
             }
             else if(rejection.status === 403){
                 alert('Você não tem permissão a este recurso');
-                $location.path('/');
+                $window.location.href = '/';
             }
             else if(rejection.status === 500){
                 alert('Erro ao processar requisição');
