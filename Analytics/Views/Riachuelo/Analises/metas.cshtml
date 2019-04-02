@@ -1,0 +1,556 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<div ng-controller="ctrl-riachuelo-hum-producao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Metas Operacionais</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('metas-window')">
+                <i class="fa fa-edit"></i>
+                CADASTRO DE META
+            </div>
+        </header>
+
+        <!--CADASTRO DE META -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="metas-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Cadastro de Meta - Valores do dia</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!-- Filtros -->
+                            <div class="tab-pane active" id="control-sidebar-filters-tab">
+                                <!--ANO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Ano</label>
+                                    <select ng-model="filtros.ano">
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                    </select>
+                                </div>
+
+                                <!--MES-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading" style="width: 100px;">Mês</label>
+                                    <select ng-model="filtros.mes">
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevereiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <!--MENOR QUE 30-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">< 30 CPCA</label>
+                                            <input-mask class="mask" ng-model="filtros.meta_menor30" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--30 A 90-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">30 a 90 CPCA</label>
+                                            <input-mask id="mask_pl" ng-model="filtros.meta_31a90" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--91 A 180-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">91 a 180 CPCA</label>
+                                            <input-mask ng-model="filtros.meta_91a180" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--181 A 360-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">181 a 360 CPCA</label>
+                                            <input-mask ng-model="filtros.meta_181a360" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--360 A 720-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">361 a 720 CPCA</label>
+                                            <input-mask id="mask_pl" ng-model="filtros.meta_361a720" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!-- 721 A 1080-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">721 a 1080 CPCA</label>
+                                            <input-mask ng-model="filtros.meta_721a1080" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--1081 A 9999-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">1081 a 9999 CPCA</label>
+                                            <input-mask ng-model="filtros.meta_1081a9999" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <!--MENOR QUE 30-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">< 30 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_menor30_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+
+                                        <!--31 A 90 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">31 a 90 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_31a90_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--91 A 180 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">91 a 180 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_91a180_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--181 A 360 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">181 a 360 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_181a360_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--361 A 720 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">361 a 720 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_361a720_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--721 A 1080 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">721 a 1080 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_721a1080_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+
+                                        <!--1081 A 9999 PROMESSA-->
+                                        <div class="form-group">
+                                            <label class="control-sidebar-subheading" style="width: 100px;">1081 a 9999 Promessa</label>
+                                            <input-mask ng-model="filtros.meta_1081a9999_promessa" mask="0.000" reverse="true" placeholder="5.000"></input-mask>
+                                        </div>
+                                    </div>
+                                    
+                                    </div>
+
+
+                               
+
+                                <!--BOTÃO-->
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="salvarMetas()" onclick="addDisplayNone('metas-window')">Salvar</button>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div><!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Produto</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner" style="color:black">
+                        <h3 ng-bind="dashboard.resumo.metacpca | megaNumber"></h3>
+                        <p>Meta CPCA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner" style="color:black">
+                        <h3 ng-bind="dashboard.resumo.cpca | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.metacpca | percentage: 1"></h4>
+                        <p>CPA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.metapromessa | megaNumber"></h3>
+                        <p>Meta Acordo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-3">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.metapromessa | percentage: 1"></h4>
+                        <p>Acordo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA ANALISE DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('ProducaoEmpresa','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Meta CPCA</th>
+                                        <th>CPCA</th>
+                                        <th>% Feito</th>
+                                        <th>Meta Promessa</th>
+                                        <th>Promessa</th>
+                                        <th>% Feito</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.dia | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].data}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'metacpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'metacpca' | percentage:1}}</td>
+                                        <td>{{e | sumByColumn: 'metapromessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'metapromessa' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.hora}}</td>
+                                        <td>{{c.metacpca | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.cpca / c.metacpca | percentage:1}}</td>
+                                        <td>{{c.metapromessa | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.promessa / c.metapromessa | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--GRAFICO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="conversao">Conversão</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="metacpca">% Feito CPCA</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="metapromessa">% Feito promessa</option>
+                            </select>
+                        </small>
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-riachuelo-hum-producao', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            faixas:'',
+            ano: '' + new Date().getFullYear(),
+            mes: '' + (new Date().getMonth() + 1),
+            meta_menor30: '',
+            meta_31a90: '',
+            meta_91a180: '',
+            meta_181a360: '',
+            meta_361a720: '',
+            meta_721a1080: '',
+            meta_1081a9999: '', 
+            meta_menor30_promessa: '',
+            meta_31a90_promessa: '',
+            meta_91a180_promessa: '',
+            meta_181a360_promessa: '',
+            meta_361a720_promessa: '',
+            meta_721a1080_promessa: '',
+            meta_1081a9999_promessa: '',
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'conversao' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.faixas = r.data.Table6;
+
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/metas",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.diagrafico = data.Table3;
+
+
+                // setar os valores das metas nos campos
+                setTimeout(function () {
+                    if (data.Table2.find(o => o.id_faixa_atraso == 1) && data.Table2.find(o => o.id_faixa_atraso == 1)["cpca"] > 0)
+                        $scope.filtros.meta_menor30 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 1)["cpca"]);
+                    else
+                        $scope.filtros.meta_menor30 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 2) && data.Table2.find(o => o.id_faixa_atraso == 2)["cpca"] > 0)
+                        $scope.filtros.meta_31a90 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 2)["cpca"])
+                    else
+                        $scope.filtros.meta_31a90 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 3) && data.Table2.find(o => o.id_faixa_atraso == 3)["cpca"] > 0)
+                        $scope.filtros.meta_91a180 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 3)["cpca"])
+                    else
+                        $scope.filtros.meta_91a180 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 4) && data.Table2.find(o => o.id_faixa_atraso == 4)["cpca"] > 0)
+                        $scope.filtros.meta_181a360 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 4)["cpca"])
+                    else
+                        $scope.filtros.meta_181a360 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 5) && data.Table2.find(o => o.id_faixa_atraso == 5)["cpca"] > 0)
+                        $scope.filtros.meta_361a720 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 5)["cpca"])
+                    else
+                        $scope.filtros.meta_361a720 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 6) && data.Table2.find(o => o.id_faixa_atraso == 6)["cpca"] > 0)
+                        $scope.filtros.meta_721a1080 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 6)["cpca"])
+                    else
+                        $scope.filtros.meta_721a1080 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 7) && data.Table2.find(o => o.id_faixa_atraso == 7)["cpca"] > 0)
+                        $scope.filtros.meta_1081a9999 = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 7)["cpca"])
+                    else
+                        $scope.filtros.meta_1081a9999 = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 1) && data.Table2.find(o => o.id_faixa_atraso == 1)["promessa"] > 0)
+                        $scope.filtros.meta_menor30_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 1)["promessa"]);
+                    else
+                        $scope.filtros.meta_menor30_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 2) && data.Table2.find(o => o.id_faixa_atraso == 2)["promessa"] > 0)
+                        $scope.filtros.meta_31a90_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 2)["promessa"])
+                    else
+                        $scope.filtros.meta_31a90_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 3) && data.Table2.find(o => o.id_faixa_atraso == 3)["promessa"] > 0)
+                        $scope.filtros.meta_91a180_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 3)["promessa"])
+                    else
+                        $scope.filtros.meta_91a180_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 4) && data.Table2.find(o => o.id_faixa_atraso == 4)["promessa"] > 0)
+                        $scope.filtros.meta_181a360_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 4)["promessa"])
+                    else
+                        $scope.filtros.meta_181a360_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 5) && data.Table2.find(o => o.id_faixa_atraso == 5)["promessa"] > 0)
+                        $scope.filtros.meta_361a720_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 5)["promessa"])
+                    else
+                        $scope.filtros.meta_361a720_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 6) && data.Table2.find(o => o.id_faixa_atraso == 6)["promessa"] > 0)
+                        $scope.filtros.meta_721a1080_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 6)["promessa"])
+                    else
+                        $scope.filtros.meta_721a1080_promessa = 0;
+
+                    if (data.Table2.find(o => o.id_faixa_atraso == 7) && data.Table2.find(o => o.id_faixa_atraso == 7)["promessa"] > 0)
+                        $scope.filtros.meta_1081a9999_promessa = $('.mask').masked(data.Table2.find(o => o.id_faixa_atraso == 7)["promessa"])
+                    else
+                        $scope.filtros.meta_1081a9999_promessa = 0;
+
+                    $scope.$apply();
+                }, 2000);
+
+                $scope.carregarGrafico();
+
+            });
+
+            // carrega o mapa de acordo com o indicador escolhido
+            $scope.carregarGrafico = function () {
+                let dados = $scope.dashboard.diagrafico;
+                $scope.dashboard.datas = dados.map(obj => obj.data);
+                switch ($scope.grafico.indicador) {
+                    case 'metacpca':
+                        $scope.dashboard.grafico = [{ name: 'metacpca', data: dados.map(obj => (obj.cpca * 100 / obj.metacpca).toFixed(1) * 1) }];
+                        break;
+                    case 'metapromessa':
+                        $scope.dashboard.grafico = [{ name: 'metapromessa', data: dados.map(obj => (obj.promessa * 100 / obj.metapromessa).toFixed(1) * 1) }];
+                        break;
+                    case 'conversao':
+                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                        break;
+                    default:
+                        $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+                }
+            }
+        }
+
+
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.salvarMetas = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/cadmeta",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.carregarDashboard();
+            });
+        }
+
+    });
+
+</script>

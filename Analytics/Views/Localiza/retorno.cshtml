@@ -71,6 +71,9 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -124,6 +127,7 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.retorno = data.Table;
+                $scope.dashboard.dados = r.data;
             });
         }
 
@@ -139,6 +143,11 @@
         }
 
         $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>

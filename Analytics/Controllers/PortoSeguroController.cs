@@ -111,6 +111,7 @@ namespace Analytics.Controllers
             {
                 string id_chamada = form["id_chamada"];
                 bool marcado = Convert.ToBoolean(form["marcado"]);
+                int id_carteira = Convert.ToInt32(form["id_carteira"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
                 {
@@ -118,6 +119,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("id_chamada", id_chamada);
                     parametros.Add("marcado", Convert.ToInt16(marcado).ToString());
+                    parametros.Add("id_carteira", id_carteira);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_promessa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

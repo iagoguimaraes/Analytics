@@ -54,6 +54,12 @@
 
                             <!--EMPRESA-->
                             <div class="form-group">
+                                <label class="control-sidebar-subheading">Produto</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
+                            </div>
+
+                            <!--EMPRESA-->
+                            <div class="form-group">
                                 <label class="control-sidebar-subheading">Empresa</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
                             </div>
@@ -311,11 +317,13 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            produtos:'',
             empresas: '',
             carteiras: '',
             supervisores: '',
             equipes: '',
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
@@ -332,6 +340,8 @@
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.supervisores = r.data.Table3;
             $scope.dashFiltros.equipes = r.data.Table4;
+            $scope.dashFiltros.produtos = r.data.Table5;
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -347,33 +357,36 @@
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.equipe = data.Table2;
+                
 
                 $scope.carregarGrafico();
 
             });
-        }
 
-        // carrega o mapa de acordo com o indicador escolhido
-        $scope.carregarGrafico = function () {
-            let dados = $scope.dashboard.dia;
-            $scope.dashboard.datas = dados.map(obj => obj.data);
-            switch ($scope.grafico.indicador) {
-                case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
-                    break;
-                case 'txloc':
-                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
-                    break;
-                case 'txapv':
-                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
-                    break;
-                case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;
-                default:
-                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            // carrega o mapa de acordo com o indicador escolhido
+            $scope.carregarGrafico = function () {
+                let dados = $scope.dashboard.dia;
+                $scope.dashboard.datas = dados.map(obj => obj.data);
+                switch ($scope.grafico.indicador) {
+                    case 'hitrate':
+                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                        break;
+                    case 'txloc':
+                        $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                        break;
+                    case 'txapv':
+                        $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                        break;
+                    case 'conversao':
+                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                        break;
+                    default:
+                        $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+                }
             }
         }
+
+       
 
         $scope.carregarDashboard();
 
@@ -381,6 +394,7 @@
         $scope.extrair = function (nomeArquivo, tabela) {
             alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
+
 
     });
 

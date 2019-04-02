@@ -51,6 +51,12 @@
                                 </div>
                             </div>
 
+                            <!--PRODUTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Produto</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
+                            </div>
+
                             <!--EMPRESA-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Empresa</label>
@@ -436,6 +442,7 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            produtos: '',
             empresas: '',
             carteiras: '',
             supervisores: '',
@@ -455,6 +462,8 @@
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.supervisores = r.data.Table3;
             $scope.dashFiltros.equipes = r.data.Table4;
+            $scope.dashFiltros.produtos = r.data.Table5;
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

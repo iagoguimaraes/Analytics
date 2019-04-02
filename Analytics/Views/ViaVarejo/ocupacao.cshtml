@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-net-ocupacao">
+<div ng-controller="ctrl-viavarejo-ocupacao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -41,6 +41,17 @@
                             </div>
                         </div>
 
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
                         <!--SUPERVISOR-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Supervisor</label>
@@ -62,7 +73,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- QUADROS -->
         <div class="row margin-bottom">
             <!--INDICADORES ABSOLUTOS-->
@@ -119,32 +130,32 @@
 
             <div class="col-xs-12 col-sm-6 col-md-3">
 
-                <div class="small-box" style="background-color:deepskyblue">
+                <div class="small-box" style="background-color:#2E8B57;color:white">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.logado | formatTimer "></h3>
                         <p>Média Logado Operador</p>
                     </div>
-                    <div class="icon">
+                    <div class="icon" style="color:white">
                         <i class="fa fa-hourglass"></i>
                     </div>
                 </div>
 
-                <div class="small-box" style="background-color:deepskyblue">
+                <div class="small-box" style="background-color:#2E8B57;color:white">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.falado | formatTimer "></h3>
                         <p>Média Falado Operador</p>
                     </div>
-                    <div class="icon">
+                    <div class="icon" style="color:white">
                         <i class="fa fa-hourglass-half"></i>
                     </div>
                 </div>
 
-                <div class="small-box" style="background-color:deepskyblue">
+                <div class="small-box" style="background-color:#2E8B57;color:white">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.disponivel | formatTimer "></h3>
                         <p>Média Disponível Operador</p>
                     </div>
-                    <div class="icon">
+                    <div class="icon" style="color:white">
                         <i class="fa fa-hourglass-start"></i>
                     </div>
                 </div>
@@ -152,7 +163,7 @@
             </div>
         </div>
 
-        <!--ANALISE POR HORA-->
+        <!--ANALISE POR SUPERVISOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -232,6 +243,55 @@
             </div>
         </div>
 
+
+        <!--ANALISE DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('AnaliticoDia','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Logado</th>
+                                        <th>Falado</th>
+                                        <th>Pausa</th>
+                                        <th>Disponível</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                        <th>Atendido</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.logado}}</td>
+                                        <td>{{dia.falado}}</td>
+                                        <td>{{dia.pausatotal}}</td>
+                                        <td>{{dia.disponivel}}</td>
+                                        <td>{{dia.tma}}</td>
+                                        <td>{{dia.tme}}</td>
+                                        <td>{{dia.atendido}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -257,16 +317,15 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-net-ocupacao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-viavarejo-ocupacao', function ($scope, $http, $filter) {
 
         // filtros iniciais
         let newdate = new Date();
-
-        var numberOfDaysToAdd = -1;
-        newdate.setDate(newdate.getDate() + numberOfDaysToAdd);
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
-            dtini: $filter('date')(newdate, "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             supervisor: '',
             equipe: '',
 
@@ -281,7 +340,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/net/dashboard/filtros",
+            url: "/api/viavarejo/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
@@ -290,15 +349,13 @@
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.equipe = data.Table3;
 
-
-
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/net/dashboard/ocupacao",
+                url: "/api/viavarejo/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -308,7 +365,9 @@
                 $scope.dashboard.supervisor = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table1.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
+                $scope.dashboard.dia = r.data.Table4;
 
+                console.log($scope.dashboard.dia);
                // $scope.carregarGrafico();
             });
         }

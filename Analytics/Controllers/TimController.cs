@@ -204,8 +204,9 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -213,8 +214,9 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
-                    parametros.Add("aging", aging);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -505,9 +507,12 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -517,9 +522,12 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresas", empresas);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
-                    parametros.Add("aging", aging);
                     parametros.Add("equipes", equipe);
                     parametros.Add("supervisor", supervisor);
 
@@ -544,9 +552,10 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -556,9 +565,10 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresas", empresas);
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
-                    parametros.Add("aging", aging);
                     parametros.Add("equipes", equipe);
                     parametros.Add("supervisor", supervisor);
 
@@ -592,12 +602,14 @@ namespace Analytics.Controllers
                 int horafim_2 = Convert.ToInt16(form["horafim_2"]);
 
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
 
                 DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
-                DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
-                DataTable aging_2 = JsonConvert.DeserializeObject<DataTable>(form["aging_2"]);
+                DataTable segmento_2 = JsonConvert.DeserializeObject<DataTable>(form["segmento_2"]);
+                DataTable atraso_2 = JsonConvert.DeserializeObject<DataTable>(form["atraso_2"]);
+                DataTable produto_2 = JsonConvert.DeserializeObject<DataTable>(form["produto_2"]);
 
 
 
@@ -629,12 +641,15 @@ namespace Analytics.Controllers
                     parametros.Add("horafim_2", horafim_2);
 
                     parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
-                    parametros.Add("aging", aging);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
+                    parametros.Add("produto", produto);
 
                     parametros.Add("empresa_2", empresa_2);
-                    parametros.Add("carteira_2", carteira_2);
-                    parametros.Add("aging_2", aging_2);
+                    parametros.Add("segmento_2", segmento_2);
+                    parametros.Add("atraso_2", atraso_2);
+                    parametros.Add("produto_2", produto_2);
+                    
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -654,9 +669,10 @@ namespace Analytics.Controllers
         {
             try
             {
-                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
@@ -665,8 +681,9 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmento", segmento);
                     parametros.Add("atraso", atraso);
+                    parametros.Add("produto", produto);
                     parametros.Add("saldo", saldo);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
@@ -690,8 +707,9 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable faixaAtrasoM1 = JsonConvert.DeserializeObject<DataTable>(form["faixaAtrasoM1"]);
                 DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
 
@@ -702,8 +720,9 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresa", empresa);
-                    parametros.Add("produto", produto);
+                    parametros.Add("segmento", segmento);
                     parametros.Add("faixaAtraso", faixaAtraso);
+                    parametros.Add("produto", produto);
                     parametros.Add("faixaAtrasoM1", faixaAtrasoM1);
                     parametros.Add("statusSegmentacao", statusSegmentacao);
 
@@ -729,8 +748,9 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -745,8 +765,9 @@ namespace Analytics.Controllers
                 string chkSupervisor = form["chkSupervisor"];
                 string chkEquipe = form["chkEquipe"];
                 string chkEmpresa = form["chkEmpresa"];
-                string chkCarteira = form["chkCarteira"];
-                string chkAging = form["chkAging"];
+                string chkSegmento = form["chkSegmento"];
+                string chkAtraso = form["chkAtraso"];
+                string chkProduto = form["chkProduto"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -755,8 +776,9 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
-                    parametros.Add("aging", aging);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
+                    parametros.Add("produto", produto);
 
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
@@ -771,8 +793,9 @@ namespace Analytics.Controllers
                     parametros.Add("chkSupervisor", chkSupervisor);
                     parametros.Add("chkEquipe", chkEquipe);
                     parametros.Add("chkEmpresa", chkEmpresa);
-                    parametros.Add("chkCarteira", chkCarteira);
-                    parametros.Add("chkAging", chkAging);
+                    parametros.Add("chkSegmento", chkSegmento);
+                    parametros.Add("chkAtraso", chkAtraso);
+                    parametros.Add("chkProduto", chkProduto);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
 
@@ -799,11 +822,13 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
 
                 string mes = form["mes"];
                 string ano = form["ano"];
@@ -815,8 +840,9 @@ namespace Analytics.Controllers
                 string chkSupervisor = form["chkSupervisor"];
                 string chkEquipe = form["chkEquipe"];
                 string chkEmpresa = form["chkEmpresa"];
-                string chkCarteira = form["chkCarteira"];
-                string chkAging = form["chkAging"];
+                string chkSegmento = form["chkSegmento"];
+                string chkAtraso = form["chkAtraso"];
+                string chkProduto = form["chkProduto"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -825,8 +851,9 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
-                    parametros.Add("aging", aging);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
+                    parametros.Add("produto", produto);
 
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
@@ -841,8 +868,9 @@ namespace Analytics.Controllers
                     parametros.Add("chkSupervisor", chkSupervisor);
                     parametros.Add("chkEquipe", chkEquipe);
                     parametros.Add("chkEmpresa", chkEmpresa);
-                    parametros.Add("chkCarteira", chkCarteira);
-                    parametros.Add("chkAging", chkAging);
+                    parametros.Add("chkSegmento", chkSegmento);
+                    parametros.Add("chkAtraso", chkAtraso);
+                    parametros.Add("chkProduto", chkProduto);
 
                     DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
 
@@ -911,9 +939,10 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -921,9 +950,10 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresas", empresas);
-                    parametros.Add("carteiras", carteiras);
-                    parametros.Add("aging", aging);
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("atraso", atraso);
+                    parametros.Add("produto", produto);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
