@@ -64,26 +64,36 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
 
-            <div class="col-xs-12 col-sm-6">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.venda | number:0"></h3>
-                        <p>Vendas</p>
+            <!-- ANALISE POR PLANO-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Plano/Andamento</span>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-shopping-cart"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6">
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.ativacao | number:0"></h3>
-                        <p>Ativações Com Tráfego</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Plano</th>
+                                        <th>Vendas</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.plano | groupBy: 'plano'">
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].plano}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'venda' | number}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.ocorrencia}}</td>
+                                        <td>{{p.venda | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,65 +104,22 @@
 
 
             <!--GRAFICO POR HORA/DIA-->
-                <div class="col-xs-12 margin-bottom">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Gráfico por Hora</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <small class="pull-right">
-                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                    <option value="hora">Hora</option>
-                                    <option value="dia">Dia</option>
-                                </select>
-                            </small>
-                        </div>
-                        <div class="card-body">
-                            <high-chart series="dashboard.grafico" axis-Categories="dashboard.valor" type="column" plot-Options-Line-Data-Label="true"></high-chart>
-                        </div>
-                    </div>
-                </div>
-
-
-            <!--ANALISE POR PLANO-->
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Plano</span>
+                        <span class="card-header-title">Gráfico por Hora</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="hora">Hora</option>
+                                <option value="dia">Dia</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.plano">
-                                <thead>
-                                    <tr>
-                                        <th>Plano</th>
-                                        <th>Venda</th>
-                                        <th>Ativação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="plano in dashboard.plano">
-                                        <td>{{plano.plano}}</td>
-                                        <td>{{plano.venda | number}}</td>
-                                        <td>{{plano.ativacao | number}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>{{dashboard.resumo.venda | number}}</th>
-                                        <th>{{dashboard.resumo.ativacao | number}}</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                        <high-chart plot-Options-Column-Data-Label="true" series="dashboard.grafico" axis-Categories="dashboard.valor" type="column" plot-Options-Line-Data-Label="true"></high-chart>
                     </div>
                 </div>
             </div>
