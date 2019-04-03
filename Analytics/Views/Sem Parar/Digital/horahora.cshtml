@@ -56,10 +56,15 @@
                                 </div>
                             </div>
 
+                            <!--CAMPANHA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanha</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha" style="width:100%"></select2>
+                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -238,27 +243,32 @@
 
                             </div>
                         </div>
-                    </div>
-                </div>
+                 </div>
+         </div>
 
         <!--DIAGRAMA FINALIZACOES-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 margin-bottom">
+            <!--DIAGRAMA-->
+            <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Diagrama de Finalizações</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="diagrama.navegacao" ng-options="n.id_campanha as n.descricao for n in diagrama.navegacoes" ng-change="carregarDiagrama()"></select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação"></sankey-chart>
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Chamadas"></sankey-chart>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!--INSUCESSO CONTATO-->
@@ -292,14 +302,29 @@
         dadosPagina.titulo = 'Hora Hora';
         dadosPagina.descricao = 'Sem Parar Digital'
         $scope.showTbody = false;
+        $scope.dashFiltros = {};
 
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            campanha: '',
         };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/semparar/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.campanha = r.data.Table3;
+
+        });
 
         $scope.dashboard = {};
         $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
+        $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
 
         $scope.carregarDashboard = function () {
             $http({
@@ -311,12 +336,38 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
-                $scope.dashboard.diagrama = r.data.Table2;
+                //$scope.dashboard.diagrama = r.data.Table2;
+                $scope.diagrama.dados = r.data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
 
+                $scope.carregarFiltroDiagrama();
+                $scope.carregarDiagrama();
                 $scope.carregarGraficoHora();
             });
         }
+
+        // carrega o filtro com as navegacoes disponiveis
+        $scope.carregarFiltroDiagrama = function () {
+            $scope.diagrama.navegacoes = $scope.diagrama.dados.reduce(
+            function (total, item) {
+                let n = { id_campanha: item.id_campanha, descricao: item.descricao };
+                if (!total.some(x => x.id_campanha == n.id_campanha))
+                    total.push(n);
+
+                return total;
+            }, []);
+
+            $scope.diagrama.navegacao = $scope.diagrama.navegacoes[0].id_campanha;
+        };
+
+        
+
+        // carregar o diagrama de acordo com a navegação escolhida
+        $scope.carregarDiagrama = function () {
+            let navegacao = $scope.diagrama.navegacao;
+            $scope.dashboard.diagrama = $scope.diagrama.dados.filter(obj => obj.id_campanha == navegacao);
+            console.log($scope.dashboard.diagrama);
+        };
 
         // carrega o grafico de acordo com o indicador escolhido
         $scope.carregarGraficoHora = function () {

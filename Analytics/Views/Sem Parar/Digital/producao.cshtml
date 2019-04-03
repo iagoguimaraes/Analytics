@@ -57,10 +57,16 @@
                                 </div>
                             </div>
 
+                            <!--CAMPANHA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanha</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha" style="width:100%"></select2>
+                            </div>
+
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -231,7 +237,7 @@
 
         <!--DIAGRAMA DE FINALIZAÇÕES & FUNIL-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            @*<div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Diagrama de Finalizações</span>
@@ -244,6 +250,26 @@
                     </div>
                     <div class="card-body">
                         <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação"></sankey-chart>
+                    </div>
+                </div>
+            </div>*@
+            <!--DIAGRAMA-->
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="diagrama.navegacao" ng-options="n.id_campanha as n.descricao for n in diagrama.navegacoes" ng-change="carregarDiagrama()"></select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Chamadas"></sankey-chart>
                     </div>
                 </div>
             </div>
@@ -289,15 +315,29 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
-
+        
+        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            produtos: ''
+            campanha: ''
         };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/semparar/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.campanha = r.data.Table3;
+
+        });
+
         $scope.dashboard = {};
         $scope.graficoDia = { indicador: 'promessa', dados: [], exibir: 'false' };
-
+        $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -311,7 +351,8 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.diagrama = data.Table2;
+                //$scope.dashboard.diagrama = data.Table2;
+                $scope.diagrama.dados = r.data.Table2;
                 $scope.dashboard.ocorrencia = data.Table3;
 
                 let funil = data.Table[0];
@@ -323,12 +364,35 @@
 
                 $scope.dashboard.funil = [{ name: 'Quantidade', data: dadosFunil }];
 
-                console.log($scope.dashboard.funil);
-
+                $scope.carregarFiltroDiagrama();
+                $scope.carregarDiagrama();
                 $scope.carregarGraficoDia();
 
             });
         }
+
+        // carrega o filtro com as navegacoes disponiveis
+        $scope.carregarFiltroDiagrama = function () {
+            $scope.diagrama.navegacoes = $scope.diagrama.dados.reduce(
+            function (total, item) {
+                let n = { id_campanha: item.id_campanha, descricao: item.descricao };
+                if (!total.some(x => x.id_campanha == n.id_campanha))
+                    total.push(n);
+
+                return total;
+            }, []);
+
+            $scope.diagrama.navegacao = $scope.diagrama.navegacoes[0].id_campanha;
+        };
+
+
+
+        // carregar o diagrama de acordo com a navegação escolhida
+        $scope.carregarDiagrama = function () {
+            let navegacao = $scope.diagrama.navegacao;
+            $scope.dashboard.diagrama = $scope.diagrama.dados.filter(obj => obj.id_campanha == navegacao);
+            console.log($scope.dashboard.diagrama);
+        };
 
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGraficoDia = function () {
