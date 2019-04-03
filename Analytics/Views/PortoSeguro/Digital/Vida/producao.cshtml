@@ -10,12 +10,22 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Produção Digital - Porto Vida</div>
+            <div class="page-name">Produção Porto Vida - {{carteiraSelecionada}}</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
         </header>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Cobrança')">Cobrança</button>
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Boleto')">Boleto</button>
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('ADC')">ADC</button>
+                </div>
+            </div>
+        </div>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
@@ -55,11 +65,12 @@
                         </div>
 
                         <!--CARTEIRA-->
+                        <!--
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
-
+                            -->
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -124,7 +135,7 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Promessa</p>
+                        <p>{{sucessoDesc}}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -156,7 +167,7 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
+                                        <th>{{sucessoDesc}}</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -186,7 +197,7 @@
 
         <!--GRAFICO DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Gráfico por Dia</span>
@@ -203,7 +214,7 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
+                                <option value="promessa">{{sucessoDesc}}</option>
                             </select>
                         </small>
                     </div>
@@ -212,25 +223,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--MOTIVO-->
-            <div class="col-xs-12 col-md-4 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Motivo Inadimplência</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.motivo" axis-Categories="dashboard.motivos" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <!--ANALISE POR CARTEIRA-->
@@ -256,7 +248,7 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
+                                        <th>{{sucessoDesc}}</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -331,10 +323,11 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-
-
-            carteira: '',
+            carteira: '[{ id: 6 }, { id: 7 }]',
         };
+
+        $scope.carteiraSelecionada = 'Cobrança';
+        $scope.sucessoDesc = 'Promessa';
 
         $scope.dashboard = {};
         $scope.dashFiltros = {};
@@ -398,6 +391,25 @@
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
         }
+
+
+        $scope.selecionarCarteira = function (carteira) {
+            $scope.carteiraSelecionada = carteira;
+            $scope.sucessoDesc = "Promessa";
+
+            if (carteira == 'Cobrança')
+                $scope.filtros.carteira = '[{ id: 6 }, { id: 7 }]';
+            else if (carteira == 'Boleto')
+                $scope.filtros.carteira = '[{ id: 5 }]';
+            else if (carteira == 'ADC') {
+                $scope.filtros.carteira = '[{ id: 4 }]';
+                $scope.sucessoDesc = "Autoriza";
+            }
+            else
+                $scope.filtros.carteira = null;
+
+            $scope.carregarDashboard();
+        };
 
         $scope.carregarDashboard();
 
