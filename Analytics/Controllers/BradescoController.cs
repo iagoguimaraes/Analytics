@@ -43,8 +43,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable fase = JsonConvert.DeserializeObject<DataTable>(form["fase"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -54,8 +54,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("fase", fase);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
 
@@ -79,8 +79,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable fase = JsonConvert.DeserializeObject<DataTable>(form["fase"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -90,8 +90,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("fase", fase);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
 

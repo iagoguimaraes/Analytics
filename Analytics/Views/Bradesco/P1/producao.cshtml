@@ -56,16 +56,16 @@
                                 </div>
                             </div>
 
-                            <!--CREDORES-->
+                            <!--SEGMENTOS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Segmentos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento" style="width:100%"></select2>
                             </div>
 
-                            <!--FASES-->
+                            <!--CARTEIRAS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Fase</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fase" dados="dashFiltros.fase" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                             </div>
 
                             <!--SUPERVISOR-->
@@ -82,7 +82,7 @@
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -306,12 +306,12 @@
                                             <th>Conversão</th>
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="c in dashboard.carteira | groupBy: 'carteira'">
+                                    <tbody ng-repeat="c in dashboard.carteira | groupBy: 'segmento'">
 
                                         <tr class="text-bold">
                                             <td>
                                                 <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                                {{c[0].carteira}}
+                                                {{c[0].segmento}}
                                             </td>
                                             <td>{{c | sumByColumn: 'discado'| number}}</td>
                                             <td>{{c | sumByColumn: 'contato'| number}}</td>
@@ -328,7 +328,7 @@
                                         </tr>
 
                                         <tr ng-repeat="f in c" ng-show="showTbody">
-                                            <td>{{f.fase}}</td>
+                                            <td>{{f.carteira}}</td>
                                             <td>{{f.discado | number}}</td>
                                             <td>{{f.contato | number}}</td>
                                             <td>{{f.cpc | number}}</td>
@@ -481,8 +481,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: '',
-            fase: '',
+            segmento: '',
+            carteira: '',
             supervisor: '',
             equipe:''
         };
@@ -497,8 +497,8 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = data.Table;
-            $scope.dashFiltros.fase = data.Table1;
+            $scope.dashFiltros.segmento = data.Table;
+            $scope.dashFiltros.carteira = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.equipe = data.Table3;
         });
