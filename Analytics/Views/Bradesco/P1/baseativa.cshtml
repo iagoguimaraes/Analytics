@@ -31,28 +31,11 @@
                     <div class="card-body">
                         <div class="row margin-bottom">
 
-                            <!--DATA INCIAL-->
-                            <div class="form-group col-md-6">
-                                <label class="control-sidebar-subheading">Inclusão Inicio</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                                </div>
+                            <!--SEGMENTOS-->
+                            <div class="form-group col-md-6" ">
+                                <label class="control-sidebar-subheading">Segmentos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
                             </div>
-
-                            <!--DATA FINAL-->
-                            <div class="form-group col-md-6">
-                                <label class="control-sidebar-subheading">Inclusão Final</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                                </div>
-                            </div>
-
 
                             <!--CARTEIRA-->
                             <div class="form-group col-md-6">
@@ -60,11 +43,7 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
-                            <!--FASE-->
-                            <div class="form-group col-md-6" ">
-                                <label class="control-sidebar-subheading">Fases</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases" style="width:100%"></select2>
-                            </div>
+
                         </div>
 
                             <!--BOTÃO-->
@@ -129,26 +108,6 @@
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--POR FAIXA DE ATRASO-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Faixa de Atraso</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraAtraso','Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.atraso" axis-Categories="dashboard.faixaAtraso" plot-Options-Line-Data-Label="true" type="line"></high-chart>
                     </div>
                 </div>
             </div>
@@ -269,8 +228,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            segmentos: '',
             carteiras: '',
-            fases: '',
         };
 
         $scope.mapa = {
@@ -287,8 +246,8 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = data.Table;
-            $scope.dashFiltros.fases = data.Table1;
+            $scope.dashFiltros.segmentos = data.Table;
+            $scope.dashFiltros.carteiras = data.Table1;
 
 
         });

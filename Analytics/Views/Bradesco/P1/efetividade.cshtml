@@ -84,16 +84,17 @@
                             </div>
                         </div>
 
+                            <!--SEGMENTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Fases</label>
+                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos"></select2>
+                            </div>
+
+
                             <!--CARTEIRAS-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Carteiras</label>
                                 <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                            </div>
-
-                            <!--FASES-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Fases</label>
-                                <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases"></select2>
                             </div>
 
                             <!--VISÃO-->
@@ -324,8 +325,8 @@
             dtini_inc: $filter('date')(dataInc, "yyyy-MM-dd"),
             dtfim_inc: $filter('date')(newdate, "yyyy-MM-dd"),
             visao: 'andamento',
+            segmentos: '',
             carteiras: '',
-            fases: '',
 
         };
         $scope.dashFiltros = {};
@@ -338,8 +339,8 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteiras = r.data.Table;
-            $scope.dashFiltros.fases = r.data.Table1;
+            $scope.dashFiltros.segmentos = r.data.Table;
+            $scope.dashFiltros.carteiras = r.data.Table1;
         });
 
 
