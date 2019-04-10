@@ -148,7 +148,7 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.promessa+dashboard.resumo.acordo) / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
@@ -195,7 +195,8 @@
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
-                                        <th>Conversão</th>
+                                        <th>Conversão PROM</th>
+                                        <th>Conversão ACOR</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -215,6 +216,7 @@
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
                                         <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.acordo / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -234,6 +236,7 @@
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -275,7 +278,8 @@
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
-                                        <th>Conversão</th>
+                                        <th>Conversão PROM</th>
+                                        <th>Conversão ACOR</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="e in dashboard.carteira | groupBy: 'grupo'">
@@ -299,6 +303,7 @@
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
@@ -317,6 +322,7 @@
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
