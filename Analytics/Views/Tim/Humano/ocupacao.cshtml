@@ -5,7 +5,7 @@
 
 
 
-<div ng-controller="ctrl-sky-ocupacao">
+<div ng-controller="ctrl-tim-ocupacao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -111,16 +111,16 @@
                             </div>
                         </div>
 
-                        <!--DISCADOR-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Discador</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.discador" dados="dashFiltros.discador"></select2>
-                        </div>
-
                         <!--SUPERVISOR-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Supervisor</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                        </div>
+
+                        <!--EQUIPE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Equipe</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -134,54 +134,7 @@
         </div>
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box bg-blue-active">
-                    <div class="inner">
-                        <p>Méd. Logado Op</p>
-                        <h3 ng-bind="dashboard.resumo.logado_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box" style="background-color: rgb(124,181,236); color: white">
-                    <div class="inner">
-                        <p>Méd. Falado Op</p>
-                        <h3 ng-bind="dashboard.resumo.falado_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box" style="background-color: rgb(67,67,72); color: white">
-                    <div class="inner">
-                        <p>Méd. Disponível Op</p>
-                        <h3 ng-bind="dashboard.resumo.disponivel_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box" style="background-color: rgb(144,237,125); color: white ">
-                    <div class="inner">
-                        <p>Méd. Pausa Op</p>
-                        <h3 ng-bind="dashboard.resumo.pausa_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box" style="background-color: rgb(153,158,255); color: white">
-                    <div class="inner">
-                        <p>Méd. AfterCall Op</p>
-                        <h3 ng-bind="dashboard.resumo.aftercall_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-2 col-md-2">
-                <div class="small-box" style="background-color: rgb(241,92,128); color: white">
-                    <div class="inner">
-                        <p>Méd. Manual Op</p>
-                        <h3 ng-bind="dashboard.resumo.manual_op | formatTimer "></h3>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
         <!-- QUADROS -->
@@ -214,7 +167,7 @@
                     <div class="col-xs-12 col-sm-6 col-md-12">
                         <div class="small-box bg-gray">
                             <div class="inner">
-                                <h3 align="center" ng-bind="dashboard.resumo.tma | formatTimer"></h3>
+                                <h3 align="center"  ng-bind="dashboard.resumo.tma | formatTimer"></h3>
                                 <p>TMA</p>
                             </div>
                             <div class="icon">
@@ -235,11 +188,10 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-5">
+            <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Média Ocupação por Operador</span>
+                        <span class="card-header-title">Ocupação Operador</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -248,24 +200,79 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.ocupacao" type="pie" height="250" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.ocupacao" type="pie" height="250" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f} %</b>)"></high-chart>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Ocupação por Painel</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
+            <div class="col-xs-12 col-sm-6 col-md-5">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box bg-blue-active">
+                            <div class="inner">
+                                <p>Méd. Logado Op</p>
+                                <h3 align="center" ng-bind="dashboard.resumo.logado_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-hourglass"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.painel" type="pie" height="250" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box" style="background-color: rgb(255,188,117); color: white ">
+                            <div class="inner">
+                                <p>Méd. Offline Op</p>
+                                <h3 align="center"  ng-bind="dashboard.resumo.offline_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-hourglass-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box" style="background-color: rgb(124,181,236); color: white">
+                            <div class="inner">
+                                <p>Méd. Falado Op</p>
+                                <h3 align="center"  ng-bind="dashboard.resumo.falado_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-comments"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box" style="background-color: rgb(67,67,72); color: white">
+                            <div class="inner">
+                                <p>Méd. Disponível Op</p>
+                                <h3 align="center"  ng-bind="dashboard.resumo.disponivel_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-hourglass-start"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box" style="background-color: rgb(144,237,125); color: white ">
+                            <div class="inner">
+                                <p>Méd. Pausa Op</p>
+                                <h3 align="center"  ng-bind="dashboard.resumo.pausa_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-hourglass-half"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 col-md-6">
+                        <div class="small-box" style="background-color: rgb(153,158,255); color: white">
+                            <div class="inner">
+                                <p>Méd. AfterCall Op</p>
+                                <h3 align="center"  ng-bind="dashboard.resumo.aftercall_op | formatTimer "></h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-hourglass-end"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -282,7 +289,7 @@
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
-                        </div>                       
+                        </div>
                     </div>
                     <div class="card-body">
                         <!--TABELA-->
@@ -300,7 +307,6 @@
                                     <th>Disponível</th>
                                     <th>Pausas</th>
                                     <th>AfterCall</th>
-                                    <th>Manual</th>
                                     <th>% Ocupação</th>
                                 </tr>
                             </thead>
@@ -321,7 +327,6 @@
                                     <td>{{c | avgColumn: 'disponivel_op'| formatTimer}}</td>
                                     <td>{{c | avgColumn: 'pausa_op'| formatTimer}}</td>
                                     <td>{{c | avgColumn: 'aftercall_op'| formatTimer}}</td>
-                                    <td>{{c | avgColumn: 'manual_op'| formatTimer}}</td>
                                     <td>{{c | divideSumColumns: 'falado_op':'logado_op' | percentage: 1}}</td>
                                 </tr>
 
@@ -337,7 +342,6 @@
                                     <td>{{p.disponivel_op | formatTimer }}</td>
                                     <td>{{p.pausa_op | formatTimer }}</td>
                                     <td>{{p.aftercall_op | formatTimer }}</td>
-                                    <td>{{p.manual_op | formatTimer }}</td>
                                     <td>{{p.falado_op / p.logado_op | percentage: 1}}</td>
                                 </tr>
                             </tbody>
@@ -379,7 +383,7 @@
                                     <tr>
                                         <th>Dia</th>
                                         <th>PA</th>
-                                        <th>Méd Atendidas</th>
+                                        <th>Méd. Atendidas</th>
                                         <th>TMA</th>
                                         <th>TME</th>
                                         <th>Logado</th>
@@ -388,7 +392,6 @@
                                         <th>Disponível</th>
                                         <th>Pausa</th>
                                         <th>AfterCall</th>
-                                        <th>Manual</th>
                                         <th>% Ocupação</th>
                                     </tr>
                                 </thead>
@@ -409,7 +412,6 @@
                                         <td>{{c | sumByColumn: 'disponivel_op'| formatTimer}}</td>
                                         <td>{{c | sumByColumn: 'pausa_op'| formatTimer}}</td>
                                         <td>{{c | sumByColumn: 'aftercall_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'manual_op'| formatTimer}}</td>
                                         <td>{{c | divideSumColumns: 'falado_op':'logado_op' | percentage: 1}}</td>
                                     </tr>
 
@@ -425,7 +427,6 @@
                                         <td>{{p.disponivel_op | formatTimer }}</td>
                                         <td>{{p.pausa_op | formatTimer }}</td>
                                         <td>{{p.aftercall_op | formatTimer }}</td>
-                                        <td>{{p.manual_op | formatTimer }}</td>
                                         <td>{{p.falado_op / p.logado_op | percentage: 1}}</td>
                                     </tr>
                                 </tbody>
@@ -440,12 +441,11 @@
                                     <option value="atendido">Atendidas</option>
                                     <option value="qtd_op">Operadores</option>
                                     <option value="logado">Logado</option>
+                                    <option value="offline">Offline</option>
                                     <option value="falado">Falado</option>
                                     <option value="disponivel">Disponível</option>
-                                    <option value="pausa">Pausas</option>
+                                    <option value="pausa">Pausa</option>
                                     <option value="aftercall">AfterCall</option>
-                                    <option value="manual">Manual</option>
-                                    <option value="offline">Offline</option>
                                     <option value="tma">TMA</option>
                                     <option value="tme">TME</option>
                                 </select>
@@ -484,7 +484,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-sky-ocupacao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-tim-ocupacao', function ($scope, $http, $filter) {
 
         // filtros iniciais
         let newdate = new Date();
@@ -495,8 +495,8 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             horaini: '8',
             horafim: '21',
-            discador: '',
             supervisor: '',
+            equipe: '',
         };
 
 
@@ -507,14 +507,14 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/sky/dashboard/humano/filtros",
+            url: "/api/tim/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
 
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.supervisor = data.Table2;
-            $scope.dashFiltros.discador = data.Table5;
+            $scope.dashFiltros.supervisor = data.Table3;
+            $scope.dashFiltros.equipe = data.Table4;
 
         });
 
@@ -522,7 +522,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/sky/dashboard/humano/ocupacao",
+                url: "/api/tim/dashboard/humano/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -531,11 +531,9 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table1.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
 
-                $scope.dashboard.painel = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table2.map(obj => ({ name: obj.discador, y: obj.medFalado })) }];
-
-                $scope.dashboard.supervisor = r.data.Table3;
-                $scope.dashboard.dia = r.data.Table4;
-                $scope.dashboard.operador = r.data.Table5;
+                $scope.dashboard.supervisor = r.data.Table2;
+                $scope.dashboard.dia = r.data.Table3;
+                $scope.dashboard.operador = r.data.Table4;
                 $scope.carregarGrafico();
 
             });
@@ -549,7 +547,7 @@
 
             switch (indicador) {
                 case 'atendido':
-                    $scope.dashboard.grafico = [{ name: 'Méd. Atendidas OP', data: dados.map(obj => obj.qtd_atendidas) }];
+                    $scope.dashboard.grafico = [{ name: 'Atendidas', data: dados.map(obj => obj.qtd_atendida_op) }];
                     break;
 
                 case 'qtd_op':
@@ -565,7 +563,7 @@
                     break;
 
                 case 'disponivel':
-                    $scope.dashboard.grafico = [{ name: 'Med. Disponível OP (Segundos)', data: dados.map(obj => obj.disponivel_op) }];
+                    $scope.dashboard.grafico = [{ name: 'Med. Disponivel OP (Segundos)', data: dados.map(obj => obj.disponivel_op) }];
                     break;
 
                 case 'pausa':
