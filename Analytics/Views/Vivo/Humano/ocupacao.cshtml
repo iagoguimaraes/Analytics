@@ -3,12 +3,12 @@
 }
 
 
-<div ng-controller="ctrl-vivo-tempo">
+<div ng-controller="ctrl-vivo-ocupacao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Tempos</div>
+            <div class="page-name">Ocupação Operação</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -386,7 +386,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-vivo-tempo', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-vivo-ocupacao', function ($scope, $http, $filter) {
         // filtros iniciais
         let _dt1 = new Date();
         _dt1.setDate(_dt1.getDate());
@@ -437,7 +437,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/vivo/humano/dashboard/tempo",
+                url: "/api/vivo/humano/dashboard/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
