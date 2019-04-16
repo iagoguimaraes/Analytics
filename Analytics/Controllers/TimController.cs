@@ -1243,11 +1243,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("vendas/atom/horahora")]
+        [Route("vendas/migracao/producaoatv")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasHoraHoraAtom(FormDataCollection form)
+        public HttpResponseMessage VendasProducaoAtomAti(FormDataCollection form)
         {
             try
             {
@@ -1261,7 +1261,35 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_atom", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_atv_migracao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("vendas/migracao/producaorec")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasProducaoAtomRec(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_rec_migracao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

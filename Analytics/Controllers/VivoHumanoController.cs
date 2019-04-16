@@ -121,11 +121,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/tempo")]
+        [Route("dashboard/ocupacao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardTempo(FormDataCollection form)
+        public HttpResponseMessage DashboardOcupacaoHum(FormDataCollection form)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace Analytics.Controllers
                     parametros.Add("aging", aging);
                     parametros.Add("sabado", sabado);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_tempo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
