@@ -384,5 +384,80 @@ namespace Analytics.Controllers
         }
 
 
+        [Route("dashboard/metas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPlanejamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("atrasos", atrasos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_metas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/cadmetas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMeta(FormDataCollection form)
+        {
+            try
+            {
+
+
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int id_segmento = Convert.ToInt32(form["id_segmento"]);
+
+
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable cpca = JsonConvert.DeserializeObject<DataTable>(form["cpca"]);
+                DataTable promessa = JsonConvert.DeserializeObject<DataTable>(form["promessa"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("id_segmento", id_segmento);
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("cpca", cpca);
+                    parametros.Add("promessa", promessa);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
     }
 }
