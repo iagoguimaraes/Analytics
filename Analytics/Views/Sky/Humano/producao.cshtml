@@ -225,6 +225,25 @@
                                             <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Total</th>
+                                            <th>{{dashboard.resumo.discado | number}}</th>
+                                            <th>{{dashboard.resumo.transferido | number}}</th>
+                                            <th>{{dashboard.resumo.contato | number}}</th>
+                                            <th>{{dashboard.resumo.cpc | number}}</th>
+                                            <th>{{dashboard.resumo.cpca | number}}</th>
+                                            <th>{{dashboard.resumo.promessa | number}}</th>
+                                            <th>{{dashboard.resumo.promessa_cartao | number}}</th>
+                                            <th>{{dashboard.resumo.migracao | number}}</th>
+                                            <th>{{dashboard.resumo.Ticket_Medio | currency: 'R$ '}}</th>
+                                            <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
 
@@ -373,7 +392,11 @@
 
             angular.module('app').controller('ctrl-sky-producao', function ($scope, $http, $filter) {
             // filtros iniciais
-            let newdate = new Date();
+                let newdate = new Date();
+
+
+                newdate.setDate(newdate.getDate() - 1);
+
             let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
             $scope.filtros = {
