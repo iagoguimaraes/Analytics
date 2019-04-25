@@ -1070,9 +1070,17 @@ namespace Analytics.Controllers
         {
             try
             {
+                int compararhojecom = Convert.ToInt32(form["compararhojecom"]);
+                int compararmescom = Convert.ToInt32(form["compararmescom"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("compararhojecom", compararhojecom);
+                    parametros.Add("compararmescom", compararmescom);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

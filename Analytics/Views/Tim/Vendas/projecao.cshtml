@@ -26,9 +26,18 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Projeção de Hoje</span>
+                        <small class="pull-right">
+                            <span>Comparar com:</span>
+                            <select ng-model="filtros.compararhojecom" ng-change="carregarDashboard()">
+                                <option value="1">Ontem</option>
+                                <option value="2">Anteontem</option>
+                                <option value="3">Trasanteontem</option>
+                                <option value="7">Semana Passada</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-charts config="dashboard.projecao_dia" style="width: 100%; height: 350px"></high-charts>
+                        <high-charts config="dashboard.grafico_hoje" style="width: 100%; height: 350px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -40,9 +49,16 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Projeção do Mês</span>
+                        <small class="pull-right">
+                            <span>Comparar com:</span>
+                            <select ng-model="filtros.compararmescom" ng-change="carregarDashboard()">
+                                <option value="1">Mês Passado</option>
+                                <option value="2">Mês Retrasado</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 350px"></high-charts>
+                        <high-charts config="dashboard.grafico_mes" style="width: 100%; height: 350px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -57,6 +73,10 @@
 
         $scope.dashboard = {};
         $scope.dashboard.indicador = 'venda';
+        $scope.filtros = {
+            compararhojecom: '1',
+            compararmescom: '1'
+        };
 
         $scope.carregarDashboard = function () {
             $http({
@@ -72,19 +92,19 @@
 
                 // STATUS DASHBOARD OK
                 $scope.dashboard.status = r.status;
-
             });
         }
 
         $scope.popularDashboard = function () {
-            // PROJECAO DO DIA
+            // PROJECAO DE HOJE
             if ($scope.dashboard.dados.Table.length > 0) {
-                let dia_venda = $scope.dashboard.dados.Table1.map(o => ({ y: o[$scope.dashboard.indicador] }));
-                let dia_projecao = $scope.dashboard.dados.Table.map(o => ({ y: o[$scope.dashboard.indicador] }));
-                dia_venda[dia_venda.length - 1].dataLabels = { enabled: true };
-                dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+                let hoje_realizado = $scope.dashboard.dados.Table.filter(o => o.projecao == 0).map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_projecao = $scope.dashboard.dados.Table.map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_comparativo = $scope.dashboard.dados.Table.map(o => ({ y: o[$scope.dashboard.indicador+'_comparativo'] }));
+                hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
 
-                $scope.dashboard.projecao_dia = {
+                $scope.dashboard.grafico_hoje = {
                     title: {
                         text: ''
                     },
@@ -94,23 +114,29 @@
                         },
                     },
                     xAxis: {
-                        categories: $scope.dashboard.dados.Table1.map(o => o.hora)
+                        categories: $scope.dashboard.dados.Table.map(o => o.hora)
                     },
                     series: [
                         {
                             type: 'line',
-                            name: 'Projeção',
-                            color: 'black',
-                            dashStyle: 'dot',
-                            marker: { symbol: 'circle' },
-                            data: dia_venda
+                            name: 'Comparativo',
+                            color: 'rgba(0, 53, 140, 0.2)',
+                            data: hoje_comparativo
                         },
                         {
                             type: 'area',
                             name: 'Realizado',
                             color: 'black',
                             marker: { symbol: 'circle' },
-                            data: dia_projecao
+                            data: hoje_realizado
+                        },
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: hoje_projecao
                         },
                     ],
                     credits: {
@@ -118,15 +144,16 @@
                     }
                 };
             }
-
+            
             // PROJECAO DO MES
-            if ($scope.dashboard.dados.Table3.length > 0) {
-                let mes_venda = $scope.dashboard.dados.Table3.map(o => ({ y: o[$scope.dashboard.indicador] }));
-                let mes_projecao = $scope.dashboard.dados.Table2.map(o => ({ y: o[$scope.dashboard.indicador] }));
-                mes_venda[mes_venda.length - 1].dataLabels = { enabled: true };
-                mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+            if ($scope.dashboard.dados.Table1.length > 0) {
+                let hoje_realizado = $scope.dashboard.dados.Table1.filter(o => o.projecao == 0).map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_projecao = $scope.dashboard.dados.Table1.map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_comparativo = $scope.dashboard.dados.Table1.map(o => ({ y: o[$scope.dashboard.indicador+'_comparativo'] }));
+                hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
 
-                $scope.dashboard.projecao_mes = {
+                $scope.dashboard.grafico_mes = {
                     title: {
                         text: ''
                     },
@@ -136,23 +163,29 @@
                         },
                     },
                     xAxis: {
-                        categories: $scope.dashboard.dados.Table3.map(o => o.data)
+                        categories: $scope.dashboard.dados.Table1.map(o => o.dia)
                     },
                     series: [
                         {
                             type: 'line',
-                            name: 'Projeção',
-                            color: 'black',
-                            dashStyle: 'dot',
-                            marker: { symbol: 'circle' },
-                            data: mes_venda
+                            name: 'Comparativo',
+                            color: 'rgba(0, 53, 140, 0.2)',
+                            data: hoje_comparativo
                         },
                         {
                             type: 'area',
                             name: 'Realizado',
                             color: 'black',
                             marker: { symbol: 'circle' },
-                            data: mes_projecao
+                            data: hoje_realizado
+                        },
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: hoje_projecao
                         },
                     ],
                     credits: {
