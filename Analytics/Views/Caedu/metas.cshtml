@@ -201,22 +201,34 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-green-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.metapromessa | megaNumber"></h3>
-                        <p>Meta Acordo</p>
+                        <p>Meta Negociação</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-street-view"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.metapromessa | percentage: 1"></h4>
+                        <p>Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.acordo | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.acordo / dashboard.resumo.metapromessa | percentage: 1"></h4>
                         <p>Acordo</p>
                     </div>
                     <div class="icon">
@@ -224,6 +236,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!--TABELA ANALISE DIA-->
@@ -251,6 +264,8 @@
                                         <th>Meta Promessa</th>
                                         <th>Promessa</th>
                                         <th>% Feito</th>
+                                        <th>Acordo</th>
+                                        <th>% Feito</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="e in dashboard.dia | groupBy: 'data'">
@@ -266,6 +281,8 @@
                                         <td>{{e | sumByColumn: 'metapromessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'metapromessa' | percentage:1}}</td>
+                                        <td>{{e | sumByColumn: 'acordo'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'acordo':'metapromessa' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
@@ -276,6 +293,8 @@
                                         <td>{{c.metapromessa | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.promessa / c.metapromessa | percentage:1}}</td>
+                                        <td>{{c.acordo | number}}</td>
+                                        <td>{{c.acordo / c.metapromessa | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -302,11 +321,14 @@
                     <div class="card-body">
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="conversao">Conversão</option>
+                                <option value="conversaopro">Conversão Promessa</option>
+                                <option value="conversaoaco">Conversão Acordo</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="metacpca">% Feito CPCA</option>
                                 <option value="promessa">Promessa</option>
                                 <option value="metapromessa">% Feito promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="metaacordo">% Feito Acordo</option>
                             </select>
                         </small>
                         <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
@@ -335,7 +357,7 @@
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'conversao' };
+        $scope.grafico = { indicador: 'cpca' };
         $scope.mascara = { indicador: '1' };
 
         // carregar os filtros
@@ -383,8 +405,14 @@
                     case 'metapromessa':
                         $scope.dashboard.grafico = [{ name: 'metapromessa', data: dados.map(obj => (obj.promessa * 100 / obj.metapromessa).toFixed(1) * 1) }];
                         break;
-                    case 'conversao':
+                    case 'metaacordo':
+                        $scope.dashboard.grafico = [{ name: 'metaacordo', data: dados.map(obj => (obj.acordo * 100 / obj.metapromessa).toFixed(1) * 1) }];
+                        break;
+                    case 'conversaopro':
                         $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                        break;
+                    case 'conversaoaco':
+                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
                         break;
                     default:
                         $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
