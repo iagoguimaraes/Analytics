@@ -7,7 +7,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Efetividade</div>
+            <div class="page-name">Efetividade Acordo</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -81,45 +81,83 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
 
-            <div class="col-xs-12 col-md-5">
-                <div class="small-box bg-green-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_pago | number"></h3>
-                        <h4 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h4>
-                        <p>Pagamentos</p>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="small-box bg-gray-active">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd_acordo | number"></h3>
+                                <h4 ng-bind="dashboard.resumo.vlr_acordo | currency:'R$ '"></h4>
+                                <p>Acordos</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-thumbs-up"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="small-box bg-green-active">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd_pago | number"></h3>
+                                <h4 ng-bind="dashboard.resumo.vlr_pago | currency:'R$ '"></h4>
+                                <h3 class="pull-right" ng-bind="( dashboard.resumo.qtd_pago / dashboard.resumo.qtd_acordo ) | percentage : 1"></h3>
+                                <p>Pagamentos</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-money"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd_acordo_vencido | number"></h3>
+                                <h4 class="pull-right" ng-bind="dashboard.resumo.vlr_acordo_vencido | currency:'R$ '"></h4>
+                                <p>Acordos Vencidos</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-calendar-times-o"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12">
+                        <div class="small-box bg-yellow-active">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd_acordo_avencer | number"></h3>
+                                <h4 class="pull-right" ng-bind="dashboard.resumo.vlr_acordo_avencer | currency:'R$ '"></h4>
+                                <p>Colchão</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-calendar-plus-o"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-xs-12 col-md-5">
-                <div class="small-box bg-purple-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd_promessa | number"></h3>
-                        <h4 ng-bind="dashboard.resumo.vlr_promessa | currency:'R$ '"></h4>
-                        <p>Promessas</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <div class="small-box bg-blue-active">
-                    <div class="inner">
-                        <h3 ng-bind="( dashboard.resumo.qtd_pago / dashboard.resumo.qtd_promessa ) | percentage : 1"></h3>
-                        <h4 ng-bind="( dashboard.resumo.vlr_pago / dashboard.resumo.vlr_promessa )  | percentage : 1"></h4>
-                        <p>Efetividade Total</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-percent"></i>
+                <div class="col-xs-12 col-md-9">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-header-title">Efetividade Acordo por Dia</span>
+                                <div class="card-header-button card-header-expand">
+                                    <i class="fa fa-expand"></i>
+                                </div>
+                                <div class="card-header-button" ng-click="extrair('Table1')">
+                                    <i class="fa fa-file-excel-o"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Stacking="normal"></high-chart>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!--PRODUÇÃO POR ESTADO -->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6">
                 <div class="card">
@@ -128,52 +166,50 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-green-active">
-                                    <div class="inner">
-                                        <p><h4>Pagamentos</h4></p>
-                                        <h5 ng-bind="dashboard.mapa.qtd_pago | number"></h5>
-                                        <h5 ng-bind="dashboard.mapa.vlr_pago | currency: 'R$ '"></h5>
-                                        <p>{{ dashboard.mapa.estado }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-purple-active">
-                                    <div class="inner">
-                                        <p><h4>Promessas</h4></p>
-                                        <h5 ng-bind="dashboard.mapa.qtd_promessa | number"></h5>
-                                        <h5 ng-bind="dashboard.mapa.vlr_promessa | currency:'R$ '"></h5>
-                                        <p>{{ dashboard.mapa.estado }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-md-4">                                
+                            <div class="col-xs-12 col-md-6">
                                 <div class="small-box bg-blue-active">
                                     <div class="inner">
-                                        <p><h4>Efetividade</h4></p>
-                                        <h5 ng-bind="( dashboard.mapa.qtd_pago / dashboard.mapa.qtd_promessa ) | percentage : 1"> Quantidade</h5>
-                                        <h5 ng-bind="( dashboard.mapa.vlr_pago / dashboard.mapa.vlr_promessa ) | percentage : 1"> Valor</h5>
+                                        <p>Acordos</p>
+                                        <h5 ng-bind="dashboard.mapa.qtd_acordo | number"></h5>
+                                        <h5 class="pull-right" ng-bind="dashboard.mapa.vlr_acordo | currency: 'R$ '"></h5>
                                         <p>{{ dashboard.mapa.estado }}</p>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-md-6">
+                                <div class="small-box bg-green-active">
+                                    <div class="inner">
+                                        <p>Pagamentos</p>
+                                        <h5 ng-bind="dashboard.mapa.qtd_pago | number"></h5>
+                                        <h5 class="pull-right" ng-bind="dashboard.mapa.vlr_pago | currency: 'R$ '"></h5>
+                                        <p>{{ dashboard.mapa.estado }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-xs-12 col-md-3">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p>Efetividade</p>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.qtd_pago / dashboard.mapa.qtd_promessa ) | percentage : 1"> Quantidade</h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>*@
                         </div>
-                        <mapa-brasil style="height: 500px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        <mapa-brasil style="height: 530px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Efetividade por Carteira</span>
+                        <span class="card-header-title">Pagamentos por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -182,51 +218,107 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>                       
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!--POR DIA-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Efetividade por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                        <div class="row margin-bottom">
-                            <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Stacking="normal"></high-chart>
-                        </div>
+                        <high-chart series="dashboard.carteira" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" type="bar" height="660px"></high-chart>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--PRODUÇÃO POR OPERADOR-->
+
+
+
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <!--EFETIVIDADE OPERADOR-->
+            <div class="col-xs-12 col-md-8">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Efetividade por Operador</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
+                        <div class="card-header-button" ng-click="extrair('Table7')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="400px" order="[[5,'desc']]"></d-table>
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="500px" order="[[1,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+            <!--COLCHÃO ACORDO-->
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Colchão por Mês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.colchao" axis-Categories="dashboard.mesColchao" plot-Options-Bar-Data-Label="true" type="bar" height="500px"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--PIE-->
+        <div class="row margin-bottom">
+            <!--COLCHÃO EMPRESA-->
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Colchão por Empresa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.pieEmpresa" type="pie" height="250" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <!--COLCHÃO CARTEIRA-->
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Colchão por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.pieCarteira" type="pie" height="250" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--EFETIVIDADE COLCHÃO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade do Colchão por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.colchaoDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.diasColchao" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -240,7 +332,7 @@
     angular.module('app').controller('ctrl-cbss-efetividade', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth()), 1);
 
 
         $scope.filtros = {
@@ -265,7 +357,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteira = data.Table;
-            $scope.dashFiltros.empresa = data.Table1;            
+            $scope.dashFiltros.empresa = data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -278,20 +370,37 @@
                 let data = r.data;
 
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.diasColchao = r.data.Table5.map(obj => obj.data);
+                $scope.dashboard.mesColchao = r.data.Table6.map(obj => obj.anoMes);
                 $scope.dashboard.carteiras = r.data.Table3.map(obj => obj.carteira);
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
-                $scope.dashboard.carteira = [{ name: 'Efetividade', color: 'rgba(160, 103, 175, 1)', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
-                $scope.dashboard.operador = data.Table4;
 
                 $scope.dashboard.qtDia = [
-                  { name: 'Promessa', type: "column", color: 'rgba(160, 103, 175, 1)', data: data.Table1.map(obj => (obj.qtd_promessa)) }
-                , { name: 'Pago', type: "column", color: '#005384' , data: data.Table1.map(obj => (obj.qtd_pago)) }
-                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.Table1.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+                  { name: 'Acordo', type: "column", color: '#999', data: data.Table1.map(obj => (obj.qtd_acordo)) }
+                , { name: 'Pagamento', type: "column", color: '#008d4c', data: data.Table1.map(obj => (obj.qtd_pago)) }
+                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: '#005384', data: data.Table1.map(obj => (obj.qtd_pago * 100 / obj.qtd_acordo).toFixed(1) * 1) }];
+
+                $scope.dashboard.pieEmpresa = [
+                { name: 'Acordos', innerSize: '20%', data: data.Table2.map(obj => ({ name: obj.empresa, y: obj.qtd_avencer })) }];
+
+                $scope.dashboard.pieCarteira = [
+                { name: 'Acordos', innerSize: '20%', data: data.Table3.map(obj => ({ name: obj.carteira, y: obj.qtd_avencer })) }];
+
+
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, qtd_pago, vlr_pago, qtd_acordo, vlr_acordo, efet_porcentagem from ?', [data.Table4]);
+                $scope.dashboard.carteira = [{ name: 'Quantidade', color: 'rgba(160, 103, 175, 1)', data: data.Table3.map(obj => (obj.qtd_pago)) }];
+                $scope.dashboard.colchao = [
+                          { name: 'Quantidade', color: '#999', data: data.Table6.map(obj => (obj.qtd_acordo)) }];
+                $scope.dashboard.operador = data.Table7;
+
+                $scope.dashboard.colchaoDia = [
+                 { name: 'Acordos', type: "column", color: '#999', data: data.Table5.map(obj => (obj.qtd_acordo)) }
+               , { name: 'Pagamento', type: "column", color: '#008d4c', data: data.Table5.map(obj => (obj.qtd_pago)) }
+               , { name: '% Efetividade', yAxis: 1, type: 'spline', color: '#005384', data: data.Table5.map(obj => (obj.qtd_pago * 100 / obj.qtd_acordo).toFixed(1) * 1) }];
 
                 $scope.mudarEstado('BR-SP');
 
@@ -300,7 +409,7 @@
 
         $scope.mudarEstado = function (id) {
 
-            let dados = alasql('select id, [value], uf, estado, qtd_promessa, qtd_pago, vlr_promessa, vlr_pago, efet_porcentagem from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            let dados = alasql('select id, [value], uf, estado, qtd_acordo, qtd_pago, vlr_acordo, vlr_pago, efet_porcentagem from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
 
             $scope.dashboard.mapa = dados;
 

@@ -186,7 +186,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividadeAcordo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
