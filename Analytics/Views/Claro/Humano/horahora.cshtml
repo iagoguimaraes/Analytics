@@ -197,11 +197,13 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
+                                        <th>Alega</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
                                         <th>R$ Tkt Médio</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
+                                        <th>TxAlega</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -216,11 +218,13 @@
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'alega'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'valor_promessa'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'valor_promessa' : 'promessa'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'alega':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
 
@@ -230,11 +234,13 @@
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
+                                        <td>{{c.alega | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.valor_promessa |  currency:'R$ '}}</td>
                                         <td>{{c.valor_promessa / c.promessa |  currency:'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.alega / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
 
@@ -271,11 +277,13 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
+                                        <th>Alega</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
                                         <th>R$ Tkt Médio</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
+                                        <th>Tx Alega</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -286,11 +294,13 @@
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
+                                        <td>{{hora.alega | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
                                         <td>{{hora.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{hora.valor_promessa / hora.promessa |  currency:'R$ '}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
+                                        <td>{{hora.alega / hora.cpc | percentage:1}}</td>
                                         <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
@@ -302,10 +312,12 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.alega | number}}</th>
                                         <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.valor_promessa / dashboard.resumo.promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.alega / dashboard.resumo.cpc | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
