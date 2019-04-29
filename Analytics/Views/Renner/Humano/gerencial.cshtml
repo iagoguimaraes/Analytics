@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/master.cshtml";
 }
-<div ng-controller="ctrl-renner-dashboard-humano">
+<div ng-controller="ctrl-renner-gerencial-humano">
     <div ng-if="dashboard.status == 200">
         <div class="margin-bottom"></div>
 
@@ -357,7 +357,7 @@
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Total carteira {{grafico.indicador}} por produto</span>
+                        <span class="card-header-title">Total {{grafico.indicador}} por produto</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -425,7 +425,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-renner-dashboard-humano', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-renner-gerencial-humano', function ($scope, $http, $filter) {
         document.body.classList.remove('menu-opened');
 
         $scope.dashFiltros = {};
@@ -470,7 +470,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/renner/dashboard/humano/dashboard",
+                url: "/api/renner/dashboard/humano/gerencial",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
