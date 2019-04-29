@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-4">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.ativado | number:0"></h3>
@@ -93,12 +93,22 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-4">
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.nativado | number:0"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.nativado / dashboard.resumo.venda | percentage: 1"></h4>
                         <p>Não Ativado</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.restricao | number:0"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.restricao / dashboard.resumo.venda | percentage: 1"></h4>
+                        <p>Restrição</p>
                     </div>
                 </div>
             </div>
@@ -136,6 +146,7 @@
                                         <th>Em Aberto</th>
                                         <th>Não Ativado</th>
                                         <th>Ativações Com Tráfego</th>
+                                        <th>Restrição</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -145,10 +156,25 @@
                                         <td><b>{{dia.emaberto | number}}</b> ({{dia.emaberto / dia.venda | percentage:1}})</td>
                                         <td><b>{{dia.ativado | number}}</b> ({{dia.ativado / dia.venda | percentage:1}})</td>
                                         <td><b>{{dia.nativado | number}}</b> ({{dia.nativado / dia.venda | percentage:1}})</td>
+                                        <td><b>{{dia.restricao | number}}</b> ({{dia.restricao / dia.venda | percentage:1}})</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACKOFFICE -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Backoffices</span>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.backoffice" paging="true" order="[[1,'desc']]"></d-table>
                     </div>
                 </div>
             </div>
@@ -167,16 +193,33 @@
                 </div>
             </div>
         </div>
-        
-        <!-- BACKOFFICE -->
+
+        <!-- RESTRIÇÕES -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Backoffices</span>
+                        <span class="card-header-title">Restrições</span>
                     </div>
                     <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.backoffice" paging="true" order="[[1,'desc']]"></d-table>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Quantidade</th>
+                                        <th>% do Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.restricao">
+                                        <td>{{r.substatus}}</td>
+                                        <td>{{r.quantidade | number}}</td>
+                                        <td>{{r.quantidade / dashboard.resumo.venda | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -263,6 +306,9 @@
 
                 // # BACKOFFICE
                 $scope.dashboard.backoffice = r.data.Table4;
+
+                // # RESTRIÇÕES
+                $scope.dashboard.restricao = r.data.Table5;
 
                 // STATUS DASHBOARD OK
                 $scope.dashboard.status = r.status;
