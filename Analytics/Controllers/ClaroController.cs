@@ -135,6 +135,43 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/digital/pagamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPagamentos(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
+                DataTable tipo = JsonConvert.DeserializeObject<DataTable>(form["tipo"]);
+                DataTable fase = JsonConvert.DeserializeObject<DataTable>(form["fase"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("fase", fase);
+                    parametros.Add("origem", origem);
+                    parametros.Add("tipo", tipo);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
 
