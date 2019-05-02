@@ -221,10 +221,14 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-timvendas-retornoura', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-timvendas-retornoura', function ($scope, $http, $filter) {        
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+
         $scope.filtros = {
-            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 
         $scope.dashboard = {};

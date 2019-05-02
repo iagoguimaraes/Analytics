@@ -33,7 +33,10 @@
                         buttons: scope.buttons,
                         dom: scope.dom || 'lfrtip',
                     });
-                }               
+                }
+                else {
+                    $(element[0]).empty();
+                }
             });
         }
     }

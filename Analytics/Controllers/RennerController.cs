@@ -488,11 +488,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/humano/dashboard")]
+        [Route("dashboard/humano/gerencial")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardHumanoDasboard(FormDataCollection form)
+        public HttpResponseMessage DashboardHumanoGerencial(FormDataCollection form)
         {
             try
             {

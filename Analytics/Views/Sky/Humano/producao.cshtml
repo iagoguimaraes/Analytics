@@ -190,6 +190,7 @@
                                     <thead>
                                         <tr>
                                             <th>Dia</th>
+                                            <th>Logados</th>
                                             <th>Discado</th>
                                             <th>Atendido</th>
                                             <th>Contato</th>
@@ -198,7 +199,7 @@
                                             <th>Promessa</th>
                                             <th>Pro. Cartão</th>
                                             <th>Pro. Migração</th>
-                                            <th>Ticket Médio Promessa</th>
+                                            <th>CPCA / Logados</th>
                                             <th>HitRate</th>
                                             <th>TxAtd</th>
                                             <th>TxLoc</th>
@@ -209,6 +210,7 @@
                                     <tbody>
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                            <td>{{dia.qtd_logado | number}}</td>
                                             <td>{{dia.discado | number}}</td>
                                             <td>{{dia.transferido | number}}</td>
                                             <td>{{dia.contato | number}}</td>
@@ -217,7 +219,7 @@
                                             <td>{{dia.promessa | number}}</td>
                                             <td>{{dia.promessa_cartao | number}}</td>
                                             <td>{{dia.migracao | number}}</td>
-                                            <td>{{dia.Ticket_Medio | number}}</td>
+                                            <td>{{dia.cpca / dia.qtd_logado | number : 0 }}</td>
                                             <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                             <td>{{dia.contato / dia.transferido | percentage:1}}</td>
                                             <td>{{dia.cpc / dia.contato | percentage:1}}</td>
@@ -228,6 +230,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Total</th>
+                                            <th>{{dashboard.resumo.qtd_logado | number}}</th>
                                             <th>{{dashboard.resumo.discado | number}}</th>
                                             <th>{{dashboard.resumo.transferido | number}}</th>
                                             <th>{{dashboard.resumo.contato | number}}</th>
@@ -236,7 +239,7 @@
                                             <th>{{dashboard.resumo.promessa | number}}</th>
                                             <th>{{dashboard.resumo.promessa_cartao | number}}</th>
                                             <th>{{dashboard.resumo.migracao | number}}</th>
-                                            <th>{{dashboard.resumo.Ticket_Medio | currency: 'R$ '}}</th>
+                                            <th>{{dashboard.resumo.cpca / dashboard.resumo.qtd_logado | number : 0 }}</th>
                                             <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
@@ -313,6 +316,7 @@
                                             <th>Promessa</th>
                                             <th>Promessa Cartão</th>
                                             <th>Promessa Migração</th>
+                                            <th>CPCA / Logados</th>
                                             <th>% Cartão</th>
                                             <th>% Migração</th>
                                             <th>TxLoc</th>
@@ -333,6 +337,7 @@
                                             <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
                                             <td>{{c | sumByColumn: 'migracao'| number}}</td>
+                                            <td>{{c | divideSumColumns: 'cpca':'qtd_logado' | number : 0}}</td>
                                             <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
@@ -348,6 +353,7 @@
                                             <td>{{p.promessa | number}}</td>
                                             <td>{{p.promessa_cartao | number}}</td>
                                             <td>{{p.migracao | number}}</td>
+                                            <td>{{p.cpca / p.qtd_logado | number: 0}}</td>
                                             <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
                                             <td>{{p.migracao / p.promessa | percentage:1}}</td>
                                             <td>{{p.cpc / p.contato | percentage:1}}</td>
