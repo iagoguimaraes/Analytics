@@ -279,6 +279,65 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/digital/residencial/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraResidencial(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_residencial", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/residencial/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducaoResidencial(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_residencial", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         [Route("dashboard/humano/filtro")]
         [HttpGet]
