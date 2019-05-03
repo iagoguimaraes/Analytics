@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-portoseguro-promessa">
+<div ng-controller="ctrl-portoseguro-promessa-residencial">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -112,7 +112,8 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-portoseguro-promessa', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-portoseguro-promessa-residencial', function ($scope, $http, $filter) {
+
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -128,7 +129,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/portoseguro/dashboard/digital/promessa",
+                url: "/api/portoseguro/dashboard/digital/residencial/promessa",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
