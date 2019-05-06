@@ -56,6 +56,12 @@
                                 </div>
                             </div>
 
+                            <!--ORIGEM-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Origem</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -99,8 +105,14 @@
                 <div class="row" style="background-color: black; color: white">
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <span class="description-text">NS (20s)</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1"></h5>
+                            <span class="description-text">
+                                <select ng-model="dashFiltros.ns" style="color:black">
+                                    <option value="ns10">NS 10s</option>
+                                    <option value="ns20">NS 20s</option>
+                                    <option value="ns30">NS 30s</option>
+                                </select>
+                            </span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1"></h5>
                         </div>
                     </div>
                     <div class="col-sm-3 border-right">
@@ -135,6 +147,13 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="dashFiltros.ns" style="color:black" ng-change="carregarGrafico()">
+                                <option value="ns10">NS 10s</option>
+                                <option value="ns20">NS 20s</option>
+                                <option value="ns30">NS 30s</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
@@ -166,7 +185,13 @@
                                     <tr>
                                         <th>Hora</th>
                                         <th>Agente</th>
-                                        <th>NS (20s)</th>
+                                        <th>
+                                            <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns10">NS 10s</option>
+                                                <option value="ns20">NS 20s</option>
+                                                <option value="ns30">NS 30s</option>
+                                            </select>
+                                        </th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -179,7 +204,7 @@
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
                                         <td>{{hora.agente | number}}</td>
-                                        <td>{{hora.sla_ok / hora.chamada | percentage:1}}</td>
+                                        <td>{{hora[dashFiltros.ns] / hora.chamada | percentage:1}}</td>
                                         <td>{{hora.chamada | number}}</td>
                                         <td>{{hora.atendido | number}}</td>
                                         <td>{{hora.abandonado | number}}</td>
@@ -192,7 +217,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.agente | number}}</th>
-                                        <th>{{dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
@@ -229,7 +254,13 @@
                                     <tr>
                                         <th>Fila</th>
                                         <th>Agente</th>
-                                        <th>NS (20s)</th>
+                                        <th>
+                                            <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns10">NS 10s</option>
+                                                <option value="ns20">NS 20s</option>
+                                                <option value="ns30">NS 30s</option>
+                                            </select>
+                                        </th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -242,7 +273,7 @@
                                     <tr ng-repeat="f in dashboard.fila">
                                         <td>{{f.fila}}</td>
                                         <td>{{f.agente | number}}</td>
-                                        <td>{{f.sla_ok / f.chamada | percentage:1}}</td>
+                                        <td>{{f[dashFiltros.ns] / f.chamada | percentage:1}}</td>
                                         <td>{{f.chamada | number}}</td>
                                         <td>{{f.atendido | number}}</td>
                                         <td>{{f.abandonado | number}}</td>
@@ -255,7 +286,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.agente | number}}</th>
-                                        <th>{{dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
@@ -268,7 +299,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <!--TEMPO DE FILA E OCORRENCIAS-->
@@ -308,7 +339,7 @@
         </div>
 
         <!--POR ORIGEM-->
-        <div class="row margin-bottom">            
+        <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -382,7 +413,13 @@
                                     <tr>
                                         <th>Dia</th>
                                         <th>Agente</th>
-                                        <th>NS (20s)</th>
+                                        <th>
+                                            <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns10">NS 10s</option>
+                                                <option value="ns20">NS 20s</option>
+                                                <option value="ns30">NS 30s</option>
+                                            </select>
+                                        </th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -395,7 +432,7 @@
                                     <tr ng-repeat="d in dashboard.dia">
                                         <td>{{d.data}}</td>
                                         <td>{{d.agente | number}}</td>
-                                        <td>{{d.sla_ok / d.chamada | percentage:1}}</td>
+                                        <td>{{d[dashFiltros.ns] / d.chamada | percentage:1}}</td>
                                         <td>{{d.chamada | number}}</td>
                                         <td>{{d.atendido | number}}</td>
                                         <td>{{d.abandonado | number}}</td>
@@ -408,7 +445,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.agente | number}}</th>
-                                        <th>{{dashboard.resumo.sla_ok / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
@@ -426,13 +463,19 @@
 
     </div>
 
-<script>
-    angular.module('app').controller('ctrl-semparar-receptivo', function ($scope, $http, $filter) {
-           
+    <script>
+        angular.module('app').controller('ctrl-semparar-receptivo', function ($scope, $http, $filter) {
+
             $scope.filtros = {
                 dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
                 dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+                origem: ''
             };
+
+            $scope.dashFiltros = {
+                origem: [{ id: 1, origem: 'Digital' }, { id: 2, origem: 'Humano' }],
+                ns: 'ns20'
+            }
 
             $scope.dashboard = {};
 
@@ -443,17 +486,14 @@
                     url: "/api/semparar/dashboard/humano/receptivo",
                     data: $scope.filtros,
                 }).then(function success(r) {
+                    $scope.dashboard.dados = r.data;
 
                     $scope.dashboard.resumo = r.data.Table[0];
 
                     $scope.dashboard.horahora = r.data.Table1;
                     $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
-                    $scope.dashboard.graficohora = [
-                        { name: 'atendido', type: 'column', data: r.data.Table1.map(obj => obj.atendido) },
-                        { name: 'abandonado', type: 'column', data: r.data.Table1.map(obj => obj.abandonado) },
-                        { name: 'NS (20s)', type: 'spline', yAxis: 1, data: r.data.Table1.map(obj => (obj.sla_ok * 100 / obj.chamada).toFixed(1) / 1) },
-                    ];
-
+                    $scope.carregarGrafico();
+                    
                     $scope.dashboard.fila = r.data.Table2;
 
                     $scope.dashboard.tempos = r.data.Table3.map(obj => obj.tempo_fila);
@@ -465,9 +505,17 @@
 
                     $scope.dashboard.origem = r.data.Table6;
 
-                    $scope.dashboard.dados = r.data;
+                    
                     $scope.dashboard.status = r.status;
                 });
+            }
+
+            $scope.carregarGrafico = function () {
+                $scope.dashboard.graficohora = [
+                    { name: 'atendido', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.atendido) },
+                    { name: 'abandonado', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.abandonado) },
+                    { name: $scope.dashFiltros.ns, type: 'spline', yAxis: 1, data: $scope.dashboard.dados.Table1.map(obj => (obj[$scope.dashFiltros.ns] * 100 / obj.chamada).toFixed(1) / 1) },
+                ];
             }
 
             // extrair dados para excel
@@ -479,4 +527,4 @@
 
         });
 
-</script>
+    </script>
