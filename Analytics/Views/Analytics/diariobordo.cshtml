@@ -12,6 +12,10 @@
             <i class="fa fa-filter"></i>
             FILTROS
         </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
+            <i class="fa fa-file-excel-o"></i>
+            EXTRAIR
+        </div>
     </header>
 
     <!-- FILTROS -->
@@ -537,6 +541,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function () {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados]);
+        }
 
     });
 </script>
