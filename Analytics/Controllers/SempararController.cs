@@ -249,6 +249,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
                 {
@@ -256,6 +257,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("origem", origem);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_receptivo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
