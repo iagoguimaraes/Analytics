@@ -217,7 +217,7 @@ namespace Analytics.Controllers
                 string chkSupervisor = form["chkSupervisor"];
                 string chkEquipe = form["chkEquipe"];
                 string chkFaixa = form["chkFaixa"];
-                string chkClasse = form["chkClasse"];                
+                string chkClasse = form["chkClasse"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
@@ -518,7 +518,21 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    string procedure = "sp_dashboard_producao" + form["conceito"] + "";
+                    string procedure = "sp_dashboard_producao";
+
+                    if (form["conceito"] == "_unique")
+                    {
+                        procedure = "sp_dashboard_producao_unique";
+                    }
+                    else if (form["conceito"] == "_total")
+                    {
+                        procedure = "sp_dashboard_producao";
+                    }
+                    else
+                    {
+                        Console.WriteLine ("parametro de conceito não passado");
+                    }
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -639,5 +653,5 @@ namespace Analytics.Controllers
 
     }
 
-    
+
 }
