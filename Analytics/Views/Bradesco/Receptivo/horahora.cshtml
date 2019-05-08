@@ -257,6 +257,75 @@
             </div>
         </div>
 
+        <!--POR FILA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Fila</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.fila">
+                                <thead>
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Agente</th>
+                                        <th>
+                                            <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns10">NS 10s</option>
+                                                <option value="ns20">NS 20s</option>
+                                                <option value="ns30">NS 30s</option>
+                                            </select>
+                                        </th>
+                                        <th>Chamada</th>
+                                        <th>Atendida</th>
+                                        <th>Abandonada</th>
+                                        <th>% Abandono</th>
+                                        <th>Tempo Médio Atendimento</th>
+                                        <th>Tempo Médio em Fila</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="f in dashboard.fila">
+                                        <td>{{f.fila}}</td>
+                                        <td>{{f.agente | number}}</td>
+                                        <td>{{f[dashFiltros.ns] / f.chamada | percentage:1}}</td>
+                                        <td>{{f.chamada | number}}</td>
+                                        <td>{{f.atendido | number}}</td>
+                                        <td>{{f.abandonado | number}}</td>
+                                        <td>{{f.abandonado / f.chamada | percentage:1}}</td>
+                                        <td>{{f.tma}}</td>
+                                        <td>{{f.tmf}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumofila.agente | number}}</th>
+                                        <th>{{dashboard.resumofila[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumofila.chamada | number}}</th>
+                                        <th>{{dashboard.resumofila.atendido | number}}</th>
+                                        <th>{{dashboard.resumofila.abandonado | number}}</th>
+                                        <th>{{dashboard.resumofila.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumofila.tma}}</th>
+                                        <th>{{dashboard.resumofila.tmf}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row margin-bottom">
             <!--INSUCESSO RECUSA-->
             <div class="col-xs-12 col-md-12 margin-bottom">
@@ -387,10 +456,14 @@
             equipe: '',
         };
 
+        $scope.dashFiltros = {
+            ns: 'ns20'
+        }
+
         $scope.dashboard = {};
-        $scope.dashFiltros = {};
+
         $scope.grafico = { indicador: 'promessa' };
-        $scope.graficoPizza = { indicador: 'promessa' }
+        $scope.graficoPizza = { indicador: 'contato' }
 
         // carregar os filtros
         $http({
@@ -422,6 +495,9 @@
 
                 $scope.dashboard.empresaqtd = data.Table4;
                 $scope.dashboard.empresafinanceiro = data.Table5;
+
+                $scope.dashboard.resumofila = r.data.Table6[0];
+                $scope.dashboard.fila = r.data.Table7;
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoPizza($scope.graficoPizza.indicador);
