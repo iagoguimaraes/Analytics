@@ -181,7 +181,7 @@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <span class="description-text">Tempo Médio Atendimento</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.tma | formatTimer"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tma"></h5>
                         </div>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <span class="description-text">Tempo Médio em Fila</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.tmf | formatTimer"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tmf"></h5>
                         </div>
                     </div>
                 </div>
@@ -273,8 +273,8 @@
                                         <td>{{c.atendido | number}}</td>
                                         <td>{{c.abandonado | number}}</td>
                                         <td>{{c.abandonado / c.chamada | percentage:1}}</td>
-                                        <td>{{c.tma | formatTimer}}</td>
-                                        <td>{{c.tmf | formatTimer}}</td>
+                                        <td>{{c.tma}}</td>
+                                        <td>{{c.tmf}}</td>
                                     </tr>
 
                                 </tbody>
@@ -296,6 +296,16 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="dashFiltros.ns" style="color:black" ng-change="carregarGrafico()">
+                                <option value="ns10">NS 10s</option>
+                                <option value="ns20">NS 20s</option>
+                                <option value="ns30">NS 30s</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
@@ -305,6 +315,7 @@
                 </div>
             </div>
         </div>
+
 
         <!--FINALIZAÇÕES OCORRENCIA DISCADOR-->
         <div class="row margin-bottom">
@@ -332,7 +343,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
+                        <div class="card-header-button" ng-click="extrair('Table5')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -352,7 +363,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -382,8 +393,8 @@
                                         <td>{{dia.atendido | number}}</td>
                                         <td>{{dia.abandonado | number}}</td>
                                         <td>{{dia.abandonado / dia.chamada | percentage:1}}</td>
-                                        <td>{{dia.tma | formatTimer}}</td>
-                                        <td>{{dia.tmf | formatTimer}}</td>
+                                        <td>{{dia.tma}}</td>
+                                        <td>{{dia.tmf}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -395,8 +406,8 @@
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.abandonado | number}}</th>
                                         <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.tma | formatTimer}}</th>
-                                        <th>{{dashboard.resumo.tmf | formatTimer}}</th>
+                                        <th>{{dashboard.resumo.tma}}</th>
+                                        <th>{{dashboard.resumo.tmf}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -433,6 +444,10 @@
 
         };
 
+        $scope.dashFiltros = {
+            ns: 'ns20'
+        }
+
         // carregar os filtros
         $http({
             method: 'GET',
@@ -461,19 +476,21 @@
                 $scope.dashboard.diadia = r.data.Table3;
                 $scope.dashboard.segmentos = r.data.Table4.map(obj => obj.segmento);
 
-                $scope.dashboard.graficohora = [
-                                    { name: 'atendido', type: 'column', data: r.data.Table1.map(obj => obj.atendido) },
-                                    { name: 'abandonado', type: 'column', data: r.data.Table1.map(obj => obj.abandonado) },
-                                    { name: 'NS (20s)', type: 'spline', yAxis: 1, data: r.data.Table1.map(obj => (obj.sla_ok * 100 / obj.chamada).toFixed(1) / 1) },
-                ];
-
                 $scope.dashboard.fila = r.data.Table2;
                 $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: (obj.atendido * 100 / obj.total).toFixed(1) / 1 })) }];
                 $scope.dashboard.tempos = r.data.Table5.map(obj => obj.tempo_fila);
                 $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table5.map(obj => obj.chamada) }]
 
-
+                $scope.carregarGrafico();
             });
+        }
+
+        $scope.carregarGrafico = function () {
+            $scope.dashboard.graficohora = [
+                { name: 'atendido', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.atendido) },
+                { name: 'abandonado', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.abandonado) },
+                { name: $scope.dashFiltros.ns, type: 'spline', yAxis: 1, data: $scope.dashboard.dados.Table1.map(obj => (obj[$scope.dashFiltros.ns] * 100 / obj.chamada).toFixed(1) / 1) },
+            ];
         }
 
         $scope.carregarDashboard();
