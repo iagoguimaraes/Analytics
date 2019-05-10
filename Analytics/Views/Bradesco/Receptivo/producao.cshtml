@@ -191,9 +191,9 @@
                                         <td>{{dia.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{dia.negociacao | number}}</td>
                                         <td>{{dia.vlr_negociacao | currency: 'R$ '}}</td>
-                                        <td>{{dia.contato / hora.discado | percentage:1}}</td>
-                                        <td>{{dia.cpc / hora.contato | percentage:1}}</td>
-                                        <td>{{dia.promessa / hora.cpca | percentage:1}}</td>
+                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                        <td>{{dia.cpc / dia.contato | percentage:1}}</td>
+                                        <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -263,7 +263,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table8')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -332,9 +332,6 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
                         <small class="pull-right">
                             <select ng-model="graficoPizza.indicador" ng-change="carregarGraficoPizza()">
                                 <option value="contato">Contato</option>
@@ -360,7 +357,7 @@
         </div>
 
 
-        <!--ANALISE POR SUPERVISOR \ EQUIPE-->
+        <!--ANALISE POR SUPERVISOR \ AGENTE-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -369,7 +366,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -440,7 +437,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
+                        <div class="card-header-button" ng-click="extrair('Table6')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -519,7 +516,7 @@
 
                 $scope.dashboard.resumofila = r.data.Table7[0];
                 $scope.dashboard.fila = r.data.Table8;
-                console.log($scope.dashboard.resumofila);
+               
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoPizza($scope.graficoPizza.indicador);

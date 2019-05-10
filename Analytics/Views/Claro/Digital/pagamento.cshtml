@@ -146,7 +146,7 @@
                                         <th>Origem / Fase</th>
                                         <th>R$ Total </th>
                                         <th>Qtd Total</th>
-                                        <th>R$ Media</th>
+                                        <th>R$ Media Diaria</th>
                                         <th>R$ Projeção Total</th>
                                         <th>R$ Comissão</th>
                                         <th>R$ Comissão Projeção</th>
@@ -178,6 +178,17 @@
                                     </tr>
 
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumomovel.valor_total | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumomovel.quantidade | number}}</th>
+                                        <th>{{dashboard.resumomovel.media |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumomovel.valor_projecao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumomovel.comissao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumomovel.comissao_projecao | currency: 'R$ '}}</th>
+                                    </tr>
+                                </tfoot>
 
                             </table>
                         </div>
@@ -221,7 +232,17 @@
                                     </tr>
 
                                 </tbody>
-
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumotv.valor_total | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumotv.quantidade | number}}</th>
+                                        <th>{{dashboard.resumotv.media |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumotv.valor_projecao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumotv.comissao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumotv.comissao_projecao | currency: 'R$ '}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -233,10 +254,20 @@
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Direto e Indireto </span>
+                        <span class="card-header-title">Direto e Indireto por {{graficoBarra.indicador}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoBarra.indicador" ng-change="carregarGraficoBarra()">
+                                <option value="CONSOLIDADO">Consolidado</option>
+                                <option value="FAIXA 1">Fase 1</option>
+                                <option value="FAIXA 2">Fase 2</option>
+                                <option value="FAIXA 3">Fase 3</option>
+                                <option value="FAIXA 4">Fase 4</option>
+                                <option value="PRÉ-PDD">PRE PDD</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart class="margin-bottom" series="dashboard.grafico" axis-Categories="dashboard.dia" type="column"
@@ -260,6 +291,7 @@
                             </div>
                             <small class="pull-right">
                                 <select ng-model="graficoPizza.indicador" ng-change="carregarGrafico()">
+                                    <option value="CONSOLIDADO">Consolidado</option>
                                     <option value="FAIXA 1">Fase 1</option>
                                     <option value="FAIXA 2">Fase 2</option>
                                     <option value="FAIXA 3">Fase 3</option>
@@ -298,11 +330,11 @@
                             <small class="pull-right">
                                 <label class="btn btn-secondary active">
                                     <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
-                                    Quantidade
+                                    Financeiro
                                 </label>
                                 <label class="btn btn-secondary active">
                                     <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
-                                    Financeiro
+                                    Quantidade
                                 </label>
 
                             </small>
@@ -398,7 +430,8 @@
         };
 
         $scope.graficoHora = { exibir: 'false', tabela: 'false' };
-        $scope.graficoPizza = {indicador:'FAIXA 1'}
+        $scope.graficoPizza = { indicador: 'CONSOLIDADO' }
+        $scope.graficoBarra = { indicador: 'CONSOLIDADO' }
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -433,20 +466,26 @@
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
+
                 $scope.dashboard.diadia = r.data.Table1;
                 $scope.dashboard.diadiaFinanceiro = r.data.Table2;
+
                 $scope.dashboard.fase = r.data.Table3;
+
                 $scope.dashboard.movel = r.data.Table4;
-                $scope.dashboard.tv = r.data.Table5;
+                $scope.dashboard.resumomovel = r.data.Table5[0];
+                console.log($scope.dashboard.resumomovel);
+                $scope.dashboard.tv = r.data.Table6;
+                $scope.dashboard.resumotv = r.data.Table7[0];
 
-                $scope.dashboard.dia = r.data.Table6.map(obj => obj.data);
+                $scope.dashboard.graficobarra = r.data.Table8;
 
-                $scope.dashboard.grafico = [
-                { name: 'Direto', type: 'column', color: 'rgba(124, 197, 230, 1)', data: r.data.Table6.map(obj => obj.valor_direto) },
-                { name: 'Indireto', type: 'column', color: 'rgb(1, 70, 145)', data: r.data.Table6.map(obj => obj.valor_indireto) },
-                ];
+                $scope.dashboard.dia = r.data.Table8.map(obj => obj.data);
+
+
 
                 $scope.carregarGrafico($scope.graficoPizza.indicador);
+                $scope.carregarGraficoBarra($scope.graficoBarra.indicador);
 
 
             });
@@ -455,10 +494,42 @@
         // carrega o grafico de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
             
-            let dados = alasql('select ds_tipo_pagamento, sum(valor) valor, sum(quantidade) quantidade from ? where ds_fase =  ? group by ds_tipo_pagamento ', [$scope.dashboard.fase, $scope.graficoPizza.indicador]);
+            let dados;
+
+            if ($scope.graficoPizza.indicador == "CONSOLIDADO") {
+
+                dados = alasql('select ds_tipo_pagamento, sum(valor) valor, sum(quantidade) quantidade from ? group by ds_tipo_pagamento ', [$scope.dashboard.fase]);
+            } else {
+                dados = alasql('select ds_tipo_pagamento, sum(valor) valor, sum(quantidade) quantidade from ? where ds_fase =  ? group by ds_tipo_pagamento ', [$scope.dashboard.fase, $scope.graficoPizza.indicador]);
+            }
+
 
             $scope.dashboard.tipopagamentoFinanceiro = [{ name: 'Quantidade', innerSize: '10%', data: dados.map(obj => ({ name: obj.ds_tipo_pagamento, y: obj.valor })) }];
             $scope.dashboard.tipopagamentoQuantidade = [{ name: 'Quantidade', innerSize: '10%', data: dados.map(obj => ({ name: obj.ds_tipo_pagamento, y: obj.quantidade })) }];
+
+        }
+
+
+        // carrega o grafico (barrra) de acordo com o indicador escolhido
+        $scope.carregarGraficoBarra = function () {
+
+            let dados;
+
+            if ($scope.graficoBarra.indicador == "CONSOLIDADO") {
+
+                dados = alasql('select data, sum(valor_direto) valor_direto, sum(valor_indireto) valor_indireto from ?  group by data ', [$scope.dashboard.graficobarra]);
+
+            } else {
+
+                dados = alasql('select data, sum(valor_direto) valor_direto, sum(valor_indireto) valor_indireto from ? where ds_fase =  ? group by data ', [$scope.dashboard.graficobarra, $scope.graficoBarra.indicador]);
+            }
+
+            
+
+            $scope.dashboard.grafico = [
+                { name: 'Direto', type: 'column', color: 'rgba(124, 197, 230, 1)', data: dados.map(obj => obj.valor_direto) },
+                { name: 'Indireto', type: 'column', color: 'rgb(1, 70, 145)', data: dados.map(obj => obj.valor_indireto) },
+            ];
 
         }
 
