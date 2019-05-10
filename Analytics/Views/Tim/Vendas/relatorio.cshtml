@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-relatorio">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Relatório</div>
+    </header>
+
+    <!--OPECOES DO RELATORIO-->
+    <div class="col-xs-12 margin-bottom">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-header-title">Extrair Relatório</span>
+            </div>
+            <div class="card-body">
+
+                <!--LAYOUT-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Relatório</label>
+                    <select ng-model="filtros.relatorio">
+                        <option value="venda">Venda</option>
+                        <option value="bko">Backoffice</option>
+                        <option value="ativacao">Ativação</option>
+                    </select>
+                    <i class="fa fa-info-circle" data-toggle="modal" data-target="#modal" style="cursor:pointer;"></i>
+                </div>
+
+                <!--DATA INCIAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Inicial</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                    </div>
+                </div>
+
+                <!--DATA FINAL-->
+                <div class="form-group">
+                    <label class="control-sidebar-subheading">Data Final</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                    </div>
+                </div>
+
+                <!--BOTÃO-->
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="Extrair()">Extrair</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - INFORMACOES DOS RELATORIOS-->
+    <div class="modal fade" id="modal" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Informações/Conceitos</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <h3>Relatório Venda:</h3>
+                            <p>Irá buscar  as informações das vendas realizadas no período filtrado.</p>
+
+                            <h3>Relatório Backoffice:</h3>
+                            <p>Irá buscar as informações das vendas que tiveram o seu status alterado no período filtrado.</p>
+
+                            <h3>Relatório Ativação:</h3>
+                            <p>Irá buscar as informações das vendas que tiveram ativação com tráfego no período filtrado. </p>
+                            <p>(obs: apenas a primeira ativação com tráfego tabulada na venda é considerada)</p>
+
+                        </div>                      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-tim-relatorio', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            relatorio: 'venda',
+        }
+
+        $scope.Extrair = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/relatorio/" + $scope.filtros.relatorio,
+                data: $scope.filtros,
+            }).then(function success(r) {
+                alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [r.data.Table]);
+            });
+        }
+    });
+
+</script>
