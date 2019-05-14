@@ -82,14 +82,27 @@
             </div>
 
             <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box" style="color:white; background-color:#004592;">                    
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.atendido | number"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.atendido / dashboard.resumo.chamada | percentage: 1"></h4>
+                            <p>Atendidas</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.atendido | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.atendido / dashboard.resumo.chamada | percentage: 1"></h4>
-                        <p>Atendidas</p>
+                        <h3 ng-bind="dashboard.resumo.transferencia | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.transferencia / dashboard.resumo.atendido | percentage: 1"></h4>
+                        <p>Tranferidas</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-headphones"></i>
+                        <i class="fa fa-check-square-o"></i>
                     </div>
                 </div>
             </div>
@@ -132,19 +145,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-12 col-md-6 col-lg-2">
-                <div class="small-box" style="color:white; background-color:#004592;">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.abandonado | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage: 1"></h4>
-                        <p>Abandono</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-usd"></i>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!--ANALISE POR DIA-->
@@ -168,6 +168,7 @@
                                         <th>Data</th>
                                         <th>Chamada</th>
                                         <th>Atendido</th>
+                                        <th>Transferido</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
@@ -183,6 +184,7 @@
                                         <td>{{dia.data}}</td>
                                         <td>{{dia.chamada | number}}</td>
                                         <td>{{dia.atendido | number}}</td>
+                                        <td>{{dia.transferencia | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
@@ -198,6 +200,7 @@
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
+                                        <th>{{dashboard.resumo.transferencia | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
@@ -264,58 +267,20 @@
                     </div>
                 </div>
             </div>
-            <!--POR ESTADO-->
+            <!--TRANSFERIDOS-->
             <div class="col-xs-12 col-md-6">
                 <div class="card">
-                    <div id="info" class="card-header">
-                        <span class="card-header-title">Promessa por estado</span>
+                    <div class="card-header">
+                        <span class="card-header-title">Ligações Transferidas</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right">
-                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                <option value="promessas">Promessa</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="atendido">Atendido</option>
-                                <option value="abandonado">Abandono</option>
-                            </select>
-                        </small>
                     </div>
-
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-blue-active">
-                                    <div class="inner">
-                                        <p><h5>Chamadas - {{dashboard.mapa.estado}}</h5></p>
-                                        <h4 ng-bind="dashboard.mapa.chamada | number"></h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-green-active">
-                                    <div class="inner">
-                                        <p><h5>CPC - {{dashboard.mapa.estado}}</h5></p>
-                                        <h4 ng-bind="dashboard.mapa.cpc | number"></h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-yellow-active">
-                                    <div class="inner">
-                                        <p><h5>Promessas - {{dashboard.mapa.estado}}</h5></p>
-                                        <h4 ng-bind="dashboard.mapa.promessas | number"></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <mapa-brasil style="height: 300px" width="100%" dados="dashboard.estados" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        <high-chart series="dashboard.transferidos" axis-Categories="dashboard.ocorrenciaTransferido" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
             </div>
@@ -356,12 +321,15 @@
             }).then(function success(r) {
                 $scope.dashboard = r;
                 $scope.dashboard.dados = r.data;
+                let data = r.data;
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.diadia = r.data.Table1;
                 $scope.dashboard.ocorrencia = r.data.Table2;
+                $scope.dashboard.ocorrenciaTransferido = data.Table3.map(obj => obj.status_negocio);
 
-                $scope.carregarMapa();
+                $scope.dashboard.transferidos = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.quantidade)), color: '#b90404' }];
+
                 $scope.carregarGrafico();
             });
         }
@@ -390,25 +358,6 @@
 
         }
 
-
-        //mudar estado
-        $scope.mudarEstado = function (id) {
-            
-            let dados = alasql('select "BR-" + uf id, ' + $scope.mapa.indicador + ' [value], uf, estado, promessas, cpca, cpc, atendido, abandonado, chamada  from ? where id like ("%' + id + '%") order by [value] desc', [$scope.dashboard.dados.Table3])[0];
-            $scope.dashboard.mapa = dados;
-        }
-
-        // carrega o mapa de acordo com o indicador escolhido
-        $scope.carregarMapa = function () {
-            let dados = $scope.dashboard.dados.Table3;
-
-            $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: obj[$scope.mapa.indicador] }));
-
-            $scope.dashboard.maiorUF = alasql('select id from ? order by [value] desc', [$scope.dashboard.estados])[0];
-
-            $scope.mudarEstado($scope.dashboard.maiorUF);
-
-        }
         // extrair dados para excel
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
