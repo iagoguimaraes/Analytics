@@ -107,5 +107,142 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("inserir/operadora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage InserirOperadora(FormDataCollection form)
+        {
+            try
+            {
+                string operadora = form["operadora"].ToString();
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("operadora", operadora);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_dimOperadora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("inserir/carteira")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage InserirCarteira(FormDataCollection form)
+        {
+            try
+            {
+                string carteira = form["carteira"].ToString();
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_dimCarteira", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("inserir/gerente")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage InserirGerente(FormDataCollection form)
+        {
+            try
+            {
+                string gerente = form["gerente"].ToString();
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("gerente", gerente);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_dimGerente", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("atualizar/rota")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage AtualizarRota(FormDataCollection form)
+        {
+            try
+            {
+                int id_rota = Convert.ToInt32(form["id_rota"]);
+                int id_operadora = Convert.ToInt32(form["id_operadora"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_rota", id_rota);
+                    parametros.Add("id_operadora", id_operadora);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_dimRota", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("atualizar/fila")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage AtualizarFila(FormDataCollection form)
+        {
+            try
+            {
+                int id_fila = Convert.ToInt32(form["id_fila"]);
+                int id_carteira = Convert.ToInt32(form["id_carteira"]);
+                int id_gerente = Convert.ToInt32(form["id_gerente"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_fila", id_fila);
+                    parametros.Add("id_carteira", id_carteira);
+                    parametros.Add("id_gerente", id_gerente);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_dimFila", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
