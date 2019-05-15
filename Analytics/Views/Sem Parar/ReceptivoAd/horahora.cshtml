@@ -1,0 +1,307 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-semparar-digital-receptivo">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Hora Hora - Receptivo AD</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="box box-widget widget-user">
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Chamadas</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.chamada | number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Atendidas</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.atendido | number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Abandonadas</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.abandonado | number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Tempo Médio Atendimento</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tma"></h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="background-color: black; color: white">
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Transferidas</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.transferencia| number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">CPC</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc| number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">CPCA</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca| number"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <span class="description-text">Promessa</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa| number"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--POR HORA GRAFICO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart class="margin-bottom" series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
+                                    plot-Options-Column-Stacking="normal" plot-Options-spline-Data-Label="true" height="410"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--POR HORA TABELA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Agente</th>
+                                        <th>Chamada</th>
+                                        <th>Atendido</th>
+                                        <th>Transferido</th>
+                                        <th>Abandonada</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>% Abandono</th>
+                                        <th>Tempo Médio Atendimento</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.agente | number}}</td>
+                                        <td>{{hora.chamada | number}}</td>
+                                        <td>{{hora.atendido | number}}</td>
+                                        <td>{{hora.transferencia | number}}</td>
+                                        <td>{{hora.abandonado | number}}</td>
+                                        <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.cpca | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.abandonado / hora.chamada | percentage:1}}</td>
+                                        <td>{{hora.tma}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.agente | number}}</th>
+                                        <th>{{dashboard.resumo.chamada | number}}</th>
+                                        <th>{{dashboard.resumo.atendido | number}}</th>
+                                        <th>{{dashboard.resumo.transferencia | number}}</th>
+                                        <th>{{dashboard.resumo.abandonado | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.tma}}</th>
+                                        <th>{{dashboard.resumo.tmf}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--OCORRENCIAS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Ocorrências</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.ocorrencia" order="[[2,'desc']]" scroll-collapse="true" scroll-y="285px"></d-table>
+                    </div>
+                </div>
+            </div>
+            <!--TRANSFERIDOS-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Ligações Transferidas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.transferidos" axis-Categories="dashboard.ocorrenciaTransferido" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-semparar-digital-receptivo', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd")
+        };
+
+        $scope.dashboard = {};
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/semparar/dashboard/receptivoad/horahora",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard = r;
+                $scope.dashboard.dados = r.data;
+                let data = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.ocorrencia = r.data.Table2;
+
+                $scope.dashboard.ocorrenciaTransferido = data.Table3.map(obj => obj.status_negocio);
+
+                $scope.dashboard.transferidos = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.quantidade)), color: '#b90404' }];
+
+                $scope.carregarGrafico();
+            });
+        }
+
+        $scope.carregarGrafico = function () {
+            $scope.dashboard.graficohora = [
+                { name: 'Atendidas', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.atendido) },
+                { name: 'Transferidas', type: 'area', color: 'rgb(1, 70, 145)', data: $scope.dashboard.dados.Table1.map(obj => obj.transferencia) },
+                { name: 'Abandonadas', type: 'spline', color: 'rgba(232, 2, 39, 1)', data: $scope.dashboard.dados.Table1.map(obj => obj.abandonado) }];
+        }
+
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>

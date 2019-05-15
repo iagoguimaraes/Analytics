@@ -3,14 +3,14 @@
 }
 
 
-<div ng-controller="ctrl-claro-pagamento">
+<div ng-controller="ctrl-netdigital-pagamento">
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Pagamento</div>
+            <div class="page-name">Pagamentos Digital</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -51,12 +51,6 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
-                        </div>
-
-                        <!--SEGMENTO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Segmento</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento" style="width:100%"></select2>
                         </div>
 
                         <!--FASE-->
@@ -125,22 +119,11 @@
                         <div class="card-header-button" ng-click="extrair('Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right">
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="false" checked="checked" />
-                                Movel
-                            </label>
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="true" />
-                                Tv
-                            </label>
-
-                        </small>
                     </div>
                     <div class="card-body">
 
-                        <div class="table-responsive" ng-show="graficoHora.tabela == 'false'">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.movel">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.netorigem">
                                 <thead>
                                     <tr>
                                         <th>Origem / Fase</th>
@@ -152,7 +135,7 @@
                                         <th>R$ Comissão Projeção</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.movel | groupBy: 'ds_origem_pag'">
+                                <tbody ng-repeat="e in dashboard.netorigem | groupBy: 'ds_origem_pag'">
 
                                     <tr class="text-bold">
                                         <td>
@@ -181,68 +164,15 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumomovel.valor_total | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumomovel.quantidade | number}}</th>
-                                        <th>{{dashboard.resumomovel.media |  currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumomovel.valor_projecao | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumomovel.comissao | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumomovel.comissao_projecao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumonetorigem.valor_total | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumonetorigem.quantidade | number}}</th>
+                                        <th>{{dashboard.resumonetorigem.media |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumonetorigem.valor_projecao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumonetorigem.comissao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumonetorigem.comissao_projecao | currency: 'R$ '}}</th>
                                     </tr>
                                 </tfoot>
 
-                            </table>
-                        </div>
-
-                        <div class="table-responsive" ng-show="graficoHora.tabela == 'true'">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.tv">
-                                <thead>
-                                    <tr>
-                                        <th>Origem / Fase</th>
-                                        <th>R$ Total </th>
-                                        <th>Qtd Total</th>
-                                        <th>R$ Media</th>
-                                        <th>R$ Projeção Total</th>
-                                        <th>R$ Comissão</th>
-                                        <th>R$ Comissão Projeção</th>
-                                    </tr>
-                                </thead>
-                                <tbody ng-repeat="e in dashboard.tv | groupBy: 'ds_origem_pag'">
-
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_origem_pag}}
-                                        </td>
-                                        <td>{{e | sumByColumn: 'valor_total'| currency:'R$ '}}</td>
-                                        <td>{{e | sumByColumn: 'quantidade'| number}}</td>
-                                        <td>{{e | sumByColumn: 'media'| currency:'R$ '}}</td>
-                                        <td>{{e | sumByColumn: 'valor_projecao'| currency:'R$ '}}</td>
-                                        <td>{{e | sumByColumn: 'comissao'| currency: 'R$ '}}</td>
-                                        <td>{{e | sumByColumn: 'comissao_projecao'| currency: 'R$ '}}</td>
-                                    </tr>
-
-                                    <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_fase}}</td>
-                                        <td>{{c.valor_total | currency: 'R$ '}}</td>
-                                        <td>{{c.quantidade | number}}</td>
-                                        <td>{{c.media | currency: 'R$ '}}</td>
-                                        <td>{{c.valor_projecao | currency: 'R$ '}}</td>
-                                        <td>{{c.comissao| currency: 'R$ '}}</td>
-                                        <td>{{c.comissao_projecao| currency: 'R$ '}}</td>
-                                    </tr>
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>{{dashboard.resumotv.valor_total | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumotv.quantidade | number}}</th>
-                                        <th>{{dashboard.resumotv.media |  currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumotv.valor_projecao | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumotv.comissao | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumotv.comissao_projecao | currency: 'R$ '}}</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -277,131 +207,131 @@
             </div>
         </div>
 
-            <div class="row margin-bottom">
-                <!--INSUCESSO RECUSA-->
-                <div class="col-xs-12 col-md-12 margin-bottom">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Canais Recebimento {{graficoPizza.indicador}} </span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                            <small class="pull-right">
-                                <select ng-model="graficoPizza.indicador" ng-change="carregarGrafico()">
-                                    <option value="CONSOLIDADO">Consolidado</option>
-                                    <option value="FAIXA 1">Fase 1</option>
-                                    <option value="FAIXA 2">Fase 2</option>
-                                    <option value="FAIXA 3">Fase 3</option>
-                                    <option value="FAIXA 4">Fase 4</option>
-                                    <option value="PRÉ-PDD">PRE PDD</option>
-                                </select>
-                            </small>
+        <div class="row margin-bottom">
+            <!--INSUCESSO RECUSA-->
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Canais Recebimento {{graficoPizza.indicador}} </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6 margin-bottom">
-                                    <high-chart series="dashboard.tipopagamentoFinanceiro" type="pie" title-Text="Financeiro" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                                </div>
-                                <div class="col-xs-12 col-md-6 margin-bottom">
-                                    <high-chart series="dashboard.tipopagamentoQuantidade" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                                </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoPizza.indicador" ng-change="carregarGrafico()">
+                                <option value="CONSOLIDADO">Consolidado</option>
+                                <option value="FAIXA 1">Fase 1</option>
+                                <option value="FAIXA 2">Fase 2</option>
+                                <option value="FAIXA 3">Fase 3</option>
+                                <option value="FAIXA 4">Fase 4</option>
+                                <option value="PRÉ-PDD">PRE PDD</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                <high-chart series="dashboard.tipopagamentoFinanceiro" type="pie" title-Text="Financeiro" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            </div>
+                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                <high-chart series="dashboard.tipopagamentoQuantidade" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <!--TABELA DIA DIA-->
-            <div class="row margin-bottom">
-                <div class="col-xs-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Análise por Dia</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                            <small class="pull-right">
-                                <label class="btn btn-secondary active">
-                                    <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
-                                    Financeiro
-                                </label>
-                                <label class="btn btn-secondary active">
-                                    <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
-                                    Quantidade
-                                </label>
-
-                            </small>
-                        </div>
-                        <div class="card-body">
-
-                            <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
-                                    <thead>
-                                        <tr>
-                                            <th>Dia</th>
-                                            <th>Fase 1</th>
-                                            <th>Fase 2</th>
-                                            <th>Fase 3</th>
-                                            <th>Fase 4</th>
-                                            <th>Pre PDD</th>
-                                            <th>Total Financeiro</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody ng-repeat="e in dashboard.diadia | groupBy: 'data'">
-
-                                        <tr class="text">
-                                            <td>  {{e[0].data}} </td>
-                                            <td>{{e | sumByColumn: 'fase1'| currency:'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'fase2'| currency:'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'fase3'| currency:'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'fase4'| currency:'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'predd'| currency:'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'valor_total'| currency:'R$ '}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="table-responsive" ng-show="graficoHora.exibir == 'true'">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadiaFinanceiro">
-                                    <thead>
-                                        <tr>
-                                            <th>Dia</th>
-                                            <th>Fase 1</th>
-                                            <th>Fase 2</th>
-                                            <th>Fase 3</th>
-                                            <th>Fase 4</th>
-                                            <th>Pre PDD</th>
-                                            <th>Total Quantidade</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody ng-repeat="e in dashboard.diadiaFinanceiro | groupBy: 'data'">
-                                        <tr class="text">
-                                            <td>{{e[0].data}} </td>
-                                            <td>{{e | sumByColumn: 'fase1'| number }}</td>
-                                            <td>{{e | sumByColumn: 'fase2'| number }}</td>
-                                            <td>{{e | sumByColumn: 'fase3'| number }}</td>
-                                            <td>{{e | sumByColumn: 'fase4'| number }}</td>
-                                            <td>{{e | sumByColumn: 'predd'| number }}</td>
-                                            <td>{{e | sumByColumn: 'qtd_total'| number}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
+
+
+        <!--TABELA DIA DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                Financeiro
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                Quantidade
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Fase 1</th>
+                                        <th>Fase 2</th>
+                                        <th>Fase 3</th>
+                                        <th>Fase 4</th>
+                                        <th>Pre PDD</th>
+                                        <th>Total Financeiro</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.diadia | groupBy: 'data'">
+
+                                    <tr class="text">
+                                        <td>  {{e[0].data}} </td>
+                                        <td>{{e | sumByColumn: 'fase1'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'fase2'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'fase3'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'fase4'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'predd'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'valor_total'| currency:'R$ '}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadiaFinanceiro">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Fase 1</th>
+                                        <th>Fase 2</th>
+                                        <th>Fase 3</th>
+                                        <th>Fase 4</th>
+                                        <th>Pre PDD</th>
+                                        <th>Total Quantidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.diadiaFinanceiro | groupBy: 'data'">
+                                    <tr class="text">
+                                        <td>{{e[0].data}} </td>
+                                        <td>{{e | sumByColumn: 'fase1'| number }}</td>
+                                        <td>{{e | sumByColumn: 'fase2'| number }}</td>
+                                        <td>{{e | sumByColumn: 'fase3'| number }}</td>
+                                        <td>{{e | sumByColumn: 'fase4'| number }}</td>
+                                        <td>{{e | sumByColumn: 'predd'| number }}</td>
+                                        <td>{{e | sumByColumn: 'qtd_total'| number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 
 
 
@@ -412,9 +342,9 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-claro-pagamento', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-netdigital-pagamento', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Pagamento';
-        dadosPagina.descricao = 'Claro'
+        dadosPagina.descricao = 'Net'
 
         // filtros iniciais
         let newdate = new Date();
@@ -423,7 +353,6 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            segmento: '',
             fase: '',
             origem: '',
             tipo: ''
@@ -432,14 +361,14 @@
         $scope.graficoHora = { exibir: 'false', tabela: 'false' };
         $scope.graficoPizza = { indicador: 'CONSOLIDADO' }
         $scope.graficoBarra = { indicador: 'CONSOLIDADO' }
-        //$scope.graficoHora = { tabela: 'false'}
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
 
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/claro/dashboard/filtros",
+            url: "/api/net/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
@@ -455,7 +384,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/claro/dashboard/digital/pagamento",
+                url: "/api/net/dashboard/digital/pagamento",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
@@ -472,15 +401,12 @@
 
                 $scope.dashboard.fase = r.data.Table3;
 
-                $scope.dashboard.movel = r.data.Table4;
-                $scope.dashboard.resumomovel = r.data.Table5[0];
-        
-                $scope.dashboard.tv = r.data.Table6;
-                $scope.dashboard.resumotv = r.data.Table7[0];
+                $scope.dashboard.netorigem = r.data.Table4;
+                $scope.dashboard.resumonetorigem = r.data.Table5[0];
+   
 
-                $scope.dashboard.graficobarra = r.data.Table8;
-
-                $scope.dashboard.dia = r.data.Table9.map(obj => obj.diaDoMesNome);
+                $scope.dashboard.graficobarra = r.data.Table6;
+                $scope.dashboard.dia = r.data.Table7.map(obj => obj.diaDoMesNome);
 
 
 
@@ -493,7 +419,7 @@
 
         // carrega o grafico de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
-            
+
             let dados;
 
             if ($scope.graficoPizza.indicador == "CONSOLIDADO") {
@@ -504,7 +430,7 @@
             }
 
 
-            $scope.dashboard.tipopagamentoFinanceiro = [{ name: 'Quantidade', innerSize: '10%', data: dados.map(obj => ({ name: obj.ds_tipo_pagamento, y: obj.valor.toFixed(2) / 1 })) }];
+            $scope.dashboard.tipopagamentoFinanceiro = [{ name: 'Quantidade', innerSize: '10%', data: dados.map(obj => ({ name: obj.ds_tipo_pagamento, y: obj.valor.toFixed(2)/1 })) }];
             $scope.dashboard.tipopagamentoQuantidade = [{ name: 'Quantidade', innerSize: '10%', data: dados.map(obj => ({ name: obj.ds_tipo_pagamento, y: obj.quantidade })) }];
 
         }
@@ -524,11 +450,11 @@
                 dados = alasql('select data, sum(valor_direto) valor_direto, sum(valor_indireto) valor_indireto from ? where ds_fase =  ? group by data ', [$scope.dashboard.graficobarra, $scope.graficoBarra.indicador]);
             }
 
-            
+
 
             $scope.dashboard.grafico = [
-                { name: 'Direto', type: 'column', color: 'rgba(124, 197, 230, 1)', data: dados.map(obj => (obj.valor_direto).toFixed(2)/1) },
-                { name: 'Indireto', type: 'column', color: 'rgb(1, 70, 145)', data: dados.map(obj => (obj.valor_indireto).toFixed(2)/1) },
+                { name: 'Direto', type: 'column', color: 'rgba(124, 197, 230, 1)', data: dados.map(obj => obj.valor_direto.toFixed(2) / 1) },
+                { name: 'Indireto', type: 'column', color: 'rgb(1, 70, 145)', data: dados.map(obj => obj.valor_indireto.toFixed(2) / 1) },
             ];
 
         }
