@@ -172,9 +172,9 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Abandonado</th>
+                                        <th>Sem Interação</th>
                                         <th>Tx Atend.</th>
-                                        <th>Tx Aband</th>
+                                        <th>% Sem inter.</th>
                                         <th>Tx Loc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -188,9 +188,9 @@
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
-                                        <td>{{dia.abandonado | number}}</td>
+                                        <td>{{dia.sem_interacao | number}}</td>
                                         <td>{{dia.atendido / dia.chamada | percentage:1}}</td>
-                                        <td>{{dia.abandonado / dia.chamada | percentage:1}}</td>
+                                        <td>{{dia.sem_interacao / dia.chamada | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.atendido | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
@@ -204,9 +204,9 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.abandonado | number}}</th>
+                                        <th>{{dashboard.resumo.sem_interacao | number}}</th>
                                         <th>{{dashboard.resumo.atendido / dashboard.resumo.chamada | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.sem_interacao / dashboard.resumo.chamada | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.chamada | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
@@ -230,7 +230,7 @@
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="txatend">Tx Atend</option>
-                                <option value="txaband">Tx Aband</option>
+                                <option value="semint">Sem Interacao</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="chamada">Chamada</option>
@@ -341,16 +341,16 @@
             $scope.dashboard.dias = dados.map(obj => obj.data);
             switch ($scope.grafico.indicador) {
                 case 'txatend':
-                    $scope.dashboard.grafico = [{ name: 'txatend', data: dados.map(obj => (obj.atendido * 100 / obj.chamada).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Tx Atendimento', data: dados.map(obj => (obj.atendido * 100 / obj.chamada).toFixed(1) * 1) }];
                     break;
-                case 'txaband':
-                    $scope.dashboard.grafico = [{ name: 'txaband', data: dados.map(obj => (obj.abandonado * 100 / obj.chamada).toFixed(1) * 1) }];
+                case 'semint':
+                    $scope.dashboard.grafico = [{ name: 'Sem Interação', data: dados.map(obj => (obj.sem_interacao * 100 / obj.chamada).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
-                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.atendido).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Tx Loc', data: dados.map(obj => (obj.cpc * 100 / obj.atendido).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'Conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
