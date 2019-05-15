@@ -83,8 +83,8 @@
                     </div>
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <span class="description-text">Abandonadas</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.abandonado | number"></h5>
+                            <span class="description-text">Sem Interação</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.sem_interacao | number"></h5>
                         </div>
                     </div>
                     <div class="col-sm-3 border-right">
@@ -166,11 +166,11 @@
                                         <th>Chamada</th>
                                         <th>Atendido</th>
                                         <th>Transferido</th>
-                                        <th>Abandonada</th>
+                                        <th>Sem interação</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>% Abandono</th>
+                                        <th>% Sem inter.</th>
                                         <th>Tempo Médio Atendimento</th>
 
                                     </tr>
@@ -182,11 +182,11 @@
                                         <td>{{hora.chamada | number}}</td>
                                         <td>{{hora.atendido | number}}</td>
                                         <td>{{hora.transferencia | number}}</td>
-                                        <td>{{hora.abandonado | number}}</td>
+                                        <td>{{hora.sem_interacao | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.abandonado / hora.chamada | percentage:1}}</td>
+                                        <td>{{hora.sem_interacao / hora.chamada | percentage:1}}</td>
                                         <td>{{hora.tma}}</td>
                                     </tr>
                                 </tbody>
@@ -197,11 +197,11 @@
                                         <th>{{dashboard.resumo.chamada | number}}</th>
                                         <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.transferencia | number}}</th>
-                                        <th>{{dashboard.resumo.abandonado | number}}</th>
+                                        <th>{{dashboard.resumo.sem_interacao | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.sem_interacao / dashboard.resumo.chamada | percentage:1}}</th>
                                         <th>{{dashboard.resumo.tma}}</th>
                                         <th>{{dashboard.resumo.tmf}}</th>
                                     </tr>
@@ -291,7 +291,7 @@
             $scope.dashboard.graficohora = [
                 { name: 'Atendidas', type: 'column', data: $scope.dashboard.dados.Table1.map(obj => obj.atendido) },
                 { name: 'Transferidas', type: 'area', color: 'rgb(1, 70, 145)', data: $scope.dashboard.dados.Table1.map(obj => obj.transferencia) },
-                { name: 'Abandonadas', type: 'spline', color: 'rgba(232, 2, 39, 1)', data: $scope.dashboard.dados.Table1.map(obj => obj.abandonado) }];
+                { name: 'Sem Interação', type: 'spline', color: 'rgba(232, 2, 39, 1)', data: $scope.dashboard.dados.Table1.map(obj => obj.sem_interacao) }];
         }
 
 
