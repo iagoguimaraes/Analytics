@@ -521,6 +521,38 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/eavm/ocupacao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacaoEavm(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao_eavm", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
 
     }
