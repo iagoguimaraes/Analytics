@@ -546,6 +546,42 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("dashboard/humano/acaomassiva")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoAcaoMassiva(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("faixas", faixas);
+                    
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_acaomassiva", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+
         [Route("dashboard/callflex/horahora")]
         [HttpPost]
         [Autorizar]
