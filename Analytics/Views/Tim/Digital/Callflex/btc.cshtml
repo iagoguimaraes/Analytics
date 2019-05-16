@@ -15,7 +15,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashboardFiltros.status == 200">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -51,10 +51,16 @@
                             </div>
                         </div>
 
-                        <!--PRODUTOS-->
+                        <!--PRODUTO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Produtos</label>
-                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashboardFiltros.data.Table"></select2>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                        </div>
+
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -197,6 +203,8 @@
             indicador: 'hitrate'
         }
 
+        $scope.dashFiltros = {};
+
         // filtros iniciais
         let dtini = new Date();
         dtini.setDate(dtini.getDate() - 7);
@@ -204,7 +212,8 @@
         $scope.filtros = {
             dtini: $filter('date')(dtini, "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            produtos: null,
+            produtos: '',
+            faixa: '',
         };
 
         // carrega os filtros e colocar no scope
@@ -213,7 +222,11 @@
                 method: 'GET',
                 url: "/api/tim/dashboard/filtros",
             }).then(function success(r) {
-                $scope.dashboardFiltros = r;
+
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.produtos = r.data.Table;
+                $scope.dashFiltros.faixa = r.data.Table10;
+
             });
         }
 

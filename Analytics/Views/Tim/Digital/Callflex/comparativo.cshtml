@@ -63,6 +63,12 @@
                                         <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
                                     </div>
 
+                                    <!--FAIXA DE ATRASO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                                    </div>
+
                                     <!--HORA INCIAL-->
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Hora Inicio</label>
@@ -160,6 +166,12 @@
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Produto</label>
                                         <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos_2" dados="dashFiltros.produtos"></select2>
+                                    </div>
+
+                                    <!--FAIXA DE ATRASO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa_2" dados="dashFiltros.faixa"></select2>
                                     </div>
 
                                     <!--HORA INCIAL-->
@@ -400,8 +412,11 @@
             horafim_2: '22',
 
             produtos: '',
-
             produtos_2: '',
+
+            faixa: '',
+            faixa_2: '',
+
             visao: 'hora',
         };
         $scope.dashFiltros = {};
@@ -417,6 +432,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.produtos = data.Table;
+            $scope.dashFiltros.faixa = data.Table10;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
