@@ -51,10 +51,16 @@
                             </div>
                         </div>
 
-                        <!--CAMPANHAS-->
+                        <!--PRODUTO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Produtos</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                        </div>
+
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -269,8 +275,11 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            produtos: ''
+            produtos: '',
+            faixa: '',
         };
+
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
@@ -284,6 +293,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.produtos = data.Table;
+            $scope.dashFiltros.faixa = data.Table10;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

@@ -49,6 +49,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -57,6 +58,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("faixa", faixa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -79,6 +81,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -87,6 +90,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("faixa", faixa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -109,6 +113,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -117,6 +122,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("faixa", faixa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -148,8 +154,10 @@ namespace Analytics.Controllers
                 int horafim_2 = Convert.ToInt16(form["horafim_2"]);
 
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
-
                 DataTable produtos_2 = JsonConvert.DeserializeObject<DataTable>(form["produtos_2"]);
+
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable faixa_2 = JsonConvert.DeserializeObject<DataTable>(form["faixa_2"]);
 
 
 
@@ -181,8 +189,10 @@ namespace Analytics.Controllers
                     parametros.Add("horafim_2", horafim_2);
 
                     parametros.Add("produtos", produtos);
-
                     parametros.Add("produtos_2", produtos_2);
+
+                    parametros.Add("faixa", faixa);
+                    parametros.Add("faixa_2", faixa_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -393,6 +403,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -402,6 +413,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
                     parametros.Add("fila", fila);
+                    parametros.Add("faixa", faixa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
