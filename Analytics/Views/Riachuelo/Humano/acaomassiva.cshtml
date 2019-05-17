@@ -1,0 +1,332 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-riachuelo-acaomassiva">
+    <div ng-if="dashboard.status == 200">
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Ação Massiva</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+
+                            <!--DATA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Fim</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                            </div>
+
+                            <!--FAIXA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box">
+                    <img style="width:150px; height:102px" src="~/Content/Images/Riachuelo/riachuelo.png" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.sms | megaNumber"></h3>
+                        <p>SMS</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.email | megaNumber"></h3>
+                        <p>Email</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-envelope-square"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.ura | megaNumber"></h3>
+                        <p>Ura</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mala | megaNumber"></h3>
+                        <p>Mala</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.boleto | megaNumber"></h3>
+                        <p>Mala Whatsapp</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-whatsapp"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th><i class="fa fa-comments"></i> SMS</th>
+                                        <th><i class="fa fa-envelope-square"></i> Email</th>
+                                        <th><i class="fa fa-phone"></i> Ura</th>
+                                        <th><i class="fa fa-envelope"></i> Mala</th>
+                                        <th><i class="fa fa-whatsapp"></i> Mala Whatsapp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data}}</td>
+                                        <td>{{dia.sms | number}}</td>
+                                        <td>{{dia.email | number}}</td>
+                                        <td>{{dia.ura | number}}</td>
+                                        <td>{{dia.mala | number}}</td>
+                                        <td>{{dia.boleto | number}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.sms | number}}</th>
+                                        <th>{{dashboard.resumo.email | number}}</th>
+                                        <th>{{dashboard.resumo.ura | number}}</th>
+                                        <th>{{dashboard.resumo.mala | number}}</th>
+                                        <th>{{dashboard.resumo.boleto | number}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <!--GRAFICO CARTEIRA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="sms">SMS</option>
+                                <option value="email">Email</option>
+                                <option value="ura">Ura</option>
+                                <option value="mala">Mala</option>
+                                <option value="boleto">Mala Whatsapp</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="grafico.carteira" type="bar" axis-Categories="dashboard.carteiras" plot-Options-Bar-Data-Label="true" ></high-chart>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--GRAFICO ATRASO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="sms">SMS</option>
+                                <option value="email">Email</option>
+                                <option value="ura">Ura</option>
+                                <option value="mala">Mala</option>
+                                <option value="boleto">Mala Whatsapp</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="grafico.faixa" type="column" axis-Categories="dashboard.faixas" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-riachuelo-acaomassiva', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Ação Massiva';
+        dadosPagina.descricao = 'Riachuelo'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresas: '',
+            carteiras: '',
+            faixas: '',
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'sms' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresas = data.Table;
+            $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.faixas = r.data.Table6;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/acaomassiva",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.carteira = data.Table2;
+                $scope.dashboard.faixa = data.Table3;
+
+                $scope.dashboard.carteiras = $scope.dashboard.carteira.map(obj => obj.ds_carteira);
+                $scope.dashboard.faixas = $scope.dashboard.faixa.map(obj => obj.ds_faixa_meta);
+
+                $scope.carregarGrafico();
+
+            });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            $scope.grafico.carteira = [{ name: 'Quantidade', innerSize: '60%', color: 'black', data: $scope.dashboard.carteira.map(obj => ({ name: obj.ds_carteira, y: obj[$scope.grafico.indicador] })) }]
+           , $scope.grafico.faixa = [{ name: 'Quantidade', innerSize: '60%', color: 'black',data: $scope.dashboard.faixa.map(obj => ({ name: obj.ds_faixa_meta, y: obj[$scope.grafico.indicador] })) }];
+        }
+
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>

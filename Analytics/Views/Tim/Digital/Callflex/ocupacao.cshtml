@@ -64,6 +64,12 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fila" dados="dashFiltros.fila"></select2>
                         </div>
 
+                        <!--FAIXA DE ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -128,7 +134,6 @@
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3">
-
                 <div class="small-box bg-gray-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.logado | formatTimer "></h3>
@@ -158,10 +163,7 @@
                         <i class="fa fa-hourglass-start"></i>
                     </div>                  
                 </div>
-
-            </div>
-
-           
+            </div>           
         </div>
         <!--ANALISE POR HORA-->
         <div class="row margin-bottom">
@@ -420,6 +422,7 @@
             dtfim: _dt1,
             produtos: '',
             fila: '',
+            faixa: '',
             
         };
         $scope.dashFiltros = {};
@@ -439,6 +442,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.produto = data.Table;
             $scope.dashFiltros.fila = data.Table2;
+            $scope.dashFiltros.faixa = data.Table10;
 
         });
 
