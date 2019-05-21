@@ -106,17 +106,17 @@
 
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     @*<div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                            <span class="description-text">Discado</span>
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                                <span class="description-text">Discado</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.transferido | megaNumber"></h5>
-                            <span class="description-text">Atendido</span>
-                        </div>
-                    </div>*@
+                        <div class="col-sm-2 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.transferido | megaNumber"></h5>
+                                <span class="description-text">Atendido</span>
+                            </div>
+                        </div>*@
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
@@ -145,17 +145,17 @@
 
                 <div class="row margin-bottom" style="background-color:#ff0000; color:white;">
                     @*<div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                            <span class="description-text">Hit Rate</span>
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                                <span class="description-text">Hit Rate</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1"></h5>
-                            <span class="description-text">Tx Tab</span>
-                        </div>
-                    </div>*@
+                        <div class="col-sm-2 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1"></h5>
+                                <span class="description-text">Tx Tab</span>
+                            </div>
+                        </div>*@
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
@@ -240,7 +240,7 @@
                                         <th>% Migração</th>
                                         <th>% Parc</th>
                                         @*<th>Hit Rate</th>
-                                        <th>Tx Atd</th>*@
+                                            <th>Tx Atd</th>*@
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
                                         <th>Conversão</th>
@@ -337,7 +337,7 @@
                                             <th>% Migração</th>
                                             <th>% Parc.</th>
                                             @*<th>Hit Rate</th>
-                                            <th>Tx Atd</th>*@
+                                                <th>Tx Atd</th>*@
                                             <th>Tx Loc</th>
                                             <th>Tx Apv</th>
                                             <th>Conversão</th>
@@ -408,11 +408,11 @@
                             <i class="fa fa-expand"></i>
                         </div>
                         <small class="pull-right">
-                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">                                
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="txtab">Tx Tabulação</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
-                                <option value="conversao">Conversão</option>                                
+                                <option value="conversao">Conversão</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -516,6 +516,307 @@
             </div>
         </div>
 
+
+        <!--GRÁFICO POR ESTADO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Estado</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" ng-model="graficoRegiao.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" ng-model="graficoRegiao.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="table-responsive" ng-show="graficoRegiao.exibir == 'false'">
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Ctt</th>
+                                        <th>Cpc</th>
+                                        <th>Cpca</th>
+                                        <th>Prom</th>
+                                        <th>Pro Car.</th>
+                                        <th>Pro Mig.</th>
+                                        <th>Pro Par.</th>
+                                        <th>% Car.</th>
+                                        <th>% Mig.</th>
+                                        <th>% Par.</th>
+                                        <th>% Conv.</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.estado | groupBy: 'regiao'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].regiao}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa_cart'| number}}</td>
+                                        <td>{{e | sumByColumn: 'migracao'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa_parc'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa_cart':'promessa' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
+                                        @*<td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>*@
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.estado}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.promessa_cart | number}}</td>
+                                        <td>{{p.migracao | number}}</td>
+                                        <td>{{p.promessa_parc | number}}</td>
+                                        <td>{{p.promessa_cart / p.promessa| percentage:1}}</td>
+                                        <td>{{p.migracao / p.promessa| percentage:1}}</td>
+                                        <td>{{p.promessa_parc / p.promessa| percentage:1}}</td>
+                                        <td>{{p.promessa / p.cpca| percentage:1}}</td>
+                                        @*<td>{{p.vlr_promessa | currency: 'R$ '}}</td>*@
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--TABELA POR REGIÃO-->
+                    <div class="table-responsive" ng-show="graficoRegiao.exibir == 'true'">
+                        <div class="card-body">
+                            
+                            <div class="row">
+                                @*<div class="col-xs-12 col-md-2">
+                                        <div class="small-box bg-blue">
+                                            <div class="inner">
+                                                <p><h5>Contato</h5></p>
+                                                <h4 ng-bind="dashboard.mapa.contato| number"></h4>
+                                                <p>{{ dashboard.mapa.estado }}</p>
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-yellow-active">
+                                        <div class="inner">
+                                            <p><h5>CPC</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.cpc| number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.cpc / dashboard.mapa.contato ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-purple-active">
+                                        <div class="inner">
+                                            <p><h5>CPCA</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.cpca | number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.cpca / dashboard.mapa.cpc ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-green-active">
+                                        <div class="inner">
+                                            <p><h5>Promessa</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.promessa | number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.promessa / dashboard.mapa.cpca ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p><h5>Promessa Cartão</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.promessa_cart | number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.promessa_cart / dashboard.mapa.promessa ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-blue">
+                                        <div class="inner">
+                                            <p><h5>Promessa Migração</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.migracao | number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.migracao / dashboard.mapa.promessa ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-2">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <p><h5>Promessa Parcelada</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.promessa_parc | number"></h4>
+                                            <h5 class="pull-right" ng-bind="( dashboard.mapa.promessa_parc / dashboard.mapa.promessa ) | percentage : 1"></h5>
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="table-responsive">
+                                <mapa-brasil style="height: 505px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--GRÁFICO POR ESTADO-->
+        <div class="row margin-bottom">
+            @*<div class="col-xs-12 col-md-7">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Análise por Região</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table5')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Ctt</th>
+                                        <th>Cpc</th>
+                                        <th>Cpca</th>
+                                        <th>Prom</th>
+                                        <th>Pro Car.</th>
+                                        <th>Pro Mig.</th>
+                                        <th>Pro Par.</th>
+                                        <th>% Car.</th>
+                                        <th>% Mig.</th>
+                                        <th>% Par.</th>
+                                        <th>% Conv.</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.estado | groupBy: 'regiao'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].regiao}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa_cart'| number}}</td>
+                                        <td>{{e | sumByColumn: 'migracao'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa_parc'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa_cart':'promessa' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.estado}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.promessa_cart | number}}</td>
+                                        <td>{{p.migracao | number}}</td>
+                                        <td>{{p.promessa_parc | number}}</td>
+                                        <td>{{p.promessa_cart / p.promessa| percentage:1}}</td>
+                                        <td>{{p.migracao / p.promessa| percentage:1}}</td>
+                                        <td>{{p.promessa_parc / p.promessa| percentage:1}}</td>
+                                        <td>{{p.promessa / p.cpca| percentage:1}}</td>
+                                        <td>{{p.vlr_promessa | currency: 'R$ '}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>*@
+
+            <!--TABELA POR REGIÃO-->
+            @*<div class="col-xs-12 col-md-5">
+                    <div class="card">
+                        <div id="info" class="card-header">
+                            <span class="card-header-title">Produção por Estado </span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table5')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-green-active">
+                                        <div class="inner">
+                                            <p><h4>Promessa</h4></p>
+                                            <h5 ng-bind="dashboard.mapa.promessa | number"></h5>
+
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-purple-active">
+                                        <div class="inner">
+                                            <p><h4>CPCA</h4></p>
+                                            <h5 ng-bind="dashboard.mapa.cpca | number"></h5>
+
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p><h4>Conversão</h4></p>
+                                            <h5 ng-bind="( dashboard.mapa.promessa / dashboard.mapa.cpca ) | percentage : 1"> Conversão</h5>
+
+                                            <p>{{ dashboard.mapa.estado }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <mapa-brasil style="height: 505px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -555,6 +856,7 @@
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
+        $scope.graficoRegiao = { exibir: 'true' };
 
         //carregar os filtros
         $http({
@@ -585,8 +887,10 @@
                 $scope.dashboard.carteira = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.equipe = data.Table4;
+                $scope.dashboard.estado = data.Table5;
 
                 $scope.carregarGrafico();
+                $scope.mudarEstado('BR-SP');
             });
         }
 
@@ -594,6 +898,7 @@
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.horahora;
             $scope.dashboard.horas = dados.map(obj => obj.hora);
+
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
                     $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
@@ -613,6 +918,12 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, contato , cpc, cpca, promessa, vlr_promessa, tickect_med, promessa_cart, promessa_parc, migracao from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            $scope.dashboard.mapa = dados;
         }
 
         // extrair dados para excel
