@@ -611,38 +611,38 @@
 
                 // #9 PROJECAO HOJE
                 if (r.data.Table7.length > 0) {
-                    let dia_venda = r.data.Table8.map(o => ({ y: o.venda }));
-                    let dia_projecao = r.data.Table7.map(o => ({ y: o.venda }));
-                    dia_venda[dia_venda.length - 1].dataLabels = { enabled: true, style: { fontSize: '16px' } };
-                    dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true, style: { fontSize: '18px' } };
+                    let hoje_realizado = r.data.Table7.filter(o => o.projecao == 0).map(o => ({ y: o['venda'] }));
+                    let hoje_projecao = r.data.Table7.map(o => ({ y: o['venda'] }));
+                    hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                    hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
+
                     $scope.dashboard.projecao = {
                         title: {
-                            text: 'Projeção de Hoje (H-1)'
+                            text: ''
                         },
                         yAxis: {
-                            visible: false,
-                        },
-                        legend: {
-                            enabled: false,
+                            title: {
+                                text: ''
+                            },
                         },
                         xAxis: {
-                            categories: r.data.Table8.map(o => o.hora)
+                            categories: r.data.Table7.map(o => o.hora)
                         },
                         series: [
                             {
-                                type: 'line',
-                                name: 'Projeção',
-                                color: '#2196F3',
-                                dashStyle: 'dot',
+                                type: 'area',
+                                name: 'Realizado',
+                                color: 'black',
                                 marker: { symbol: 'circle' },
-                                data: dia_venda
+                                data: hoje_realizado
                             },
                             {
-                                type: 'area',
-                                name: 'Venda',
-                                color: '#2196F3',
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'black',
+                                dashStyle: 'dot',
                                 marker: { symbol: 'circle' },
-                                data: dia_projecao
+                                data: hoje_projecao
                             },
                         ],
                         credits: {
@@ -652,40 +652,39 @@
                 }
 
                 // #10 PROJECAO MES
-                if (r.data.Table9.length > 0) {
-                    let mes_venda = r.data.Table10.map(o => ({ y: o.venda }));
-                    let mes_projecao = r.data.Table9.map(o => ({ y: o.venda }));
-                    mes_venda[mes_venda.length - 1].dataLabels = { enabled: true, style: { fontSize: '16px' } };
-                    mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true, style: { fontSize: '18px' } };
+                if (r.data.Table8.length > 0) {
+                    let hoje_realizado = r.data.Table8.filter(o => o.projecao == 0).map(o => ({ y: o['venda'] }));
+                    let hoje_projecao = r.data.Table8.map(o => ({ y: o['venda'] }));
+                    hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                    hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
 
                     $scope.dashboard.projecao_mes = {
                         title: {
-                            text: 'Projeção Mês (D-1)'
+                            text: ''
                         },
                         yAxis: {
-                            visible: false,
-                        },
-                        legend: {
-                            enabled: false,
+                            title: {
+                                text: ''
+                            },
                         },
                         xAxis: {
-                            categories: r.data.Table10.map(o => o.data)
+                            categories: r.data.Table8.map(o => o.dia)
                         },
                         series: [
                             {
-                                type: 'line',
-                                name: 'Projeção',
-                                color: '#3F51B5',
-                                dashStyle: 'dot',
+                                type: 'area',
+                                name: 'Realizado',
+                                color: 'black',
                                 marker: { symbol: 'circle' },
-                                data: mes_venda
+                                data: hoje_realizado
                             },
                             {
-                                type: 'area',
-                                name: 'Venda',
-                                color: '#3F51B5',
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'black',
+                                dashStyle: 'dot',
                                 marker: { symbol: 'circle' },
-                                data: mes_projecao
+                                data: hoje_projecao
                             },
                         ],
                         credits: {
