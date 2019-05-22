@@ -30,7 +30,7 @@
 
                     <!--DATAS-->
                     <div class="card-body">
-                        <div class="row">                            
+                        <div class="row">
                             <div class="col-xs-12 col-sm-6">
                                 <!--DATA INCIAL-->
                                 <div class="form-group">
@@ -281,7 +281,7 @@
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
-                        </div>                       
+                        </div>
                     </div>
                     <div class="card-body">
                         <!--TABELA-->
@@ -346,12 +346,12 @@
             </div>
         </div>
 
-        <!--ANALISE POR HORA-->
+        <!--ANALISE POR OPERADOR E PA DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise PA por dia</span>
+                        <span class="card-header-title">Aderência por dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -466,115 +466,115 @@
 
         <!--ANALISE POR HORA-->
         @*<div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Análise PA por dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Análise PA por dia</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table4')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <small class="pull-right">
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                    Tabela
+                                </label>
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                    Gráfico
+                                </label>
+
+                            </small>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                        <small class="pull-right">
-                            <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
-                                Tabela
-                            </label>
-                            <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
-                                Gráfico
-                            </label>
+                        <div class="card-body">
+                            <!--TABELA-->
+                            <div class="table-responsive" ng-show="grafico.exibir == 'true'">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                    <thead>
+                                        <tr>
+                                            <th>Dia</th>
+                                            <th>PA</th>
+                                            <th>Total Atendidas</th>
+                                            <th>TMA</th>
+                                            <th>TME</th>
+                                            <th>Logado</th>
+                                            <th>Offline</th>
+                                            <th>Falado</th>
+                                            <th>Disponível</th>
+                                            <th>Pausa</th>
+                                            <th>AfterCall</th>
+                                            <th>Manual</th>
+                                            <th>% Ocupação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="c in dashboard.dia | groupBy: 'data'">
 
-                        </small>
-                    </div>
-                    <div class="card-body">
-                        <!--TABELA-->
-                        <div class="table-responsive" ng-show="grafico.exibir == 'true'">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
-                                <thead>
-                                    <tr>
-                                        <th>Dia</th>
-                                        <th>PA</th>
-                                        <th>Total Atendidas</th>
-                                        <th>TMA</th>
-                                        <th>TME</th>
-                                        <th>Logado</th>
-                                        <th>Offline</th>
-                                        <th>Falado</th>
-                                        <th>Disponível</th>
-                                        <th>Pausa</th>
-                                        <th>AfterCall</th>
-                                        <th>Manual</th>
-                                        <th>% Ocupação</th>
-                                    </tr>
-                                </thead>
-                                <tbody ng-repeat="c in dashboard.dia | groupBy: 'data'">
+                                        <tr class="text-bold">
+                                            <td>
+                                                <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                {{c[0].data}}
+                                            </td>
+                                            <td>{{c | avgColumn: 'qtd_op' | number : 0 }}</td>
+                                            <td>{{c | avgColumn: 'qtd_atendidas' | number : 0 }}</td>
+                                            <td>{{c | avgColumn: 'tma' | number : 0 | formatTimer}}</td>
+                                            <td>{{c | avgColumn: 'tme' | number : 0 | formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'logado_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'offline_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'falado_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'disponivel_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'pausa_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'aftercall_op'| formatTimer}}</td>
+                                            <td>{{c | sumByColumn: 'manual_op'| formatTimer}}</td>
+                                            <td>{{c | divideSumColumns: 'falado_op':'logado_op' | percentage: 1}}</td>
+                                        </tr>
 
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{c[0].data}}
-                                        </td>
-                                        <td>{{c | avgColumn: 'qtd_op' | number : 0 }}</td>
-                                        <td>{{c | avgColumn: 'qtd_atendidas' | number : 0 }}</td>
-                                        <td>{{c | avgColumn: 'tma' | number : 0 | formatTimer}}</td>
-                                        <td>{{c | avgColumn: 'tme' | number : 0 | formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'logado_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'offline_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'falado_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'disponivel_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'pausa_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'aftercall_op'| formatTimer}}</td>
-                                        <td>{{c | sumByColumn: 'manual_op'| formatTimer}}</td>
-                                        <td>{{c | divideSumColumns: 'falado_op':'logado_op' | percentage: 1}}</td>
-                                    </tr>
+                                        <tr ng-repeat="p in c" ng-show="showTbody">
+                                            <td>{{p.hora}}</td>
+                                            <td>{{p.qtd_op | number}}</td>
+                                            <td>{{p.qtd_atendidas | number}}</td>
+                                            <td>{{p.tma | formatTimer}}</td>
+                                            <td>{{p.tme | formatTimer}}</td>
+                                            <td>{{p.logado_op | formatTimer }}</td>
+                                            <td>{{p.offline_op | formatTimer }}</td>
+                                            <td>{{p.falado_op | formatTimer }}</td>
+                                            <td>{{p.disponivel_op | formatTimer }}</td>
+                                            <td>{{p.pausa_op | formatTimer }}</td>
+                                            <td>{{p.aftercall_op | formatTimer }}</td>
+                                            <td>{{p.manual_op | formatTimer }}</td>
+                                            <td>{{p.falado_op / p.logado_op | percentage: 1}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                    <tr ng-repeat="p in c" ng-show="showTbody">
-                                        <td>{{p.hora}}</td>
-                                        <td>{{p.qtd_op | number}}</td>
-                                        <td>{{p.qtd_atendidas | number}}</td>
-                                        <td>{{p.tma | formatTimer}}</td>
-                                        <td>{{p.tme | formatTimer}}</td>
-                                        <td>{{p.logado_op | formatTimer }}</td>
-                                        <td>{{p.offline_op | formatTimer }}</td>
-                                        <td>{{p.falado_op | formatTimer }}</td>
-                                        <td>{{p.disponivel_op | formatTimer }}</td>
-                                        <td>{{p.pausa_op | formatTimer }}</td>
-                                        <td>{{p.aftercall_op | formatTimer }}</td>
-                                        <td>{{p.manual_op | formatTimer }}</td>
-                                        <td>{{p.falado_op / p.logado_op | percentage: 1}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                            <!--GRAFICO-->
+                            <div ng-show="grafico.exibir == 'false'">
+                                <span class="pull-right">
+                                    <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                        <option value="ocupacao">Ocupação</option>
+                                        <option value="atendido">Atendidas</option>
+                                        <option value="qtd_op">Operadores</option>
+                                        <option value="logado">Logado</option>
+                                        <option value="falado">Falado</option>
+                                        <option value="disponivel">Disponível</option>
+                                        <option value="pausa">Pausas</option>
+                                        <option value="aftercall">AfterCall</option>
+                                        <option value="manual">Manual</option>
+                                        <option value="offline">Offline</option>
+                                        <option value="tma">TMA</option>
+                                        <option value="tme">TME</option>
+                                    </select>
+                                </span>
+                                <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
 
-                        <!--GRAFICO-->
-                        <div ng-show="grafico.exibir == 'false'">
-                            <span class="pull-right">
-                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                    <option value="ocupacao">Ocupação</option>
-                                    <option value="atendido">Atendidas</option>
-                                    <option value="qtd_op">Operadores</option>
-                                    <option value="logado">Logado</option>
-                                    <option value="falado">Falado</option>
-                                    <option value="disponivel">Disponível</option>
-                                    <option value="pausa">Pausas</option>
-                                    <option value="aftercall">AfterCall</option>
-                                    <option value="manual">Manual</option>
-                                    <option value="offline">Offline</option>
-                                    <option value="tma">TMA</option>
-                                    <option value="tme">TME</option>
-                                </select>
-                            </span>
-                            <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                            </div>
 
                         </div>
-
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -674,7 +674,7 @@
                 $scope.dashboard.supervisor = r.data.Table3;
                 $scope.dashboard.dia = r.data.Table4;
                 $scope.dashboard.operador = r.data.Table5;
-                $scope.dashboard.operadorManual = r.data.Table6;                
+                $scope.dashboard.operadorManual = r.data.Table6;
 
                 $scope.carregarGrafico();
 
