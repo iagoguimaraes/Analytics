@@ -2,9 +2,6 @@
     Layout = "~/Views/master.cshtml";
 }
 
-
-
-
 <div ng-controller="ctrl-sky-ocupacao">
     <div ng-if="dashboard.status == 200">
 
@@ -33,7 +30,7 @@
 
                     <!--DATAS-->
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row">                            
                             <div class="col-xs-12 col-sm-6">
                                 <!--DATA INCIAL-->
                                 <div class="form-group">
@@ -364,6 +361,124 @@
                         <small class="pull-right">
                             <label>
                                 <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                Operador
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                PA
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--VISÃO OPERADOR-->
+                        <div class="table-responsive" ng-show="grafico.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Operador</th>
+                                        <th>Atendidas</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                        <th>Logado</th>
+                                        <th>Offline</th>
+                                        <th>Falado</th>
+                                        <th>Disponível</th>
+                                        <th>Pausa</th>
+                                        <th>AfterCall</th>
+                                        <th>Manual</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>% Ocupação</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.dia">
+                                    <tr>
+                                        <td>{{c.data}}</td>
+                                        <td>{{c.qtd_op}}</td>
+                                        <td>{{c.qtd_atendidas  }}</td>
+                                        <td>{{c.tma}}</td>
+                                        <td>{{c.tme}}</td>
+                                        <td>{{c.logado_op }}</td>
+                                        <td>{{c.offline_op }}</td>
+                                        <td>{{c.falado_op }}</td>
+                                        <td>{{c.disponivel_op }}</td>
+                                        <td>{{c.pausa_op }}</td>
+                                        <td>{{c.aftercall_op }}</td>
+                                        <td>{{c.manual_op }}</td>
+                                        <td>{{c.cpca }}</td>
+                                        <td>{{c.promessa}}</td>
+                                        <td>{{c.ocupacao_sky}}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!--VISÃO PA-->
+                        <div class="table-responsive" ng-show="grafico.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>PA</th>
+                                        <th>Atendidas</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                        <th>Logado</th>
+                                        <th>Offline</th>
+                                        <th>Falado</th>
+                                        <th>Disponível</th>
+                                        <th>Pausa</th>
+                                        <th>AfterCall</th>
+                                        <th>Manual</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>% Ocupação</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.dia">
+                                    <tr>
+                                        <td>{{c.data}}</td>
+                                        <td>{{c.qtd_pa}}</td>
+                                        <td>{{c.qtd_atendidas }}</td>
+                                        <td>{{c.tma }}</td>
+                                        <td>{{c.tme }}</td>
+                                        <td>{{c.logado_pa }}</td>
+                                        <td>{{c.offline_pa }}</td>
+                                        <td>{{c.falado_pa }}</td>
+                                        <td>{{c.disponivel_pa }}</td>
+                                        <td>{{c.pausa_pa}}</td>
+                                        <td>{{c.aftercall_pa }}</td>
+                                        <td>{{c.manual_pa}}</td>
+                                        <td>{{c.cpca}}</td>
+                                        <td>{{c.promessa}}</td>
+                                        <td>{{c.ocupacao_sky}}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR HORA-->
+        @*<div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise PA por dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
                                 Tabela
                             </label>
                             <label>
@@ -459,7 +574,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -559,7 +674,8 @@
                 $scope.dashboard.supervisor = r.data.Table3;
                 $scope.dashboard.dia = r.data.Table4;
                 $scope.dashboard.operador = r.data.Table5;
-                $scope.dashboard.operadorManual = r.data.Table6;
+                $scope.dashboard.operadorManual = r.data.Table6;                
+
                 $scope.carregarGrafico();
 
             });
