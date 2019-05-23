@@ -41,7 +41,7 @@
                             <!-- PERIODO 1 -->
                             <div class="col-xs-12 col-sm-6">
                                 <fieldset>
-                                    <legend>Periodo 1</legend>
+                                    <legend>Periodo 1 (Presente)</legend>
 
                                     <!--DATAS-->
                                     <div class="row">
@@ -159,7 +159,7 @@
                             <!-- PERIODO 2 -->
                             <div class="col-xs-12 col-sm-6">
                                 <fieldset>
-                                    <legend>Periodo 2</legend>
+                                    <legend>Periodo 2 (Passado)</legend>
 
                                     <!--DATAS-->
                                     <div class="row">
@@ -365,7 +365,7 @@
                                         <p>{{dashboard.promessa.p1 | number}} vs {{dashboard.promessa.p2 | number}}</p>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa fa-thumbs-o-up"></i>
+                                        <i class="fa fa-handshake-o"></i>
                                     </div>
                                     <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
@@ -559,8 +559,8 @@
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.promessa2 * 100 / obj.cpca2).toFixed(1) * 1);
                     break;
                 case 'esforco':
-                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado / obj.promessa).toFixed(1) * 1);
-                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.discado2 / obj.promessa2).toFixed(1) * 1);
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado / obj.contato).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.discado2 / obj.contato2).toFixed(1) * 1);
                     break;
                 default:
                     series1 = $scope.dashboard.dados.Table.map(obj => obj[indicador]);
@@ -587,8 +587,8 @@
                 txapv2: dados2.cpca / dados2.cpc,
                 conversao1: dados1.promessa / dados1.cpca,
                 conversao2: dados2.promessa / dados2.cpca,
-                esforco1: dados1.discado / dados1.promessa,
-                esforco2: dados2.discado / dados2.promessa
+                esforco1: dados1.discado / dados1.contato,
+                esforco2: dados2.discado / dados2.contato
             }
 
             $scope.dashboard.discado = { p1: dados1.discado, p2: dados2.discado, vs: dados1.discado / dados2.discado - 1 };
