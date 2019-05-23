@@ -22,7 +22,7 @@ namespace Analytics.Controllers
             {
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_grupo");
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_grupos");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
