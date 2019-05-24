@@ -115,6 +115,7 @@ namespace Analytics.Controllers
                     // ALTERAR O USUARIO
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
                     parametros.Add("id_credor", id_credor);
+                    parametros.Add("nome", nome);
                     parametros.Add("logo", logo);
                     parametros.Add("cor_primaria", cor_primaria);
                     parametros.Add("cor_secundaria", cor_secundaria);
