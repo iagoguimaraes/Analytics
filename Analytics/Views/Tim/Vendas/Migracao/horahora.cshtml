@@ -124,8 +124,17 @@
                     <div class="card-header">
                         <span class="card-header-title">Análise por Hora</span>
                         <small class="pull-right">
-                            <span>Indicador:</span>
+                            <span>Indicadores:</span>
                             <select ng-model="dashboard.indicador" ng-change="carregarGraficoHora()">
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="crivo">Crivo</option>
+                                <option value="contato">Atendimento</option>
+                                <option value="migracao">Migrações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                            </select>
+                            <select ng-model="dashboard.indicador2" ng-change="carregarGraficoHora()">
                                 <option value="venda">Venda</option>
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
@@ -230,7 +239,8 @@
         };
 
         $scope.dashboard = {
-            indicador: 'venda'
+            indicador: 'venda',
+            indicador2: 'migracao'
         };
 
         $scope.carregarDashboard = function () {
@@ -267,10 +277,19 @@
                 },
                 series: [
                     {
-                        type: 'column',
-                        name: 'Quantidade x Hora',
-                        color: 'rgba(0,51,153,0.6)',
+                        type: 'line',
+                        name: $scope.dashboard.indicador,
+                        color: '#00a65a',
                         data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        type: 'column',
+                        name: $scope.dashboard.indicador2,
+                        color: 'rgba(0,115,183,0.4)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador2]),
                         dataLabels: {
                             enabled: true
                         }
