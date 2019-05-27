@@ -65,23 +65,10 @@
         <div class="row margin-bottom">
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
-                        <p>Ligações</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.qtd | percentage: 1"></h4>
-                        <p>Atendido</p>
+                        <p>Atendimento</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-headphones"></i>
@@ -98,19 +85,6 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-ban"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.crivo / dashboard.resumo.contato | percentage: 1"></h4>
-                        <p>Crivo</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-exclamation-triangle"></i>
                     </div>
                 </div>
             </div>
@@ -140,6 +114,18 @@
                 </div>
             </div>
 
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
+                        <p>Crivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!--DIA A DIA-->
@@ -156,16 +142,25 @@
                             </select>
                         </small>
                         <small class="pull-right" ng-show="mostrargrafico == 'true'">
-                            <span>Indicador:</span>
+                            <span>Indicadores:</span>
                             <select ng-model="dashboard.indicadorDia" ng-change="carregarGraficoDia()">
                                 <option value="venda">Venda</option>
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
-                                <option value="qtd">Ligações</option>
                                 <option value="migracao">Migrações</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
+                            </select>
+                            <select ng-model="dashboard.indicadorDia2" ng-change="carregarGraficoDia()">
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="crivo">Crivo</option>
+                                <option value="contato">Atendimento</option>
+                                <option value="migracao">Migrações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                                <option value="">Ocultar</option>
                             </select>
                         </small>
                     </div>
@@ -180,11 +175,11 @@
                                         <th>Dia</th>
                                         <th>Atendimento</th>
                                         <th>Recusa</th>
-                                        <th>Crivo</th>
                                         <th>Venda</th>
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
                                         <th>Migrações</th>
+                                        <th>Crivo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,11 +187,11 @@
                                         <td>{{c.data}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.recusa | number}}</td>
-                                        <td>{{c.crivo | number}}</td>
                                         <td>{{c.venda | number}}</td>
                                         <td>{{c.recusa / c.contato | percentage:1}}</td>
                                         <td>{{c.venda / c.contato | percentage:1}}</td>
                                         <td>{{c.migracao | number}}</td>
+                                        <td>{{c.crivo | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -220,9 +215,8 @@
                                 <thead>
                                     <tr>
                                         <th>Operador</th>
-                                        <th>Atendimento</th>
+                                        <th>Acionamento</th>
                                         <th>Recusa</th>
-                                        <th>Crivo</th>
                                         <th>Venda</th>
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
@@ -235,23 +229,20 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].supervisor}}
                                         </td>
-                                        <td>{{c | sumByColumn: 'contato' | number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
                                         <td>{{c | sumByColumn: 'recusa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'crivo'| number}}</td>
                                         <td>{{c | sumByColumn: 'venda'| number}}</td>
-                                        <td>{{c | divideSumColumns: 'recusa':'contato' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'venda':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'recusa':'qtd' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'venda':'qtd' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.operador}}</td>
-                                        <td>{{p.contato | number}}</td>
-
+                                        <td>{{p.qtd | number}}</td>
                                         <td>{{p.recusa | number}}</td>
-                                        <td>{{p.crivo | number}}</td>
                                         <td>{{p.venda | number}}</td>
-                                        <td>{{p.recusa / p.contato | percentage:1}}</td>
-                                        <td>{{p.venda / p.contato | percentage:1}}</td>
+                                        <td>{{p.recusa / p.qtd | percentage:1}}</td>
+                                        <td>{{p.venda / p.qtd | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -330,6 +321,7 @@
 
         $scope.dashboard = {
             indicadorDia: 'venda',
+            indicadorDia2: 'migracao',
             indicadorLote: 'venda'
         };
 
@@ -372,9 +364,18 @@
                 series: [
                     {
                         type: 'line',
-                        name: 'Qtd x Dia',
+                        name: $scope.dashboard.indicadorDia,
                         color: 'rgba(0,51,153,0.6)',
                         data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        type: 'column',
+                        name: $scope.dashboard.indicadorDia2,
+                        color: 'rgba(119,119,119,0.8)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia2]),
                         dataLabels: {
                             enabled: true
                         }
