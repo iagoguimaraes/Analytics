@@ -65,18 +65,6 @@
         <div class="row margin-bottom">
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
-                        <p>Ligações</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
@@ -128,6 +116,18 @@
             </div>
 
             <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.chips | megaNumber"></h3>
+                        <p>Chips</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-caret-square-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.ativacao | megaNumber"></h3>
@@ -155,7 +155,7 @@
                             </select>
                         </small>
                         <small class="pull-right" ng-show="mostrargrafico == 'true'">
-                            <span>Indicador:</span>
+                            <span>Indicadores:</span>
                             <select ng-model="dashboard.indicadorDia" ng-change="carregarGraficoDia()">
                                 <option value="venda">Venda</option>
                                 <option value="recusa">Recusa</option>
@@ -165,6 +165,17 @@
                                 <option value="ativacao">Ativações</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
+                            </select>
+                            <select ng-model="dashboard.indicadorDia2" ng-change="carregarGraficoDia()">
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="crivo">Crivo</option>
+                                <option value="contato">Atendimento</option>
+                                <option value="qtd">Ligações</option>
+                                <option value="ativacao">Ativações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                                <option value="">Ocultar</option>
                             </select>
                         </small>
                     </div>
@@ -184,6 +195,7 @@
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
                                         <th>Ativações</th>
+                                        <th>Chips</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -196,6 +208,7 @@
                                         <td>{{c.recusa / c.contato | percentage:1}}</td>
                                         <td>{{c.venda / c.contato | percentage:1}}</td>
                                         <td>{{c.ativacao | number}}</td>
+                                        <td>{{c.chips | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -219,12 +232,13 @@
                                 <thead>
                                     <tr>
                                         <th>Operador</th>
-                                        <th>Atendimento</th>
+                                        <th>Acionamento</th>
                                         <th>Recusa</th>
                                         <th>Crivo</th>
                                         <th>Venda</th>
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
+                                        <th>Chips</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.operacao | groupBy: 'supervisor'">
@@ -240,6 +254,7 @@
                                         <td>{{c | sumByColumn: 'venda'| number}}</td>
                                         <td>{{c | divideSumColumns: 'recusa':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'venda':'contato' | percentage:1}}</td>
+                                        <td>{{c | sumByColumn: 'chips'| number}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -251,6 +266,7 @@
                                         <td>{{p.venda | number}}</td>
                                         <td>{{p.recusa / p.contato | percentage:1}}</td>
                                         <td>{{p.venda / p.contato | percentage:1}}</td>
+                                        <td>{{p.chips | number}}</td>
                                     </tr>
 
                                 </tbody>
@@ -326,7 +342,6 @@
                                 <thead>
                                     <tr>
                                         <th>Origem</th>
-                                        <th>Ligações</th>
                                         <th>Atendimento</th>
                                         <th>Recusa</th>
                                         <th>Crivo</th>
@@ -338,7 +353,6 @@
                                 <tbody>
                                     <tr ng-repeat="c in dashboard.origem">
                                         <td>{{c.origematendimento}}</td>
-                                        <td>{{c.qtd | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.recusa | number}}</td>
                                         <td>{{c.crivo | number}}</td>
@@ -370,6 +384,7 @@
 
         $scope.dashboard = {
             indicadorDia: 'venda',
+            indicadorDia2: 'ativacao',
             indicadorLote: 'venda'
         };
 
@@ -413,9 +428,18 @@
                 series: [
                     {
                         type: 'line',
-                        name: 'Qtd x Dia',
+                        name: $scope.dashboard.indicadorDia,
                         color: 'rgba(0,51,153,0.6)',
                         data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        type: 'column',
+                        name: $scope.dashboard.indicadorDia2,
+                        color: 'rgba(119,119,119,0.8)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia2]),
                         dataLabels: {
                             enabled: true
                         }
