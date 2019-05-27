@@ -103,10 +103,22 @@
             </div>
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-blue">
+                <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.migracao | megaNumber"></h3>
-                        <p>Migrações</p>
+                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
+                        <p>Crivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.migracaoapv | megaNumber"></h3>
+                        <p>Migração Apv</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-exchange"></i>
@@ -115,13 +127,13 @@
             </div>
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
+                <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
-                        <p>Crivo</p>
+                        <h3 ng-bind="dashboard.resumo.migracaook | megaNumber"></h3>
+                        <p>Migração Ok</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-exclamation-triangle"></i>
+                        <i class="fa fa-check"></i>
                     </div>
                 </div>
             </div>
@@ -148,7 +160,8 @@
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
-                                <option value="migracao">Migrações</option>
+                                <option value="migracaook">Migração Ok</option>
+                                <option value="migracaoapv">Migração Apv</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
                             </select>
@@ -157,7 +170,8 @@
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
-                                <option value="migracao">Migrações</option>
+                                <option value="migracaook">Migração Ok</option>
+                                <option value="migracaoapv">Migração Apv</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
                                 <option value="">Ocultar</option>
@@ -178,7 +192,7 @@
                                         <th>Venda</th>
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
-                                        <th>Migrações</th>
+                                        <th>Migração Ok</th>
                                         <th>Crivo</th>
                                     </tr>
                                 </thead>
@@ -190,7 +204,7 @@
                                         <td>{{c.venda | number}}</td>
                                         <td>{{c.recusa / c.contato | percentage:1}}</td>
                                         <td>{{c.venda / c.contato | percentage:1}}</td>
-                                        <td>{{c.migracao | number}}</td>
+                                        <td>{{c.migracaook | number}}</td>
                                         <td>{{c.crivo | number}}</td>
                                     </tr>
                                 </tbody>
@@ -278,7 +292,8 @@
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
                                 <option value="qtd">Ligações</option>
-                                <option value="migracao">Migrações</option>
+                                <option value="migracaook">Migração Ok</option>
+                                <option value="migracaoapv">Migração Apv</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
                             </select>
@@ -321,7 +336,7 @@
 
         $scope.dashboard = {
             indicadorDia: 'venda',
-            indicadorDia2: 'migracao',
+            indicadorDia2: 'migracaook',
             indicadorLote: 'venda'
         };
 
@@ -353,11 +368,19 @@
                 title: {
                     text: ''
                 },
-                yAxis: {
-                    title: {
-                        text: ''
+                yAxis: [
+                    {
+                        title: {
+                            text: ''
+                        },
                     },
-                },
+                    {
+                        title: {
+                            text: ''
+                        },
+                        opposite: true,
+                    }
+                ],
                 xAxis: {
                     categories: $scope.dashboard.dados.Table1.map(o => o.data)
                 },
@@ -373,6 +396,7 @@
                     },
                     {
                         type: 'column',
+                        yAxis: 1,
                         name: $scope.dashboard.indicadorDia2,
                         color: 'rgba(0,115,183,0.4)',
                         data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia2]),
