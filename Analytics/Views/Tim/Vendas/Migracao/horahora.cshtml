@@ -92,10 +92,22 @@
             </div>
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-blue">
+                <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.migracao | megaNumber"></h3>
-                        <p>Migrações</p>
+                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
+                        <p>Crivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.migracaoapv | megaNumber"></h3>
+                        <p>Migração Apv</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-exchange"></i>
@@ -104,13 +116,13 @@
             </div>
 
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
+                <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.crivo | megaNumber"></h3>
-                        <p>Crivo</p>
+                        <h3 ng-bind="dashboard.resumo.migracaook | megaNumber"></h3>
+                        <p>Migração Ok</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-exclamation-triangle"></i>
+                        <i class="fa fa-check"></i>
                     </div>
                 </div>
             </div>
@@ -130,7 +142,8 @@
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
-                                <option value="migracao">Migrações</option>
+                                <option value="migracaook">Migrações Ok</option>
+                                <option value="migracaoapv">Migrações Apv</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
                             </select>
@@ -139,7 +152,8 @@
                                 <option value="recusa">Recusa</option>
                                 <option value="crivo">Crivo</option>
                                 <option value="contato">Atendimento</option>
-                                <option value="migracao">Migrações</option>
+                                <option value="migracaook">Migrações Ok</option>
+                                <option value="migracaoapv">Migrações Apv</option>
                                 <option value="txvenda">% Venda</option>
                                 <option value="txrecusa">% Recusa</option>
                             </select>
@@ -240,7 +254,7 @@
 
         $scope.dashboard = {
             indicador: 'venda',
-            indicador2: 'migracao'
+            indicador2: 'migracaook'
         };
 
         $scope.carregarDashboard = function () {
@@ -253,7 +267,7 @@
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.operacao = r.data.Table2;
-               
+
                 $scope.carregarGraficoHora();
                 $scope.carregarGraficoResultado();
                 $scope.carregarGraficoWorkflow();
@@ -267,11 +281,19 @@
                 title: {
                     text: ''
                 },
-                yAxis: {
-                    title: {
-                        text: ''
+                yAxis: [
+                    {
+                        title: {
+                            text: ''
+                        },
                     },
-                },
+                    {
+                        title: {
+                            text: ''
+                        },
+                        opposite: true,
+                    }
+                ],
                 xAxis: {
                     categories: $scope.dashboard.dados.Table1.map(o => o.hora)
                 },
@@ -287,6 +309,7 @@
                     },
                     {
                         type: 'column',
+                        yAxis: 1,
                         name: $scope.dashboard.indicador2,
                         color: 'rgba(0,115,183,0.4)',
                         data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador2]),
