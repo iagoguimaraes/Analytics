@@ -110,7 +110,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="background-color: #15bcec">
+                <div class="row" style="background-color: #019a90; color:white;">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.vl_acordo | currency: 'R$'"></h5>
@@ -138,7 +138,7 @@
                     <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h5>
-                            <span class="description-text">Conversao</span>
+                            <span class="description-text">Conversão</span>
                         </div>
                     </div>
                 </div>
@@ -326,7 +326,7 @@
                             <i class="fa fa-expand"></i>
                         </div>
                         <small class="pull-right">
-                            <select ng-model="grafico.indicador" ng-change="carregarDashboard()">
+                            <select ng-model="grafico.indicador" ng-change="carregarGraficoAtraso()">
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -372,7 +372,7 @@
     angular.module('app').controller('ctrl-light-horahora', function ($scope, $http, $filter) {
         $scope.showTbody = false;
 
-        
+
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
@@ -412,10 +412,13 @@
                 $scope.dashboard.faixaAtraso = r.data.Table3.map(obj => obj.ds_faixa);
                 $scope.dashboard.operador = r.data.Table4;
 
-                $scope.dashboard.atraso = [{ name: $scope.grafico.indicador, data: r.data.Table3.map(obj => (obj[$scope.grafico.indicador])), color: '#019a90' }];
+
+                $scope.carregarGraficoAtraso = function () {
+                    $scope.dashboard.atraso = [{ name: $scope.grafico.indicador, data: r.data.Table3.map(obj => (obj[$scope.grafico.indicador])), color: '#019a90' }];
+                }
 
                 $scope.carregarGraficoHora();
-                
+                $scope.carregarGraficoAtraso();
             });
         }
 
@@ -442,10 +445,9 @@
 
         }
 
-
         $scope.carregarDashboard();
 
-         // extrair dados para excel
+        // extrair dados para excel
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }
