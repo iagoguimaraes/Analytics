@@ -160,7 +160,7 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa / dashboard.resumo.promessa| percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa / dashboard.resumo.promessa| currency:'R$ '"></h5>
                             <span class="description-text">Tckt Medio Promessa</span>
                         </div>
                     </div>
@@ -289,7 +289,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'valor_promessa'| currency:'R$ '}}</td>
-                                        <td>{{e | sumByColumn: 'valor_promessa':'promessa' | currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'valor_promessa':'promessa' | currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>

@@ -1,0 +1,250 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+
+<div ng-controller="ctrl-light-baseativa">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Estratificação de Base</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Foto</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-white">
+                    <div class="inner" style="color:black">
+                        <h3 ng-bind="dashboard.resumo.CONTRATO | number"></h3>
+                        <p>Total Contratos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-aqua-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.CONTRATOVLR | megaNumber"></h3>
+                        <p>Total Financeiro</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-aqua-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.TCK_MEDIO | currency:'R$'"></h3>
+                        <p>Tckt Medio</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-ticket"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FAIXA DE ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Extratificacao_Analytics_Atraso','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.aging" axis-Categories="dashboard.faixaAtraso" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!--VALOR E CARTEIRAS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Valor</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Carteiras</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Extratificacao_Analytics_Carteiras','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--SITUACAO E IDADE-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Idade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Extratificacao_Analytics_Idade','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Situações Contratos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Extratificacao_Analytics_Sitaucoes','Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.situacao" axis-Categories="dashboard.faixaSituacao" plot-Options-Column-Data-Label="true" type="bar"></high-chart>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-light-baseativa', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Estratificação de Base';
+
+
+        // filtros iniciais
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd")
+
+        };
+
+        $scope.mapa = {
+            indicador: 'percentual'
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/light/dashboard/humano/baseativa",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+
+                $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.carteira);
+                $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_idade);
+                $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_faixa);
+                $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_classificacao);
+                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_faixa);
+
+                let indicador = 'CONTRATO';
+                $scope.dashboard.aging = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#6ac2b9' }];
+                $scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#6ac2b9' }];
+                $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#6ac2b9' }];
+                $scope.dashboard.situacao = [{ name: [indicador], data: data.Table6.map(obj => (obj[indicador])), color: '#6ac2b9' }];
+                $scope.dashboard.carteira = [{ name: 'Quantidade', data: r.data.Table1.map(obj => ({ name: obj.carteira, y: obj.CONTRATO })) }];
+
+                console.log($scope.dashboard.carteira);
+                console.log($scope.dashboard.faixaCarteira);
+            });
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
