@@ -283,7 +283,7 @@ namespace Analytics.Controllers
         {
             try
             {
-                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_LEADER"))
                 {
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

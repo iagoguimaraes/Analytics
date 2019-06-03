@@ -7,7 +7,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Producao</div>
+            <div class="page-name">TeleVendas - Produção</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -15,7 +15,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
 
-                        <!--DATA FINAL-->
+                        <!--DATA INCIAL-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Data Final</label>
                             <div class="input-group date">
@@ -49,6 +49,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--CAMPANHA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanhas</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -64,63 +70,312 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
 
-            <div class="col-xs-12 col-sm-6">
-                <div class="small-box bg-green">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.venda | number:0"></h3>
-                        <p>Vendas</p>
+                        <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
+                        <p>Acionamento</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-phone-square"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6">
-                <div class="small-box bg-blue">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-light-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.ativacao | number:0"></h3>
-                        <p>Ativações Com Tráfego</p>
+                        <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>Contato</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-thumbs-up"></i>
+                        <i class="fa fa-headphones"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.efetivo | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.efetivo / dashboard.resumo.contato | percentage: 1"></h4>
+                        <p>Efetivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.venda | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.venda / dashboard.resumo.efetivo | percentage: 1"></h4>
+                        <p>Vendas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.chips | number"></h3>
+                        <p>Chips</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-caret-square-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.ativacao | number"></h3>
+                        <p>Ativações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check"></i>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <div class="row">
+        <!--DIA A DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <small style="margin-left: 10px;">
+                            <span>Visualizar</span>
+                            <select ng-model="mostrargrafico">
+                                <option value="true">Gráfico</option>
+                                <option value="false">Tabela</option>
+                            </select>
+                        </small>
+                        <small class="pull-right" ng-show="mostrargrafico == 'true'">
+                            <span>Indicadores:</span>
+                            <select ng-model="dashboard.indicadorDia" ng-change="carregarGraficoDia()">
+                                <option value="qtd">Acionamento</option>
+                                <option value="contato">Contato</option>
+                                <option value="efetivo">Efetivo</option>
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="chips">Chips</option>
+                                <option value="ativacao">Ativações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                            </select>
+                            <select ng-model="dashboard.indicadorDia2" ng-change="carregarGraficoDia()">
+                                <option value="qtd">Acionamento</option>
+                                <option value="contato">Contato</option>
+                                <option value="efetivo">Efetivo</option>
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="chips">Chips</option>
+                                <option value="ativacao">Ativações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                                <option value="">Ocultar</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--GRAFICO-->
+                        <high-charts config="dashboard.dia" ng-show="mostrargrafico == 'true'" style="width: 100%; height: 350px"></high-charts>
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="mostrargrafico == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Acionamento</th>
+                                        <th>Contato</th>
+                                        <th>Efetivo</th>
+                                        <th>Recusa</th>
+                                        <th>Venda</th>
+                                        <th>% Recusa</th>
+                                        <th>% Venda</th>
+                                        <th>Ativações</th>
+                                        <th>Chips</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.diadia">
+                                        <td>{{c.data}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.efetivo | number}}</td>
+                                        <td>{{c.recusa | number}}</td>
+                                        <td>{{c.venda | number}}</td>
+                                        <td>{{c.recusa / c.efetivo | percentage:1}}</td>
+                                        <td>{{c.venda / c.efetivo | percentage:1}}</td>
+                                        <td>{{c.ativacao | number}}</td>
+                                        <td>{{c.chips | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-            <!-- ANALISE POR PLANO-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--SUPERVISOR/OPERADOR-->
+        <div class="row">
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Plano</span>
+                        <span class="card-header-title">Análise da Operação</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.operacao">
                                 <thead>
                                     <tr>
-                                        <th>Plano</th>
-                                        <th>Vendas</th>
-                                        <th>Ativações</th>
+                                        <th>Operador</th>
+                                        <th>Acionamento</th>
+                                        <th>Contato</th>
+                                        <th>Efetivo</th>
+                                        <th>Recusa</th>
+                                        <th>Venda</th>
+                                        <th>% Recusa</th>
+                                        <th>% Venda</th>
+                                        <th>Chips</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="c in dashboard.plano | groupBy: 'tipo'">
+                                <tbody ng-repeat="c in dashboard.operacao | groupBy: 'supervisor'">
+
                                     <tr class="text-bold">
                                         <td class="text-bold">
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{c[0].tipo}}
+                                            {{c[0].supervisor}}
                                         </td>
-                                        <td>{{c | sumByColumn: 'venda' | number}}</td>
-                                        <td>{{c | sumByColumn: 'ativacao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{c | sumByColumn: 'efetivo'| number}}</td>
+                                        <td>{{c | sumByColumn: 'recusa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'venda'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'recusa':'efetivo' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'venda':'efetivo' | percentage:1}}</td>
+                                        <td>{{c | sumByColumn: 'chips'| number}}</td>
                                     </tr>
+
                                     <tr ng-repeat="p in c" ng-show="showTbody">
-                                        <td>{{p.plano}}</td>
+                                        <td>{{p.operador}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.efetivo | number}}</td>
+                                        <td>{{p.recusa | number}}</td>
                                         <td>{{p.venda | number}}</td>
-                                        <td>{{p.ativacao | number}}</td>
+                                        <td>{{p.recusa / p.efetivo | percentage:1}}</td>
+                                        <td>{{p.venda / p.efetivo | percentage:1}}</td>
+                                        <td>{{p.chips | number}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESULTADO E LOTE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tabulações</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.resultado" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Lote</span>
+                        <small class="pull-right" ng-show="mostrargrafico == 'true'">
+                            <span>Indicador:</span>
+                            <select ng-model="dashboard.indicadorLote" ng-change="carregarGraficoLote()">
+                                <option value="qtd">Acionamento</option>
+                                <option value="contato">Contato</option>
+                                <option value="efetivo">Efetivo</option>
+                                <option value="venda">Venda</option>
+                                <option value="recusa">Recusa</option>
+                                <option value="chips">Chips</option>
+                                <option value="ativacao">Ativações</option>
+                                <option value="txvenda">% Venda</option>
+                                <option value="txrecusa">% Recusa</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.lote" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--WORKFLOW-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Workflow</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.workflow" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ORIGEM ATENDIMENTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Origem Atendimento</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.origem">
+                                <thead>
+                                    <tr>
+                                        <th>Origem</th>
+                                        <th>Acionamento</th>
+                                        <th>Contato</th>
+                                        <th>Efetivo</th>
+                                        <th>Recusa</th>
+                                        <th>Venda</th>
+                                        <th>% Recusa</th>
+                                        <th>% Venda</th>
+                                        <th>Chips</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.origem">
+                                        <td>{{c.origematendimento}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.efetivo | number}}</td>
+                                        <td>{{c.recusa | number}}</td>
+                                        <td>{{c.venda | number}}</td>
+                                        <td>{{c.recusa / c.efetivo | percentage:1}}</td>
+                                        <td>{{c.venda / c.efetivo | percentage:1}}</td>
+                                        <td>{{c.chips | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -128,381 +383,211 @@
                     </div>
                 </div>
             </div>
-
-            <!--GRAFICO POR DIA-->
-            <div class="col-xs-12 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Vendas e Ativações por Dia</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_dia" style="width: 100%; height: 300px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--GRAFICO POR STATUS-->
-            <!--
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Status das Vendas</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_status" style="width: 100%; height: 300px"></high-charts>
-                    </div>
-                </div>
-            </div>
-                -->
-            <!--PORTABILIDADE-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Portabilidade</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_portabilidade" style="width: 100%; height: 200px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--DEBITO EM CONTA-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Débito em Conta</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_debito" style="width: 100%; height: 200px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--CONTA ONLINE-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Conta Online</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_contaonline" style="width: 100%; height: 200px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--POR SEXO-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Genêro</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_sexo" style="width: 100%; height: 200px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--POR UF-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Vendas Região</span>
-                    </div>
-                    <div class="card-body">
-                        <mapa-brasil ballon-Text="both" style="height: 300px" width="100%" dados="dashboard.mapa"></mapa-brasil>
-                    </div>
-                </div>
-            </div>
-
-            <!--POR FX ETARIA-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Vendas por Faixa Etária</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.grafico_fxetaria" style="width: 100%; height: 300px"></high-charts>
-                    </div>
-                </div>
-            </div>
-
-            <!--POR OPERADOR-->
-            <div class="col-xs-12 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Análise por Operador</span>
-                    </div>
-                    <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="300px" order="[[1,'desc']]"></d-table>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
     </div>
 </div>
 
-
 <script>
     angular.module('app').controller('ctrl-tim-producao', function ($scope, $http, $filter) {
-
+       
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanhas: '',
         };
 
-        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/tim/vendas/filtros",
+            }).then(function success(r) {
+                $scope.dashFiltros.campanhas = r.data.Table1;
+                $scope.dashFiltros.status = r.status;
+            });
+        }
+
+        $scope.dashboard = {
+            indicadorDia: 'venda',
+            indicadorDia2: 'ativacao',
+            indicadorLote: 'venda'
+        };
+
+        $scope.mostrargrafico = 'true';
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/vendas/producao",
+                url: "/api/tim/vendas/atom/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
-                // #1 RESUMO
+                $scope.dashboard.dados = r.data;
+
                 $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.diadia = r.data.Table1;
+                $scope.dashboard.operacao = r.data.Table2;
+                $scope.dashboard.origem = r.data.Table6;
+               
+                $scope.carregarGraficoDia();
+                $scope.carregarGraficoResultado();
+                $scope.carregarGraficoWorkflow();
+                $scope.carregarGraficoLote();
 
-                // #2 DIA
-                $scope.dashboard.grafico_dia = {
-                    title: {
-                        text: ''
-                    },
-                    yAxis: {
-                        title: {
-                            text: ''
-                        },
-                    },
-                    xAxis: {
-                        categories: r.data.Table1.map(obj => obj.data)
-                    },
-                    series: [
-                        {
-                            type: 'line',
-                            name: 'Venda',
-                            color: '#00a65a',
-                            dataLabels: {
-                                enabled: true,
-                            },
-                            data: r.data.Table1.map(obj => obj.venda)
-                        },
-                        {
-                            type: 'column',
-                            name: 'Ativação',
-                            color: 'rgba(0,115,183,0.4)',
-                            dataLabels: {
-                                enabled: true,
-                            },
-                            data: r.data.Table1.map(obj => obj.ativacao)
-                        },
-                    ],
-                    tooltip: {
-                        shared: true,
-                    },
-                    credits: {
-                        enabled: false
-                    }
-                };
-
-                // #3 PLANO
-                $scope.dashboard.plano = r.data.Table2;
-
-                // #4 STATUS
-                let dados_status = alasql('select status, sum(venda) venda from ? group by status', [r.data.Table3]);
-                dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.venda }));
-                let dados_substatus = [];
-                for (s in dados_status) {
-                    let d = alasql('select substatus,venda from ?', [r.data.Table3.filter(d => d.status == dados_status[s]['name'])]);
-                    d = d.map(o => [o.substatus, o.venda]);
-                    let obj = {
-                        name: dados_status[s]['name'],
-                        id: dados_status[s]['name'],
-                        data: d
-                    }
-                    dados_substatus.push(obj);
-                }
-                $scope.dashboard.grafico_status = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.name}: {point.y}'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
-                    },
-                    series: [{
-                        name: "Status",
-                        colorByPoint: true,
-                        data: dados_status
-                    }],
-                    drilldown: {
-                        series: dados_substatus
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                };
-
-                // #5 UF
-                $scope.dashboard.mapa = r.data.Table4.map(obj => ({ id: 'BR-' + obj.uf, value: obj.venda }));
-
-                // #6 OPERADOR
-                $scope.dashboard.operador = r.data.Table5;
-
-                // #7 SEXO
-                $scope.dashboard.grafico_sexo = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table6.map(obj => ({ name: obj.sexo, y: obj.venda })) }]
-                };
-
-                // #8 FX ETARIA
-                $scope.dashboard.grafico_fxetaria = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ innerSize: '60%', data: r.data.Table7.map(obj => ({ name: obj.faixa_etaria, y: obj.venda })) }]
-                };
-
-                // #9 PORTABILIDADE
-                $scope.dashboard.grafico_portabilidade = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table8.map(obj => ({ name: obj.portabilidade, y: obj.venda })) }]
-                };
-
-                // #10 DEBITO EM CONTA
-                $scope.dashboard.grafico_debito = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table9.map(obj => ({ name: obj.debito_em_conta, y: obj.venda })) }]
-                };
-
-                // #11 CONTA ONLINE
-                $scope.dashboard.grafico_contaonline = {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{point.y} <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            }
-                        }
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: [{ data: r.data.Table10.map(obj => ({ name: obj.aceitou_conta_online, y: obj.venda })) }]
-                };
-
-                // STATUS DASHBOARD OK
                 $scope.dashboard.status = r.status;
-
             });
         }
 
+        $scope.carregarGraficoDia = function () {
+            $scope.dashboard.dia = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: $scope.dashboard.dados.Table1.map(o => o.data)
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: $scope.dashboard.indicadorDia,
+                        color: 'rgba(0,51,153,0.6)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        type: 'column',
+                        name: $scope.dashboard.indicadorDia2,
+                        color: 'rgba(119,119,119,0.8)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicadorDia2]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+        $scope.carregarGraficoResultado = function () {
+            let dados_status = alasql('select status, sum(quantidade) quantidade from ? group by status', [$scope.dashboard.dados.Table3]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+            let dados_substatus = [];
+            for (s in dados_status) {
+                let d = alasql('select substatus, quantidade from ?', [$scope.dashboard.dados.Table3.filter(d => d.status == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            $scope.dashboard.resultado = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                series: [{
+                    name: "Status",
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
+        $scope.carregarGraficoWorkflow = function () {
+            $scope.dashboard.workflow = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: $scope.dashboard.dados.Table4.map(o => o.substatus)
+                },
+                series: [
+                    {
+                        type: 'column',
+                        name: 'Quantidade',
+                        color: 'rgba(51,102,102,1)',
+                        data: $scope.dashboard.dados.Table4.map(o => o.qtd),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+        $scope.carregarGraficoLote = function () {
+            $scope.dashboard.lote = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: $scope.dashboard.dados.Table5.map(o => o.lote)
+                },
+                series: [
+                    {
+                        type: 'column',
+                        name: 'Qtd x Lote',
+                        color: 'rgba(51,102,102,1)',
+                        data: $scope.dashboard.dados.Table5.map(o => o[$scope.dashboard.indicadorLote]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        $scope.carregarFiltros();
         $scope.carregarDashboard();
     });
 
