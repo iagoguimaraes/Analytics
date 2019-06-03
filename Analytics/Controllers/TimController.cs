@@ -1407,25 +1407,27 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region VENDAS RECEPTIVO
+        #region VENDAS TELE ATOM
 
-        [Route("vendas/receptivo/horahora")]
+        [Route("vendas/atom/horahora")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasReceptivoHoraHora(FormDataCollection form)
+        public HttpResponseMessage VendasAtomHoraHora(FormDataCollection form)
         {
             try
             {
                 DateTime data = Convert.ToDateTime(form["data"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_horahora", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -1435,16 +1437,17 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("vendas/receptivo/producao")]
+        [Route("vendas/atom/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasReceptivoProducao(FormDataCollection form)
+        public HttpResponseMessage VendasAtomProducao(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
@@ -1452,8 +1455,9 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_producao", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -1465,7 +1469,7 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region VENDAS
+        #region VENDAS GERAL
 
         [Route("vendas/filtros")]
         [HttpGet]
