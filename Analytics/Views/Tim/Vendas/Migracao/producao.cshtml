@@ -190,25 +190,27 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
-                                        <th>Atendimento</th>
+                                        <th>Acionamento</th>
+                                        <th>Contato</th>
+                                        <th>Efetivo</th>
                                         <th>Recusa</th>
                                         <th>Venda</th>
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
                                         <th>Migração Ok</th>
-                                        <th>Crivo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="c in dashboard.diadia">
                                         <td>{{c.data}}</td>
+                                        <td>{{c.qtd | number}}</td>
                                         <td>{{c.contato | number}}</td>
+                                        <td>{{c.efetivo | number}}</td>
                                         <td>{{c.recusa | number}}</td>
                                         <td>{{c.venda | number}}</td>
                                         <td>{{c.recusa / c.efetivo | percentage:1}}</td>
                                         <td>{{c.venda / c.efetivo | percentage:1}}</td>
                                         <td>{{c.migracaook | number}}</td>
-                                        <td>{{c.crivo | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -233,6 +235,7 @@
                                     <tr>
                                         <th>Operador</th>
                                         <th>Acionamento</th>
+                                        <th>Contato</th>
                                         <th>Efetivo</th>
                                         <th>Recusa</th>
                                         <th>Venda</th>
@@ -248,6 +251,7 @@
                                             {{c[0].supervisor}}
                                         </td>
                                         <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'efetivo'| number}}</td>
                                         <td>{{c | sumByColumn: 'recusa'| number}}</td>
                                         <td>{{c | sumByColumn: 'venda'| number}}</td>
@@ -258,6 +262,7 @@
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.operador}}</td>
                                         <td>{{p.qtd | number}}</td>
+                                        <td>{{p.contato | number}}</td>
                                         <td>{{p.efetivo | number}}</td>
                                         <td>{{p.recusa | number}}</td>
                                         <td>{{p.venda | number}}</td>
