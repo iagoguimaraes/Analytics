@@ -536,6 +536,62 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/atemporal")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardAtemporal(FormDataCollection form)
+        {
+            try
+            {
+                int dtini = Convert.ToInt32(form["dtini"]);
+                int dtfim = Convert.ToInt32(form["dtfim"]);
+                DataTable periodo = JsonConvert.DeserializeObject<DataTable>(form["periodo"]);
+                string diautil = form["diautil"];
+                string feriado = form["feriado"];
+                DataTable diasemana = JsonConvert.DeserializeObject<DataTable>(form["diasemana"]);
+                DataTable semanames = JsonConvert.DeserializeObject<DataTable>(form["semanames"]);
+
+
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
+                DataTable classificacao = JsonConvert.DeserializeObject<DataTable>(form["classificacao"]);
+
+                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("periodo", periodo);
+                    parametros.Add("diautil", diautil);
+                    parametros.Add("feriado", feriado);
+                    parametros.Add("diaSemana", diasemana);
+                    parametros.Add("semanaMes", semanames);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("tenure", tenure);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("classificacao", classificacao);
+                    //parametros.Add("equipe", equipe);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_atemporal", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
