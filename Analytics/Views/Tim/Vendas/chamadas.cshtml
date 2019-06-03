@@ -181,13 +181,23 @@
             <div class="col-xs-12 col-md-7">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
+                        <span class="card-header-title">Análise por {{visao}}</span>
+                        <div ng-show="visao == 'dia'" class="card-header-button" ng-click="extrair('Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <div ng-show="visao == 'hora'" class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="card-header-button">
+                            <select ng-model="visao">
+                                <option value="hora">Hora</option>
+                                <option value="dia">Dia</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-charts config="dashboard.hora" style="width: 100%; height: 300px"></high-charts>
+                        <high-charts ng-show="visao == 'hora'" config="dashboard.hora" style="width: 100%; height: 300px"></high-charts>
+                        <high-charts ng-show="visao == 'dia'" config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -293,6 +303,7 @@
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.visao = 'hora'
 
         // carrega os filtros e colocar no scope
         $scope.carregarFiltros = function () {
@@ -316,6 +327,44 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.fila = r.data.Table1;
 
+                $scope.dashboard.dia = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: ''
+                            },
+                        }
+                    ],
+                    xAxis: {
+                        categories: r.data.Table2.map(o => o.data)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Alô',
+                            color: '#0073b7',
+                            data: r.data.Table2.map(o => o['atendidos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                        {
+                            type: 'column',
+                            name: 'Abandono',
+                            color: '#dd4b39',
+                            data: r.data.Table2.map(o => o['abandonos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
                 $scope.dashboard.hora = {
                     title: {
                         text: ''
