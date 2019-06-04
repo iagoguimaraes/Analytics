@@ -110,16 +110,23 @@
                 </div>
 
                 <div class="row" style="background-color: #ed44ac; color:white">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
-                            <span class="description-text">Esforço</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.qtd_ad | number"></h5>
+                            <span class="description-text">AD</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
+                            <span class="description-text">Esforço</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
@@ -134,10 +141,10 @@
                             <span class="description-text">Tx Apv</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
-                            <span class="description-text">Conversao</span>
+                            <span class="description-text">Conversão</span>
                         </div>
                     </div>
                 </div>
@@ -164,6 +171,7 @@
                                 <thead>
                                     <tr>
                                         <th>Hora</th>
+                                        <th>AD</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -178,6 +186,7 @@
                                 <tbody>
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
+                                        <td>{{hora.qtd_ad | number}}</td>
                                         <td>{{hora.discado | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
@@ -192,6 +201,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
+                                        <th>{{dashboard.resumo.qtd_ad | number}}</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>

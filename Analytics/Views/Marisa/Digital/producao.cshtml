@@ -169,6 +169,7 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
+                                        <th>AD</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -183,6 +184,7 @@
                                 <tbody>
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.qtd_agt | number}}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
@@ -194,6 +196,23 @@
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.qtd_agt | number}}</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+
+                                    </tr>
+                                </tfoot>
+
                             </table>
                         </div>
 

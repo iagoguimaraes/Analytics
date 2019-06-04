@@ -199,14 +199,14 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
 
 
-                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_LEADER"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("data", dtini.ToString("yyyy-MM-dd"));
 
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_basecobranca", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
