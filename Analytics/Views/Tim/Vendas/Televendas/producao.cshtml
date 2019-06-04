@@ -15,7 +15,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -49,12 +49,6 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
-                        </div>
-
-                        <!--CAMPANHA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Campanhas</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -397,21 +391,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            campanhas: '',
         };
-
-        $scope.dashFiltros = {};
-
-        // carrega os filtros e colocar no scope
-        $scope.carregarFiltros = function () {
-            $http({
-                method: 'GET',
-                url: "/api/tim/vendas/filtros",
-            }).then(function success(r) {
-                $scope.dashFiltros.campanhas = r.data.Table1;
-                $scope.dashFiltros.status = r.status;
-            });
-        }
 
         $scope.dashboard = {
             indicadorDia: 'venda',
@@ -424,7 +404,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/vendas/atom/producao",
+                url: "/api/tim/vendas/televendas/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
@@ -587,7 +567,6 @@
             };
         }
 
-        $scope.carregarFiltros();
         $scope.carregarDashboard();
     });
 

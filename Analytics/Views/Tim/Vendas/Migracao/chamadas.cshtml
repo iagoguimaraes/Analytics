@@ -1,0 +1,505 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-timvendas-chamadas">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Migração - Chamadas</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.chamadas | megaNumber"></h3>
+                        <p>Ligações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.atendidos | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.atendidos / dashboard.resumo.chamadas | percentage: 1"></h4>
+                        <p>Alô</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-headphones"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.abandonos | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.abandonos / dashboard.resumo.chamadas | percentage: 1"></h4>
+                        <p>Abandonos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.conversado / dashboard.resumo.atendidos | formatTimer"></h3>
+                        <p>TMA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR FILA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Fila</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.fila">
+                                <thead>
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Descrição</th>
+                                        <th>Ligações</th>
+                                        <th>Alôs</th>
+                                        <th>Abandonos</th>
+                                        <th>% Alô</th>
+                                        <th>% Abandono</th>
+                                        <th>TMA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.fila">
+                                        <td>{{r.id_fila}}</td>
+                                        <td>{{r.descricao}}</td>
+                                        <td>{{r.chamadas | number}}</td>
+                                        <td>{{r.atendidos | number}}</td>
+                                        <td>{{r.abandonos | number}}</td>
+                                        <td>{{r.atendidos / r.chamadas | percentage:1}}</td>
+                                        <td>{{r.abandonos / r.chamadas | percentage:1}}</td>
+                                        <td>{{r.conversado / r.atendidos | formatTimer}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total</th>
+                                        <th>{{dashboard.resumo.chamadas | number}}</th>
+                                        <th>{{dashboard.resumo.atendidos | number}}</th>
+                                        <th>{{dashboard.resumo.abandonos | number}}</th>
+                                        <th>{{dashboard.resumo.atendidos / dashboard.resumo.chamadas | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.abandonos / dashboard.resumo.chamadas | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.conversado / dashboard.resumo.atendidos | formatTimer}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--HORA HORA E STATUS TELEFONIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-7">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por {{visao}}</span>
+                        <div ng-show="visao == 'dia'" class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div ng-show="visao == 'hora'" class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="card-header-button">
+                            <select ng-model="visao">
+                                <option value="hora">Hora</option>
+                                <option value="dia">Dia</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts ng-show="visao == 'hora'" config="dashboard.hora" style="width: 100%; height: 300px"></high-charts>
+                        <high-charts ng-show="visao == 'dia'" config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Status Telefonia</span>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.tabulacao" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ORIGEM, TIPO TEL E MAPA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Origem da Chamada</span>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.origem" style="width: 100%; height: 200px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tipo de Telefone</span>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.tipotel" style="width: 100%; height: 200px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Melhor Rota</span>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.rota" style="width: 100%; height: 200px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--AGENTE E REGIAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Agente</span>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.agente" scroll-collapse="true" scroll-y="382px" paging="true" order="[[1,'desc']]" ></d-table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Melhor Região</span>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height: 500px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-timvendas-chamadas', function ($scope, $http, $filter) {
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {};
+        $scope.visao = 'hora'
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/migracao/chamadas",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.fila = r.data.Table1;
+
+                $scope.dashboard.dia = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: ''
+                            },
+                        }
+                    ],
+                    xAxis: {
+                        categories: r.data.Table2.map(o => o.data)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Alô',
+                            color: '#0073b7',
+                            data: r.data.Table2.map(o => o['atendidos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                        {
+                            type: 'column',
+                            name: 'Abandono',
+                            color: '#dd4b39',
+                            data: r.data.Table2.map(o => o['abandonos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.hora = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: ''
+                            },
+                        }
+                    ],
+                    xAxis: {
+                        categories: r.data.Table3.map(o => o.hora)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Alô',
+                            color: '#0073b7',
+                            data: r.data.Table3.map(o => o['atendidos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                        {
+                            type: 'column',
+                            name: 'Abandono',
+                            color: '#dd4b39',
+                            data: r.data.Table3.map(o => o['abandonos']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.tabulacao = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: '60%'
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            name: 'chamadas',
+                            data: r.data.Table4.map(o => ({ name: o['descricao'], y: o['chamadas'] })),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.origem = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: ''
+                            },
+                        }
+                    ],
+                    xAxis: {
+                        categories: r.data.Table5.map(o => o.origem)
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            name: 'chamadas',
+                            data: r.data.Table5.map(o => o['chamadas']),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.tipotel = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            name: 'chamadas',
+                            data: r.data.Table6.map(o => ({ name: o['tipo_telefone'], y: o['chamadas'] })),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.rota = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: ''
+                            },
+                        }
+                    ],
+                    xAxis: {
+                        categories: r.data.Table7.map(o => o.rota)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Hit Rate',
+                            data: r.data.Table7.map(o => (o.atendidos*100.0/o.chamadas).toFixed(1)/1),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.mapa = r.data.Table8.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.atendidos * 100 / obj.chamadas).toFixed(1) }));
+                $scope.dashboard.agente = r.data.Table9;
+
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;              
+            });
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
