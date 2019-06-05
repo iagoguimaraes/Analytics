@@ -183,6 +183,7 @@
                                 <thead>
                                     <tr>
                                         <th>Operador</th>
+                                        <th>#</th>
                                         <th>Acionamento</th>
                                         <th>Contato</th>
                                         <th>Efetivo</th>
@@ -199,6 +200,7 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].supervisor}}
                                         </td>
+                                        <td>{{c.length}}</td>
                                         <td>{{c | sumByColumn: 'qtd' | number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'efetivo'| number}}</td>
@@ -209,7 +211,7 @@
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
-                                        <td>{{p.operador}}</td>
+                                        <td colspan="2">{{p.operador}}</td>
                                         <td>{{p.qtd | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.efetivo | number}}</td>
