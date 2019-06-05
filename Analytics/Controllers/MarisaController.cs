@@ -760,6 +760,32 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/digital/cadmailing")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMailing(FormDataCollection form)
+        {
+            try
+            {
+                DataTable mailing = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("mailing", mailing);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_fatoMailing", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
     }
 
