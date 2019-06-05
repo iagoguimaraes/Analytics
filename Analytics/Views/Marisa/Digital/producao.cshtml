@@ -164,12 +164,25 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="row margin-bottom">
+                            <!--Cadastrar Mailing-->
+                            <div>
+                                <small>
+                                    <input type="button" class="btn btn-secondary" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
+                                </small>
+                                <small>
+                                    <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar()" />
+                                </small>
+                            </div>
+
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
                                         <th>AD</th>
+                                        <th>Mailing</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -181,10 +194,14 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="idtbody">
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{dia.qtd_agt | number}}</td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.mailing}}" ng-disabled="!opcoes.edit" />
+                                        </td>
+                                        <td ng-if="!opcoes.edit">{{dia.mailing | number}}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
@@ -200,6 +217,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.qtd_agt | number}}</th>
+                                        <th>{{dashboard.resumo.mailing | number}}</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
@@ -293,6 +311,35 @@
         $scope.grafico = { indicador: 'promessa' };
         $scope.conceito = { string: '' };
 
+        $scope.opcoes = {
+            edit: false
+        };
+
+        // Objeto Mailing
+        $scope.mailing = [{
+            data: '',
+            qtd_mailing: ''
+        }];
+
+        $scope.cadastrarMailing = function () {
+            $http({
+                method: 'POST',
+                url: "	/api/marisa/dashboard/digital/cadmailing",
+                data: JSON.stringify($scope.mailing),
+            }).then(function success(r) {
+
+                $scope.mailing = [{
+                    data: '',
+                    qtd_mailing: ''
+                }];
+
+                location.reload();
+                $scope.carregarDashboard();
+
+            });
+        }
+
+
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
@@ -314,9 +361,31 @@
                 } else {
                     $scope.conceito.string = '- Unique';
                 }
-                console.log($scope.grafico.indicador2)
 
             });
+        }
+
+        $scope.editar = function () {
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+        }
+
+        $scope.salvar = function () {
+
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+
+            let tabela = document.getElementById('idtbody')
+
+
+            for (let i = 0; i < tabela.rows.length; i++) {
+
+                let dt = $scope.converterData(tabela.children[i].children[0].innerHTML);
+                let txt = tabela.children[i].children[2].getElementsByTagName('input').item(0).value;
+
+                $scope.mailing.push({ data: dt, qtd_mailing: txt });
+
+            }
+
+            $scope.cadastrarMailing();
         }
 
         // carrega o mapa de acordo com o indicador escolhido
@@ -333,7 +402,14 @@
         }
 
         $scope.carregarDashboard();
-        //console.log($scope.filtros.conceito);
+
+        $scope.converterData = function (data) {
+            var dia = data.split("/")[0];
+            var mes = data.split("/")[1];
+            var ano = data.split("/")[2];
+
+            return ano + '-' + ("0" + mes).slice(-2) + '-' + ("0" + dia).slice(-2);
+        }
 
     });
 </script>
