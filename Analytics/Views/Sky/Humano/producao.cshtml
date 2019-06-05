@@ -187,7 +187,7 @@
                 <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-new-brown">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.qtd_pa | number"></h3>                            
+                            <h3 ng-bind="dashboard.resumo.qtd_pa | number"></h3>
                             <p>Média PA</p>
                         </div>
                         <div class="icon">
@@ -494,88 +494,95 @@
 
 <script>
 
-            angular.module('app').controller('ctrl-sky-producao', function ($scope, $http, $filter) {
-            // filtros iniciais
-                let newdate = new Date();
+    angular.module('app').controller('ctrl-sky-producao', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
 
 
-                newdate.setDate(newdate.getDate() - 1);
+        newdate.setDate(newdate.getDate() - 1);
 
-            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
-            $scope.filtros = {
-                dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-                dtfim: $filter('date')(newdate, "yyyy-MM-dd"),           
-                carteira: '',
-                segmentacao: '',
-                supervisor: '',
-                tenure: ''
-            };
-            $scope.dashFiltros = {};
-            $scope.dashboard = {};
-            $scope.grafico = { indicador: 'promessa' };
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteira: '',
+            segmentacao: '',
+            supervisor: '',
+            tenure: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'promessa' };
 
-            // carregar os filtros
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.segmentacao = r.data.Table1;
+            $scope.dashFiltros.supervisor = data.Table2;
+            $scope.dashFiltros.tenure = data.Table3;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
             $http({
-                method: 'GET',
-                url: "/api/sky/dashboard/humano/filtros",
+                method: 'POST',
+                url: "/api/sky/dashboard/humano/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
-                $scope.dashFiltros.status = r.status;
+                $scope.dashboard.status = r.status;                
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.tabulacao = data.Table2;
+                $scope.dashboard.equipe = data.Table3;
 
-                $scope.dashFiltros.carteira = r.data.Table;
-                $scope.dashFiltros.segmentacao = r.data.Table1;
-                $scope.dashFiltros.supervisor = data.Table2;
-                $scope.dashFiltros.tenure = data.Table3;
+                $scope.carregarGrafico();
+
             });
+        }
 
-            // obtem filtros do escopo e carrega os dados do dashboard
-            $scope.carregarDashboard = function () {
-                $http({
-                    method: 'POST',
-                    url: "/api/sky/dashboard/humano/producao",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    let data = r.data;
-                    $scope.dashboard.status = r.status;
-                    $scope.dashboard.resumo = data.Table[0];
-                    $scope.dashboard.dia = data.Table1;
-                    $scope.dashboard.tabulacao = data.Table2;
-                    $scope.dashboard.equipe = data.Table3;
-
-                    $scope.carregarGrafico();
-
-                });
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dia;
+            $scope.dashboard.datas = dados.map(obj => obj.data);
+            switch ($scope.grafico.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txtab':
+                    $scope.dashboard.grafico = [{ name: 'taxa tabulação', data: dados.map(obj => (obj.contato * 100 / obj.transferido).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.grafico = [{ name: 'taxa localização', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.grafico = [{ name: 'taxa aproveitamento', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.grafico = [{ name: 'conversão', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
 
-            // carrega o mapa de acordo com o indicador escolhido
-            $scope.carregarGrafico = function () {
-                let dados = $scope.dashboard.dia;
-                $scope.dashboard.datas = dados.map(obj => obj.data);
-                switch ($scope.grafico.indicador) {
-                    case 'hitrate':
-                        $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
-                        break;
-                    case 'txtab':
-                        $scope.dashboard.grafico = [{ name: 'taxa tabulação', data: dados.map(obj => (obj.contato * 100 / obj.transferido).toFixed(1) * 1) }];
-                        break;
-                    case 'txloc':
-                        $scope.dashboard.grafico = [{ name: 'taxa localização', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
-                        break;
-                    case 'txapv':
-                        $scope.dashboard.grafico = [{ name: 'taxa aproveitamento', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
-                        break;
-                    case 'conversao':
-                        $scope.dashboard.grafico = [{ name: 'conversão', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                        break;
-                    default:
-                        $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
-                }
-            }
+        $scope.carregarDashboard();
 
-            $scope.carregarDashboard();
 
-        });
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
 
 </script>
