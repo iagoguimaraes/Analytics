@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Chamadas</div>
+            <div class="page-name">Televendas - Chamadas</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -16,7 +16,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -50,12 +50,6 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
-                        </div>
-
-                        <!--PRODUTO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Filas</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -298,30 +292,16 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            filas: '',
         };
 
-        $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.visao = 'hora'
-
-        // carrega os filtros e colocar no scope
-        $scope.carregarFiltros = function () {
-            $http({
-                method: 'GET',
-                url: "/api/tim/vendas/filtros",
-            }).then(function success(r) {              
-                $scope.dashFiltros.filas = r.data.Table;
-
-                $scope.dashFiltros.status = r.status;
-            });
-        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/tim/vendas/chamadas",
+                url: "/api/tim/vendas/televendas/chamadas",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.resumo = r.data.Table[0];
@@ -514,8 +494,6 @@
             });
         }
 
-
-        $scope.carregarFiltros();
         $scope.carregarDashboard();
 
         $scope.extrair = function (tabela) {

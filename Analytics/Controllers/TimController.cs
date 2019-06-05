@@ -1016,7 +1016,7 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region VENDAS TELE
+        #region VENDAS AKIVA
 
         [Route("vendas/horahora")]
         [HttpPost]
@@ -1405,29 +1405,55 @@ namespace Analytics.Controllers
             }
         }
 
-        #endregion
-
-        #region VENDAS TELE ATOM
-
-        [Route("vendas/atom/horahora")]
+        [Route("vendas/migracao/chamadas")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasAtomHoraHora(FormDataCollection form)
+        public HttpResponseMessage VendasMigracaoChamadas(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_migracao_chamadas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region VENDAS RECEPTIVO
+
+        [Route("vendas/receptivo/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasReceptivoHoraHora(FormDataCollection form)
         {
             try
             {
                 DateTime data = Convert.ToDateTime(form["data"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("data", data.ToString("yyyy-MM-dd"));
-                    parametros.Add("campanhas", campanhas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_horahora", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -1437,17 +1463,16 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("vendas/atom/producao")]
+        [Route("vendas/receptivo/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasAtomProducao(FormDataCollection form)
+        public HttpResponseMessage VendasReceptivoProducao(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
@@ -1455,9 +1480,36 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("campanhas", campanhas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_producao", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("vendas/receptivo/chamadas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasReceptivoChamadas(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_chamadas", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -1469,19 +1521,25 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region VENDAS GERAL
+        #region VENDAS TELEVENDAS
 
-        [Route("vendas/filtros")]
-        [HttpGet]
+        [Route("vendas/televendas/horahora")]
+        [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasFiltros()
+        public HttpResponseMessage VendasTelevendasHoraHora(FormDataCollection form)
         {
             try
             {
+                DateTime data = Convert.ToDateTime(form["data"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -1491,17 +1549,16 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("vendas/chamadas")]
+        [Route("vendas/televendas/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage VendasChamadas(FormDataCollection form)
+        public HttpResponseMessage VendasTelevendasProducao(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
@@ -1509,9 +1566,36 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("filas", filas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_chamadas", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("vendas/televendas/chamadas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasTelevendasChamadas(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_chamadas", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
