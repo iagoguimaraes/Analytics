@@ -1433,6 +1433,34 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("vendas/migracao/backoffice")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasMigracaoBackoffice(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_migracao_backoffice", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region VENDAS RECEPTIVO
@@ -1519,6 +1547,34 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("vendas/receptivo/backoffice")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasReceptivoBackoffice(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_backoffice", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region VENDAS TELEVENDAS
@@ -1596,6 +1652,34 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_chamadas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("vendas/televendas/backoffice")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasTelevendasBackoffice(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_backoffice", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

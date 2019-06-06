@@ -1,0 +1,268 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-backoffice">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Migração - Backoffice</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
+                        <p>Vendas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone-square"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.tratar | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.tratar / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>A Tratar</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-headphones"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cancelado | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cancelado / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>Cancelado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-3">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.migracaoapv | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.migracaoapv / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>Migração Apv</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exchange"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.migracaook | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.migracaook / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>Migração Ok</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--SITUAÇÃO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Situação</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.situacao" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--DIA A DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Vendas</th>
+                                        <th>A Tratar</th>
+                                        <th>Cancelado</th>
+                                        <th>Migração Apv</th>
+                                        <th>Migração Ok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.diadia">
+                                        <td>{{c.data}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td><b>{{c.tratar | number}}</b> ({{c.tratar / c.qtd | percentage:1}})</td>
+                                        <td><b>{{c.cancelado | number}}</b> ({{c.cancelado / c.qtd | percentage:1}})</td>
+                                        <td><b>{{c.migracaoapv | number}}</b> ({{c.migracaoapv / c.qtd | percentage:1}})</td>
+                                        <td><b>{{c.migracaook | number}}</b> ({{c.migracaook / c.qtd | percentage:1}})</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-tim-backoffice', function ($scope, $http, $filter) {
+       
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {
+        };
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/migracao/backoffice",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.diadia = r.data.Table2;  
+
+                // SITUACAO
+                let dados_status = alasql('select status, sum(quantidade) quantidade from ? group by status', [$scope.dashboard.dados.Table1]);
+                dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+                let dados_substatus = [];
+                for (s in dados_status) {
+                    let d = alasql('select substatus, quantidade from ?', [$scope.dashboard.dados.Table1.filter(d => d.status == dados_status[s]['name'])]);
+                    d = d.map(o => [o.substatus, o.quantidade]);
+                    let obj = {
+                        name: dados_status[s]['name'],
+                        id: dados_status[s]['name'],
+                        data: d
+                    }
+                    dados_substatus.push(obj);
+                }
+                $scope.dashboard.situacao = {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.y}'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                    },
+                    series: [{
+                        name: "Status",
+                        colorByPoint: true,
+                        data: dados_status
+                    }],
+                    drilldown: {
+                        series: dados_substatus
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                };                       
+             
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>
