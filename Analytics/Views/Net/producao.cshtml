@@ -89,11 +89,6 @@
         <div ng-if="dashboard.status == 200">
 
             <div class="row margin-bottom">
-                @*<div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box">
-                        <img class="img-responsive center-block" src="~/Content/Images/Net/logo-producao.jpg" style="height:102px" />
-                    </div>
-                </div>*@
                 <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-gray">
                         <div class="inner">
@@ -228,6 +223,9 @@
                             <span class="card-header-title">Análise por Supervisor/Equipe</span>
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table4')">
+                                <i class="fa fa-user"></i>
                             </div>
                             <div class="card-header-button" ng-click="extrair('Table3')">
                                 <i class="fa fa-file-excel-o"></i>
@@ -411,6 +409,7 @@
                     $scope.dashboard.dia = r.data.Table1;
                     $scope.dashboard.tabulacao = r.data.Table2;
                     $scope.dashboard.supervisor = r.data.Table3;
+                    $scope.dashboard.operadorOcorrencia = r.data.Table4;
 
                     $scope.dashboard.gridCh = false;
                     if (!($scope.filtros.empresas.search("5") === -1)) {

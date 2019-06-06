@@ -171,7 +171,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_LEADER"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
