@@ -9,6 +9,14 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Hora Hora</div>
+            <br>
+            <div class="inner">
+                <div ng-bind="dashboard.dataatz.data | date: 'yyyy-MM-dd HH:mm' "></div>
+                <p>Ultima atualização</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-refresh"></i>
+            </div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -434,6 +442,7 @@
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.operador = r.data.Table2;
                 $scope.dashboard.supervisor = r.data.Table3;
+                 $scope.dashboard.dataatz = r.data.Table4[0];
 
                 $scope.carregarGrafico();
             });
