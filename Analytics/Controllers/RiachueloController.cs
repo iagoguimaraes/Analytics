@@ -1079,7 +1079,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("faixas", faixas);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_planejamento", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_metas", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
