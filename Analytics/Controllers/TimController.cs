@@ -1359,13 +1359,15 @@ namespace Analytics.Controllers
         {
             try
             {
-                DateTime data = Convert.ToDateTime(form["data"]);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_migracao_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1473,13 +1475,15 @@ namespace Analytics.Controllers
         {
             try
             {
-                DateTime data = Convert.ToDateTime(form["data"]);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_receptivo_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1587,13 +1591,15 @@ namespace Analytics.Controllers
         {
             try
             {
-                DateTime data = Convert.ToDateTime(form["data"]);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
