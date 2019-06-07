@@ -148,7 +148,44 @@
         </div>
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmento Quantidade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('DiaQuantidade','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.resultado" style="width: 100%;"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmento Valor</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('DiaValor','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.resultadoValor" style="width: 100%;"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Dia Quantidade</span>
@@ -171,29 +208,17 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-12 col-md-4 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Segmento Quantidade</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.resultado" style="width: 100%;"></high-charts>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Dia Valor</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('DiaValor','Table2')">
+                        <div class="card-header-button" ng-click="extrair('DiaValor','Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -202,19 +227,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-12 col-md-4 margin-bottom">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Segmento Valor</span>
-                    </div>
-                    <div class="card-body">
-                        <high-charts config="dashboard.resultadoValor" style="width: 100%;"></high-charts>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -294,7 +308,7 @@
 
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.operador =  r.data.Table5;
+                $scope.dashboard.operador =  r.data.Table4;
 
                 $scope.carregarGraficoCarteira();
                 $scope.carregarGraficoCarteiraValor();
@@ -306,35 +320,35 @@
         $scope.carregarGrafico = function () {
 
             let dadosQtd = $scope.dashboard.dados.Table1;
-            let dadosVlr = $scope.dashboard.dados.Table2;
+
             console.log(dadosQtd);
             switch ($scope.graf.indicador) {
                 case 'total':
                     $scope.dashboard.qtDia = [{ name: 'Quantidade', data: dadosQtd.map(obj => (obj.quantidade)) }];
-                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosVlr.map(obj => (obj.valor)) }];
+                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosQtd.map(obj => (obj.valor)) }];
                     break;
                 case 'operacao':
                     $scope.dashboard.qtDia = [{ name: 'Quantidade', data: dadosQtd.map(obj => (obj.quantidade_ope)) }];
-                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosVlr.map(obj => (obj.valor_op)) }];
+                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosQtd.map(obj => (obj.valor_op)) }];
                     break;
                 case 'espontaneo':
                     $scope.dashboard.qtDia = [{ name: 'Quantidade', data: dadosQtd.map(obj => (obj.quantidade_esp)) }];
-                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosVlr.map(obj => (obj.valor_esp)) }];
+                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosQtd.map(obj => (obj.valor_esp)) }];
                     break;
                 default:
                     $scope.dashboard.qtDia = [{ name: 'Quantidade', data: dadosQtd.map(obj => (obj.quantidade)) }];
-                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosVlr.map(obj => (obj.valor)) }];
+                    $scope.dashboard.vlDia = [{ name: 'Valor', data: dadosQtd.map(obj => (obj.valor)) }];
             }
          }
 
 
         $scope.carregarGraficoCarteira = function () {
-            let dados_status = alasql('select ds_score, sum(quantidade) quantidade from ? group by ds_score', [$scope.dashboard.dados.Table3]);
+            let dados_status = alasql('select ds_score, sum(quantidade) quantidade from ? group by ds_score', [$scope.dashboard.dados.Table2]);
             dados_status = dados_status.map(o => ({ name: o.ds_score, drilldown: o.ds_score, y: o.quantidade }));
 
             let dados_substatus = [];
             for (s in dados_status) {
-                let d = alasql('select ds_regua, quantidade from ?', [$scope.dashboard.dados.Table3.filter(d => d.ds_score == dados_status[s]['name'])]);
+                let d = alasql('select ds_regua, quantidade from ?', [$scope.dashboard.dados.Table2.filter(d => d.ds_score == dados_status[s]['name'])]);
 
                 d = d.map(o => [o.ds_regua, o.quantidade]);
                 let obj = {
@@ -379,12 +393,12 @@
         }
 
         $scope.carregarGraficoCarteiraValor = function () {
-            let dados_status = alasql('select ds_score, sum(valor) valor from ? group by ds_score', [$scope.dashboard.dados.Table4]);
+            let dados_status = alasql('select ds_score, sum(valor) valor from ? group by ds_score', [$scope.dashboard.dados.Table3]);
             dados_status = dados_status.map(o => ({ name: o.ds_score, drilldown: o.ds_score, y: o.valor }));
 
             let dados_substatus = [];
             for (s in dados_status) {
-                let d = alasql('select ds_regua, valor from ?', [$scope.dashboard.dados.Table4.filter(d => d.ds_score == dados_status[s]['name'])]);
+                let d = alasql('select ds_regua, valor from ?', [$scope.dashboard.dados.Table3.filter(d => d.ds_score == dados_status[s]['name'])]);
 
                 d = d.map(o => [o.ds_regua, o.valor]);
                 let obj = {
