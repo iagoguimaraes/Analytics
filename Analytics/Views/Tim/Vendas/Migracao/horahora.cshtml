@@ -31,12 +31,23 @@
 
                         <!--DATA INCIAL-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Data</label>
+                            <label class="control-sidebar-subheading">Data Inicial</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
                         </div>
 
@@ -261,7 +272,8 @@
     angular.module('app').controller('ctrl-tim-horahora', function ($scope, $http, $filter) {
 
         $scope.filtros = {
-            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
         };
 
         $scope.dashboard = {
