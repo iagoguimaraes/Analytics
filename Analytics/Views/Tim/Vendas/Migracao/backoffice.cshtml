@@ -12,6 +12,10 @@
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
+                <i class="fa fa-file-excel-o"></i>
+                EXTRAIR
+            </div>
         </header>
 
         <!-- FILTROS -->
@@ -102,12 +106,25 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.backlog | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.backlog / dashboard.resumo.qtd | percentage: 1"></h4>
+                        <p>Backlog</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bullseye"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.migracaoapv | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.migracaoapv / dashboard.resumo.qtd | percentage: 1"></h4>
-                        <p>Migração Apv</p>
+                        <p>Mig Apv</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-exchange"></i>
@@ -115,12 +132,12 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.migracaook | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.migracaook / dashboard.resumo.qtd | percentage: 1"></h4>
-                        <p>Migração Ok</p>
+                        <p>Mig Ok</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -162,6 +179,7 @@
                                         <th>Vendas</th>
                                         <th>A Tratar</th>
                                         <th>Cancelado</th>
+                                        <th>Backlog</th>
                                         <th>Migração Apv</th>
                                         <th>Migração Ok</th>
                                     </tr>
@@ -172,6 +190,7 @@
                                         <td>{{c.qtd | number}}</td>
                                         <td><b>{{c.tratar | number}}</b> ({{c.tratar / c.qtd | percentage:1}})</td>
                                         <td><b>{{c.cancelado | number}}</b> ({{c.cancelado / c.qtd | percentage:1}})</td>
+                                        <td><b>{{c.backlog | number}}</b> ({{c.backlog / c.qtd | percentage:1}})</td>
                                         <td><b>{{c.migracaoapv | number}}</b> ({{c.migracaoapv / c.qtd | percentage:1}})</td>
                                         <td><b>{{c.migracaook | number}}</b> ({{c.migracaook / c.qtd | percentage:1}})</td>
                                     </tr>
@@ -210,7 +229,8 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.diadia = r.data.Table2;  
+                $scope.dashboard.diadia = r.data.Table2;
+                $scope.dashboard.analitico = r.data.Table3;
 
                 // SITUACAO
                 let dados_status = alasql('select status, sum(quantidade) quantidade from ? group by status', [$scope.dashboard.dados.Table1]);
@@ -263,6 +283,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.analitico]);
+        }
     });
 
 </script>
