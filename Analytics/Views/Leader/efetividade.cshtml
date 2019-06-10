@@ -51,6 +51,12 @@
                             </div>
                         </div>
 
+                        <!--SEGMENTOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -368,10 +374,24 @@
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
+        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            segmentos:''
         };
+
+        //carregar os filtros
+        $http({
+            method: 'POST',
+            url: "/api/leader/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.segmentos = r.data.Table;
+
+        });
 
         $scope.dashboard = {};
         $scope.graficoHora = { indicador: 'qtd', exibir: 'false' };
