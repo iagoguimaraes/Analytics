@@ -724,6 +724,7 @@ namespace Analytics.Controllers
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable faixaAtrasoM1 = JsonConvert.DeserializeObject<DataTable>(form["faixaAtrasoM1"]);
                 DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
+                DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -736,7 +737,8 @@ namespace Analytics.Controllers
                     parametros.Add("faixaAtraso", faixaAtraso);
                     parametros.Add("produto", produto);
                     parametros.Add("faixaAtrasoM1", faixaAtrasoM1);
-                    parametros.Add("statusSegmentacao", statusSegmentacao);
+                    parametros.Add("estado", estado);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
