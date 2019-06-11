@@ -1,0 +1,276 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-marisa-digital-sms">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Sms</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-4">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.sms_5_a10 | megaNumber"></h3>
+                        <p>SMS 5 à 10</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-4">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.sms_11_a30 | megaNumber"></h3>
+                        <p>SMS 11 à 30</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.sms_preventivo | number"></h3>
+                        <p>SMS Preventivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!--VISÃO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th><i class="fa fa-comments"></i> 5 à 10</th>
+                                        <th><i class="fa fa-commenting"></i> 11 à 30</th>
+                                        <th><i class="fa fa-comment"></i> Preventivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="idtbody">
+                                    <tr ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.sms_5_a10 | number}}</td>
+                                        <td>{{dia.sms_11_a30 | number}}</td>
+                                        <td>{{dia.sms_preventivo | number}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.sms_5_a10 | number}}</th>
+                                        <th>{{dashboard.resumo.sms_11_a30 | number}}</th>
+                                        <th>{{dashboard.resumo.sms_preventivo | number}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRÁFICO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Dia {{conceito.string}}</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.grafico" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.datas" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FAIXA DE VALOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Valor</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Idade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+
+<script>
+    angular.module('app').controller('ctrl-marisa-digital-sms', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Produção';
+        dadosPagina.descricao = 'Marisa'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            conceito: '',
+        };
+
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'promessa' };
+        $scope.conceito = { string: '' };
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/marisa/dashboard/digital/sms",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                //$scope.dashboard.tabulacao = data.Table2;
+                //$scope.dashboard.dados = r.data;
+                $scope.dashboard.datas = data.Table1.map(obj => obj.data);
+                $scope.dashboard.grafico = [{ name: '5 a 10', type: 'spline', color: '#d2d6de', data: data.Table1.map(obj => obj.sms_5_a10) },
+                                            { name: '11 a 30', type: 'spline', color: '#00c0ef', data: data.Table1.map(obj => obj.sms_11_a30) },
+                                            { name: 'Preventivo', type: 'spline', color: '#dd4b39', data: data.Table1.map(obj => obj.sms_preventivo) }
+                                           ];
+        
+                $scope.dashboard.faixaValor = data.Table2.map(obj => obj.ds_saldo);
+                $scope.dashboard.faixaIdade = data.Table3.map(obj => obj.ds_idade);
+
+                $scope.dashboard.valor = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.contrato)), color: '#ff4d94' }];
+                $scope.dashboard.idade = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.contrato)), color: '#ff4d94' }];
+
+                $scope.carregarGrafico();
+
+
+            });
+        }
+
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
