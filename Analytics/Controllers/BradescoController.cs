@@ -553,6 +553,78 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/eavm/metas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPlanejamentoEavm(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_metas_eavm", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/eavm/cadmetas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMetaEavm(FormDataCollection form)
+        {
+            try
+            {
+
+
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int id_segmento = 0;
+
+
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable cpca = JsonConvert.DeserializeObject<DataTable>(form["cpca"]);
+                DataTable promessa = JsonConvert.DeserializeObject<DataTable>(form["promessa"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("id_segmento", id_segmento);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("cpca", cpca);
+                    parametros.Add("promessa", promessa);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_cadmeta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
 
     }

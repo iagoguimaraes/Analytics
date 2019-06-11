@@ -178,7 +178,7 @@
 
         <!--GRAFICO POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 margin-bottom"> 
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Gráfico por Dia</span>
@@ -201,13 +201,13 @@
                         <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
                     </div>
                 </div>
-            </div>         
+            </div>
         </div>
 
 
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-12 margin-bottom">
-                <div class="card">
+            <div class="col-xs-12 col-md-6">
+                <div class="card" style="height: 530px">
                     <div class="card-header">
                         <span class="card-header-title">Status Segmentação</span>
                         <div class="card-header-button card-header-expand">
@@ -225,7 +225,53 @@
                         </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.graficoStatusSegmentacao" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.graficoStatusSegmentacao" type="pie" height="400" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <!--POR ESTADO-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Estado</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Estado','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="map.indicador2" ng-change="carregarMapa()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="small-box bg-blue-active">
+                                    <div class="inner">
+                                        <p><h5>Qtd - {{dashboard.mapa.estado}}</h5></p>
+                                        <h4 ng-bind="dashboard.mapa.indicador | number"></h4>
+                                        <h5 ng-bind="dashboard.mapa.indicador/dashboard.resumo.{{map.indicador2}} | percentage"></h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-md-6">
+                                <div class="small-box bg-green-active">
+                                    <div class="inner">
+                                        <p><h5>Valor - {{dashboard.mapa.estado}}</h5></p>
+                                        <h4 ng-bind="dashboard.mapa.valor | currency: 'R$ '"></h4>
+                                        <h5 ng-bind="dashboard.mapa.ticket_medio | currency: 'R$ '"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mapa-brasil style="height: 300px" width="100%" dados="dashboard.estados" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -278,12 +324,15 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+
         $scope.grafico = {
             indicador: 'ativo'
         };
 
-       
-        
+        $scope.map = {
+            indicador2: 'ativo'
+        };
+
 
         // carregar os filtros
         $http({
@@ -299,7 +348,7 @@
             $scope.dashFiltros.produto = r.data.Table9;
             $scope.dashFiltros.faixaAtrasoM1 = r.data.Table6;
             $scope.dashFiltros.statusSegmentacao = r.data.Table8;
-            
+
         });
 
         $scope.validafiltro = false;
@@ -316,10 +365,10 @@
                     if ($scope.filtros.faixaAtraso.length > 1) {
                         $scope.validafiltro = false;
                     }
-                } 
+                }
 
             }
-                // Se encontrar muda a flag para mostrar o filtros.
+            // Se encontrar muda a flag para mostrar o filtros.
         }
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -338,16 +387,17 @@
                 $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '30%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
                 $scope.dashboard.segmentacao = r.data.Table3;
-                
-                $scope.dashboard.statusSegmentacao = r.data.Table4
 
+                $scope.dashboard.statusSegmentacao = r.data.Table4
                 $scope.dashboard.segmentacoes = r.data.Table3.map(obj => obj.segmentacao);
+
+                $scope.carregarMapa();
                 $scope.carregarGrafico();
             });
         }
 
 
-        // carrega o mapa de acordo com o indicador escolhido
+        // carrega o grafico de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dia;
             let indicador = $scope.grafico.indicador;
@@ -357,9 +407,70 @@
 
             $scope.dashboard.graficoSegmentacao = [
                 { name: 'Quantidade', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj[indicador] })) },
-                { name: 'Percentual', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj['percent_'+indicador] })) }
+                { name: 'Percentual', data: $scope.dashboard.segmentacao.map(obj => ({ name: obj.segmentacao, y: obj['percent_' + indicador] })) }
             ];
             $scope.dashboard.graficoStatusSegmentacao = [{ name: 'Quantidade', innerSize: '10%', data: $scope.dashboard.statusSegmentacao.map(obj => ({ name: obj.st, y: obj[indicador] })) }];
+
+
+            console.log($scope.grafico.indicador);
+        }
+
+
+        //mudar estado
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select "BR-" + uf id, ' + $scope.map.indicador2 + ' [value], uf, estado, inclusao, devolucao, ativo, ativo_vl, inclusao_vl, devolucao_vl, media_ativo, media_inclusao, media_devolucao from ? where id like ("%' + id + '%") order by [value] desc', [$scope.dashboard.dados.Table5])[0];
+            let est, ind, vlr, tkt
+            switch ($scope.map.indicador2) {
+                case 'ativo':
+                    est = dados.estado;
+                    ind = dados.ativo;
+                    vlr = dados.ativo_vl;
+                    tkt = dados.media_ativo;
+                    $scope.dashboard.mapa = { estado: est, indicador: ind, valor: vlr, ticket_medio: tkt };
+                    break
+                case 'inclusao':
+                    est = dados.estado;
+                    ind = dados.inclusao;
+                    vlr = dados.inclusao_vl;
+                    tkt = dados.media_inclusao;
+                    $scope.dashboard.mapa = { estado: est, indicador: ind, valor: vlr, ticket_medio: tkt };
+                    break;
+                case 'devolucao':
+                    est = dados.estado;
+                    ind = dados.devolucao;
+                    vlr = dados.devolucao_vl;
+                    tkt = dados.media_devolucao;
+                    $scope.dashboard.mapa = { estado: est, indicador: ind, valor: vlr, ticket_medio: tkt };
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados;
+            }
+            console.log($scope.dashboard.mapa);
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+
+            let dados = $scope.dashboard.dados.Table5;
+            switch ($scope.map.indicador2) {
+                case 'ativo':
+                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.ativo) }));
+                    break;
+                case 'inclusao':
+                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.inclusao) }));
+                    break;
+                case 'devolucao':
+                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.devolucao) }));
+                    break;
+                default:
+                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: obj[$scope.mapa.indicador] }));
+            }
+
+            $scope.dashboard.maiorUF = alasql('select id from ? order by [value] desc', [$scope.dashboard.estados])[0];
+
+            $scope.mudarEstado($scope.dashboard.maiorUF);
+            console.log($scope.map.indicador2);
         }
 
 
