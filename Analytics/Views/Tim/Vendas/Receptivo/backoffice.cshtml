@@ -12,6 +12,10 @@
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
+                <i class="fa fa-file-excel-o"></i>
+                EXTRAIR
+            </div>
         </header>
 
         <!-- FILTROS -->
@@ -211,6 +215,7 @@
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.diadia = r.data.Table2;  
+                $scope.dashboard.analitico = r.data.Table3;
 
                 // SITUACAO
                 let dados_status = alasql('select status, sum(quantidade) quantidade from ? group by status', [$scope.dashboard.dados.Table1]);
@@ -263,6 +268,10 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.analitico]);
+        }
     });
 
 </script>
