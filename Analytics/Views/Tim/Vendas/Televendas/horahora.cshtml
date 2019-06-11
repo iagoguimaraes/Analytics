@@ -181,6 +181,50 @@
             </div>
         </div>
 
+        <!--PRODUTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Vendas por Produto</span>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.produto">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Vendas</th>
+                                    <th>Chips</th>
+                                    <th>Ativações</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="c in dashboard.produto | groupBy: 'plano'">
+
+                                <tr class="text-bold">
+                                    <td class="text-bold">
+                                        <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                        {{c[0].plano}}
+                                    </td>
+                                    <td>{{c | sumByColumn: 'venda' | number}}</td>
+                                    <td>{{c | sumByColumn: 'chips'| number}}</td>
+                                    <td>{{c | sumByColumn: 'ativacao'| number}}</td>
+                                </tr>
+
+                                <tr ng-repeat="p in c" ng-show="showTbody">
+                                    <td>{{p.resultado}}</td>
+                                    <td>{{p.venda | number}}</td>
+                                    <td>{{p.chips | number}}</td>
+                                    <td>{{p.ativacao | number}}</td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--SUPERVISOR/OPERADOR-->
         <div class="row">
             <div class="col-xs-12 margin-bottom">
@@ -338,6 +382,7 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.operacao = r.data.Table2;
                 $scope.dashboard.origem = r.data.Table5;
+                $scope.dashboard.produto = r.data.Table6;
 
                 $scope.carregarGraficoHora();
                 $scope.carregarGraficoResultado();
