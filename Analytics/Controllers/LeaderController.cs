@@ -106,6 +106,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_LEADER"))
                 {
@@ -113,6 +114,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

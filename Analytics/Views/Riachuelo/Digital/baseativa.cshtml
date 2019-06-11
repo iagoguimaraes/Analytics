@@ -208,6 +208,27 @@
 
 
 
+        <!--TENURE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmentação de Contratos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentacao" height="550" axis-Categories="dashboard.faixaSegmentacao" plot-Options-Bar-Data-Label="true" type="area"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
@@ -260,6 +281,7 @@
                 $scope.dashboard.faixaSaldo = data.Table3.map(obj => obj.ds_faixaSaldo);
                 $scope.dashboard.faixaSituacao = data.Table5.map(obj => obj.ds_situacao);
                 $scope.dashboard.faixaAtraso = data.Table6.map(obj => obj.ds_faixa_meta);
+                $scope.dashboard.faixaSegmentacao    = data.Table7.map(obj => obj.ds_segmentacao);
 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
@@ -270,6 +292,7 @@
                 //$scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table5.map(obj => (obj.CONTRATO)), color: '#000000' }];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table6.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.segmentacao = [{ name: [indicador], data: data.Table7.map(obj => (obj[indicador])), color: '#000000' }];
 
                 $scope.carregarMapa();
 
