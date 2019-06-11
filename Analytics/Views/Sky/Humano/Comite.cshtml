@@ -1,0 +1,505 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-sky-comite">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Comitê</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <!--PERIODO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Periodo</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.periodo" dados="dashFiltros.periodo"></select2>
+                                    </div>
+
+                                    <!--CARTEIRA-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Carteira</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                                    </div>
+
+                                    <!--TENURE-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Tenure</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure"></select2>
+                                    </div>
+
+
+
+                                    <!--BOTÃO-->
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-md-6">
+                                    <!--DIAS UTEIS-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Dia Útil</label>
+                                        <small>
+                                            <select class="form-control" ng-model="filtros.diautil">
+                                                <option value="">Todos</option>
+                                                <option value="1">Somente dia útil</option>
+                                                <option value="0">Somente fim de semana</option>
+                                            </select>
+                                        </small>
+                                    </div>
+
+                                    <!--SEGMENTACAO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Segmentação</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
+                                    </div>
+
+                                    <!--SUPERVISOR-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Supervisor</label>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO POR MES-->
+        <div ng-if="dashboard.status == 200">
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Contato por dia</span>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body" style="height:440px">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.contato" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">CPC por dia</span>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body" style="height:440px">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.cpc" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">CPCA por dia</span>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body" style="height:440px">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.cpca" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Promessa por dia</span>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body" style="height:440px">
+                                <div class="row margin-bottom">
+                                    <high-chart series="dashboard.promessas" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRÁFICO UNIQUE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção Unique Mês</span>
+
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#8c0624;font:bold">{{dashboard.TitleOne}}</h4>
+                        <high-chart series="dashboard.graficoUniqueOne" axis-Categories="dashboard.legendaOne" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#8c5e06;font:bold">{{dashboard.TitleTwo}}</h4>
+                        <high-chart series="dashboard.graficoUniqueTwo" axis-Categories="dashboard.legendaTwo" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRÁFICO INDICADORES CONTATO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">NÃO CPC</span>
+
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#185ba5;font:bold">{{dashboard.TitleCtt1}}</h4>
+                        <high-chart series="dashboard.graficoCtt1" axis-Categories="dashboard.legendaCtt1" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#0a3361;font:bold">{{dashboard.TitleCtt2}}</h4>
+                        <high-chart series="dashboard.graficoCtt2" axis-Categories="dashboard.legendaCtt2" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRÁFICO INDICADORES CPC-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">NÃO CPCA</span>
+
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#185ba5;font:bold">{{dashboard.TitleCpc1}}</h4>
+                        <high-chart series="dashboard.graficoCpc1" axis-Categories="dashboard.legendaCpc1" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#0a3361;font:bold">{{dashboard.TitleCpc2}}</h4>
+                        <high-chart series="dashboard.graficoCpc2" axis-Categories="dashboard.legendaCpc2" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRÁFICO INDICADORES CPCA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">NÃO PROMESSA</span>
+
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#db8b0b;font:bold">{{dashboard.TitleCpca1}}</h4>
+                        <high-chart series="dashboard.graficoCpca1" axis-Categories="dashboard.legendaCpca1" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <h4 style="text-align:center;color:#a26707;font:bold">{{dashboard.TitleCpca2}}</h4>
+                        <high-chart series="dashboard.graficoCpca2" axis-Categories="dashboard.legendaCpca2" plot-Options-Column-Data-Label="true"
+                                    plot-Options-Spline-Data-Label="true" type="column" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    angular.module('app').controller('ctrl-sky-comite', function ($scope, $http, $filter) {
+        // filtros iniciais
+        let newdate = new Date();
+
+
+        newdate.setDate(newdate.getDate());
+
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $scope.filtros = {
+            periodo: '',
+            diautil: '',
+
+            carteira: '',
+            segmentacao: '',
+            tenure: '',
+
+            supervisor: '',
+            //equipe: '',
+        };
+
+
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.segmentacao = r.data.Table1;
+            $scope.dashFiltros.supervisor = data.Table2;
+            $scope.dashFiltros.tenure = data.Table3;
+            $scope.dashFiltros.periodo = data.Table8;
+
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/dashboard/humano/comite",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.producao = data.Table;
+                $scope.dashboard.unique1 = data.Table1;
+                $scope.dashboard.unique2 = data.Table2;
+
+                $scope.dashboard.ctt1 = data.Table3;
+                $scope.dashboard.cpc1 = data.Table4;
+                $scope.dashboard.cpca1 = data.Table5;
+
+                $scope.dashboard.ctt2 = data.Table6;
+                $scope.dashboard.cpc2 = data.Table7;
+                $scope.dashboard.cpca2 = data.Table8;
+
+                $scope.carregarGraficoProducao();
+                $scope.carregarGraficoUnique();
+                $scope.carregarGraficoIndicador();
+            });
+        }
+
+        $scope.carregarGraficoProducao = function () {
+            let dados = $scope.dashboard.producao;
+
+            $scope.dashboard.contato = [
+                { name: 'Alô', color: '#00c0ef', data: dados.map(obj => (obj.contato_dia)) },
+                { name: '% Comparação Mês Anterior', yAxis: 1, type: 'spline', color: 'red', data: dados.map(obj => (obj.evolucao_ctt * 100).toFixed(1) * 1) }];
+            $scope.dashboard.cpc = [
+                { name: 'CPC', color: '#004592', data: dados.map(obj => (obj.cpc_dia)) },
+                { name: '% Comparação Mês Anterior', yAxis: 1, type: 'spline', color: 'red', data: dados.map(obj => (obj.evolucao_cpc * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.cpca = [
+                { name: 'CPCA', color: '#db8b0b', data: dados.map(obj => (obj.cpca_dia)) },
+                { name: '% Comparação Mês Anterior', yAxis: 1, type: 'spline', color: 'red', data: dados.map(obj => (obj.evolucao_cpca * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.promessas = [
+                { name: 'Promessa', color: '#008d4c', data: dados.map(obj => (obj.promessa_dia)) },
+                { name: '% Comparação Mês Anterior', yAxis: 1, type: 'spline', color: 'red', data: dados.map(obj => (obj.evolucao_pro * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.meses = dados.map(obj => obj.mes_descricao);
+        }
+
+        $scope.carregarGraficoUnique = function () {
+            let dados1 = $scope.dashboard.unique1;
+            let dados2 = $scope.dashboard.unique2;
+
+
+            $scope.dashboard.graficoUniqueOne = [
+                { name: 'Quantidade', type: 'column', color: '#8c0624', data: dados1.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: dados1.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaOne = dados1.map(obj => obj.chave);
+            $scope.dashboard.TitleOne = dados1.map(obj => obj.chave)[0];
+
+
+            $scope.dashboard.graficoUniqueTwo = [
+                { name: 'Quantidade', type: 'column', color: '#8c5e06', data: dados2.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: dados2.map(obj => obj.percentual) }];
+
+            $scope.dashboard.legendaTwo = dados2.map(obj => obj.chave);
+            $scope.dashboard.TitleTwo = dados2.map(obj => obj.chave)[0];
+        }
+
+        $scope.carregarGraficoIndicador = function () {
+
+            let Ctt1 = $scope.dashboard.ctt1;
+            let Cpc1 = $scope.dashboard.cpc1;
+            let Cpca1 = $scope.dashboard.cpca1;
+
+            let Ctt2 = $scope.dashboard.ctt2;
+            let Cpc2 = $scope.dashboard.cpc2;
+            let Cpca2 = $scope.dashboard.cpca2;
+
+            //CONTATO
+            $scope.dashboard.graficoCtt1 = [
+                { name: 'Quantidade', type: 'column', color: '#00c0ef', data: Ctt1.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Ctt1.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCtt1 = Ctt1.map(obj => obj.chave);
+            $scope.dashboard.TitleCtt1 = Ctt1.map(obj => obj.mes)[0];
+
+            $scope.dashboard.graficoCtt2 = [
+                { name: 'Quantidade', type: 'column', color: '#00a7d0', data: Ctt2.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Ctt2.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCtt2 = Ctt2.map(obj => obj.chave);
+            $scope.dashboard.TitleCtt2 = Ctt2.map(obj => obj.mes)[0];
+
+            //CPC
+            $scope.dashboard.graficoCpc1 = [
+                { name: 'Quantidade', type: 'column', color: '#185ba5', data: Cpc1.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Cpc1.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCpc1 = Cpc1.map(obj => obj.chave);
+            $scope.dashboard.TitleCpc1 = Cpc1.map(obj => obj.mes)[0];
+
+            $scope.dashboard.graficoCpc2 = [
+                { name: 'Quantidade', type: 'column', color: '#0a3361', data: Cpc2.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Cpc2.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCpc2 = Cpc2.map(obj => obj.chave);
+            $scope.dashboard.TitleCpc2 = Cpc2.map(obj => obj.mes)[0];
+
+            //CPCA
+            $scope.dashboard.graficoCpca1 = [
+                { name: 'Quantidade', type: 'column', color: '#db8b0b', data: Cpca1.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Cpca1.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCpca1 = Cpca1.map(obj => obj.chave);
+            $scope.dashboard.TitleCpca1 = Cpca1.map(obj => obj.mes)[0];
+
+            $scope.dashboard.graficoCpca2 = [
+                { name: 'Quantidade', type: 'column', color: '#a26707', data: Cpca2.map(obj => obj.valor) },
+                { name: '% Percent', type: 'spline', yAxis: 1, color: 'white', data: Cpca2.map(obj => obj.percentual) }
+            ];
+
+            $scope.dashboard.legendaCpca2 = Cpca2.map(obj => obj.chave);
+            $scope.dashboard.TitleCpca2 = Cpca2.map(obj => obj.mes)[0];
+        }
+
+        $scope.carregarDashboard();
+
+
+        //$scope.CompararResultados();
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
