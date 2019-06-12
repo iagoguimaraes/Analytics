@@ -62,6 +62,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.saldo" dados="dashFiltros.saldo" style="width:100%"></select2>
                         </div>
 
+                        <!--ESTADO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Estado</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.estado" dados="dashFiltros.estado" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -291,125 +297,121 @@
                 </div>
             </div>
         </div>
-
-
-        <!--REGIAO-->
-
-        <div class="row margin-bottom">
-
-        </div>
     </div>
+</div>
 
-    <script>
-        angular.module('app').controller('ctrl-tim-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
-            dadosPagina.titulo = 'Estratificação de Base';
-            dadosPagina.descricao = 'Tim Telecomunicações'
+<script>
+    angular.module('app').controller('ctrl-tim-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Estratificação de Base';
+        dadosPagina.descricao = 'Tim Telecomunicações'
 
-            // filtros iniciais
-            let newdate = new Date();
-            let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
-            $scope.filtros = {
-                empresa: '',
-                segmento: '',
-                atraso: '',
-                produto: '',
-                saldo: '',
-            };
+        $scope.filtros = {
+            empresa: '',
+            segmento: '',
+            atraso: '',
+            produto: '',
+            saldo: '',
+            estado: '',
+        };
 
-            $scope.mapa = {
-                indicador: 'percentual'
-            };
+        $scope.mapa = {
+            indicador: 'percentual'
+        };
 
-            $scope.idSelecionadoMapa = '';
-            $scope.graficoMapa = { exibir: 'true' };
-            $scope.dashFiltros = {};
-            $scope.dashboard = {};
+        $scope.idSelecionadoMapa = '';
+        $scope.graficoMapa = { exibir: 'true' };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
 
-            //carregar os filtros
-            $http({
-                method: 'GET',
-                url: "/api/tim/dashboard/humano/filtros",
-            }).then(function success(r) {
-                $scope.dados = r.status;
-                $scope.dashFiltros.status = r.status;
-                $scope.dashFiltros.empresa = r.data.Table;
-                $scope.dashFiltros.segmento = r.data.Table1;
-                $scope.dashFiltros.atraso = r.data.Table2;
-                $scope.dashFiltros.produto = r.data.Table9;
-                $scope.dashFiltros.saldo = r.data.Table7;
+        //carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/tim/dashboard/humano/filtros",
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresa = r.data.Table;
+            $scope.dashFiltros.segmento = r.data.Table1;
+            $scope.dashFiltros.atraso = r.data.Table2;
+            $scope.dashFiltros.produto = r.data.Table9;
+            $scope.dashFiltros.saldo = r.data.Table7;
+            $scope.dashFiltros.estado = r.data.Table10;
 
-
-            });
-
-            $scope.carregarDashboard = function () {
-                $http({
-                    method: 'POST',
-                    url: "/api/tim/dashboard/humano/baseativa",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    $scope.dashboard.status = r.status;
-                    let data = r.data;
-                    $scope.dashboard.dados = r.data;
-                    $scope.dashboard.resumo = data.Table[0];
-
-
-                    $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.empresa);
-                    $scope.dashboard.faixaEmpresa = data.Table2.map(obj => obj.ds_empresa);
-                    $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_fx_saldo);
-                    $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_faixaAtraso);
-                    $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
-
-                    let indicador = 'CONTRATO';
-                    $scope.dashboard.resumo = data.Table[0];
-                    $scope.dashboard.atraso = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#0073b7' }];
-                    //$scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#0073b7' }];
-                    $scope.dashboard.empresa = [{ name: 'Quantidade', innerSize: '60%', data: data.Table2.map(obj => ({ name: obj.ds_empresa, y: obj.CONTRATO })) }];
-                    $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#0073b7' }];
-                    $scope.dashboard.carteira = [{ name: 'Quantidade', data: r.data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
-                    //$scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
-                    $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
-
-                    $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percentual [value], uf, estado, regiao, quantidade, valor, ticket_medio, percentual from ?', [data.Table4]);
-
-
-                    $scope.dashboard.maiorUF = alasql('select top 1 "BR-" + uf id from ?', [data.Table4])[0];
-
-                    $scope.mudarEstado($scope.dashboard.maiorUF);
-
-                    //$scope.carregarMapa();
-
-                });
-            }
-
-            $scope.mudarEstado = function (id) {
-
-                let dados = alasql('select id, [value], uf, estado, regiao, quantidade, valor, percentual, ticket_medio from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
-                $scope.dashboard.mapa = dados;
-            }
-
-            // carrega o mapa de acordo com o indicador escolhido
-            $scope.carregarMapa = function () {
-                let dados = $scope.dashboard.dados.Table4;
-                switch ($scope.mapa.indicador) {
-                    case 'percentual':
-                        $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.percentual) }));
-                        break;
-                    case 'quantidade':
-                        $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.quantidade) }));
-                        break;
-                    default:
-                        $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[$scope.mapa.indicador] }));
-                }
-            }
-
-
-            $scope.carregarDashboard();
-
-            // extrair dados para excel
-            $scope.extrair = function (nomeArquivo, tabela) {
-                alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-            }
 
         });
-    </script>
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/dashboard/humano/baseativa",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+
+
+                $scope.dashboard.faixaCarteira = data.Table1.map(obj => obj.empresa);
+                $scope.dashboard.faixaEmpresa = data.Table2.map(obj => obj.ds_empresa);
+                $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_fx_saldo);
+                $scope.dashboard.faixaAtraso = data.Table5.map(obj => obj.ds_faixaAtraso);
+                $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
+
+                let indicador = 'CONTRATO';
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.atraso = [{ name: [indicador], data: data.Table5.map(obj => (obj[indicador])), color: '#0073b7' }];
+                //$scope.dashboard.idade = [{ name: [indicador], data: data.Table2.map(obj => (obj[indicador])), color: '#0073b7' }];
+                $scope.dashboard.empresa = [{ name: 'Quantidade', innerSize: '60%', data: data.Table2.map(obj => ({ name: obj.ds_empresa, y: obj.CONTRATO })) }];
+                $scope.dashboard.valor = [{ name: [indicador], data: data.Table3.map(obj => (obj[indicador])), color: '#0073b7' }];
+                $scope.dashboard.carteira = [{ name: 'Quantidade', data: r.data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
+                //$scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
+                $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#0073b7' }];
+
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percentual [value], uf, estado, regiao, quantidade, valor, ticket_medio, percentual from ?', [data.Table4]);
+
+
+                $scope.dashboard.maiorUF = alasql('select top 1 "BR-" + uf id from ?', [data.Table4])[0];
+
+                $scope.mudarEstado($scope.dashboard.maiorUF);
+
+                //$scope.carregarMapa();
+
+            });
+        }
+
+        $scope.mudarEstado = function (id) {
+
+            let dados = alasql('select id, [value], uf, estado, regiao, quantidade, valor, percentual, ticket_medio from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            $scope.dashboard.mapa = dados;
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.dados.Table4;
+            switch ($scope.mapa.indicador) {
+                case 'percentual':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.percentual) }));
+                    break;
+                case 'quantidade':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: (obj.quantidade) }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>

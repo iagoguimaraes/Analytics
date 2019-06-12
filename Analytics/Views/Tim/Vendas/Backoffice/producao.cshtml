@@ -1,0 +1,317 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-producao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Backoffice - Produção</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd | megaNumber"></h3>
+                        <p>Workflow</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-share-square"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cancelado | megaNumber"></h3>
+                        <p>Cancelado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.finalizado | megaNumber"></h3>
+                        <p>Finalizado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.gross | number"></h3>
+                        <p>Gross</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--DIA A DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">
+                            Análise por
+                            <small>
+                                <select ng-model="dashboard.visao" ng-change="carregarGraficoDiaHora()">
+                                    <option value="hora">Hora</option>
+                                    <option value="dia">Dia</option>
+                                </select>
+                            </small>
+                        </span>
+                        <small class="pull-right">
+                            <span>Indicadores:</span>
+                            <select ng-model="dashboard.indicador" ng-change="carregarGraficoDiaHora()">
+                                <option value="qtd">Workflow</option>
+                                <option value="cancelado">Cancelado</option>
+                                <option value="finalizado">Finalizado</option>
+                                <option value="gross">Gross</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--GRAFICO-->
+                        <high-charts config="dashboard.diahora" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CAMPANHA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Campanha</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.campanha">
+                                <thead>
+                                    <tr>
+                                        <th>Campanha</th>
+                                        <th>Workflow</th>
+                                        <th>Cancelado</th>
+                                        <th>Finalizado</th>
+                                        <th>Gross</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.campanha">
+                                        <td>{{c.campanha}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td>{{c.cancelado | number}}</td>
+                                        <td>{{c.finalizado | number}}</td>
+                                        <td>{{c.gross | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--WORKFLOW-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Workflow</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.workflow" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Backoffice</span>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.backoffice" scroll-collapse="true" scroll-y="300px" order="[[1,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-tim-producao', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {
+            visao: 'hora',
+            indicador: 'gross'
+        };
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/backoffice/producao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.hora = r.data.Table2;
+                $scope.dashboard.campanha = r.data.Table3;
+                $scope.dashboard.backoffice = r.data.Table4;
+
+                $scope.dashboard.workflow = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: $scope.dashboard.dados.Table5.map(o => o.workflow)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Quantidade',
+                            color: 'rgba(51,102,102,1)',
+                            data: $scope.dashboard.dados.Table5.map(o => o.qtd),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                $scope.carregarGraficoDiaHora();
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarGraficoDiaHora = function () {
+            let categories, data;
+
+            if ($scope.dashboard.visao == 'dia') {
+                categories = $scope.dashboard.dados.Table1.map(o => o.data);
+                data = $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador]);
+            }
+            if ($scope.dashboard.visao == 'hora') {
+                categories = $scope.dashboard.dados.Table2.map(o => o.hora);
+                data = $scope.dashboard.dados.Table2.map(o => o[$scope.dashboard.indicador]);
+            }
+
+            $scope.dashboard.diahora = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: categories
+                },
+                series: [
+                    {
+                        type: 'column',
+                        name: $scope.dashboard.indicador,
+                        color: 'rgba(119,119,119,0.8)',
+                        data: data,
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>

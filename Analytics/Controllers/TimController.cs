@@ -686,6 +686,7 @@ namespace Analytics.Controllers
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
+                DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -697,6 +698,7 @@ namespace Analytics.Controllers
                     parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
                     parametros.Add("saldo", saldo);
+                    parametros.Add("estado", estado);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -724,6 +726,7 @@ namespace Analytics.Controllers
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable faixaAtrasoM1 = JsonConvert.DeserializeObject<DataTable>(form["faixaAtrasoM1"]);
                 DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
+                DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -736,7 +739,8 @@ namespace Analytics.Controllers
                     parametros.Add("faixaAtraso", faixaAtraso);
                     parametros.Add("produto", produto);
                     parametros.Add("faixaAtrasoM1", faixaAtrasoM1);
-                    parametros.Add("statusSegmentacao", statusSegmentacao);
+                    parametros.Add("estado", estado);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1686,6 +1690,66 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_televendas_backoffice", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region BACKOFFICE
+
+        [Route("vendas/backoffice/chamadas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasBackofficeChamadas(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_backoffice_chamadas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("vendas/backoffice/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasBackofficeProducao(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("atom_dashboard_backoffice_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

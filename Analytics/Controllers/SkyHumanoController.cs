@@ -591,6 +591,44 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/comite")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComite(FormDataCollection form)
+        {
+            try
+            {
+
+                DataTable periodo = JsonConvert.DeserializeObject<DataTable>(form["periodo"]);
+                string diautil = form["diautil"];
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+
+                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("periodo", periodo);
+                    parametros.Add("diautil", diautil);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("tenure", tenure);
+                    parametros.Add("supervisor", supervisor);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_comite", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         [Route("dashboard/digital/horahora")]
         [HttpPost]
