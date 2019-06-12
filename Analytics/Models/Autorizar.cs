@@ -60,7 +60,7 @@ namespace Analytics
             }
             catch (Exception e)
             {
-                i gthrow e;
+                throw e;
             }
         }
     }

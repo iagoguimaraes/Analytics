@@ -686,7 +686,6 @@ namespace Analytics.Controllers
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
-                DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
                 {
@@ -698,7 +697,6 @@ namespace Analytics.Controllers
                     parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
                     parametros.Add("saldo", saldo);
-                    parametros.Add("estado", estado);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
