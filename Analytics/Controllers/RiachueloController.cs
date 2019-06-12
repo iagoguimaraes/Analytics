@@ -299,6 +299,7 @@ namespace Analytics.Controllers
             try
             {
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -306,6 +307,7 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("carteiras", carteira);
+                    parametros.Add("segmentacao", segmentacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

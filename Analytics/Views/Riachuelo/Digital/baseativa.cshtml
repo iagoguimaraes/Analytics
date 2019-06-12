@@ -38,6 +38,13 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
+
+                        <!--SEGMENTACAO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentacao</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -53,7 +60,7 @@
             <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-white">
                     <div class="inner" style="color:black">
-                        <h3 ng-bind="dashboard.resumo.CONTRATO | number"></h3>
+                        <h3 ng-bind="dashboard.resumo.CONTRATO | megaNumber"></h3>
                         <p>Total Contratos</p>
                     </div>
                     <div class="icon">
@@ -107,7 +114,7 @@
 
         <!--POR FAIXA DE ATRASO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Faixa de Atraso</span>
@@ -123,6 +130,24 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmentação de Contratos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="row margin-bottom">
@@ -206,29 +231,6 @@
             </div>
         </div>
 
-
-
-        <!--TENURE-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Segmentação de Contratos</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table5')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.segmentacao" height="550" axis-Categories="dashboard.faixaSegmentacao" plot-Options-Bar-Data-Label="true" type="area"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
     </div>
 </div>
 
@@ -244,6 +246,7 @@
         $scope.filtros = {
             empresas: '',
             carteiras: '',
+            segmentacao: '',
         };
 
         $scope.mapa = {
@@ -261,6 +264,7 @@
             $scope.dados = r.status;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.segmentacao = r.data.Table3;
 
         });
 
@@ -281,7 +285,7 @@
                 $scope.dashboard.faixaSaldo = data.Table3.map(obj => obj.ds_faixaSaldo);
                 $scope.dashboard.faixaSituacao = data.Table5.map(obj => obj.ds_situacao);
                 $scope.dashboard.faixaAtraso = data.Table6.map(obj => obj.ds_faixa_meta);
-                $scope.dashboard.faixaSegmentacao    = data.Table7.map(obj => obj.ds_segmentacao);
+                $scope.dashboard.faixaSegmentacao    = data.Table7.map(obj => obj.ds_tipo);
 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
@@ -292,7 +296,7 @@
                 //$scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table1.map(obj => ({ name: obj.empresa, y: obj.CONTRATO })) }];
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table5.map(obj => (obj.CONTRATO)), color: '#000000' }];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table6.map(obj => (obj[indicador])), color: '#000000' }];
-                $scope.dashboard.segmentacao = [{ name: [indicador], data: data.Table7.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.segmentacao =[{ name: 'Quantidade', data: r.data.Table7.map(obj => ({ name: obj.ds_tipo, y: obj.CONTRATO })) }];
 
                 $scope.carregarMapa();
 
