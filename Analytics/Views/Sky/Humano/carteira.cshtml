@@ -81,7 +81,7 @@
 
         <!--RESUMO E MEDIA CARTEIRA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6 margin-bottom">
+            <div class="col-xs-12 col-md-5 margin-bottom">
 
                 <div class="card">
                     <div class="card-header">
@@ -117,6 +117,33 @@
                             <!-- /.info-box-content -->
                         </div>
 
+                        <div class="info-box bg-blue">
+                            <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Baixa Total</span>
+                                <span class="info-box-number">{{dashboard.resumo.baixa_total | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.vlBaixaTotal | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+
+                        <div class="info-box bg-purple">
+                            <span class="info-box-icon"><i class="fa fa-minus-square"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Baixa Administrativa</span>
+                                <span class="info-box-number">{{dashboard.resumo.baixa_adm | number}}</span>
+                                <span class="progress-description">
+                                    {{dashboard.resumo.vlBaixaAdm | currency:'R$'}}
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
                         <div class="info-box bg-red">
                             <span class="info-box-icon"><i class="fa fa-archive"></i></span>
 
@@ -133,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-6 margin-bottom">
+            <div class="col-xs-12 col-md-7 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Média Carteira Ativa por Produto</span>
@@ -145,7 +172,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.carteira" type="pie" height="525" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
@@ -153,7 +180,7 @@
 
         <!--GRAFICO POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 margin-bottom"> 
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Gráfico por Dia</span>
@@ -167,6 +194,8 @@
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
                                 <option value="inclusao">Inclusão</option>
                                 <option value="devolucao">Devolução</option>
+                                <option value="baixa_total">Baixa Total</option>
+                                <option value="baixa_adm">Baixa Adm</option>
                                 <option value="ativo">Ativo</option>
                             </select>
                         </small>
@@ -176,7 +205,7 @@
                         <high-chart series="dashboard.graficoVlr" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true" height="300"></high-chart>
                     </div>
                 </div>
-            </div>         
+            </div>
         </div>
 
     </div>
