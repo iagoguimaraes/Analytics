@@ -1761,5 +1761,41 @@ namespace Analytics.Controllers
 
         #endregion
 
+        #region VENDAS GERENCIAL
+
+        [Route("vendas/gerencial")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage VendasGerencial(FormDataCollection form)
+        {
+            try
+            {
+                string camapanha = form["campanha"];
+                string procedure = "";
+
+                if (camapanha == "migracao")
+                    procedure = "atom_dashboard_migracao_gerencial";
+                else if (camapanha == "receptivo")
+                    procedure = "atom_dashboard_receptivo_gerencial";
+                else if (camapanha == "televendas")
+                    procedure = "atom_dashboard_televendas_gerencial";
+                else
+                    throw new Exception("Campanha inválida");
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_VENDAS"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
     }
 }
