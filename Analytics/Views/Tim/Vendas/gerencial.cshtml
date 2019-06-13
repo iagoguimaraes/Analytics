@@ -1,0 +1,440 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-gerencial">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Tim Vendas - Gerencial</div>
+        </header>
+
+        <!-- SELEÇÃO DE CAMPANHA-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-info active" ng-click="carregarDashboard('televendas')">
+                    <input type="radio"> Televendas
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard('receptivo')">
+                    <input type="radio"> Receptivo
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard('migracao')">
+                    <input type="radio"> Migração
+                </label>
+            </div>
+        </div>
+
+        <!--LAYOUT PARA MIGRACAO-->
+        <div ng-if="dashboard.campanha == 'migracao'">
+            <div class="row margin-bottom">
+                <!--HOJE-->
+                <div class="col-xs-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Vendas Hoje</div>
+                                            <div class="number">{{dashboard.resumo.venda_hoje}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-cyan hover-expand-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Migrações Hoje</div>
+                                            <div class="number">{{dashboard.resumo.migracao_hoje}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--MÊS-->
+                <div class="col-xs-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-indigo hover-zoom-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Vendas Mês</div>
+                                            <div class="number">{{dashboard.resumo.venda}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-teal hover-expand-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Migrações Mês</div>
+                                            <div class="number">{{dashboard.resumo.migracao}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--PLANO-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.plano" style="width: 100%; height: 218px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-bottom">
+                <!--PROJEÇÃO HOJE-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Projeção Hoje</span>
+                            <small class="pull-right">
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
+                                    <option value="venda">Venda</option>
+                                    <option value="migracao">Migração</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.projecao_hoje" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--PROJEÇÃO MÊS-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Projeção Mês</span>
+                            <small class="pull-right">
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
+                                    <option value="venda">Venda</option>
+                                    <option value="migracao">Migração</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--BACKOFFICE-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Backoffice</span>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.backoffice" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--LAYOUT PARA TELEVENDAS E RECEPTIVO-->
+        <div ng-if="dashboard.campanha != 'migracao'">
+            <div class="row margin-bottom">
+                <!--HOJE-->
+                <div class="col-xs-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Vendas Hoje</div>
+                                            <div class="number">{{dashboard.resumo.venda_hoje}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-cyan hover-expand-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Ativações Hoje</div>
+                                            <div class="number">{{dashboard.resumo.ativacao_hoje}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--MÊS-->
+                <div class="col-xs-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-indigo hover-zoom-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Vendas Mês</div>
+                                            <div class="number">{{dashboard.resumo.venda}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="info-box-new bg-new-teal hover-expand-effect">
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <div class="content" style="text-align: center;">
+                                            <div class="text">Ativações Mês</div>
+                                            <div class="number">{{dashboard.resumo.ativacao}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--PLANO-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.plano" style="width: 100%; height: 218px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-bottom">
+                <!--PROJEÇÃO HOJE-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Projeção Hoje</span>
+                            <small class="pull-right">
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
+                                    <option value="venda">Venda</option>
+                                    <option value="ativacao">Ativação</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.projecao_hoje" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--PROJEÇÃO MÊS-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Projeção Mês</span>
+                            <small class="pull-right">
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
+                                    <option value="venda">Venda</option>
+                                    <option value="ativacao">Ativação</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--BACKOFFICE-->
+                <div class="col-xs-4 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Backoffice</span>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.backoffice" style="width: 100%; height: 287px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-tim-gerencial', function ($scope, $http, $filter) {
+             
+        $scope.dashboard = {
+            campanha: 'televendas',
+            indicador: 'venda',          
+        };
+
+        $scope.carregarDashboard = function (campanha) {
+            $scope.dashboard.indicador = 'venda';
+            $scope.dashboard.campanha = campanha;
+
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/gerencial",
+                data: {campanha: campanha},
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.plano = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: campanha == 'migracao' ? 'Migrações por Plano' : 'Ativações por Plano'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: r.data.Table1.map(obj => obj.plano)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Ativação', data: r.data.Table1.map(obj => ({ name: obj.plano, y: obj[campanha == 'migracao' ? 'migracao' : 'ativacao'] })) }]
+                };
+                $scope.dashboard.backoffice = {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Vendas', data: r.data.Table2.map(obj => ({ name: obj.situacao, y: obj.qtd })) }]
+                };
+
+                $scope.carregarGraficoProjecao();
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+       
+        $scope.carregarGraficoProjecao = function () {
+            // PROJECAO HOJE
+            if ($scope.dashboard.dados.Table3.length > 0) {
+                let hoje_realizado = $scope.dashboard.dados.Table3.filter(o => o.projecao == 0).map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_projecao = $scope.dashboard.dados.Table3.map(o => ({ y: o[$scope.dashboard.indicador] }));
+                hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
+
+                $scope.dashboard.projecao_hoje = {
+                    title: {
+                        text: 'Projeção Hoje'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: $scope.dashboard.dados.Table3.map(o => o.hora)
+                    },
+                    series: [
+                        {
+                            type: 'area',
+                            name: 'Realizado',
+                            color: '#1d84d6',
+                            marker: { symbol: 'circle' },
+                            data: hoje_realizado
+                        },
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: '#1d84d6',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: hoje_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+            }
+
+            // PROJECAO MES
+            if ($scope.dashboard.dados.Table4.length > 0) {
+                let hoje_realizado = $scope.dashboard.dados.Table4.filter(o => o.projecao == 0).map(o => ({ y: o[$scope.dashboard.indicador] }));
+                let hoje_projecao = $scope.dashboard.dados.Table4.map(o => ({ y: o[$scope.dashboard.indicador] }));
+                hoje_realizado[hoje_realizado.length - 1].dataLabels = { enabled: true };
+                hoje_projecao[hoje_projecao.length - 1].dataLabels = { enabled: true };
+
+                $scope.dashboard.projecao_mes = {
+                    title: {
+                        text: 'Projeção Mês'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: $scope.dashboard.dados.Table4.map(o => o.dia)
+                    },
+                    series: [
+                        {
+                            type: 'area',
+                            name: 'Realizado',
+                            color: '#37479f',
+                            marker: { symbol: 'circle' },
+                            data: hoje_realizado
+                        },
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: '#37479f',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: hoje_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+            }
+        }
+
+        $scope.carregarDashboard('televendas');
+
+    });
+
+</script>
