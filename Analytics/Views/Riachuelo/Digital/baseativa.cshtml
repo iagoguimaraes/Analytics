@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.atraso" axis-Categories="dashboard.faixaAtraso" plot-Options-Line-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.atraso"  height="550" axis-Categories="dashboard.faixaAtraso" plot-Options-Line-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Segmentação de Contratos</span>
+                        <span class="card-header-title">Situações de Contratos</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -143,7 +143,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.segmentacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.situacao" height="550" axis-Categories="dashboard.faixaSituacao" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
             </div>
@@ -213,10 +213,11 @@
                 </div>
             </div>
 
-            <div class="col-xs-6 col-md-6">
+
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Situações de Contratos</span>
+                        <span class="card-header-title">Segmentação de Contratos</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -225,14 +226,42 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.situacao" height="550" axis-Categories="dashboard.faixaSituacao" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                        <high-chart style="height:550px" series="dashboard.segmentacao" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--ELEGIVEIS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Elegíveis à Cobrança</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraAtraso','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="contrato">Total</option>
+                                <option value="contrato_cobr">Cobraveis</option>
+                                <option value="contrato_incobr">Incobraveis</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentoGraf" axis-Categories="dashboard.faixaSegmentacaoGraf" plot-Options-Line-Data-Label="true" type="area"></high-chart>
                     </div>
                 </div>
             </div>
         </div>
 
+        </div>
     </div>
-</div>
 
 <script>
     angular.module('app').controller('ctrl-riachuelo-analise', function ($scope, $http, $filter, $interval, dadosPagina) {
@@ -253,6 +282,7 @@
             indicador: 'percentual'
         };
 
+        $scope.grafico = { indicador: 'contrato' };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
 
@@ -286,6 +316,8 @@
                 $scope.dashboard.faixaSituacao = data.Table5.map(obj => obj.ds_situacao);
                 $scope.dashboard.faixaAtraso = data.Table6.map(obj => obj.ds_faixa_meta);
                 $scope.dashboard.faixaSegmentacao    = data.Table7.map(obj => obj.ds_tipo);
+                $scope.dashboard.faixaSegmentacaoGraf = data.Table8.map(obj => obj.ds_segmentacao);
+
 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
@@ -297,9 +329,10 @@
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table5.map(obj => (obj.CONTRATO)), color: '#000000' }];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table6.map(obj => (obj[indicador])), color: '#000000' }];
                 $scope.dashboard.segmentacao =[{ name: 'Quantidade', data: r.data.Table7.map(obj => ({ name: obj.ds_tipo, y: obj.CONTRATO })) }];
+                $scope.dashboard.segmentacao.Graf = data.Table8;
 
                 $scope.carregarMapa();
-
+                $scope.carregarGrafico(); 
             });
         }
 
@@ -316,6 +349,27 @@
                 default:
                     $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[$scope.mapa.indicador] }));
             }
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dadosSegmento = $scope.dashboard.segmentacao.Graf;
+      
+
+            switch ($scope.grafico.indicador) {
+                case 'contrato':
+                    $scope.dashboard.segmentoGraf = [{ name: 'Total', data: dadosSegmento.map(obj => obj[$scope.grafico.indicador]),  color: 'black' }];
+                    break;
+                case 'contrato_cobr':
+                    $scope.dashboard.segmentoGraf = [{ name: 'Cobráveis', data: dadosSegmento.map(obj => obj[$scope.grafico.indicador]),  color: 'black' }];
+                    break;
+                case 'contrato_incobr':
+                    $scope.dashboard.segmentoGraf = [{ name: 'Incobráveis', data: dadosSegmento.map(obj => obj[$scope.grafico.indicador]),  color: 'black' }];
+                    break;
+                default:
+                    $scope.dashboard.segmentoGraf = [{ name: 'Total', data: dadosSegmento.map(obj => obj[$scope.grafico.indicador]),  color: 'black' }];
+            }
+
         }
 
 
