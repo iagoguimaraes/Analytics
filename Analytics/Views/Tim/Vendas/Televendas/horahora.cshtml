@@ -242,6 +242,7 @@
                                         <th>Acionamento</th>
                                         <th>Contato</th>
                                         <th>Efetivo</th>
+                                        <th>% Efetivo</th>
                                         <th>Recusa</th>
                                         <th>Venda</th>
                                         <th>% Recusa</th>
@@ -260,6 +261,7 @@
                                         <td>{{c | sumByColumn: 'qtd' | number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'efetivo'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'efetivo':'contato' | percentage:1}}</td>
                                         <td>{{c | sumByColumn: 'recusa'| number}}</td>
                                         <td>{{c | sumByColumn: 'venda'| number}}</td>
                                         <td>{{c | divideSumColumns: 'recusa':'efetivo' | percentage:1}}</td>
@@ -272,6 +274,7 @@
                                         <td>{{p.qtd | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.efetivo | number}}</td>
+                                        <td>{{p.efetivo / p.contato | percentage:1}}</td>
                                         <td>{{p.recusa | number}}</td>
                                         <td>{{p.venda | number}}</td>
                                         <td>{{p.recusa / p.efetivo | percentage:1}}</td>
