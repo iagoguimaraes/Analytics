@@ -185,9 +185,17 @@
                         <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="contrato">Total</option>
+                                <option value="sms_5_a10">5 à 10</option>
+                                <option value="sms_11_a30">11 à 30</option>
+                                <option value="sms_preventivo">Preventivo</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.valor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.graficoValor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -203,7 +211,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.graficoIdade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -229,7 +237,7 @@
         };
 
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'promessa' };
+        $scope.grafico = { indicador: 'contrato' };
         $scope.conceito = { string: '' };
 
 
@@ -255,13 +263,45 @@
                 $scope.dashboard.faixaValor = data.Table2.map(obj => obj.ds_saldo);
                 $scope.dashboard.faixaIdade = data.Table3.map(obj => obj.ds_idade);
 
-                $scope.dashboard.valor = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.contrato)), color: '#ff4d94' }];
-                $scope.dashboard.idade = [{ name: 'Quantidade', data: data.Table3.map(obj => (obj.contrato)), color: '#ff4d94' }];
+                $scope.dashboard.valor = data.Table2; //[{ name: 'Quantidade', data: data.Table2.map(obj => (obj.contrato)), color: '#ff4d94' }];
+                $scope.dashboard.idade = data.Table3; //[{ name: 'Quantidade', data: data.Table3.map(obj => (obj.contrato)), color: '#ff4d94' }];
 
                 $scope.carregarGrafico();
 
 
             });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dadosValor = $scope.dashboard.valor;
+            let dadosIdade = $scope.dashboard.idade;
+
+            $scope.dashboard.Idade = dadosValor.map(obj => obj.ds_saldo);
+            $scope.dashboard.Valor = dadosIdade.map(obj => obj.ds_idade);
+
+            switch ($scope.grafico.indicador) {
+                case 'contrato':
+                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    break;
+                case 'sms_11_a30':
+                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    break;
+                case 'sms_5_a10':
+                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    break;
+                case 'sms_preventivo':
+                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    break;
+                default:
+                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
+            }
+
         }
 
 
