@@ -32,12 +32,28 @@
                     </div>
                     <div class="card-body">
 
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Foto</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                            </div>
+                        </div>
+
                         <!--CARTEIRA-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
+                        <!--TIPO SEGMENTACAO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo Segmentacao</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tiposegmentacao" dados="dashFiltros.tiposegmentacao" style="width:100%"></select2>
+                        </div>
 
                         <!--SEGMENTACAO-->
                         <div class="form-group">
@@ -273,8 +289,10 @@
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
             empresas: '',
             carteiras: '',
+            tiposegmentacao: '',
             segmentacao: '',
         };
 
@@ -295,6 +313,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteira = r.data.Table;
             $scope.dashFiltros.segmentacao = r.data.Table3;
+            $scope.dashFiltros.tiposegmentacao = r.data.Table4;
 
         });
 
