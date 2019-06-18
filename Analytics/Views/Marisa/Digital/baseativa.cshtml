@@ -125,43 +125,57 @@
             </div>
         </div>
 
-        <!--Segmentação E ESTADO-->
+        <!--FAIXA DE IDADE-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Segmentacao</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('CarteiraSegmentacao','Table8')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <high-chart series="dashboard.segmentacao" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                        </div>
-                    </div>
-                </div>
-            <div class="col-xs-12 col-md-6 col-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Localização</span>
+                        <span class="card-header-title">Faixa Idade</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
+                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right">
-                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                <option value="quantidade">Quantidade</option>
-                                <option value="percentual">Percentual</option>
-                            </select>
-                        </small>
                     </div>
                     <div class="card-body">
-                        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Segmentação E ESTADO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmentacao</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraSegmentacao','Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentacao" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Cobráveis e Incobráveis</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraSegmentacaoClass','Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentacao_class" inner-size="60%" axis-Categories="dashboard.faixaSegmentacaoClass" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
             </div>
@@ -208,19 +222,24 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Faixa Idade</span>
+                        <span class="card-header-title">Localização</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
+                        <div class="card-header-button" ng-click="extrair('CarteiraRegiao','Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                     </div>
                 </div>
-
             </div>
             <div class="col-xs-12 col-md-6">
                 <div class="card">
@@ -294,7 +313,7 @@
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_saldo);
                 $scope.dashboard.faixatenure = data.Table5.map(obj => obj.ds_status);
                 $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
-
+                $scope.dashboard.faixaSegmentacaoClass = data.Table9.map(obj => obj.classificacao); 
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table1.map(obj => (obj[indicador])), color: '#ff4d94' }];
@@ -304,6 +323,7 @@
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#ff4d94' }];
                 $scope.dashboard.sexo = [{ name: 'Quantidade', innerSize: '20%', data: data.Table7.map(obj => ({ name: obj.ds_sexo, y: obj.CONTRATO })) }];
                 $scope.dashboard.segmentacao = [{ name: 'Quantidade', innerSize: '20%', data: data.Table8.map(obj => ({ name: obj.ds_segmentacao, y: obj.CONTRATO })) }];
+                $scope.dashboard.segmentacao_class = [{ name: 'Quantidade', innerSize: '20%', data: data.Table9.map(obj => ({ name: obj.classificacao, y: obj.CONTRATO, color: '#ff4d94' })) }];
 
                 $scope.carregarMapa();
 
