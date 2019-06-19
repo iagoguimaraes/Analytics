@@ -7,7 +7,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Produção Humano</div>
+            <div class="page-name">Produção - Tele</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -54,12 +54,6 @@
                                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                                 </div>
                             </div>
-                            
-                                <!--FAIXAS-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">Faixas</label>
-                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
-                                </div>
 
                                 <!--PRODUTOS-->
                                 <div class="form-group">
@@ -346,7 +340,6 @@
                 dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
                 atrasos: '',
-                faixas: '',
                 equipe: '',
                 supervisor: '',
             };
@@ -363,11 +356,10 @@
                 let data = r.data;
                 $scope.dashFiltros.status = r.status;
 
-                $scope.dashFiltros.atrasos = r.data.Table4;
-                $scope.dashFiltros.faixas = r.data.Table1;
+                
                 $scope.dashFiltros.supervisor = r.data.Table2;
                 $scope.dashFiltros.equipes = r.data.Table3;
-               
+                $scope.dashFiltros.atrasos = r.data.Table4;
 
             });
 

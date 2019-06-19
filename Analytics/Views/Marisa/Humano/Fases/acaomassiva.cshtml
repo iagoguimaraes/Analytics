@@ -3,12 +3,12 @@
 }
 
 
-<div ng-controller="ctrl-marisa-humano-acaomassiva">
+<div ng-controller="ctrl-marisa-humano-acaomassiva-fases">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Ação Massiva - Tele</div>
+            <div class="page-name">Ação Massiva - Fases</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -246,7 +246,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-marisa-humano-acaomassiva', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-marisa-humano-acaomassiva-fases', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Ação Massiva';
         dadosPagina.descricao = 'Marisa'
 
@@ -271,7 +271,7 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.atrasos = r.data.Table4;
+            $scope.dashFiltros.atrasos = r.data.Table5;
 
 
         });
@@ -280,7 +280,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/humano/acaomassiva",
+                url: "/api/marisa/dashboard/humano/fases/acaomassiva",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
