@@ -154,6 +154,41 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/fases/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoHoraHoraFases(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", produtos);
+                    parametros.Add("faixas", atrasos);
+                    parametros.Add("supervisores", supervisor);
+                    parametros.Add("equipes", equipes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_horahora_fases", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/humano/producao")]
         [HttpPost]
         [Autorizar]
@@ -181,6 +216,42 @@ namespace Analytics.Controllers
                     parametros.Add("equipes", equipes);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/fases/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoProducaoFases(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", produtos);
+                    parametros.Add("faixas", atrasos);
+                    parametros.Add("supervisores", supervisor);
+                    parametros.Add("equipes", equipes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao_fases", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
