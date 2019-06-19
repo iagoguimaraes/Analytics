@@ -70,33 +70,55 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-4">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.sms_5_a10 | megaNumber"></h3>
-                        <p>SMS 5 à 10</p>
+                        <p>5 à 10</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-commenting"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-4">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.sms_11_a30 | megaNumber"></h3>
-                        <p>SMS 11 à 30</p>
+                        <p>11 à 30</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-commenting"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-4">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.sms_preventivo | number"></h3>
-                        <p>SMS Preventivo</p>
+                        <h3 ng-bind="dashboard.resumo.sms_preventivo | number"></h3>
+                        <p>Preventivo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.sms_quebra | number"></h3>
+                        <p>Quebra</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.sms_seminteracao | number"></h3>
+                        <p>Sem Interação</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-commenting"></i>
@@ -127,9 +149,11 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
-                                        <th><i class="fa fa-comments"></i> 5 à 10</th>
-                                        <th><i class="fa fa-commenting"></i> 11 à 30</th>
-                                        <th><i class="fa fa-comment"></i> Preventivo</th>
+                                        <th>5 à 10</th>
+                                        <th>11 à 30</th>
+                                        <th>Preventivo</th>
+                                        <th>Quebra</th>
+                                        <th>Sem Interação</th>
                                     </tr>
                                 </thead>
                                 <tbody id="idtbody">
@@ -138,6 +162,8 @@
                                         <td>{{dia.sms_5_a10 | number}}</td>
                                         <td>{{dia.sms_11_a30 | number}}</td>
                                         <td>{{dia.sms_preventivo | number}}</td>
+                                        <td>{{dia.sms_quebra | number}}</td>
+                                        <td>{{dia.sms_seminteracao | number}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -146,6 +172,8 @@
                                         <th>{{dashboard.resumo.sms_5_a10 | number}}</th>
                                         <th>{{dashboard.resumo.sms_11_a30 | number}}</th>
                                         <th>{{dashboard.resumo.sms_preventivo | number}}</th>
+                                        <th>{{dashboard.resumo.sms_quebra | number}}</th>
+                                        <th>{{dashboard.resumo.sms_seminteracao | number}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -191,6 +219,8 @@
                                 <option value="sms_5_a10">5 à 10</option>
                                 <option value="sms_11_a30">11 à 30</option>
                                 <option value="sms_preventivo">Preventivo</option>
+                                <option value="sms_quebra">Quebra</option>
+                                <option value="sms_seminteracao">Sem Interação</option>
                             </select>
                         </small>
                     </div>
@@ -217,8 +247,8 @@
             </div>
         </div>
 
-        </div>
     </div>
+</div>
 
 
 <script>
@@ -255,11 +285,14 @@
                 //$scope.dashboard.tabulacao = data.Table2;
                 //$scope.dashboard.dados = r.data;
                 $scope.dashboard.datas = data.Table1.map(obj => obj.data);
-                $scope.dashboard.grafico = [{ name: '5 a 10', type: 'spline', color: '#d2d6de', data: data.Table1.map(obj => obj.sms_5_a10) },
-                                            { name: '11 a 30', type: 'spline', color: '#00c0ef', data: data.Table1.map(obj => obj.sms_11_a30) },
-                                            { name: 'Preventivo', type: 'spline', color: '#dd4b39', data: data.Table1.map(obj => obj.sms_preventivo) }
-                                           ];
-        
+                $scope.dashboard.grafico = [
+                    { name: '5 a 10', type: 'spline', color: '#d2d6de', data: data.Table1.map(obj => obj.sms_5_a10) },
+                    { name: '11 a 30', type: 'spline', color: '#00c0ef', data: data.Table1.map(obj => obj.sms_11_a30) },
+                    { name: 'Preventivo', type: 'spline', color: '#dd4b39', data: data.Table1.map(obj => obj.sms_preventivo) },
+                    { name: 'Quebra', type: 'spline', color: '#f39c12', data: data.Table1.map(obj => obj.sms_quebra) },
+                    { name: 'Sem Interação', type: 'spline', color: '#0073b7', data: data.Table1.map(obj => obj.sms_seminteracao) },
+                ];
+
                 $scope.dashboard.faixaValor = data.Table2.map(obj => obj.ds_saldo);
                 $scope.dashboard.faixaIdade = data.Table3.map(obj => obj.ds_idade);
 
@@ -280,28 +313,8 @@
             $scope.dashboard.Idade = dadosValor.map(obj => obj.ds_saldo);
             $scope.dashboard.Valor = dadosIdade.map(obj => obj.ds_idade);
 
-            switch ($scope.grafico.indicador) {
-                case 'contrato':
-                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    break;
-                case 'sms_11_a30':
-                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    break;
-                case 'sms_5_a10':
-                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    break;
-                case 'sms_preventivo':
-                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    break;
-                default:
-                    $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-                    $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]),  color: '#ff4d94' }];
-            }
-
+            $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]), color: '#ff4d94' }];
+            $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]), color: '#ff4d94' }];
         }
 
 
