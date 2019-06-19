@@ -300,13 +300,17 @@ namespace Analytics.Controllers
             {
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable tiposegmentacao = JsonConvert.DeserializeObject<DataTable>(form["tiposegmentacao"]);
+                DateTime data = Convert.ToDateTime(form["data"]);
+
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
 
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
-
+                    parametros.Add("data", data);
                     parametros.Add("carteiras", carteira);
+                    parametros.Add("tiposegmentacao", tiposegmentacao);
                     parametros.Add("segmentacao", segmentacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);

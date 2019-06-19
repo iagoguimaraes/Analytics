@@ -1,0 +1,373 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<div ng-controller="ctrl-rh-headcount">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Head Count</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DEPARTAMENTOS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Departamentos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.departamentos" dados="dashFiltros.departamentos" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-6 col-lg-6">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="calculo.turnover  | percentage: 1 "></h3>
+                        <h4 class="pull-right" ng-bind="calculo.turnoverVs | percentage: 1"></h4>
+                        <p>Turnover</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.headcountAtual.func_headcount | number "></h3>
+                        <h4 class="pull-right" ng-bind="calculo.headMesVs | percentage: 1"></h4>
+                        <p>HeadCount</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.idadeAtual.media_idade | number "></h3>
+                        <h4 class="pull-right" ng-bind="calculo.idadeVs | percentage: 1"></h4>
+                        <p>Media Idade</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.abs.absTempo | percentage: 1 "></h3>
+                        <p>Abs Tempo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.abs.absPresenca | percentage: 1 "></h3>
+                        <p>Abs Presença</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.demissaoAtual.func_demitidos | number "></h3>
+                        <h4 class="pull-right" ng-bind="calculo.demissaoVs | percentage: 1"></h4>
+                        <p>Demitidos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-3">
+                <div class="small-box bg-white">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.admissaoAtual.func_admitidos | number "></h3>
+                        <h4 class="pull-right" ng-bind="calculo.admissaoVs | percentage: 1"></h4>
+                        <p>Contratação</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--EFETIVIDADE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funcionario - Sexo</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.sexo" axis-Categories="dashboard.mes" type="column"
+                                    plot-Options-Column-Data-Label="true" y-Axis1-Min="0"
+                                    y-Axis1-Max="100" plot-Options-Column-Stacking="normal"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRUPOS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funcionarios por Departamento</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraGrupo','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.departamento" axis-Categories="dashboard.depSerie" type="colunm"
+                                    plot-Options-Column-Data-Label="true" y-Axis1-Min="0"
+                                    y-Axis1-Max="100" ></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funcionarios por Carteiras</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('CarteiraGrupo','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-rh-headcount', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'HeadCount';
+        dadosPagina.descricao = 'Rh'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            departamentos: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'quantidade' };
+
+        $scope.calculo = {
+            headMes: '',
+            headMesVs: '',
+            admissao: '',
+            admissaoVs: '',
+            demissao: '',
+            demissaoVs: '',
+            idade: '',
+            idadeVs: '',
+            turnover: '',
+            turnoverVs: ''
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/rh/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.departamentos = data.Table;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/rh/headcount",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.headcountAtual = data.Table[0];
+                $scope.dashboard.headcountPassado = data.Table[1];
+                $scope.dashboard.sexoBase = data.Table1;
+                $scope.dashboard.admissaoAtual = data.Table2[0];
+                $scope.dashboard.admissaoPassado = data.Table2[1];
+                $scope.dashboard.demissaoAtual = data.Table3[0];
+                $scope.dashboard.demissaoPassado = data.Table3[1];
+                $scope.dashboard.idadeAtual = data.Table4[0];
+                $scope.dashboard.idadePassado = data.Table4[1];
+                $scope.dashboard.abs = data.Table7[0];
+            
+                $scope.calculo.headMes = $scope.dashboard.headcountAtual.func_headcount - $scope.dashboard.headcountPassado.func_headcount; 
+                $scope.calculo.headMesVs = $scope.calculo.headMes / $scope.dashboard.headcountAtual.func_headcount;
+
+                $scope.calculo.admissao = $scope.dashboard.admissaoAtual.func_admitidos - $scope.dashboard.admissaoPassado.func_admitidos;   
+                $scope.calculo.admissaoVs = $scope.calculo.admissao / $scope.dashboard.admissaoAtual.func_admitidos;
+
+                $scope.calculo.demissao = $scope.dashboard.demissaoAtual.func_demitidos - $scope.dashboard.demissaoPassado.func_demitidos;   
+                $scope.calculo.demissaoVs = $scope.calculo.demissao / $scope.dashboard.demissaoAtual.func_demitidos;
+
+                $scope.calculo.idade = $scope.dashboard.idadeAtual.media_idade - $scope.dashboard.idadePassado.media_idade;   
+                $scope.calculo.idadeVs = $scope.calculo.idade / $scope.dashboard.idadeAtual.media_idade;
+
+                $scope.calculo.turnover = (($scope.dashboard.admissaoAtual.func_admitidos + $scope.dashboard.demissaoAtual.func_demitidos) / 2)/$scope.dashboard.headcountAtual.func_headcount;   
+                $scope.calculo.turnoverPassado = (($scope.dashboard.admissaoPassado.func_admitidos + $scope.dashboard.demissaoPassado.func_demitidos) / 2) / $scope.dashboard.headcountPassado.func_headcount;
+                $scope.calculo.turnoverVs = ($scope.calculo.turnover  - $scope.calculo.turnoverPassado)/ $scope.calculo.turnover;
+
+                $scope.dashboard.depSerie = data.Table5.map(obj => obj.departamento);
+                $scope.dashboard.departamento =  [ { name: 'Quantidade', type: 'column', data:  data.Table5.map(obj => obj.func_headcount), color: '#dd4b39' },];
+
+                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table6.map(obj => ({ name: obj.empresa, y: obj.func_headcount })) }];
+
+                $scope.carregarGrafico();
+
+            });
+        }
+
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dadosSexo = $scope.dashboard.sexoBase;
+
+            $scope.dashboard.mes = dadosSexo.map(obj => obj.mes);
+
+
+            switch ($scope.grafico.indicador) {
+                case 'percentual':
+                  $scope.dashboard.sexo = [
+                      { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => (obj.masculino * 100.0 / obj.total).toFixed(1) / 1  ), color: '#dfdfe0'  },
+                      { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => (obj.feminino * 100.0 / obj.total).toFixed(1) / 1  ), color: '#dd4b39' },];
+                    break;
+          
+                case 'quantidade':
+                  $scope.dashboard.sexo = [
+                        { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => obj.masculino), color: '#dfdfe0' },
+                        { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => obj.feminino), color: '#dd4b39' },];
+                    break;
+                
+                default:
+                  $scope.dashboard.sexo = [
+                        { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => obj.masculino), color: '#dfdfe0' },
+                        { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => obj.feminino), color: '#dd4b39' },];
+                   
+            }
+
+        }
+
+   
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("Analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+
+
+    });
+</script>

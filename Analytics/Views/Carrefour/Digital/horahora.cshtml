@@ -53,6 +53,12 @@
                             </div>
                         </div>
 
+                        <!--CAMPANHA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Campanha</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
+                        </div>
+
                         <!--SEGMENTO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Segmento</label>
@@ -435,6 +441,7 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             segmento: '',
+            campanha: '',
         };
 
         $scope.dashboard = {};
@@ -450,6 +457,7 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.segmento = data.Table;
+            $scope.dashFiltros.campanha = data.Table3;
         });
 
         $scope.carregarDashboard = function () {
