@@ -9,9 +9,6 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Filtros</span>
-                    <div class="card-header-button card-header-expand">
-                        <i class="fa fa-expand"></i>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -55,18 +52,18 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-xs-12 col-sm-4 col-md-2" ng-show="validarSelecao()">
                             <div class="form-group">
                                 <label>Upload Arquivo</label>
-                                <input type="file" accept="{{arquivo.extensao[0]}}" uploadfile="arquivo" />
-                                <input type="hidden" ng-model="arquivo" />
+                                <input type="file" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo" />
+                                <input type="hidden" ng-model="filtros.arquivo" />
                             </div>
                         </div>
                     </div>
 
-
                     <div class="form-group">
-                        <button ng-disabled="!validarSelecao()" type="button" class="btn btn-success" data-toggle="control-sidebar">Importar Arquivo</button>
+                        <button ng-disabled="!validarSelecao()" ng-click="importarArquivo()" type="button" class="btn btn-success" data-toggle="control-sidebar">Importar Arquivo</button>
                     </div>
                 </div>
 
@@ -85,7 +82,7 @@
                                 <tr>
                                     <th ng-repeat="(key, val) in arquivo.metadados[0]">{{ key }}</th>
                                 </tr>
-                            </thead>                            
+                            </thead>
                         </table>
                     </div>
                 </div>
@@ -105,9 +102,8 @@
             carteira: '',
             fornecedor: '',
             layout: '',
-            tabela: ''
-
-
+            tabela: '',
+            arquivo: ''
         };
 
         $scope.arquivo = {};
@@ -140,7 +136,6 @@
 
                 $scope.arquivo.status = r.status;
                 $scope.arquivo.metadados = r.data.Table;
-                console.log(r.data);
             });
         }
 
@@ -168,6 +163,22 @@
             $scope.getPreviewLayout();
         }
 
+        $scope.importarArquivo = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sms/lote/upload",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                let status = r.status;
+                let id = r.data;
+
+                if (r.status == 200) {
+                    alert("Importado com sucesso" );
+                }
+
+            });
+        }
 
 
     });

@@ -129,6 +129,35 @@ namespace Analytics
                 cmd.Dispose();
             }
         }
+        public int ExecuteProcedureInt(string Procedure, Dictionary<string, object> Parameters = null)
+        {
+            SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
+            cmd.CommandTimeout = 18000;
+            SqlDataAdapter da = new SqlDataAdapter();
+            int id;
+            try
+            {
+                if (Parameters != null)
+                    foreach (var p in Parameters)
+                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand = cmd;
+
+                cmd.Connection.Open();
+                id = (int)cmd.ExecuteScalar();
+                return id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Dispose();
+            }
+        }
         public void ExecuteProcedure(string Procedure, Dictionary<string, object> Parameters = null)
         {
             SqlCommand cmd = new SqlCommand(Procedure, oSqlConnection);
@@ -153,7 +182,34 @@ namespace Analytics
                 cmd.Dispose();
             }
         }
+        public void BulkInsert(string nm_tabela, DataTable dataTable)
+        {
 
+            try
+            {
+                oSqlConnection.Open();
+                using (var bulk = new SqlBulkCopy(this.oSqlConnection))
+                {
+                    foreach (DataColumn column in dataTable.Columns)
+                        bulk.ColumnMappings.Add(column.ColumnName, column.ColumnName);
+
+
+                    bulk.BulkCopyTimeout = Int32.MaxValue;
+                    bulk.DestinationTableName = nm_tabela;
+                    bulk.WriteToServer(dataTable);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                oSqlConnection.Close();
+                oSqlConnection.Dispose();
+            }
+
+        }
         #endregion
 
         #region Dispose
