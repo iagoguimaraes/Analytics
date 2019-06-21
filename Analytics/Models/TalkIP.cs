@@ -101,7 +101,7 @@ namespace Analytics.Models
             }
 
         }
-        private void AtualizarStatus(long id_envio, int codigo_status)
+        public void AtualizarStatus(long id_envio, int codigo_status)
         {
             int id_status = 0;
             switch (codigo_status)
@@ -144,7 +144,7 @@ namespace Analytics.Models
                     parametros.Add("@id_status", id_status);
 
                     sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_envio, id_status, data_retorno) values (@id_envio,@id_status,getdate())", parametros);
-                    sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_retorno_ultimo = @id_status where id_envio = @id_envio", parametros);
+                    sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
                 }
             }
         }
