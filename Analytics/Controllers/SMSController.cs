@@ -104,7 +104,7 @@ namespace Analytics.Controllers
 
                     string[] str = new string[] { "\r\n" };
                     string[] linhas = arquivo.Split(str, StringSplitOptions.None);
-                    string[] cabecalho = linhas[0].Split(';');                    
+                    string[] cabecalho = linhas[0].Split(';');
 
                     DataTable dt = new DataTable();
 
@@ -118,21 +118,25 @@ namespace Analytics.Controllers
 
                     for (int i = 1; i < linhas.Length - 1; i++)
                     {
-                        DataRow row = dt.NewRow();                      
+                        DataRow row = dt.NewRow();
 
                         row.ItemArray = linhas[i].Split(';');
 
                         dt.Rows.Add(row);
                     }
 
-
                     sql.BulkInsert(tabela, dt);
 
-                    // fazer consulta no banco select * from TB_LOTE where id_lote = x
-                    DataTable lote = new DataTable();
+                    
+                    Dictionary<string, object> parameters = new Dictionary<string, object>();
+                    parameters.Add("@id_resultado", resultado);
 
-                    Task.Run(() => {
-                        using(TalkIP api = new TalkIP())
+                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from "+tabela+" where id_lote = @id_resultado", parameters);
+
+
+                    Task.Run(() =>
+                    {
+                        using (TalkIP api = new TalkIP())
                         {
                             foreach (DataRow registro in lote.Rows)
                             {
@@ -142,7 +146,7 @@ namespace Analytics.Controllers
                                 int id_registro = Convert.ToInt32(registro["id_registro"]);
 
                                 api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                            }                          
+                            }
                         }
                     });
 

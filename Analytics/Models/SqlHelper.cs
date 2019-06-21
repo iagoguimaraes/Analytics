@@ -58,7 +58,7 @@ namespace Analytics
             {
                 if (Parameters != null)
                     foreach (var p in Parameters)
-                        cmd.Parameters.AddWithValue(p.Key, p.Value);
+                        cmd.Parameters.AddWithValue(p.Key, p.Value == null ? DBNull.Value : p.Value);
 
                 cmd.CommandType = CommandType.Text;
                 da.SelectCommand = cmd;
@@ -205,8 +205,7 @@ namespace Analytics
             }
             finally
             {
-                oSqlConnection.Close();
-                oSqlConnection.Dispose();
+                oSqlConnection.Close();                
             }
 
         }
