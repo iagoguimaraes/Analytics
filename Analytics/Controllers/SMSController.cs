@@ -1,4 +1,5 @@
 ﻿using Analytics.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -126,6 +128,24 @@ namespace Analytics.Controllers
 
                     sql.BulkInsert(tabela, dt);
 
+                    // fazer consulta no banco select * from TB_LOTE where id_lote = x
+                    DataTable lote = new DataTable();
+
+                    Task.Run(() => {
+                        using(TalkIP api = new TalkIP())
+                        {
+                            foreach (DataRow registro in lote.Rows)
+                            {
+                                long telefone = Convert.ToInt64(registro["telefone"]);
+                                string mensagem = registro["mensagem"].ToString();
+                                int id_lote = Convert.ToInt32(registro["id_lote"]);
+                                int id_registro = Convert.ToInt32(registro["id_registro"]);
+
+                                api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                            }                          
+                        }
+                    });
+
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -134,5 +154,28 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("talkip")]
+        [HttpGet]
+        public HttpResponseMessage TalkIP(JObject json)
+        {
+            try
+            {
+                int id_envio = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
+                int codigo_status = Convert.ToInt32(json["status"]);
+
+                using (TalkIP api = new TalkIP())
+                {
+                    api.AtualizarStatus(id_envio, codigo_status);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
