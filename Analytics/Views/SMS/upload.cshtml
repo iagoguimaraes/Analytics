@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="form-group">
-                        <button ng-disabled="!validarSelecao()" ng-click="importarArquivo()" type="button" class="btn btn-success" data-toggle="control-sidebar">Importar Arquivo</button>
+                        <button ng-disabled="!validarSelecaoArquivo()" ng-click="importarArquivo()" type="button" class="btn btn-success" data-toggle="control-sidebar">Importar Arquivo</button>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                         <table class="table table-striped table-bordered" style="width:100%" ng-if="arquivo.metadados">
                             <thead>
                                 <tr>
-                                    <th ng-repeat="(key, val) in arquivo.metadados[0]">{{ key }}</th>
+                                    <th ng-repeat="x in arquivo.metadados">{{  x.name }}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -135,10 +135,22 @@
             }).then(function success(r) {
 
                 $scope.arquivo.status = r.status;
-                $scope.arquivo.metadados = r.data.Table;
+                               
+                let tabela = r.data.Table;
+
+                 $scope.arquivo.metadados = [];
+
+                for (let i = 0; i < (tabela.length); i++) {
+
+                    let tb = tabela[i];                  
+
+                    let serie = { name: tb.column_name};
+
+                     $scope.arquivo.metadados.push(serie);
+                }
+               
             });
         }
-
 
         $scope.validarSelecao = function () {
 
@@ -147,6 +159,16 @@
             if (!$scope.filtros.centrocusto == '' && !$scope.filtros.carteira == '' && !$scope.filtros.fornecedor == '' && !$scope.filtros.layout == '') {
                 show = true;
 
+            }
+
+            return show;
+        }
+
+        $scope.validarSelecaoArquivo = function () {
+            let show = false;
+
+            if (!$scope.filtros.arquivo == '') {
+                show = true;
             }
 
             return show;
@@ -174,7 +196,7 @@
                 let id = r.data;
 
                 if (r.status == 200) {
-                    alert("Importado com sucesso" );
+                    alert("Importado com sucesso");
                 }
 
             });

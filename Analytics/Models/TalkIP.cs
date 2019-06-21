@@ -20,20 +20,20 @@ namespace Analytics.Models
         public TalkIP()
         {
             wc = new WebClient();
-            wc.Headers.Add("Content-Type", "application/json");
-            wc.Headers.Add("Accept", "application/json");
-            wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-
             WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
             proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
             wc.Proxy = proxy;
         }
         public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {
+            wc.Headers.Add("Content-Type", "application/json");
+            wc.Headers.Add("Accept", "application/json");
+            wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+
             int id_envio = RegistrarEnvio(telefone, mensagem, id_lote, id_registro);
 
             try
-            {
+            {              
                 string body = JsonConvert.SerializeObject(new { phone = telefone, message = mensagem, callback = string.Format("{0}?id={1}", url_callback, id_envio) });
                 string resultado = wc.UploadString(url, body);
                 dynamic json = JsonConvert.DeserializeObject(resultado);
@@ -42,25 +42,26 @@ namespace Analytics.Models
                 double custo = json.charged;
                 int status = json.status;
 
+                AtualizarEnvio(id_envio, true, null, id_unico_fornecedor, custo);
+            }
+            catch (WebException e) // erro interno
+            {
+                HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
 
-                if (status == 200) // sucesso
+                if ((int)response.StatusCode == 402) // saldo insuficiente
                 {
-                    AtualizarEnvio(id_envio, true, null, id_unico_fornecedor, custo);
+                    AtualizarEnvio(id_envio, false, 4, null, null);
                 }
-                else if (status == 402) // saldo insuficiente
+                else if ((int) response.StatusCode == 422) // requisição mal formada
                 {
-                    AtualizarEnvio(id_envio, false, 4, id_unico_fornecedor, custo);
-                }
-                else if (status == 422) // requisição mal formada
-                {
-                    AtualizarEnvio(id_envio, false, 3, id_unico_fornecedor, custo);
+                    AtualizarEnvio(id_envio, false, 3, null, null);
                 }
                 else // erro na plataforma
                 {
-                    AtualizarEnvio(id_envio, false, 2, id_unico_fornecedor, custo);
+                    AtualizarEnvio(id_envio, false, 2, null, null);
                 }
             }
-            catch (Exception e) // erro interno
+            catch (Exception ex)
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
