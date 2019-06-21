@@ -14,12 +14,19 @@ namespace Analytics.Models
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip";
         private readonly int id_fornecedor = 1;
         private WebClient wc;
+
+
+
         public TalkIP()
         {
             wc = new WebClient();
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
             wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+
+            WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+            proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+            wc.Proxy = proxy;
         }
         public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {
@@ -53,7 +60,7 @@ namespace Analytics.Models
                     AtualizarEnvio(id_envio, false, 2, id_unico_fornecedor, custo);
                 }
             }
-            catch (Exception) // erro interno
+            catch (Exception e) // erro interno
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
@@ -135,7 +142,7 @@ namespace Analytics.Models
                     break;
             }
 
-            if(id_status > 0)
+            if (id_status > 0)
             {
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {
