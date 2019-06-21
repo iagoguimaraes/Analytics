@@ -3,11 +3,11 @@
 }
 
 
-<div ng-controller="ctrl-marisa-humano-horahora">
+<div ng-controller="ctrl-marisa-humano-horahora-fases">
     <div ng-if="dashboard.status == 200">
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora Humano</div>
+            <div class="page-name">Hora Hora - Fases</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -55,13 +55,7 @@
                                 </div>
                             </div>
 
-                                <!--FAIXAS-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">Faixas</label>
-                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
-                                </div>
-
-                                <!--PRODUTOS-->
+                                <!--ATRASOS-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Atrasos</label>
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
@@ -197,37 +191,19 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_atraso'">
-
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_atraso}}
-                                        </td>
-                                        <td>{{e | sumByColumn: 'discado'| number}}</td>
-                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
-                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
-                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
-                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
-                                    </tr>
-
-                                    <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_produto}}</td>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.carteira">
+                                        <td>{{c.ds_atraso}}</td>
                                         <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
-                                        <td>{{c.contato / c.discado | percentage:1}}</td>
+                                        <td>{{c.contato / hora.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
-
                                 </tbody>
 
                             </table>
@@ -427,7 +403,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-marisa-humano-horahora', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-marisa-humano-horahora-fases', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Hora Hora';
         dadosPagina.descricao = 'Marisa - Humano'
         $scope.showTbody = false;
@@ -438,7 +414,6 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             atrasos: '',
-            faixas: '',
             equipe: '',
             supervisor: '',
         }
@@ -452,8 +427,7 @@
         }).then(function success(r) {
             $scope.dados = r.status;
 
-            $scope.dashFiltros.atrasos = r.data.Table4;
-            $scope.dashFiltros.faixas = r.data.Table1;
+            $scope.dashFiltros.atrasos = r.data.Table5;
             $scope.dashFiltros.supervisor = r.data.Table2;
             $scope.dashFiltros.equipes = r.data.Table3;
 
@@ -462,7 +436,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/humano/horahora",
+                url: "/api/marisa/dashboard/humano/fases/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

@@ -3,22 +3,21 @@
 }
 
 
-<div ng-controller="ctrl-marisa-digital-sms">
-
-    <!-- DAHSBOARD -->
+<div ng-controller="ctrl-marisa-humano-acaomassiva-fases">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Sms</div>
+            <div class="page-name">Ação Massiva - Fases</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
         </header>
 
+
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
 
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -57,6 +56,13 @@
                                 </div>
                             </div>
 
+                            <!--PRODUTOS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Atrasos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                            </div>
+
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -67,72 +73,73 @@
             </div>
         </div>
 
-
         <!--RESUMO-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box">
+                    <img style="width:150px; height:102px" src="~/Content/Images/Marisa/producao.png" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.sms_5_a10 | megaNumber"></h3>
-                        <p>5 à 10</p>
+                        <h3 ng-bind="dashboard.resumo.sms | megaNumber"></h3>
+                        <p>SMS</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-commenting"></i>
+                        <i class="fa fa-comments"></i>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.sms_11_a30 | megaNumber"></h3>
-                        <p>11 à 30</p>
+                        <h3 ng-bind="dashboard.resumo.email | megaNumber"></h3>
+                        <p>Email</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-commenting"></i>
+                        <i class="fa fa-envelope-square"></i>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.sms_preventivo | number"></h3>
-                        <p>Preventivo</p>
+                        <h3 ng-bind="dashboard.resumo.ura | megaNumber"></h3>
+                        <p>Ura</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-commenting"></i>
+                        <i class="fa fa-phone"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.sms_quebra | number"></h3>
-                        <p>Quebra</p>
+                        <h3 ng-bind="dashboard.resumo.mala | megaNumber"></h3>
+                        <p>Mala</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-commenting"></i>
+                        <i class="fa fa-envelope"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-blue">
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.sms_seminteracao | number"></h3>
-                        <p>Sem Interação</p>
+                        <h3 ng-bind="dashboard.resumo.boleto | megaNumber"></h3>
+                        <p>Mala Whatsapp</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-commenting"></i>
+                        <i class="fa fa-whatsapp"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-
-
-
-        <!--VISÃO DIA-->
+        <!--ANALISE DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Dia</span>
@@ -149,31 +156,31 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
-                                        <th>5 à 10</th>
-                                        <th>11 à 30</th>
-                                        <th>Preventivo</th>
-                                        <th>Quebra</th>
-                                        <th>Sem Interação</th>
+                                        <th><i class="fa fa-comments"></i> SMS</th>
+                                        <th><i class="fa fa-envelope-square"></i> Email</th>
+                                        <th><i class="fa fa-phone"></i> Ura</th>
+                                        <th><i class="fa fa-envelope"></i> Mala</th>
+                                        <th><i class="fa fa-whatsapp"></i> Mala Whatsapp</th>
                                     </tr>
                                 </thead>
-                                <tbody id="idtbody">
+                                <tbody>
                                     <tr ng-repeat="dia in dashboard.dia">
-                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{dia.sms_5_a10 | number}}</td>
-                                        <td>{{dia.sms_11_a30 | number}}</td>
-                                        <td>{{dia.sms_preventivo | number}}</td>
-                                        <td>{{dia.sms_quebra | number}}</td>
-                                        <td>{{dia.sms_seminteracao | number}}</td>
+                                        <td>{{dia.data}}</td>
+                                        <td>{{dia.sms | number}}</td>
+                                        <td>{{dia.email | number}}</td>
+                                        <td>{{dia.ura | number}}</td>
+                                        <td>{{dia.mala | number}}</td>
+                                        <td>{{dia.boleto | number}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.sms_5_a10 | number}}</th>
-                                        <th>{{dashboard.resumo.sms_11_a30 | number}}</th>
-                                        <th>{{dashboard.resumo.sms_preventivo | number}}</th>
-                                        <th>{{dashboard.resumo.sms_quebra | number}}</th>
-                                        <th>{{dashboard.resumo.sms_seminteracao | number}}</th>
+                                        <th>{{dashboard.resumo.sms | number}}</th>
+                                        <th>{{dashboard.resumo.email | number}}</th>
+                                        <th>{{dashboard.resumo.ura | number}}</th>
+                                        <th>{{dashboard.resumo.mala | number}}</th>
+                                        <th>{{dashboard.resumo.boleto | number}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -184,64 +191,52 @@
             </div>
         </div>
 
-        <!--GRÁFICO DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <!--GRAFICO FAIXA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Gráfico por Dia {{conceito.string}}</span>
+                        <span class="card-header-title">Faixas</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.grafico" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.datas" plot-Options-Column-Data-Label="true"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--FAIXA DE VALOR-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Faixa de Valor</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraValor','Table3')">
-                            <i class="fa fa-file-excel-o"></i>
                         </div>
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="contrato">Total</option>
-                                <option value="sms_5_a10">5 à 10</option>
-                                <option value="sms_11_a30">11 à 30</option>
-                                <option value="sms_preventivo">Preventivo</option>
-                                <option value="sms_quebra">Quebra</option>
-                                <option value="sms_seminteracao">Sem Interação</option>
+                                <option value="sms">SMS</option>
+                                <option value="email">Email</option>
+                                <option value="ura">Ura</option>
+                                <option value="mala">Mala</option>
+                                <option value="boleto">Mala Whatsapp</option>
                             </select>
                         </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.graficoValor" axis-Categories="dashboard.faixaValor" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="grafico.faixa" type="column" axis-Categories="dashboard.faixas" plot-Options-Column-Data-Label="true"></high-chart>
                     </div>
                 </div>
+
             </div>
-            <div class="col-xs-12 col-md-6">
+
+            <!--GRAFICO ATRASO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Faixa Idade</span>
+                        <span class="card-header-title">Atraso</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraIdade','Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="sms">SMS</option>
+                                <option value="email">Email</option>
+                                <option value="ura">Ura</option>
+                                <option value="mala">Mala</option>
+                                <option value="boleto">Mala Whatsapp</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.graficoIdade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="grafico.atraso" type="column" axis-Categories="dashboard.atrasos" plot-Options-Column-Data-Label="true"></high-chart>
                     </div>
                 </div>
             </div>
@@ -250,10 +245,9 @@
     </div>
 </div>
 
-
 <script>
-    angular.module('app').controller('ctrl-marisa-digital-sms', function ($scope, $http, $filter, dadosPagina) {
-        dadosPagina.titulo = 'Produção';
+    angular.module('app').controller('ctrl-marisa-humano-acaomassiva-fases', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Ação Massiva';
         dadosPagina.descricao = 'Marisa'
 
         // filtros iniciais
@@ -263,60 +257,51 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            conceito: '',
+            atrasos: '',
         };
-
+        $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'contrato' };
-        $scope.conceito = { string: '' };
+        $scope.grafico = { indicador: 'sms' };
 
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/marisa/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.atrasos = r.data.Table5;
+
+
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/digital/sms",
+                url: "/api/marisa/dashboard/humano/fases/acaomassiva",
                 data: $scope.filtros,
             }).then(function success(r) {
-                let data = r.data;
+                $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.dia = data.Table1;
-                //$scope.dashboard.tabulacao = data.Table2;
-                //$scope.dashboard.dados = r.data;
-                $scope.dashboard.datas = data.Table1.map(obj => obj.data);
-                $scope.dashboard.grafico = [
-                    { name: '5 a 10', type: 'spline', color: '#d2d6de', data: data.Table1.map(obj => obj.sms_5_a10) },
-                    { name: '11 a 30', type: 'spline', color: '#00c0ef', data: data.Table1.map(obj => obj.sms_11_a30) },
-                    { name: 'Preventivo', type: 'spline', color: '#dd4b39', data: data.Table1.map(obj => obj.sms_preventivo) },
-                    { name: 'Quebra', type: 'spline', color: '#f39c12', data: data.Table1.map(obj => obj.sms_quebra) },
-                    { name: 'Sem Interação', type: 'spline', color: '#0073b7', data: data.Table1.map(obj => obj.sms_seminteracao) },
-                ];
 
-                $scope.dashboard.faixaValor = data.Table2.map(obj => obj.ds_saldo);
-                $scope.dashboard.faixaIdade = data.Table3.map(obj => obj.ds_idade);
-
-                $scope.dashboard.valor = data.Table2; //[{ name: 'Quantidade', data: data.Table2.map(obj => (obj.contrato)), color: '#ff4d94' }];
-                $scope.dashboard.idade = data.Table3; //[{ name: 'Quantidade', data: data.Table3.map(obj => (obj.contrato)), color: '#ff4d94' }];
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.dia = r.data.Table1;
+                $scope.dashboard.atraso = r.data.Table2;
+                $scope.dashboard.faixa = r.data.Table3;
+                $scope.dashboard.faixas = $scope.dashboard.faixa.map(obj => obj.ds_faixa);
+                $scope.dashboard.atrasos = $scope.dashboard.atraso.map(obj => obj.ds_atraso);
 
                 $scope.carregarGrafico();
-
-
             });
         }
 
-        // carrega o grafico de acordo com o indicador escolhido
+        // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
-            let dadosValor = $scope.dashboard.valor;
-            let dadosIdade = $scope.dashboard.idade;
-
-            $scope.dashboard.Idade = dadosValor.map(obj => obj.ds_saldo);
-            $scope.dashboard.Valor = dadosIdade.map(obj => obj.ds_idade);
-
-            $scope.dashboard.graficoIdade = [{ name: $scope.grafico.indicador, data: dadosIdade.map(obj => obj[$scope.grafico.indicador]), color: '#ff4d94' }];
-            $scope.dashboard.graficoValor = [{ name: $scope.grafico.indicador, data: dadosValor.map(obj => obj[$scope.grafico.indicador]), color: '#ff4d94' }];
+            $scope.grafico.faixa = [{ name: $scope.grafico.indicador, data: $scope.dashboard.faixa.map(obj => obj[$scope.grafico.indicador]) }];
+            $scope.grafico.atraso = [{ name: $scope.grafico.indicador, data: $scope.dashboard.atraso.map(obj => obj[$scope.grafico.indicador]) }];
         }
-
 
         // extrair dados para excel
         $scope.extrair = function (tabela) {
@@ -326,4 +311,7 @@
         $scope.carregarDashboard();
 
     });
+
+
+
 </script>

@@ -3,14 +3,12 @@
 }
 
 
-
-
 <div ng-controller="ctrl-marisa-receptivo">
     <div ng-if="dashboard.status === 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Produção Receptivo</div>
+            <div class="page-name">Receptivo - Tele</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -18,7 +16,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.faixas">
+        <div class="row margin-bottom" ng-if="dashFiltros.atrasos">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -126,13 +124,7 @@
                             </div>
                         </div>
 
-                        <!--FAIXAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Faixas</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
-                        </div>
-
-                        <!--CLASSES-->
+                        <!--ATRASOS-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Atrasos</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
@@ -250,7 +242,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Empresa/Carteira</span>
+                        <span class="card-header-title">Análise por Atraso</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -273,64 +265,22 @@
                                         <th>Tempo Médio em Fila</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.fila | groupBy: 'ds_empresa'">
-
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_empresa}}
-                                        </td>
-                                        <td>{{e | divideSumColumns: 'sla_ok':'chamada'| percentage:1}}</td>
-                                        <td>{{e | sumByColumn: 'chamada'| number}}</td>
-                                        <td>{{e | sumByColumn: 'atendido'| number}}</td>
-                                        <td>{{e | sumByColumn: 'abandonado'| number}}</td>
-                                        <td>{{e | divideSumColumns: 'abandonado':'chamada'| percentage:1}}</td>
-                                        <td>{{e | avgColumn: 'tma' | formatTimer}}</td>
-                                        <td>{{e | avgColumn: 'tmf' | formatTimer}}</td>
+                                <tbody>
+                                    <tr ng-repeat="atraso in dashboard.fila">
+                                        <td>{{atraso.ds_carteira}}</td>
+                                        <td>{{atraso[dashFiltros.ns] / hora.chamada | percentage:1}}</td>
+                                        <td>{{atraso.chamada | number}}</td>
+                                        <td>{{atraso.atendido | number}}</td>
+                                        <td>{{atraso.abandonado | number}}</td>
+                                        <td>{{atraso.abandonado / atraso.chamada | percentage:1}}</td>
+                                        <td>{{atraso.tma}}</td>
+                                        <td>{{atraso.tmf}}</td>
                                     </tr>
-
-                                    <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_carteira}}</td>
-                                        <td>{{c.sla_ok / c.chamada | percentage:1}}</td>
-                                        <td>{{c.chamada | number}}</td>
-                                        <td>{{c.atendido | number}}</td>
-                                        <td>{{c.abandonado | number}}</td>
-                                        <td>{{c.abandonado / c.chamada | percentage:1}}</td>
-                                        <td>{{c.tma}}</td>
-                                        <td>{{c.tmf}}</td>
-                                    </tr>
-
                                 </tbody>
 
                             </table>
                         </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--POR HORA GRAFICO-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Gráfico por Hora</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <small class="pull-right">
-                            <select ng-model="dashFiltros.ns" style="color:black" ng-change="carregarGrafico()">
-                                <option value="ns10">NS 10s</option>
-                                <option value="ns20">NS 20s</option>
-                                <option value="ns30">NS 30s</option>
-                            </select>
-                        </small>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.graficohora" axis-Categories="dashboard.horas" type="column"
-                                    plot-Options-Column-Data-Label="true" plot-Options-Column-Stacking="normal" y-Axis1-Min="0"
-                                    y-Axis1-Max="100"></high-chart>
                     </div>
                 </div>
             </div>
@@ -530,7 +480,6 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             hrini: '08',
             hrfim: '20',
-            faixas: '',
             atrasos: ''
 
         };
@@ -546,7 +495,6 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
-            $scope.dashFiltros.faixas = r.data.Table1;
             $scope.dashFiltros.atrasos = r.data.Table4;
 
         });
