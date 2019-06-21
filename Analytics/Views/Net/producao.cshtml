@@ -355,8 +355,7 @@
             $scope.filtros = {
                 dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-                empresas: '[{ "id": "5" }]',
-                carteiras: '[{ "id": "5" }]',
+                carteiras: '',
                 equipes: '',
                 supervisores: ''
             };
@@ -375,25 +374,12 @@
                 let data = r.data;
                 $scope.dashFiltros.status = r.status;
 
-                $scope.dashFiltros.empresas = data.Table;
                 $scope.dashFiltros.supervisores = r.data.Table2;
                 $scope.dashFiltros.equipes = r.data.Table3;
                 $scope.dashFiltros.carteiras = r.data.Table4;
 
-                delay(function () {
-                    $scope.filtros.empresas = '[{ "id": "5" }]';
-                    $('#empresas').val('5').trigger('change.select2');
-                }, 5000);
-
             });
 
-            var delay = (function () {
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
 
             // obtem filtros do escopo e carrega os dados do dashboard
             $scope.carregarDashboard = function () {
@@ -411,11 +397,6 @@
                     $scope.dashboard.supervisor = r.data.Table3;
                     $scope.dashboard.operadorOcorrencia = r.data.Table4;
 
-                    $scope.dashboard.gridCh = false;
-                    if (!($scope.filtros.empresas.search("5") === -1)) {
-
-                        $scope.dashboard.gridCh = true;
-                    }  // Se encontrar muda a flag para mostrar tabela.
 
                     $scope.carregarGrafico();
 

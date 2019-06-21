@@ -3,7 +3,7 @@
 }
 
 <div ng-controller="ctrl-net-horahora">
-    <div ng-if="dashboard.status == 200">
+    <div>
 
         <!-- HEADER-->
         <header class="page-header">
@@ -124,13 +124,13 @@
                                 <!--SUPERVISOR-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Supervisor</label>
-                                    <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores" style="width:100%"></select2>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisores" dados="dashFiltros.supervisores" style="width:100%"></select2>
                                 </div>
 
                                 <!--EQUIPES-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Equipes</label>
-                                    <select2 id="empresas" class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes" style="width:100%"></select2>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.equipes" dados="dashFiltros.equipes" style="width:100%"></select2>
                                 </div>
 
                                 <!--BOTÃO-->
@@ -246,6 +246,9 @@
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table5')">
                             <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-list-alt"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -445,7 +448,6 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            empresas: '[{ "id": "5" }]',
             equipes: '',
             supervisores: '',
             carteiras: '',
@@ -455,13 +457,6 @@
         //console.log($scope.filtros);
         $scope.grafico = { indicador: 'promessa' };
 
-        var delay = (function () {
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
 
         // carregar os filtros
         $http({
@@ -472,15 +467,9 @@
             $scope.dados = r.status;
             $scope.dashFiltros.status = r.status;
 
-            $scope.dashFiltros.empresas = r.data.Table;
             $scope.dashFiltros.supervisores = r.data.Table2;
             $scope.dashFiltros.equipes = r.data.Table3;
             $scope.dashFiltros.carteiras = r.data.Table4;
-
-            delay(function () {
-                $scope.filtros.empresas = '[{ "id": "5" }]';
-                $('#empresas').val('5').trigger('change.select2');
-            }, 5000);
 
 
         });
@@ -504,12 +493,7 @@
                 $scope.dashboard.supervisorHora = r.data.Table5;
 
                 $scope.dashboard.dataatz = r.data.Table6[0];
-                $scope.dashboard.gridCh = false;
-                if(!($scope.filtros.empresas.search("5") === -1)) {
-
-                    $scope.dashboard.gridCh = true;
-                } // Se encontrar muda a flag para mostrar tabela.
-                 $scope.dashboard.operadorOcorrencia = r.data.Table7;
+                $scope.dashboard.operadorOcorrencia = r.data.Table7;
                 
 
                 $scope.carregarGrafico();
