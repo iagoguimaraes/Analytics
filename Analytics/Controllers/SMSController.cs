@@ -107,33 +107,32 @@ namespace Analytics.Controllers
                     if (idlayout == 1)
                     {
                         //Monta o datatable com os registros do arquivo.csv layout simples
-                        DataTable dt = new CsvSmsSimples().CarregarArquivo(arquivo, resultado);
-                        
+                        DataTable dt = new CsvHelper().CarregarArquivoSimples(arquivo, resultado);
+
                         //Insere os registros do datatable na TB_LAYOUT_SIMPLES
                         sql.BulkInsert(tabela, dt);
                     }
-                    
+
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
                     parameters.Add("@id_resultado", resultado);
 
-                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from "+tabela+" where id_lote = @id_resultado", parameters);
-
+                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from " + tabela + " where id_lote = @id_resultado", parameters);
 
                     Task.Run(() =>
-                    {
-                        using (TalkIP api = new TalkIP())
-                        {
-                            foreach (DataRow registro in lote.Rows)
-                            {
-                                long telefone = Convert.ToInt64(registro["telefone"]);
-                                string mensagem = registro["mensagem"].ToString();
-                                int id_lote = Convert.ToInt32(registro["id_lote"]);
-                                int id_registro = Convert.ToInt32(registro["id_registro"]);
+                                        {
+                                            using (TalkIP api = new TalkIP())
+                                            {
+                                                foreach (DataRow registro in lote.Rows)
+                                                {
+                                                    long telefone = Convert.ToInt64(registro["telefone"]);
+                                                    string mensagem = registro["mensagem"].ToString();
+                                                    int id_lote = Convert.ToInt32(registro["id_lote"]);
+                                                    int id_registro = Convert.ToInt32(registro["id_registro"]);
 
-                                api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                            }
-                        }
-                    });
+                                                    api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                                                }
+                                            }
+                                        });
 
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
