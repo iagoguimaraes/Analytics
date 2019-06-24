@@ -4,7 +4,7 @@
 
 <div ng-controller="ctrl-sms-upload">
     <div class="margin-bottom">
-        <!--FILTROS 2-->
+        <!--FILTROS-->
         <div class="col-xs-12 margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="card">
                 <div class="card-header">
@@ -12,7 +12,8 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!--SEGMENTACOES-->
+
+                        <!--CENTRO DE CUSTO-->
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Centro de Custo</label>
@@ -23,6 +24,7 @@
                             </div>
                         </div>
 
+                        <!--CARTEIRA-->
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Carteira</label>
@@ -33,6 +35,7 @@
                             </div>
                         </div>
 
+                        <!--FORNECEDOR-->
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Fornecedor</label>
@@ -43,6 +46,7 @@
                             </div>
                         </div>
 
+                        <!--LAYOUT ARQUIVO-->
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Layout do Arquivo</label>
@@ -53,23 +57,26 @@
                             </div>
                         </div>
 
+                        <!--UPLOAD ARQUIVO-->
                         <div class="col-xs-12 col-sm-4 col-md-2" ng-show="validarSelecao()">
                             <div class="form-group">
                                 <label>Upload Arquivo</label>
-                                <input type="file" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo" />
+                                <input type="file" id="fileInput" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo" />
                                 <input type="hidden" ng-model="filtros.arquivo" />
                             </div>
                         </div>
                     </div>
 
+                    <!-- BOTÃO UPLOAD ARQUIVO-->
                     <div class="form-group">
-                        <button ng-disabled="!validarSelecaoArquivo()" ng-click="importarArquivo()" type="button" class="btn btn-success" data-toggle="control-sidebar">Importar Arquivo</button>
+                        <button data-toggle="modal" data-target="#modalUpload" ng-disabled="!validarSelecaoArquivo()" type="button" class="btn btn-success">Importar Arquivo</button>
                     </div>
                 </div>
 
             </div>
         </div>
 
+        <!--PREVIEW LAYOUT ARQUIVO-->
         <div class="row margin-bottom" ng-show="validarSelecao()">
             <div class="col-xs-12">
                 <div class="card">
@@ -89,6 +96,26 @@
             </div>
         </div>
 
+        <!--MODAL CONFIRMAR UPLOAD-->
+        <div class="modal" id="modalUpload" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Confirmar Upload</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><h4>Tem certeza que é este o arquivo que deseja importar?</h4></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="importarArquivo()" data-dismiss="modal">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -133,22 +160,8 @@
                 url: "/api/sms/lote/getPreviewLayout",
                 data: $scope.filtros,
             }).then(function success(r) {
-
                 $scope.arquivo.status = r.status;
-                               
-                let tabela = r.data.Table;
-
-                 $scope.arquivo.metadados = [];
-
-                for (let i = 0; i < (tabela.length); i++) {
-
-                    let tb = tabela[i];                  
-
-                    let serie = { name: tb.column_name};
-
-                     $scope.arquivo.metadados.push(serie);
-                }
-               
+                $scope.arquivo.metadados = r.data.Table;
             });
         }
 
@@ -170,7 +183,6 @@
             if (!$scope.filtros.arquivo == '') {
                 show = true;
             }
-
             return show;
         }
 
@@ -194,14 +206,31 @@
 
                 let status = r.status;
                 let id = r.data;
+                console.log(r.data);
 
                 if (r.status == 200) {
-                    alert("Importado com sucesso");
+
+                    alert("Arquivo importado com sucesso!");
+                    $("#fileInput").val('');
+                    $scope.filtros.centrocusto = '';
+                    $scope.filtros.carteira = '';
+                    $scope.filtros.fornecedor = '';
+                    $scope.filtros.layout = '';
+                    $scope.filtros.tabela = '';
+                    $scope.filtros.arquivo = '';
+                } else if (r.status == 500) {
+                    alert("Erro ao tentar processar o arquivo, verifique se o layout está correto e tente novamente!");
+                    $("#fileInput").val('');
+                    $scope.filtros.centrocusto = '';
+                    $scope.filtros.carteira = '';
+                    $scope.filtros.fornecedor = '';
+                    $scope.filtros.layout = '';
+                    $scope.filtros.tabela = '';
+                    $scope.filtros.arquivo = '';
                 }
 
             });
         }
-
 
     });
 </script>
