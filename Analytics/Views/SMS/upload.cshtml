@@ -204,9 +204,8 @@
                 data: $scope.filtros,
             }).then(function success(r) {
 
-                let status = r.status;
-                let id = r.data;
-                console.log(r.data);
+                //let status = r.status;
+                //let id = r.data;                
 
                 if (r.status == 200) {
 
@@ -218,8 +217,12 @@
                     $scope.filtros.layout = '';
                     $scope.filtros.tabela = '';
                     $scope.filtros.arquivo = '';
+
                 } else if (r.status == 500) {
-                    alert("Erro ao tentar processar o arquivo, verifique se o layout está correto e tente novamente!");
+                    console.log(r.data.Message);
+                    
+                    alert(r.data.Message);
+
                     $("#fileInput").val('');
                     $scope.filtros.centrocusto = '';
                     $scope.filtros.carteira = '';
