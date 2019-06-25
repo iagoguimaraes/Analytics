@@ -80,7 +80,7 @@
                                             <input type="checkbox" ng-model="filtros.mes" ng-true-value="'MES,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Mês</label>
                                         </div>
-                                        <!--CHECKED MES-->
+                                        <!--CHECKED SEMANA-->
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="filtros.semana" ng-true-value="'SEMANA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Semana</label>
@@ -98,11 +98,6 @@
                                     </div>
 
                                     <div class="col-xs-6 col-md-4">
-                                        <!--CHECKED OCORRENCIA-->
-                                        <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.ocorrencia" ng-true-value="'OCORRENCIA,'" ng-false-value="''" />
-                                            <label class="control-sidebar-subheading">Ocorrencia</label>
-                                        </div>
                                         <!--CHECKED OPERADOR-->
                                         <div class="form-group">
                                             <input type="checkbox" ng_checked="true" ng-model="filtros.nome" ng-true-value="'NOME,'" ng-false-value="''" />
@@ -113,14 +108,7 @@
                                             <input type="checkbox" ng-model="filtros.chkSupervisor" ng-true-value="'SUPERVISOR,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Supervisor</label>
                                         </div>
-                                        <!--CHECKED EQUIPE-->
-                                        @*<div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.chkEquipe" ng-true-value="'EQUIPE,'" ng-false-value="''" />
-                                            <label class="control-sidebar-subheading">Equipe</label>
-                                        </div>*@
-                                    </div>
 
-                                    <div class="col-xs-6 col-md-4">
                                         <!--CHECKED EMPRESA-->
                                         <div class="form-group">
                                             <input type="checkbox" ng-model="filtros.chkEmpresa" ng-true-value="'EMPRESA,'" ng-false-value="''" />
@@ -131,17 +119,6 @@
                                             <input type="checkbox" ng-model="filtros.chkCarteira" ng-true-value="'CARTEIRA,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Carteira</label>
                                         </div>
-                                        @*<!--CHECKED FAIXA DE ATRASO-->
-                                        <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.chkAtraso" ng-true-value="'ATRASO,'" ng-false-value="''" />
-                                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
-                                        </div>
-                                        <!--CHECKED PRODUTO-->
-                                        <div class="form-group">
-                                            <input type="checkbox" ng-model="filtros.chkProduto" ng-true-value="'PRODUTO,'" ng-false-value="''" />
-                                            <label class="control-sidebar-subheading">Produto</label>
-                                        </div>*@
-
                                     </div>
 
                                     <!--BOTÃO-->
@@ -176,7 +153,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="d in dashboard.tabela">
-                                    <td ng-repeat="c in dashboard.coluna">{{d[c]}}</td>
+                                    <td ng-repeat="c in dashboard.coluna">{{$last != true ? d[c]  : (d[c] | formatTimer) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -205,7 +182,6 @@
             semana: '',
             data: '',
             hora: '',
-            ocorrencia: '',
             nome: 'NOME,',
             chkSupervisor: '',
             chkEmpresa: '',
@@ -251,7 +227,7 @@
         }
 
         $scope.carregarAcionamentos = function () {
-
+            
             let dados = alasql(
                  'SELECT '
                  + $scope.filtros.ano + ''
@@ -259,29 +235,26 @@
                  + $scope.filtros.semana + ''
                  + $scope.filtros.data + ''
                  + $scope.filtros.hora + ''
-                 + $scope.filtros.ocorrencia + ''
                  + $scope.filtros.nome + ''
                  + $scope.filtros.chkSupervisor + ''
                  + $scope.filtros.chkEmpresa + ''
                  + $scope.filtros.chkCarteira + '' +
-                 'sum(QTD_ALO) QTD_ALO, sum(QTD_ACIONAMENTOS) QTD, sum(CONTATO) CTT, sum(CPC) CPC, sum(CPCA) CPCA, sum(PROMESSA) PROM from ? group by '
+                 'sum(QTD_ALO) QTD_ALO, sum(CONTATO) CTT, sum(CPC) CPC, sum(CPCA) CPCA, sum(PROMESSA) PROM, sum(CONVERSADO)*1.0/sum(QTD_ALO) CONVERSADO from ? group by '
                  + $scope.filtros.ano + ''
                  + $scope.filtros.mes + ''
                  + $scope.filtros.semana + ''
                  + $scope.filtros.data + ''
                  + $scope.filtros.hora + ''
-                 + $scope.filtros.ocorrencia + ''
                  + $scope.filtros.nome + ''
                  + $scope.filtros.chkSupervisor + ''
                  + $scope.filtros.chkEmpresa + ''
                  + $scope.filtros.chkCarteira + ''
-                 + ' CONTADOR'
-                 + ' order by sum(QTD_ALO) desc'
+                 + 'CONTADOR'
+                 + ' order by 6 desc  '
                  , [$scope.dashboard.dados.Table]);
 
-
+            
             $scope.dashboard.tabela = dados;
-
 
             $scope.dashboard.coluna = Object.keys($scope.dashboard.tabela[0]);
         }
@@ -314,7 +287,7 @@
                     var link = document.createElement('a');
                     link.style = "display: none";
                     link.href = objectUrl;
-                    link.download = 'ACIONAMENTOS_ANALYTICS_TIM_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.csv';
+                    link.download = 'ACIONAMENTOS_ANALYTICS_NET_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.csv';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

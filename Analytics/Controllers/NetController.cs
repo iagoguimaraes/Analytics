@@ -358,7 +358,6 @@ namespace Analytics.Controllers
                 string semana = form["semana"];
                 string data = form["data"];
                 string hora = form["hora"];
-                string ocorrencia = form["ocorrencia"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
                 string chkEmpresa = form["chkEmpresa"];
@@ -378,12 +377,10 @@ namespace Analytics.Controllers
                     parametros.Add("semana", semana);
                     parametros.Add("data", data);
                     parametros.Add("hora", hora);
-                    parametros.Add("ocorrencia", ocorrencia);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
                     parametros.Add("chkEmpresa", chkEmpresa);
                     parametros.Add("chkCarteira", chkCarteira);
-
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
 
@@ -420,14 +417,13 @@ namespace Analytics.Controllers
                 string semana = form["semana"];
                 string data = form["data"];
                 string hora = form["hora"];
-                string ocorrencia = form["ocorrencia"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
                 string chkEmpresa = form["chkEmpresa"];
                 string chkCarteira = form["chkCarteira"];
 
 
-                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -441,7 +437,6 @@ namespace Analytics.Controllers
                     parametros.Add("semana", semana);
                     parametros.Add("data", data);
                     parametros.Add("hora", hora);
-                    parametros.Add("ocorrencia", ocorrencia);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
                     parametros.Add("chkEmpresa", chkEmpresa);
