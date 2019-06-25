@@ -64,11 +64,6 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: white">
-                    <img class="center-block" src="~/Content/Images/Caedu/LOGO VERDE02.png" height="100" width="100" />
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
@@ -120,10 +115,21 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Acordo</p>
+                        <p>Promessa</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vl_promessa | number"></h3>
+                        <p>R$ Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
                     </div>
                 </div>
             </div>
@@ -165,6 +171,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -179,6 +186,7 @@
                                         <td>{{d.cpc | number}}</td>
                                         <td>{{d.cpca | number}}</td>
                                         <td>{{d.promessa | number}}</td>
+                                        <td>{{d.vl_promessa | number}}</td>
                                         <td>{{d.contato / d.discado | percentage:1}}</td>
                                         <td>{{d.cpc / d.contato | percentage:1}}</td>
                                         <td>{{d.cpca / d.cpc | percentage:1}}</td>
@@ -193,6 +201,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.vl_promessa | number}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -215,6 +224,7 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
+                                    <option value="vl_promessa">R$ Promessa</option>
                                 </select>
                             </span>
                             <high-chart series="graficoDia.dados" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
