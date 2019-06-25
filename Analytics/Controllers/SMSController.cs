@@ -1,4 +1,5 @@
 ﻿using Analytics.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -145,12 +146,23 @@ namespace Analytics.Controllers
 
         [Route("talkip")]
         [HttpGet]
-        public HttpResponseMessage TalkIP(JObject json)
+        public HttpResponseMessage TalkIP()
         {
             try
             {
+                // VALIDAR
+                string path = @"\\luxemburgo\public\talkipdebug.txt";
+                File.AppendAllLines(path, new string[] { "req" });
+                string[] contents = new string[3];
+                contents[1] = Request.GetQueryNameValuePairs().First().Value;
+                contents[2] = Request.Content.ReadAsStringAsync().Result;               
+                File.AppendAllLines(path,contents);
+
                 int id_envio = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
-                int codigo_status = Convert.ToInt32(json["status"]);
+
+                string body = Request.Content.ReadAsStringAsync().Result;
+                dynamic json = JsonConvert.DeserializeObject(body);
+                int codigo_status = json.status;
 
                 using (TalkIP api = new TalkIP())
                 {
