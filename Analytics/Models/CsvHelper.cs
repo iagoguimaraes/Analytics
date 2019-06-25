@@ -9,50 +9,56 @@ namespace Analytics.Models
 {
     public class CsvHelper
     {
-        public DataTable dataTable { get; set; }
 
-        public DataTable CarregarArquivo(string arquivo, string[] quebraLinha, char delimitadorColuna)
+        private void ValidarTelefone(string numero)
         {
-            
-            //string[] str = new string[] { "\r\n" };
+            long n;
+            long.TryParse(numero, out n);
 
-            string[] linhas = arquivo.Split(quebraLinha, StringSplitOptions.None);
-
-            string[] cabecalho = linhas[0].Split(delimitadorColuna);
-
-            for (int i = 0; i < cabecalho.Length; i++)
-                dataTable.Columns.Add(cabecalho[i]);
-
-            for (int i = 1; i < linhas.Length; i++)
+            if (n == 0)
             {
-                DataRow row = dataTable.NewRow();
-                row.ItemArray = linhas[i].Split(delimitadorColuna);
-                dataTable.Rows.Add(row);
+                throw new Exception("Coluna TELEFONE não pode conter textos ou carácter especial");
             }
-
-            return dataTable;
         }
 
-        public DataTable CarregarArquivo(string arquivo, char quebraLinha, char delimitadorColuna)
+        public DataTable CarregarArquivoSimples(string arquivo, int id_lote)
         {
-            
-            //string[] str = new string[] { "\r\n" };
-
-            string[] linhas = arquivo.Split(quebraLinha);
-
-            string[] cabecalho = linhas[0].Split(delimitadorColuna);
-
-            for (int i = 0; i < cabecalho.Length; i++)
-                dataTable.Columns.Add(cabecalho[i]);
-
-            for (int i = 1; i < linhas.Length; i++)
+            try
             {
-                DataRow row = dataTable.NewRow();
-                row.ItemArray = linhas[i].Split(delimitadorColuna);
-                dataTable.Rows.Add(row);
-            }
+                string[] str = new string[] { "\r\n" };
+                string[] linhas = arquivo.Split(str, StringSplitOptions.None);
 
-            return dataTable;
+                DataTable dataTable = new DataTable();
+
+                dataTable.Columns.Add("telefone");
+                dataTable.Columns.Add("mensagem");
+                dataTable.Columns.Add("cpf");
+                dataTable.Columns.Add("id_lote", typeof(int)).DefaultValue = id_lote;
+                
+                try
+                {
+                    for (int i = 1; i < linhas.Length - 1; i++)
+                    {
+                        DataRow row = dataTable.NewRow();
+                        row.ItemArray = linhas[i].Split(';');
+                        ValidarTelefone(row.ItemArray[0].ToString());
+                        dataTable.Rows.Add(row);
+                    }
+
+                    return dataTable;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Arquivo não possui a quantidade correta de colunas para este layout");
+                }
+                
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
+
+
     }
 }

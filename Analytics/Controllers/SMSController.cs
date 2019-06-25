@@ -100,55 +100,39 @@ namespace Analytics.Controllers
                     parametros.Add("idusuario", Convert.ToInt16(sessao.id_usuario.ToString()));
                     parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
+                    //retorna do id_lote
                     int resultado = sql.ExecuteProcedureInt("sp_upload", parametros);
 
-                    string[] str = new string[] { "\r\n" };
-                    string[] linhas = arquivo.Split(str, StringSplitOptions.None);
-                    string[] cabecalho = linhas[0].Split(';');
-
-                    DataTable dt = new DataTable();
-
-                    //for (int i = 0; i < cabecalho.Length; i++)                        
-                    //dt.Columns.Add(cabecalho[i]);
-
-                    dt.Columns.Add("telefone");
-                    dt.Columns.Add("mensagem");
-                    dt.Columns.Add("cpf");
-                    dt.Columns.Add("id_lote", typeof(int)).DefaultValue = resultado;
-
-                    for (int i = 1; i < linhas.Length - 1; i++)
+                    //verifica o id_layout
+                    if (idlayout == 1)
                     {
-                        DataRow row = dt.NewRow();
+                        //Monta o datatable com os registros do arquivo.csv layout simples
+                        DataTable dt = new CsvHelper().CarregarArquivoSimples(arquivo, resultado);
 
-                        row.ItemArray = linhas[i].Split(';');
-
-                        dt.Rows.Add(row);
+                        //Insere os registros do datatable na TB_LAYOUT_SIMPLES
+                        sql.BulkInsert(tabela, dt);
                     }
 
-                    sql.BulkInsert(tabela, dt);
-
-                    
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
                     parameters.Add("@id_resultado", resultado);
 
-                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from "+tabela+" where id_lote = @id_resultado", parameters);
-
+                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from " + tabela + " where id_lote = @id_resultado", parameters);
 
                     Task.Run(() =>
-                    {
-                        using (TalkIP api = new TalkIP())
-                        {
-                            foreach (DataRow registro in lote.Rows)
-                            {
-                                long telefone = Convert.ToInt64(registro["telefone"]);
-                                string mensagem = registro["mensagem"].ToString();
-                                int id_lote = Convert.ToInt32(registro["id_lote"]);
-                                int id_registro = Convert.ToInt32(registro["id_registro"]);
+                                        {
+                                            using (TalkIP api = new TalkIP())
+                                            {
+                                                foreach (DataRow registro in lote.Rows)
+                                                {
+                                                    long telefone = Convert.ToInt64(registro["telefone"]);
+                                                    string mensagem = registro["mensagem"].ToString();
+                                                    int id_lote = Convert.ToInt32(registro["id_lote"]);
+                                                    int id_registro = Convert.ToInt32(registro["id_registro"]);
 
-                                api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                            }
-                        }
-                    });
+                                                    api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                                                }
+                                            }
+                                        });
 
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
