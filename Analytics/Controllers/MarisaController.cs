@@ -834,11 +834,12 @@ namespace Analytics.Controllers
             try
             {
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DateTime data = Convert.ToDateTime(form["data"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
-
+                    parametros.Add("data", data);
                     parametros.Add("atraso", atraso);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
