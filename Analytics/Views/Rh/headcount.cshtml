@@ -2,8 +2,6 @@
     Layout = "~/Views/master.cshtml";
 }
 
-
-
 <div ng-controller="ctrl-rh-headcount">
 
     <!-- DAHSBOARD -->
@@ -153,7 +151,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-4 col-lg-3">
+            <div class="col-xs-6 col-md-4 col-lg-3">
                 <div class="small-box bg-white">
                     <div class="inner">
                         <h3 ng-bind="dashboard.admissaoAtual.func_admitidos | number "></h3>
@@ -168,12 +166,12 @@
 
         </div>
 
-        <!--EFETIVIDADE-->
+        <!--SEXO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Funcionario - Sexo</span>
+                        <span class="card-header-title">Funcionario - Gênero</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -194,7 +192,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Entradas e Saídas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.movimentacoes" axis-Categories="dashboard.mes" type="column"
+                                    plot-Options-Column-Data-Label="true" y-Axis1-Min="0"
+                                    y-Axis1-Max="100"></high-chart>
+                    </div>
+                </div>
+            </div>
         </div>
+
 
         <!--GRUPOS-->
         <div class="row margin-bottom">
@@ -208,11 +225,18 @@
                         <div class="card-header-button" ng-click="extrair('CarteiraGrupo','Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="dep.indicador" ng-change="carregarGraficoDepartamento()">
+                                <option value="CONSOLIDADO">Consolidado</option>
+                                <option value="OPERACAO">Operação</option>
+                                <option value="ADMINISTRATIVO">Administrativo</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.departamento" axis-Categories="dashboard.depSerie" type="colunm"
                                     plot-Options-Column-Data-Label="true" y-Axis1-Min="0"
-                                    y-Axis1-Max="100" ></high-chart>
+                                    y-Axis1-Max="100"></high-chart>
                     </div>
                 </div>
             </div>
@@ -220,16 +244,10 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Funcionarios por Carteiras</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('CarteiraGrupo','Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
+                        <span class="card-header-title">Faixa Idade</span>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.carteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-charts config="dashboard.faixaIdade" style="width: 100%"></high-charts>
                     </div>
                 </div>
             </div>
@@ -256,6 +274,9 @@
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'quantidade' };
+        $scope.dep = {
+            indicador: 'ADMINISTRATIVO', exibir: 'false'
+        };
 
         $scope.calculo = {
             headMes: '',
@@ -301,64 +322,148 @@
                 $scope.dashboard.idadeAtual = data.Table4[0];
                 $scope.dashboard.idadePassado = data.Table4[1];
                 $scope.dashboard.abs = data.Table7[0];
-            
-                $scope.calculo.headMes = $scope.dashboard.headcountAtual.func_headcount - $scope.dashboard.headcountPassado.func_headcount; 
+
+                $scope.calculo.headMes = $scope.dashboard.headcountAtual.func_headcount - $scope.dashboard.headcountPassado.func_headcount;
                 $scope.calculo.headMesVs = $scope.calculo.headMes / $scope.dashboard.headcountAtual.func_headcount;
 
-                $scope.calculo.admissao = $scope.dashboard.admissaoAtual.func_admitidos - $scope.dashboard.admissaoPassado.func_admitidos;   
+                $scope.calculo.admissao = $scope.dashboard.admissaoAtual.func_admitidos - $scope.dashboard.admissaoPassado.func_admitidos;
                 $scope.calculo.admissaoVs = $scope.calculo.admissao / $scope.dashboard.admissaoAtual.func_admitidos;
 
-                $scope.calculo.demissao = $scope.dashboard.demissaoAtual.func_demitidos - $scope.dashboard.demissaoPassado.func_demitidos;   
+                $scope.calculo.demissao = $scope.dashboard.demissaoAtual.func_demitidos - $scope.dashboard.demissaoPassado.func_demitidos;
                 $scope.calculo.demissaoVs = $scope.calculo.demissao / $scope.dashboard.demissaoAtual.func_demitidos;
 
-                $scope.calculo.idade = $scope.dashboard.idadeAtual.media_idade - $scope.dashboard.idadePassado.media_idade;   
+                $scope.calculo.idade = $scope.dashboard.idadeAtual.media_idade - $scope.dashboard.idadePassado.media_idade;
                 $scope.calculo.idadeVs = $scope.calculo.idade / $scope.dashboard.idadeAtual.media_idade;
 
-                $scope.calculo.turnover = (($scope.dashboard.admissaoAtual.func_admitidos + $scope.dashboard.demissaoAtual.func_demitidos) / 2)/$scope.dashboard.headcountAtual.func_headcount;   
+                $scope.calculo.turnover = (($scope.dashboard.admissaoAtual.func_admitidos + $scope.dashboard.demissaoAtual.func_demitidos) / 2) / $scope.dashboard.headcountAtual.func_headcount;
                 $scope.calculo.turnoverPassado = (($scope.dashboard.admissaoPassado.func_admitidos + $scope.dashboard.demissaoPassado.func_demitidos) / 2) / $scope.dashboard.headcountPassado.func_headcount;
-                $scope.calculo.turnoverVs = ($scope.calculo.turnover  - $scope.calculo.turnoverPassado)/ $scope.calculo.turnover;
+                $scope.calculo.turnoverVs = ($scope.calculo.turnover - $scope.calculo.turnoverPassado) / $scope.calculo.turnover;
 
-                $scope.dashboard.depSerie = data.Table5.map(obj => obj.departamento);
-                $scope.dashboard.departamento =  [ { name: 'Quantidade', type: 'column', data:  data.Table5.map(obj => obj.func_headcount), color: '#dd4b39' },];
+                $scope.dashboard.depBase = data.Table5;
+                $scope.dashboard.carteira = data.Table6;
 
-                $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: data.Table6.map(obj => ({ name: obj.empresa, y: obj.func_headcount })) }];
+                $scope.dashboard.movimentacoes = [
+                    { name: 'Contratos', type: 'column', data: data.Table8.map(obj => (obj.qtd_contratacao)), color: '#dfdfe0' },
+                    { name: 'Demitidos', type: 'column', data: data.Table8.map(obj => (obj.qtd_demissao)), color: '#dd4b39' }];
+
+                $scope.dashboard.faixaIdade = {
+                    chart: {
+                        type: 'bar'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: [{
+                        categories: data.Table9.map(obj => obj.ds_idade),
+                        reversed: false,
+                        labels: {
+                            step: 1
+                        }
+                    }, { // mirror axis on right side
+                        opposite: true,
+                        reversed: false,
+                        categories: data.Table9.map(obj => obj.ds_idade),
+                        linkedTo: 0,
+                        labels: {
+                            step: 1
+                        }
+                    }],
+                    yAxis: {
+                        title: {
+                            text: null
+                        },
+                        labels: {
+                            formatter: function () {
+                                return Math.abs(this.value) + '%';
+                            }
+                        }
+                    },
+
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + ', Faixa ' + this.point.category + '</b><br/>' +
+                                 Math.abs(this.point.y) + '%'
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Masculino', data: data.Table9.map(obj => (obj.op).toFixed(1)/1), color: '#dfdfe0'},
+                             { name: 'Feminino', data: data.Table10.map(obj => (obj.op).toFixed(1)/1), color: '#dd4b39' }]
+                };
 
                 $scope.carregarGrafico();
+                $scope.carregarGraficoDepartamento($scope.dep.indicador);
 
             });
+
         }
 
 
-        // carrega o grafico de acordo com o indicador escolhido
+        // carrega o grafico de Genero com o indicador escolhido
         $scope.carregarGrafico = function () {
             let dadosSexo = $scope.dashboard.sexoBase;
 
             $scope.dashboard.mes = dadosSexo.map(obj => obj.mes);
 
-
             switch ($scope.grafico.indicador) {
                 case 'percentual':
-                  $scope.dashboard.sexo = [
-                      { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => (obj.masculino * 100.0 / obj.total).toFixed(1) / 1  ), color: '#dfdfe0'  },
-                      { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => (obj.feminino * 100.0 / obj.total).toFixed(1) / 1  ), color: '#dd4b39' },];
+                    $scope.dashboard.sexo = [
+                        { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => (obj.masculino * 100.0 / obj.total).toFixed(1) / 1), color: '#dfdfe0' },
+                        { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => (obj.feminino * 100.0 / obj.total).toFixed(1) / 1), color: '#dd4b39' },];
                     break;
-          
+
                 case 'quantidade':
-                  $scope.dashboard.sexo = [
+                    $scope.dashboard.sexo = [
                         { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => obj.masculino), color: '#dfdfe0' },
                         { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => obj.feminino), color: '#dd4b39' },];
                     break;
-                
+
                 default:
-                  $scope.dashboard.sexo = [
+                    $scope.dashboard.sexo = [
                         { name: 'Masculino', type: 'column', data: dadosSexo.map(obj => obj.masculino), color: '#dfdfe0' },
                         { name: 'Feminino', type: 'column', data: dadosSexo.map(obj => obj.feminino), color: '#dd4b39' },];
-                   
+
             }
 
         }
 
-   
+
+        // carrega o grafico (barrra) departamento
+        $scope.carregarGraficoDepartamento = function () {
+
+            let dados;
+
+            if ($scope.dep.indicador == "CONSOLIDADO") {
+
+                dados = alasql('select departamento,  func_headcount from ? ', [$scope.dashboard.depBase]);
+                $scope.dashboard.depSerie = dados.map(obj => obj.departamento);
+                $scope.dashboard.departamento = [{ name: 'Quantidade', type: 'column', data: dados.map(obj => obj.func_headcount), color: '#dd4b39' }];
+
+            } else if ($scope.dep.indicador == "OPERACAO") {
+                console.log($scope.dep.indicado);
+                dados = alasql('select empresa, func_headcount  from ? ', [$scope.dashboard.carteira]);
+                $scope.dashboard.depSerie = dados.map(obj => obj.empresa);
+                $scope.dashboard.departamento = [{ name: 'Quantidade', type: 'column', data: dados.map(obj => obj.func_headcount), color: '#dd4b39' }];
+
+            } else if ($scope.dep.indicador == "ADMINISTRATIVO") {
+
+                dados = alasql('select departamento,  func_headcount from ? where departamento <>  "OPERAÇÃO" ', [$scope.dashboard.depBase]);
+                $scope.dashboard.depSerie = dados.map(obj => obj.departamento);
+                $scope.dashboard.departamento = [{ name: 'Quantidade', type: 'column', data: dados.map(obj => obj.func_headcount), color: '#dd4b39' }];
+            }        
+
+        }
+
+
 
         // extrair dados para excel
         $scope.extrair = function (tabela) {
