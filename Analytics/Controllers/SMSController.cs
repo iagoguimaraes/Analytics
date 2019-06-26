@@ -102,7 +102,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     //retorna do id_lote
-                    int resultado = sql.ExecuteProcedureInt("sp_upload", parametros);
+                    int resultado = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
 
                     //verifica o id_layout
                     if (idlayout == 1)
