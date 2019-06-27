@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 
 namespace Analytics.Models
@@ -45,6 +46,22 @@ namespace Analytics.Models
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
                 AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
+
+                /*
+                if ((int)response.StatusCode == 429)
+                {
+                    Thread.Sleep(10000);
+                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                }
+                if ((int)response.StatusCode == 400)
+                {
+                    wc = new WebClient();
+                    WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+                    proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+                    wc.Proxy = proxy;
+                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                }
+                */
             }
             catch (Exception ex)
             {
