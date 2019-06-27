@@ -72,16 +72,16 @@ namespace Analytics.Models
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
             {
                 Dictionary<string, object> parametros = new Dictionary<string, object>();
-                parametros.Add("@id_fornecedor", id_fornecedor);
+                //parametros.Add("@id_fornecedor", id_fornecedor);
                 parametros.Add("@telefone", telefone);
                 parametros.Add("@mensagem", mensagem);
                 parametros.Add("@id_lote", id_lote);
                 parametros.Add("@id_registro", id_registro);
 
                 DataTable dt = sql.ExecuteQueryDataTable(@"
-                        insert into TB_ENVIO(id_fornecedor, data_envio, telefone, mensagem, id_lote, id_registro)
+                        insert into TB_ENVIO( data_envio, telefone, mensagem, id_lote, id_registro)
                         output inserted.id_envio
-                        values(@id_fornecedor, getdate(), @telefone, @mensagem, @id_lote, @id_registro)"
+                        values(getdate(), @telefone, @mensagem, @id_lote, @id_registro)"
                 , parametros);
                 int id_envio = Convert.ToInt32(dt.Rows[0]["id_envio"]);
                 return id_envio;
