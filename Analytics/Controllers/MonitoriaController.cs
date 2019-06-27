@@ -18,6 +18,7 @@ namespace Analytics.Controllers
     [RoutePrefix("api/monitoria")]
     public class MonitoriaController : ApiController
     {
+        #region MONITORIA ONLINE
 
         [Route("consultar")]
         [HttpPost]
@@ -531,6 +532,116 @@ namespace Analytics.Controllers
             return newPath2;
         }
 
+        #endregion
 
+        #region Campanhas
+
+        [Route("campanha/obter")]
+        [HttpGet]
+        [Autorizar]
+        public HttpResponseMessage ObterCampanha()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_campanhas");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("campanha/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarCampanha(FormDataCollection form)
+        {
+            try
+            {
+                int id_campanha = Convert.ToInt32(form["id_campanha"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_campanha", id_campanha);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_campanha", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("campanha/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirCampanha(FormDataCollection form)
+        {
+            try
+            {
+                string campanha = form["campanha"];
+                int id_empresa = Convert.ToInt32(form["indicador"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // INSERIR GRUPO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("campanha", campanha);
+                    parametros.Add("id_empresa", id_empresa);
+
+                    DataTable result = sql.ExecuteProcedureDataTable("sp_ins_monitoria_campanha", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("campanha/alterar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage AlterarCampanha(FormDataCollection form)
+        {
+            try
+            {
+
+                int id_campanha = Convert.ToInt32(form["id_campanha"]);
+                string campanha = form["campanha"];
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+                bool ativo = Convert.ToBoolean(form["ativo"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // ALTERAR O USUARIO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_campanha", id_campanha);
+                    parametros.Add("campanha", campanha);
+                    parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("ativo", ativo ? 1 : 0);
+
+                    sql.ExecuteProcedure("sp_upd_monitoria_campanha", parametros);
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
     }
 }
