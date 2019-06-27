@@ -12,10 +12,7 @@ namespace Analytics.Models
     {
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip";
-        private readonly int id_fornecedor = 1;
         private WebClient wc;
-
-
 
         public TalkIP()
         {
@@ -47,25 +44,12 @@ namespace Analytics.Models
             catch (WebException e) // erro interno
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
-
-                if ((int)response.StatusCode == 402) // saldo insuficiente
-                {
-                    AtualizarEnvio(id_envio, false, 4, null, null);
-                }
-                else if ((int) response.StatusCode == 422) // requisição mal formada
-                {
-                    AtualizarEnvio(id_envio, false, 3, null, null);
-                }
-                else // erro na plataforma
-                {
-                    AtualizarEnvio(id_envio, false, 2, null, null);
-                }
+                AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
             }
             catch (Exception ex)
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
-
         }
         private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {

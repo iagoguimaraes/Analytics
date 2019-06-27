@@ -61,7 +61,7 @@
                         <div class="col-xs-12 col-sm-4 col-md-2" ng-show="validarSelecao()">
                             <div class="form-group">
                                 <label>Upload Arquivo</label>
-                                <input type="file" id="fileInput" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo" />
+                                <input type="file" id="fileInput" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo"/>
                                 <input type="hidden" ng-model="filtros.arquivo" />
                             </div>
                         </div>
@@ -130,12 +130,12 @@
             fornecedor: '',
             layout: '',
             tabela: '',
-            arquivo: ''
+            arquivo: '',
+            nomearquivo: '',
         };
 
         $scope.arquivo = {};
         $scope.dashFiltros = {};
-        $scope.arquivo = {};
 
         //carregar os filtros
         $http({
@@ -198,6 +198,9 @@
         }
 
         $scope.importarArquivo = function () {
+
+            $scope.filtros.nomearquivo = document.querySelector('#fileInput').files[0].name;
+
             $http({
                 method: 'POST',
                 url: "/api/sms/lote/upload",
@@ -217,6 +220,7 @@
                     $scope.filtros.layout = '';
                     $scope.filtros.tabela = '';
                     $scope.filtros.arquivo = '';
+                    $scope.filtros.nomearquivo = '';
 
                 } else if (r.status == 500) {
                     console.log(r.data.Message);
@@ -230,8 +234,9 @@
                     $scope.filtros.layout = '';
                     $scope.filtros.tabela = '';
                     $scope.filtros.arquivo = '';
+                    $scope.filtros.nomearquivo = '';
                 }
-
+                
             });
         }
 
