@@ -81,15 +81,27 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Layout do arquivo selecionado</span>
+                        <span class="card-header-title">Layout do Arquivo</span>
                     </div>
+                    
                     <div class="card-body">
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
+                            <h3> {{arquivo.extensao[0]}} </h3>
+                        </div>
                         <table class="table table-striped table-bordered" style="width:100%" ng-if="arquivo.metadados">
                             <thead>
                                 <tr>
                                     <th ng-repeat="x in arquivo.metadados">{{  x.name }}</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <tr>
+                                    <td ng-repeat="y in arquivo.metadados">
+                                        {{  y.tipo }}
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -205,7 +217,7 @@
             }).then(function success(r) {
 
                 //let status = r.status;
-                //let id = r.data;                
+                //let id = r.data;
 
                 if (r.status == 200) {
 
@@ -220,7 +232,7 @@
 
                 } else if (r.status == 500) {
                     console.log(r.data.Message);
-                    
+
                     alert(r.data.Message);
 
                     $("#fileInput").val('');
