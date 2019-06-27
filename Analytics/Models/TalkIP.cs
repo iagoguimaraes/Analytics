@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 
 namespace Analytics.Models
@@ -12,10 +13,7 @@ namespace Analytics.Models
     {
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip";
-        private readonly int id_fornecedor = 1;
         private WebClient wc;
-
-
 
         public TalkIP()
         {
@@ -47,25 +45,28 @@ namespace Analytics.Models
             catch (WebException e) // erro interno
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
+                AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
 
-                if ((int)response.StatusCode == 402) // saldo insuficiente
+                /*
+                if ((int)response.StatusCode == 429)
                 {
-                    AtualizarEnvio(id_envio, false, 4, null, null);
+                    Thread.Sleep(10000);
+                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
                 }
-                else if ((int) response.StatusCode == 422) // requisição mal formada
+                if ((int)response.StatusCode == 400)
                 {
-                    AtualizarEnvio(id_envio, false, 3, null, null);
+                    wc = new WebClient();
+                    WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+                    proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+                    wc.Proxy = proxy;
+                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
                 }
-                else // erro na plataforma
-                {
-                    AtualizarEnvio(id_envio, false, 2, null, null);
-                }
+                */
             }
             catch (Exception ex)
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
-
         }
         private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {

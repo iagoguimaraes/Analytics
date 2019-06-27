@@ -160,6 +160,14 @@
             </div>
         </div>
 
+        <div class="margin-bottom">
+            <div class="form-group">                
+                    <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadClassificacoes()">Classificação Ocorrências</button>                
+                
+                    <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadCarteiras()">De/para Carteiras</button>                
+            </div>
+        </div>
+
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
             <div class="widget-user-header bg-black" style="background: url('/Content/Images/Tim/bg.png') center center;">
@@ -742,7 +750,7 @@
 
 
         $scope.mudarEstado = function (id) {
-            
+
             let dados = alasql('select "BR-" + uf id, ' + $scope.mapa.indicador + ' [value], uf, estado, regiao, percentual, conversao, promessas, vlr_promessas, ticket_medio from ? where id like ("%' + id + '%") order by [value] desc', [$scope.dashboard.dados.Table7])[0];
             $scope.dashboard.mapa = dados;
 
@@ -800,6 +808,56 @@
         }
 
         $scope.carregarDashboard();
+
+        $scope.DownloadClassificacoes = function () {
+            $http({
+                method: 'GET',
+                url: "/api/tim/dashboard/humano/downloadClassificacao",
+                data: $scope.filtros,
+                responseType: 'arraybuffer',
+
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+
+                var file = new File([r.data], { type: "application/csv" });
+                var objectUrl = URL.createObjectURL(file);
+
+                var link = document.createElement('a');
+                link.style = "display: none";
+                link.href = objectUrl;
+                link.download = 'CLASSIFICACAO_ANALYTICS_TIM_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(objectUrl);
+
+            });
+        }
+
+        $scope.DownloadCarteiras = function () {
+            $http({
+                method: 'GET',
+                url: "/api/tim/dashboard/humano/downloadCarteira",
+                data: $scope.filtros,
+                responseType: 'arraybuffer',
+
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+
+                var file = new File([r.data], { type: "application/csv" });
+                var objectUrl = URL.createObjectURL(file);
+
+                var link = document.createElement('a');
+                link.style = "display: none";
+                link.href = objectUrl;
+                link.download = 'DEPARA_CARTEIRAS_ANALYTICS_TIM_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(objectUrl);
+
+            });
+        }
 
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
