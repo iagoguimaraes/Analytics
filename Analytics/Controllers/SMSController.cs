@@ -102,7 +102,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     //retorna do id_lote
-                    int resultado = sql.ExecuteProcedureInt("sp_upload", parametros);
+                    int resultado = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
 
                     //verifica o id_layout
                     if (idlayout == 1)
@@ -170,6 +170,40 @@ namespace Analytics.Controllers
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/acompanhamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardAcompanhamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable centrocusto = JsonConvert.DeserializeObject<DataTable>(form["centrocusto"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable fornecedores = JsonConvert.DeserializeObject<DataTable>(form["fornecedores"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("centrocusto", centrocusto);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acompanhamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
             }
             catch (Exception e)
             {

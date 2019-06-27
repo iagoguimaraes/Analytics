@@ -1018,6 +1018,75 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/downloadClassificacao")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadClassificacaoExcel(FormDataCollection form)
+        {
+
+            try
+            {                
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                   
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download_classificacao");
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=CLASSIFICACAO_ANALYTICS_TIM_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/downloadCarteira")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadCarteiraExcel(FormDataCollection form)
+        {
+
+            try
+            {
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download_carteira");
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=DEPARA_CARTEIRAS_ANALYTICS_TIM_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
         #endregion
 
         #region VENDAS AKIVA
