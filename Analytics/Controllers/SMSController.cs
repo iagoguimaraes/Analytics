@@ -189,6 +189,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable centrocusto = JsonConvert.DeserializeObject<DataTable>(form["centrocusto"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable fornecedores = JsonConvert.DeserializeObject<DataTable>(form["fornecedores"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {

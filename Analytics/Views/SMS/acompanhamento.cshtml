@@ -64,6 +64,12 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                         </div>
 
+                        <!--FORNECEDORES-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fornecedores</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedores" dados="dashFiltros.fornecedores"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -76,7 +82,7 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.lotes | number: 0"></h3>
@@ -86,19 +92,8 @@
                         <i class="fa fa-clone"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.custo | currency:'R$'"></h3>
-                        <p>Custo</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-3">
+            </div>            
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.registros | megaNumber"></h3>
@@ -109,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.disparado | megaNumber"></h3>
@@ -139,9 +134,9 @@
                                         <th>Hora</th>
                                         <th>Centro Custo</th>
                                         <th>Carteira</th>
+                                        <th>Fornecedor</th>
                                         <th>Usuário</th>
                                         <th>Layout</th>
-                                        <th>Custo</th>
                                         <th>Registros</th>
                                         <th>SMS Enviado</th>
                                         <th>% Enviado</th>
@@ -153,9 +148,9 @@
                                         <td>{{r.hora}}</td>
                                         <td>{{r.centrocusto}}</td>
                                         <td>{{r.carteira}}</td>
+                                        <td>{{r.fornecedor}}</td>
                                         <td>{{r.usuario}}</td>
                                         <td>{{r.layout}}</td>
-                                        <td>{{r.custo | currency: 'R$'}}</td>
                                         <td>{{r.registros | number}}</td>
                                         <td>{{r.disparado | number}}</td>
                                         <td>{{r.disparado / r.registros | percentage:1}}</td>
@@ -188,15 +183,12 @@
 <script>
     angular.module('app').controller('ctrl-sms-acompanhamento', function ($scope, $http, $filter) {
 
-        // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
-
         $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             centrocusto: '',
-            carteiras: ''
+            carteiras: '',
+            fornecedores: '',
         };
 
         $scope.dashFiltros = {};
@@ -211,7 +203,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.centrocusto = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
-            //$scope.dashFiltros.fornecedor = r.data.Table2;
+            $scope.dashFiltros.fornecedores = r.data.Table2;
             //$scope.dashFiltros.layout = r.data.Table3;
         });
 
