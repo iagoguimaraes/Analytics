@@ -2,11 +2,11 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-monitoria-campanha">
+<div ng-controller="ctrl-monitoria-carteira">
 
     <!-- HEADER-->
     <header class="page-header">
-        <div class="page-name">Campanhas</div>
+        <div class="page-name">Carteiras</div>
     </header>
 
     <!--LISTA DE CAMPANHAS-->
@@ -16,7 +16,7 @@
                 <div class="card-header">
                     <span class="card-header-title">
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-default">
-                            Inserir Nova Campanha
+                            Inserir Nova Carteira
                         </button>
                     </span>
                     <div class="card-header-button card-header-expand">
@@ -26,9 +26,9 @@
                 <div class="card-body">
 
 
-                    <div class="row margin-bottom" ng-if="campanhasLista">
+                    <div class="row margin-bottom" ng-if="carteirasLista">
                         <div class="col-xs-12">
-                            <d-table class="table table-striped table-bordered" style="width:100%" dados="campanhasLista"></d-table>
+                            <d-table class="table table-striped table-bordered" style="width:100%" dados="carteirasLista"></d-table>
                         </div>
                     </div>
 
@@ -38,27 +38,32 @@
     </div>
 
     <!-- MODAL INSERIR-->
-    <div class="modal fade" id="modal-default" style="display: none;" ng-if="empresasLista">
+    <div class="modal fade" id="modal-default" style="display: none;" ng-if="gruposLista">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Inserir Campanha</h4>
+                    <h4 class="modal-title">Inserir Carteira</h4>
                 </div>
                 <div class="modal-body">
 
                     <form role="form">
 
                         <div class="form-group">
-                            <label>Empresa</label>
-                            <select class="form-control" ng-model="campanha.indicador" ng-options="g.id_empresa as g.empresa for g in empresasLista"></select>
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="carteira.grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista"></select>
                         </div>
-
+                        <div class="form-group" ng-show="carteira.grupo">
+                            <label>Empresa</label>
+                            <select class="form-control" ng-model="carteira.empresa" ng-options="e.id_empresa as e.empresa for e in empresasLista | filter:{id_grupo: carteira.grupo}:true">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
                         <div class="form-group">
-                            <label>Campanha</label>
-                            <input type="text" class="form-control" placeholder="Nome Campanha" ng-model="campanha.campanha" />
+                            <label>Carteira</label>
+                            <input type="text" class="form-control" placeholder="Nome Carteira" ng-model="carteira.nome" />
                         </div>
 
                     </form>
@@ -66,7 +71,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirPagina($event)">Inserir</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirCarteira($event)">Inserir</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -88,32 +93,38 @@
 
                     <form role="form" id="teste">
 
-                        <input type="hidden" ng-model="editdiario.id_campanha" />
+                        <input type="hidden" ng-model="editdiario.id_empresa" />
 
                         <div class="form-group">
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="editcarteira.id_grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="editcarteira.id_grupo">
                             <label>Empresa</label>
-                            <select class="form-control" ng-model="editcampanha.id_empresa" ng-options="g.id_empresa as g.empresa for g in empresasLista">
+                            <select class="form-control" ng-model="editcarteira.id_empresa" ng-options="f.id_empresa as f.empresa for f in empresasLista | filter:{id_grupo: editcarteira.id_grupo}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Campanha</label>
-                            <input type="text" class="form-control" placeholder="Nome Campanha" ng-model="editcampanha.campanha" />
+                            <label>Carteira</label>
+                            <input type="text" class="form-control" placeholder="Nome Campanha" ng-model="editcarteira.carteira" />
                         </div>
 
                         <div class="form-group">
                             <label>Ativo: </label>
-                            <input type="checkbox" ng-model="editcampanha.ativo" />
+                            <input type="checkbox" ng-model="editcarteira.ativo" />
                         </div>
 
                     </form>
 
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarCampanha()">Salvar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarCarteira()">Salvar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -122,77 +133,87 @@
     </div>
 </div>
 
+
 <script>
-    angular.module('app').controller('ctrl-monitoria-campanha', function ($scope, $http, $filter, $window, dadosPagina) {
-        dadosPagina.titulo = 'Campanha';
+    angular.module('app').controller('ctrl-monitoria-carteira', function ($scope, $http, $filter, $window, dadosPagina) {
+        dadosPagina.titulo = 'Carteira';
         dadosPagina.descricao = ''
 
-        // carregar os paginas
-        $scope.carregarPaginas = function () {
+        // carregar carteiras
+        $scope.carregarCarteiras = function () {
             $http({
                 method: 'GET',
-                url: "/api/monitoria/campanha/obter",
+                url: "/api/monitoria/carteira/obter",
             }).then(function success(r) {
 
-                $scope.campanhasLista = r.data.Table;
-                $scope.empresasLista = r.data.Table1;
+                $scope.carteirasLista = r.data.Table;
+                $scope.gruposLista = r.data.Table1;
+                $scope.empresasLista = r.data.Table2;
+                console.log($scope.empresasLista);
 
             });
 
         }
 
-        $scope.carregarPaginas();
+        $scope.carregarCarteiras();
 
         $scope.refresh = function () {
             location.reload();
         }
 
-        // INSERIR CAMPANHA
-        $scope.campanha = {
-            campanha: '',
-            indicador: ''
+        // INSERIR CARTEIRA
+        $scope.carteira = {
+            nome: '',
+            id_grupo: '',
+            id_empresa: ''
 
         }; // objeto para inserir campanha
 
-        $scope.inserirPagina = function ($event) {
+        $scope.inserirCarteira = function ($event) {
 
-            if (!$scope.campanha.campanha) {
+            if (!$scope.carteira.nome) {
                 $event.stopPropagation();
-                $window.alert("Insira um nome para campanha.");
+                $window.alert("Insira um nome para Carteira.");
                 return false;
             }
 
-            if (!$scope.campanha.indicador) {
+            if (!$scope.carteira.id_grupo) {
                 $event.stopPropagation();
-                $window.alert("Insira a empresaa da campanha.");
+                $window.alert("Insira o grupo da carteira.");
+                return false;
+            }
+
+            if (!$scope.carteira.id_empresa) {
+                $event.stopPropagation();
+                $window.alert("Insira a empresa da carteira.");
                 return false;
             }
 
             $http({
                 method: 'POST',
-                url: "/api/monitoria/campanha/inserir",
-                data: $scope.campanha,
+                url: "/api/monitoria/carteira/inserir",
+                data: $scope.carteira,
             }).then(function success(r) {
                 $scope.empresa = {
                     nome: '',
                 };
 
                 location.reload(); //eliminar o cache dos grupos
-                $scope.carregarPaginas();
+                $scope.carregarCarteiras();
 
 
             });
         }
 
-        // EDITAR CAMPANHA
-        $scope.editcampanha = {}; // objeto para editar campanha
-        $scope.editarCampanha = function () {
+        // EDITAR CARTEIRA
+        $scope.editcarteira = {}; // objeto para editar campanha
+        $scope.editarCarteira = function () {
             $http({
                 method: 'POST',
-                url: "/api/monitoria/campanha/alterar",
-                data: $scope.editcampanha,
+                url: "/api/monitoria/carteira/alterar",
+                data: $scope.editcarteira,
             }).then(function success(r) {
-                $scope.carregarPaginas();
+                $scope.carregarCarteiras();
             });
         }
 
@@ -205,15 +226,17 @@
             // consultar dados da campanha
             $http({
                 method: 'POST',
-                url: "/api/monitoria/campanha/consultar",
-                data: { id_campanha: id }
+                url: "/api/monitoria/carteira/consultar",
+                data: { id_carteira: id }
             }).then(function success(r) {
 
-                $scope.editcampanha.id_campanha = r.data.Table[0].id_campanha;
-                $scope.editcampanha.empresa = r.data.Table[0].empresa;
-                $scope.editcampanha.campanha = r.data.Table[0].campanha;
-                $scope.editcampanha.id_empresa = r.data.Table[0].id_empresa;
-                $scope.editcampanha.ativo = r.data.Table[0].ativo;
+                $scope.editcarteira.id_carteira = r.data.Table[0].id_carteira;
+                $scope.editcarteira.carteira = r.data.Table[0].carteira;
+                $scope.editcarteira.id_grupo = r.data.Table[0].id_grupo;
+                $scope.editcarteira.grupo = r.data.Table[0].grupo;
+                $scope.editcarteira.id_empresa = r.data.Table[0].id_empresa;
+                $scope.editcarteira.empresa = r.data.Table[0].empresa;
+                $scope.editcarteira.ativo = r.data.Table[0].ativo;
 
                 $('#modal-edit').modal('show');
 
