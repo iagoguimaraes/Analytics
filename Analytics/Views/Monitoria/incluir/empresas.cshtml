@@ -51,6 +51,11 @@
                     <form role="form">
 
                         <div class="form-group">
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="empresa.id_grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista"></select>
+                        </div>
+
+                        <div class="form-group">
                             <label>Empresa</label>
                             <input type="text" class="form-control" placeholder="Nome" ng-model="empresa.nome" />
                         </div>
@@ -83,6 +88,13 @@
                     <form role="form" id="teste">
 
                         <input type="hidden" ng-model="editdiario.id_empresa" />
+
+                        <div class="form-group">
+                            <label>Grupo</label>
+                            <select class="form-control" ng-model="editempresa.id_grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
 
                         <div class="form-group">
                             <label>Empresa</label>
@@ -123,6 +135,7 @@
             }).then(function success(r) {
 
                 $scope.empresasLista = r.data.Table;
+                $scope.gruposLista = r.data.Table1;
 
             });
 
@@ -191,6 +204,7 @@
                 $scope.editempresa.id_empresa = r.data.Table[0].id_empresa;
                 $scope.editempresa.empresa = r.data.Table[0].empresa;
                 $scope.editempresa.ativo = r.data.Table[0].ativo;
+                $scope.editempresa.id_grupo = r.data.Table[0].id_grupo;
 
                 $('#modal-edit').modal('show');
 

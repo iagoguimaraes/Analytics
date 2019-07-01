@@ -2,11 +2,11 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-monitoria-carteira">
+<div ng-controller="ctrl-monitoria-ocorrencia">
 
     <!-- HEADER-->
     <header class="page-header">
-        <div class="page-name">Carteiras</div>
+        <div class="page-name">Ocorrências</div>
     </header>
 
     <!--LISTA DE CAMPANHAS-->
@@ -16,7 +16,7 @@
                 <div class="card-header">
                     <span class="card-header-title">
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-default">
-                            Inserir Nova Carteira
+                            Inserir Nova Ocorrência
                         </button>
                     </span>
                     <div class="card-header-button card-header-expand">
@@ -26,9 +26,9 @@
                 <div class="card-body">
 
 
-                    <div class="row margin-bottom" ng-if="carteirasLista">
+                    <div class="row margin-bottom" ng-if="ocorrenciasLista">
                         <div class="col-xs-12">
-                            <d-table class="table table-striped table-bordered" style="width:100%" dados="carteirasLista"></d-table>
+                            <d-table class="table table-striped table-bordered" style="width:100%" dados="ocorrenciasLista"></d-table>
                         </div>
                     </div>
 
@@ -38,32 +38,27 @@
     </div>
 
     <!-- MODAL INSERIR-->
-    <div class="modal fade" id="modal-default" style="display: none;" ng-if="gruposLista">
+    <div class="modal fade" id="modal-default" style="display: none;" ng-if="empresasLista">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Inserir Carteira</h4>
+                    <h4 class="modal-title">Inserir Ocorrência</h4>
                 </div>
                 <div class="modal-body">
 
                     <form role="form">
 
                         <div class="form-group">
-                            <label>Grupo</label>
-                            <select class="form-control" ng-model="carteira.id_grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista"></select>
-                        </div>
-                        <div class="form-group" ng-show="carteira.id_grupo">
                             <label>Empresa</label>
-                            <select class="form-control" ng-model="carteira.id_empresa" ng-options="e.id_empresa as e.empresa for e in empresasLista | filter:{id_grupo: carteira.id_grupo}:true">
-                                <option value="">Selecione</option>
-                            </select>
+                            <select class="form-control" ng-model="ocorrencia.id_empresa" ng-options="g.id_empresa as g.empresa for g in empresasLista"></select>
                         </div>
+
                         <div class="form-group">
-                            <label>Carteira</label>
-                            <input type="text" class="form-control" placeholder="Nome Carteira" ng-model="carteira.nome" />
+                            <label>Ocorrência</label>
+                            <input type="text" class="form-control" placeholder="Nome Ocorrência" ng-model="ocorrencia.ocorrencia" />
                         </div>
 
                     </form>
@@ -71,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirCarteira($event)">Inserir</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -87,44 +82,38 @@
                     <button type="button" ng-click="refresh()" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title">Editar Campanha</h4>
+                    <h4 class="modal-title">Editar Ocorrência</h4>
                 </div>
                 <div class="modal-body">
 
                     <form role="form" id="teste">
 
-                        <input type="hidden" ng-model="editdiario.id_empresa" />
+                        <input type="hidden" ng-model="editdiario.id_ocorrencia" />
 
                         <div class="form-group">
-                            <label>Grupo</label>
-                            <select class="form-control" ng-model="editcarteira.id_grupo" ng-options="g.id_grupo as g.grupo for g in gruposLista">
-                                <option value="">Selecione</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" ng-show="editcarteira.id_grupo">
                             <label>Empresa</label>
-                            <select class="form-control" ng-model="editcarteira.id_empresa" ng-options="f.id_empresa as f.empresa for f in empresasLista | filter:{id_grupo: editcarteira.id_grupo}:true">
+                            <select class="form-control" ng-model="editocorrencia.id_empresa" ng-options="g.id_empresa as g.empresa for g in empresasLista">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Carteira</label>
-                            <input type="text" class="form-control" placeholder="Nome Campanha" ng-model="editcarteira.carteira" />
+                            <label>Ocorrência</label>
+                            <input type="text" class="form-control" placeholder="Nome Ocorrência" ng-model="editocorrencia.ocorrencia" />
                         </div>
 
                         <div class="form-group">
                             <label>Ativo: </label>
-                            <input type="checkbox" ng-model="editcarteira.ativo" />
+                            <input type="checkbox" ng-model="editocorrencia.ativo" />
                         </div>
 
                     </form>
 
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarCarteira()">Salvar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarOcorrencia()">Salvar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -133,86 +122,77 @@
     </div>
 </div>
 
-
 <script>
-    angular.module('app').controller('ctrl-monitoria-carteira', function ($scope, $http, $filter, $window, dadosPagina) {
-        dadosPagina.titulo = 'Carteira';
+    angular.module('app').controller('ctrl-monitoria-ocorrencia', function ($scope, $http, $filter, $window, dadosPagina) {
+        dadosPagina.titulo = 'Ocorrencia';
         dadosPagina.descricao = ''
 
-        // carregar carteiras
-        $scope.carregarCarteiras = function () {
+        // carregar ocorrencia
+        $scope.carregarOcorrencias = function () {
             $http({
                 method: 'GET',
-                url: "/api/monitoria/carteira/obter",
+                url: "/api/monitoria/ocorrencia/obter",
             }).then(function success(r) {
 
-                $scope.carteirasLista = r.data.Table;
-                $scope.gruposLista = r.data.Table1;
-                $scope.empresasLista = r.data.Table2;
+                $scope.ocorrenciasLista = r.data.Table;
+                $scope.empresasLista = r.data.Table1;
 
             });
 
         }
 
-        $scope.carregarCarteiras();
+        $scope.carregarOcorrencias();
 
         $scope.refresh = function () {
             location.reload();
         }
 
-        // INSERIR CARTEIRA
-        $scope.carteira = {
-            nome: '',
-            id_grupo: '',
+        // INSERIR OCORRENCIA
+        $scope.ocorrencia = {
+            ocorrencia: '',
             id_empresa: ''
 
         }; // objeto para inserir campanha
 
-        $scope.inserirCarteira = function ($event) {
+        $scope.inserirOcorrencia = function ($event) {
 
-            if (!$scope.carteira.nome) {
+            if (!$scope.ocorrencia.ocorrencia) {
                 $event.stopPropagation();
-                $window.alert("Insira um nome para Carteira.");
+                $window.alert("Insira um nome para ocorrencia.");
                 return false;
             }
 
-            if (!$scope.carteira.id_grupo) {
+            if (!$scope.ocorrencia.id_empresa) {
                 $event.stopPropagation();
-                $window.alert("Insira o grupo da carteira.");
-                return false;
-            }
-
-            if (!$scope.carteira.id_empresa) {
-                $event.stopPropagation();
-                $window.alert("Insira a empresa da carteira.");
+                $window.alert("Insira a empresaa da ocorrencia.");
                 return false;
             }
 
             $http({
                 method: 'POST',
-                url: "/api/monitoria/carteira/inserir",
-                data: $scope.carteira,
+                url: "/api/monitoria/ocorrencia/inserir",
+                data: $scope.ocorrencia,
             }).then(function success(r) {
                 $scope.empresa = {
                     nome: '',
                 };
 
                 location.reload(); //eliminar o cache dos grupos
-                $scope.carregarCarteiras();
+                $scope.carregarOcorrencias();
 
 
             });
         }
 
-        // EDITAR CARTEIRA
-        $scope.editcarteira = {}; // objeto para editar campanha
-        $scope.editarCarteira = function () {
+        // EDITAR CAMPANHA
+        $scope.editocorrencia = {}; // objeto para editar campanha
+        $scope.editarOcorrencia = function () {
             $http({
                 method: 'POST',
-                url: "/api/monitoria/carteira/alterar",
-                data: $scope.editcarteira,
+                url: "/api/monitoria/ocorrencia/alterar",
+                data: $scope.editocorrencia,
             }).then(function success(r) {
-                $scope.carregarCarteiras();
+                $scope.carregarOcorrencias();                
             });
         }
 
@@ -225,17 +205,15 @@
             // consultar dados da campanha
             $http({
                 method: 'POST',
-                url: "/api/monitoria/carteira/consultar",
-                data: { id_carteira: id }
+                url: "/api/monitoria/ocorrencia/consultar",
+                data: { id_ocorrencia: id }
             }).then(function success(r) {
 
-                $scope.editcarteira.id_carteira = r.data.Table[0].id_carteira;
-                $scope.editcarteira.carteira = r.data.Table[0].carteira;
-                $scope.editcarteira.id_grupo = r.data.Table[0].id_grupo;
-                $scope.editcarteira.grupo = r.data.Table[0].grupo;
-                $scope.editcarteira.id_empresa = r.data.Table[0].id_empresa;
-                $scope.editcarteira.empresa = r.data.Table[0].empresa;
-                $scope.editcarteira.ativo = r.data.Table[0].ativo;
+                $scope.editocorrencia.id_ocorrencia = r.data.Table[0].id_ocorrencia;
+                $scope.editocorrencia.ocorrencia = r.data.Table[0].ocorrencia;
+                $scope.editocorrencia.id_empresa = r.data.Table[0].id_empresa;
+                $scope.editocorrencia.empresa = r.data.Table[0].empresa;
+                $scope.editocorrencia.ativo = r.data.Table[0].ativo;
 
                 $('#modal-edit').modal('show');
 
