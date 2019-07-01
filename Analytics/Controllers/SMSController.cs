@@ -83,6 +83,7 @@ namespace Analytics.Controllers
                 int idlayout = Convert.ToInt16(form["layout"]);
                 var tabela = form["tabela"];
                 string blob = form["arquivo"];
+                string nomearquivo = form["nomearquivo"];
 
                 byte[] data = Convert.FromBase64String(blob.Substring(blob.IndexOf(",") + 1));
                 string arquivo = Encoding.UTF8.GetString(data);
@@ -100,6 +101,7 @@ namespace Analytics.Controllers
                     parametros.Add("idlayout", idlayout);
                     parametros.Add("idusuario", Convert.ToInt16(sessao.id_usuario.ToString()));
                     parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    parametros.Add("nomearquivo", nomearquivo);
 
                     //retorna do id_lote
                     int resultado = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
@@ -125,12 +127,16 @@ namespace Analytics.Controllers
                                             {
                                                 foreach (DataRow registro in lote.Rows)
                                                 {
-                                                    long telefone = Convert.ToInt64(registro["telefone"]);
-                                                    string mensagem = registro["mensagem"].ToString();
-                                                    int id_lote = Convert.ToInt32(registro["id_lote"]);
-                                                    int id_registro = Convert.ToInt32(registro["id_registro"]);
+                                                    try
+                                                    {
+                                                        long telefone = Convert.ToInt64(registro["telefone"]);
+                                                        string mensagem = registro["mensagem"].ToString();
+                                                        int id_lote = Convert.ToInt32(registro["id_lote"]);
+                                                        int id_registro = Convert.ToInt32(registro["id_registro"]);
 
-                                                    api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                                                        api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                                                    }
+                                                    catch { }
                                                 }
                                             }
                                         });
@@ -155,8 +161,8 @@ namespace Analytics.Controllers
                 File.AppendAllLines(path, new string[] { "req" });
                 string[] contents = new string[3];
                 contents[1] = Request.GetQueryNameValuePairs().First().Value;
-                contents[2] = Request.Content.ReadAsStringAsync().Result;               
-                File.AppendAllLines(path,contents);
+                contents[2] = Request.Content.ReadAsStringAsync().Result;
+                File.AppendAllLines(path, contents);
 
                 int id_envio = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
 

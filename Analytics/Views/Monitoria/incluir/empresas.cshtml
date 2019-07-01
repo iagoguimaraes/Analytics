@@ -1,0 +1,214 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-monitoria-empresa">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Empresas</div>
+    </header>
+
+    <!--LISTA DE EMPRESAS-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-default">
+                            Inserir Nova Empresa
+                        </button>
+                    </span>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="row margin-bottom" ng-if="empresasLista">
+                        <div class="col-xs-12">
+                            <d-table class="table table-striped table-bordered" style="width:100%" dados="empresasLista"></d-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL INSERIR-->
+    <div class="modal fade" id="modal-default" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Inserir Empresa</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form">
+
+                        <div class="form-group">
+                            <label>Empresa</label>
+                            <input type="text" class="form-control" placeholder="Nome" ng-model="empresa.nome" />
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirEmpresa($event)">Inserir</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- MODAL EDITAR-->
+    <div class="modal fade" id="modal-edit" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" ng-click="refresh()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Empresa</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form" id="teste">
+
+                        <input type="hidden" ng-model="editdiario.id_empresa" />
+
+                        <div class="form-group">
+                            <label>Empresa</label>
+                            <input type="text" class="form-control" placeholder="Nome Empresa" ng-model="editempresa.empresa" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ativo: </label>
+                            <input type="checkbox" ng-model="editempresa.ativo" />
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarEmpresa()">Salvar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-monitoria-empresa', function ($scope, $http, $filter, $window, dadosPagina) {
+        dadosPagina.titulo = 'Empresa';
+        dadosPagina.descricao = ''
+
+
+        // carregar empresas
+        $scope.carregarEmpresas = function () {
+            $http({
+                method: 'GET',
+                url: "/api/monitoria/empresa/obter",
+            }).then(function success(r) {
+
+                $scope.empresasLista = r.data.Table;
+
+            });
+
+        }
+
+        $scope.carregarEmpresas();
+
+        $scope.refresh = function () {
+            location.reload();
+        }
+
+        // INSERIR EMPRESA
+        $scope.empresa = {
+            nome: ''
+        }; // objeto para inserir empresa
+
+        $scope.inserirEmpresa = function ($event) {
+
+            if (!$scope.empresa.nome) {
+                $event.stopPropagation();
+                $window.alert("Insira um nome para a Empresa.");
+                return false;
+            }
+
+            $http({
+                method: 'POST',
+                url: "/api/monitoria/empresa/inserir",
+                data: $scope.empresa,
+            }).then(function success(r) {
+                $scope.empresa = {
+                    nome: '',
+                };
+
+                location.reload(); //eliminar o cache dos grupos
+                $scope.carregarPaginas();
+
+
+            });
+        }
+
+        // EDITAR EMPRESA
+        $scope.editempresa = {}; // objeto para editar empresa
+        $scope.editarEmpresa = function () {
+            $http({
+                method: 'POST',
+                url: "/api/monitoria/empresa/alterar",
+                data: $scope.editempresa,
+            }).then(function success(r) {
+                $scope.carregarEmpresas();
+            });
+        }
+
+        // ao clicar em uma campanha, carregar modal
+        $(document).on('click', '.table tbody tr', function () {
+            // obtem o id da empresa para buscar
+            let id = $(this).find('td:nth-child(1)').html();
+
+
+            // consultar dados da empresa
+            $http({
+                method: 'POST',
+                url: "/api/monitoria/empresa/consultar",
+                data: { id_empresa: id }
+            }).then(function success(r) {
+
+                $scope.editempresa.id_empresa = r.data.Table[0].id_empresa;
+                $scope.editempresa.empresa = r.data.Table[0].empresa;
+                $scope.editempresa.ativo = r.data.Table[0].ativo;
+
+                $('#modal-edit').modal('show');
+
+
+            });
+
+        });
+
+    });
+
+</script>
+
+<style>
+    .table tbody tr {
+        cursor: pointer;
+    }
+
+        .table tbody tr:hover {
+            font-weight: bold;
+        }
+</style>
