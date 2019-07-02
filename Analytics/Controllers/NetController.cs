@@ -348,8 +348,6 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
@@ -360,8 +358,6 @@ namespace Analytics.Controllers
                 string hora = form["hora"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
-                string chkEmpresa = form["chkEmpresa"];
-                string chkCarteira = form["chkCarteira"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -369,8 +365,6 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
@@ -379,8 +373,6 @@ namespace Analytics.Controllers
                     parametros.Add("hora", hora);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
-                    parametros.Add("chkEmpresa", chkEmpresa);
-                    parametros.Add("chkCarteira", chkCarteira);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
 
@@ -407,8 +399,6 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
@@ -419,8 +409,6 @@ namespace Analytics.Controllers
                 string hora = form["hora"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
-                string chkEmpresa = form["chkEmpresa"];
-                string chkCarteira = form["chkCarteira"];
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
@@ -429,8 +417,6 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
@@ -439,8 +425,6 @@ namespace Analytics.Controllers
                     parametros.Add("hora", hora);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
-                    parametros.Add("chkEmpresa", chkEmpresa);
-                    parametros.Add("chkCarteira", chkCarteira);
 
                     DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
 
