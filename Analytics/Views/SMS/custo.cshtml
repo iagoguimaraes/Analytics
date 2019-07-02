@@ -447,7 +447,7 @@
                                         <td>{{c | sumByColumn: 'qtd_registros' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_sucesso'| number : 0 }}</td>
                                         <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_registros' | percentage: 1}}</td>
-                                        <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 2}}</td>                                        
+                                        <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 2}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -472,10 +472,11 @@
 
 <script>
     angular.module('app').controller('ctrl-sms-custo', function ($scope, $http, $filter) {
-
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
         $scope.filtros = {
-            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             centrocusto: '',
             carteiras: '',
             fornecedores: '',
