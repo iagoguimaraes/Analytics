@@ -130,6 +130,39 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="( dashboard.resumo.qtd_pag_promessa_cartao / dashboard.resumo.promessa_cartao ) | percentage : 1"></h3>
+                        <p>Efetividade Cartão</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="( dashboard.resumo.qtd_pag_promessa_parc / dashboard.resumo.promessa_parc ) | percentage : 1"></h3>
+                        <p>Efetividade Parcelamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="( dashboard.resumo.qtd_pag_migracao / dashboard.resumo.migracao ) | percentage : 1"></h3>
+                        <p>Efetividade Migração</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6">
@@ -212,7 +245,8 @@
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12">
                 <div class="card">
-                    <div class="card-header">
+
+                    <div class="card-header" ng-show="grafico.exibir == 'true'">
                         <span class="card-header-title">Efetividade por Dia Visão : {{grafico.indicador}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
@@ -220,16 +254,96 @@
                         <div class="card-header-button" ng-click="extrair('Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false"  />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
                     </div>
-                    <div class="card-body">
-
+                    <div class="card-body" ng-show="grafico.exibir == 'true'">
                         <div class="row margin-bottom">
                             <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Stacking="normal"></high-chart>
                         </div>
                     </div>
+
+                    <div class="card-header" ng-show="grafico.exibir == 'false'">
+                        <span class="card-header-title">Análise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked"  />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body" ng-show="grafico.exibir == 'false'">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Qtd Promessas Geral</th>
+                                        <th>Qtd Pag Geral</th>
+                                        <th>Qtd Pag Cartão</th>
+                                        <th>Qtd Pag Migração</th>
+                                        <th>Qtd Pag Parcelado</th>
+                                        <th>% Geral</th>
+                                        <th>% Cartão</th>
+                                        <th>% Parcelado</th>
+                                        <th>% Migração</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dia in dashboard.diadia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.qtd_promessa | number}}</td>
+                                        <td>{{dia.qtd_pago | number}}</td>
+                                        <td>{{dia.qtd_pag_promessa_cartao | number}}</td>
+                                        <td>{{dia.qtd_pag_promessa_parc | number}}</td>
+                                        <td>{{dia.qtd_pag_migracao | number}}</td>
+                                        <td>{{dia.qtd_pago  / dia.qtd_promessa |  percentage:1}}</td>
+                                        <td>{{dia.qtd_pag_promessa_cartao  / dia.promessa_cartao |  percentage:1}}</td>
+                                        <td>{{dia.qtd_pag_promessa_parc  / dia.promessa_parc |  percentage:1}}</td>
+                                        <td>{{dia.qtd_pag_migracao  / dia.migracao |  percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.qtd_promessa | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pago | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_promessa_cartao | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_promessa_parc | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_migracao | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pago  / dashboard.resumo.qtd_promessa | number : 0 }}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_promessa_cartao / dashboard.resumo.promessa_cartao  | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_promessa_parc  / dashboard.resumo.promessa_parc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.qtd_pag_migracao / dashboard.resumo.migracao  | percentage: 1}}</th>
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
+   
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -243,8 +357,11 @@
                         <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table5')">
+                        <div class="card-header-button" ng-click="extrair('Table6')">
                             <i class="fa fa-table"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-plus-square "></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -263,8 +380,8 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
-        $scope.grafico = { indicador: 'total' };
-        console.log($scope.grafico.indicador);
+        $scope.grafico = { indicador: 'total' ,  exibir: 'true'};
+
         $scope.filtros = {
 
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
