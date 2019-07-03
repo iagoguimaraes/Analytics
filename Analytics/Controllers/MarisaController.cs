@@ -132,6 +132,8 @@ namespace Analytics.Controllers
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -141,6 +143,7 @@ namespace Analytics.Controllers
                     parametros.Add("atrasos", produtos);
                     parametros.Add("supervisores", supervisor);
                     parametros.Add("equipes", equipes);
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -198,6 +201,7 @@ namespace Analytics.Controllers
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
@@ -208,6 +212,7 @@ namespace Analytics.Controllers
                     parametros.Add("atrasos", atrasos);
                     parametros.Add("supervisores", supervisor);
                     parametros.Add("equipes", equipes);
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
