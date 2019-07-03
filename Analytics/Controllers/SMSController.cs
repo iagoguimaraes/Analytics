@@ -217,5 +217,43 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/custo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardCusto(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable centrocusto = JsonConvert.DeserializeObject<DataTable>(form["centrocusto"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable fornecedores = JsonConvert.DeserializeObject<DataTable>(form["fornecedores"]);
+                DataTable estados = JsonConvert.DeserializeObject<DataTable>(form["estados"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("centrocusto", centrocusto);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("fornecedores", fornecedores);
+                    parametros.Add("estados", estados);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_custo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
     }
 }
