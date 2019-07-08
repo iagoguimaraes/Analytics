@@ -331,7 +331,7 @@ namespace Analytics.Controllers
                 string resposta6 = form["questao6[complemento]"];
                 string resposta7 = (form["questao7[resposta]"]);
 
-                if(string.IsNullOrEmpty(complemento1))
+                if (string.IsNullOrEmpty(complemento1))
                 {
                     complemento1 = "Sem complemento.";
                 }
@@ -534,7 +534,7 @@ namespace Analytics.Controllers
 
         #endregion
 
-        #region Campanhas
+        #region CAMPANHA
 
         [Route("campanha/obter")]
         [HttpGet]
@@ -588,6 +588,7 @@ namespace Analytics.Controllers
             {
                 string campanha = form["campanha"];
                 int id_empresa = Convert.ToInt32(form["indicador"]);
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
@@ -596,6 +597,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("campanha", campanha);
                     parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("id_grupo", id_grupo);
 
                     DataTable result = sql.ExecuteProcedureDataTable("sp_ins_monitoria_campanha", parametros);
 
@@ -619,6 +621,7 @@ namespace Analytics.Controllers
                 int id_campanha = Convert.ToInt32(form["id_campanha"]);
                 string campanha = form["campanha"];
                 int id_empresa = Convert.ToInt32(form["id_empresa"]);
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
                 bool ativo = Convert.ToBoolean(form["ativo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
@@ -628,6 +631,7 @@ namespace Analytics.Controllers
                     parametros.Add("id_campanha", id_campanha);
                     parametros.Add("campanha", campanha);
                     parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("id_grupo", id_grupo);
                     parametros.Add("ativo", ativo ? 1 : 0);
 
                     sql.ExecuteProcedure("sp_upd_monitoria_campanha", parametros);
@@ -643,5 +647,343 @@ namespace Analytics.Controllers
         }
 
         #endregion
+
+        #region EMPRESA
+
+        [Route("empresa/obter")]
+        [HttpGet]
+        [Autorizar]
+        public HttpResponseMessage ObterEmpresa()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_empresas");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("empresa/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarEmpresa(FormDataCollection form)
+        {
+            try
+            {
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_empresa", id_empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_empresa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("empresa/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirEmpresa(FormDataCollection form)
+        {
+            try
+            {
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
+                string empresa = form["nome"];
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // INSERIR GRUPO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_grupo", id_grupo);
+                    parametros.Add("empresa", empresa);
+
+                    DataTable result = sql.ExecuteProcedureDataTable("sp_ins_monitoria_empresa", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("empresa/alterar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage AlterarEmpresa(FormDataCollection form)
+        {
+            try
+            {
+
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
+                string empresa = form["empresa"];
+                bool ativo = Convert.ToBoolean(form["ativo"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // ALTERAR O USUARIO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("id_grupo", id_grupo);
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("ativo", ativo ? 1 : 0);
+
+                    sql.ExecuteProcedure("sp_upd_monitoria_empresa", parametros);
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region CARTEIRA
+
+        [Route("carteira/obter")]
+        [HttpGet]
+        [Autorizar]
+        public HttpResponseMessage ObterCarteira()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_carteiras");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("carteira/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarCarteira(FormDataCollection form)
+        {
+            try
+            {
+                int id_carteira = Convert.ToInt32(form["id_carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_carteira", id_carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_carteira", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("carteira/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirCarteira(FormDataCollection form)
+        {
+            try
+            {
+                string carteira = form["nome"];
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // INSERIR GRUPO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("id_grupo", id_grupo);
+                    parametros.Add("id_empresa", id_empresa);
+
+                    DataTable result = sql.ExecuteProcedureDataTable("sp_ins_monitoria_carteira", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("carteira/alterar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage AlterarCarteira(FormDataCollection form)
+        {
+            try
+            {
+
+                int id_carteira = Convert.ToInt32(form["id_carteira"]);
+                string carteira = form["carteira"];
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+                int id_grupo = Convert.ToInt32(form["id_grupo"]);
+                bool ativo = Convert.ToBoolean(form["ativo"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // ALTERAR O USUARIO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_carteira", id_carteira);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("id_grupo", id_grupo);
+                    parametros.Add("ativo", ativo ? 1 : 0);
+
+                    sql.ExecuteProcedure("sp_upd_monitoria_carteira", parametros);
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region OCORRENCIA
+
+        [Route("ocorrencia/obter")]
+        [HttpGet]
+        [Autorizar]
+        public HttpResponseMessage ObterOcorrencia()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_ocorrencias");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("ocorrencia/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarOcorrencia(FormDataCollection form)
+        {
+            try
+            {
+                int id_ocorrencia = Convert.ToInt32(form["id_ocorrencia"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_ocorrencia", id_ocorrencia);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_monitoria_ocorrencia", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("ocorrencia/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirOcorrencia(FormDataCollection form)
+        {
+            try
+            {
+                string ocorrencia = form["ocorrencia"];
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // INSERIR GRUPO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("id_empresa", id_empresa);
+
+                    DataTable result = sql.ExecuteProcedureDataTable("sp_ins_monitoria_ocorrencia", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("ocorrencia/alterar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage AlterarOcorrencia(FormDataCollection form)
+        {
+            try
+            {
+
+                int id_ocorrencia = Convert.ToInt32(form["id_ocorrencia"]);
+                string ocorrencia = form["ocorrencia"];
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+                string empresa = form["empresa"];
+                bool ativo = Convert.ToBoolean(form["ativo"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    // ALTERAR O USUARIO
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("id_ocorrencia", id_ocorrencia);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("id_empresa", id_empresa);
+                    parametros.Add("ativo", ativo ? 1 : 0);
+
+                    sql.ExecuteProcedure("sp_upd_monitoria_ocorrencia", parametros);
+
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+
     }
 }

@@ -15,6 +15,9 @@ namespace Analytics.Controllers
     [RoutePrefix("api/marisa")]
     public class MarisaController : ApiController
     {
+
+
+        #region HUMANO
         [Route("dashboard/horahora")]
         [HttpPost]
         [Autorizar]
@@ -132,6 +135,8 @@ namespace Analytics.Controllers
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -141,6 +146,7 @@ namespace Analytics.Controllers
                     parametros.Add("atrasos", produtos);
                     parametros.Add("supervisores", supervisor);
                     parametros.Add("equipes", equipes);
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -198,6 +204,7 @@ namespace Analytics.Controllers
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
@@ -208,6 +215,7 @@ namespace Analytics.Controllers
                     parametros.Add("atrasos", atrasos);
                     parametros.Add("supervisores", supervisor);
                     parametros.Add("equipes", equipes);
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -702,7 +710,56 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/operacional")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoOperacional(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int atrasos = Convert.ToInt32(form["atrasos"]);
+                int carteiras = Convert.ToInt32(form["carteiras"]);
 
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("carteiras", carteiras);
+
+                    string procedure = "sp_humano_dashboard_operacional";
+
+                    if (form["conceito"] == "_unique")
+                    {
+                        procedure = "sp_humano_dashboard_operacional_unique";
+                    }
+                    else if (form["conceito"] == "_total")
+                    {
+                        procedure = "sp_humano_dashboard_operacional";
+                    }
+                    else
+                    {
+                        Console.WriteLine("parametro de conceito não passado");
+                    }
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion 
+
+        #region DIGITAL
         [Route("dashboard/callflex/horahora")]
         [HttpPost]
         [Autorizar]
@@ -1020,6 +1077,8 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        #endregion
 
     }
 
