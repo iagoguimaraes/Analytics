@@ -22,7 +22,7 @@ namespace Analytics.Models
             proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
             wc.Proxy = proxy;
         }
-        public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
+        public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null, int contagem_erro = 0)
         {
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
@@ -46,19 +46,23 @@ namespace Analytics.Models
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
                 AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
+                
+                if ((int)response.StatusCode == 400)
+                {
+                    if(contagem_erro <= 3)
+                    {
+                        wc = new WebClient();
+                        WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+                        proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+                        wc.Proxy = proxy;
+                        EnviarSMS(telefone, mensagem, id_lote, id_registro, ++contagem_erro);
+                    }                   
+                }
 
                 /*
                 if ((int)response.StatusCode == 429)
                 {
                     Thread.Sleep(10000);
-                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                }
-                if ((int)response.StatusCode == 400)
-                {
-                    wc = new WebClient();
-                    WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
-                    proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
-                    wc.Proxy = proxy;
                     EnviarSMS(telefone, mensagem, id_lote, id_registro);
                 }
                 */
