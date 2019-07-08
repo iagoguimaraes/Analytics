@@ -22,7 +22,7 @@ namespace Analytics.Models
             proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
             wc.Proxy = proxy;
         }
-        public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
+        public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null, int contagem_erro = 0)
         {
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
@@ -46,19 +46,23 @@ namespace Analytics.Models
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
                 AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
+                
+                if ((int)response.StatusCode == 400)
+                {
+                    if(contagem_erro <= 3)
+                    {
+                        wc = new WebClient();
+                        WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+                        proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+                        wc.Proxy = proxy;
+                        EnviarSMS(telefone, mensagem, id_lote, id_registro, ++contagem_erro);
+                    }                   
+                }
 
                 /*
                 if ((int)response.StatusCode == 429)
                 {
                     Thread.Sleep(10000);
-                    EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                }
-                if ((int)response.StatusCode == 400)
-                {
-                    wc = new WebClient();
-                    WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
-                    proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
-                    wc.Proxy = proxy;
                     EnviarSMS(telefone, mensagem, id_lote, id_registro);
                 }
                 */
@@ -67,6 +71,23 @@ namespace Analytics.Models
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
+        }
+        public void EnviarLoteSMS(int id_lote)
+        {
+            // consulta no banco de dados o lote
+            DataSet ds = ObterLote(id_lote);
+
+            // monta o json
+            ds.Tables[1].Columns["telefone"].ColumnName = "phone"; 
+            ds.Tables[1].Columns["mensagem"].ColumnName = "message";
+            ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}", url_callback, "id_registro"));
+
+            string block = JsonConvert.SerializeObject(ds.Tables[1]);
+            string json = "{ block: " + block + "}";
+
+            // faz requisição
+
+            // atualiza o lote: id unico fornecedor, quantidade de registros e o custo
         }
         private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {
@@ -155,6 +176,15 @@ namespace Analytics.Models
                     sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_envio, id_status, data_retorno) values (@id_envio,@id_status,getdate())", parametros);
                     sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
                 }
+            }
+        }
+        private DataSet ObterLote(int id_lote)
+        {
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@id_lote", id_lote);
+                return sql.ExecuteProcedureDataSet("sp_sel_lote", parametros);
             }
         }
 
