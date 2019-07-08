@@ -371,6 +371,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                bool carregar = Convert.ToBoolean(form["carregar"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
                 {
@@ -378,6 +379,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carregar", carregar ? 1 : 0);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_boleto_sms", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
