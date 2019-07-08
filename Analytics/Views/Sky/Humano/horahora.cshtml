@@ -521,18 +521,17 @@
                                     <tr>
                                         <th>Equipe</th>
                                         <th>Agentes</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
-                                        <th>CPC</th>
-                                        <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Prom Cart.</th>
-                                        <th>Prom Migr.</th>
-                                        <th>Prom Parc.</th>
+                                        <th>TMA</th>
+                                        <th>% Atendidas x Tab</th>
+                                        <th>% Improdutivo x Ctt</th>
                                         <th>% Cart.</th>
                                         <th>% Migr.</th>
                                         <th>% Parc.</th>
-                                        <th>TxLoc</th>
-                                        <th>TxApv</th>
+                                        <th>% CPC x CTT</th>
+                                        <th>% CPCA x CTT</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -544,36 +543,34 @@
                                             {{c[0].supervisor}}
                                         </td>
                                         <td>{{c | sumByColumn: 'qtd_agente'| number}}</td>
+                                        <td>{{c | sumByColumn: 'atendidas'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
-                                        <td>{{c | sumByColumn: 'cpc'| number}}</td>
-                                        <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
-                                        <td>{{c | sumByColumn: 'migracao'| number}}</td>
-                                        <td>{{c | sumByColumn: 'promessa_parc'| number}}</td>
+                                        <td>{{c | sumByColumn: 'tmp_falado'| formatTimer}}</td>
+                                        <td>{{c | divideSumColumns: 'acionados':'atendidas' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'improdutivo':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpca':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.equipe}}</td>
                                         <td>{{p.qtd_agente | number}}</td>
+                                        <td>{{p.atendidas | number}}</td>
                                         <td>{{p.contato | number}}</td>
-                                        <td>{{p.cpc | number}}</td>
-                                        <td>{{p.cpca | number}}</td>
                                         <td>{{p.promessa | number}}</td>
-                                        <td>{{p.promessa_cartao | number}}</td>
-                                        <td>{{p.migracao | number}}</td>
-                                        <td>{{p.promessa_parc | number}}</td>
+                                        <td>{{p.tmp_falado | formatTimer}}</td>
+                                        <td>{{p.acionados / p.atendidas | percentage:1}}</td>
+                                        <td>{{p.improdutivo / p.contato  | percentage:1}}</td>
                                         <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
                                         <td>{{p.migracao / p.promessa | percentage:1}}</td>
                                         <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
-                                        <td>{{p.cpca / p.cpc | percentage:1}}</td>
+                                        <td>{{p.cpca / p.contato | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                     </tr>
 
@@ -587,8 +584,9 @@
             </div>
         </div>
 
+        
         <!--GRÁFICO POR ESTADO-->
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -645,7 +643,6 @@
                                         <td>{{e | divideSumColumns: 'promessa_cart':'promessa' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
-                                        @*<td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>*@
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
                                     <tr ng-repeat="p in e" ng-show="showTbody">
@@ -661,27 +658,17 @@
                                         <td>{{p.migracao / p.promessa| percentage:1}}</td>
                                         <td>{{p.promessa_parc / p.promessa| percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca| percentage:1}}</td>
-                                        @*<td>{{p.vlr_promessa | currency: 'R$ '}}</td>*@
 
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <!--TABELA POR REGIÃO-->
+                  
                     <div class="table-responsive" ng-show="graficoRegiao.exibir == 'true'">
                         <div class="card-body">
                             
                             <div class="row">
-                                @*<div class="col-xs-12 col-md-2">
-                                        <div class="small-box bg-blue">
-                                            <div class="inner">
-                                                <p><h5>Contato</h5></p>
-                                                <h4 ng-bind="dashboard.mapa.contato| number"></h4>
-                                                <p>{{ dashboard.mapa.estado }}</p>
-                                            </div>
-                                        </div>
-                                    </div>*@
 
                                 <div class="col-xs-12 col-md-2">
                                     <div class="small-box bg-yellow-active">
@@ -758,7 +745,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!--GRÁFICO POR ESTADO-->
         <div class="row margin-bottom">
