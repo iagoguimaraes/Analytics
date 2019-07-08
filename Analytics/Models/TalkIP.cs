@@ -72,6 +72,23 @@ namespace Analytics.Models
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
         }
+        public void EnviarLoteSMS(int id_lote)
+        {
+            // consulta no banco de dados o lote
+            DataSet ds = ObterLote(id_lote);
+
+            // monta o json
+            ds.Tables[1].Columns["telefone"].ColumnName = "phone"; 
+            ds.Tables[1].Columns["mensagem"].ColumnName = "message";
+            ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}", url_callback, "id_registro"));
+
+            string block = JsonConvert.SerializeObject(ds.Tables[1]);
+            string json = "{ block: " + block + "}";
+
+            // faz requisição
+
+            // atualiza o lote: id unico fornecedor, quantidade de registros e o custo
+        }
         private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
@@ -159,6 +176,15 @@ namespace Analytics.Models
                     sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_envio, id_status, data_retorno) values (@id_envio,@id_status,getdate())", parametros);
                     sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
                 }
+            }
+        }
+        private DataSet ObterLote(int id_lote)
+        {
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@id_lote", id_lote);
+                return sql.ExecuteProcedureDataSet("sp_sel_lote", parametros);
             }
         }
 
