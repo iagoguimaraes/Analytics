@@ -12,6 +12,7 @@ namespace Analytics.Models
     public class TalkIP : IDisposable
     {
         private readonly string url = "http://142.93.78.16/api/sms";
+        private readonly string url_smsLote = "http://142.93.78.16/api/blocks";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip";
         private WebClient wc;
 
@@ -31,7 +32,7 @@ namespace Analytics.Models
             int id_envio = RegistrarEnvio(telefone, mensagem, id_lote, id_registro);
 
             try
-            {              
+            {
                 string body = JsonConvert.SerializeObject(new { phone = telefone, message = mensagem, callback = string.Format("{0}?id={1}", url_callback, id_envio) });
                 string resultado = wc.UploadString(url, body);
                 dynamic json = JsonConvert.DeserializeObject(resultado);
@@ -46,17 +47,17 @@ namespace Analytics.Models
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
                 AtualizarEnvio(id_envio, false, (int)response.StatusCode, null, null);
-                
+
                 if ((int)response.StatusCode == 400)
                 {
-                    if(contagem_erro <= 3)
+                    if (contagem_erro <= 3)
                     {
                         wc = new WebClient();
                         WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
                         proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
                         wc.Proxy = proxy;
                         EnviarSMS(telefone, mensagem, id_lote, id_registro, ++contagem_erro);
-                    }                   
+                    }
                 }
 
                 /*
@@ -72,22 +73,47 @@ namespace Analytics.Models
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
         }
-        public void EnviarLoteSMS(int id_lote)
+        public void EnviarLoteSMS(int id_lote, DataTable lote)
         {
+            wc.Headers.Add("Content-Type", "application/json");
+            wc.Headers.Add("Accept", "application/json");
+            wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+
             // consulta no banco de dados o lote
-            DataSet ds = ObterLote(id_lote);
+            //DataSet ds = ObterLote(id_lote);
 
             // monta o json
-            ds.Tables[1].Columns["telefone"].ColumnName = "phone"; 
-            ds.Tables[1].Columns["mensagem"].ColumnName = "message";
-            ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}", url_callback, "id_registro"));
+           //ds.Tables[1].Columns["telefone"].ColumnName = "phone";
+           //ds.Tables[1].Columns["mensagem"].ColumnName = "message";
+           //ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}&idlayout={2}", url_callback, "id_registro", id_layout));
+            try
+            {
+                //string block = JsonConvert.SerializeObject(ds.Tables[1]);
+                string json = JsonConvert.SerializeObject(new { block = lote });
+                //string json = "{ block: " + block + "}";
 
-            string block = JsonConvert.SerializeObject(ds.Tables[1]);
-            string json = "{ block: " + block + "}";
+                // faz requisição
+                string request = wc.UploadString(url_smsLote, json);
+                dynamic result = JsonConvert.DeserializeObject(request);
 
-            // faz requisição
 
-            // atualiza o lote: id unico fornecedor, quantidade de registros e o custo
+                // atualiza o lote: id unico fornecedor, quantidade de registros e o custo
+                int id_unico_fornecedor = result.id;
+                double custo = result.charged;
+                int quantidade = result.quantiy;
+
+                AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
+            }
+            catch (WebException e)
+            {
+                HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
+                AtualizarLote(id_lote, null, null, null, false, (int)response.StatusCode);
+
+                throw new Exception(e.Message);
+            }
+            
+
+
         }
         private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
         {
@@ -131,7 +157,7 @@ namespace Analytics.Models
             }
 
         }
-        public void AtualizarStatus(long id_envio, int codigo_status)
+        public void AtualizarStatus(long id_registro, int id_layout, int codigo_status)
         {
             int id_status = 0;
             switch (codigo_status)
@@ -170,22 +196,55 @@ namespace Analytics.Models
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
-                    parametros.Add("@id_envio", id_envio);
+                    parametros.Add("@id_registro", id_registro);
+                    parametros.Add("@id_layout", id_layout);
                     parametros.Add("@id_status", id_status);
 
-                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_envio, id_status, data_retorno) values (@id_envio,@id_status,getdate())", parametros);
-                    sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
+                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, data_retorno) values (@id_registro,@id_layout,@id_status,getdate())", parametros);
+                    //sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
                 }
             }
         }
-        private DataSet ObterLote(int id_lote)
+        public void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
         {
+
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
             {
                 Dictionary<string, object> parametros = new Dictionary<string, object>();
                 parametros.Add("@id_lote", id_lote);
-                return sql.ExecuteProcedureDataSet("sp_sel_lote", parametros);
+                parametros.Add("@sucesso", sucesso ? 1 : 0);
+                parametros.Add("@id_erro", id_erro);
+                parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
+                parametros.Add("@quantidade", quantidade);
+                parametros.Add("@custo", custo);
+
+                sql.ExecuteQueryDataTable(@"
+                        update TB_LOTE set
+                             sucesso = @sucesso
+                            ,id_erro = @id_erro
+                            ,id_unico_fornecedor = @id_unico_fornecedor
+                            ,quantidade = @quantidade
+                            ,custo = @custo
+                        where id_lote = @id_lote"
+                , parametros);
             }
+
+
+        }
+
+        private DataSet ObterLote(int id_lote, int id_layout)
+        {
+
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@id_lote", id_lote);
+                parametros.Add("@id_layout", id_layout);
+                parametros.Add("@callback", url_callback);
+                return sql.ExecuteProcedureDataSet("sp_sel_lote", parametros);
+                
+            }
+
         }
 
         #region Dispose

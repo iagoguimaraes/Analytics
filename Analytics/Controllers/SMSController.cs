@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -104,44 +105,61 @@ namespace Analytics.Controllers
                     parametros.Add("nomearquivo", nomearquivo);
 
                     //retorna do id_lote
-                    int resultado = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
+                    int idlote = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
 
                     //verifica o id_layout
                     if (idlayout == 1)
                     {
                         //Monta o datatable com os registros do arquivo.csv layout simples
-                        DataTable dt = new CsvHelper().CarregarArquivoSimples(arquivo, resultado);
+                        DataTable dt = new CsvHelper().CarregarArquivoSimples(arquivo, idlote);
 
                         //Insere os registros do datatable na TB_LAYOUT_SIMPLES
                         sql.BulkInsert(tabela, dt);
                     }
 
+                    string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?id=";
+
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
-                    parameters.Add("@id_resultado", resultado);
+                    parameters.Add("@idlote", idlote);
+                    parameters.Add("@idlayout", idlayout);
+                    parameters.Add("@callback", url_callback.ToString());
 
-                    DataTable lote = sql.ExecuteQueryDataTable(@"select * from " + tabela + " where id_lote = @id_resultado", parameters);
+                    //DataTable lote = sql.ExecuteQueryDataTable(@"select * from " + tabela + " where id_lote = @id_lote", parameters);
+                    DataTable lote = sql.ExecuteQueryDataTable(@"select 
+                                        telefone phone, 
+                                        mensagem message, 
+                                        convert(varchar(100),@callback) + convert(varchar,id_registro)+ '&idlayout=' + convert(varchar,@idlayout) callback
 
-                    Task.Run(() =>
-                                        {
-                                            using (TalkIP api = new TalkIP())
-                                            {
-                                                foreach (DataRow registro in lote.Rows)
-                                                {
-                                                    try
-                                                    {
-                                                        long telefone = Convert.ToInt64(registro["telefone"]);
-                                                        string mensagem = registro["mensagem"].ToString();
-                                                        int id_lote = Convert.ToInt32(registro["id_lote"]);
-                                                        int id_registro = Convert.ToInt32(registro["id_registro"]);
+                                        from " + tabela + " where id_lote = @idlote", parameters);
 
-                                                        api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                                                    }
-                                                    catch { }
-                                                }
-                                            }
-                                        });
 
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                    using (TalkIP api = new TalkIP())
+                    {
+
+                        api.EnviarLoteSMS(idlote, lote);
+
+                    }
+                    //Task.Run(() =>
+                    //                    {
+                    //                        using (TalkIP api = new TalkIP())
+                    //                        {
+                    //                            foreach (DataRow registro in lote.Rows)
+                    //                            {
+                    //                                try
+                    //                                {
+                    //                                    long telefone = Convert.ToInt64(registro["telefone"]);
+                    //                                    string mensagem = registro["mensagem"].ToString();
+                    //                                    int id_lote = Convert.ToInt32(registro["id_lote"]);
+                    //                                    int id_registro = Convert.ToInt32(registro["id_registro"]);
+
+                    //                                    api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
+                    //                                }
+                    //                                catch { }
+                    //                            }
+                    //                        }
+                    //                    });
+
+                    return Request.CreateResponse(HttpStatusCode.OK, idlote);
                 }
             }
             catch (Exception e)
@@ -161,10 +179,11 @@ namespace Analytics.Controllers
                 File.AppendAllLines(path, new string[] { "req" });
                 string[] contents = new string[3];
                 contents[1] = Request.GetQueryNameValuePairs().First().Value;
-                contents[2] = Request.Content.ReadAsStringAsync().Result;
+                contents[2] = Request.Content.ReadAsStringAsync().Result;        
                 File.AppendAllLines(path, contents);
 
-                int id_envio = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
+                int id_registro = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
+                int id_layout = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlayout"));
 
                 string body = Request.Content.ReadAsStringAsync().Result;
                 dynamic json = JsonConvert.DeserializeObject(body);
@@ -172,7 +191,7 @@ namespace Analytics.Controllers
 
                 using (TalkIP api = new TalkIP())
                 {
-                    api.AtualizarStatus(id_envio, codigo_status);
+                    api.AtualizarStatus(id_registro, id_layout, codigo_status);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
