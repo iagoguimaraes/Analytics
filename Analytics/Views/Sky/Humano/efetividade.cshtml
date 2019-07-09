@@ -69,37 +69,37 @@
                                 </div>
                             </div>
 
-                            </div>
-
-                            <!--Carteira-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
-                            </div>
-
-                            <!--Segmentacao-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Segmentacao</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
-                            </div>
-
-                            <!--Tenure-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Tenure</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure"></select2>
-                            </div>
-
-                            <!--SUPERVISOR-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Supervisor</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
-                            </div>
-
-                            <!--BOTÃO-->
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                            </div>
                         </div>
+
+                        <!--Carteira-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                        </div>
+
+                        <!--Segmentacao-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentacao</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
+                        </div>
+
+                        <!--Tenure-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tenure</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure"></select2>
+                        </div>
+
+                        <!--SUPERVISOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Supervisor</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -269,7 +269,7 @@
                         </div>
                         <small class="pull-right">
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false"  />
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="false" />
                                 Tabela
                             </label>
                             <label>
@@ -298,7 +298,7 @@
                                 Tabela
                             </label>
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked"  />
+                                <input type="radio" name="graficoHoraExibir" ng-model="grafico.exibir" value="true" checked="checked" />
                                 Gráfico
                             </label>
                         </small>
@@ -356,7 +356,7 @@
                 </div>
             </div>
         </div>
-   
+
 
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
@@ -379,6 +379,78 @@
                     </div>
                     <div class="card-body">
                         <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[3,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO POR EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor/Equipe</th>
+                                        <th>Qtd Promessas Geral</th>
+                                        <th>Qtd Pag Geral</th>
+                                        <th>Qtd Pag Cartão</th>
+                                        <th>Qtd Pag Migração</th>
+                                        <th>Qtd Pag Parcelado</th>
+                                        <th>% Geral</th>
+                                        <th>% Cartão</th>
+                                        <th>% Parcelado</th>
+                                        <th>% Migração</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.supervisor | groupBy: 'supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].supervisor}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'total_qtd_promessa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'total_qtd_pago'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_promessa_cartao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_migracao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_promessa_parc'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'total_qtd_pago':'total_qtd_promessa' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_promessa_cartao':'promessa_cartao' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_promessa_parc':'promessa_parc' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_migracao':'migracao' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.equipe}}</td>
+                                        <td>{{p.total_qtd_promessa | number}}</td>
+                                        <td>{{p.total_qtd_pago | number}}</td>
+                                        <td>{{p.qtd_pag_promessa_cartao | number}}</td>
+                                        <td>{{p.qtd_pag_migracao | number}}</td>
+                                        <td>{{p.qtd_pag_promessa_parc | number}}</td>
+                                        <td>{{p.total_qtd_pago / p.total_qtd_promessa | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_promessa_cartao / p.promessa_cartao  | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_promessa_parc / p.promessa_parc | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_migracao / p.migracao | percentage:1}}</td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -445,6 +517,7 @@
                 $scope.dashboard.diadia = r.data.Table1;
                 $scope.dashboard.car = r.data.Table3;
                 $scope.dashboard.operador = r.data.Table4;
+                $scope.dashboard.supervisor = r.data.Table7;
                 $scope.mudarEstado('BR-SP');
                 $scope.carregarGrafico(); 
 
