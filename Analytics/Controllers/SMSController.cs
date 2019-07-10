@@ -117,47 +117,11 @@ namespace Analytics.Controllers
                         sql.BulkInsert(tabela, dt);
                     }
 
-                    string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?idregistro=";
-
-                    Dictionary<string, object> parameters = new Dictionary<string, object>();
-                    parameters.Add("@idlote", idlote);
-                    parameters.Add("@idlayout", idlayout);
-                    parameters.Add("@callback", url_callback.ToString());
-
-                    //DataTable lote = sql.ExecuteQueryDataTable(@"select * from " + tabela + " where id_lote = @id_lote", parameters);
-                    DataTable lote = sql.ExecuteQueryDataTable(@"select 
-                                        telefone phone, 
-                                        mensagem message, 
-                                        convert(varchar(100),@callback) + convert(varchar,id_registro)+ '&idlayout=' + convert(varchar,@idlayout) callback
-
-                                        from " + tabela + " where id_lote = @idlote", parameters);
-
-
+                    // Chama o Método da API para envio do lote SMS;
                     using (TalkIP api = new TalkIP())
                     {
-
-                        api.EnviarLoteSMS(idlote, lote);
-
+                        api.EnviarLoteSMS(idlote, tabela);
                     }
-                    //Task.Run(() =>
-                    //                    {
-                    //                        using (TalkIP api = new TalkIP())
-                    //                        {
-                    //                            foreach (DataRow registro in lote.Rows)
-                    //                            {
-                    //                                try
-                    //                                {
-                    //                                    long telefone = Convert.ToInt64(registro["telefone"]);
-                    //                                    string mensagem = registro["mensagem"].ToString();
-                    //                                    int id_lote = Convert.ToInt32(registro["id_lote"]);
-                    //                                    int id_registro = Convert.ToInt32(registro["id_registro"]);
-
-                    //                                    api.EnviarSMS(telefone, mensagem, id_lote, id_registro);
-                    //                                }
-                    //                                catch { }
-                    //                            }
-                    //                        }
-                    //                    });
 
                     return Request.CreateResponse(HttpStatusCode.OK, idlote);
                 }
@@ -176,24 +140,13 @@ namespace Analytics.Controllers
             {
                 // VALIDAR
                 string path = @"\\luxemburgo\public\talkipdebug.txt";
-                File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query});
-
-
-
-                string[] contents = new string[3];
-                contents[1] = Request.GetQueryNameValuePairs().First().Value;
-                contents[2] = Request.Content.ReadAsStringAsync().Result;
-                File.AppendAllLines(path, contents);
+                File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query });
 
                 long id_registro = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idregistro"));
                 int id_layout = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlayout"));
                 int id_lote = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlote"));
                 int codigo_status = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("status"));
                 int id_unico_fornecedor = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("id"));
-
-                //string body = Request.Content.ReadAsStringAsync().Result;
-                //dynamic json = JsonConvert.DeserializeObject(body);
-                //int codigo_status = json.status;
 
                 using (TalkIP api = new TalkIP())
                 {
