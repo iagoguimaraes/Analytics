@@ -78,19 +78,11 @@ namespace Analytics.Models
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
             wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-
-            // consulta no banco de dados o lote
-            //DataSet ds = ObterLote(id_lote);
-
-            // monta o json
-           //ds.Tables[1].Columns["telefone"].ColumnName = "phone";
-           //ds.Tables[1].Columns["mensagem"].ColumnName = "message";
-           //ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}&idlayout={2}", url_callback, "id_registro", id_layout));
+            
             try
             {
-                //string block = JsonConvert.SerializeObject(ds.Tables[1]);
-                string json = JsonConvert.SerializeObject(new { block = lote });
-                //string json = "{ block: " + block + "}";
+                // Monta o Json do lote
+                string json = JsonConvert.SerializeObject(new { block = lote });               
 
                 // faz requisição
                 string request = wc.UploadString(url_smsLote, json);
@@ -157,7 +149,7 @@ namespace Analytics.Models
             }
 
         }
-        public void AtualizarStatus(long id_registro, int id_layout, int codigo_status)
+        public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
         {
             int id_status = 0;
             switch (codigo_status)
@@ -199,8 +191,10 @@ namespace Analytics.Models
                     parametros.Add("@id_registro", id_registro);
                     parametros.Add("@id_layout", id_layout);
                     parametros.Add("@id_status", id_status);
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
 
-                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, data_retorno) values (@id_registro,@id_layout,@id_status,getdate())", parametros);
+                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, id_lote, id_unico_fornecedor, data_retorno) values (@id_registro,@id_layout,@id_status,@id_lote,@id_unico_fornecedor,getdate())", parametros);
                     //sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
                 }
             }

@@ -117,7 +117,7 @@ namespace Analytics.Controllers
                         sql.BulkInsert(tabela, dt);
                     }
 
-                    string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?id=";
+                    string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?idregistro=";
 
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
                     parameters.Add("@idlote", idlote);
@@ -176,22 +176,28 @@ namespace Analytics.Controllers
             {
                 // VALIDAR
                 string path = @"\\luxemburgo\public\talkipdebug.txt";
-                File.AppendAllLines(path, new string[] { "req" });
+                File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query});
+
+
+
                 string[] contents = new string[3];
                 contents[1] = Request.GetQueryNameValuePairs().First().Value;
-                contents[2] = Request.Content.ReadAsStringAsync().Result;        
+                contents[2] = Request.Content.ReadAsStringAsync().Result;
                 File.AppendAllLines(path, contents);
 
-                int id_registro = Convert.ToInt32(Request.GetQueryNameValuePairs().First().Value);
+                long id_registro = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idregistro"));
                 int id_layout = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlayout"));
+                int id_lote = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlote"));
+                int codigo_status = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("status"));
+                int id_unico_fornecedor = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("id"));
 
-                string body = Request.Content.ReadAsStringAsync().Result;
-                dynamic json = JsonConvert.DeserializeObject(body);
-                int codigo_status = json.status;
+                //string body = Request.Content.ReadAsStringAsync().Result;
+                //dynamic json = JsonConvert.DeserializeObject(body);
+                //int codigo_status = json.status;
 
                 using (TalkIP api = new TalkIP())
                 {
-                    api.AtualizarStatus(id_registro, id_layout, codigo_status);
+                    api.AtualizarStatus(id_registro, id_layout, codigo_status, id_lote, id_unico_fornecedor);
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
