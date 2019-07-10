@@ -113,50 +113,11 @@ namespace Analytics.Models
 
 
         }
-        private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
-        {
-            using (SqlHelper sql = new SqlHelper("DB_SMS"))
-            {
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
-                //parametros.Add("@id_fornecedor", id_fornecedor);
-                parametros.Add("@telefone", telefone);
-                parametros.Add("@mensagem", mensagem);
-                parametros.Add("@id_lote", id_lote);
-                parametros.Add("@id_registro", id_registro);
-
-                DataTable dt = sql.ExecuteQueryDataTable(@"
-                        insert into TB_ENVIO( data_envio, telefone, mensagem, id_lote, id_registro)
-                        output inserted.id_envio
-                        values(getdate(), @telefone, @mensagem, @id_lote, @id_registro)"
-                , parametros);
-                int id_envio = Convert.ToInt32(dt.Rows[0]["id_envio"]);
-                return id_envio;
-            }
-        }
-        private void AtualizarEnvio(long id_envio, bool sucesso, int? id_erro, int? id_unico_fornecedor, double? custo)
-        {
-            using (SqlHelper sql = new SqlHelper("DB_SMS"))
-            {
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
-                parametros.Add("@id_envio", id_envio);
-                parametros.Add("@sucesso", sucesso ? 1 : 0);
-                parametros.Add("@id_erro", id_erro);
-                parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
-                parametros.Add("@custo", custo);
-
-                sql.ExecuteQueryDataTable(@"
-                        update TB_ENVIO set
-                             sucesso = @sucesso
-                            ,id_erro = @id_erro
-                            ,id_unico_fornecedor = @id_unico_fornecedor
-                            ,custo = @custo
-                        where id_envio = @id_envio"
-                , parametros);
-            }
-
-        }
         public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
         {
+
+            AtualizaUltimoRetorno(id_registro, id_layout);
+
             int id_status = 0;
             switch (codigo_status)
             {
@@ -200,12 +161,12 @@ namespace Analytics.Models
                     parametros.Add("@id_lote", id_lote);
                     parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
 
-                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, id_lote, id_unico_fornecedor, data_retorno) values (@id_registro,@id_layout,@id_status,@id_lote,@id_unico_fornecedor,getdate())", parametros);
-                    //sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
+                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, id_lote, id_unico_fornecedor, data_retorno) values (@id_registro,@id_layout,@id_status,@id_lote,@id_unico_fornecedor,getdate())", parametros);                    
                 }
             }
         }
-        public void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
+
+        private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
         {
 
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
@@ -231,7 +192,65 @@ namespace Analytics.Models
 
 
         }
+        private int RegistrarEnvio(long telefone, string mensagem, int? id_lote = null, int? id_registro = null)
+        {
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                //parametros.Add("@id_fornecedor", id_fornecedor);
+                parametros.Add("@telefone", telefone);
+                parametros.Add("@mensagem", mensagem);
+                parametros.Add("@id_lote", id_lote);
+                parametros.Add("@id_registro", id_registro);
 
+                DataTable dt = sql.ExecuteQueryDataTable(@"
+                        insert into TB_ENVIO( data_envio, telefone, mensagem, id_lote, id_registro)
+                        output inserted.id_envio
+                        values(getdate(), @telefone, @mensagem, @id_lote, @id_registro)"
+                , parametros);
+                int id_envio = Convert.ToInt32(dt.Rows[0]["id_envio"]);
+                return id_envio;
+            }
+        }
+        private void AtualizarEnvio(long id_envio, bool sucesso, int? id_erro, int? id_unico_fornecedor, double? custo)
+        {
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@id_envio", id_envio);
+                parametros.Add("@sucesso", sucesso ? 1 : 0);
+                parametros.Add("@id_erro", id_erro);
+                parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
+                parametros.Add("@custo", custo);
+
+                sql.ExecuteQueryDataTable(@"
+                        update TB_ENVIO set
+                             sucesso = @sucesso
+                            ,id_erro = @id_erro
+                            ,id_unico_fornecedor = @id_unico_fornecedor
+                            ,custo = @custo
+                        where id_envio = @id_envio"
+                , parametros);
+            }
+
+        }        
+        private void AtualizaUltimoRetorno (long id_registro, int id_layout) {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_registro", id_registro);
+                    parametros.Add("@id_layout", id_layout);                                                            
+
+                    sql.ExecuteQueryDataTable(@"update TB_RETORNO set ultimo_retorno = 0 where id_registro = @id_registro and id_layout = @id_layout)", parametros);                    
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         private DataSet ObterLote(int id_lote, string tabela)
         {
 
@@ -242,11 +261,10 @@ namespace Analytics.Models
                 parametros.Add("@tabela", tabela);
                 parametros.Add("@callback", url_callback);
                 return sql.ExecuteProcedureDataSet("sp_sel_lote_talkip", parametros);
-                
+
             }
 
         }
-
         #region Dispose
 
         // Flag: Has Dispose already been called?
