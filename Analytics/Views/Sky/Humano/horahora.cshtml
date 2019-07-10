@@ -392,20 +392,23 @@
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.equipe">
                                 <thead>
                                     <tr>
-                                        <th>Discador/Campanhas</th>
+                                        <th>Discador</th>
                                         <th>OP</th>
                                         <th>Atendido</th>
                                         <th>CTT</th>
                                         <th>PROM</th>
                                         <th>TMA</th>
                                         <th>% Ocup.</th>
-                                        <th>% Atendidas x Tab</th>
-                                        <th>% Improdutivo x Ctt</th>
+                                        <th>% Atds x Tab</th>
+                                        <th>% Impro x Ctt</th>
                                         <th>% Cart.</th>
                                         <th>% Migr.</th>
                                         <th>% Parc.</th>
                                         <th>% CPC x CTT</th>
                                         <th>% CPCA x CTT</th>
+                                        <th>% Aban x CTT</th>
+                                        <th>% C. Pag x CTT</th>
+                                        <th>% Desco. x CTT</th>
                                         <th>Conversão</th>
                                         <th>PROM OP</th>
                                     </tr>
@@ -430,6 +433,9 @@
                                         <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'abandono':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'consta_pagamento':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'desconhecido':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'qtd_operador' | number:1}}</td>
                                     </tr>
@@ -449,6 +455,9 @@
                                         <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.contato | percentage:1}}</td>
+                                        <td>{{p.abandono / p.contato | percentage:1}}</td>
+                                        <td>{{p.consta_pagamento / p.contato | percentage:1}}</td>
+                                        <td>{{p.desconhecido / p.contato | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                         <td>{{p.promessa / p.qtd_operador | number:1}}</td>
                                     </tr>
