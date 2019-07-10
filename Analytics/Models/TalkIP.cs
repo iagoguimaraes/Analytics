@@ -14,11 +14,11 @@ namespace Analytics.Models
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_smsLote = "http://142.93.78.16/api/blocks";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?";
-        private WebClient wc;
+        private WebClientNT wc;
 
         public TalkIP()
         {
-            wc = new WebClient();
+            wc = new WebClientNT();
             WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
             proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
             wc.Proxy = proxy;
@@ -52,7 +52,7 @@ namespace Analytics.Models
                 {
                     if (contagem_erro <= 3)
                     {
-                        wc = new WebClient();
+                        wc = new WebClientNT();
                         WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
                         proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
                         wc.Proxy = proxy;
@@ -81,6 +81,7 @@ namespace Analytics.Models
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
                 wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+                
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, tabela);
