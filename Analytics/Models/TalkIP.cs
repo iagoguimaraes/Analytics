@@ -28,6 +28,7 @@ namespace Analytics.Models
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
             wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+            
 
             int id_envio = RegistrarEnvio(telefone, mensagem, id_lote, id_registro);
 
@@ -81,7 +82,6 @@ namespace Analytics.Models
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
                 wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-                
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, tabela);
@@ -243,7 +243,7 @@ namespace Analytics.Models
                     parametros.Add("@id_registro", id_registro);
                     parametros.Add("@id_layout", id_layout);                                                            
 
-                    sql.ExecuteQueryDataTable(@"update TB_RETORNO set ultimo_retorno = 0 where id_registro = @id_registro and id_layout = @id_layout)", parametros);                    
+                    sql.ExecuteQueryDataTable(@"update TB_RETORNO set ultimo_retorno = 0 where id_registro = @id_registro and id_layout = @id_layout", parametros);                    
                 }
             }
             catch (Exception ex)
