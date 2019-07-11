@@ -64,7 +64,7 @@
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -76,196 +76,65 @@
         <!-- DAHSBOARD -->
         <div ng-if="dashboard.status == 200">
 
-            <div class="row margin-bottom ">
-                <!--RESUMOS-->
-                <div class="col-xs-12 col-md-6 margin-bottom">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Acessos</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row margin-bottom">
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-gray" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.qtd_acesso | megaNumber"></h3>
-                                            <p>Acessos</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-phone"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-aqua" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.qtd_simulacao | megaNumber"></h3>
-                                            <h4 class="pull-right" ng-bind="dashboard.resumo.qtd_simulacao / dashboard.resumo.qtd_acesso | percentage: 1"></h4>
-                                            <p>Simulação</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-headphones"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-aqua" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.qtd_negociacao | megaNumber"></h3>
-                                            <h4 class="pull-right" ng-bind="dashboard.resumo.qtd_negociacao / dashboard.resumo.qtd_simulacao | percentage: 1"></h4>
-                                            <p>Negociado</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-headphones"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!--RESUMOS-->
-                <div class="col-xs-12 col-md-6 margin-bottom">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="card-header-title">Financeiro</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row margin-bottom">
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-red" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.divida | megaNumber"></h3>
-                                            @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>*@
-                                            <p>Valor Divida</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-male"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-yellow" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.desconto | megaNumber"></h3>
-                                            @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>*@
-                                            <p>Valor Desconto</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-street-view"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-md-4 col-lg-4">
-                                    <div class="small-box bg-green" style="padding: 10px; border-radius: 25px">
-                                        <div class="inner">
-                                            <h3 ng-bind="dashboard.resumo.negociado | megaNumber"></h3>
-                                            @*<h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>*@
-                                            <p>Valor Fechado</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-thumbs-o-up"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- RESUMO INDICADORES -->
             <div class="box box-widget widget-user">
                 <div class="box-footer">
                     <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                         <div class="col-sm-2 border-right">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.qtd_acesso | megaNumber"></h5>
                                 <span class="description-text">Acessos</span>
                             </div>
                         </div>
                         <div class="col-sm-2 border-right">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.qtd_simulacao | megaNumber"></h5>
                                 <span class="description-text">Simulações</span>
                             </div>
                         </div>
                         <div class="col-sm-2 border-right">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.qtd_negociacao | number"></h5>
                                 <span class="description-text">Negociações</span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.divida | currency:'R$ '"></h5>
                                 <span class="description-text">R$ Divida</span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency:'R$ '"></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.desconto | currency:'R$ '"></h5>
                                 <span class="description-text">R$ Desconto</span>
                             </div>
                         </div>
                         <div class="col-sm-2 border-right">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa / dashboard.resumo.promessa | currency:'R$ ' "></h5>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.negociado | currency:'R$ ' "></h5>
                                 <span class="description-text">R$ Negociado</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="row" style="background-color: #0298d5; color:white; opacity: 0.8">
-                        <div class="col-sm-2 border-right">
+                        <div class="col-sm-2 col-sm-offset-3 border-right">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
-                                <span class="description-text">Media Acessos</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
-                                <span class="description-text">Media Simulações</span>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.qtd_simulacao / dashboard.resumo.qtd_acesso | percentage: 1"></h5>
+                                <span class="description-text">% Simulações</span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
-                                <span class="description-text">Media Negociações</span>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.qtd_negociacao / dashboard.resumo.qtd_simulacao | percentage: 1"></h5>
+                                <span class="description-text">% Negociações</span>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.pa |number "></h5>
-                                <span class="description-text">Media Divida</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.pa | number: 0"></h5>
-                                <span class="description-text">Media Desconto</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.pa | number: 0"></h5>
-                                <span class="description-text">Media Negociado</span>
+                                <h5 class="description-header" ng-bind="dashboard.resumo.negociado / dashboard.resumo.qtd_negociacao | currency:'R$ '"></h5>
+                                <span class="description-text">Tck Médio</span>
                             </div>
                         </div>
                     </div>
