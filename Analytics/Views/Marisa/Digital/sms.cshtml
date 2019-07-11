@@ -71,6 +71,17 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.total_sms | megaNumber"></h3>
+                        <p>Total SMS</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-commenting"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.sms_5_a10 | megaNumber"></h3>
@@ -149,6 +160,7 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
+                                        <th>Total Sms</th>
                                         <th>5 à 10</th>
                                         <th>11 à 30</th>
                                         <th>Preventivo</th>
@@ -159,6 +171,7 @@
                                 <tbody id="idtbody">
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.total_sms | number}}</td>
                                         <td>{{dia.sms_5_a10 | number}}</td>
                                         <td>{{dia.sms_11_a30 | number}}</td>
                                         <td>{{dia.sms_preventivo | number}}</td>
@@ -169,6 +182,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
+                                        <th>{{dashboard.resumo.total_sms | number}}</th>
                                         <th>{{dashboard.resumo.sms_5_a10 | number}}</th>
                                         <th>{{dashboard.resumo.sms_11_a30 | number}}</th>
                                         <th>{{dashboard.resumo.sms_preventivo | number}}</th>

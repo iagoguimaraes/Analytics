@@ -43,13 +43,9 @@ namespace Analytics.Controllers
         {
             try
             {
-                string dtini = form["dtini"];
-                string dtfim = form["dtfim"];
-                string campanhas = form["campanhas"];
-                string canais = form["canais"];
-
-                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
-                DataTable _canais = JsonConvert.DeserializeObject<DataTable>(canais);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_OMNE"))
                 {
@@ -57,8 +53,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
-                    parametros.Add("campanhas", _campanhas);
-                    parametros.Add("canais", _canais);
+                    parametros.Add("fila", fila);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -78,13 +73,10 @@ namespace Analytics.Controllers
         {
             try
             {
-                string dtini = form["dtini"];
-                string dtfim = form["dtfim"];
-                string campanhas = form["campanhas"];
-                string canais = form["canais"];
-
-                DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
-                DataTable _canais = JsonConvert.DeserializeObject<DataTable>(canais);
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
+  
 
                 using (SqlHelper sql = new SqlHelper("CUBO_OMNE"))
                 {
@@ -92,8 +84,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
-                    parametros.Add("campanhas", _campanhas);
-                    parametros.Add("canais", _canais);
+                    parametros.Add("fila", fila);
+              
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
