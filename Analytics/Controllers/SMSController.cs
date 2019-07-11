@@ -139,8 +139,8 @@ namespace Analytics.Controllers
             try
             {
                 // VALIDAR
-                string path = @"\\luxemburgo\public\talkipdebug.txt";
-                File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query });
+                //string path = @"\\luxemburgo\public\talkipdebug.txt";
+                //File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query });
 
                 long id_registro = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idregistro"));
                 int id_layout = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlayout"));
