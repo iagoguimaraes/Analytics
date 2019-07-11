@@ -301,6 +301,7 @@
                                     <th>AfterCall</th>
                                     <th>Manual</th>
                                     <th>% Ocupação</th>
+                                    <th>% Em Pausa</th>
                                 </tr>
                             </thead>
                             <tbody ng-repeat="c in dashboard.supervisor | groupBy: 'supervisor'">
@@ -322,6 +323,7 @@
                                     <td>{{c | avgColumn: 'aftercall_op'| formatTimer}}</td>
                                     <td>{{c | avgColumn: 'manual_op'| formatTimer}}</td>
                                     <td>{{c | divideSumColumns: 'tmp_falado':'tmp_logado_parcial' | percentage: 1}}</td>
+                                    <td>{{c | divideSumColumns: 'tmp_total_pausa':'tmp_logado_parcial' | percentage: 1}}</td>
                                 </tr>
 
                                 <tr ng-repeat="p in c" ng-show="showTbody">
@@ -338,6 +340,7 @@
                                     <td>{{p.aftercall_op | formatTimer }}</td>
                                     <td>{{p.manual_op | formatTimer }}</td>
                                     <td>{{p.tmp_falado / p.tmp_logado_parcial | percentage: 1}}</td>
+                                    <td>{{p.tmp_total_pausa / p.tmp_logado_parcial | percentage: 1}}</td>
                                 </tr>
                             </tbody>
                         </table>
