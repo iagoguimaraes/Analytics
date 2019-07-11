@@ -6,13 +6,15 @@ using System.Web;
 
 namespace Analytics.Models
 {
-    public class WebClientNT: WebClient
+    public class WebClientNT : WebClient
     {
         protected override WebRequest GetWebRequest(Uri uri)
         {
-            WebRequest w = base.GetWebRequest(uri);
+            HttpWebRequest w = (HttpWebRequest)base.GetWebRequest(uri);
             w.Timeout = 10 * 60 * 1000;
+            w.KeepAlive = false;
             return w;
+
         }
     }
 }
