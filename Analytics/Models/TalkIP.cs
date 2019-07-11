@@ -13,12 +13,12 @@ namespace Analytics.Models
     {
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_smsLote = "http://142.93.78.16/api/blocks";
-        private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip";
-        private WebClient wc;
+        private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?";
+        private WebClientNT wc;
 
         public TalkIP()
         {
-            wc = new WebClient();
+            wc = new WebClientNT();
             WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
             proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
             wc.Proxy = proxy;
@@ -28,6 +28,7 @@ namespace Analytics.Models
             wc.Headers.Add("Content-Type", "application/json");
             wc.Headers.Add("Accept", "application/json");
             wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+            
 
             int id_envio = RegistrarEnvio(telefone, mensagem, id_lote, id_registro);
 
@@ -52,7 +53,7 @@ namespace Analytics.Models
                 {
                     if (contagem_erro <= 3)
                     {
-                        wc = new WebClient();
+                        wc = new WebClientNT();
                         WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
                         proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
                         wc.Proxy = proxy;
@@ -73,35 +74,32 @@ namespace Analytics.Models
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
         }
-        public void EnviarLoteSMS(int id_lote, DataTable lote)
-        {
-            wc.Headers.Add("Content-Type", "application/json");
-            wc.Headers.Add("Accept", "application/json");
-            wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-
-            // consulta no banco de dados o lote
-            //DataSet ds = ObterLote(id_lote);
-
-            // monta o json
-           //ds.Tables[1].Columns["telefone"].ColumnName = "phone";
-           //ds.Tables[1].Columns["mensagem"].ColumnName = "message";
-           //ds.Tables[1].Columns.Add("callback", typeof(string), string.Format("{0}?id={1}&idlayout={2}", url_callback, "id_registro", id_layout));
+        public void EnviarLoteSMS(int id_lote, string tabela)
+        {            
+            
             try
             {
-                //string block = JsonConvert.SerializeObject(ds.Tables[1]);
-                string json = JsonConvert.SerializeObject(new { block = lote });
-                //string json = "{ block: " + block + "}";
+                wc.Headers.Add("Content-Type", "application/json");
+                wc.Headers.Add("Accept", "application/json");
+                wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
 
-                // faz requisição
+                // Obtem o Lote já com o layout pronto para o json;
+                DataSet ds = ObterLote(id_lote, tabela);
+                DataTable lote = ds.Tables[0];                
+
+                // Monta o Json do lote;
+                string json = JsonConvert.SerializeObject(new { block = lote });               
+
+                // Efetua a requisição;
                 string request = wc.UploadString(url_smsLote, json);
                 dynamic result = JsonConvert.DeserializeObject(request);
 
-
-                // atualiza o lote: id unico fornecedor, quantidade de registros e o custo
+                //  Armazena o valor dos atribudos do request;
                 int id_unico_fornecedor = result.id;
-                double custo = result.charged;
                 int quantidade = result.quantiy;
+                double custo = result.charged;
 
+                // Atualiza o lote: id_unico_fornecedor, quantidade de registros e o custo;
                 AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
             }
             catch (WebException e)
@@ -112,6 +110,85 @@ namespace Analytics.Models
                 throw new Exception(e.Message);
             }
             
+
+
+        }
+        public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
+        {
+
+            AtualizaUltimoRetorno(id_registro, id_layout);
+
+            int id_status = 0;
+            switch (codigo_status)
+            {
+                case 200:
+                    id_status = 1; //SMS Enviado
+                    break;
+                case 1:
+                    id_status = 3; //Em Processamento
+                    break;
+                case 2:
+                    id_status = 2; //SMS Entregue
+                    break;
+                case 3:
+                    id_status = 4; //Erro no envio
+                    break;
+                case 7:
+                    id_status = 9; //Sem Saldo
+                    break;
+                case 11:
+                    id_status = 5; //Número Inválido
+                    break;
+                case 12:
+                    id_status = 6; //Número Bloqueado
+                    break;
+                case 13:
+                    id_status = 7; //BlackList
+                    break;
+                case 14:
+                    id_status = 8; //Mensagem Mal Formatada
+                    break;
+            }
+
+            if (id_status > 0)
+            {
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_registro", id_registro);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@id_status", id_status);
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
+
+                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, id_lote, id_unico_fornecedor, data_retorno) values (@id_registro,@id_layout,@id_status,@id_lote,@id_unico_fornecedor,getdate())", parametros);                    
+                }
+            }
+        }
+
+        private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
+        {
+
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@id_lote", id_lote);
+                parametros.Add("@sucesso", sucesso ? 1 : 0);
+                parametros.Add("@id_erro", id_erro);
+                parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
+                parametros.Add("@quantidade", quantidade);
+                parametros.Add("@custo", custo);
+
+                sql.ExecuteQueryDataTable(@"
+                        update TB_LOTE set
+                             sucesso = @sucesso
+                            ,id_erro = @id_erro
+                            ,id_unico_fornecedor = @id_unico_fornecedor
+                            ,quantidade = @quantidade
+                            ,custo = @custo
+                        where id_lote = @id_lote"
+                , parametros);
+            }
 
 
         }
@@ -156,97 +233,38 @@ namespace Analytics.Models
                 , parametros);
             }
 
-        }
-        public void AtualizarStatus(long id_registro, int id_layout, int codigo_status)
-        {
-            int id_status = 0;
-            switch (codigo_status)
-            {
-                case 200:
-                    id_status = 1; //SMS Enviado
-                    break;
-                case 1:
-                    id_status = 3; //Em Processamento
-                    break;
-                case 2:
-                    id_status = 2; //SMS Entregue
-                    break;
-                case 3:
-                    id_status = 4; //Erro no envio
-                    break;
-                case 7:
-                    id_status = 9; //Sem Saldo
-                    break;
-                case 11:
-                    id_status = 5; //Número Inválido
-                    break;
-                case 12:
-                    id_status = 6; //Número Bloqueado
-                    break;
-                case 13:
-                    id_status = 7; //BlackList
-                    break;
-                case 14:
-                    id_status = 8; //Mensagem Mal Formatada
-                    break;
-            }
-
-            if (id_status > 0)
+        }        
+        private void AtualizaUltimoRetorno (long id_registro, int id_layout) {
+            try
             {
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
                     parametros.Add("@id_registro", id_registro);
-                    parametros.Add("@id_layout", id_layout);
-                    parametros.Add("@id_status", id_status);
+                    parametros.Add("@id_layout", id_layout);                                                            
 
-                    sql.ExecuteQueryDataTable(@"insert into TB_RETORNO(id_registro, id_layout, id_status, data_retorno) values (@id_registro,@id_layout,@id_status,getdate())", parametros);
-                    //sql.ExecuteQueryDataTable(@"update TB_ENVIO set id_status_ultimo = @id_status where id_envio = @id_envio", parametros);
+                    sql.ExecuteQueryDataTable(@"update TB_RETORNO set ultimo_retorno = 0 where id_registro = @id_registro and id_layout = @id_layout", parametros);                    
                 }
             }
-        }
-        public void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
-        {
-
-            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            catch (Exception ex)
             {
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
-                parametros.Add("@id_lote", id_lote);
-                parametros.Add("@sucesso", sucesso ? 1 : 0);
-                parametros.Add("@id_erro", id_erro);
-                parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
-                parametros.Add("@quantidade", quantidade);
-                parametros.Add("@custo", custo);
-
-                sql.ExecuteQueryDataTable(@"
-                        update TB_LOTE set
-                             sucesso = @sucesso
-                            ,id_erro = @id_erro
-                            ,id_unico_fornecedor = @id_unico_fornecedor
-                            ,quantidade = @quantidade
-                            ,custo = @custo
-                        where id_lote = @id_lote"
-                , parametros);
+                throw new Exception(ex.Message);
             }
-
-
         }
-
-        private DataSet ObterLote(int id_lote, int id_layout)
+        private DataSet ObterLote(int id_lote, string tabela)
         {
 
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
             {
                 Dictionary<string, object> parametros = new Dictionary<string, object>();
                 parametros.Add("@id_lote", id_lote);
-                parametros.Add("@id_layout", id_layout);
+                parametros.Add("@tabela", tabela);
                 parametros.Add("@callback", url_callback);
-                return sql.ExecuteProcedureDataSet("sp_sel_lote", parametros);
-                
+                return sql.ExecuteProcedureDataSet("sp_sel_lote_talkip", parametros);
+
             }
 
         }
-
         #region Dispose
 
         // Flag: Has Dispose already been called?
