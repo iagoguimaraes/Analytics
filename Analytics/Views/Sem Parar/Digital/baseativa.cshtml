@@ -3,12 +3,12 @@
 }
 <!-- DAHSBOARD -->
 
-<div ng-controller="ctrl-semparar-baseativa">
+<div ng-controller="ctrl-semparar-baseativa-digital">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Estratificação de Base</div>
+            <div class="page-name">Estratificação de Base - Digital</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -217,7 +217,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-semparar-baseativa', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-semparar-baseativa-digital', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Estratificação de Base';
         dadosPagina.descricao = 'Sem Parar'
 
@@ -236,19 +236,19 @@
         //carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/semparar/dashboard/humano/filtros",
+            url: "/api/semparar/dashboard/digital/filtros",
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
 
-            $scope.dashFiltros.carteiras = r.data.Table4;
-            $scope.dashFiltros.faixaAtraso = data.Table2;
+            $scope.dashFiltros.carteiras = r.data.Table;
+            $scope.dashFiltros.faixaAtraso = data.Table1;
         });
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/semparar/dashboard/humano/baseativa",
+                url: "/api/semparar/dashboard/digital/baseativa",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
