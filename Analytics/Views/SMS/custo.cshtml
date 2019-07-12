@@ -116,7 +116,7 @@
                                 <div class="info-box bg-green">
                                     <div class="inner" style="padding:5px;text-align:center">
                                         <p>Ticket Médio</p>
-                                        <h3 class="info-box-number" ng-bind="dashboard.resumo.ticket_med | currency: 'R$ '"></h3>
+                                        <h3 class="info-box-number" ng-bind="dashboard.resumo.ticket_med | number: 3"></h3>
                                     </div>
                                 </div>
                             </div>
@@ -248,7 +248,7 @@
                                         <td>{{c | sumByColumn: 'qtd_registros' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_sucesso'| number : 0 }}</td>
                                         <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_registros' | percentage: 1}}</td>
-                                        <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 2}}</td>
+                                        <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 3}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -258,7 +258,7 @@
                                         <td>{{p.qtd_registros | number}}</td>
                                         <td>{{p.qtd_sucesso | number}}</td>
                                         <td>{{p.qtd_sucesso / p.qtd_registros | percentage: 1}}</td>
-                                        <td>{{p.custo / p.qtd_sucesso | number : 2}}</td>
+                                        <td>{{p.custo / p.qtd_sucesso | number : 3}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -282,12 +282,39 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.centroCusto" axis-Categories="dashboard.centrosCustos" plot-Options-Bar-Data-Label="true" type="bar" height="450px"></high-chart>
+                        <high-chart series="dashboard.centroCusto" axis-Categories="dashboard.centrosCustos" plot-Options-Bar-Data-Label="true" type="bar" height="300"></high-chart>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-7 col-md-7 margin-bottom">
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Custo Fornecedor</span>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.custoFornecedor" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-3 col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade</span>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.efetFornecedor" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-xs-7 col-md-7 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Custo por Estado</span>
@@ -309,6 +336,7 @@
 
                         </small>
                     </div>
+
                     <div class="card-body" ng-show="graficoRegiao.exibir == 'true'">
                         <div class="row">
                             <div class="col-xs-9 col-md-9">
@@ -375,39 +403,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
 
         <!--GRAFICOS FORNECEDOR-->
         <div class="row margin-bottom">
-            <div class="col-xs-3">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Custo Fornecedor</span>
-                        <div class="card-header-button" ng-click="extrair('Table7')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.custoFornecedor" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-xs-2 col-md-2">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Efetividade</span>
-                        <div class="card-header-button" ng-click="extrair('Table8')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.efetFornecedor" type="pie" height="300" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Arquivo</span>
@@ -439,22 +441,22 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].fornecedor}}
                                         </td>
-                                        <td>{{c | sumByColumn: 'custo' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'custo' | currency: 'R$ ' }}</td>
                                         <td>{{c | sumByColumn: 'qtd_lote' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_registros' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_sucesso'| number : 0 }}</td>
                                         <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_registros' | percentage: 1}}</td>
-                                        <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 2}}</td>
+                                        <td>{{c | divideSumColumns: 'custo':'qtd_registros' | number : 3}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.nomearquivo}}</td>
-                                        <td>{{p.custo | number}}</td>
+                                        <td>{{p.custo | currency:'R$ '}}</td>
                                         <td>{{p.qtd_lote | number}}</td>
                                         <td>{{p.qtd_registros | number}}</td>
                                         <td>{{p.qtd_sucesso | number}}</td>
                                         <td>{{p.qtd_sucesso / p.qtd_registros | percentage: 1}}</td>
-                                        <td>{{p.custo / p.qtd_sucesso | number : 2}}</td>
+                                        <td>{{p.custo / p.qtd_registros | number : 3}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -518,10 +520,10 @@
                 //$scope.dashboard.centroCusto = r.data.Table6;
                 $scope.mudarEstado('BR-SP');
 
-                $scope.dashboard.carteiras = r.data.Table5.map(obj => obj.carteira);
+                $scope.dashboard.carteiras = r.data.Table4.map(obj => obj.carteira);
                 $scope.dashboard.carteira = [
-                    { name: 'R$ Valor', color: '#08b967', data: r.data.Table5.map(obj => obj.custo) }
-                    , { name: '% Enviado', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table5.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_registros).toFixed(1) * 1) }];
+                    { name: 'R$ Valor', color: '#08b967', data: r.data.Table4.map(obj => obj.custo) }
+                    , { name: '% Enviado', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table4.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_registros).toFixed(1) * 1) }];
 
 
                 $scope.dashboard.datas = r.data.Table2.map(obj => obj.data);
@@ -529,11 +531,11 @@
                     { name: 'R$ Valor', color: '#f9b344', data: r.data.Table2.map(obj => obj.custo) }
                     , { name: '% Enviado', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table2.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_registros).toFixed(1) * 1) }];
 
-                $scope.dashboard.centrosCustos = r.data.Table6.map(obj => obj.centrocusto);
-                $scope.dashboard.centroCusto = [{ name: 'Valor', data: r.data.Table6.map(obj => obj.custo) }];
+                $scope.dashboard.centrosCustos = r.data.Table5.map(obj => obj.centrocusto);
+                $scope.dashboard.centroCusto = [{ name: 'Valor', data: r.data.Table5.map(obj => obj.custo) }];
 
-                $scope.dashboard.custoFornecedor = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table7.map(obj => ({ name: obj.fornecedor, y: obj.ticket_med })) }];
-                $scope.dashboard.efetFornecedor = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table8.map(obj => ({ name: obj.fornecedor, y: obj.efetividade, color: '#a01313' })) }];
+                $scope.dashboard.custoFornecedor = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table6.map(obj => ({ name: obj.fornecedor, y: obj.custo })) }];
+                $scope.dashboard.efetFornecedor = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table7.map(obj => ({ name: obj.fornecedor, y: obj.efetividade, color: '#a01313' })) }];
             });
         }
 
