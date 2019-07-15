@@ -14,6 +14,8 @@ namespace Analytics.Models
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_smsLote = "http://142.93.78.16/api/blocks";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?";
+        private readonly string url_statusLote = "http://142.93.78.16/api/blocks";
+
         private WebClientNT wc;
 
         public TalkIP()
@@ -76,13 +78,11 @@ namespace Analytics.Models
         }
         public void EnviarLoteSMS(int id_lote, string tabela)
         {
-
             try
             {
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
                 wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, tabela);
@@ -92,9 +92,9 @@ namespace Analytics.Models
                 string json = JsonConvert.SerializeObject(new { block = lote });
 
                 // Efetua a requisição;
-                string request = wc.UploadString(url_smsLote, json);
+                string request = wc.UploadString(url_smsLote, json);                
                 dynamic result = JsonConvert.DeserializeObject(request);
-
+               
                 //  Armazena o valor dos atribudos do request;
                 int id_unico_fornecedor = result.id;
                 int quantidade = result.quantiy;
@@ -102,6 +102,7 @@ namespace Analytics.Models
 
                 // Atualiza o lote: id_unico_fornecedor, quantidade de registros e o custo;
                 AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
+                //ConsultarStatus(id_unico_fornecedor);
             }
             catch (WebException e)
             {
@@ -110,9 +111,6 @@ namespace Analytics.Models
 
                 throw new Exception(e.Message);
             }
-
-
-
         }
         public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
         {
@@ -166,6 +164,24 @@ namespace Analytics.Models
                 }
             }
         }
+        public void ConsultarStatus(int id_unico_fornecedor) {
+
+            try
+            {
+                string response = wc.DownloadString(string.Format("{0}/{1}", url_statusLote, id_unico_fornecedor));
+                dynamic result = JsonConvert.DeserializeObject(response);
+
+                string[] smsNumbers = result.numbers;
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+        }
+
 
         private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
         {
