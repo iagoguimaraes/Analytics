@@ -184,7 +184,7 @@ namespace Analytics.Controllers
         {
             try
             {
-                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
 
@@ -192,7 +192,6 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("faixaAtraso", faixaAtraso);
 
@@ -438,6 +437,54 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtivaDigital(FormDataCollection form)
+        {
+            try
+            {
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("faixaAtraso", faixaAtraso);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFiltrosDigital()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

@@ -398,6 +398,7 @@
                                         <th>CTT</th>
                                         <th>PROM</th>
                                         <th>TMA</th>
+                                        <th>TME</th>
                                         <th>% Ocup.</th>
                                         <th>% Atds x Tab</th>
                                         <th>% Impro x Ctt</th>
@@ -407,7 +408,6 @@
                                         <th>% CPC x CTT</th>
                                         <th>% CPCA x CTT</th>
                                         <th>% Aban x CTT</th>
-                                        <th>% C. Pag x CTT</th>
                                         <th>% Desco. x CTT</th>
                                         <th>Conversão</th>
                                         <th>PROM OP</th>
@@ -425,6 +425,7 @@
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{c | sumByColumn: 'tmp_falado'| formatTimer}}</td>
+                                        <td>{{c | sumByColumn: 'tmp_espera'| formatTimer}}</td>
                                         <td>{{c | divideSumColumns: 'tmp_falado_total':'tmp_logado_parcial' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'acionados':'atendidas' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'improdutivo':'contato' | percentage:1}}</td>
@@ -434,7 +435,6 @@
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'abandono':'contato' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'consta_pagamento':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'desconhecido':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'qtd_operador' | number:1}}</td>
@@ -447,6 +447,7 @@
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.promessa | number}}</td>
                                         <td>{{p.tmp_falado | formatTimer}}</td>
+                                        <td>{{p.tmp_espera | formatTimer}}</td>
                                         <td>{{p.tmp_falado_total / p.tmp_logado_parcial | percentage:1}}</td>
                                         <td>{{p.acionados / p.atendidas | percentage:1}}</td>
                                         <td>{{p.improdutivo / p.contato  | percentage:1}}</td>
@@ -456,7 +457,6 @@
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.contato | percentage:1}}</td>
                                         <td>{{p.abandono / p.contato | percentage:1}}</td>
-                                        <td>{{p.consta_pagamento / p.contato | percentage:1}}</td>
                                         <td>{{p.desconhecido / p.contato | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                         <td>{{p.promessa / p.qtd_operador | number:1}}</td>
@@ -619,10 +619,10 @@
                                     <tr>
                                         <th>Equipe</th>
                                         <th>Agentes</th>
-                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>Promessa</th>
                                         <th>TMA</th>
+                                        <th>% Ocup.</th>
                                         <th>% Atendidas x Tab</th>
                                         <th>% Improdutivo x Ctt</th>
                                         <th>% Cart.</th>
@@ -641,10 +641,10 @@
                                             {{c[0].supervisor}}
                                         </td>
                                         <td>{{c | sumByColumn: 'qtd_agente'| number}}</td>
-                                        <td>{{c | sumByColumn: 'atendidas'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{c | sumByColumn: 'tmp_falado'| formatTimer}}</td>
+                                        <td>{{c | divideSumColumns: 'tmp_falado_total':'tmp_logado_parcial' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'acionados':'atendidas' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'improdutivo':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
@@ -658,10 +658,10 @@
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.equipe}}</td>
                                         <td>{{p.qtd_agente | number}}</td>
-                                        <td>{{p.atendidas | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.promessa | number}}</td>
                                         <td>{{p.tmp_falado | formatTimer}}</td>
+                                        <td>{{p.tmp_falado_total / p.tmp_logado_parcial | percentage:1}}</td>
                                         <td>{{p.acionados / p.atendidas | percentage:1}}</td>
                                         <td>{{p.improdutivo / p.contato  | percentage:1}}</td>
                                         <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
