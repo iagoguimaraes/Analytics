@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 
@@ -71,7 +73,7 @@ namespace Analytics.Models
                 }
                 */
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
@@ -92,9 +94,10 @@ namespace Analytics.Models
                 string json = JsonConvert.SerializeObject(new { block = lote });
 
                 // Efetua a requisição;
-                string request = wc.UploadString(url_smsLote, json);                
+                string request = wc.UploadString(url_smsLote, json);
                 dynamic result = JsonConvert.DeserializeObject(request);
-               
+                ConsultarStatus(Convert.ToInt16(result.id));
+
                 //  Armazena o valor dos atribudos do request;
                 int id_unico_fornecedor = result.id;
                 int quantidade = result.quantiy;
@@ -102,7 +105,7 @@ namespace Analytics.Models
 
                 // Atualiza o lote: id_unico_fornecedor, quantidade de registros e o custo;
                 AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
-                //ConsultarStatus(id_unico_fornecedor);
+
             }
             catch (WebException e)
             {
@@ -110,6 +113,11 @@ namespace Analytics.Models
                 AtualizarLote(id_lote, null, null, null, false, (int)response.StatusCode);
 
                 throw new Exception(e.Message);
+            }
+            catch(Exception ee)
+            {
+                AtualizarLote(id_lote, null, null, null, false, ee.HResult);
+                throw new Exception(ee.Message);
             }
         }
         public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
@@ -164,22 +172,50 @@ namespace Analytics.Models
                 }
             }
         }
-        public void ConsultarStatus(int id_unico_fornecedor) {
+        public void ConsultarStatus(int id_unico_fornecedor)
+        {
 
             try
             {
                 string response = wc.DownloadString(string.Format("{0}/{1}", url_statusLote, id_unico_fornecedor));
-                dynamic result = JsonConvert.DeserializeObject(response);
+                dynamic result = JsonConvert.DeserializeObject(response);                
 
-                string[] smsNumbers = result.numbers;
-                
+                DataTable dt = new DataTable();
+                dt.Columns.Add("id_unico_fornecedor");
+                dt.Columns.Add("id_status");
+                dt.Columns.Add("id_registro");
+                dt.Columns.Add("id_lote");
+                dt.Columns.Add("id_layout");
+                dt.Columns.Add("data_retorno", typeof(DateTime)).DefaultValue = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+
+                for (int i = 0; i < result.numbers.Count; i++)
+                {
+                    DataRow row = dt.NewRow();
+
+                    int id = result.numbers[i].id;
+                    int id_status = result.numbers[i].status;
+                    Uri uri = result.numbers[i].callback;
+
+                    var query = uri.Query.Replace("?", "");
+                    var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
+                    var queryString = string.Join(";", id, id_status, string.Join(";", queryValues.Values));
+                    row.ItemArray = queryString.Split(';');
+
+                    dt.Rows.Add(row);
+                }
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+                    sql.BulkInsert("TB_RETORNO", dt);
+                }
+
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw new Exception(e.Message);
             }
-            
+
         }
 
 
