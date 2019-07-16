@@ -191,8 +191,14 @@
                 <div class="row" style="background-color: deeppink; color: white">
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
-                            <span class="description-text">NS05</span>
-                            <h5 class="description-header" ng-bind="dashboard.resumo.ns05 / dashboard.resumo.chamada | percentage:1"></h5>
+                            <span class="description-text">
+                                <select ng-model="dashFiltros.ns" style="color:black">
+                                    <option value="ns05">NS 05s</option>
+                                    <option value="ns10">NS 10s</option>
+                                    <option value="ns20">NS 20s</option>
+                                </select>
+                            </span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1"></h5>
                         </div>
                     </div>
                     <div class="col-sm-3 border-right">
@@ -300,7 +306,13 @@
                                 <thead>
                                     <tr>
                                         <th>Produto</th>
-                                        <th>NS (05s)</th>
+                                        <th>
+                                            <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns05">NS 05s</option>
+                                                <option value="ns10">NS 10s</option>
+                                                <option value="ns20">NS 20s</option>
+                                            </select>
+                                        </th>
                                         <th>Chamada</th>
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
@@ -312,7 +324,7 @@
                                 <tbody>
                                     <tr ng-repeat="atraso in dashboard.fila">
                                         <td>{{atraso.ds_carteira}}</td>
-                                        <td>{{atraso.ns05 / atraso.chamada | percentage:1}}</td>
+                                        <td>{{atraso[dashFiltros.ns] / atraso.chamada | percentage:1}}</td>
                                         <td>{{atraso.chamada | number}}</td>
                                         <td>{{atraso.atendido | number}}</td>
                                         <td>{{atraso.abandonado | number}}</td>
