@@ -15,6 +15,21 @@
             </div>
         </header>
 
+        <!-- SELEÇÃO DE CAMPANHA-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-info active" ng-click=" carregarDashboard(7073)">
+                    <input type="radio"> Cartão
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard(8090)">
+                    <input type="radio"> Empréstimo
+                </label>
+                @*<label class="btn btn-danger">
+                    <input type="radio"> Receptivo
+                </label>*@
+            </div>
+        </div>
+
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.atrasos">
             <div class="col-xs-12">
@@ -132,7 +147,7 @@
 
                         <!--BOTÃO-->
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard(filtros.fila)" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                         </div>
 
                     </div>
@@ -178,9 +193,9 @@
                         <div class="description-block">
                             <span class="description-text">
                                 <select ng-model="dashFiltros.ns" style="color:black">
+                                    <option value="ns05">NS 05s</option>
                                     <option value="ns10">NS 10s</option>
                                     <option value="ns20">NS 20s</option>
-                                    <option value="ns30">NS 30s</option>
                                 </select>
                             </span>
                             <h5 class="description-header" ng-bind="dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1"></h5>
@@ -209,6 +224,41 @@
             </div>
         </div>
 
+        <!--FINALIZAÇÕES OCORRENCIA DISCADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Origem Chamada</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.origem" axis-Categories="dashboard.origens" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Tempo de Fila</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.tempofila" axis-Categories="dashboard.tempos" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--POR HORA GRAFICO-->
         <div class="row margin-bottom">
@@ -221,9 +271,9 @@
                         </div>
                         <small class="pull-right">
                             <select ng-model="dashFiltros.ns" style="color:black" ng-change="carregarGrafico()">
+                                <option value="ns05">NS 05s</option>
                                 <option value="ns10">NS 10s</option>
                                 <option value="ns20">NS 20s</option>
-                                <option value="ns30">NS 30s</option>
                             </select>
                         </small>
                     </div>
@@ -256,62 +306,11 @@
                                 <thead>
                                     <tr>
                                         <th>Produto</th>
-                                        <th>NS (20s)</th>
-                                        <th>Chamada</th>
-                                        <th>Atendida</th>
-                                        <th>Abandonada</th>
-                                        <th>% Abandono</th>
-                                        <th>Tempo Médio Atendimento</th>
-                                        <th>Tempo Médio em Fila</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="atraso in dashboard.fila">
-                                        <td>{{atraso.ds_carteira}}</td>
-                                        <td>{{atraso[dashFiltros.ns] / hora.chamada | percentage:1}}</td>
-                                        <td>{{atraso.chamada | number}}</td>
-                                        <td>{{atraso.atendido | number}}</td>
-                                        <td>{{atraso.abandonado | number}}</td>
-                                        <td>{{atraso.abandonado / atraso.chamada | percentage:1}}</td>
-                                        <td>{{atraso.tma}}</td>
-                                        <td>{{atraso.tmf}}</td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--POR HORA TABELA-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <!--TABELA-->
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
-                                <thead>
-                                    <tr>
-                                        <th>Hora</th>
-                                        <th>Agente</th>
                                         <th>
                                             <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns05">NS 05s</option>
                                                 <option value="ns10">NS 10s</option>
                                                 <option value="ns20">NS 20s</option>
-                                                <option value="ns30">NS 30s</option>
                                             </select>
                                         </th>
                                         <th>Chamada</th>
@@ -323,69 +322,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="hora in dashboard.horahora">
-                                        <td>{{hora.hora}}</td>
-                                        <td>{{hora.agente | number}}</td>
-                                        <td>{{hora[dashFiltros.ns] / hora.chamada | percentage:1}}</td>
-                                        <td>{{hora.chamada | number}}</td>
-                                        <td>{{hora.atendido | number}}</td>
-                                        <td>{{hora.abandonado | number}}</td>
-                                        <td>{{hora.abandonado / hora.chamada | percentage:1}}</td>
-                                        <td>{{hora.tma}}</td>
-                                        <td>{{hora.tmf}}</td>
+                                    <tr ng-repeat="atraso in dashboard.fila">
+                                        <td>{{atraso.ds_carteira}}</td>
+                                        <td>{{atraso[dashFiltros.ns] / atraso.chamada | percentage:1}}</td>
+                                        <td>{{atraso.chamada | number}}</td>
+                                        <td>{{atraso.atendido | number}}</td>
+                                        <td>{{atraso.abandonado | number}}</td>
+                                        <td>{{atraso.abandonado / atraso.chamada | percentage:1}}</td>
+                                        <td>{{atraso.tma}}</td>
+                                        <td>{{atraso.tmf}}</td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>{{dashboard.resumo.agente | number}}</th>
-                                        <th>{{dashboard.resumo[dashFiltros.ns] / dashboard.resumo.chamada | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.chamada | number}}</th>
-                                        <th>{{dashboard.resumo.atendido | number}}</th>
-                                        <th>{{dashboard.resumo.abandonado | number}}</th>
-                                        <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
-                                        <th>{{dashboard.resumo.tma}}</th>
-                                        <th>{{dashboard.resumo.tmf}}</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--FINALIZAÇÕES OCORRENCIA DISCADOR-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Atendimentos por Produto</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.produtos" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Tempo de Fila</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.tempofila" axis-Categories="dashboard.tempos" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -414,9 +363,9 @@
                                         <th>Agente</th>
                                         <th>
                                             <select ng-model="dashFiltros.ns" style="color:black">
+                                                <option value="ns05">NS 05s</option>
                                                 <option value="ns10">NS 10s</option>
                                                 <option value="ns20">NS 20s</option>
-                                                <option value="ns30">NS 30s</option>
                                             </select>
                                         </th>
                                         <th>Chamada</th>
@@ -480,12 +429,13 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             hrini: '08',
             hrfim: '20',
-            atrasos: ''
+            atrasos: '',
+            fila: ''
 
         };
 
         $scope.dashFiltros = {
-            ns: 'ns20'
+            ns: 'ns05'
         }
 
         // carregar os filtros
@@ -500,7 +450,8 @@
         });
 
 
-        $scope.carregarDashboard = function () {
+        $scope.carregarDashboard = function (fila) {
+            $scope.filtros.fila = fila;
             $http({
                 method: 'POST',
                 url: "/api/marisa/dashboard/humano/receptivo",
@@ -514,12 +465,16 @@
                 $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
                 $scope.dashboard.dia = r.data.Table3;
 
+                $scope.dashboard.origens = r.data.Table6.map(obj => obj.ds_status_negocio);
+                $scope.dashboard.origem = [{ name: 'chamada', data: r.data.Table6.map(obj => obj.chamada) }]
+
                 $scope.dashboard.fila = r.data.Table2;
                 $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: obj.atendido })) }];
                 $scope.dashboard.tempos = r.data.Table5.map(obj => obj.tempo_fila);
                 $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table5.map(obj => obj.chamada) }]
             
                 $scope.carregarGrafico();
+                console.log($scope.dashboard.fila);
             });
         }
 
@@ -531,7 +486,7 @@
             ];
         }
 
-        $scope.carregarDashboard();
+        $scope.carregarDashboard(7073);
 
         // extrair dados para excel
         $scope.extrair = function (tabela) {

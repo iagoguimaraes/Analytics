@@ -415,6 +415,7 @@ namespace Analytics.Controllers
                 string hrini = form["hrini"];
                 string hrfim = form["hrfim"];
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                int fila = Convert.ToInt32(form["fila"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
@@ -423,6 +424,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString(string.Format("yyyy-MM-dd {0}:00", hrini)));
                     parametros.Add("dtfim", dtfim.ToString(string.Format("yyyy-MM-dd {0}:59", hrfim)));
                     parametros.Add("atrasos", atrasos);
+                    parametros.Add("fila", fila);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_rec", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
