@@ -107,9 +107,9 @@
             <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.tentativa | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.registros / dashboard.resumo.tentativa | percentage: 1"></h4>
-                        <p>Tentativa</p>
+                        <h3 ng-bind="dashboard.resumo.enviado | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.enviado / dashboard.resumo.registros | percentage: 1"></h4>
+                        <p>Enviado</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-envelope-square"></i>
@@ -119,9 +119,9 @@
             <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.disparado | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.disparado / dashboard.resumo.tentativa | percentage: 1"></h4>
-                        <p>SMS Enviado</p>
+                        <h3 ng-bind="dashboard.resumo.entregue | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.entregue / dashboard.resumo.enviado | percentage: 1"></h4>
+                        <p>Entregue</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-envelope-square"></i>
@@ -150,7 +150,6 @@
                                         <th>Usuário</th>
                                         <th>Layout</th>
                                         <th>Registros</th>
-                                        <th>Tentativas</th>
                                         <th>Enviado</th>
                                         <th>% Enviado</th>
                                     </tr>
@@ -165,9 +164,8 @@
                                         <td>{{r.usuario}}</td>
                                         <td>{{r.layout}}</td>
                                         <td>{{r.registros | number}}</td>
-                                        <td>{{r.tentativa | number}}</td>
-                                        <td>{{r.disparado | number}}</td>
-                                        <td>{{r.disparado / r.registros | percentage:1}}</td>
+                                        <td>{{r.enviado | number}}</td>
+                                        <td>{{r.enviado / r.registros | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -230,13 +228,11 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
-                console.log(r.data);
-
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.lote = r.data.Table1;
 
                 $scope.dashboard.datas = r.data.Table2.map(obj => obj.data);
-                $scope.dashboard.dia = [{ name: 'SMS', data: r.data.Table2.map(obj => obj.disparado)}];
+                $scope.dashboard.dia = [{ name: 'SMS', data: r.data.Table2.map(obj => obj.enviado)}];
             });
         }
 
