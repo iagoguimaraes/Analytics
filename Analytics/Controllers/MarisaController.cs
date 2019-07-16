@@ -545,6 +545,51 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/cadmetastele")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMetaHumanoTele(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                int id_carteira = Convert.ToInt32(form["id_carteira"]);
+                int meta_1a30 = Convert.ToInt32(form["meta_1a30"].ToString().Replace(".", ""));
+                int meta_31a60 = Convert.ToInt32(form["meta_31a60"].ToString().Replace(".", ""));
+                int meta_61a90 = Convert.ToInt32(form["meta_61a90"].ToString().Replace(".", ""));
+
+                int meta_1a30_promessa = Convert.ToInt32(form["meta_1a30_promessa"].ToString().Replace(".", ""));
+                int meta_31a60_promessa = Convert.ToInt32(form["meta_31a60_promessa"].ToString().Replace(".", ""));
+                int meta_61a90_promessa = Convert.ToInt32(form["meta_61a90_promessa"].ToString().Replace(".", ""));
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("id_carteira", id_carteira);
+                    parametros.Add("meta_1a30", meta_1a30);
+                    parametros.Add("meta_31a60", meta_31a60);
+                    parametros.Add("meta_61a90", meta_61a90);
+
+                    parametros.Add("meta_1a30_promessa", meta_1a30_promessa);
+                    parametros.Add("meta_31a60_promessa", meta_31a60_promessa);
+                    parametros.Add("meta_61a90_promessa", meta_61a90_promessa);
+  
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_ins_cadmeta_metas_tele", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/humano/metas")]
         [HttpPost]
         [Autorizar]
@@ -566,6 +611,38 @@ namespace Analytics.Controllers
                     parametros.Add("faixas", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_metas", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/metastele")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoMetasTele(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("atraso", atraso);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_metas_tele", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -703,6 +780,36 @@ namespace Analytics.Controllers
 
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_acaomassiva_fases", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/tele/multicanal")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Producao(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao_multicanal", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

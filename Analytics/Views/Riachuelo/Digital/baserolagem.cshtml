@@ -1,0 +1,270 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-riachuelo-baserolagem">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Base Rolagem</div>
+        </header>
+
+        <!-- SELEÇÃO DE VISÃO-->
+        <div class="row margin-bottom" style="margin-top: 15px;">
+            <div class="col-xs-12 btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-default active" ng-click="popularDashboard('quantidade')">
+                    <input type="radio"> Quantidade
+                </label>
+                <label class="btn btn-default" ng-click="popularDashboard('saldo')">
+                    <input type="radio"> Valor
+                </label>
+            </div>
+        </div>
+
+        <!--FILTROS-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Carteira</label>
+                <multiple-select ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()" placeholder="Carteira" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Rating</label>
+                <multiple-select ng-model="dashboard.filtros.rating" dados="dashboard.dimensao.rating" ng-change="aplicarFiltros()" placeholder="Rating" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Situação</label>
+                <multiple-select ng-model="dashboard.filtros.situacao" dados="dashboard.dimensao.situacao" ng-change="aplicarFiltros()" placeholder="Situação" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Rolagem</label>
+                <div style="width:100%">
+                    <multiple-select ng-model="dashboard.filtros.rolagem" dados="dashboard.dimensao.rolagem" ng-change="aplicarFiltros()" placeholder="Rolagem" /><multiple-select />
+                </div>
+            </div>
+        </div>
+
+        <!--DASHBOARD-->
+        <div class="row margin-bottom">
+            <!--ROLAGEM-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.rolagem" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--RATING-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.rating" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--CARTEIRA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.carteira" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--SITUACAO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.situacao" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $('select').multipleSelect()
+
+    angular.module('app').controller('ctrl-riachuelo-baserolagem', function ($scope, $http, $filter, cubo) {
+
+        $scope.dashboard = {
+            visao: 'quantidade',
+            dimensao: {},
+            filtros: {},
+        };
+        $scope.dimensao = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/baserolagem",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('carteira').sort();
+            $scope.dashboard.dimensao.rating = cubo.obterDimensao('rating').sort();
+            $scope.dashboard.dimensao.situacao = cubo.obterDimensao('situacao').sort();
+            $scope.dashboard.dimensao.rolagem = cubo.obterDimensao('rolagem').sort();
+        }
+
+        $scope.popularDashboard = function (visao) {
+            if (visao)
+                $scope.dashboard.visao = visao;
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.carteira = cubo.obterDimensao('carteira');
+            $scope.dimensao.rating = cubo.obterDimensao('rating');
+            $scope.dimensao.rating = cubo.obterDimensao('situacao');
+            $scope.dimensao.rating = cubo.obterDimensao('rolagem');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            let carteira = alasql('select carteira, sum(' + $scope.dashboard.visao + ') qtd from ? group by carteira', [dados]);
+            let rating = alasql('select ini,rating, sum(' + $scope.dashboard.visao + ') qtd from ? group by ini,rating order by ini', [dados]);
+            let situacao = alasql('select situacao, sum(' + $scope.dashboard.visao + ') qtd from ? group by situacao', [dados]);
+            let rolagem = alasql('select rolagem, sum(' + $scope.dashboard.visao + ') qtd from ? group by rolagem order by rolagem', [dados]);
+
+            let tt = rolagem.reduce((prev, cur) => prev + cur.qtd, 0);
+            for (var i = 0, scum = 0; i < rolagem.length; i++) {
+                scum += rolagem[i].qtd;
+                rolagem[i].scum = scum;
+                rolagem[i].perc_scum = (scum * 100 / tt).toFixed(1) / 1;
+            }
+
+            $scope.dashboard.carteira = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Carteira'
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: $scope.dashboard.visao, data: carteira.map(obj => ({ name: obj.carteira, y: obj.qtd.toFixed(0) / 1 })) }]
+            };
+            $scope.dashboard.rating = {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Rating'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: rating.map(obj => obj.rating)
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: $scope.dashboard.visao, data: rating.map(obj => obj.qtd.toFixed(0) / 1), color: '#333' }]
+            };
+            $scope.dashboard.situacao = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Situação'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: situacao.map(obj => obj.situacao)
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: $scope.dashboard.visao, data: situacao.map(obj => obj.qtd.toFixed(0) / 1), color: '#333' }]
+            };
+            $scope.dashboard.rolagem = {
+                title: {
+                    text: 'Rolagem'
+                },
+                yAxis: [
+                    { title: '' }, { opposite: true, visible: false, min: 0, max: 100 }
+                ],
+                xAxis: {
+                    categories: rolagem.map(obj => obj.rolagem)
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [
+                    { name: $scope.dashboard.visao, type: 'column', data: rolagem.map(obj => obj.qtd.toFixed(0) / 1) },
+                    { name: '%', yAxis: 1, type: 'spline', data: rolagem.map(obj => obj.perc_scum) }
+                ],
+                tooltip: {
+                    shared: true
+                }
+            };
+
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('carteira', $scope.dashboard.filtros.carteira);
+            cubo.filtrar('rating', $scope.dashboard.filtros.rating);
+            cubo.filtrar('situacao', $scope.dashboard.filtros.situacao);
+            cubo.filtrar('rolagem', $scope.dashboard.filtros.rolagem);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>

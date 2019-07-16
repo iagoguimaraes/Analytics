@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 
@@ -14,6 +16,8 @@ namespace Analytics.Models
         private readonly string url = "http://142.93.78.16/api/sms";
         private readonly string url_smsLote = "http://142.93.78.16/api/blocks";
         private readonly string url_callback = "https://analytics.creditcash.com.br/api/sms/talkip?";
+        private readonly string url_statusLote = "http://142.93.78.16/api/blocks";
+
         private WebClientNT wc;
 
         public TalkIP()
@@ -69,20 +73,18 @@ namespace Analytics.Models
                 }
                 */
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
         }
         public void EnviarLoteSMS(int id_lote, string tabela)
         {
-
             try
             {
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
                 wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
-
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, tabela);
@@ -94,6 +96,7 @@ namespace Analytics.Models
                 // Efetua a requisição;
                 string request = wc.UploadString(url_smsLote, json);
                 dynamic result = JsonConvert.DeserializeObject(request);
+                ConsultarStatus(Convert.ToInt16(result.id));
 
                 //  Armazena o valor dos atribudos do request;
                 int id_unico_fornecedor = result.id;
@@ -102,6 +105,7 @@ namespace Analytics.Models
 
                 // Atualiza o lote: id_unico_fornecedor, quantidade de registros e o custo;
                 AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
+
             }
             catch (WebException e)
             {
@@ -110,9 +114,11 @@ namespace Analytics.Models
 
                 throw new Exception(e.Message);
             }
-
-
-
+            catch(Exception ee)
+            {
+                AtualizarLote(id_lote, null, null, null, false, ee.HResult);
+                throw new Exception(ee.Message);
+            }
         }
         public void AtualizarStatus(long id_registro, int id_layout, int codigo_status, int id_lote, int id_unico_fornecedor)
         {
@@ -166,6 +172,52 @@ namespace Analytics.Models
                 }
             }
         }
+        public void ConsultarStatus(int id_unico_fornecedor)
+        {
+
+            try
+            {
+                string response = wc.DownloadString(string.Format("{0}/{1}", url_statusLote, id_unico_fornecedor));
+                dynamic result = JsonConvert.DeserializeObject(response);                
+
+                DataTable dt = new DataTable();
+                dt.Columns.Add("id_unico_fornecedor");
+                dt.Columns.Add("id_status");
+                dt.Columns.Add("id_registro");
+                dt.Columns.Add("id_lote");
+                dt.Columns.Add("id_layout");
+                dt.Columns.Add("data_retorno", typeof(DateTime)).DefaultValue = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+
+                for (int i = 0; i < result.numbers.Count; i++)
+                {
+                    DataRow row = dt.NewRow();
+
+                    int id = result.numbers[i].id;
+                    int id_status = result.numbers[i].status;
+                    Uri uri = result.numbers[i].callback;
+
+                    var query = uri.Query.Replace("?", "");
+                    var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
+                    var queryString = string.Join(";", id, id_status, string.Join(";", queryValues.Values));
+                    row.ItemArray = queryString.Split(';');
+
+                    dt.Rows.Add(row);
+                }
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+                    sql.BulkInsert("TB_RETORNO", dt);
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+
+        }
+
 
         private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
         {
