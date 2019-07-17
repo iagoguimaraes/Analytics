@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-marisa-mktzap-operacional">
+<div ng-controller="ctrl-marisa-mktzap-producao">
     <div ng-if="dashboard.status == 200">
 
         <header class="page-header">
@@ -17,7 +17,7 @@
         <!-- FILTROS -->
         <div class="row margin-bottom">
 
-            <div class="col-xs-12" ng-if="dadosFiltros.status === 200">
+            <div class="col-xs-12" ng-if="dashFiltros.status === 200">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
                         <span class="card-header-title">Filtros</span>
@@ -51,6 +51,18 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--CARTEIRAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteiras</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--ATRASOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Atrasos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso" style="width:100%"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -166,12 +178,85 @@
             </div>
         </div>
 
+        <!--TABELA CARTEIRA/ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Carteira/Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira/Atraso</th>
+                                        <th>Atendimento</th>
+                                        <th>Finalizado</th>
+                                        <th>Interação</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Negociação</th>
+                                        <th>% Finalizado</th>
+                                        <th>Conversão</th>
+                                        <th>TME</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'carteira'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].carteira}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'atendimento'| number}}</td>
+                                        <td>{{e | sumByColumn: 'finalizado'| number}}</td>
+                                        <td>{{e | sumByColumn: 'interacao'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'negociacao'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'finalizado':'atendimento' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'negociacao':'cpca' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'tempo_espera':'atendimento' | formatTimer }}</td>
+
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.atraso}}</td>
+                                        <td>{{c.atendimento | number}}</td>
+                                        <td>{{c.finalizado | number}}</td>
+                                        <td>{{c.interacao | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.negociacao | number}}</td>
+
+                                        <td>{{c.finalizado / c.atendimento | percentage:1}}</td>
+                                        <td>{{c.negociacao / c.cpca | percentage:1}}</td>
+                                        <td>{{c.tempo_espera / c.atendimento | formatTimer}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
+                        <span class="card-header-title">Análise por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -180,18 +265,18 @@
                         </div>
                         <small class="pull-right">
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="false" checked="checked" />
                                 Tabela
                             </label>
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="true" />
                                 Gráfico
                             </label>
                         </small>
                     </div>
                     <div class="card-body">
                         <!--TABELA-->
-                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'false'">
                             <table class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
@@ -208,17 +293,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="hora in dashboard.hora">
-                                        <td>{{hora.data}}</td>
-                                        <td>{{hora.atendimento | number}}</td>
-                                        <td>{{hora.finalizado | number}}</td>
-                                        <td>{{hora.interacao | number}}</td>
-                                        <td>{{hora.cpc | number}}</td>
-                                        <td>{{hora.cpca | number}}</td>
-                                        <td>{{hora.negociacao | number}}</td>
-                                        <td>{{hora.finalizado / hora.atendimento | percentage:1}}</td>
-                                        <td>{{hora.negociacao / hora.cpca | percentage:1}}</td>
-                                        <td>{{hora.tme | formatTimer}}</td>
+                                    <tr ng-repeat="data in dashboard.data">
+                                        <td>{{data.data}}</td>
+                                        <td>{{data.atendimento | number}}</td>
+                                        <td>{{data.finalizado | number}}</td>
+                                        <td>{{data.interacao | number}}</td>
+                                        <td>{{data.cpc | number}}</td>
+                                        <td>{{data.cpca | number}}</td>
+                                        <td>{{data.negociacao | number}}</td>
+                                        <td>{{data.finalizado / data.atendimento | percentage:1}}</td>
+                                        <td>{{data.negociacao / data.cpca | percentage:1}}</td>
+                                        <td>{{data.tme | formatTimer}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -238,9 +323,9 @@
                             </table>
                         </div>
                         <!--GRAFICO-->
-                        <div ng-show="graficoHora.exibir == 'true'">
+                        <div ng-show="graficoDia.exibir == 'true'">
                             <span class="pull-right">
-                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                <select ng-model="graficoDia.indicador" ng-change="carregarGraficoDia()">
                                     <option value="atendimento">Atendimento</option>
                                     <option value="finalizado">Finalizado</option>
                                     <option value="interacao">Interação</option>
@@ -254,7 +339,7 @@
                                     <option value="tme">TME</option>
                                 </select>
                             </span>
-                            <high-chart series="graficoHora.dados" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                            <high-chart series="graficoDia.dados" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
                         </div>
                     </div>
                 </div>
@@ -295,6 +380,8 @@
             </div>
         </div>
 
+
+
         <!--OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -327,34 +414,50 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-marisa-mktzap-operacional', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-marisa-mktzap-producao', function ($scope, $http, $filter) {
 
         let newdate = new Date(new Date().setDate(new Date().getDate() - 1));
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
-        $scope.dadosFiltros = {};
+        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteiras: '',
+            atraso: '',
 
         };
+
+          // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/marisa/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.atraso = r.data.Table4;
+            $scope.dashFiltros.carteiras = r.data.Table6;
+            $scope.dashFiltros.status =  r.status;
+        });
+
         $scope.dashboard = {};
-        $scope.graficoHora = { indicador: 'atendimento', dados: [], exibir: 'false' };
+        $scope.graficoDia = { indicador: 'atendimento', dados: [], exibir: 'false' };
         $scope.mapa = { indicador: 'atendimento', dados: [] };
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/humano/tele/multicanal",
+                url: "/api/marisa/dashboard/humano/tele/multicanal/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.hora = r.data.Table1;
+                $scope.dashboard.data = r.data.Table1;
                 $scope.dashboard.uf = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table4;
-                $scope.carregarGraficoHora();
+                $scope.dashboard.carteira= r.data.Table5;
+                $scope.carregarGraficoDia();
                 $scope.carregarMapa();
 
                 $scope.dashboard.tabulacao = {
@@ -369,24 +472,24 @@
             });
         }
 
-        $scope.carregarGraficoHora = function () {
-            let dados = $scope.dashboard.hora;
-            $scope.dashboard.horas = dados.map(obj => obj.data);
-            switch ($scope.graficoHora.indicador) {
+        $scope.carregarGraficoDia = function () {
+            let dados = $scope.dashboard.data;
+            $scope.dashboard.datas = dados.map(obj => obj.data);
+            switch ($scope.graficoDia.indicador) {
                 case '%finalizado':
-                    $scope.graficoHora.dados = [{ name: '%finalizado', data: dados.map(obj => (obj.finalizado * 100 / obj.atendimento).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: '%finalizado', data: dados.map(obj => (obj.finalizado * 100 / obj.atendimento).toFixed(1) * 1) }];
                     break;
                 case '%interacao':
-                    $scope.graficoHora.dados = [{ name: '%interacao', data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: '%interacao', data: dados.map(obj => (obj.interacao * 100 / obj.finalizado).toFixed(1) * 1) }];
                     break;
                 case '%cpc':
-                    $scope.graficoHora.dados = [{ name: '%cpc', data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: '%cpc', data: dados.map(obj => (obj.cpc * 100 / obj.interacao).toFixed(1) * 1) }];
                     break;
                 case '%negociacao':
-                    $scope.graficoHora.dados = [{ name: '%negociacao', data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: '%negociacao', data: dados.map(obj => (obj.negociacao * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
-                    $scope.graficoHora.dados = [{ name: $scope.graficoHora.indicador, data: dados.map(obj => obj[$scope.graficoHora.indicador]) }];
+                    $scope.graficoDia.dados = [{ name: $scope.graficoDia.indicador, data: dados.map(obj => obj[$scope.graficoDia.indicador]) }];
             }
         }
 

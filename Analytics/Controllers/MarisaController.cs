@@ -789,7 +789,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/humano/tele/multicanal")]
+        [Route("dashboard/humano/tele/multicanal/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -799,7 +799,8 @@ namespace Analytics.Controllers
             {
                 string dtini = form["dtini"];
                 string dtfim = form["dtfim"];
-
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
                 {
@@ -807,9 +808,43 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
-
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("atrasos", atrasos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_producao_multicanal", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("dashboard/humano/tele/multicanal/hora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage MulticanalHoraHoraTele(FormDataCollection form)
+        {
+            try
+            {
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("dtfim", dtfim);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("atrasos", atrasos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_horahora_multicanal", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
