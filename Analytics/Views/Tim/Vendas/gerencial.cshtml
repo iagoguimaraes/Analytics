@@ -16,9 +16,6 @@
                 <label class="btn btn-info active" ng-click="carregarDashboard('televendas')">
                     <input type="radio"> Televendas
                 </label>
-                <label class="btn btn-info" ng-click="carregarDashboard('receptivo')">
-                    <input type="radio"> Receptivo
-                </label>
                 <label class="btn btn-info" ng-click="carregarDashboard('migracao')">
                     <input type="radio"> Migração
                 </label>
@@ -148,7 +145,7 @@
             </div>
         </div>
 
-        <!--LAYOUT PARA TELEVENDAS E RECEPTIVO-->
+        <!--LAYOUT PARA TELEVENDAS-->
         <div ng-if="dashboard.campanha != 'migracao'">
             <div class="row margin-bottom">
                 <!--HOJE-->
@@ -173,7 +170,7 @@
                                             <i class="fa fa-thumbs-up"></i>
                                         </div>
                                         <div class="content" style="text-align: center;">
-                                            <div class="text">Ativações Hoje</div>
+                                            <div class="text">Gross Hoje</div>
                                             <div class="number">{{dashboard.resumo.ativacao_hoje}}</div>
                                         </div>
                                     </div>
@@ -204,7 +201,7 @@
                                             <i class="fa fa-thumbs-up"></i>
                                         </div>
                                         <div class="content" style="text-align: center;">
-                                            <div class="text">Ativações Mês</div>
+                                            <div class="text">Gross Mês</div>
                                             <div class="number">{{dashboard.resumo.ativacao}}</div>
                                         </div>
                                     </div>
@@ -231,7 +228,7 @@
                             <small class="pull-right">
                                 <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
                                     <option value="venda">Venda</option>
-                                    <option value="ativacao">Ativação</option>
+                                    <option value="ativacao">Gross</option>
                                 </select>
                             </small>
                         </div>
@@ -248,7 +245,7 @@
                             <small class="pull-right">
                                 <select ng-model="dashboard.indicador" ng-change="carregarGraficoProjecao()">
                                     <option value="venda">Venda</option>
-                                    <option value="ativacao">Ativação</option>
+                                    <option value="ativacao">Gross</option>
                                 </select>
                             </small>
                         </div>
@@ -299,7 +296,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: campanha == 'migracao' ? 'Migrações por Plano' : 'Ativações por Plano'
+                        text: campanha == 'migracao' ? 'Migrações por Plano' : 'Gross por Plano'
                     },
                     yAxis: {
                         visible: false,
