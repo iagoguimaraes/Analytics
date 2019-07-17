@@ -509,14 +509,14 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_receptivo_digital", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_receptivo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -537,14 +537,14 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_receptivo_digital", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_receptivo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
