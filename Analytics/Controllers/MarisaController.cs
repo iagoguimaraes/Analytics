@@ -879,6 +879,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
                 {
@@ -886,6 +887,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("fila", fila);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -907,6 +909,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
                 {
@@ -914,6 +917,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("fila", fila);
 
                     string procedure = "sp_dashboard_producao";
 
