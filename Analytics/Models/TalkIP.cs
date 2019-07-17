@@ -96,7 +96,7 @@ namespace Analytics.Models
                 // Efetua a requisição;
                 string request = wc.UploadString(url_smsLote, json);
                 dynamic result = JsonConvert.DeserializeObject(request);
-                ConsultarStatus(Convert.ToInt16(result.id));
+                //ConsultarStatus(Convert.ToInt16(result.id));
 
                 //  Armazena o valor dos atribudos do request;
                 int id_unico_fornecedor = result.id;
@@ -193,7 +193,7 @@ namespace Analytics.Models
                     DataRow row = dt.NewRow();
 
                     int id = result.numbers[i].id;
-                    int id_status = result.numbers[i].status;
+                    int id_status = result.numbers[i].status; // FAZER DE PARA COM O NOSSO ID STATUS
                     Uri uri = result.numbers[i].callback;
 
                     var query = uri.Query.Replace("?", "");
