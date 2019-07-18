@@ -68,6 +68,11 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -361,6 +366,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             empresas: '',
             carteiras: '',
+            faixaAtraso: '',
         }
         $scope.grafico = { indicador: 'promessa' };
 
@@ -374,6 +380,8 @@
 
             $scope.dashFiltros.empresas = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.faixaAtraso = r.data.Table2;
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
