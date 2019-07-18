@@ -110,7 +110,7 @@ namespace Analytics.Models
             catch (WebException e)
             {
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
-                AtualizarLote(id_lote, null, null, null, false, (int)response.StatusCode);
+                AtualizarLote(id_lote, null, null, null, false, (int?)response.StatusCode);
 
                 throw new Exception(e.Message);
             }
