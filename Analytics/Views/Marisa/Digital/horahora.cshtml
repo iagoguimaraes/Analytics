@@ -57,6 +57,11 @@
                                 </div>
                             </div>
 
+                            <!--FILA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Fila</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.fila" dados="dashFiltros.fila"></select2>
+                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -211,6 +216,57 @@
             </div>
         </div>
 
+        <!--VISÃO FILA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Fila {{conceito.string}}</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.fila">
+                                <thead>
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>HitRate</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="idtbody">
+                                    <tr ng-repeat="fila in dashboard.fila">
+                                        <td>{{fila.ds_fila}}</td>
+                                        <td>{{fila.discado | number}}</td>
+                                        <td>{{fila.contato | number}}</td>
+                                        <td>{{fila.cpc | number}}</td>
+                                        <td>{{fila.cpca | number}}</td>
+                                        <td>{{fila.promessa | number}}</td>
+                                        <td>{{fila.contato / fila.discado | percentage:1}}</td>
+                                        <td>{{fila.cpc / fila.contato | percentage:1}}</td>
+                                        <td>{{fila.cpca / fila.cpc | percentage:1}}</td>
+                                        <td>{{fila.promessa / fila.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--DIAGRAMA FINALIZACOES-->
         <div class="row margin-bottom">
             <div class="col-xs-12 margin-bottom">
@@ -297,11 +353,22 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            fila: '',
         };
 
         $scope.dashboard = {};
+        $scope.dashFiltros = {};
         $scope.grafico = { indicador: 'hitrate' };
 
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/Marisa/dashboard/digital/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.fila = r.data.Table1;
+        });
 
         $scope.carregarDashboard = function () {
             $http({
@@ -316,6 +383,7 @@
                 $scope.dashboard.horahora = data.Table1;
                 $scope.dashboard.diagrama = data.Table2;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table3.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
+                $scope.dashboard.fila = data.Table4;
 
                 $scope.carregarGrafico();
             });

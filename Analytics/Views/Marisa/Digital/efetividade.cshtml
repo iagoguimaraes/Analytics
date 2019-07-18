@@ -58,6 +58,12 @@
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso"></select2>
                         </div>
 
+                        <!--FILA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fila</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.fila" dados="dashFiltros.fila"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -226,6 +232,7 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             atraso: '',
+            fila: ''
         }
         $scope.dashboard = {};
         $scope.dashFiltros = {};
@@ -239,6 +246,7 @@
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.atraso = r.data.Table;
+            $scope.dashFiltros.fila = r.data.Table1;
         });
 
 
