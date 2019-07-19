@@ -116,6 +116,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_UOL"))
                 {
@@ -124,7 +126,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteira", carteira);
-
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -147,7 +150,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_UOL"))
                 {
@@ -156,6 +160,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteira", carteira);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
