@@ -105,9 +105,9 @@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.ativacao | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.ativacao / dashboard.resumo.venda | percentage: 1"></h4>
-                        <p>Ativação</p>
+                        <h3 ng-bind="dashboard.resumo.gross | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.gross / dashboard.resumo.venda | percentage: 1"></h4>
+                        <p>Gross</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa fa-check"></i>
@@ -154,7 +154,7 @@
                                 <option value="discagens">Discagens</option>
                                 <option value="cpc">CPC</option>
                                 <option value="venda">Venda</option>
-                                <option value="ativacao">Ativação</option>
+                                <option value="gross">Gross</option>
                                 <option value="chips">Chips</option>
                                 <option value="recusa">Recusa</option>
                                 <option value="txvenda">% Venda</option>
@@ -164,7 +164,7 @@
                                 <option value="discagens">Discagens</option>
                                 <option value="cpc">CPC</option>
                                 <option value="venda">Venda</option>
-                                <option value="ativacao">Ativação</option>
+                                <option value="gross">Gross</option>
                                 <option value="chips">Chips</option>
                                 <option value="recusa">Recusa</option>
                                 <option value="txvenda">% Venda</option>
@@ -195,7 +195,7 @@
                                         <th>#</th>
                                         <th>CPC</th>
                                         <th>Venda</th>
-                                        <th>Ativação</th>
+                                        <th>Gross</th>
                                         <th>Chips</th>
                                         <th>Recusa</th>
                                         <th>% Recusa</th>
@@ -212,7 +212,7 @@
                                         <td>{{c.length}}</td>
                                         <td>{{c | sumByColumn: 'cpc' | number}}</td>
                                         <td>{{c | sumByColumn: 'venda'| number}}</td>
-                                        <td>{{c | sumByColumn: 'ativacao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'gross'| number}}</td>
                                         <td>{{c | sumByColumn: 'chips'| number}}</td>
                                         <td>{{c | sumByColumn: 'recusa'| number}}</td>
                                         <td>{{c | divideSumColumns: 'recusa':'cpc' | percentage:1}}</td>
@@ -223,7 +223,7 @@
                                         <td colspan="2">{{p.operador}}</td>
                                         <td>{{p.cpc | number}}</td>
                                         <td>{{p.venda | number}}</td>
-                                        <td>{{p.ativacao | number}}</td>
+                                        <td>{{p.gross | number}}</td>
                                         <td>{{p.chips | number}}</td>
                                         <td>{{p.recusa | number}}</td>
                                         <td>{{p.recusa / p.cpc | percentage:1}}</td>
@@ -252,7 +252,7 @@
                                 <tr>
                                     <th>Produto</th>
                                     <th>Vendas</th>
-                                    <th>Ativação</th>
+                                    <th>Gross</th>
                                     <th>Chips</th>
                                 </tr>
                             </thead>
@@ -264,14 +264,14 @@
                                         {{c[0].plano}}
                                     </td>
                                     <td>{{c | sumByColumn: 'venda' | number}}</td>
-                                    <td>{{c | sumByColumn: 'ativacao' | number}}</td>
+                                    <td>{{c | sumByColumn: 'gross' | number}}</td>
                                     <td>{{c | sumByColumn: 'chips'| number}}</td>
                                 </tr>
 
                                 <tr ng-repeat="p in c" ng-show="showTbody">
                                     <td>{{p.resultado}}</td>
                                     <td>{{p.venda | number}}</td>
-                                    <td>{{p.ativacao | number}}</td>
+                                    <td>{{p.gross | number}}</td>
                                     <td>{{p.chips | number}}</td>
                                 </tr>
 
