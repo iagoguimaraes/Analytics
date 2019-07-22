@@ -69,9 +69,15 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases" style="width:100%"></select2>
                             </div>
 
+                            <!--SUPERVISOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()"  onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                             </div>
                         </div>
                     </div>
@@ -455,6 +461,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             credores: '',
             fases: '',
+            supervisor: '',
         };
 
         $scope.dashboard = {};
@@ -471,6 +478,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.credores = data.Table;
             $scope.dashFiltros.fases = data.Table1;
+            $scope.dashFiltros.supervisor = data.Table2;
         });
 
         $scope.carregarDashboard = function () {

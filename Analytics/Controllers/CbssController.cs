@@ -196,6 +196,38 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/efetividadepromessa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEfetividadePromessa(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CBSS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/ocupacao")]
         [HttpPost]
         [Autorizar]
