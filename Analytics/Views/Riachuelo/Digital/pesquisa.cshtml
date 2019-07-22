@@ -16,6 +16,10 @@
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair('Analitico','Table6')">
+                <i class="fa fa-file-excel-o"></i>
+                Analítico
+            </div>
         </header>
 
         <!-- FILTROS -->
@@ -59,12 +63,6 @@
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Campanhas</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
-                        </div>
-
-                        <!--FUNCIONARIO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Funcionário</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario" style="width:100%"></select2>
                         </div>
 
                         <!--OCORRENCIA-->
@@ -244,8 +242,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteiras: '',
-            funcionario: ''
+            carteiras: ''
         };
         $scope.dashFiltros = {};
 
@@ -266,7 +263,6 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
-            $scope.dashFiltros.funcionario = data.Table1;
 
         });
 
