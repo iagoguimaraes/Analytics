@@ -131,10 +131,11 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
-                int sabado = Convert.ToInt16(form["sabado"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+                DataTable discador = JsonConvert.DeserializeObject<DataTable>(form["discador"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                //int sabado = Convert.ToInt16(form["sabado"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
                 {
@@ -142,12 +143,13 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresa", empresa);
-                    parametros.Add("carteira", carteira);
-                    parametros.Add("aging", aging);
-                    parametros.Add("sabado", sabado);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+                    parametros.Add("discador", discador);
+                    parametros.Add("supervisor", supervisor);
+                    //parametros.Add("sabado", sabado);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacaoNew", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

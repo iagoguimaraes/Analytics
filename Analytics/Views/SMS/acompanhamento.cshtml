@@ -82,7 +82,7 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.lotes | number: 0"></h3>
@@ -93,8 +93,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
-                <div class="small-box bg-aqua">
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-blue-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.registros | megaNumber"></h3>
                         <p>Registros</p>
@@ -104,10 +104,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
-                <div class="small-box bg-green">
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-yellow-active">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.enviado | megaNumber"></h3>
+                        <h3 ng-bind="dashboard.resumo.enviado | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.enviado / dashboard.resumo.registros | percentage: 1"></h4>
                         <p>Enviado</p>
                     </div>
@@ -116,15 +116,39 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3">
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.entregue | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.entregue / dashboard.resumo.enviado | percentage: 2"></h4>
+                        <p>Entregue</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-2">
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.registros - dashboard.resumo.enviado | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="(dashboard.resumo.registros - dashboard.resumo.enviado) / dashboard.resumo.registros | percentage: 1"></h4>
+                        <h3 ng-bind="dashboard.resumo.enviado - dashboard.resumo.entregue | number"></h3>
+                        <h4 class="pull-right" ng-bind="(dashboard.resumo.enviado - dashboard.resumo.entregue) / dashboard.resumo.enviado | percentage: 2"></h4>
                         <p>Não Enviado</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-cancel"></i>
+                        <i class="fa fa-times-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.erro | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.erro / dashboard.resumo.enviado | percentage: 2"></h4>
+                        <p>Erro Envio</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation"></i>
                     </div>
                 </div>
             </div>
@@ -151,7 +175,10 @@
                                         <th>Layout</th>
                                         <th>Registros</th>
                                         <th>Enviado</th>
+                                        <th>Entregue</th>
+                                        <th>Não Enviado</th>
                                         <th>% Enviado</th>
+                                        <th>Tempo Retorno</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -165,7 +192,10 @@
                                         <td>{{r.layout}}</td>
                                         <td>{{r.registros | number}}</td>
                                         <td>{{r.enviado | number}}</td>
-                                        <td>{{r.enviado / r.registros | percentage:1}}</td>
+                                        <td>{{r.entregue | number}}</td>
+                                        <td>{{r.enviado - r.entregue | number}}</td>
+                                        <td>{{r.entregue / r.enviado | percentage:1}}</td>
+                                        <td>{{r.tempo_callback | formatTimer}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -173,7 +203,10 @@
                                         <th colspan="7">Total</th>
                                         <th>{{dashboard.resumo.registros | number}}</th>
                                         <th>{{dashboard.resumo.enviado | number}}</th>
-                                        <th>{{dashboard.resumo.enviado / dashboard.resumo.registros | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.entregue | number}}</th>
+                                        <th>{{dashboard.resumo.enviado - dashboard.resumo.entregue | number}}</th>
+                                        <th>{{dashboard.resumo.entregue / dashboard.resumo.enviado | percentage: 1}}</th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                             </table>
