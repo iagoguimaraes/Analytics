@@ -901,6 +901,65 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/tele/editar")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage EditarHumano(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int atrasos = Convert.ToInt32(form["atrasos"]);
+                int carteiras = Convert.ToInt32(form["carteiras"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_editar", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/tele/cadmailing")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMailingHumano(FormDataCollection form)
+        {
+            try
+            {
+                DataTable mailing = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("mailing", mailing);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_fatoMailing", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion 
 
         #region DIGITAL
