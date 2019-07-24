@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Boleto - SMS</div>
+            <div class="page-name">WS - SMS Promessas</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -55,10 +55,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label>Carregar Analítico: </label>
-                                <input type="checkbox" ng-model="filtros.carregar" />
-                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -72,7 +68,7 @@
 
         <!-- RESUMO -->
         <div class="row clearfix">
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="info-box bg-purple-active">
                     <span class="info-box-icon">
                         <i class="fa fa-handshake-o"></i>
@@ -89,24 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div class="info-box bg-aqua-active">
-                    <span class="info-box-icon">
-                        <i class="fa fa-barcode"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <div class="text">Boletos Cadastrados</div>
-                        <div class="info-box-number" ng-bind="dashboard.resumo.boleto | number"></div>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_cadastrado}}%"></div>
-                        </div>
-                        <span class="progress-description">
-                            <b>{{dashboard.resumo.pct_cadastrado}}%</b> Promessas Cadastradas
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="info-box bg-green-active">
                     <span class="info-box-icon">
                         <i class="fa fa-envelope-open-o "></i>
@@ -115,16 +94,16 @@
                         <div class="text">SMS Enviados</div>
                         <div class="info-box-number" ng-bind="dashboard.resumo.envio_sms | number"></div>
                         <div class="progress">
-                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_enviado}}%"></div>
+                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_cadastrado}}%"></div>
                         </div>
                         <span class="progress-description">
-                            <b>{{dashboard.resumo.pct_enviado}}%</b> Boletos Enviados
+                            <b>{{dashboard.resumo.pct_cadastrado}}%</b> Boletos Enviados
                         </span>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div class="info-box bg-gray-active">
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="info-box bg-aqua-active">
                     <span class="info-box-icon">
                         <i class="fa fa-money"></i>
                     </span>
@@ -179,10 +158,8 @@
                                     <tr>
                                         <th style="text-align:center">Dia</th>
                                         <th style="text-align:center">Promessa</th>
-                                        <th style="text-align:center">Boleto Cadastrado</th>
                                         <th style="text-align:center">SMS Enviado</th>
                                         <th style="text-align:center">Custo</th>
-                                        <th style="text-align:center">% Boleto</th>
                                         <th style="text-align:center">% SMS</th>
                                     </tr>
                                 </thead>
@@ -190,22 +167,18 @@
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{dia.promessa | number}}</td>
-                                        <td>{{dia.boleto | number}}</td>
                                         <td>{{dia.envio_sms | number}}</td>
                                         <td>{{dia.custo | currency:'R$ '}}</td>
-                                        <td>{{dia.boleto / dia.promessa | percentage:1}}</td>
-                                        <td>{{dia.envio_sms / dia.boleto | percentage:1}}</td>
+                                        <td>{{dia.envio_sms / dia.promessa | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th style="text-align:center">Total</th>
                                         <th style="text-align:center">{{dashboard.resumo.promessa | number}}</th>
-                                        <th style="text-align:center">{{dashboard.resumo.boleto | number}}</th>
                                         <th style="text-align:center">{{dashboard.resumo.envio_sms | number}}</th>
-                                        <th style="text-align:center">{{dashboard.resumo.custo | currency:'R$ '}}</th>
-                                        <th style="text-align:center">{{dashboard.resumo.boleto / dashboard.resumo.promessa | percentage: 1}}</th>
-                                        <th style="text-align:center">{{dashboard.resumo.envio_sms / dashboard.resumo.boleto | percentage: 1}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.custo | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.envio_sms / dashboard.resumo.promessa | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -214,6 +187,57 @@
                         <!--GRAFICO-->
                         <div ng-show="graficoDia.exibir == 'false'">
                             <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('GraficoDia','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Carteira</th>
+                                        <th style="text-align:center">Promessa</th>
+                                        <th style="text-align:center">SMS Enviado</th>
+                                        <th style="text-align:center">Custo</th>
+                                        <th style="text-align:center">% SMS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="dia in dashboard.carteira">
+                                        <td>{{dia.carteira }}</td>
+                                        <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.envio_sms | number}}</td>
+                                        <td>{{dia.custo | currency:'R$ '}}</td>
+                                        <td>{{dia.envio_sms / dia.promessa | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th style="text-align:center">Total</th>
+                                        <th style="text-align:center">{{dashboard.resumo.promessa | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.envio_sms | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.custo | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.envio_sms / dashboard.resumo.promessa | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -242,7 +266,6 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carregar: false
         };
 
         $scope.dashboard = {};
@@ -253,7 +276,7 @@
             $scope.buttonDownload.exibir = $scope.filtros.carregar
             $http({
                 method: 'POST',
-                url: "/api/semparar/dashboard/digital/boletosms",
+                url: "/api/riachuelo/dashboard/sms",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -261,6 +284,7 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.dia = r.data.Table1;
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.carteira = r.data.Table2;
 
                 $scope.carregarGraficoDia();
                 console.log($scope.buttonDownload.exibir);
@@ -274,8 +298,10 @@
 
             $scope.dashboard.graficoDia = [
                 { name: 'Promessa', type: 'column', color: '#555299', data: dados.map(obj => (obj.promessa)) },
-                { name: 'Boleto', type: 'column', color: '#00a7d0', data: dados.map(obj => (obj.boleto)) },
-                { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.envio_sms)) }];
+                { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.envio_sms)) },
+                { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.envio_sms * 100 / obj.promessa).toFixed(1) * 1) }
+                
+            ];
         }
 
         // extrair dados para excel
