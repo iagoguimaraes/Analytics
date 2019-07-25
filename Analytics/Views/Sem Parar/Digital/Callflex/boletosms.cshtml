@@ -63,8 +63,30 @@
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                                <button type="button" data-target="#exampleModal" data-toggle="modal" class="btn btn-success" onclick="addDisplayNone('filtros-window')">Download Promessas</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Marcar todos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Deseja baixar as promessas do período de {{filtros.dtini}} até {{filtros.dtfim}} ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="downloadfile()">Sim</button>
                     </div>
                 </div>
             </div>
@@ -263,7 +285,7 @@
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
 
                 $scope.carregarGraficoDia();
-                console.log($scope.buttonDownload.exibir);
+
 
             });
         }
@@ -281,6 +303,46 @@
         // extrair dados para excel
         $scope.extrair = function (nomeArquivo, tabela) {
             alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        //extrair dados para excel
+        $scope.downloadfile = function () {
+
+            var dtini = $filter('date')($scope.filtros.dtini, "dd")
+            var dtfim = $filter('date')($scope.filtros.dtfim, "dd")
+
+            if ((dtfim - dtini) < 0) {
+
+                alert("O período inserido no filtro deverá ser de 1 mês fechado!")
+
+            } else {
+
+                $http({
+                    method: 'POST',
+                    url: "/api/semparar/dashboard/digital/download",
+                    data: $scope.filtros,
+                    responseType: 'arraybuffer',
+
+                }).then(function success(r) {
+                    $scope.dashboard.status = r.status;
+
+                    var file = new File([r.data], { type: "application/csv" });
+                    var objectUrl = URL.createObjectURL(file);
+
+                    var link = document.createElement('a');
+                    link.style = "display: none";
+                    link.href = objectUrl;
+                    link.download = 'PROMESSASDIGITAL_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.txt';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(objectUrl);
+
+                    $('#exampleModal').modal('hide');
+                   
+
+                });
+            }
         }
 
         $scope.carregarDashboard();
