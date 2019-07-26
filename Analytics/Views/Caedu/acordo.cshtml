@@ -75,7 +75,7 @@
 
         <!-- RESUMO -->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_acordo | number"></h3>
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_pagamentos | number"></h3>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd_vencer | number"></h3>
@@ -110,7 +110,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_vencido | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.qtd_vencido / dashboard.resumo.qtd_acordo | percentage: 1"></h4>
+                        <p>Qtd Vencidos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.valor_acordo | currency:'R$ '"></h3>
@@ -121,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.vl_pago | currency:'R$ '"></h3>
@@ -133,12 +145,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.valor_vencer | currency:'R$ '"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.valor_vencer / dashboard.resumo.valor_acordo | percentage: 1"></h4>
                         <p>Vlr à Vencer</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.valor_vencido | currency:'R$ '"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.valor_vencido / dashboard.resumo.valor_acordo | percentage: 1"></h4>
+                        <p>Vlr Vencido</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
@@ -193,9 +217,11 @@
                                         <th>Qtd Acordos</th>
                                         <th>Qtd Pagamentos</th>
                                         <th>Qtd à Vencer</th>
+                                        <th>Qtd Vencidos</th>
                                         <th>Vlr Acordos</th>
                                         <th>Vlr Pagamentos</th>
                                         <th>Vlr à Vencer</th>
+                                        <th>Vlr Vencido</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -209,9 +235,11 @@
                                         <td>{{e | sumByColumn: 'qtd_acordo'| number}}</td>
                                         <td>{{e | sumByColumn: 'qtd_pagamentos'| number}}</td>
                                         <td>{{e | sumByColumn: 'qtd_vencer'| number}}</td>
+                                        <td>{{e | sumByColumn: 'qtd_vencido'| number}}</td>
                                         <td>{{e | sumByColumn: 'valor_acordos'| currency:'R$ '}}</td>
                                         <td>{{e | sumByColumn: 'vl_pago'| currency:'R$ '}}</td>
                                         <td>{{e | sumByColumn: 'valor_vencer'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'valor_vencido'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'qtd_pagamentos':'qtd_acordo' | percentage:1}}</td>
                                     </tr>
 
@@ -220,9 +248,11 @@
                                         <td>{{c.qtd_acordo | number}}</td>
                                         <td>{{c.qtd_pagamentos | number}}</td>
                                         <td>{{c.qtd_vencer | number}}</td>
+                                        <td>{{c.qtd_vencido | number}}</td>
                                         <td>{{c.valor_acordos | currency:'R$ '}}</td>
                                         <td>{{c.vl_pago | currency:'R$ '}}</td>
                                         <td>{{c.valor_vencer | currency:'R$ '}}</td>
+                                        <td>{{c.valor_vencido | currency:'R$ '}}</td>
                                         <td>{{c.qtd_pagamentos / c.qtd_acordo | percentage:1}}</td>
                                     </tr>
 
