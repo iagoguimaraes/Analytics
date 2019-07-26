@@ -50,9 +50,9 @@
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Layout do Arquivo</label>
-                                <select ng-model="filtros.layout" ng-change="getLayout( filtros.layout )" class="form-control">
-                                    <option value="" selected="selected"> Selecione</option>
-                                    <option ng-repeat="l in dashFiltros.layout" value="{{l.id_layout}}">{{l.layout}}</option>
+                                <select ng-model="filtros.layout" ng-change="getPreview(filtros.layout)" class="form-control">
+                                    <option value="" selected="selected" >Selecione</option>
+                                    <option ng-repeat="l in dashFiltros.layout" value="{{l.id_layout}}">{{l.layout}}</option>                                                                        
                                 </select>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         <div class="col-xs-12 col-sm-4 col-md-2" ng-show="validarSelecao()">
                             <div class="form-group">
                                 <label>Upload Arquivo</label>
-                                <input type="file" id="fileInput" accept="{{arquivo.extensao[0]}}" uploadfile="filtros.arquivo"/>
+                                <input type="file" id="fileInput" accept="{{layout.extensao.extensao}}" uploadfile="filtros.arquivo" />
                                 <input type="hidden" ng-model="filtros.arquivo" />
                             </div>
                         </div>
@@ -81,33 +81,81 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Layout do Arquivo</span>
+                        <span class="card-header-title">Layout do Arquivo {{layout.layout.layout}}</span>
                     </div>
-                    
                     <div class="card-body">
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
-                            <h3> {{arquivo.extensao[0]}} </h3>
+                        <div class="row">
+
+                            <div class="col-xs-4">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
+                                    <h4> {{layout.extensao.extensao}} </h4>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading"> Qtd Colunas:</label>
+                                    <h4> {{layout.qtdcolumn.qtd}} </h4>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading"> Tipos de Coluna:</label>
+                                    <table class="table table-striped table-bordered" ng-if="layout.qtdTipo">
+                                        <thead>
+                                            <tr>
+                                                <th ng-repeat="(Key, val) in layout.qtdTipo[0]">{{ Key }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="row in layout.qtdTipo">
+                                                <td ng-repeat="column in row">
+                                                    {{  column }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="layout.tabela">
+                                    <thead>
+                                        <tr>
+                                            <th ng-repeat="(Key, val) in layout.tabela[0]">{{ Key }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="row in layout.tabela">
+                                            <td ng-repeat="column in row">
+                                                {{  column }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <table class="table table-striped table-bordered" style="width:100%" ng-if="arquivo.metadados">
-                            <thead>
-                                <tr>
-                                    <th ng-repeat="x in arquivo.metadados">{{  x.name }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td ng-repeat="y in arquivo.metadados">
-                                        {{  y.tipo }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!--TABELA DINAMICA HORIZONTAL
+        <div class="card-body">
+            <div class="form-group">
+                <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
+                <h3> {{arquivo.extensao[0]}} </h3>
+            </div>
+            <table class="table table-striped table-bordered" style="width:100%" ng-if="arquivo.metadados">
+                <thead>
+                    <tr>
+                        <th ng-repeat="x in arquivo.metadados">{{  x.name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td ng-repeat="y in arquivo.metadados">
+                            {{  y.tipo }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>-->
         <!--MODAL CONFIRMAR UPLOAD-->
         <div class="modal" id="modalUpload" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -146,7 +194,7 @@
             nomearquivo: '',
         };
 
-        $scope.arquivo = {};
+        $scope.layout = {};
         $scope.dashFiltros = {};
 
         //carregar os filtros
@@ -165,6 +213,7 @@
         });
 
 
+
         $scope.getPreviewLayout = function () {
 
             $http({
@@ -172,8 +221,15 @@
                 url: "/api/sms/lote/getPreviewLayout",
                 data: $scope.filtros,
             }).then(function success(r) {
-                $scope.arquivo.status = r.status;
-                $scope.arquivo.metadados = r.data.Table;
+
+                $scope.layout.status = r.status;
+
+                $scope.layout.tabela = r.data.Table;
+                $scope.filtros.tabela = r.data.Table1[0].tabela;
+                $scope.layout.qtdTipo = r.data.Table2;
+                $scope.layout.qtdcolumn = r.data.Table3[0];
+                $scope.layout.extensao = r.data.Table4[0];
+                $scope.layout.layout = r.data.Table5[0];
             });
         }
 
@@ -182,10 +238,18 @@
             let show = false;
 
             if (!$scope.filtros.centrocusto == '' && !$scope.filtros.carteira == '' && !$scope.filtros.fornecedor == '' && !$scope.filtros.layout == '') {
-                show = true;
 
+                show = $scope.validarLayout();
             }
 
+            return show;
+        }
+
+        $scope.validarLayout = function () {
+            let show = false;
+            if ($scope.filtros.carteira == 6 && $scope.filtros.layout == 3 || $scope.filtros.carteira == 7 && $scope.filtros.layout == 2 || $scope.filtros.carteira == 8 && $scope.filtros.layout == 4 || !$scope.filtros.carteira == '' && $scope.filtros.layout == 1) {
+                show = true;
+            }
             return show;
         }
 
@@ -198,15 +262,11 @@
             return show;
         }
 
-        $scope.getLayout = function (id) {
+        $scope.getPreview = function (id) {
 
-            let extensao = alasql = ('select extensao_arquivo from ? where id_layout = ' + id + '', [$scope.dashFiltros.layout][0]);
-            let tabela = alasql = ('select tabela from ? where id_layout = ' + id + '', [$scope.dashFiltros.layout][0]);
-
-            $scope.filtros.tabela = tabela.map(obj => obj.tabela)[0];
-            $scope.arquivo.extensao = extensao.map(obj => obj.extensao_arquivo);
-
-            $scope.getPreviewLayout();
+            if (!id == 0) {
+                $scope.getPreviewLayout();
+            }            
         }
 
         $scope.importarArquivo = function () {
@@ -248,7 +308,7 @@
                     $scope.filtros.arquivo = '';
                     $scope.filtros.nomearquivo = '';
                 }
-                
+
             });
         }
 
