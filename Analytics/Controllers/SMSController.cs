@@ -49,7 +49,7 @@ namespace Analytics.Controllers
         public HttpResponseMessage LotegetPreviewLayout(FormDataCollection form)
         {
 
-            var tabela = form["tabela"];
+            int idlayout = Convert.ToInt16(form["layout"]);
 
             try
             {
@@ -57,10 +57,9 @@ namespace Analytics.Controllers
                 {
 
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("idlayout", idlayout);
 
-                    parametros.Add("tabela", tabela.ToString());
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_getPreviewLayout", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_getLayout", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -107,7 +106,7 @@ namespace Analytics.Controllers
                     //retorna do id_lote
                     int idlote = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
 
-                    //verifica o id_layout
+                    //verifica o id_layout                    
                     if (idlayout == 1)
                     {
                         //Monta o datatable com os registros do arquivo.csv layout simples
@@ -115,12 +114,53 @@ namespace Analytics.Controllers
 
                         //Insere os registros do datatable na TB_LAYOUT_SIMPLES
                         sql.BulkInsert(tabela, dt);
+
+                    }
+                    else if (idlayout == 2)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout CLARO TV
+                        DataTable dt = new CsvHelper().CarregarArquivoClaroTv(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_CLARO_TV
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamClaroTv = new Dictionary<String, Object>();
+                        ParamClaroTv.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_claro_tv", ParamClaroTv);
+
+                    }
+                    else if (idlayout == 3)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout CLARO MOVEL
+                        DataTable dt = new CsvHelper().CarregarArquivoClaroMovel(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_CLARO_MOVEL
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamClaroMovel = new Dictionary<String, Object>();
+                        ParamClaroMovel.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_claro_movel", ParamClaroMovel);
+                    }
+                    else if (idlayout == 4)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout NET
+                        DataTable dt = new CsvHelper().CarregarArquivoNet(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_NET
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamNet = new Dictionary<String, Object>();
+                        ParamNet.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_net", ParamNet);
                     }
 
                     // Chama o Método da API para envio do lote SMS;
                     using (TalkIP api = new TalkIP())
                     {
-                        api.EnviarLoteSMS(idlote, tabela);
+                        api.EnviarLoteSMS(idlote, idlayout);
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK, idlote);
