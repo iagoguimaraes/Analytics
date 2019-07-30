@@ -394,7 +394,8 @@
                                     <tr>
                                         <th>Discador</th>
                                         <th>OP</th>
-                                        <th>Atendido</th>
+                                        <th>Disc</th>
+                                        <th>Att</th>
                                         <th>CTT</th>
                                         <th>PROM</th>
                                         <th>TMA</th>
@@ -403,7 +404,7 @@
                                         <th>% HitRate</th>
                                         <th>% Impro x Ctt</th>
                                         <th>% Cart.</th>
-                                        <th>% Migr.</th>
+                                        @*<th>% Migr.</th>*@
                                         <th>% Parc.</th>
                                         <th>% CPC x CTT</th>
                                         <th>% CPCA x CTT</th>
@@ -421,6 +422,7 @@
                                             {{c[0].discador}}
                                         </td>
                                         <td>{{c | sumByColumn: 'qtd_operador'| number}}</td>
+                                        <td>{{c | sumByColumn: 'discagens'| number}}</td>
                                         <td>{{c | sumByColumn: 'atendidas'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
@@ -430,7 +432,7 @@
                                         <td>{{c | divideSumColumns: 'atendidas':'discagens' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'improdutivo':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
+                                        @*<td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>*@
                                         <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'contato' | percentage:1}}</td>
@@ -443,6 +445,7 @@
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.fila}}</td>
                                         <td>{{p.qtd_operador | number}}</td>
+                                        <td>{{p.discagens | number}}</td>
                                         <td>{{p.atendidas | number}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.promessa | number}}</td>
@@ -452,7 +455,7 @@
                                         <td>{{p.atendidas / p.discagens | percentage:1}}</td>
                                         <td>{{p.improdutivo / p.contato  | percentage:1}}</td>
                                         <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
-                                        <td>{{p.migracao / p.promessa | percentage:1}}</td>
+                                        @*<td>{{p.migracao / p.promessa | percentage:1}}</td>*@
                                         <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
                                         <td>{{p.cpc / p.contato | percentage:1}}</td>
                                         <td>{{p.cpca / p.contato | percentage:1}}</td>
