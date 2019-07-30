@@ -68,13 +68,7 @@
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Fornecedores</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedores" dados="dashFiltros.fornecedores"></select2>
-                        </div>
-
-                        <!--ESTADO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Estado</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.estados" dados="dashFiltros.estados"></select2>
-                        </div>
+                        </div>                       
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -151,16 +145,17 @@
                                         <i class="fa fa-check"></i>
                                     </span>
                                     <div class="info-box-content">
-                                        <p>Disparo</p>
-                                        <h3 ng-bind="dashboard.resumo.qtd_sucesso | number: 0"></h3>
+                                        <p>Enviado</p>
+                                        <h3 ng-bind="dashboard.resumo.qtd_enviado | number: 0"></h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xs-5 col-md-5">
                                 <div class="info-box bg-yellow">
-                                    <div class="inner" style="padding:5px;text-align:center">
-                                        <p>Enviado</p>
-                                        <h3 ng-bind="dashboard.resumo.qtd_sucesso / dashboard.resumo.qtd_registros | percentage: 1"></h3>
+                                    <div class="inner" style="padding:5px">
+                                        <p style="text-align:center">Entregue</p>
+                                        <h3 class="pull-right" ng-bind="dashboard.resumo.qtd_sucesso / dashboard.resumo.qtd_enviado | percentage: 1"></h3>
+                                        <h4 style="text-align:center" ng-bind="dashboard.resumo.qtd_sucesso | number: 0"></h4>
                                     </div>
                                 </div>
                             </div>
@@ -231,8 +226,9 @@
                                         <th>Custo</th>
                                         <th>Lotes</th>
                                         <th>Registros</th>
-                                        <th>Disparos</th>
-                                        <th>% Enviado</th>
+                                        <th>Enviado</th>
+                                        <th>Entregue</th>
+                                        <th>% Entregue</th>
                                         <th>Tickect Médio</th>
                                     </tr>
                                 </thead>
@@ -246,6 +242,7 @@
                                         <td>{{c | sumByColumn: 'custo' | currency:'R$ ' }}</td>
                                         <td>{{c | sumByColumn: 'qtd_lote' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_registros' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'qtd_enviado' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_sucesso'| number : 0 }}</td>
                                         <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_registros' | percentage: 1}}</td>
                                         <td>{{c | divideSumColumns: 'custo':'qtd_sucesso' | number : 3}}</td>
@@ -256,6 +253,7 @@
                                         <td>{{p.custo | currency:'R$ '}}</td>
                                         <td>{{p.qtd_lote | number}}</td>
                                         <td>{{p.qtd_registros | number}}</td>
+                                        <td>{{p.qtd_enviado | number}}</td>
                                         <td>{{p.qtd_sucesso | number}}</td>
                                         <td>{{p.qtd_sucesso / p.qtd_registros | percentage: 1}}</td>
                                         <td>{{p.custo / p.qtd_sucesso | number : 3}}</td>
@@ -429,7 +427,8 @@
                                         <th>Custo</th>
                                         <th>Lotes</th>
                                         <th>Registros</th>
-                                        <th>Disparados</th>
+                                        <th>Enviado</th>
+                                        <th>Entregue</th>
                                         <th>% Enviado</th>
                                         <th>Ticket Médio</th>
                                     </tr>
@@ -444,9 +443,10 @@
                                         <td>{{c | sumByColumn: 'custo' | currency: 'R$ ' }}</td>
                                         <td>{{c | sumByColumn: 'qtd_lote' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_registros' | number : 0 }}</td>
+                                        <td>{{c | sumByColumn: 'qtd_enviado' | number : 0 }}</td>
                                         <td>{{c | sumByColumn: 'qtd_sucesso'| number : 0 }}</td>
-                                        <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_registros' | percentage: 1}}</td>
-                                        <td>{{c | divideSumColumns: 'custo':'qtd_registros' | number : 3}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_sucesso':'qtd_enviado' | percentage: 1}}</td>
+                                        <td>{{c | divideSumColumns: 'custo':'qtd_enviado' | number : 3}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -454,9 +454,10 @@
                                         <td>{{p.custo | currency:'R$ '}}</td>
                                         <td>{{p.qtd_lote | number}}</td>
                                         <td>{{p.qtd_registros | number}}</td>
+                                        <td>{{p.qtd_enviado | number}}</td>
                                         <td>{{p.qtd_sucesso | number}}</td>
-                                        <td>{{p.qtd_sucesso / p.qtd_registros | percentage: 1}}</td>
-                                        <td>{{p.custo / p.qtd_registros | number : 3}}</td>
+                                        <td>{{p.qtd_sucesso / p.qtd_enviado | percentage: 1}}</td>
+                                        <td>{{p.custo / p.qtd_enviado | number : 3}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -515,21 +516,21 @@
                 $scope.dashboard.fornecedor = r.data.Table1;
                 $scope.dashboard.tabelaDia = r.data.Table2;
                 $scope.dashboard.arquivo = r.data.Table3;
-                $scope.dashboard.estado = alasql('select "BR-" + uf id,  efetividade [percent], custo [value], regiao, uf, estado, custo, qtd_registros, qtd_sucesso, ticket_med, efetividade from ?', [r.data.Table4]);
+                //$scope.dashboard.estado = alasql('select "BR-" + uf id,  efetividade [percent], custo [value], regiao, uf, estado, custo, qtd_registros, qtd_sucesso, ticket_med, efetividade from ?', [r.data.Table4]);
                 //$scope.dashboard.carteira = r.data.Table5;
                 //$scope.dashboard.centroCusto = r.data.Table6;
-                $scope.mudarEstado('BR-SP');
+                //$scope.mudarEstado('BR-SP');
 
                 $scope.dashboard.carteiras = r.data.Table4.map(obj => obj.carteira);
                 $scope.dashboard.carteira = [
                     { name: 'R$ Valor', color: '#08b967', data: r.data.Table4.map(obj => obj.custo) }
-                    , { name: '% Enviado', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table4.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_registros).toFixed(1) * 1) }];
+                    , { name: '% Entregue', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table4.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_enviado).toFixed(1) * 1) }];
 
 
                 $scope.dashboard.datas = r.data.Table2.map(obj => obj.data);
                 $scope.dashboard.dia = [
                     { name: 'R$ Valor', color: '#f9b344', data: r.data.Table2.map(obj => obj.custo) }
-                    , { name: '% Enviado', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table2.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_registros).toFixed(1) * 1) }];
+                    , { name: '% Entregue', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table2.map(obj => (obj.qtd_sucesso * 100 / obj.qtd_enviado).toFixed(1) * 1) }];
 
                 $scope.dashboard.centrosCustos = r.data.Table5.map(obj => obj.centrocusto);
                 $scope.dashboard.centroCusto = [{ name: 'Valor', data: r.data.Table5.map(obj => obj.custo) }];
@@ -541,7 +542,7 @@
 
         $scope.mudarEstado = function (id) {
 
-            let dados = alasql('select id, [value], regiao, uf, estado, custo, qtd_registros, qtd_sucesso, ticket_med, efetividade from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            let dados = alasql('select id, [value], regiao, uf, estado, custo, qtd_registros, qtd_sucesso, qtd_enviado, ticket_med, efetividade from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
 
             $scope.dashboard.mapa = dados;
 
