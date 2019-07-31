@@ -412,7 +412,6 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
@@ -422,7 +421,6 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("funcionario", funcionario);
     
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pesquisa", parametros);
@@ -630,6 +628,36 @@ namespace Analytics.Controllers
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baserolagem");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/sms")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEnvioSms(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ws_sms", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

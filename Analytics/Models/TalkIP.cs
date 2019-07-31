@@ -78,7 +78,7 @@ namespace Analytics.Models
                 AtualizarEnvio(id_envio, false, 1, null, null);
             }
         }
-        public void EnviarLoteSMS(int id_lote, string tabela)
+        public void EnviarLoteSMS(int id_lote, int id_layout)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Analytics.Models
                 wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
 
                 // Obtem o Lote já com o layout pronto para o json;
-                DataSet ds = ObterLote(id_lote, tabela);
+                DataSet ds = ObterLote(id_lote, id_layout);
                 DataTable lote = ds.Tables[0];
 
                 // Monta o Json do lote;
@@ -114,7 +114,7 @@ namespace Analytics.Models
 
                 throw new Exception(e.Message);
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 AtualizarLote(id_lote, null, null, null, false, ee.HResult);
                 throw new Exception(ee.Message);
@@ -178,7 +178,7 @@ namespace Analytics.Models
             try
             {
                 string response = wc.DownloadString(string.Format("{0}/{1}", url_statusLote, id_unico_fornecedor));
-                dynamic result = JsonConvert.DeserializeObject(response);                
+                dynamic result = JsonConvert.DeserializeObject(response);
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("id_unico_fornecedor");
@@ -305,16 +305,51 @@ namespace Analytics.Models
                 throw new Exception(ex.Message);
             }
         }
-        private DataSet ObterLote(int id_lote, string tabela)
+        private DataSet ObterLote(int id_lote, int id_layout)
         {
 
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
             {
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
-                parametros.Add("@id_lote", id_lote);
-                parametros.Add("@tabela", tabela);
-                parametros.Add("@callback", url_callback);
-                return sql.ExecuteProcedureDataSet("sp_sel_lote_talkip", parametros);
+                //LAYOUT_SIMPLES
+                if (id_layout == 1)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_talkip", parametros);
+                }
+                //LAYOUT_CLARO_TV
+                else if (id_layout == 2)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_claro_tv", parametros);
+                }
+                //LAYOUT_CLARO_MOVEL
+                else if (id_layout == 3)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_claro_movel", parametros);
+                }
+                //LAYOUT_NET
+                else if (id_layout == 4)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_net", parametros);
+                }
+                else
+                {
+                    return null;
+                }
 
             }
 

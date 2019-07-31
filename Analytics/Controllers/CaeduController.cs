@@ -48,7 +48,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
-                DataTable faixa    = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
                 {
@@ -113,7 +113,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
-                
+
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
                 {
@@ -123,7 +123,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("equipe", equipe);
                     parametros.Add("supervisor", supervisor);
-                    
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -222,6 +222,84 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/digital/btc")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("dashboard/digital/ocupacao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacaoDigital(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao_digital", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
         #endregion
 

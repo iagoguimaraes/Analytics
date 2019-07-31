@@ -57,6 +57,59 @@
                                 </div>
                             </div>
 
+                            <!--HORA-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Inicio</label>
+                                        <select class="form-control" ng-model="filtros.horaini">
+                                            <option value="7" selected="selected">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <!--HORA FIM-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Final</label>
+                                        <select class="form-control" ng-model="filtros.horafim">
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22" selected="selected">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!--EMPRESA-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Empresa</label>
@@ -69,6 +122,11 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -158,43 +216,57 @@
                             </div>
                         </div>
                         <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
-                                            <thead>
-                                                <tr>
-                                                    <th>Dia</th>
-                                                    <th>Discado</th>
-                                                    <th>Contato</th>
-                                                    <th>CPC</th>
-                                                    <th>CPCA</th>
-                                                    <th>Promessa</th>
-                                                    <th>HitRate</th>
-                                                    <th>TxLoc</th>
-                                                    <th>TxApv</th>
-                                                    <th>Conversão</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="dia in dashboard.dia">
-                                                    <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                                    <td>{{dia.discado | number}}</td>
-                                                    <td>{{dia.contato | number}}</td>
-                                                    <td>{{dia.cpc | number}}</td>
-                                                    <td>{{dia.cpca | number}}</td>
-                                                    <td>{{dia.promessa | number}}</td>
-                                                    <td>{{dia.contato / dia.discado | percentage:1}}</td>
-                                                    <td>{{dia.cpc / dia.contato | percentage:1}}</td>
-                                                    <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
-                                                    <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                    <thead>
+                                        <tr>
+                                            <th>Dia</th>
+                                            <th>Discado</th>
+                                            <th>Contato</th>
+                                            <th>CPC</th>
+                                            <th>CPCA</th>
+                                            <th>Promessa</th>
+                                            <th>HitRate</th>
+                                            <th>TxLoc</th>
+                                            <th>TxApv</th>
+                                            <th>Conversão</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="dia in dashboard.dia">
+                                            <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                            <td>{{dia.discado | number}}</td>
+                                            <td>{{dia.contato | number}}</td>
+                                            <td>{{dia.cpc | number}}</td>
+                                            <td>{{dia.cpca | number}}</td>
+                                            <td>{{dia.promessa | number}}</td>
+                                            <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                            <td>{{dia.cpc / dia.contato | percentage:1}}</td>
+                                            <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
+                                            <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Total</th>
+                                            <th>{{dashboard.resumo.discado | number}}</th>
+                                            <th>{{dashboard.resumo.contato | number}}</th>
+                                            <th>{{dashboard.resumo.cpc | number}}</th>
+                                            <th>{{dashboard.resumo.cpca | number}}</th>
+                                            <th>{{dashboard.resumo.promessa | number}}</th>
+                                            <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
+
                         </div>
                     </div>
+                </div>
+            </div>
 
             <div class="row margin-bottom">
                 <div class="col-xs-12">
@@ -225,7 +297,7 @@
                 </div>
             </div>
 
-        <!-- ANÁLISE POR OCORRENCIA -->
+            <!-- ANÁLISE POR OCORRENCIA -->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="card">
@@ -244,10 +316,10 @@
                     </div>
                 </div>
             </div>
-      </div>
-</div>
+        </div>
+    </div>
 
-<script>
+    <script>
 
         angular.module('app').controller('ctrl-semparar-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
             dadosPagina.titulo = 'Produção';
@@ -262,6 +334,9 @@
                 dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
                 empresas: '',
                 carteiras: '',
+                faixaAtraso: '',
+                horaini: '7',
+                horafim: '22',
             };
             $scope.dashFiltros = {};
             $scope.dashboard = {};
@@ -278,6 +353,7 @@
 
                 $scope.dashFiltros.empresas = data.Table;
                 $scope.dashFiltros.carteiras = r.data.Table1;
+                $scope.dashFiltros.faixaAtraso = r.data.Table2;
             });
 
             // obtem filtros do escopo e carrega os dados do dashboard
@@ -329,4 +405,4 @@
 
         });
 
-</script>
+    </script>

@@ -189,6 +189,7 @@
                                         <tr>
                                             <th>Dia</th>
                                             <th>Agente</th>
+                                            <th>Mailing</th>
                                             <th>Discado</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
@@ -198,6 +199,7 @@
                                             <th>TxLoc</th>
                                             <th>TxApv</th>
                                             <th>Conversão</th>
+                                            <th>Prom x Mailing</th>
                                             <th>TMA</th>
                                             <th>TME</th>
                                         </tr>
@@ -206,6 +208,7 @@
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                             <td>{{dia.qtd_agente | number}}</td>
+                                            <td>{{dia.qtd_mailing | number}}</td>
                                             <td>{{dia.discado | number}}</td>
                                             <td>{{dia.contato | number}}</td>
                                             <td>{{dia.cpc | number}}</td>
@@ -215,6 +218,7 @@
                                             <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                             <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                             <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                            <td>{{dia.promessa / dia.qtd_mailing | percentage:1}}</td>
                                             <td>{{dia.tma | number : 0 | formatTimer}}</td>
                                             <td>{{dia.tme | number : 0 | formatTimer}}</td>
                                         </tr>

@@ -45,6 +45,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
                 DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_IBI"))
                 {
@@ -54,6 +55,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("credores", credores);
                     parametros.Add("fases", fases);
+                    parametros.Add("supervisor", supervisor);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -77,6 +79,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable credores = JsonConvert.DeserializeObject<DataTable>(form["credores"]);
                 DataTable fases = JsonConvert.DeserializeObject<DataTable>(form["fases"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_IBI"))
                 {
@@ -86,6 +89,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("credores", credores);
                     parametros.Add("fases", fases);
+                    parametros.Add("supervisor", supervisor);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

@@ -626,6 +626,75 @@ namespace Analytics.Controllers
         }
 
 
+        [Route("dashboard/bloco3/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraBloco3(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
+                //DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("bloco", bloco);
+                    //parametros.Add("supervisor", supervisor);
+                    //parametros.Add("equipe", equipe);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_bloco3", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/bloco3/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducaoBloco3(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
+                //DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("bloco", bloco);
+                    //parametros.Add("supervisor", supervisor);
+                    //parametros.Add("equipe", equipe);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_bloco3", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
 
     }
 }

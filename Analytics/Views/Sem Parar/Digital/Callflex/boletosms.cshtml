@@ -63,6 +63,7 @@
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                                <button type="button" data-target="#exampleModal" data-toggle="modal" class="btn btn-success" onclick="addDisplayNone('filtros-window')">Download Promessas</button>
                             </div>
                         </div>
                     </div>
@@ -70,9 +71,30 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Marcar todos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Deseja baixar as promessas do período de {{filtros.dtini}} até {{filtros.dtfim}} ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="downloadfile()">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- RESUMO -->
         <div class="row clearfix">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-purple-active">
                     <span class="info-box-icon">
                         <i class="fa fa-handshake-o"></i>
@@ -89,7 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-aqua-active">
                     <span class="info-box-icon">
                         <i class="fa fa-barcode"></i>
@@ -106,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-green-active">
                     <span class="info-box-icon">
                         <i class="fa fa-envelope-open-o "></i>
@@ -119,6 +141,23 @@
                         </div>
                         <span class="progress-description">
                             <b>{{dashboard.resumo.pct_enviado}}%</b> Boletos Enviados
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="info-box bg-yellow-active">
+                    <span class="info-box-icon">
+                        <i class="fa fa-money"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <div class="text">Custo</div>
+                        <div class="info-box-number" ng-bind="dashboard.resumo.custo | currency:'R$ '"></div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <span class="progress-description">
+                            <b>{{dashboard.resumo.custo_media_dia}}</b> - Média Custo Dia
                         </span>
                     </div>
                 </div>
@@ -164,6 +203,7 @@
                                         <th style="text-align:center">Promessa</th>
                                         <th style="text-align:center">Boleto Cadastrado</th>
                                         <th style="text-align:center">SMS Enviado</th>
+                                        <th style="text-align:center">Custo</th>
                                         <th style="text-align:center">% Boleto</th>
                                         <th style="text-align:center">% SMS</th>
                                     </tr>
@@ -174,6 +214,7 @@
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.boleto | number}}</td>
                                         <td>{{dia.envio_sms | number}}</td>
+                                        <td>{{dia.custo | currency:'R$ '}}</td>
                                         <td>{{dia.boleto / dia.promessa | percentage:1}}</td>
                                         <td>{{dia.envio_sms / dia.boleto | percentage:1}}</td>
                                     </tr>
@@ -184,6 +225,7 @@
                                         <th style="text-align:center">{{dashboard.resumo.promessa | number}}</th>
                                         <th style="text-align:center">{{dashboard.resumo.boleto | number}}</th>
                                         <th style="text-align:center">{{dashboard.resumo.envio_sms | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumo.custo | currency:'R$ '}}</th>
                                         <th style="text-align:center">{{dashboard.resumo.boleto / dashboard.resumo.promessa | percentage: 1}}</th>
                                         <th style="text-align:center">{{dashboard.resumo.envio_sms / dashboard.resumo.boleto | percentage: 1}}</th>
                                     </tr>
@@ -243,7 +285,7 @@
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
 
                 $scope.carregarGraficoDia();
-                console.log($scope.buttonDownload.exibir);
+
 
             });
         }
@@ -261,6 +303,46 @@
         // extrair dados para excel
         $scope.extrair = function (nomeArquivo, tabela) {
             alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        //extrair dados para excel
+        $scope.downloadfile = function () {
+
+            var dtini = $filter('date')($scope.filtros.dtini, "dd")
+            var dtfim = $filter('date')($scope.filtros.dtfim, "dd")
+
+            if ((dtfim - dtini) < 0) {
+
+                alert("O período inserido no filtro deverá ser de 1 mês fechado!")
+
+            } else {
+
+                $http({
+                    method: 'POST',
+                    url: "/api/semparar/dashboard/digital/download",
+                    data: $scope.filtros,
+                    responseType: 'arraybuffer',
+
+                }).then(function success(r) {
+                    $scope.dashboard.status = r.status;
+
+                    var file = new File([r.data], { type: "application/csv" });
+                    var objectUrl = URL.createObjectURL(file);
+
+                    var link = document.createElement('a');
+                    link.style = "display: none";
+                    link.href = objectUrl;
+                    link.download = 'PROMESSASDIGITAL_' + $filter('date')(new Date(), "yyyyMMdd HH:mm:ss") + '.txt';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(objectUrl);
+
+                    $('#exampleModal').modal('hide');
+                   
+
+                });
+            }
         }
 
         $scope.carregarDashboard();
