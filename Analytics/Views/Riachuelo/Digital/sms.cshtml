@@ -74,13 +74,13 @@
                         <i class="fa fa-handshake-o"></i>
                     </span>
                     <div class="info-box-content">
-                        <div class="text">Total Promessas</div>
+                        <div class="text">Total Disponiveis</div>
                         <div class="info-box-number" ng-bind="dashboard.resumo.promessa | number"></div>
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
                         </div>
                         <span class="progress-description">
-                            <b>{{dashboard.resumo.promessa_media_dia}}</b> - Média Promessas Dia
+                            <b>{{dashboard.resumo.promessa_media_dia}}</b> - Média Disponiveis Dia
                         </span>
                     </div>
                 </div>
@@ -91,13 +91,13 @@
                         <i class="fa fa-envelope-open-o "></i>
                     </span>
                     <div class="info-box-content">
-                        <div class="text">SMS Enviados</div>
+                        <div class="text">Total SMS</div>
                         <div class="info-box-number" ng-bind="dashboard.resumo.envio_sms | number"></div>
                         <div class="progress">
                             <div class="progress-bar" style="width: {{dashboard.resumo.pct_cadastrado}}%"></div>
                         </div>
                         <span class="progress-description">
-                            <b>{{dashboard.resumo.pct_cadastrado}}%</b> Boletos Enviados
+                            <b>{{dashboard.resumo.pct_cadastrado}}%</b> Sms Enviados
                         </span>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                         <i class="fa fa-money"></i>
                     </span>
                     <div class="info-box-content">
-                        <div class="text">Custo</div>
+                        <div class="text">Total Custo</div>
                         <div class="info-box-number" ng-bind="dashboard.resumo.custo | currency:'R$ '"></div>
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
@@ -157,7 +157,7 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">Dia</th>
-                                        <th style="text-align:center">Promessa</th>
+                                        <th style="text-align:center">Disponivel</th>
                                         <th style="text-align:center">SMS Enviado</th>
                                         <th style="text-align:center">Custo</th>
                                         <th style="text-align:center">% SMS</th>
@@ -213,7 +213,7 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">Carteira</th>
-                                        <th style="text-align:center">Promessa</th>
+                                        <th style="text-align:center">Disponivel</th>
                                         <th style="text-align:center">SMS Enviado</th>
                                         <th style="text-align:center">Custo</th>
                                         <th style="text-align:center">% SMS</th>
@@ -297,7 +297,7 @@
             let dados = $scope.dashboard.dia;
 
             $scope.dashboard.graficoDia = [
-                { name: 'Promessa', type: 'column', color: '#555299', data: dados.map(obj => (obj.promessa)) },
+                { name: 'Disponivel', type: 'column', color: '#555299', data: dados.map(obj => (obj.promessa)) },
                 { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.envio_sms)) },
                 { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.envio_sms * 100 / obj.promessa).toFixed(1) * 1) }
                 
