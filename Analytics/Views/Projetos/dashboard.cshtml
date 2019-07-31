@@ -1,0 +1,591 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-projetos">
+    <div ng-if="dashboard.status == 200">
+
+        <!--HEADER-->
+        <header class="page-header">
+            <div class="page-name">Dashboard Projetos</div>
+            <button type="button" class="btn btn-default pull-right" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                Filtros
+            </button>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FILTROS ONLINE-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Responsavel</label>
+                <multiple-select ng-model="dashboard.filtros.responsavel" dados="dashboard.dimensao.responsavel" ng-change="aplicarFiltros()" placeholder="Responsavel" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Solicitante</label>
+                <multiple-select ng-model="dashboard.filtros.solicitante" dados="dashboard.dimensao.solicitante" ng-change="aplicarFiltros()" placeholder="Solicitante" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Departamento</label>
+                <multiple-select ng-model="dashboard.filtros.departamento" dados="dashboard.dimensao.departamento" ng-change="aplicarFiltros()" placeholder="Departamento" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Categoria</label>
+                <multiple-select ng-model="dashboard.filtros.categoria" dados="dashboard.dimensao.categoria" ng-change="aplicarFiltros()" placeholder="Categoria" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Prioridade</label>
+                <multiple-select ng-model="dashboard.filtros.prioridade" dados="dashboard.dimensao.prioridade" ng-change="aplicarFiltros()" placeholder="Prioridade" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Status</label>
+                <multiple-select ng-model="dashboard.filtros.status" dados="dashboard.dimensao.status" ng-change="aplicarFiltros()" placeholder="Status" /><multiple-select />
+            </div>
+        </div>
+
+        <!--DASHBOARD-->
+        <div class="row margin-bottom">
+            <!--STATUS-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.statuses" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--PRIORIDADE-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.prioridade" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--DIA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <select ng-model="opcoes.data" class="pull-right" ng-change="popularDashboard()">
+                            <option value="prazo">Prazo</option>
+                            <option value="ultima_atualizacao">Ultima Atualização</option>
+                            <option value="dtini">Data Inicial</option>
+                            <option value="dtfim">Data Final</option>
+                        </select>
+                        <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--VARIAVEL-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <select ng-model="opcoes.variavel" class="pull-right" ng-change="popularDashboard()">
+                            <option value="responsavel">Responsável</option>
+                            <option value="solicitante">Solicitante</option>
+                            <option value="departamento">Departamento</option>
+                            <option value="categoria">Categoria</option>
+                        </select>
+                        <high-charts config="dashboard.variavel" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTA -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Lista</span>
+                        <div class="pull-right input-group col-xs-6" style="margin-top: 10px;">
+                            <div class="input-group-addon">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                                <input type="radio" name="ordenacao" ng-model="opcoes.order" value="" checked="checked" />
+                                <i class="fa fa-sort-alpha-desc"></i>
+                                <input type="radio" name="ordenacao" ng-model="opcoes.order" value="-" />
+                            </div>
+                            <select class="form-control" ng-model="opcoes.field">
+                                <option value="prazo">Prazo</option>
+                                <option value="ultima_atualizacao">Ultima Atualização</option>
+                                <option value="dtini">Data Inicial</option>
+                                <option value="dtfim">Data Final</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="lista_projetos" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Prazo</th>
+                                    <th>Prioridade</th>
+                                    <th>Responsável</th>
+                                    <th>Solicitante</th>
+                                    <th>Departamento</th>
+                                    <th>Categoria</th>
+                                    <th>Status</th>
+                                    <th>Etapas</th>
+                                    <th>Ult Atualização</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in dashboard.projetos | orderBy: opcoes.order+opcoes.field" ng-click="popularView(x.id_projeto)" data-toggle="modal" data-target="#modal-view">
+                                    <td>{{x.nome}}</td>
+                                    <td ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0}">{{x.prazo}}</td>
+                                    <td>{{x.prioridade}}</td>
+                                    <td>{{x.responsavel}}</td>
+                                    <td>{{x.solicitante}}</td>
+                                    <td>{{x.departamento}}</td>
+                                    <td>{{x.categoria}}</td>
+                                    <td>{{x.status}}</td>
+                                    <td>{{x.etapas_concluidas + '/' + x.etapas}}</td>
+                                    <td ng-class="{'alerta-vermelho': x.ultima_atualizacao_dias > 5}">{{x.ultima_atualizacao_dias}} dias</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PROJETO-->
+        <div class="modal fade" id="modal-view" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">{{viewprojeto.nome | uppercase}}</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs margin-bottom">
+                                <li class="active"><a href="#informacoes" data-toggle="tab" aria-expanded="false"><i class="fa fa-info"></i> Informações</a></li>
+                                <li class=""><a href="#checklist" data-toggle="tab" aria-expanded="false"><i class="fa fa-check-square-o"></i> Checklist</a></li>
+                                <li class=""><a href="#comentarios" data-toggle="tab" aria-expanded="true"><i class="fa fa-commenting-o"></i> Comentários</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <!--INFORMACOES-->
+                                <div class="tab-pane active" id="informacoes">
+                                    <form role="form">
+                                        <div class="row">
+                                            <input type="hidden" ng-model="viewprojeto.id" />
+
+                                            <div class="col-xs-12 col-md-8 margin-bottom">
+                                                <label>Nome</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-lightbulb-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.nome" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-4 margin-bottom">
+                                                <label>Status</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-exclamation-circle"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.status" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 margin-bottom">
+                                                <label>Objetivo</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </div>
+                                                    <textarea class="form-control" rows="3" ng-model="viewprojeto.objetivo" disabled="disabled"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Prioridade</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-star"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.prioridade" disabled="disabled" />
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Prazo</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-check-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.prazo" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Data Inicio</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-plus-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.dtini" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Data Fim</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-times-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.dtfim" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Responsável</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-eye"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.responsavel" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Solicitante</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.solicitante" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Departamento</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-map-marker"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.departamento" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Categoria</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-tag"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.categoria" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--CHECKLIST-->
+                                <div class="tab-pane" id="checklist">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar progress-bar-success" ng-style="{'width': (viewprojeto.etapas_concluidas*100/viewprojeto.etapas)+'%'}"></div>
+                                    </div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" ng-repeat="x in viewprojeto.etapas_">
+                                            <input type="checkbox" ng-checked="{{x.concluido}}" ng-model="x.concluido" ng-true-value="1" ng-false-value="0" disabled="disabled" />
+                                            <span ng-bind="x.descricao"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--COMENTARIOS-->
+                                <div class="tab-pane" id="comentarios">
+                                    <!-- TIMELINE -->
+                                    <ul class="timeline">
+                                        <li ng-repeat="x in viewprojeto.comentarios_">
+                                            <i class="fa fa-commenting-o"></i>
+                                            <div class="timeline-item">
+                                                <span class="time">
+                                                    <i class="fa fa-calendar-o"></i> <span style="padding-right:5px;">{{x.data}}</span>
+                                                    <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{x.hora}}</span>
+                                                </span>
+                                                <div class="timeline-body" ng-bind="x.comentario"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-projetos', function ($scope, $http, $filter, cubo) {
+
+        // obj ref aos filtros da consulta
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(new Date().setFullYear(new Date().getFullYear() - 1)), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        }
+        // obj ref opcoes interativas do dashboard
+        $scope.opcoes = {
+            variavel: 'responsavel',
+            data: 'prazo',
+            order: '',
+            field: 'prazo',
+        }
+        // obj ref aos graficos e elementos do dashboard
+        $scope.dashboard = {
+            dimensao: {},
+            filtros: {},
+        }
+        // obj ref aos filtros de dimensoes
+        $scope.dimensao = {};
+        // obj ref a visualizacao do projeto
+        $scope.viewprojeto = {};
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/projetos/dashboard",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+
+                $scope.etapas_ = r.data.Table1;
+                $scope.comentarios_ = r.data.Table2;
+
+                $scope.dashboard.status = r.status;
+            })
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.responsavel = cubo.obterDimensao('responsavel').sort();
+            $scope.dashboard.dimensao.solicitante = cubo.obterDimensao('solicitante').sort();
+            $scope.dashboard.dimensao.departamento = cubo.obterDimensao('departamento').sort();
+            $scope.dashboard.dimensao.categoria = cubo.obterDimensao('categoria').sort();
+            $scope.dashboard.dimensao.prioridade = cubo.obterDimensao('prioridade').sort();
+            $scope.dashboard.dimensao.status = cubo.obterDimensao('status').sort();
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.responsavel = cubo.obterDimensao('responsavel');
+            $scope.dimensao.solicitante = cubo.obterDimensao('solicitante');
+            $scope.dimensao.departamento = cubo.obterDimensao('departamento');
+            $scope.dimensao.categoria = cubo.obterDimensao('categoria');
+            $scope.dimensao.prioridade = cubo.obterDimensao('prioridade');
+            $scope.dimensao.status = cubo.obterDimensao('status');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+            $scope.dashboard.projetos = dados;
+
+            let status = alasql('select status, count(*) qtd from ? group by status order by qtd', [dados]);
+            let dia = alasql('select ' + $scope.opcoes.data + ', count(*) qtd from ? group by ' + $scope.opcoes.data + ' order by ' + $scope.opcoes.data + '', [dados]);
+            let variavel = alasql('select ' + $scope.opcoes.variavel + ', count(*) qtd from ? group by ' + $scope.opcoes.variavel + ' order by qtd', [dados]);
+            let prioridade = alasql('select id_prioridade, prioridade, count(*) qtd from ? group by id_prioridade, prioridade order by id_prioridade', [dados]);
+
+            $scope.dashboard.statuses = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Status'
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Qtd', data: status.map(obj => ({ name: obj.status, y: obj.qtd })) }]
+            };
+            $scope.dashboard.dia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Prazo'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dia.map(obj => obj[$scope.opcoes.data])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Qtd', data: dia.map(obj => obj.qtd), color: '#333' }]
+            };
+            $scope.dashboard.variavel = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: variavel.map(obj => obj[$scope.opcoes.variavel])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Qtd', data: variavel.map(obj => obj.qtd) }]
+            };
+            $scope.dashboard.prioridade = {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Prioridade'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: prioridade.map(obj => obj.prioridade)
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Qtd', data: prioridade.map(obj => obj.qtd) }]
+            };
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('responsavel', $scope.dashboard.filtros.responsavel);
+            cubo.filtrar('solicitante', $scope.dashboard.filtros.solicitante);
+            cubo.filtrar('departamento', $scope.dashboard.filtros.departamento);
+            cubo.filtrar('categoria', $scope.dashboard.filtros.categoria);
+            cubo.filtrar('prioridade', $scope.dashboard.filtros.prioridade);
+            cubo.filtrar('status', $scope.dashboard.filtros.status);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.popularView = function (id) {
+            let dados = cubo.obter();
+            let prj = dados.find(x => x.id_projeto == id);
+            $scope.viewprojeto = Object.create(prj);
+
+            $scope.viewprojeto.etapas_ = $scope.etapas_.filter(x => x.id_projeto == prj.id_projeto);
+            $scope.viewprojeto.comentarios_ = $scope.comentarios_.filter(x => x.id_projeto == prj.id_projeto);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
+<style>
+    .alerta-vermelho {
+        background-color: #ff3b3b;
+        color: white;
+    }
+
+    input[type=checkbox]:checked + span {
+        text-decoration: line-through;
+    }
+    #lista_projetos tr:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>

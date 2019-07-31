@@ -5,7 +5,7 @@
         require: 'ngModel',
         scope: {
         },
-        template: '<input type="text" readonly="true"/>',
+        template: '<input type="text"/>',
         link: function (scope, element, attr, ctrl) {
             $(element[0]).datepicker({
                 format: 'yyyy-mm-dd'
