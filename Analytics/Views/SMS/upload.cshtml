@@ -28,7 +28,7 @@
                         <div class="col-xs-12 col-sm-4 col-md-2">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Carteira</label>
-                                <select ng-model="filtros.carteira" class="form-control">
+                                <select ng-model="filtros.carteira" ng-change="getCarteiraLayout(filtros.carteira)" class="form-control">
                                     <option value="" selected="selected"> Selecione</option>
                                     <option ng-repeat="c in dashFiltros.carteira" value="{{c.id_carteira}}">{{c.carteira}}</option>
                                 </select>
@@ -51,8 +51,8 @@
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Layout do Arquivo</label>
                                 <select ng-model="filtros.layout" ng-change="getPreview(filtros.layout)" class="form-control">
-                                    <option value="" selected="selected" >Selecione</option>
-                                    <option ng-repeat="l in dashFiltros.layout" value="{{l.id_layout}}">{{l.layout}}</option>                                                                        
+                                    <option value="" selected="selected">Selecione</option>
+                                    <option ng-repeat="l in dashFiltros.layout" value="{{l.id_layout}}">{{l.layout}}</option>
                                 </select>
                             </div>
                         </div>
@@ -208,11 +208,20 @@
             $scope.dashFiltros.centrocusto = r.data.Table;
             $scope.dashFiltros.carteira = r.data.Table1;
             $scope.dashFiltros.fornecedor = r.data.Table2;
-            $scope.dashFiltros.layout = r.data.Table3;
-
+            //$scope.dashFiltros.layout = r.data.Table3;
+            $scope.getCarteiraLayout(1);
         });
 
 
+        $scope.getCarteiraLayout = function (carteira) {            
+            $http({
+                method: 'POST',
+                url: "/api/sms/lote/getCarteiraLayout",
+                data: { carteira },
+            }).then(function success(r) {
+                $scope.dashFiltros.layout = r.data;                
+            });
+        }
 
         $scope.getPreviewLayout = function () {
 
@@ -239,19 +248,11 @@
 
             if (!$scope.filtros.centrocusto == '' && !$scope.filtros.carteira == '' && !$scope.filtros.fornecedor == '' && !$scope.filtros.layout == '') {
 
-                show = $scope.validarLayout();
-            }
-
-            return show;
-        }
-
-        $scope.validarLayout = function () {
-            let show = false;
-            if ($scope.filtros.carteira == 6 && $scope.filtros.layout == 3 || $scope.filtros.carteira == 7 && $scope.filtros.layout == 2 || $scope.filtros.carteira == 8 && $scope.filtros.layout == 4 || !$scope.filtros.carteira == '' && $scope.filtros.layout == 1) {
                 show = true;
             }
+
             return show;
-        }
+        }        
 
         $scope.validarSelecaoArquivo = function () {
             let show = false;
@@ -266,7 +267,7 @@
 
             if (!id == 0) {
                 $scope.getPreviewLayout();
-            }            
+            }
         }
 
         $scope.importarArquivo = function () {
