@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-projetos-variaveis">
+    <div>
+
+        <!--HEADER-->
+        <header class="page-header">
+            <div class="page-name">Cadastro de Variaveis</div>
+        </header>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <select class="form-control" ng-model="variavel" ng-change="popularLista()">
+                    <option value="">Responsável</option>
+                    <option value="1">Solicitante</option>
+                    <option value="2">Departamento</option>
+                    <option value="3">Categoria</option>
+                </select>
+            </div>
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Descrição" ng-model="variavelIncluir">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-success" ng-click="incluirRegistro()">Incluir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="i in dashboard.lista">
+                <span>{{i.descricao}}</span>
+                <span class="badge badge-danger" style="cursor: pointer" ng-click="deletarRegistro(i.id)">X</span>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-projetos-variaveis', function ($scope, $http, $filter) {
+
+        $scope.dashboard = {};
+        $scope.variavel = "";
+        $scope.tabela = "RESPONSAVEL";
+
+        $scope.carregarDados = function () {
+            $http({
+                method: 'POST',
+                url: "/api/projetos/variaveis",
+            }).then(function success(r) {
+                $scope.dashboard.variaveis = r.data;
+                $scope.popularLista();
+            });
+        };
+
+        $scope.popularLista = function () {
+            $scope.dashboard.lista = $scope.dashboard.variaveis['Table' + $scope.variavel];
+
+            if ($scope.variavel == "")
+                $scope.tabela = "RESPONSAVEL";
+            if ($scope.variavel == "1")
+                $scope.tabela = "SOLICITANTE";
+            if ($scope.variavel == "2")
+                $scope.tabela = "DEPARTAMENTO";
+            if ($scope.variavel == "3")
+                $scope.tabela = "CATEGORIA";
+        }
+
+        $scope.incluirRegistro = function () {
+            if (confirm('Tem certeza que deseja inserir esse registro?')) {
+                $http({
+                    method: 'POST',
+                    url: "/api/projetos/variaveis/inserir",
+                    data: { tabela: $scope.tabela, descricao: $scope.variavelIncluir },
+                }).then(function success(r) {
+                    $scope.carregarDados();
+                    $scope.variavelIncluir = ""
+                });
+            }
+        }
+
+        $scope.deletarRegistro = function (id) {
+            if (confirm('Tem certeza que deseja excluir esse registro?')) {
+                $http({
+                    method: 'POST',
+                    url: "/api/projetos/variaveis/excluir",
+                    data: { tabela: $scope.tabela, id: id },
+                }).then(function success(r) {
+                    $scope.carregarDados();
+                });
+            }
+        }
+
+        $scope.carregarDados();
+
+    });
+</script>
