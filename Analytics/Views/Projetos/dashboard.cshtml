@@ -177,7 +177,7 @@
                             <tbody>
                                 <tr ng-repeat="x in dashboard.projetos | orderBy: opcoes.order+opcoes.field" ng-click="popularView(x.id_projeto)" data-toggle="modal" data-target="#modal-view">
                                     <td>{{x.nome}}</td>
-                                    <td ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0}">{{x.prazo}}</td>
+                                    <td ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0  && x.id_status < 5}">{{x.prazo}}</td>
                                     <td>{{x.prioridade}}</td>
                                     <td>{{x.responsavel}}</td>
                                     <td>{{x.solicitante}}</td>
@@ -185,7 +185,7 @@
                                     <td>{{x.categoria}}</td>
                                     <td>{{x.status}}</td>
                                     <td>{{x.etapas_concluidas + '/' + x.etapas}}</td>
-                                    <td ng-class="{'alerta-vermelho': x.ultima_atualizacao_dias > 5}">{{x.ultima_atualizacao_dias}} dias</td>
+                                    <td ng-class="{'alerta-vermelho': x.ultima_atualizacao_dias > 5 && x.id_status < 5}">{{x.ultima_atualizacao_dias}} dias</td>
                                 </tr>
                             </tbody>
                         </table>

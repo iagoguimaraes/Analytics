@@ -92,7 +92,7 @@
                                 <span ng-bind="x.prioridade"></span>
                                 <i ng-class="x.icone"></i>
                             </li>
-                            <li class="pull-right" ng-show="x.prazo" ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0}">
+                            <li class="pull-right" ng-show="x.prazo" ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0  && x.id_status < 5}">
                                 <i class="fa fa-calendar"></i>
                                 <span ng-bind="x.prazo"></span>
                             </li>
@@ -138,7 +138,7 @@
                                 <i class="fa fa-commenting-o"></i>
                                 <span ng-bind="x.comentarios"></span>
                             </li>
-                            <li ng-class="{'alerta-vermelho': x.ultima_atualizacao_dias > 5}">
+                            <li ng-class="{'alerta-vermelho': x.ultima_atualizacao_dias > 5  && x.id_status < 5}">
                                 <i class="fa fa-refresh"></i>
                                 <span>Há {{x.ultima_atualizacao_dias}} dias</span>
                             </li>
