@@ -1,0 +1,232 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-portoseguro-pagamento-vida">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Pagamento Porto Vida - {{carteiraSelecionada}}</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Cobrança')">Cobrança</button>
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Boleto')">Boleto</button>
+                    <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('ADC')">ADC</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <img class="image-responsive center-block" src="~/Content/Images/PortoSeguro/porto-pag.png" style="height: 100px; width: 100%; object-fit: cover;" />
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.quantidade | number"></h3>
+                        <p>Qtd Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-white">
+                    <div class="inner" style="color:black">
+                        <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
+                        <p>Vlr Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Dia Quantidade</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('DiaQuantidade','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.qtDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Dia Valor</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('DiaValor','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.vlDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="control-sidebar-bg"></div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-portoseguro-pagamento-vida', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Pagamento Digital';
+        dadosPagina.descricao = 'Porto Seguro Digital'
+
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteira: '[{ id: 6 }, { id: 7 }]',
+        };
+
+        $scope.carteiraSelecionada = 'Cobrança';
+        $scope.sucessoDesc = 'Promessa';
+
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/portoseguro/dashboard/humano/filtro",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = r.data.Table2;
+        });
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/portoseguro/dashboard/digital/vida/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.dados = data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.quantidade)) }];
+                $scope.dashboard.vlDia = [{ name: 'Valor', data: r.data.Table2.map(obj => (obj.valor)) }];
+
+            });
+        }
+
+
+        $scope.selecionarCarteira = function (carteira) {
+            $scope.carteiraSelecionada = carteira;
+            $scope.sucessoDesc = "Promessa";
+
+            if (carteira == 'Cobrança')
+                $scope.filtros.carteira = '[{ id: 6 }, { id: 7 }]';
+            else if (carteira == 'Boleto')
+                $scope.filtros.carteira = '[{ id: 5 }]';
+            else if (carteira == 'ADC') {
+                $scope.filtros.carteira = '[{ id: 4 }]';
+                $scope.sucessoDesc = "Autoriza";
+            }
+            else
+                $scope.filtros.carteira = null;
+
+            $scope.carregarDashboard();
+        };
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
