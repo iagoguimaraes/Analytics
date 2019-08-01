@@ -104,7 +104,7 @@ namespace Analytics.Controllers
         [Route("consultar")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ConsultarProjetos(FormDataCollection form)
         {
             try
@@ -130,7 +130,7 @@ namespace Analytics.Controllers
         [Route("inserir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage InserirProjeto(FormDataCollection form)
         {
             try
@@ -170,7 +170,7 @@ namespace Analytics.Controllers
         [Route("editar")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage EditarProjeto(FormDataCollection form)
         {
             try
@@ -218,7 +218,7 @@ namespace Analytics.Controllers
         [Route("excluir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ExcluirProjeto(FormDataCollection form)
         {
             try
@@ -244,7 +244,7 @@ namespace Analytics.Controllers
         [Route("etapas/inserir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage InserirEtapa(FormDataCollection form)
         {
             try
@@ -272,7 +272,7 @@ namespace Analytics.Controllers
         [Route("etapas/excluir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ExcluirEtapa(FormDataCollection form)
         {
             try
@@ -298,7 +298,7 @@ namespace Analytics.Controllers
         [Route("etapas/concluir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ConcluirEtapa(FormDataCollection form)
         {
             try
@@ -325,7 +325,7 @@ namespace Analytics.Controllers
         [Route("etapas/reativar")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ReativarEtapa(FormDataCollection form)
         {
             try
@@ -352,7 +352,7 @@ namespace Analytics.Controllers
         [Route("comentarios/inserir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage InserirComentario(FormDataCollection form)
         {
             try
@@ -380,7 +380,7 @@ namespace Analytics.Controllers
         [Route("comentarios/excluir")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage ExcluirComentario(FormDataCollection form)
         {
             try
@@ -406,7 +406,7 @@ namespace Analytics.Controllers
         [Route("dashboard")]
         [HttpPost]
         [Autorizar]
-        //[Gravar]
+        [Gravar]
         public HttpResponseMessage Dashboard(FormDataCollection form)
         {
             try
