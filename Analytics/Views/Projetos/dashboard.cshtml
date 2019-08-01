@@ -175,7 +175,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in dashboard.projetos | orderBy: opcoes.order+opcoes.field" ng-click="popularView(x.id_projeto)" data-toggle="modal" data-target="#modal-view">
+                                <tr ng-repeat="x in dashboard.projetos | orderBy: opcoes.order+opcoes.field" ng-click="popularView(x.id_projeto)" data-toggle="modal" data-target="#modal-view" ng-class="{'riscado': x.id_status >= 5}">
                                     <td>{{x.nome}}</td>
                                     <td ng-class="{'alerta-vermelho': x.dias_restantes_prazo < 0  && x.id_status < 5}">{{x.prazo}}</td>
                                     <td>{{x.prioridade}}</td>
@@ -587,5 +587,9 @@
     #lista_projetos tr:hover{
         cursor: pointer;
         font-weight: bold;
+    }  
+
+    .riscado{
+        text-decoration: line-through;
     }
 </style>
