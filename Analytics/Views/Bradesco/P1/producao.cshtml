@@ -155,7 +155,7 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green-active">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>                        
+                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
                         <p>Valor de Promessa</p>
                     </div>
                     <div class="icon">
@@ -163,7 +163,7 @@
                     </div>
                 </div>
             </div>
-           
+
             <!--ANALISE POR DIA-->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
@@ -450,7 +450,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
@@ -468,6 +468,27 @@
                     </div>
                 </div>
             </div>
+
+            <!--FINALIZÇÕES DO DISCADOR-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Finalizações do Discador</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table8')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -525,6 +546,7 @@
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.ocorrencia = data.Table4;
                 $scope.dashboard.supervisor = data.Table5;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table8.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
                 $scope.dashboard.dados = r.data;
 
                

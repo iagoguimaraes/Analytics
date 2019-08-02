@@ -84,7 +84,7 @@
         <div class="box box-widget widget-user">
             <div class="widget-user-header" style="background: url('/Content/Images/ViaVarejo/banner_new.jpg') no-repeat center;background-color:#003333">
             </div>
-            <div class="widget-user-image" >
+            <div class="widget-user-image">
                 <img class="img-circle" style="border-color:#2b5734; height:85px" src="~/Content/Images/ViaVarejo/logo_new.jpg">
             </div>
             <div class="box-footer">
@@ -372,6 +372,26 @@
             </div>
         </div>
 
+        <!--FINALIZÇÕES DO DISCADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Finalizações do Discador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -420,6 +440,7 @@
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
 
                 $scope.carregarGrafico();
             });
