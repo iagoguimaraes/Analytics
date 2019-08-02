@@ -70,6 +70,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                         </div>
 
+                        <!--ATRASOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Atrasos</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                        </div>
+
                         <!--SUPERVISOR-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Supervisores</label>
@@ -130,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
@@ -142,7 +148,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
@@ -151,6 +157,17 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-2">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
+                        <p>R$ Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
                     </div>
                 </div>
             </div>
@@ -184,6 +201,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -199,12 +217,83 @@
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.vlr_promessa | currency:'R$ '}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA ATRASO/CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('ProducaoEmpresa','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.atrasos">
+                                <thead>
+                                    <tr>
+                                        <th>Atraso/Produto</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.atrasos | groupBy: 'ds_faixa_meta'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <b>
+                                                <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                {{e[0].ds_faixa_meta}}
+                                            </b>
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_produto}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
                             </table>
                         </div>
 
@@ -236,6 +325,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -254,6 +344,7 @@
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessa'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -265,6 +356,7 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
+                                        <td>{{c.vlr_promessa | currency:'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -345,6 +437,7 @@
             produtos:'',
             empresas: '',
             carteiras: '',
+            atrasos: '',
             supervisores: '',
             equipes: '',
         };
@@ -366,6 +459,7 @@
             $scope.dashFiltros.supervisores = r.data.Table3;
             $scope.dashFiltros.equipes = r.data.Table4;
             $scope.dashFiltros.produtos = r.data.Table5;
+            $scope.dashFiltros.atrasos = r.data.Table6;
 
         });
 
@@ -383,6 +477,7 @@
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.equipe = data.Table2;
                 $scope.dashboard.tabulacao = data.Table3;
+                $scope.dashboard.atrasos = data.Table5;
 
                 $scope.carregarGrafico();
 
