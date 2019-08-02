@@ -126,6 +126,60 @@ namespace Analytics.Models
                 throw new Exception(e.Message);
             }
         }
+        public DataTable CarregarArquivoClaroTvCancelado(string arquivo, int id_lote)
+        {
+            try
+            {
+                string[] str = new string[] { "\r\n" };
+                string[] linhas = arquivo.Split(str, StringSplitOptions.None);
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add("COBRADORA");
+                dataTable.Columns.Add("CREDOR");
+                dataTable.Columns.Add("SENHA");
+                dataTable.Columns.Add("DEVEDOR");
+                dataTable.Columns.Add("TELEFONE1");
+                dataTable.Columns.Add("TELEFONE2");
+                dataTable.Columns.Add("EMAIL");
+                dataTable.Columns.Add("CARTEIRA");
+                dataTable.Columns.Add("FILIAL");
+                dataTable.Columns.Add("NEGOCIADOR");
+                dataTable.Columns.Add("NEGOCIADORA");
+                dataTable.Columns.Add("TITULO");
+                dataTable.Columns.Add("DATA_CANCELAMENTO");
+                dataTable.Columns.Add("PLANO");
+                dataTable.Columns.Add("QTDE_PARCELAS_PAGA");
+                dataTable.Columns.Add("VALOR_ACORDO");
+                dataTable.Columns.Add("VALOR_RECEBIDO");
+                dataTable.Columns.Add("SALDO_ACORDO");
+                dataTable.Columns.Add("RESPONSAVEL");
+                dataTable.Columns.Add("CODIGO_NEGOCIACAO");
+                dataTable.Columns.Add("STATUS_CONTRATO");
+                dataTable.Columns.Add("UF");
+                dataTable.Columns.Add("id_lote", typeof(int)).DefaultValue = id_lote;
+
+                try
+                {
+                    for (int i = 1; i < linhas.Length - 1; i++)
+                    {
+                        DataRow row = dataTable.NewRow();
+                        row.ItemArray = linhas[i].Split(';');
+                        dataTable.Rows.Add(row);
+                    }
+
+                    return dataTable;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Arquivo não possui a quantidade correta de colunas para este layout");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         public DataTable CarregarArquivoClaroMovel(string arquivo, int id_lote)
         {
             try
@@ -195,6 +249,60 @@ namespace Analytics.Models
                 throw new Exception(e.Message);
             }
         }
+        public DataTable CarregarArquivoClaroMovelCancelado(string arquivo, int id_lote)
+        {
+            try
+            {
+                string[] str = new string[] { "\r\n" };
+                string[] linhas = arquivo.Split(str, StringSplitOptions.None);
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add("COBRADORA");
+                dataTable.Columns.Add("CREDOR");
+                dataTable.Columns.Add("SENHA");
+                dataTable.Columns.Add("DEVEDOR");
+                dataTable.Columns.Add("TELEFONE1");
+                dataTable.Columns.Add("TELEFONE2");
+                dataTable.Columns.Add("EMAIL");
+                dataTable.Columns.Add("CARTEIRA");
+                dataTable.Columns.Add("FILIAL");
+                dataTable.Columns.Add("NEGOCIADOR");
+                dataTable.Columns.Add("NEGOCIADORA");
+                dataTable.Columns.Add("TITULO");
+                dataTable.Columns.Add("DATA_CANCELAMENTO");
+                dataTable.Columns.Add("PLANO");
+                dataTable.Columns.Add("QTDE_PARCELAS_PAGA");
+                dataTable.Columns.Add("VALOR_ACORDO");
+                dataTable.Columns.Add("VALOR_RECEBIDO");
+                dataTable.Columns.Add("SALDO_ACORDO");
+                dataTable.Columns.Add("RESPONSAVEL");
+                dataTable.Columns.Add("CODIGO_NEGOCIACAO");
+                dataTable.Columns.Add("STATUS_CONTRATO");
+                dataTable.Columns.Add("UF");
+                dataTable.Columns.Add("id_lote", typeof(int)).DefaultValue = id_lote;
+
+                try
+                {
+                    for (int i = 1; i < linhas.Length - 1; i++)
+                    {
+                        DataRow row = dataTable.NewRow();
+                        row.ItemArray = linhas[i].Split(';');
+                        dataTable.Rows.Add(row);
+                    }
+
+                    return dataTable;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Arquivo não possui a quantidade correta de colunas para este layout");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         public DataTable CarregarArquivoNet(string arquivo, int id_lote)
         {
             try
@@ -238,6 +346,70 @@ namespace Analytics.Models
                 dataTable.Columns.Add("Contrato");
                 dataTable.Columns.Add("Aging_Acordo");
                 dataTable.Columns.Add("Status_Contrato_Net");
+                dataTable.Columns.Add("id_lote", typeof(int)).DefaultValue = id_lote;
+
+                try
+                {
+                    for (int i = 1; i < linhas.Length - 1; i++)
+                    {
+                        DataRow row = dataTable.NewRow();
+                        row.ItemArray = linhas[i].Split(';');
+                        dataTable.Rows.Add(row);
+                    }
+
+                    return dataTable;
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Arquivo não possui a quantidade correta de colunas para este layout");
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public DataTable CarregarArquivoNetCancelado(string arquivo, int id_lote)
+        {
+            try
+            {
+                string[] str = new string[] { "\r\n" };
+                string[] linhas = arquivo.Split(str, StringSplitOptions.None);
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add("COBRADORA");
+                dataTable.Columns.Add("CREDOR");
+                dataTable.Columns.Add("SENHA");
+                dataTable.Columns.Add("DEVEDOR");
+                dataTable.Columns.Add("EMAIL");
+                dataTable.Columns.Add("CARTEIRA");
+                dataTable.Columns.Add("FILIAL");
+                dataTable.Columns.Add("NEGOCIADOR");
+                dataTable.Columns.Add("NEGOCIADORA");
+                dataTable.Columns.Add("TITULO");
+                dataTable.Columns.Add("DATA_CANCELAMENTO");
+                dataTable.Columns.Add("PLANO");
+                dataTable.Columns.Add("QTDE_PARCELAS_PAGA");
+                dataTable.Columns.Add("VALOR_ACORDO");
+                dataTable.Columns.Add("VALOR_RECEBIDO");
+                dataTable.Columns.Add("SALDO_ACORDO");
+                dataTable.Columns.Add("RESPONSAVEL");
+                dataTable.Columns.Add("CODIGO_NEGOCIACAO");
+                dataTable.Columns.Add("STATUS_CONTRATO");
+                dataTable.Columns.Add("UF");
+                dataTable.Columns.Add("TELEFONE_CONTATO_FIXO");
+                dataTable.Columns.Add("TELEFONE_CONTATO_CELULAR");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_FIXO");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_2_FIXO");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_3_FIXO");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_CELULAR");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_2_CELULAR");
+                dataTable.Columns.Add("TELEFONE_CONFIRMADO_3_CELULAR");
+                dataTable.Columns.Add("TELEFONE_ATUALIZADO_FIXO");
+                dataTable.Columns.Add("TELEFONE_ATUALIZADO_CELULAR");
+                dataTable.Columns.Add("OUTROS_FIXO");
+                dataTable.Columns.Add("OUTROS_CELULAR");
                 dataTable.Columns.Add("id_lote", typeof(int)).DefaultValue = id_lote;
 
                 try
