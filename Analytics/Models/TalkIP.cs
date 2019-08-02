@@ -347,6 +347,30 @@ namespace Analytics.Models
                     parametros.Add("@callback", url_callback);
                     return sql.ExecuteProcedureDataSet("sp_sel_lote_net", parametros);
                 }
+                else if (id_layout == 5)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_claro_tv_cancelado", parametros);
+                }
+                else if (id_layout == 6)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_claro_movel_cancelado", parametros);
+                }
+                else if (id_layout == 7)
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("@id_lote", id_lote);
+                    parametros.Add("@id_layout", id_layout);
+                    parametros.Add("@callback", url_callback);
+                    return sql.ExecuteProcedureDataSet("sp_sel_lote_net_cancelado", parametros);
+                }
                 else
                 {
                     return null;
