@@ -42,6 +42,32 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("lote/getCarteiraLayout")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage LotegetCarteiraLayout(FormDataCollection form)
+        {
+            try
+            {
+                int carteira = Convert.ToInt16(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("idcarteira", carteira);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_sel_carteira_layout", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("lote/getPreviewLayout")]
         [HttpPost]
         [Autorizar]
