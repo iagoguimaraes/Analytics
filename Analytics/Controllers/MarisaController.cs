@@ -1303,7 +1303,7 @@ namespace Analytics.Controllers
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
                     parametros.Add("data", data);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_teste_funil", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_funil", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

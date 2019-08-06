@@ -162,8 +162,6 @@
     angular.module('app').controller('ctrl-marisa-basecontrole', function ($scope, $http, $filter, $interval, dadosPagina) {
 
         // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
             data: $filter('date')(new Date(), "yyyy-MM-dd"),
@@ -180,7 +178,7 @@
                 $scope.dashboard.status = r.status;
                 let data = r.data;
                 $scope.dashboard.dados = r.data;
-                $scope.dashboard.resumo = data.Table4[0];
+                $scope.dashboard.resumo = data.Table3[0];
                 $scope.dashboard.carteira = data.Table[0];
                 $scope.dashboard.ds_follow = data.Table1.map(obj => obj.ds_follow);
                 $scope.dashboard.ds_sms = data.Table2.map(obj => obj.ds_sms);
@@ -188,10 +186,10 @@
 
                 $scope.dashboard.follow = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.quantidade)), color: '#b94d4b' }];
                 $scope.dashboard.sms = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.quantidade)), color: '#b94d4b'}];
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '50%', data: data.Table5.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '50%', data: data.Table4.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
 
                 // FUNIL
-                let resumo = data.Table4[0];
+                let resumo = data.Table3[0];
                 $scope.dashboard.funil = {
                     animationEnabled: true,
                     data: [{
@@ -200,10 +198,10 @@
                         indexLabel: "{label} ({percentage}%)",
                         dataPoints: [
                             { y: resumo.discado, label: "Discado", percentage: 100 },
-                            { y: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1, color: '#868686' },
-                            { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1, color: '#db8b0b' },
-                            { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1, color: '#2196f3' },
-                            { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1, color: '#00a65a' },
+                            { y: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1},
+                            { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1},
+                            { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1},
+                            { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1},
                         ]
                     }]
                 };
