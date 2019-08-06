@@ -16,7 +16,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -51,15 +51,16 @@
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
                         </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <!--BTC-->
             <div class="col-xs-12 col-md-6 margin-bottom">
@@ -198,9 +199,7 @@
 
         $scope.filtros = {
             dtini: $filter('date')(dtini, "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            produtos: '',
-            faixa: '',
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),         
         };
 
 
@@ -213,6 +212,7 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.r = r;
+                $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_nome);
