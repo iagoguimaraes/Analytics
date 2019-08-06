@@ -412,7 +412,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-
+                DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -421,7 +421,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-    
+                    parametros.Add("filas", filas);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pesquisa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -869,9 +870,9 @@ namespace Analytics.Controllers
                 string procedure = "sp_dashboard_grupo";
 
                 if (form["visao"] == "andamento")
-                    procedure = "sp_dashboard_grupo";
+                    procedure = "sp_dashboard_mala";
                 if (form["visao"] == "vencimento")
-                    procedure = "sp_dashboard_grupoVencimento";
+                    procedure = "sp_dashboard_malaVencimento";
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
