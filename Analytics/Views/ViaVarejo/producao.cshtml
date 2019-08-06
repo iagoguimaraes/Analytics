@@ -247,7 +247,7 @@
             </div>
 
             <!-- ANÁLISE POR OCORRENCIA -->
-            <div class="row">
+            <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
@@ -265,6 +265,28 @@
                     </div>
                 </div>
             </div>
+
+            <!--PRODUÇÃO POR OPERADOR-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Finalizações do Discador</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table4')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -315,6 +337,7 @@
                     $scope.dashboard.dia = data.Table1;
                     $scope.dashboard.tabulacao = data.Table2;
                     $scope.dashboard.dados = r.data;
+                    $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
                     $scope.carregarGrafico();
 
                 });

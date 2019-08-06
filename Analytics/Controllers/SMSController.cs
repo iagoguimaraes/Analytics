@@ -42,6 +42,32 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("lote/getCarteiraLayout")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage LotegetCarteiraLayout(FormDataCollection form)
+        {
+            try
+            {
+                int carteira = Convert.ToInt16(form["carteira"]);
+
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("idcarteira", carteira);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_sel_carteira_layout", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("lote/getPreviewLayout")]
         [HttpPost]
         [Autorizar]
@@ -155,6 +181,45 @@ namespace Analytics.Controllers
                         ParamNet.Add("idlote", idlote);
 
                         sql.ExecuteProcedure("sp_ins_layout_net", ParamNet);
+                    }
+                    else if (idlayout == 5)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout CLARO TV CANCELADO
+                        DataTable dt = new CsvHelper().CarregarArquivoClaroTvCancelado(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_CLARO_TV_CANCELADO
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamClaroTvCancelado = new Dictionary<String, Object>();
+                        ParamClaroTvCancelado.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_claro_tv_cancelado", ParamClaroTvCancelado);
+                    }
+                    else if (idlayout == 6)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout CLARO MOVEL CANCELADO
+                        DataTable dt = new CsvHelper().CarregarArquivoClaroMovelCancelado(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_CLARO_MOVEL_CANCELADO
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamClaroMovelCancelado = new Dictionary<String, Object>();
+                        ParamClaroMovelCancelado.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_claro_movel_cancelado", ParamClaroMovelCancelado);
+                    }
+                    else if (idlayout == 7)
+                    {
+                        //Monta o datatable com os registros do arquivo.csv layout NET CANCELADO
+                        DataTable dt = new CsvHelper().CarregarArquivoNetCancelado(arquivo, idlote);
+
+                        //Insere os registros do datatable na TB_LAYOUT_NET_CANCELADO
+                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
+
+                        Dictionary<string, object> ParamNetCancelado = new Dictionary<String, Object>();
+                        ParamNetCancelado.Add("idlote", idlote);
+
+                        sql.ExecuteProcedure("sp_ins_layout_net_cancelado", ParamNetCancelado);
                     }
 
                     // Chama o Método da API para envio do lote SMS;

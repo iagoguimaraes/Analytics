@@ -706,6 +706,7 @@ namespace Analytics.Controllers
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
@@ -719,6 +720,7 @@ namespace Analytics.Controllers
                     parametros.Add("produtos", produtos);
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("atrasos", atrasos);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("equipes", equipes);
 
@@ -745,6 +747,7 @@ namespace Analytics.Controllers
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
 
@@ -757,6 +760,7 @@ namespace Analytics.Controllers
                     parametros.Add("produtos", produtos);
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("atrasos", atrasos);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("equipes", equipes);
 
@@ -935,7 +939,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -945,6 +949,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("empresas", empresas);
+                    parametros.Add("atrasos", atrasos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira_humano", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
