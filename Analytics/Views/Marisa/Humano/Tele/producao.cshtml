@@ -96,11 +96,6 @@
 
             <div class="row margin-bottom">
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box">
-                        <img style="width:150px; height:102px" src="~/Content/Images/Marisa/producao.png" />
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-gray">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
@@ -112,10 +107,22 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-gray-active">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.alo | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1"></h4>
+                            <p>Atendido</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-volume-control-phone"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-aqua">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                            <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.alo | percentage: 1"></h4>
                             <p>Contato</p>
                         </div>
                         <div class="icon">
@@ -183,6 +190,7 @@
                                         <tr>
                                             <th>Dia</th>
                                             <th>Discado</th>
+                                            <th>Atendido</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>CPCA</th>
@@ -197,11 +205,12 @@
                                         <tr ng-repeat="dia in dashboard.dia">
                                             <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                             <td>{{dia.discado | number}}</td>
+                                            <td>{{dia.alo | number}}</td>
                                             <td>{{dia.contato | number}}</td>
                                             <td>{{dia.cpc | number}}</td>
                                             <td>{{dia.cpca | number}}</td>
                                             <td>{{dia.promessa | number}}</td>
-                                            <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                            <td>{{dia.alo / dia.discado | percentage:1}}</td>
                                             <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                             <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                             <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -231,6 +240,7 @@
                                     <option value="conversao">Conversão</option>
                                     <option value="carteira">Carteira</option>
                                     <option value="discado">Discado</option>
+                                    <option value="alo">Atendido</option>
                                     <option value="contato">Contato</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
@@ -419,7 +429,7 @@
                 $scope.dashboard.datas = dados.map(obj => obj.data);
                 switch ($scope.grafico.indicador) {
                     case 'hitrate':
-                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
                         break;
                     case 'txloc':
                         $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
