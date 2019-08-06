@@ -1287,6 +1287,32 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("dashboard/digital/funil")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardDigitalFunil(FormDataCollection form)
+        {
+            try
+            {
+                DateTime data = Convert.ToDateTime(form["data"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+                    parametros.Add("data", data);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_teste_funil", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }
