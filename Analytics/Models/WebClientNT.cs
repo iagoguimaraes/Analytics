@@ -11,7 +11,7 @@ namespace Analytics.Models
         protected override WebRequest GetWebRequest(Uri uri)
         {
             HttpWebRequest w = (HttpWebRequest)base.GetWebRequest(uri);
-            w.Timeout = 30 * 60 * 1000;
+            w.Timeout = 30 * 60 * 2000;
             w.KeepAlive = false;
             return w;
 

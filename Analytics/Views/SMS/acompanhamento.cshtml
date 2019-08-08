@@ -145,7 +145,7 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.erro | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.erro / dashboard.resumo.enviado | percentage: 2"></h4>
-                        <p>Erro Envio</p>
+                        <p>Erros</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-exclamation"></i>
@@ -209,6 +209,51 @@
                                         <th></th>
                                     </tr>
                                 </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ERROS IMPORTACAO LOTE-->
+        <div class="row  margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Lotes de Insucesso</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.erroLote">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Hora</th>
+                                        <th>Carteira</th>
+                                        <th>Fornecedor</th>
+                                        <th>Usuário</th>
+                                        <th>Layout</th>
+                                        <th>Arquivo</th>
+                                        <th>Cod Erro</th>
+                                        <th>Erro</th>
+                                        <th>Descrição</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="r in dashboard.erroLote">
+                                        <td>{{r.data}}</td>
+                                        <td>{{r.hora}}</td>
+                                        <td>{{r.carteira}}</td>
+                                        <td>{{r.fornecedor}}</td>
+                                        <td>{{r.usuario}}</td>
+                                        <td>{{r.layout}}</td>
+                                        <td>{{r.nomearquivo}}</td>
+                                        <td>{{r.id_erro}}</td>
+                                        <td>{{r.erro}}</td>
+                                        <td>{{r.descricao}}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -290,6 +335,7 @@
                 $scope.dashboard.dia = [{ name: 'SMS', data: r.data.Table2.map(obj => obj.enviado) }];
 
                 $scope.dashboard.callback = [{ name: 'Qtd', data: r.data.Table3.map(obj => ({ name: obj.retorno, y: obj.quantidade })) }];
+                $scope.dashboard.erroLote = r.data.Table4;
             });
         }
 

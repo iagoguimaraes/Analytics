@@ -235,6 +235,74 @@ namespace Analytics.Controllers
         }
 
 
+        [Route("comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
+                int horaini_2 = Convert.ToInt16(form["horaini_2"]);
+                int horafim_2 = Convert.ToInt16(form["horafim_2"]);
+
+                DataTable reguas = JsonConvert.DeserializeObject<DataTable>(form["reguas"]);
+                DataTable scores = JsonConvert.DeserializeObject<DataTable>(form["scores"]);
+
+                DataTable reguas_2 = JsonConvert.DeserializeObject<DataTable>(form["reguas_2"]);
+                DataTable scores_2 = JsonConvert.DeserializeObject<DataTable>(form["scores_2"]);
+
+                string procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "hora")
+                    procedure = "sp_dashboard_comparativo_hora";
+                if (form["visao"] == "dia")
+                    procedure = "sp_dashboard_comparativo_dia";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_dashboard_comparativo_dia_semana";
+                if (form["visao"] == "semana")
+                    procedure = "sp_dashboard_comparativo_semana";
+                if (form["visao"] == "mes")
+                    procedure = "sp_dashboard_comparativo_mes";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIAVAREJO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+
+                    parametros.Add("horaini_2", horaini_2);
+                    parametros.Add("horafim_2", horafim_2);
+
+                    parametros.Add("reguas", reguas);
+                    parametros.Add("scores", scores);
+
+                    parametros.Add("reguas_2", reguas_2);
+                    parametros.Add("scores_2", scores_2);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
 
