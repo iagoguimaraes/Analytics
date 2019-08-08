@@ -101,7 +101,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="card-body">
-                                    <h5 class="text-center">Follow</h5>
+                                    <h4 class="text-center">Carteira</h4>
                                     <high-chart series="dashboard.follow" axis-Categories="dashboard.ds_follow" plot-Options-Bar-Data-Label="true" type="bar" style="height: 280px"></high-chart>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                     <div class="card-body" style="height: 350px">
                         <div class="row">
                             <div class="card-body">
-                                <h5 class="text-center">Ação Massiva</h5>
+                                <h4 class="text-center">Ação Massiva</h4>
                                 <high-chart series="dashboard.sms" axis-Categories="dashboard.ds_sms" plot-Options-Bar-Data-Label="true" type="column" style="height: 280px"></high-chart>
                             </div>
                         </div>
@@ -190,18 +190,21 @@
 
                 // FUNIL
                 let resumo = data.Table3[0];
+                let carteira = data.Table5[0];
                 $scope.dashboard.funil = {
                     animationEnabled: true,
                     data: [{
                         type: "funnel",
-                        toolTipContent: "<b>{label}</b>: {y} <b>({percentage}%)</b>",
+                        toolTipContent: "<b>{label}</b>: {value} <b>({percentage}%)</b>",
                         indexLabel: "{label} ({percentage}%)",
                         dataPoints: [
-                            { y: resumo.discado, label: "Discado", percentage: 100 },
-                            { y: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1},
-                            { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1},
-                            { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1},
-                            { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1},
+                            { y: 45, value: carteira.carteira, label: "Carteira", percentage: 100 },
+                            { y: 30, value: carteira.mailing, label: "Mailing", percentage: (carteira.mailing * 100 / carteira.carteira).toFixed(1) / 1},
+                            { y: 25, value: resumo.discado, label: "Discado", percentage: (resumo.discado * 100 / carteira.mailing).toFixed(1) / 1 },
+                            { y: 20, value: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1},
+                            { y: 15, value: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1},
+                            { y: 10, value: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1},
+                            { y: 10, value: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1},
                         ]
                     }]
                 };
