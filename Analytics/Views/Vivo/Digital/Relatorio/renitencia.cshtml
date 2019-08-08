@@ -51,21 +51,68 @@
             </div>
         </div>
 
-        <!--TABELA-->
+        <!--FILTROS ONLINE-->
         <div class="row">
-            <div class="col-xs-12 margin-bottom">
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Campanha</label>
+                <multiple-select ng-model="dashboard.filtros.campanha" dados="dashboard.dimensao.campanha" ng-change="aplicarFiltros()" placeholder="Campanha" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Plano de Tabulação</label>
+                <multiple-select ng-model="dashboard.filtros.plano_tabulacao" dados="dashboard.dimensao.plano_tabulacao" ng-change="aplicarFiltros()" placeholder="Plano de Tabulação" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Disposition</label>
+                <multiple-select ng-model="dashboard.filtros.disposition" dados="dashboard.dimensao.disposition" ng-change="aplicarFiltros()" placeholder="Disposition" /><multiple-select />
+            </div>
+        </div>
+
+        <!--TABELA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Renitência</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table')">
-                            <i class="fa fa-file-excel-o"></i>
+                        <span class="card-header-title">Lista</span>
+                        <div class="pull-right input-group col-xs-6" style="margin-top: 10px;">
+                            <div class="input-group-addon">
+                                <i class="fa fa-sort-alpha-asc"></i>
+                                <input type="radio" name="ordenacao" ng-model="opcoes.order" value="" checked="checked" />
+                                <i class="fa fa-sort-alpha-desc"></i>
+                                <input type="radio" name="ordenacao" ng-model="opcoes.order" value="-" />
+                            </div>
+                            <select class="form-control" ng-model="opcoes.field">
+                                <option value="media_renetencia">Média Renitência</option>
+                                <option value="menor_renitencia">Menor Renitência</option>
+                                <option value="media_quantidade">Média Quantidade</option>
+                                <option value="maior_quantidade">Maior Quantidade</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.dados.Table"></d-table>
+                        <table id="lista_projetos" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Disposition</th>
+                                    <th>Campanha</th>
+                                    <th>Plano de Tabulação</th>
+                                    <th>Média Renitência</th>
+                                    <th>Menor Renitência</th>
+                                    <th>Média Quantidade</th>
+                                    <th>Maior Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in dashboard.dados | orderBy: opcoes.order+opcoes.field">
+                                    <td>{{x.disposition}}</td>
+                                    <td>{{x.campanha}}</td>
+                                    <td>{{x.plano_tabulacao}}</td>
+                                    <td>{{x.media_renetencia}}</td>
+                                    <td>{{x.menor_renitencia}}</td>
+                                    <td>{{x.media_quantidade}}</td>
+                                    <td>{{x.maior_quantidade}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -76,13 +123,25 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-vivo-rel-renitencia', function ($scope, $http, $filter, $interval) {
+    angular.module('app').controller('ctrl-vivo-rel-renitencia', function ($scope, $http, $filter, cubo) {
 
+        // obj ref aos filtros do dashboard
         $scope.filtros = {
             data: $filter('date')(new Date(new Date().setDate(new Date().getDate()-1)), "yyyy-MM-dd"),
         };
+        // obj ref opcoes interativas do dashboard
+        $scope.opcoes = {
+            order: '',
+            field: 'media_renetencia',
+        }
+        // obj ref aos graficos e elementos do dashboard
+        $scope.dashboard = {
+            dimensao: {},
+            filtros: {},
+        }
+        // obj ref aos filtros de dimensoes
+        $scope.dimensao = {};
 
-        $scope.dashboard = {};
 
         $scope.carregarDashboard = function () {
             $http({
@@ -90,15 +149,41 @@
                 url: "/api/vivo/dashboard/renitencia",
                 data: $scope.filtros,
             }).then(function success(r) {
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dados = r.data;
             });
         }
-
-        // extrair dados para excel
-        $scope.extrair = function (tabela) {
-            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.campanha = cubo.obterDimensao('campanha').sort();
+            $scope.dashboard.dimensao.disposition = cubo.obterDimensao('disposition').sort();
+            $scope.dashboard.dimensao.plano_tabulacao = cubo.obterDimensao('plano_tabulacao').sort();
         }
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.campanha = cubo.obterDimensao('campanha');
+            $scope.dimensao.disposition = cubo.obterDimensao('disposition');
+            $scope.dimensao.plano_tabulacao = cubo.obterDimensao('plano_tabulacao');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            $scope.dashboard.dados = cubo.obter();
+        }
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('campanha', $scope.dashboard.filtros.campanha);
+            cubo.filtrar('disposition', $scope.dashboard.filtros.disposition);
+            cubo.filtrar('plano_tabulacao', $scope.dashboard.filtros.plano_tabulacao);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
 
         $scope.carregarDashboard();
 
