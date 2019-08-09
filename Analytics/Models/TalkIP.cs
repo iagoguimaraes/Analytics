@@ -88,7 +88,7 @@ namespace Analytics.Models
 
                 // Credenciais de teste
                 //wc.Headers.Add("Authorization", "Basic dGVzdGVAdGVzdGUuY29tOnRlc3RlX3RhbGtpcA==");
-                
+
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, id_layout);
                 DataTable lote = ds.Tables[0];
@@ -107,20 +107,20 @@ namespace Analytics.Models
                 double custo = result.charged;
 
                 // Atualiza o lote: id_unico_fornecedor, quantidade de registros e o custo;
-                AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null);
+                AtualizarLote(id_lote, id_unico_fornecedor, quantidade, custo, true, null, null);
 
             }
             catch (WebException e)
             {
 
                 HttpWebResponse response = (System.Net.HttpWebResponse)e.Response;
-                AtualizarLote(id_lote, null, null, null, false, (int?)response.StatusCode);
+                AtualizarLote(id_lote, null, null, null, false, (int?)response.StatusCode, null);
 
                 throw new Exception(e.Message);
             }
             catch (Exception ee)
             {
-                AtualizarLote(id_lote, null, null, null, false, ee.HResult);
+                AtualizarLote(id_lote, null, null, null, false, null, ee.Message);
                 throw new Exception(ee.Message);
             }
         }
@@ -223,7 +223,7 @@ namespace Analytics.Models
         }
 
 
-        private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro)
+        private void AtualizarLote(int id_lote, int? id_unico_fornecedor, int? quantidade, double? custo, bool sucesso, int? id_erro, string errormsg)
         {
 
             using (SqlHelper sql = new SqlHelper("DB_SMS"))
@@ -235,6 +235,7 @@ namespace Analytics.Models
                 parametros.Add("@id_unico_fornecedor", id_unico_fornecedor);
                 parametros.Add("@quantidade", quantidade);
                 parametros.Add("@custo", custo);
+                parametros.Add("@errormsg", errormsg);
 
                 sql.ExecuteQueryDataTable(@"
                         update TB_LOTE set
@@ -243,6 +244,7 @@ namespace Analytics.Models
                             ,id_unico_fornecedor = @id_unico_fornecedor
                             ,quantidade = @quantidade
                             ,custo = @custo
+                            ,ds_erroInterno = @errormsg
                         where id_lote = @id_lote"
                 , parametros);
             }

@@ -21,6 +21,23 @@ namespace Analytics.Controllers
     [RoutePrefix("api/sms")]
     public class SMSController : ApiController
     {
+        private void ValidarArquivoImportado(string nomearquivo)
+        {
+            using (SqlHelper sql = new SqlHelper("DB_SMS"))
+            {
+                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                parametros.Add("@nomearquivo", nomearquivo);
+
+                DataTable dt = sql.ExecuteQueryDataTable(@"
+                        select nomearquivo, convert(varchar(16),data_upload,121) data from TB_LOTE where nomearquivo = @nomearquivo"
+                , parametros);
+
+                if (dt.Rows.Count > 0)
+                {
+                    throw new Exception(string.Format("O Arquivo: {0} já existe e foi importado as {1}", nomearquivo, dt.Rows[0][1]));
+                }
+            }
+        }
 
         [Route("lote/filtros")]
         [HttpGet]
@@ -129,8 +146,11 @@ namespace Analytics.Controllers
                     parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     parametros.Add("nomearquivo", nomearquivo);
 
+                    ValidarArquivoImportado(nomearquivo);
+
                     //retorna do id_lote
                     int idlote = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
+
 
                     //verifica o id_layout                    
                     if (idlayout == 1)
@@ -225,7 +245,15 @@ namespace Analytics.Controllers
                     // Chama o Método da API para envio do lote SMS;
                     using (TalkIP api = new TalkIP())
                     {
-                        api.EnviarLoteSMS(idlote, idlayout);
+                        try
+                        {
+                            api.EnviarLoteSMS(idlote, idlayout);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception(e.Message);
+                        }
+
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK, idlote);
