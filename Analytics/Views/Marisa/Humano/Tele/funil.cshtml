@@ -1,0 +1,246 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-marisa-funil-humano">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Funil</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- SELEÇÃO DE CAMPANHA-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-info active" ng-click=" carregarDashboard(301, 7)">
+                    <input type="radio"> 31 a 60 - Cartão
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard(301, 8)">
+                    <input type="radio"> 61 a 90 - Cartão
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard(1022,0)">
+                    <input type="radio"> Empréstimo
+                </label>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Foto</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard(filtros.carteiras,filtros.atrasos)" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+
+            <!--CARTEIRA-->
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-body" style="height: 350px">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="info-box-new bg-new-grey hover-zoom-effect">
+                                    <div class="icon">
+                                        <i class="fa fa-university"></i>
+                                    </div>
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Carteira Ativa</div>
+                                        <div class="number">{{dashboard.carteira.ativo | number}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="info-box-new bg-new-green hover-expand-effect">
+                                    <div class="icon">
+                                        <i class="fa fa-plus-square"></i>
+                                    </div>
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Entrada Hoje</div>
+                                        <div class="number">{{dashboard.carteira.entrada | number}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="info-box-new bg-new-orange hover-expand-effect">
+                                    <div class="icon">
+                                        <i class="fa fa-minus-square "></i>
+                                    </div>
+                                    <div class="content" style="text-align: center;">
+                                        <div class="text">Saída Hoje</div>
+                                        <div class="number">{{dashboard.carteira.saida | number}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--FOLLOW-->
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-body" style="height: 350px">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="card-body">
+                                    <h4 class="text-center">Carteira</h4>
+                                    <high-chart series="dashboard.follow" axis-Categories="dashboard.ds_follow" plot-Options-Bar-Data-Label="true" type="bar" style="height: 280px"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--SMS-->
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-body" style="height: 350px">
+                        <div class="row">
+                            <div class="card-body">
+                                <h4 class="text-center">Ação Massiva</h4>
+                                <h4 class="text-center">{{dashboard.qtd_sms.qtd_sms | number}}</h4>
+                                <high-chart series="dashboard.sms" axis-Categories="dashboard.ds_sms" plot-Options-Bar-Data-Label="true" type="column" style="height: 250px"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--FUNIL-->
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <canvasjs config="dashboard.funil" style="width: 100%; height: 480px"></canvasjs>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <h4 class="text-center">Discagens Improdutivas</h4>
+                                <h2 class="text-center">{{dashboard.resumo.improdutivo | number}}</h2>
+                                <div class="card-body">
+                                    <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-marisa-funil-humano', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Funil - Humano';
+        dadosPagina.descricao = 'Marisa'
+
+        $scope.filtros = {
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            atrasos: '',
+            carteiras: ''
+        };
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function (carteira, atraso) {
+            $scope.filtros.carteiras = carteira;
+            $scope.filtros.atrasos = atraso;
+
+            $http({
+                method: 'POST',
+                url: "/api/marisa/dashboard/humano/tele/funil",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table3[0];
+                $scope.dashboard.carteira = data.Table[0];
+                $scope.dashboard.ds_follow = data.Table1.map(obj => obj.ds_follow);
+                $scope.dashboard.ds_sms = data.Table2.map(obj => obj.ds_sms);
+                $scope.dashboard.qtd_sms = data.Table6[0];
+
+
+                $scope.dashboard.follow = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.quantidade)), color: '#b94d4b' }];
+                $scope.dashboard.sms = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.quantidade)), color: '#b94d4b' }];
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '50%', data: data.Table4.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
+
+                // FUNIL
+                let resumo = data.Table3[0];
+                let carteira = data.Table5[0];
+                $scope.dashboard.funil = {
+                    animationEnabled: true,
+                    data: [{
+                        type: "funnel",
+                        toolTipContent: "<b>{label}</b>: {value} <b>({percentage}%)</b>",
+                        indexLabel: "{label} ({percentage}%)",
+                        dataPoints: [
+                            { y: 45, value: carteira.carteira, label: "Carteira", percentage: 100 },
+                            { y: 30, value: carteira.mailing, label: "Mailing", percentage: (carteira.mailing * 100 / carteira.carteira).toFixed(1) / 1 },
+                            { y: 25, value: resumo.discado, label: "Discado", percentage: (resumo.discado * 100 / carteira.mailing).toFixed(1) / 1 },
+                            { y: 20, value: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1 },
+                            { y: 15, value: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1 },
+                            { y: 10, value: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1 },
+                            { y: 10, value: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1 },
+                        ]
+                    }]
+                };
+
+            });
+        }
+
+
+
+        $scope.carregarDashboard(301, 7);
+
+    });
+
+
+
+</script>
