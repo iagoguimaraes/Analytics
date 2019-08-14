@@ -1905,6 +1905,8 @@ namespace Analytics.Controllers
                     procedure = "atom_dashboard_receptivo_gerencial";
                 else if (camapanha == "televendas")
                     procedure = "atom_dashboard_televendas_gerencial";
+                else if (camapanha == "tudo")
+                    procedure = "atom_dashboard_tudo_gerencial";
                 else
                     throw new Exception("Campanha inválida");
 

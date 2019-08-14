@@ -147,6 +147,14 @@
 
         <!--LAYOUT PARA TELEVENDAS-->
         <div ng-if="dashboard.campanha != 'migracao'">
+            <div class="row margin-bottom text-center">
+                <label>Seleção de Campanha:</label>
+                <select ng-model="dashboard.campanha_tele" ng-change="carregarDashboard('televendas')">
+                    <option value="0">Tudo</option>
+                    <option value="2">RoboCall/Receptivo</option>
+                    <option value="7">Televendas</option>
+                </select>                
+            </div>
             <div class="row margin-bottom">
                 <!--HOJE-->
                 <div class="col-xs-4">
@@ -276,17 +284,27 @@
              
         $scope.dashboard = {
             campanha: 'televendas',
+            campanha_tele: '0',
             indicador: 'venda',          
         };
 
         $scope.carregarDashboard = function (campanha) {
             $scope.dashboard.indicador = 'venda';
             $scope.dashboard.campanha = campanha;
+            let campanha_selecionada = campanha;
+
+            // alternar a visualizacao de televendas: tudo, televendas e robocall
+            if (campanha == 'televendas') {
+                if ($scope.dashboard.campanha_tele == '0')
+                    campanha_selecionada = 'tudo'
+                if ($scope.dashboard.campanha_tele == '2')
+                    campanha_selecionada = 'receptivo'
+            }
 
             $http({
                 method: 'POST',
                 url: "/api/tim/vendas/gerencial",
-                data: {campanha: campanha},
+                data: {campanha: campanha_selecionada},
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
 
