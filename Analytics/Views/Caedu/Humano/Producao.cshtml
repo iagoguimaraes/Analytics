@@ -76,17 +76,6 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            @*<div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
-                        <p>Discado</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-phone"></i>
-                    </div>
-                </div>
-            </div>*@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
@@ -182,8 +171,8 @@
                                 <thead>
                                     <tr>
                                         <th>Dia</th>
-                                        @*<th>Agente</th>*@
                                         <th>Discado</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -203,8 +192,8 @@
                                 <tbody>
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        @*<td>{{dia.qtd_agente | number}}</td>*@
                                         <td>{{dia.discado | number}}</td>
+                                        <td>{{dia.alo | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
@@ -214,7 +203,7 @@
                                         <td>{{dia.acordo_vlr | currency:'R$ '}}</td>
                                         <td>{{dia.negociacao | number}}</td>
                                         <td>{{dia.preventivo | number}}</td>
-                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                        <td>{{dia.alo / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -224,8 +213,8 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.qtd_agente | number}}</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.alo | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
@@ -235,7 +224,7 @@
                                         <th>{{dashboard.resumo.acordo_vlr | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
                                         <th>{{dashboard.resumo.preventivo | number}}</th>
-                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -265,6 +254,7 @@
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
+                                <option value="alo">Atendido</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
