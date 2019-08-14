@@ -89,10 +89,22 @@
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.alo | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1"></h4>
+                        <p>Atendido</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-volume-control-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.alo | percentage: 1"></h4>
                         <p>Contato</p>
                     </div>
                     <div class="icon">
@@ -136,17 +148,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-green-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
-                        <p>Valor de Promessa</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!--ANALISE POR DIA-->
@@ -173,6 +174,7 @@
                                         <th>Dia</th>
                                         @*<th>Agente</th>*@
                                         <th>Discado</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -193,6 +195,7 @@
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                         @*<td>{{dia.qtd_agente | number}}</td>*@
                                         <td>{{dia.discado | number}}</td>
+                                        <td>{{dia.alo | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
@@ -202,7 +205,7 @@
                                         <td>{{dia.sms | number}}</td>
                                         <td>{{dia.qtd_carteira | megaNumber}}</td>
                                         <td>{{dia.discado / dia.qtd_carteira | number:1}}</td>
-                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                        <td>{{dia.alo / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -213,6 +216,7 @@
                                         <th>Total</th>
                                         @*<th>{{dashboard.resumo.qtd_agente | number}}</th>*@
                                         <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.alo | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
@@ -222,7 +226,7 @@
                                         <th>{{dashboard.resumo.sms | number}}</th>
                                         <th>{{dashboard.resumo.qtd_carteira | number}}</th>
                                         <th>{{dashboard.resumo.discado / dashboard.resumo.qtd_carteira | number: 1}}</th>
-                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -252,6 +256,7 @@
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
+                                <option value="alo">Atendido</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -469,7 +474,7 @@
             $scope.dashboard.datas = dados.map(obj => obj.data);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'spin':
                     $scope.dashboard.grafico = [{ name: 'spin', data: dados.map(obj => (obj.discado / obj.qtd_carteira).toFixed(1) * 1) }];

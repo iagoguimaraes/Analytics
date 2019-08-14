@@ -73,11 +73,6 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
                             </div>
 
-                            <!--EQUIPE-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Equipe</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe" style="width:100%"></select2>
-                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -103,10 +98,22 @@
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.alo | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1"></h4>
+                        <p>Atendido</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-volume-control-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.alo | percentage: 1"></h4>
                         <p>Contato</p>
                     </div>
                     <div class="icon">
@@ -126,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
@@ -138,24 +145,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
+            <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
                         <p>Promessa</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
-                <div class="small-box bg-red-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.acordo | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Acordo</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -188,6 +183,7 @@
                                         <th>Dia</th>
                                         <th>Agente</th>
                                         <th>Discado</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -204,12 +200,13 @@
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{dia.qtd_agente | number}}</td>
                                         <td>{{dia.discado | number}}</td>
+                                        <td>{{dia.alo | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.acordo | number}}</td>
-                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                        <td>{{dia.alo / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -232,7 +229,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('ProducaoEmpresa','Table2')">
+                        <div class="card-header-button" ng-click="extrair('ProducaoEmpresa','Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -306,6 +303,7 @@
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
+                                <option value="alo">Atendido</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -413,7 +411,6 @@
                 $scope.dashboard.dia = data.Table1;
                 $scope.dashboard.tabulacao = data.Table2;
                 $scope.dashboard.equipe = r.data.Table3;
-                $scope.dashboard.equipe = r.data.Table4;
                 $scope.dashboard.tabulacao = r.data.Table5;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }]; 
                 $scope.carregarGrafico();
@@ -428,7 +425,7 @@
             $scope.dashboard.datas = dados.map(obj => obj.data);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
