@@ -652,7 +652,7 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/humano/comparativo")]
+        [Route("dashboard/humano/fases/comparativo")]
         [HttpPost]
         [Autorizar]
         [Gravar]
@@ -981,6 +981,75 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_funil_tele", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/humano/tele/comparativo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativoTele(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DateTime dtini_2 = Convert.ToDateTime(form["dtini_2"]);
+                DateTime dtfim_2 = Convert.ToDateTime(form["dtfim_2"]);
+
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
+                int horaini_2 = Convert.ToInt16(form["horaini_2"]);
+                int horafim_2 = Convert.ToInt16(form["horafim_2"]);
+
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
+
+                int atrasos = Convert.ToInt32(form["atrasos"]);
+                int carteiras = Convert.ToInt32(form["carteiras"]);
+
+                string procedure = "sp_humano_dashboard_comparativo_hora_tele";
+
+                if (form["visao"] == "hora")
+                    procedure = "sp_humano_dashboard_comparativo_hora_tele";
+                if (form["visao"] == "dia")
+                    procedure = "sp_humano_dashboard_comparativo_dia_tele";
+                if (form["visao"] == "dia_semana")
+                    procedure = "sp_humano_dashboard_comparativo_dia_semana_tele";
+                if (form["visao"] == "semana")
+                    procedure = "sp_humano_dashboard_comparativo_semana_tele";
+                if (form["visao"] == "mes")
+                    procedure = "sp_humano_dashboard_comparativo_mes_tele";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtini_2", dtini_2.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim_2", dtfim_2.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+
+                    parametros.Add("horaini_2", horaini_2);
+                    parametros.Add("horafim_2", horafim_2);
+
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("supervisor_2", supervisor_2);
+
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

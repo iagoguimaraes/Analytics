@@ -3,7 +3,6 @@
 }
 
 
-
 <div ng-controller="ctrl-marisa-comparativo">
     <div ng-if="dashboard.status == 200">
 
@@ -15,6 +14,21 @@
                 FILTROS
             </div>
         </header>
+
+        <!-- SELEÇÃO DE CAMPANHA-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-info active" ng-click=" carregarDashboard(301, 7)">
+                    <input type="radio"> 31 a 60 - Cartão
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard(301, 8)">
+                    <input type="radio"> 61 a 90 - Cartão
+                </label>
+                <label class="btn btn-info" ng-click="carregarDashboard(1022,0)">
+                    <input type="radio"> Empréstimo
+                </label>
+            </div>
+        </div>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
@@ -118,19 +132,6 @@
                                         </div>
                                     </div>
 
-                                    <!--ATRASO-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Atraso</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso" style="width:100%"></select2>
-                                    </div>
-
-                                    <!--FAIXA-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Faixa</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa" style="width:100%"></select2>
-                                    </div>
-
-
                                     <!--SUPERVISOR-->
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Supervisor</label>
@@ -141,7 +142,7 @@
 
                                     <!--BOTÃO-->
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard(filtros.carteiras,filtros.atrasos)" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
                                     </div>
                                 </fieldset>
                             </div>
@@ -230,19 +231,6 @@
                                         </div>
                                     </div>
 
-                                    <!--ATRASO-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Atraso</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso_2" dados="dashFiltros.atraso" style="width:100%"></select2>
-                                    </div>
-
-                                    <!--FAIXA-->
-                                    <div class="form-group">
-                                        <label class="control-sidebar-subheading">Faixa</label>
-                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa_2" dados="dashFiltros.faixa" style="width:100%"></select2>
-                                    </div>
-
-
                                     <!--SUPERVISOR-->
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Supervisor</label>
@@ -268,7 +256,7 @@
                             {{grafico.indicador}} por :
                         </div>
                         <div class="card-header-title">
-                            <select style="margin-left: 20px" class="form-control" ng-model="filtros.visao" ng-change="carregarDashboard()">
+                            <select style="margin-left: 20px" class="form-control" ng-model="filtros.visao" ng-change="carregarDashboard(filtros.carteiras,filtros.atrasos)">
                                 <option value="hora" selected="selected">Hora</option>
                                 <option value="dia">Dia do Mês</option>
                                 <option value="dia_semana">Dia da Semana</option>
@@ -462,13 +450,11 @@
             horaini_2: '7',
             horafim_2: '22',
 
-            atraso: '',
-            faixa: '',
             supervisor: '',
-
-            atraso_2: '',
-            faixa_2: '',
             supervisor_2: '',
+
+            atrasos: '',
+            carteiras: '',
 
             visao: 'hora',
         };
@@ -484,17 +470,19 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.atraso = data.Table4;
-            $scope.dashFiltros.faixa = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
 
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
-        $scope.carregarDashboard = function () {
+        $scope.carregarDashboard = function (carteira, atraso) {
+
+            $scope.filtros.carteiras = carteira;
+            $scope.filtros.atrasos = atraso;
+
             $http({
                 method: 'POST',
-                url: "/api/marisa/dashboard/humano/comparativo",
+                url: "/api/marisa/dashboard/humano/tele/comparativo",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -583,7 +571,7 @@
 
         }
 
-        $scope.carregarDashboard();
+        $scope.carregarDashboard(301, 7);
 
         $scope.$watch('grafico.indicador', function (newVal, oldVal) {
             if ($scope.dashboard.status == 200)
