@@ -12,7 +12,7 @@ namespace Analytics.Models
         {
             HttpWebRequest w = (HttpWebRequest)base.GetWebRequest(uri);
             w.Timeout = 30 * 60 * 2000;
-            w.KeepAlive = false;
+            //w.KeepAlive = false;
             return w;
 
         }

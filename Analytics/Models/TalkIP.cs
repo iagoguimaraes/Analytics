@@ -23,9 +23,9 @@ namespace Analytics.Models
         public TalkIP()
         {
             wc = new WebClientNT();
-            WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
-            proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
-            wc.Proxy = proxy;
+            //WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+            //proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+            //wc.Proxy = proxy;
         }
         public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null, int contagem_erro = 0)
         {
@@ -84,10 +84,10 @@ namespace Analytics.Models
             {
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
-                wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+                //wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
 
                 // Credenciais de teste
-                //wc.Headers.Add("Authorization", "Basic dGVzdGVAdGVzdGUuY29tOnRlc3RlX3RhbGtpcA==");
+                wc.Headers.Add("Authorization", "Basic dGVzdGVAdGVzdGUuY29tOnRlc3RlX3RhbGtpcA==");
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, id_layout);
