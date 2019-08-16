@@ -23,9 +23,9 @@ namespace Analytics.Models
         public TalkIP()
         {
             wc = new WebClientNT();
-            WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
-            proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
-            wc.Proxy = proxy;
+            //WebProxy proxy = new WebProxy("proxy.credit.local", 8088);
+            //proxy.Credentials = new NetworkCredential("automatizacaobi", "th7WruR!", "creditcash.com.br");
+            //wc.Proxy = proxy;
         }
         public void EnviarSMS(long telefone, string mensagem, int? id_lote = null, int? id_registro = null, int contagem_erro = 0)
         {

@@ -112,7 +112,6 @@
             </div>
         </div>
 
-
         <!--TABELA FASE MOVEL E TV-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -127,19 +126,23 @@
                         </div>
                         <small class="pull-right">
                             <label class="btn btn-secondary active">
-                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="true"  />
+                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="movel" />
                                 Movel
                             </label>
                             <label class="btn btn-secondary active">
-                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="false" checked="checked" />
+                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="tv" checked="checked" />
                                 Tv
+                            </label>
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="graficoHoraTabela" ng-model="graficoHora.tabela" value="fixo" checked="checked" />
+                                Fixo
                             </label>
 
                         </small>
                     </div>
                     <div class="card-body">
 
-                        <div class="table-responsive" ng-show="graficoHora.tabela == 'false'">
+                        <div class="table-responsive" ng-show="graficoHora.tabela == 'tv'">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.movel">
                                 <thead>
                                     <tr>
@@ -193,7 +196,61 @@
                             </table>
                         </div>
 
-                        <div class="table-responsive" ng-show="graficoHora.tabela == 'true'">
+                        <div class="table-responsive" ng-show="graficoHora.tabela == 'fixo'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.fixo">
+                                <thead>
+                                    <tr>
+                                        <th>Origem / Fase</th>
+                                        <th>R$ Total </th>
+                                        <th>Qtd Total</th>
+                                        <th>R$ Media Diaria</th>
+                                        <th>R$ Projeção Total</th>
+                                        <th>R$ Comissão</th>
+                                        <th>R$ Comissão Projeção</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.fixo | groupBy: 'ds_origem_pag'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_origem_pag}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'valor_total'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'quantidade'| number}}</td>
+                                        <td>{{e | sumByColumn: 'media'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'valor_projecao'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'comissao'| currency: 'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'comissao_projecao'| currency: 'R$ '}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_fase}}</td>
+                                        <td>{{c.valor_total | currency: 'R$ '}}</td>
+                                        <td>{{c.quantidade | number}}</td>
+                                        <td>{{c.media | currency: 'R$ '}}</td>
+                                        <td>{{c.valor_projecao | currency: 'R$ '}}</td>
+                                        <td>{{c.comissao| currency: 'R$ '}}</td>
+                                        <td>{{c.comissao_projecao| currency: 'R$ '}}</td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumofixo.valor_total | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumofixo.quantidade | number}}</th>
+                                        <th>{{dashboard.resumofixo.media |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumofixo.valor_projecao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumofixo.comissao | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumofixo.comissao_projecao | currency: 'R$ '}}</th>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+
+                        <div class="table-responsive" ng-show="graficoHora.tabela == 'movel'">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.tv">
                                 <thead>
                                     <tr>
@@ -429,7 +486,7 @@
             tipo: ''
         };
 
-        $scope.graficoHora = { exibir: 'false', tabela: 'false' };
+        $scope.graficoHora = { exibir: 'false', tabela: 'tv' };
         $scope.graficoPizza = { indicador: 'CONSOLIDADO' }
         $scope.graficoBarra = { indicador: 'CONSOLIDADO' }
         //$scope.graficoHora = { tabela: 'false'}
@@ -477,6 +534,9 @@
         
                 $scope.dashboard.tv = r.data.Table6;
                 $scope.dashboard.resumotv = r.data.Table7[0];
+
+                $scope.dashboard.fixo = r.data.Table10;
+                $scope.dashboard.resumofixo = r.data.Table11[0];
 
                 $scope.dashboard.graficobarra = r.data.Table8;
 
