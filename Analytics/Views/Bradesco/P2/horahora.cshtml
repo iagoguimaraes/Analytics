@@ -57,22 +57,28 @@
                                 </div>
                             </div>
 
-                            <!--CREDORES-->
+                            <!--SEGMENTO-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Credores</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento" style="width:100%"></select2>
                             </div>
 
-                            <!--FASES-->
+                            <!--CARTEIRA-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Fases</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                             </div>
 
                             <!--SUPERVISOR-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Supervisor</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                            </div>
+
+                            <!--EQUIPE-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Equipe</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -392,9 +398,9 @@
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'valor_promessa' | currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'valor_negociacao'| currency: 'R$ '}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -405,9 +411,9 @@
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
                                         <td>{{f.promessa | number}}</td>
-                                        <td>{{f.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{f.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{f.negociacao | number}}</td>
-                                        <td>{{f.vlr_negociacao | currency: 'R$ '}}</td>
+                                        <td>{{f.valor_negociacao | currency: 'R$ '}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
@@ -478,9 +484,11 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            credores: '',
-            fases: '',
+            segmento: '',
+            carteira: '',
             supervisor: '',
+            equipe: '',
+            empresa: 2,
         };
 
         $scope.dashboard = {};
@@ -489,21 +497,22 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
-            url: "/api/ibi/dashboard/filtros",
+            method: 'POST',
+            url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.credores = data.Table;
-            $scope.dashFiltros.fases = data.Table1;
+            $scope.dashFiltros.segmento = data.Table;
+            $scope.dashFiltros.carteira = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
+            $scope.dashFiltros.equipe = data.Table3;
         });
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/ibi/dashboard/horahora",
+                url: "/api/bradesco/dashboard/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;

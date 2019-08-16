@@ -511,16 +511,19 @@
             segmento: '',
             carteira: '',
             supervisor: '',
-            equipe:''
+            equipe: '',
+            empresa: 1,
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.graficoDia = { indicador: 'promessa', dados: [], exibir: 'false' };
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
+            data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;

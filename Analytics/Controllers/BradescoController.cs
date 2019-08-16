@@ -14,16 +14,22 @@ namespace Analytics.Controllers
     public class BradescoController : ApiController
     {
         [Route("dashboard/filtros")]
-        [HttpGet]
+        [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardFiltros()
+        public HttpResponseMessage DashboardFiltros(FormDataCollection form)
         {
             try
             {
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                int empresa = Convert.ToInt32(form["empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("empresa", empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros",parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -32,6 +38,7 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
 
         [Route("dashboard/horahora")]
         [HttpPost]
@@ -47,8 +54,9 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                int empresa = Convert.ToInt32(form["empresa"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -58,6 +66,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
+                    parametros.Add("empresa", empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -83,8 +92,10 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                int empresa = Convert.ToInt32(form["empresa"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -94,6 +105,8 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
+                    parametros.Add("empresa", empresa);
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

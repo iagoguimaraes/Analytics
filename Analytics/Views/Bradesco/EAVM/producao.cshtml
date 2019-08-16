@@ -497,7 +497,8 @@
             segmento: '',
             carteira: '',
             supervisor: '',
-            equipe:''
+            equipe: '',
+            empresa: 3,
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -505,13 +506,14 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
+            data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.segmento = data.Table;
-            $scope.dashFiltros.carteira = data.Table4;
+            $scope.dashFiltros.carteira = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.equipe = data.Table3;
         });
@@ -520,7 +522,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/bradesco/dashboard/eavm/producao",
+                url: "/api/bradesco/dashboard/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
