@@ -130,8 +130,9 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                int empresa = Convert.ToInt16(form["empresa"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -139,6 +140,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("empresa", empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -160,13 +162,15 @@ namespace Analytics.Controllers
             {
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                int empresa = Convert.ToInt16(form["empresa"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
 
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("empresa", empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -193,15 +197,11 @@ namespace Analytics.Controllers
                 DateTime dtfim_imp = Convert.ToDateTime(form["dtfim_inc"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                int empresa = Convert.ToInt16(form["empresa"]);
+                string visao = form["visao"].ToString();
 
-                string procedure = "sp_dashboard_efetividade_vencimento";
 
-                if (form["visao"] == "andamento")
-                    procedure = "sp_dashboard_efetividade_andamento";
-                if (form["visao"] == "vencimento")
-                    procedure = "sp_dashboard_efetividade_vencimento";
-
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -211,8 +211,10 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim_imp", dtfim_imp.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("visao", visao);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

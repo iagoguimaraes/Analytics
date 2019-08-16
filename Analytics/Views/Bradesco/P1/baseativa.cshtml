@@ -230,6 +230,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             segmentos: '',
             carteiras: '',
+            empresa: 1,
         };
 
         $scope.mapa = {
@@ -241,8 +242,9 @@
 
         //carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
+            data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
