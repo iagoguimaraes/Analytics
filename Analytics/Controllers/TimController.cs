@@ -513,6 +513,26 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/rajadas")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardRajadas(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_RELATORIO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_timrajadas_dashboard");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO

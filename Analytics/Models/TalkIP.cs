@@ -84,10 +84,10 @@ namespace Analytics.Models
             {
                 wc.Headers.Add("Content-Type", "application/json");
                 wc.Headers.Add("Accept", "application/json");
-                //wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
+                wc.Headers.Add("Authorization", "Basic Y3JlZF9jYXNoXzI6Y3JlZF9jYXNoX3RhbGtpcA==");
 
                 // Credenciais de teste
-                wc.Headers.Add("Authorization", "Basic dGVzdGVAdGVzdGUuY29tOnRlc3RlX3RhbGtpcA==");
+                //wc.Headers.Add("Authorization", "Basic dGVzdGVAdGVzdGUuY29tOnRlc3RlX3RhbGtpcA==");
 
                 // Obtem o Lote já com o layout pronto para o json;
                 DataSet ds = ObterLote(id_lote, id_layout);
