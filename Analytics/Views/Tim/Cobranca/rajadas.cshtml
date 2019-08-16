@@ -1,0 +1,235 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+
+<div ng-controller="ctrl-tim-rajadas">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Rajadas</div>
+        </header>
+
+        <!--RAJADAS-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Rajadas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.rajadas">
+                                <thead>
+                                    <tr>
+                                        <th>Data/Hora</th>
+                                        <th>Qtd</th>
+                                        <th>Violado</th>
+                                        <th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.rajadas | groupBy: 'data'">
+
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'violado'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'violado':'qtd' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.hora}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.violado | number}}</td>
+                                        <td>{{p.violado / p.qtd | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--DATA/HORA-->
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.data" style="width: 100%; height: 250px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVIDOR/FILA-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.fila" style="width: 100%; height: 250px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--TEMPO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.tempo" style="width: 100%; height: 250px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-tim-rajadas', function ($scope, $http, $filter) {
+
+        $scope.dashboard = {};
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/dashboard/rajadas",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.rajadas = r.data.Table;
+
+                // ## DATA/HORA ##
+                let data = alasql('select data, hora, sum(qtd) qtd from ? group by data, hora order by data,hora', [r.data.Table1]);
+                let datas = alasql('select distinct data from ?', [data]);
+                let categories_dt = [];
+                for (d in datas) {
+                    let dt = datas[d].data;
+                    let horas = alasql('select distinct hora from ? where data = "' + dt + '"', [data]);
+                    categories_dt.push({ name: dt, categories: horas.map(x =>  x.hora + "h") });
+                }
+                $scope.dashboard.data = {
+                    chart: {
+                        type: 'column',
+                    },
+                    title: {
+                        text: 'Data/Hora Violações'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    xAxis: {
+                        categories: categories_dt,
+                        tickWidth: 0,
+                    },
+                    series: [
+                        {
+                            name: 'Violações',
+                            data: data.map(x => x.qtd),
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // ## SERVIDOR/FILA ##
+                let fila = alasql('select servidor, fila, sum(qtd) qtd from ? group by servidor, fila order by servidor,fila', [r.data.Table1]);
+                let srvs = alasql('select distinct servidor from ?', [fila]);
+                let categories_srv = [];
+                for (s in srvs) {
+                    let sv = srvs[s].servidor;
+                    let filas = alasql('select distinct fila from ? where servidor = "' + sv + '"', [fila]);
+                    categories_srv.push({ name: sv, categories: filas.map(x =>  x.fila) });
+                }
+                $scope.dashboard.fila = {
+                    chart: {
+                        type: 'column',
+                    },
+                    title: {
+                        text: 'Servidor/Fila Violações'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    xAxis: {
+                        categories: categories_srv,
+                        tickWidth: 0,
+                    },
+                    series: [
+                        {
+                            name: 'Violações',
+                            data: fila.map(x => x.qtd),
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                // ## TEMPO ##
+                let tempo = alasql('select tempo, sum(qtd) qtd from ? group by tempo order by tempo', [r.data.Table1]);
+                $scope.dashboard.tempo = {
+                    chart: {
+                        type: 'bar',
+                    },
+                    title: {
+                        text: 'Tempo Violações'
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    xAxis: {
+                        categories: tempo.map(x => x.tempo),
+                        tickWidth: 0,
+                    },
+                    series: [
+                        {
+                            name: 'Violações',
+                            dataLabels: {
+                                //enabled: true,
+                            },
+                            data: tempo.map(x => x.qtd),
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
