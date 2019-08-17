@@ -21,7 +21,7 @@ namespace Analytics.Controllers
         {
             try
             {
-                int empresa = Convert.ToInt32(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
@@ -54,7 +54,8 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
-                int empresa = Convert.ToInt32(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);                
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
@@ -67,6 +68,7 @@ namespace Analytics.Controllers
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("bloco", bloco);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -92,7 +94,8 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
-                int empresa = Convert.ToInt32(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
@@ -106,6 +109,7 @@ namespace Analytics.Controllers
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("bloco", bloco);
 
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
@@ -130,7 +134,8 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                int empresa = Convert.ToInt16(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
@@ -141,6 +146,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("bloco", bloco);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -162,7 +168,8 @@ namespace Analytics.Controllers
             {
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                int empresa = Convert.ToInt16(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
@@ -171,6 +178,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("bloco", bloco);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -197,8 +205,9 @@ namespace Analytics.Controllers
                 DateTime dtfim_imp = Convert.ToDateTime(form["dtfim_inc"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                int empresa = Convert.ToInt16(form["empresa"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 string visao = form["visao"].ToString();
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
@@ -212,7 +221,8 @@ namespace Analytics.Controllers
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("empresa", empresa);
-                    parametros.Add("visao", visao);
+                    parametros.Add("visao", visao);                    
+                    parametros.Add("bloco", bloco);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -255,8 +265,8 @@ namespace Analytics.Controllers
 
                 DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
                 //DataTable equipe_2 = JsonConvert.DeserializeObject<DataTable>(form["equipe_2"]);
-
-
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
 
                 string procedure = "sp_dashboard_comparativo_hora";
                 if (form["visao"] == "hora")
@@ -270,7 +280,7 @@ namespace Analytics.Controllers
                 if (form["visao"] == "mes")
                     procedure = "sp_dashboard_comparativo_mes";
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -292,6 +302,9 @@ namespace Analytics.Controllers
                     parametros.Add("carteira_2", carteira_2);
                     parametros.Add("fase_2", fase_2);
                     parametros.Add("supervisor_2", supervisor_2);
+
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("bloco", bloco);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -316,8 +329,9 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -349,7 +363,7 @@ namespace Analytics.Controllers
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -422,7 +436,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -450,7 +464,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -641,73 +655,7 @@ namespace Analytics.Controllers
         }
 
 
-        [Route("dashboard/bloco3/horahora")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardHoraHoraBloco3(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
-                //DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
-                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("bloco", bloco);
-                    //parametros.Add("supervisor", supervisor);
-                    //parametros.Add("equipe", equipe);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_bloco3", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("dashboard/bloco3/producao")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardProducaoBloco3(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
-                //DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
-                //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
-
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
-                {
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("bloco", bloco);
-                    //parametros.Add("supervisor", supervisor);
-                    //parametros.Add("equipe", equipe);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_bloco3", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
+        
 
 
 
