@@ -50,13 +50,12 @@
         </div>
 
         <div class="row margin-bottom">
-
-            <!--CARTEIRA-->
-            <div class="col-xs-4">
+            <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
-                    <div class="card-body" style="height: 350px">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12">
+                            <!--CARTEIRA-->
+                            <div class="col-xs-12 col-md-4">
                                 <div class="info-box-new bg-new-grey hover-zoom-effect">
                                     <div class="icon">
                                         <i class="fa fa-university"></i>
@@ -67,25 +66,62 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12">
+                            <!--ENTRADA-->
+                            <div class="col-xs-12 col-md-4">
                                 <div class="info-box-new bg-new-green hover-expand-effect">
                                     <div class="icon">
                                         <i class="fa fa-plus-square"></i>
                                     </div>
                                     <div class="content" style="text-align: center;">
-                                        <div class="text">Entrada Hoje</div>
+                                        <div class="text">Entrada </div>
                                         <div class="number">{{dashboard.carteira.entrada | number}}</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12">
+                            <!--SAIDA-->
+                            <div class="col-xs-12 col-md-4">
                                 <div class="info-box-new bg-new-orange hover-expand-effect">
                                     <div class="icon">
                                         <i class="fa fa-minus-square "></i>
                                     </div>
                                     <div class="content" style="text-align: center;">
-                                        <div class="text">Saída Hoje</div>
+                                        <div class="text">Saída </div>
                                         <div class="number">{{dashboard.carteira.saida | number}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="col-xs-4">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="card-body">
+                                            <h4 class="text-center">Carteira</h4>
+                                            <high-chart series="dashboard.follow" axis-Categories="dashboard.ds_follow" plot-Options-Bar-Data-Label="true" type="column" style="height: 280px"></high-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--FOLLOW-->
+                            <div class="col-xs-4">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="card-body">
+                                            <h4 class="text-center">Follow</h4>
+                                            <high-chart series="dashboard.segmentacao" axis-Categories="dashboard.ds_segmentacao" plot-Options-Bar-Data-Label="true" type="bar" style="height: 280px"></high-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--SMS-->
+                            <div class="col-xs-4">
+                                <div class="row">
+                                    <div class="card-body">
+                                        <h4 class="text-center">Ação Massiva</h4>
+                                        <h4 class="text-center">{{dashboard.qtd_sms.qtd_sms | number}}</h4>
+                                        <high-chart series="dashboard.sms" axis-Categories="dashboard.ds_sms" plot-Options-Bar-Data-Label="true" type="column" style="height: 250px"></high-chart>
                                     </div>
                                 </div>
                             </div>
@@ -93,42 +129,9 @@
                     </div>
                 </div>
             </div>
-
-            <!--FOLLOW-->
-            <div class="col-xs-4">
-                <div class="card">
-                    <div class="card-body" style="height: 350px">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="card-body">
-                                    <h4 class="text-center">Carteira</h4>
-                                    <high-chart series="dashboard.follow" axis-Categories="dashboard.ds_follow" plot-Options-Bar-Data-Label="true" type="bar" style="height: 280px"></high-chart>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--SMS-->
-            <div class="col-xs-4">
-                <div class="card">
-                    <div class="card-body" style="height: 350px">
-                        <div class="row">
-                            <div class="card-body">
-                                <h4 class="text-center">Ação Massiva</h4>
-                                <h4 class="text-center">{{dashboard.qtd_sms.qtd_sms | number}}</h4>
-                                <high-chart series="dashboard.sms" axis-Categories="dashboard.ds_sms" plot-Options-Bar-Data-Label="true" type="column" style="height: 250px"></high-chart>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <!--FUNIL-->
-
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
@@ -184,10 +187,12 @@
                 $scope.dashboard.ds_follow = data.Table1.map(obj => obj.ds_follow);
                 $scope.dashboard.ds_sms = data.Table2.map(obj => obj.ds_sms);
                 $scope.dashboard.qtd_sms = data.Table6[0];
+                $scope.dashboard.ds_segmentacao = data.Table7.map(obj => obj.ds_segmentacao);
 
 
                 $scope.dashboard.follow = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.quantidade)), color: '#b94d4b' }];
-                $scope.dashboard.sms = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.quantidade)), color: '#b94d4b'}];
+                $scope.dashboard.sms = [{ name: 'Quantidade', data: data.Table2.map(obj => (obj.quantidade)), color: '#b94d4b' }];
+                $scope.dashboard.segmentacao = [{ name: 'Quantidade', data: data.Table7.map(obj => (obj.quantidade)), color: '#b94d4b' }];
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '50%', data: data.Table4.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
 
                 // FUNIL
@@ -201,12 +206,12 @@
                         indexLabel: "{label} ({percentage}%)",
                         dataPoints: [
                             { y: 45, value: carteira.carteira, label: "Carteira", percentage: 100 },
-                            { y: 30, value: carteira.mailing, label: "Mailing", percentage: (carteira.mailing * 100 / carteira.carteira).toFixed(1) / 1},
+                            { y: 30, value: carteira.mailing, label: "Mailing", percentage: (carteira.mailing * 100 / carteira.carteira).toFixed(1) / 1 },
                             { y: 25, value: resumo.discado, label: "Discado", percentage: (resumo.discado * 100 / carteira.mailing).toFixed(1) / 1 },
-                            { y: 20, value: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1},
-                            { y: 15, value: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1},
-                            { y: 10, value: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1},
-                            { y: 10, value: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1},
+                            { y: 20, value: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1 },
+                            { y: 15, value: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1 },
+                            { y: 10, value: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1 },
+                            { y: 10, value: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1 },
                         ]
                     }]
                 };
