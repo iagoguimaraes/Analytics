@@ -135,7 +135,7 @@
                 <div class="row" style="background-color: white; color: black;">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
                         </div>
                     </div>
@@ -194,6 +194,7 @@
                                     <tr>
                                         <th>Hora</th>
                                         <th>Discado</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -210,6 +211,7 @@
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
                                         <td>{{hora.discado | number}}</td>
+                                        <td>{{hora.alo | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
@@ -217,7 +219,7 @@
                                         <td>{{hora.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{hora.negociacao | number}}</td>
                                         <td>{{hora.valor_negociacao | currency: 'R$ '}}</td>
-                                        <td>{{hora.contato / hora.discado | percentage:1}}</td>
+                                        <td>{{hora.alo / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
                                     </tr>
@@ -226,6 +228,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.alo | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
@@ -233,7 +236,7 @@
                                         <th>{{dashboard.resumo.valor_promessa | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
                                         <th>{{dashboard.resumo.valor_negociacao | currency: 'R$ '}}</th>
-                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
@@ -339,6 +342,7 @@
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
+                                <option value="alo">Atendido</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -538,7 +542,7 @@
             $scope.dashboard.horas = dados.map(obj => obj.hora);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];

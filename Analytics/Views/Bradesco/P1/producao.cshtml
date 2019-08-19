@@ -107,7 +107,7 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.alo | percentage: 1"></h4>
                         <p>Contato</p>
                     </div>
                     <div class="icon">
@@ -200,6 +200,7 @@
                                             <th>Data</th>
                                             @*<th>Agente</th>*@
                                             <th>Discado</th>
+                                            <th>Atendido</th>
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>CPCA</th>
@@ -218,6 +219,7 @@
                                             <td>{{d.data}}</td>
                                             @*<td>{{d.qtd_agente | number}}</td>*@
                                             <td>{{d.discado | number}}</td>
+                                            <td>{{d.alo | number}}</td>
                                             <td>{{d.contato | number}}</td>
                                             <td>{{d.cpc | number}}</td>
                                             <td>{{d.cpca | number}}</td>
@@ -225,7 +227,7 @@
                                             <td>{{d.vlr_promessa | currency: 'R$ '}}</td>
                                             <td>{{d.negociacao | number}}</td>
                                             <td>{{d.vlr_negociacao | currency: 'R$ '}}</td>
-                                            <td>{{d.contato / d.discado | percentage:1}}</td>
+                                            <td>{{d.alo / d.discado | percentage:1}}</td>
                                             <td>{{d.cpc / d.contato | percentage:1}}</td>
                                             <td>{{d.cpca / d.cpc | percentage:1}}</td>
                                             <td>{{d.promessa / d.cpca | percentage:1}}</td>
@@ -236,6 +238,7 @@
                                             <th>Total</th>
                                             @*<th>{{dashboard.resumo.qtd_agente | number}}</th>*@
                                             <th>{{dashboard.resumo.discado | number}}</th>
+                                            <th>{{dashboard.resumo.alo | number}}</th>
                                             <th>{{dashboard.resumo.contato | number}}</th>
                                             <th>{{dashboard.resumo.cpc | number}}</th>
                                             <th>{{dashboard.resumo.cpca | number}}</th>
@@ -243,7 +246,7 @@
                                             <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
                                             <th>{{dashboard.resumo.negociacao | number}}</th>
                                             <th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>
-                                            <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                            <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -261,6 +264,7 @@
                                         <option value="txapv">Tx Apv</option>
                                         <option value="conversao">Conversão</option>
                                         <option value="discado">Discado</option>
+                                        <option value="alo">Atendido</option>
                                         <option value="contato">Contato</option>
                                         <option value="cpc">CPC</option>
                                         <option value="cpca">CPCA</option>
@@ -565,7 +569,7 @@
             $scope.dashboard.dias = dados.map(obj => obj.data);
             switch ($scope.graficoDia.indicador) {
                 case 'hitrate':
-                    $scope.graficoDia.dados = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.graficoDia.dados = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
