@@ -362,6 +362,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
@@ -371,6 +372,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("empresa", empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_metas", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -396,6 +398,7 @@ namespace Analytics.Controllers
                 int ano = Convert.ToInt32(form["ano"]);
                 int mes = Convert.ToInt32(form["mes"]);
                 int id_segmento = Convert.ToInt32(form["id_segmento"]);
+                int carteira = Convert.ToInt32(form["carteira"]);
 
 
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
@@ -403,7 +406,7 @@ namespace Analytics.Controllers
                 DataTable promessa = JsonConvert.DeserializeObject<DataTable>(form["promessa"]);
 
 
-                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_BRADESCO_HUMANO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
