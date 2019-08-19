@@ -327,6 +327,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             supervisor: '',
             equipe: '',
+            empresa: "[{ 'id':'2'}]",
 
         };
 
@@ -339,7 +340,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/ibi/dashboard/filtros",
+            url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
@@ -354,7 +355,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/ibi/dashboard/ocupacao",
+                url: "/api/bradesco/dashboard/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

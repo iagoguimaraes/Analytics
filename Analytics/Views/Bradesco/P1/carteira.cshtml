@@ -194,6 +194,8 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             segmentos: '',
             carteiras: '',
+            empresa: "[{ 'id':'1'}]",
+            bloco: "[{ 'id':'1'}, {'id': '2'}]"
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -203,7 +205,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {

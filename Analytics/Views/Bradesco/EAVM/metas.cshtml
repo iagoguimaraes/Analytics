@@ -323,6 +323,7 @@
             carteira: '',
             ano: '' + new Date().getFullYear(),
             mes: '' + (new Date().getMonth() + 1),
+            empresa: "[{ 'id':'3'}]",
         };
 
         $scope.dashFiltros = {};
@@ -332,7 +333,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
@@ -340,15 +341,13 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.segmento = data.Table;
             $scope.dashFiltros.carteira = data.Table1;
-
-
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/bradesco/dashboard/eavm/metas",
+                url: "/api/bradesco/dashboard/metas",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
@@ -410,7 +409,7 @@
 
             $http({
                 method: 'POST',
-                url: "/api/bradesco/dashboard/eavm/cadmetas",
+                url: "/api/bradesco/dashboard/cadmetas",
                 data: $scope.metas,
             }).then(function success(r) {
                 $scope.carregarDashboard();

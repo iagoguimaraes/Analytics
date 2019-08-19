@@ -478,21 +478,24 @@
 
         dadosPagina.titulo = 'Hora Hora';
         dadosPagina.descricao = 'Bradesco'
-        $scope.showTbody = false;
+        $scope.showTbody = false;        
 
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+
             segmento: '',
             carteira: '',
             supervisor: '',
             equipe: '',
-            empresa: 1,
+            empresa: "[{ 'id':'1'}]",
+            bloco: "[{ 'id':'1'}, {'id': '2'}]"
         };
 
         $scope.dashboard = {};
         $scope.dashFiltros = {};
         $scope.grafico = { indicador: 'promessa' };
+
 
         // carregar os filtros
         $http({
@@ -522,8 +525,10 @@
                 $scope.dashboard.carteira = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.supervisor = data.Table4;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
                 $scope.carregarGrafico();
+
+                
             });
         }
 

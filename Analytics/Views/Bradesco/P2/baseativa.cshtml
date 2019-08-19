@@ -270,6 +270,8 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             credores: '',
             fases: '',
+            empresa: "[{ 'id':'2'}]",
+            bloco: "[{ 'id':'1'}, {'id': '2'}]"
         };
 
         $scope.mapa = {
@@ -295,7 +297,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/ibi/dashboard/baseativa",
+                url: "/api/bradesco/dashboard/baseativa",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

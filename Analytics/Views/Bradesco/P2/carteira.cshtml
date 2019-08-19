@@ -194,6 +194,8 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             credores: '',
             fases: '',
+            empresa: "[{ 'id':'2'}]",
+            bloco: "[{ 'id':'1'}, {'id': '2'}]"
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -204,7 +206,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/ibi/dashboard/filtros",
+            url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
@@ -217,7 +219,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/ibi/dashboard/carteira",
+                url: "/api/bradesco/dashboard/carteira",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

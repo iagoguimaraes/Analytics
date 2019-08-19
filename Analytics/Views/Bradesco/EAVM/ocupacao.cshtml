@@ -331,6 +331,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             supervisor: '',
             equipe: '',
+            empresa: "[{ 'id':'3'}]",
 
         };
 
@@ -358,7 +359,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/bradesco/dashboard/eavm/ocupacao",
+                url: "/api/bradesco/dashboard/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

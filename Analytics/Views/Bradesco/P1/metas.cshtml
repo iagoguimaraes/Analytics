@@ -73,9 +73,14 @@
                                 <!--MES-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading" style="width: 100px;">Segmento</label>
-                                    <select ng-model="mascara.indicador" ng-change="carregarMascara()">
+                                    @*<select ng-model="mascara.indicador" ng-change="carregarMascara()">
                                         <option value="1">Credmais e Bem</option>
                                         <option value="2">Private Label</option>
+                                    </select>*@
+
+                                    <select ng-model="mascara.indicador">
+                                        <option value="" selected="selected"> Selecione</option>
+                                        <option ng-repeat="cc in dashFiltros.segmento" value="{{cc.id_segmento}}">{{cc.ds_segmento}}</option>
                                     </select>
                                 </div>
 
@@ -286,7 +291,6 @@
             </div>
         </div>
 
-
         <!--GRAFICO DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -329,6 +333,7 @@
             carteira: '',
             ano: '' + new Date().getFullYear(),
             mes: '' + (new Date().getMonth() + 1),
+            empresa: "[{ 'id':'1'}]",
         };
 
         $scope.dashFiltros = {};
@@ -338,7 +343,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
@@ -390,12 +395,13 @@
             }
         }
 
-        $scope.carregarMascara = function () {
+        
+        //$scope.carregarMascara = function () {
 
-            let indicador = $scope.mascara.indicador;
-            $scope.dashboard.mascara = $scope.dashboard.dados.Table2.filter(obj => obj.id_segmento == indicador);
+        //    let indicador = $scope.mascara.indicador;
+        //    $scope.dashboard.mascara = $scope.dashboard.dados.Table2.filter(obj => obj.id_segmento == indicador);
          
-        }
+        //}
 
         $scope.carregarDashboard();
 
