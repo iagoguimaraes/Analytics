@@ -178,11 +178,11 @@
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                                <span class="description-text">Discado</span>
-                            </div>
-                        </div>*@
+            <div class="description-block">
+                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                <span class="description-text">Discado</span>
+            </div>
+        </div>*@
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -201,7 +201,13 @@
                             <span class="description-text">CPC</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.alega_pagamento | megaNumber"></h5>
+                            <span class="description-text">Alega</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
                             <span class="description-text">CPCA</span>
@@ -217,11 +223,11 @@
 
                 <div class="row bg-blue">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                                <span class="description-text">Hit Rate</span>
-                            </div>
-                        </div>*@
+            <div class="description-block">
+                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                <span class="description-text">Hit Rate</span>
+            </div>
+        </div>*@
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -242,7 +248,13 @@
                             <span class="description-text">Tx Apv</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.alega_pagamento / dashboard.resumo.cpc | percentage: 1"></h5>
+                            <span class="description-text">Tx Alega</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
@@ -282,7 +294,13 @@
                             <span class="description-text">CPC OP</span>
                         </div>
                     </div>
-                    <div class="col-sm-3 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="(dashboard.resumo.alega_pagamento / dashboard.resumo.qtd_op) | number : 0"></h5>
+                            <span class="description-text">Alega OP</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="(dashboard.resumo.cpca / dashboard.resumo.qtd_op) | number : 0"></h5>
                             <span class="description-text">CPCA OP</span>
@@ -509,11 +527,13 @@
                                         @*<th>Discado</th>*@
                                         <th>Contato</th>
                                         <th>CPC</th>
+                                        <th>Alega</th> 
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>Valor Promessa</th>
                                         @*<th>HitRate</th>*@
                                         <th>TxLoc</th>
+                                        <th>TxAlega</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -528,11 +548,13 @@
                                         @*<td>{{e | sumByColumn: 'discado'| number}}</td>*@
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'alega_pagamento'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
                                         @*<td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>*@
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -542,11 +564,13 @@
                                         @*<td>{{c.discado | number}}</td>*@
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
+                                        <td>{{c.alega_pagamento | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa| currency: 'R$ '}}</td>
                                         @*<td>{{c.contato / c.discado | percentage:1}}</td>*@
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
@@ -581,10 +605,12 @@
                                         <th>Supervisor/Equipe</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
+                                        <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>Valor Promessa</th>
                                         <th>TxLoc</th>
+                                        <th>TxAlega</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -598,10 +624,12 @@
                                         </td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'alega_pagamento'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ ' }}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -610,11 +638,13 @@
                                         <td>{{c.ds_equipe}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
+                                        <td>{{c.alega_pagamento | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
 
