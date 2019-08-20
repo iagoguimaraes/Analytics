@@ -1059,6 +1059,36 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/tele/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtivaTele(FormDataCollection form)
+        {
+            try
+            {
+                DateTime data = Convert.ToDateTime(form["data"]);
+                int atrasos = Convert.ToInt32(form["atrasos"]);
+                int carteiras = Convert.ToInt32(form["carteiras"]);
+            
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", data);
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("carteiras", carteiras);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_baseativa_tele", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion 
 
         #region DIGITAL
