@@ -74,11 +74,11 @@
 
         <!--RESUMO-->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Semparar/banner teste.png') no-repeat center;">
-            </div>
+            <!--<div class="widget-user-header bg-black" style="background: url('/Content/Images/Semparar/banner teste.png') no-repeat center;"></div
             <div class="widget-user-image">
                 <img class="img-circle" src="~/Content/Images/semparar/center-semparar.png" style="background-color: #fab510; border-style: solid; border-color: black" height="160" width="200">
             </div>
+                >-->
             <div class="box-footer">
 
                 <div class="row">
@@ -174,77 +174,77 @@
                         </small>
                     </div>
                     <div class="card-body">
-                                <!--TABELA-->
-                                <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
-                                    <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
-                                        <thead>
-                                            <tr>
-                                                <th>Hora</th>
-                                                <th>Discado</th>
-                                                <th>Contato</th>
-                                                <th>CPC</th>
-                                                <th>CPCA</th>
-                                                <th>Promessa</th>
-                                                <th>Hit Rate</th>
-                                                <th>Tx Loc</th>
-                                                <th>Tx Apv</th>
-                                                <th>Conversão</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="hora in dashboard.horahora">
-                                                <td>{{hora.hora}}</td>
-                                                <td>{{hora.discado | number}}</td>
-                                                <td>{{hora.contato | number}}</td>
-                                                <td>{{hora.cpc | number}}</td>
-                                                <td>{{hora.cpca | number}}</td>
-                                                <td>{{hora.promessa | number}}</td>
-                                                <td>{{hora.contato / hora.discado | percentage:1}}</td>
-                                                <td>{{hora.cpc / hora.contato | percentage:1}}</td>
-                                                <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                                <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Total</th>
-                                                <th>{{dashboard.resumo.discado | number}}</th>
-                                                <th>{{dashboard.resumo.contato | number}}</th>
-                                                <th>{{dashboard.resumo.cpc | number}}</th>
-                                                <th>{{dashboard.resumo.cpca | number}}</th>
-                                                <th>{{dashboard.resumo.promessa | number}}</th>
-                                                <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
-                                                <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
-                                                <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                                <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-
-                                <!--GRAFICO-->
-                                <div ng-show="graficoHora.exibir == 'true'">
-                                    <span class="pull-right">
-                                        <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
-                                            <option value="hitrate">Hit Rate</option>
-                                            <option value="txloc">Tx Loc</option>
-                                            <option value="txapv">Tx Apv</option>
-                                            <option value="conversao">Conversão</option>
-                                            <option value="discado">Discado</option>
-                                            <option value="contato">Contato</option>
-                                            <option value="cpc">CPC</option>
-                                            <option value="cpca">CPCA</option>
-                                            <option value="promessa">Promessa</option>
-                                        </select>
-                                    </span>
-                                    <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
-
-                                </div>
-
-                            </div>
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.discado | number}}</td>
+                                        <td>{{hora.contato | number}}</td>
+                                        <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.cpca | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.contato / hora.discado | percentage:1}}</td>
+                                        <td>{{hora.cpc / hora.contato | percentage:1}}</td>
+                                        <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
+                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                 </div>
-         </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoHora.exibir == 'true'">
+                            <span class="pull-right">
+                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                    <option value="hitrate">Hit Rate</option>
+                                    <option value="txloc">Tx Loc</option>
+                                    <option value="txapv">Tx Apv</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="discado">Discado</option>
+                                    <option value="contato">Contato</option>
+                                    <option value="cpc">CPC</option>
+                                    <option value="cpca">CPCA</option>
+                                    <option value="promessa">Promessa</option>
+                                </select>
+                            </span>
+                            <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!--DIAGRAMA FINALIZACOES-->
         <div class="row margin-bottom">
@@ -291,7 +291,7 @@
             </div>
         </div>
 
-            </div>
+    </div>
 </div>
 
 
@@ -349,18 +349,18 @@
         // carrega o filtro com as navegacoes disponiveis
         $scope.carregarFiltroDiagrama = function () {
             $scope.diagrama.navegacoes = $scope.diagrama.dados.reduce(
-            function (total, item) {
-                let n = { id_campanha: item.id_campanha, descricao: item.descricao };
-                if (!total.some(x => x.id_campanha == n.id_campanha))
-                    total.push(n);
+                function (total, item) {
+                    let n = { id_campanha: item.id_campanha, descricao: item.descricao };
+                    if (!total.some(x => x.id_campanha == n.id_campanha))
+                        total.push(n);
 
-                return total;
-            }, []);
+                    return total;
+                }, []);
 
             $scope.diagrama.navegacao = $scope.diagrama.navegacoes[0].id_campanha;
         };
 
-        
+
 
         // carregar o diagrama de acordo com a navegação escolhida
         $scope.carregarDiagrama = function () {
