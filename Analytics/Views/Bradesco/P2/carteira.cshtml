@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-ibi-carteira">
+<div ng-controller="ctrl-bradescop2-carteira">
 
     <!-- DAHSBOARD -->
     <div ng-if="dashboard.status == 200">
@@ -57,16 +57,16 @@
                                 </div>
                             </div>
 
-                            <!--CARTEIRAS-->
+                            <!--SEGMENTOS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Credores</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.credores" dados="dashFiltros.credores" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Segmentos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
                             </div>
 
-                            <!--SEGMENTACOES-->
+                            <!--CARTEIRAS-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Fases</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fases" dados="dashFiltros.fases" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -184,7 +184,7 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-ibi-carteira', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-bradescop2-carteira', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -192,8 +192,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            credores: '',
-            fases: '',
+            segmentos: '',
+            carteiras: '',
             empresa: "[{ 'id':'2'}]",
             bloco: "[{ 'id':'1'}, {'id': '2'}]"
         };
@@ -205,14 +205,14 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.credores = data.Table;
-            $scope.dashFiltros.fases = data.Table1;
+            $scope.dashFiltros.segmentos = data.Table;
+            $scope.dashFiltros.carteiras = data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

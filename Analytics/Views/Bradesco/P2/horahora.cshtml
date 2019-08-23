@@ -4,7 +4,7 @@
 
 
 <!-- DAHSBOARD -->
-<div ng-controller="ctrl-ibi-horahora">
+<div ng-controller="ctrl-bradescop2-horahora">
     <div ng-if="dashboard.status === 200">
 
         <!-- HEADER-->
@@ -122,7 +122,7 @@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
-                            <span class="description-text">Promessa</span>
+                            <span class="description-text">Acordo</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
@@ -161,7 +161,7 @@
                     <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency: 'R$ '"></h5>
-                            <span class="description-text">Valor Promessa</span>
+                            <span class="description-text">Valor Acordo</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
@@ -199,10 +199,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Vlr Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Vlr Negociação</th>
+                                        <th>$ Negociação</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Conversão</th>
@@ -273,21 +273,21 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        <th>$ Negociação</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="c in dashboard.credor | groupBy: 'credor'">
+                                <tbody ng-repeat="c in dashboard.credor | groupBy: 'segmento'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{c[0].credor}}
+                                            {{c[0].segmento}}
                                         </td>
                                         <td>{{c | sumByColumn: 'discado'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
@@ -303,7 +303,7 @@
                                     </tr>
 
                                     <tr ng-repeat="f in c" ng-show="showTbody">
-                                        <td>{{f.fase}}</td>
+                                        <td>{{f.carteira}}</td>
                                         <td>{{f.discado | number}}</td>
                                         <td>{{f.contato | number}}</td>
                                         <td>{{f.cpc | number}}</td>
@@ -316,9 +316,7 @@
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
 
@@ -383,10 +381,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        <th>$ Negociação</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -421,12 +419,9 @@
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -479,10 +474,10 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-ibi-horahora', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-bradescop2-horahora', function ($scope, $http, $filter, $interval, dadosPagina) {
 
         dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'IBI'
+        dadosPagina.descricao = 'P2'
         $scope.showTbody = false;
 
         $scope.filtros = {
@@ -528,7 +523,7 @@
                 $scope.dashboard.credor = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.supervisor = data.Table4;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
 
                 $scope.carregarGrafico();
             });
