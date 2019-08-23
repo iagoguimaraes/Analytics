@@ -1089,6 +1089,40 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/tele/efetividade")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoEfetividade(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int atrasos = Convert.ToInt32(form["atrasos"]);
+                int carteiras = Convert.ToInt32(form["carteiras"]);
+                string visao = form["visao"].ToString();
+
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("visao", visao);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_humano_dashboard_efetividade_tele", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion 
 
         #region DIGITAL
