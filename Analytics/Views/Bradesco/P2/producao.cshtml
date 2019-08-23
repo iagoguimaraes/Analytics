@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-ibi-producao">
+<div ng-controller="ctrl-bradescop2-producao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -144,7 +144,7 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Promessa</p>
+                        <p>Acordo</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -155,7 +155,7 @@
                 <div class="small-box bg-green-active">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
-                        <p>Valor Promessa</p>
+                        <p>Valor Acordo</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
@@ -205,10 +205,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        <th>$ Negociação</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -239,7 +239,7 @@
                                         <th>Total</th>
                                         @*<th>{{dashboard.resumo.qtd_agente | number}}</th>*@
                                         <th>{{dashboard.resumo.discado | number}}</th>
-                                        <th>{{dashboard.resumo.alo | number}}</th> 
+                                        <th>{{dashboard.resumo.alo | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
@@ -307,8 +307,8 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>$ Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
                                         <th>$ Negociação</th>
                                         <th>HitRate</th>
@@ -385,10 +385,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        <th>$ Negociação</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -502,7 +502,7 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-ibi-producao', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-bradescop2-producao', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Produção';
         dadosPagina.descricao = 'Ibi'
 
@@ -553,7 +553,7 @@
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.ocorrencia = data.Table4;
                 $scope.dashboard.supervisor = data.Table5;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table7.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table7.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
                 $scope.dashboard.dados = r.data;
 
                 let funil = data.Table[0];
