@@ -1,0 +1,871 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+<div ng-controller="ctrl-bradesco-gerencial">
+    <div ng-if="dashboard.status == 200">
+        <div class="margin-bottom"></div>
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresas" style="width:100%"></select2>
+                            </div>
+
+                            <!--SEGMENTOS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            @*<div class="form-group">
+                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                </div>*@
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro Blocos-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-danger" ng-click="filtrarBloco(1)">
+                    <input type="radio"> Bloco 1
+                </label>
+                <label class="btn btn-danger" ng-click="filtrarBloco(2)">
+                    <input type="radio"> Bloco 2
+                </label>
+                <label class="btn btn-danger" ng-click="filtrarBloco(3)">
+                    <input type="radio"> Bloco 3
+                </label>
+                <label class="btn btn-danger" ng-click="filtrarBloco(0)">
+                    <input type="radio"> Todos
+                </label>
+            </div>
+        </div>
+
+        <!--Efetividade-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade Mês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.efetividade_mes" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Efetividade dia a dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.efetividade_dia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Pagamento-->
+        <div class="row">
+            <div class="col-xs-12 col-lg-6 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Média pagamentos do mês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="small-box bg-new-blue-grey">
+                                    <div class="inner">
+                                        <h6 class="right">Média Pagamento Dia</h6>
+                                        <h3 class="right">{{dashboard.pagamentoAtual.qtd | number}}</h3>
+                                        <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.qtd_evolucao > 0 ? 'green' : 'red'}};background-color:{{dashboard.pagamentoAtual.qtd_evolucao > 0 ? 'white' : 'grey'}}">{{dashboard.pagamentoAtual.qtd_evolucao | percentage: 1}}</h4>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.qtd | number}}</h7>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="small-box bg-olive-active">
+                                    <div class="inner">
+                                        <h6 class="right">Média Valor Pago Dia</h6>
+                                        <h3 class="right">{{dashboard.pagamentoAtual.vlr | megaNumber}}</h3>
+                                        <h4 class="pull-right" style="color:{{dashboard.pagamentoAtual.vlr_evolucao > 0 ? 'green' : 'red'}};background-color:{{dashboard.pagamentoAtual.vlr_evolucao > 0 ? 'white' : 'grey'}}">{{dashboard.pagamentoAtual.vlr_evolucao | percentage: 1}}</h4>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.vlr | megaNumber }}</h7>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="small-box bg-olive-active">
+                                    <div class="inner">
+                                        <h6 class="right">Ticket Médio</h6>
+                                        <h3>{{dashboard.pagamentoAtual.tck | currency: 'R$ '}}</h3>
+                                        <h7 class="right">3M Atrás: {{dashboard.pagamentoAnterior.tck | currency }}</h7>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--GRAFICO MES-->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="card-body">
+                                    <high-chart series="dashboard.PagamentoqtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.mes" plot-Options-Column-Data-Label="true" type="column" style="width: 100%; height: 185px"></high-chart>
+                                </div>
+                                <div class="card-body">
+                                    <high-chart series="dashboard.PagamentovlrDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.mes" plot-Options-Column-Data-Label="true" type="column" style="width: 100%; height: 185px"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção pagamentos do mês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes_vlr" style="width: 100%; height: 275px"></high-charts>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes_qtd" style="width: 100%; height: 275px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Produção Operador-->
+        <div ng-show="exibirGrafico.exibir == true" class="row margin-bottom">
+            <!--Média PA Negocio-->
+            <div class="col-xs-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Negócio por operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="small-box bg-purple">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.media.md_op"></h3>
+                                        <p>Qtd Operador</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="small-box bg-yellow">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.media.md_qtd_op"></h3>
+                                        <p>Acordos</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="small-box bg-green-active">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.media.md_vlr_op | currency : 'R$'"></h3>
+                                        <p>Valor Negócio</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-money"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.qtdOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="150"></high-chart>
+                            </div>
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.PromessaOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="150"></high-chart>
+                            </div>
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.ValorOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="150"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Média PA Valor-->
+            <div class="col-xs-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção Média por operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.cttOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="190"></high-chart>
+                            </div>
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.cpcOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="190"></high-chart>
+                            </div>
+                            <div class="col-xs-12">
+                                <high-chart series="dashboard.cpcaOp" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="190"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Produção-->
+        <div class="row margin-bottom">
+            <!--Produção Média Dia-->
+            <div class="col-xs-12 col-md-6 ">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção média dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body" style="height:600px">
+                            <!--Promessa-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-green">
+                                    <div class="inner">
+                                        <h5>Acordo</h5>
+                                        <h3 align="center">{{dashboard.promessa.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.promessa.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.promessa.vs | percentage: 1" style="color:{{dashboard.promessa.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.promessa.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-handshake-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Conversão-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-green" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Conversão</h5>
+                                        <h3 align="center">{{dashboard.conversao.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.conversao.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.conversao.vs | percentage: 1" style="color:{{dashboard.conversao.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.conversao.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--CPCA-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-blue">
+                                    <div class="inner">
+                                        <h5>CPCA</h5>
+                                        <h3 align="center">{{dashboard.cpca.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpca.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.cpca.vs | percentage: 1" style="color:{{dashboard.cpca.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpca.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-bullseye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Tx Apv-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-blue" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Tx Aproveitamento</h5>
+                                        <h3 align="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.txapv.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.txapv.vs | percentage: 1" style="color:{{dashboard.txapv.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txapv.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Cpc-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-yellow-active">
+                                    <div class="inner">
+                                        <h5>CPC</h5>
+                                        <h3 align="center">{{dashboard.cpc.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpc.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.cpc.vs | percentage: 1" style="color:{{dashboard.cpc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpc.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-male"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Tx Loc-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-yellow-active" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Tx Localização</h5>
+                                        <h3 align="center">{{dashboard.txloc.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.txloc.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.txloc.vs | percentage: 1" style="color:{{dashboard.txloc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txloc.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Contato-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-grey">
+                                    <div class="inner">
+                                        <h5>Contato</h5>
+                                        <h3 align="center">{{dashboard.contato.p1 | number}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.contato.p2 | number}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.contato.vs | percentage: 1" style="color:{{dashboard.contato.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.contato.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-comments-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Hit Rate-->
+                            <div class="col-xs-6">
+                                <div class="small-box bg-new-grey" style="opacity: 0.75">
+                                    <div class="inner">
+                                        <h5>Hit Rate</h5>
+                                        <h3 align="center">{{dashboard.hitrate.p1 | percentage:1}}</h3>
+                                        <h7 class="right"> Média 3M anterior: {{dashboard.hitrate.p2 | percentage:1}}</h7>
+                                        <h4 class="pull-right" ng-bind="dashboard.hitrate.vs | percentage: 1" style="color:{{dashboard.hitrate.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.hitrate.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Funil Operacional-->
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção unique lote </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="baseFunil.mes" ng-change="carregarFunil(baseFunil.mes)">
+                                <option ng-repeat="r in dashboard.FiltroMes" value="{{r.mes}}">{{r.ds_mes}}</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <canvasjs config="dashboard.funil" style="width: 100%; height: 560px"></canvasjs>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Discagens-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise do Discador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body" style="height:440px">
+                            <div class="row margin-bottom">
+                                <high-chart series="dashboard.discagem" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.discagem.meses" plot-Options-Column-Data-Label="true" type="column" height="350"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Diagrama Discagens-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Diagrama do Discador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <sankey-chart dados="dashboard.diagrama" series-name="Qt Tabulação"></sankey-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Carteira-->
+        <div class="row">
+            <!--CARTEIRA MES-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Total {{grafico.indicador}} por mes</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGraficoCarteira()">
+                                <option value="inclusao">Inclusão</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="ativo">Ativo</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_meses" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_meses_vlr" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Data-Label="true" type="column" height="200"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Total ativo por empresa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table8')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.carteira_atual" type="pie" height="440" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-bradesco-gerencial', function ($scope, $http, $filter) {
+        document.body.classList.remove('menu-opened');
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        //$scope.grafico = { indicador: 'qtd' };
+
+        // filtros iniciais
+        let newdate = new Date();
+        newdate.setDate(newdate.getDate() - 1);
+
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+
+        $scope.grafico = {
+            indicador: 'ativo'
+        };
+
+        $scope.baseFunil = {
+            mes: ''
+        };
+
+        $scope.exibirGrafico = {
+            exibir: true
+        };
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresa: '',
+            segmentos: '',
+            carteiras: '',
+            bloco: '',
+
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'POST',
+            url: "/api/bradesco/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.segmentos = r.data.Table;
+            $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.empresas = r.data.Table6;
+
+        });
+
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/bradesco/dashboard/gerencial",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.FiltroMes = r.data.Table14;
+
+                $scope.dashboard.meses = r.data.Table14.map(obj => obj.mes_do_ano_descricao);
+                $scope.dashboard.media = r.data.Table10[0];
+                $scope.dashboard.pagamentoAtual = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Atual" ', [r.data.Table2])[0]
+                $scope.dashboard.pagamentoAnterior = alasql('select qtd, vlr, tck, qtd_evolucao, vlr_evolucao from ? where periodo = "Anterior" ', [r.data.Table2])[0]
+                $scope.dashboard.diagrama = r.data.Table5;
+
+                $scope.exibirProducaoOperador();
+
+                // PROJECAO DO MES
+                if (r.data.Table6.length > 0) {
+
+                    let mes_qtd = r.data.Table6.map(o => ({ y: o.qtd }));
+                    let mes_vlr = r.data.Table6.map(o => ({ y: o.vlr }));
+
+                    let mes_projecaoQtd = r.data.Table7.map(o => ({ y: o.qtd }));
+                    let mes_projecaoVlr = r.data.Table7.map(o => ({ y: o.vlr }));
+
+                    mes_qtd[mes_qtd.length - 1].dataLabels = { enabled: true };
+                    mes_projecaoQtd[mes_projecaoQtd.length - 1].dataLabels = { enabled: true };
+
+                    mes_vlr[mes_vlr.length - 1].dataLabels = { enabled: true };
+                    mes_projecaoVlr[mes_projecaoVlr.length - 1].dataLabels = { enabled: true };
+
+                    $scope.dashboard.projecao_mes_qtd = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
+                        },
+                        xAxis: {
+                            categories: r.data.Table7.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'green',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: mes_projecaoQtd
+                            },
+                            {
+                                type: 'area',
+                                name: 'Quantidade',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: mes_qtd
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+
+                    $scope.dashboard.projecao_mes_vlr = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            },
+                        },
+                        xAxis: {
+                            categories: r.data.Table7.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Projeção',
+                                color: 'green',
+                                dashStyle: 'dot',
+                                marker: { symbol: 'circle' },
+                                data: mes_projecaoVlr
+                            },
+                            {
+                                type: 'area',
+                                name: 'Valor',
+                                color: 'black',
+                                marker: { symbol: 'circle' },
+                                data: mes_vlr
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                }
+
+                $scope.carregarGraficoOperador();
+                $scope.carregarComparativo();
+                $scope.carregarGraficoPagamento();
+                $scope.carregarGraficoDiscagem();
+                $scope.carregarGraficoCarteira();
+                $scope.carregarGraficoEfetividade();
+                $scope.carregarFunil(r.data.Table14.map(obj => obj.mes)[0]);
+
+            });
+        }
+
+        $scope.carregarComparativo = function () {
+
+            let dados1 = alasql('select discado_atual,contato_atual, cpc_atual, cpca_atual, promessa_atual from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select discado_antes,contato_antes, cpc_antes, cpca_antes, promessa_antes from ?', [$scope.dashboard.dados.Table])[0];
+
+            let calculo = {
+                hitrate1: dados1.contato_atual / dados1.discado_atual,
+                hitrate2: dados2.contato_antes / dados2.discado_antes,
+                txloc1: dados1.cpc_atual / dados1.contato_atual,
+                txloc2: dados2.cpc_antes / dados2.contato_antes,
+                txapv1: dados1.cpca_atual / dados1.cpc_atual,
+                txapv2: dados2.cpca_antes / dados2.cpc_antes,
+                conversao1: dados1.promessa_atual / dados1.cpca_atual,
+                conversao2: dados2.promessa_antes / dados2.cpca_antes
+            }
+
+            $scope.dashboard.discado = { p1: dados1.discado_atual, p2: dados2.discado_antes, vs: dados1.discado_atual / dados2.discado_antes - 1 };
+            $scope.dashboard.contato = { p1: dados1.contato_atual, p2: dados2.contato_antes, vs: dados1.contato_atual / dados2.contato_antes - 1 };
+            $scope.dashboard.cpc = { p1: dados1.cpc_atual, p2: dados2.cpc_antes, vs: dados1.cpc_atual / dados2.cpc_antes - 1 };
+            $scope.dashboard.cpca = { p1: dados1.cpca_atual, p2: dados2.cpca_antes, vs: dados1.cpca_atual / dados2.cpca_antes - 1 };
+            $scope.dashboard.promessa = { p1: dados1.promessa_atual, p2: dados2.promessa_antes, vs: dados1.promessa_atual / dados2.promessa_antes - 1 };
+
+            $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 / calculo.hitrate2 - 1 };
+            $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 / calculo.txloc2 - 1 };
+            $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 / calculo.txapv2 - 1 };
+            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 / calculo.conversao2 - 1 };
+        }
+
+        $scope.carregarGraficoOperador = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.qtdOp = [{ name: 'Operadores', color: '#605ca8', data: dados.Table1.map(obj => (obj.qtd_agente)) }];
+            $scope.dashboard.cttOp = [{ name: 'Contatos', color: '#9e9e9e', data: dados.Table1.map(obj => (obj.qtd_ctt)) }];
+            $scope.dashboard.cpcOp = [{ name: 'Cpc', color: '#23bfaa', data: dados.Table1.map(obj => (obj.qtd_cpc)) }];
+            $scope.dashboard.cpcaOp = [{ name: 'Cpca', color: '#4f81bc', data: dados.Table1.map(obj => (obj.qtd_cpca)) }];
+
+            $scope.dashboard.PromessaOp = [{ name: 'Acordos', color: '#f39c12', data: dados.Table1.map(obj => (obj.qtd_promessa)) }];
+            $scope.dashboard.ValorOp = [{ name: 'Valor Negociado', color: '#368763', data: dados.Table1.map(obj => (obj.valor_promessa)) }];
+        }
+
+        $scope.carregarGraficoPagamento = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.PagamentoqtDia = [
+                { name: 'Quantidade', color: 'rgba(192, 192, 192, 0.8)', data: dados.Table3.map(obj => (obj.qtd_pagamento)) },
+                { name: 'Evolução', yAxis: 1, type: 'spline', color: 'rgba(0, 153, 76, 1)', data: dados.Table3.map(obj => (obj.evolucaoQtd * 100).toFixed(1) * 1) }];
+            $scope.dashboard.mes = dados.Table3.map(obj => (obj.data));
+
+            $scope.dashboard.PagamentovlrDia = [
+                { name: 'Valor', color: 'rgba(192, 192, 192, 0.8)', data: dados.Table3.map(obj => (obj.vlr_pagamento)) },
+                { name: 'Evolução', yAxis: 1, type: 'spline', color: 'rgba(0, 153, 76, 1)', data: dados.Table3.map(obj => (obj.evolucaoVlr * 100).toFixed(1) * 1) }];
+            $scope.dashboard.mes = dados.Table3.map(obj => (obj.data));
+
+        }
+
+        $scope.carregarGraficoDiscagem = function () {
+            let dados = $scope.dashboard.dados;
+
+            $scope.dashboard.discagem = [
+                { name: 'Outros', data: dados.Table4.map(obj => (obj.outros)) },
+                { name: 'Não Atende', data: dados.Table4.map(obj => (obj.natende)) },
+                { name: 'Falha', data: dados.Table4.map(obj => (obj.falha)) },
+                { name: 'Ocupado', data: dados.Table4.map(obj => (obj.ocupado)) },
+                { name: 'Hangup', data: dados.Table4.map(obj => (obj.hangup)) },
+                { name: 'Alô', data: dados.Table4.map(obj => (obj.atendido)) },
+                { name: '% Evolução Alô', yAxis: 1, type: 'spline', color: 'yellow', data: dados.Table4.map(obj => (obj.evolucao * 100).toFixed(1) * 1) }];
+
+            $scope.dashboard.discagem.meses = dados.Table4.map(obj => obj.mes_do_ano_descricao);
+
+        }
+
+        $scope.carregarGraficoCarteira = function () {
+            let dados = $scope.dashboard.dados;
+            let indicador = $scope.grafico.indicador;
+
+            $scope.dashboard.meses = dados.Table9.map(obj => obj.mes);
+            $scope.dashboard.dias = dados.Table11.map(obj => obj.data);
+
+            $scope.dashboard.carteira_atual = [
+                { name: 'Contratos', innerSize: '30%', data: dados.Table8.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
+
+            $scope.dashboard.carteira_meses = [
+                { name: 'Qtd Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador])) }];
+
+            $scope.dashboard.carteira_meses_vlr = [
+                { name: 'Saldo Contrato ' + [indicador], data: dados.Table9.map(obj => (obj[indicador + "Vlr"])) }];
+
+        }
+
+        $scope.carregarGraficoEfetividade = function () {
+            let dados = $scope.dashboard.dados;
+            let indicador = $scope.grafico.indicador;
+
+            $scope.dashboard.meses = dados.Table11.map(obj => obj.mes);
+            $scope.dashboard.dias = dados.Table12.map(obj => obj.data);
+
+            $scope.dashboard.efetividade_mes = [
+                { name: 'Acordos', data: dados.Table11.map(obj => (obj.qtd_acordos)) }
+                , { name: 'Pagamentos', data: dados.Table11.map(obj => (obj.qtd_pagamentos)) }
+                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'orange', data: dados.Table11.map(obj => (obj.efetividade)) }];
+
+            $scope.dashboard.efetividade_dia = [
+                { name: 'Acordos', data: dados.Table12.map(obj => (obj.qtd_acordos)) }
+                , { name: 'Pagamentos', data: dados.Table12.map(obj => (obj.qtd_pagamentos)) }
+                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'orange', data: dados.Table12.map(obj => (obj.efetividade)) }];
+
+        }
+
+        $scope.carregarFunil = function (mes) {
+
+            let funil = alasql('select qtd base, trabalhado, contato, cpc, cpca, acordo from ? where mes = ' + mes + '', [$scope.dashboard.dados.Table13])[0];
+
+            $scope.dashboard.funil = {
+                animationEnabled: true,
+                data: [{
+                    type: "funnel",
+                    toolTipContent: "<b>{label}</b>: {value} <b>({percentage}%)</b>",
+                    indexLabel: "{label} ({percentage}%)",
+                    dataPoints: [
+                        { y: 45, value: funil.base, label: "Carteira", percentage: 100 },
+                        { y: 25, value: funil.trabalhado, label: "Trabalhado", percentage: (funil.trabalhado * 100 / funil.base).toFixed(1) / 1 },
+                        { y: 20, value: funil.contato, label: "Contato", percentage: (funil.contato * 100 / funil.base).toFixed(1) / 1 },
+                        { y: 15, value: funil.cpc, label: "CPC", percentage: (funil.cpc * 100 / funil.base).toFixed(1) / 1 },
+                        { y: 10, value: funil.cpca, label: "CPCA", percentage: (funil.cpca * 100 / funil.base).toFixed(1) / 1 },
+                        { y: 10, value: funil.acordo, label: "Acordo", percentage: (funil.acordo * 100 / funil.base).toFixed(1) / 1 },
+                    ]
+                }]
+            };
+        }
+
+        $scope.filtrarBloco = function (id) {
+
+            if (id == 1) {
+                $scope.filtros.bloco = "[{ 'id':'1'}]";
+            } else if (id == 2) {
+                $scope.filtros.bloco = "[{ 'id':'2'}]";
+            } else if (id == 3) {
+                $scope.filtros.bloco = "[{ 'id':'3'}]";
+            }
+            else {
+                $scope.filtros.bloco = '';
+            }
+
+            $scope.carregarDashboard();
+        }
+
+        $scope.exibirProducaoOperador = function () {
+
+            if (!$scope.filtros.empresa == '' || !$scope.filtros.carteiras == '' || !$scope.filtros.segmentos == '' || !$scope.filtros.bloco == '') {
+                $scope.exibirGrafico.exibir = false;
+            } else {
+                
+                $scope.exibirGrafico.exibir = true;
+            }
+
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX(".xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+    });
+</script>
+
