@@ -80,6 +80,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
                             </div>
 
+                            <!--OPERADOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Operador</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operador" dados="dashFiltros.operador" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -95,7 +101,7 @@
 
             <div class="row margin-bottom">
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-gray">
+                    <div class="small-box bg-black">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
                             <p>Discado</p>
@@ -107,7 +113,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-aqua">
+                    <div class="small-box bg-aqua-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
                             <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
@@ -120,7 +126,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-red">
+                    <div class="small-box bg-red-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.cpc | number"></h3>
                             <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
@@ -133,7 +139,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-yellow-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
                             <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
@@ -146,7 +152,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-green">
+                    <div class="small-box bg-green-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                             <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
@@ -161,11 +167,11 @@
                 <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box" style="color:white; background-color:#004592;">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.Ticket_Medio | currency: 'R$ ' "></h3>
-                            <p>Ticket Médio</p>
+                            <h3 ng-bind="(dashboard.resumo.tmp_faladoAftercall /  dashboard.resumo.tmp_disponivel) | percentage: 1"></h3>
+                            <p>Ocupação Média</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-usd"></i>
+                            <i class="fa fa-hourglass-half"></i>
                         </div>
                     </div>
                 </div>
@@ -185,64 +191,50 @@
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-new-brown">
+                    <div class="small-box bg-aqua">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.qtd_pa | number"></h3>
-                            <p>Média PA</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-laptop"></i>
+                            <h3 ng-bind="(dashboard.resumo.contato / dashboard.resumo.qtd_op )| number : 0 "></h3>
+                            <p>Contato / Op</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-red-active">
+                    <div class="small-box bg-red">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.promessa_cartao | number"></h3>
-                            <h4 class="pull-right" ng-bind="dashboard.resumo.promessa_cartao / dashboard.resumo.promessa | percentage: 1"></h4>
-                            <p>Promessa Cartão</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-cc-mastercard"></i>
+                            <h3 ng-bind="(dashboard.resumo.cpc / dashboard.resumo.qtd_op )| number : 0"></h3>
+                            <p>Cpc / Op</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-yellow-active">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.migracao | number"></h3>
-                            <h4 class="pull-right" ng-bind="dashboard.resumo.migracao / dashboard.resumo.promessa | percentage: 1"></h4>
-                            <p>Promessa Migr.</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-thumbs-up"></i>
+                            <h3 ng-bind="(dashboard.resumo.cpca / dashboard.resumo.qtd_op )| number : 0"></h3>
+                            <p>Cpca / Op</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-green-active">
+                    <div class="small-box bg-green">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.promessa_parc | number"></h3>
-                            <h4 class="pull-right" ng-bind="dashboard.resumo.promessa_parc / dashboard.resumo.promessa | percentage: 1"></h4>
-                            <p>Promessa Parc.</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-handshake-o"></i>
+                            <h3 ng-bind="(dashboard.resumo.promessa / dashboard.resumo.qtd_op )| number : 0"></h3>
+                            <p>Promessa / Op</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-aqua-active">
+                    <div class="small-box bg-gray">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.cpca_dia / dashboard.resumo.qtd_op | number: 0"></h3>
-                            <p>CPCA / Operador</p>
+                            <h3 ng-bind="dashboard.resumo.qtd_pago | number: 0"></h3>
+                            <h4 class="pull-right" ng-bind="(dashboard.resumo.qtd_pago / dashboard.resumo.qtd_promessa) | percentage: 1"></h4>
+                            <p>Efetividade</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-dot-circle-o"></i>
+                            <i class="fa fa-check"></i>
                         </div>
                     </div>
                 </div>
@@ -262,86 +254,73 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
-                                    <thead>
-                                        <tr>
-                                            <th>Dia</th>
-                                            <th>OP</th>
-                                            <th>PA</th>
-                                            <th>Discado</th>
-                                            <th>Atendido</th>
-                                            <th>Contato</th>
-                                            <th>CPC</th>
-                                            <th>CPCA</th>
-                                            <th>Promessa</th>
-                                            <th>Prom Cart.</th>
-                                            <th>Prom Migr.</th>
-                                            <th>Prom Parc.</th>
-                                            <th>CPCA / Op</th>
-                                            <th>% Cart.</th>
-                                            <th>% Migr.</th>
-                                            <th>% Parc.</th>
-                                            @*<th>HitRate</th>*@
-                                            <th>TxAtd</th>
-                                            <th>TxLoc</th>
-                                            <th>TxApv</th>
-                                            <th>Conversão</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="dia in dashboard.dia">
-                                            <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                            <td>{{dia.qtd_op | number}}</td>
-                                            <td>{{dia.qtd_pa | number}}</td>
-                                            <td>{{dia.discado | number}}</td>
-                                            <td>{{dia.transferido | number}}</td>
-                                            <td>{{dia.contato | number}}</td>
-                                            <td>{{dia.cpc | number}}</td>
-                                            <td>{{dia.cpca | number}}</td>
-                                            <td>{{dia.promessa | number}}</td>
-                                            <td>{{dia.promessa_cartao | number}}</td>
-                                            <td>{{dia.migracao | number}}</td>
-                                            <td>{{dia.promessa_parc | number}}</td>
-                                            <td>{{dia.cpca / dia.qtd_op | number : 0 }}</td>
-                                            <td>{{dia.promessa_cartao / dia.promessa |  percentage:1}}</td>
-                                            <td>{{dia.migracao / dia.promessa |  percentage:1}}</td>
-                                            <td>{{dia.promessa_parc / dia.promessa|  percentage:1}}</td>
-                                            @*<td>{{dia.contato / dia.discado | percentage:1}}</td>*@
-                                            <td>{{dia.contato / dia.transferido | percentage:1}}</td>
-                                            <td>{{dia.cpc / dia.contato | percentage:1}}</td>
-                                            <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
-                                            <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Total</th>
-                                            <th>{{dashboard.resumo.qtd_op | number}}</th>
-                                            <th>{{dashboard.resumo.qtd_pa | number}}</th>
-                                            <th>{{dashboard.resumo.discado | number}}</th>
-                                            <th>{{dashboard.resumo.transferido | number}}</th>
-                                            <th>{{dashboard.resumo.contato | number}}</th>
-                                            <th>{{dashboard.resumo.cpc | number}}</th>
-                                            <th>{{dashboard.resumo.cpca | number}}</th>
-                                            <th>{{dashboard.resumo.promessa | number}}</th>
-                                            <th>{{dashboard.resumo.promessa_cartao | number}}</th>
-                                            <th>{{dashboard.resumo.migracao | number}}</th>
-                                            <th>{{dashboard.resumo.promessa_parc | number}}</th>
-                                            <th>{{dashboard.resumo.cpca_dia / dashboard.resumo.qtd_op | number : 0 }}</th>
-                                            <th>{{dashboard.resumo.promessa_cartao / dashboard.resumo.promessa | percentage: 1}}</th>
-                                            <th>{{dashboard.resumo.migracao / dashboard.resumo.promessa | percentage: 1}}</th>
-                                            <th>{{dashboard.resumo.promessa_parc / dashboard.resumo.promessa | percentage: 1}}</th>
-                                            @*<th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>*@
-                                            <th>{{dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1}}</th>
-                                            <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
-                                            <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                            <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                        <thead>
+                                            <tr>
+                                                <th>Dia</th>
+                                                <th>Discado</th>
+                                                <th>Contato</th>
+                                                <th>CPC</th>
+                                                <th>CPCA</th>
+                                                <th>Promessa</th>
+                                                <th>Pro. Cartão</th>
+                                                <th>Pro. Migração</th>
+                                                <th>Pro. Parc</th>
+                                                <th>% Cartão</th>
+                                                <th>% Migração</th>
+                                                <th>% Parc.</th>
+                                                <th>Tx Loc</th>
+                                                <th>Tx Apv</th>
+                                                <th>Conversão</th>
+                                                <th>% Ocup.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="dia in dashboard.dia">
+                                                <td>{{dia.data}}</td>
+                                                <td>{{dia.discado | number}}</td>
+                                                <td>{{dia.contato | number}}</td>
+                                                <td>{{dia.cpc | number}}</td>
+                                                <td>{{dia.cpca | number}}</td>
+                                                <td>{{dia.promessa | number}}</td>
+                                                <td>{{dia.promessa_cartao | number}}</td>
+                                                <td>{{dia.migracao | number}}</td>
+                                                <td>{{dia.promessa_parc | number}}</td>
+                                                <td>{{dia.promessa_cartao / dia.promessa | percentage:1}}</td>
+                                                <td>{{dia.migracao / dia.promessa | percentage:1}}</td>
+                                                <td>{{dia.promessa_parc / dia.promessa | percentage:1}}</td>
+                                                <td>{{dia.cpc / dia.contato | percentage:1}}</td>
+                                                <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
+                                                <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                                <td>{{dia.tmp_faladoAftercall / dia.tmp_disponivel | percentage:1}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Total</th>
+                                                <th>{{dashboard.resumo.discado | number}}</th>
+                                                <th>{{dashboard.resumo.contato | number}}</th>
+                                                <th>{{dashboard.resumo.cpc | number}}</th>
+                                                <th>{{dashboard.resumo.cpca | number}}</th>
+                                                <th>{{dashboard.resumo.promessa | number}}</th>
+                                                <th>{{dashboard.resumo.promessa_cartao | number}}</th>
+                                                <th>{{dashboard.resumo.migracao | number}}</th>
+                                                <th>{{dashboard.resumo.promessa_parc | number}}</th>
+                                                <th>{{dashboard.resumo.promessa_cartao / dashboard.resumo.promessa | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.migracao / dashboard.resumo.promessa | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.promessa_parc / dashboard.resumo.promessa | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                                <th>{{dashboard.resumo.tmp_faladoAftercall / dashboard.resumo.tmp_disponivel | percentage:1}}</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -358,13 +337,14 @@
                             </div>
                             <small class="pull-right">
                                 <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                    <option value="ocupacao">% Ocupação</option>
+                                    <option value="tmpocioso">% Ocioso</option>
                                     <option value="hitrate">Hit Rate</option>
                                     <option value="txtab">Tx Atendido</option>
                                     <option value="txloc">Tx Loc</option>
                                     <option value="txapv">Tx Apv</option>
                                     <option value="conversao">Conversão</option>
                                     <option value="discado">Discado</option>
-                                    <option value="transferido">Atendido</option>
                                     <option value="contato">Contato</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
@@ -372,7 +352,8 @@
                                     <option value="promessa_cartao">Promessa Cartão</option>
                                     <option value="promessa_parc">Promessa Parcelada</option>
                                     <option value="migracao">Promessa Migração</option>
-                                    <option value="Ticket_Medio">Ticket Médio Promessa</option>
+                                    <option value="segundos_tma">TMA</option>
+                                    <option value="segundos_tme">TME</option>
                                 </select>
                             </small>
                         </div>
@@ -402,19 +383,20 @@
                                     <thead>
                                         <tr>
                                             <th>Equipe</th>
-                                            <th>Contato</th>
-                                            <th>CPC</th>
-                                            <th>CPCA</th>
-                                            <th>Promessa</th>
-                                            <th>Prom Cart.</th>
-                                            <th>Prom Migr.</th>
-                                            <th>Prom Parc.</th>
-                                            <th>CPCA / OP</th>
+                                            <th>Op</th>
+                                            <th>Ctt</th>
+                                            <th>Cpc</th>
+                                            <th>Cpca</th>
+                                            <th>Prom.</th>
+                                            <th>Tma</th>
+                                            <th>% Ocupação</th>
+                                            <th>% Pausa</th>
+                                            <th>% Manual x Disp.</th>
+                                            <th>% Ctt x Att.</th>
                                             <th>% Cart.</th>
                                             <th>% Migr.</th>
                                             <th>% Parc.</th>
-                                            <th>TxLoc</th>
-                                            <th>TxApv</th>
+                                            <th>% CPC</th>
                                             <th>Conversão</th>
                                         </tr>
                                     </thead>
@@ -425,37 +407,39 @@
                                                 <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                                 {{c[0].supervisor}}
                                             </td>
+                                            <td>{{c | sumByColumn: 'qtd_op'| number}}</td>
                                             <td>{{c | sumByColumn: 'contato'| number}}</td>
-                                            <td>{{c | sumByColumn: 'cpc'| number}}</td>
+                                            <td>{{c | sumByColumn: 'cpc' | number}}</td>
                                             <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                             <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                            <td>{{c | sumByColumn: 'promessa_cartao'| number}}</td>
-                                            <td>{{c | sumByColumn: 'migracao'| number}}</td>
-                                            <td>{{c | sumByColumn: 'promessa_parc'| number}}</td>
-                                            <td>{{c | divideSumColumns: 'cpca':'qtd_op' | number : 0}}</td>
+                                            <td>{{c | divideSumColumns: 'tmp_falado':'contato' | formatTimer}}</td>
+                                            <td>{{c | divideSumColumns: 'tmp_faladoAftercall':'tmp_disponivel' | percentage:1}}</td>
+                                            <td>{{c | divideSumColumns: 'tmp_pausa':'tmp_logado' | percentage:1}}</td>
+                                            <td>{{c | divideSumColumns: 'tmp_manual':'tmp_disponivel' | percentage:1}}</td>
+                                            <td>{{c | divideSumColumns: 'atendidas':'contato' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
-                                            <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                             <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                         </tr>
 
                                         <tr ng-repeat="p in c" ng-show="showTbody">
                                             <td>{{p.equipe}}</td>
+                                            <td>{{p.qtd_op | number}}</td>
                                             <td>{{p.contato | number}}</td>
                                             <td>{{p.cpc | number}}</td>
-                                            <td>{{p.cpca | number}}</td>
+                                            <td>{{p.cpc | number}}</td>
                                             <td>{{p.promessa | number}}</td>
-                                            <td>{{p.promessa_cartao | number}}</td>
-                                            <td>{{p.migracao | number}}</td>
-                                            <td>{{p.promessa_parc | number}}</td>
-                                            <td>{{p.cpca / p.qtd_op | number: 0}}</td>
+                                            <td>{{p.tmp_falado / p.contato | formatTimer}}</td>
+                                            <td>{{p.tmp_faladoAftercall / p.tmp_disponivel | percentage:1}}</td>
+                                            <td>{{p.tmp_pausa / p.tmp_logado | percentage:1}}</td>
+                                            <td>{{p.tmp_manual / p.tmp_disponivel | percentage:1}}</td>
+                                            <td>{{p.atendidas / p.contato | percentage:1}}</td>
                                             <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
                                             <td>{{p.migracao / p.promessa | percentage:1}}</td>
                                             <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
                                             <td>{{p.cpc / p.contato | percentage:1}}</td>
-                                            <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                             <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                         </tr>
 
@@ -469,21 +453,21 @@
                 </div>
             </div>
 
-            <!-- ANÁLISE POR OCORRENCIA -->
+            <!-- ANÁLISE POR OPERADOR -->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <span class="card-header-title">Andamentos</span>
+                            <span class="card-header-title">Consolidade Operador</span>
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
                             </div>
-                            <div class="card-header-button" ng-click="extrair('Table2')">
+                            <div class="card-header-button" ng-click="extrair('Table4')">
                                 <i class="fa fa-file-excel-o"></i>
                             </div>
                         </div>
                         <div class="card-body">
-                            <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.tabulacao" paging="false" order="[[1,'desc']]"></d-table>
+                            <d-table class="table table-striped table-bordered" style="width:100%" scroll-collapse="true" scroll-y="324px" dados="dashboard.operador" order="[[6,'desc']]"></d-table>
                         </div>
                     </div>
                 </div>
@@ -510,6 +494,7 @@
             segmentacao: '',
             supervisor: '',
             tenure: '',
+            operador: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -528,6 +513,7 @@
             $scope.dashFiltros.segmentacao = r.data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.tenure = data.Table3;
+            $scope.dashFiltros.operador = data.Table13;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -538,12 +524,12 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
-                $scope.dashboard.status = r.status;                
+                $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.tabulacao = data.Table2;
-                $scope.dashboard.equipe = data.Table3;
+                $scope.dashboard.equipe = data.Table2;
+                $scope.dashboard.operador = data.Table4;
 
                 $scope.carregarGrafico();
 
@@ -555,6 +541,12 @@
             let dados = $scope.dashboard.dia;
             $scope.dashboard.datas = dados.map(obj => obj.data);
             switch ($scope.grafico.indicador) {
+                case 'ocupacao':
+                    $scope.dashboard.grafico = [{ name: 'ocupação', data: dados.map(obj => (obj.tmp_faladoAftercall * 100 / obj.tmp_disponivel).toFixed(1) * 1) }];
+                    break;
+                case 'tmpocioso':
+                    $scope.dashboard.grafico = [{ name: 'tempo ocioso', data: dados.map(obj => (obj.tmp_ocioso * 100 / obj.tmp_disponivel).toFixed(1) * 1) }];
+                    break;
                 case 'hitrate':
                     $scope.dashboard.grafico = [{ name: 'hit rate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
