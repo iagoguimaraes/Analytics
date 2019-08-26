@@ -112,6 +112,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
+                DataTable regiao = JsonConvert.DeserializeObject<DataTable>(form["regiao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -121,6 +122,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
+                    parametros.Add("regiao", regiao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
