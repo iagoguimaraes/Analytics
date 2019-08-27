@@ -215,7 +215,7 @@
         <!--Produção Operador-->
         <div ng-show="exibirGrafico.exibir == true" class="row margin-bottom">
             <!--Média PA Negocio-->
-            <div class="col-xs-12 col-lg-6">
+            <div class="margin-bottom col-xs-12 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Negócio por operador</span>
@@ -225,11 +225,11 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-4">
+                            <div class="col-xs-3">
                                 <div class="small-box bg-purple">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.media.md_op"></h3>
-                                        <p>Qtd Operador</p>
+                                        <p>Operadores</p>
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-users"></i>
@@ -237,7 +237,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-4">
+                            <div class="col-xs-3">
                                 <div class="small-box bg-yellow">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.media.md_qtd_op"></h3>
@@ -249,10 +249,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-4">
+                            <div class="col-xs-6">
                                 <div class="small-box bg-green-active">
                                     <div class="inner">
-                                        <h3 ng-bind="dashboard.media.md_vlr_op | currency : 'R$'"></h3>
+                                        <h3 ng-bind="dashboard.media.md_vlr_op | currency : 'R$ '"></h3>
                                         <p>Valor Negócio</p>
                                     </div>
                                     <div class="icon">
@@ -276,8 +276,8 @@
                 </div>
             </div>
 
-            <!--Média PA Valor-->
-            <div class="col-xs-12 col-lg-6">
+            <!--Média PA Indicadores-->
+            <div class="margin=bottom col-xs-12 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Produção Média por operador</span>
@@ -305,7 +305,7 @@
         <!--Produção-->
         <div class="row margin-bottom">
             <!--Produção Média Dia-->
-            <div class="col-xs-12 col-md-6 ">
+            <div class="margin-bottom col-xs-12 col-md-6 ">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Produção média dia</span>
@@ -314,104 +314,106 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-body" style="height:600px">
-                            <!--Promessa-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-green">
-                                    <div class="inner">
-                                        <h5>Acordo</h5>
-                                        <h3 align="center">{{dashboard.promessa.p1 | number}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.promessa.p2 | number}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.promessa.vs | percentage: 1" style="color:{{dashboard.promessa.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.promessa.vs > 0 ? 'white' : 'grey'}}"></h4>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-handshake-o"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Conversão-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-green" style="opacity: 0.75">
-                                    <div class="inner">
-                                        <h5>Conversão</h5>
-                                        <h3 align="center">{{dashboard.conversao.p1 | percentage:1}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.conversao.p2 | percentage:1}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.conversao.vs | percentage: 1" style="color:{{dashboard.conversao.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.conversao.vs > 0 ? 'white' : 'grey'}}"></h4>
+                        <div class="card-body">
+                            <div class="row">
+                                <!--Promessa-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-green">
+                                        <div class="inner">
+                                            <h5>Acordo</h5>
+                                            <h3 align="center">{{dashboard.promessa.p1 | number}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.promessa.p2 | number}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.promessa.vs | percentage: 1" style="color:{{dashboard.promessa.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.promessa.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-handshake-o"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--CPCA-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-new-blue">
-                                    <div class="inner">
-                                        <h5>CPCA</h5>
-                                        <h3 align="center">{{dashboard.cpca.p1 | number}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpca.p2 | number}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.cpca.vs | percentage: 1" style="color:{{dashboard.cpca.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpca.vs > 0 ? 'white' : 'grey'}}"></h4>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-bullseye"></i>
+                                <!--Conversão-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-green" style="opacity: 0.75">
+                                        <div class="inner">
+                                            <h5>Conversão</h5>
+                                            <h3 align="center">{{dashboard.conversao.p1 | percentage:1}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.conversao.p2 | percentage:1}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.conversao.vs | percentage: 1" style="color:{{dashboard.conversao.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.conversao.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Tx Apv-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-new-blue" style="opacity: 0.75">
-                                    <div class="inner">
-                                        <h5>Tx Aproveitamento</h5>
-                                        <h3 align="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.txapv.p2 | percentage:1}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.txapv.vs | percentage: 1" style="color:{{dashboard.txapv.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txapv.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                <!--CPCA-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-new-blue">
+                                        <div class="inner">
+                                            <h5>CPCA</h5>
+                                            <h3 align="center">{{dashboard.cpca.p1 | number}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.cpca.p2 | number}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.cpca.vs | percentage: 1" style="color:{{dashboard.cpca.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpca.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-bullseye"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Cpc-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-yellow-active">
-                                    <div class="inner">
-                                        <h5>CPC</h5>
-                                        <h3 align="center">{{dashboard.cpc.p1 | number}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.cpc.p2 | number}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.cpc.vs | percentage: 1" style="color:{{dashboard.cpc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpc.vs > 0 ? 'white' : 'grey'}}"></h4>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-male"></i>
+                                <!--Tx Apv-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-new-blue" style="opacity: 0.75">
+                                        <div class="inner">
+                                            <h5>Tx Aproveitamento</h5>
+                                            <h3 align="center"> {{dashboard.txapv.p1 | percentage:1}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.txapv.p2 | percentage:1}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.txapv.vs | percentage: 1" style="color:{{dashboard.txapv.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txapv.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Tx Loc-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-yellow-active" style="opacity: 0.75">
-                                    <div class="inner">
-                                        <h5>Tx Localização</h5>
-                                        <h3 align="center">{{dashboard.txloc.p1 | percentage:1}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.txloc.p2 | percentage:1}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.txloc.vs | percentage: 1" style="color:{{dashboard.txloc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txloc.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                <!--Cpc-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-yellow-active">
+                                        <div class="inner">
+                                            <h5>CPC</h5>
+                                            <h3 align="center">{{dashboard.cpc.p1 | number}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.cpc.p2 | number}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.cpc.vs | percentage: 1" style="color:{{dashboard.cpc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.cpc.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-male"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Contato-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-new-grey">
-                                    <div class="inner">
-                                        <h5>Contato</h5>
-                                        <h3 align="center">{{dashboard.contato.p1 | number}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.contato.p2 | number}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.contato.vs | percentage: 1" style="color:{{dashboard.contato.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.contato.vs > 0 ? 'white' : 'grey'}}"></h4>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-comments-o"></i>
+                                <!--Tx Loc-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-yellow-active" style="opacity: 0.75">
+                                        <div class="inner">
+                                            <h5>Tx Localização</h5>
+                                            <h3 align="center">{{dashboard.txloc.p1 | percentage:1}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.txloc.p2 | percentage:1}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.txloc.vs | percentage: 1" style="color:{{dashboard.txloc.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.txloc.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Hit Rate-->
-                            <div class="col-xs-6">
-                                <div class="small-box bg-new-grey" style="opacity: 0.75">
-                                    <div class="inner">
-                                        <h5>Hit Rate</h5>
-                                        <h3 align="center">{{dashboard.hitrate.p1 | percentage:1}}</h3>
-                                        <h7 class="right"> Média 3M anterior: {{dashboard.hitrate.p2 | percentage:1}}</h7>
-                                        <h4 class="pull-right" ng-bind="dashboard.hitrate.vs | percentage: 1" style="color:{{dashboard.hitrate.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.hitrate.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                <!--Contato-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-new-grey">
+                                        <div class="inner">
+                                            <h5>Contato</h5>
+                                            <h3 align="center">{{dashboard.contato.p1 | number}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.contato.p2 | number}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.contato.vs | percentage: 1" style="color:{{dashboard.contato.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.contato.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-comments-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Hit Rate-->
+                                <div class="col-xs-6">
+                                    <div class="small-box bg-new-grey" style="opacity: 0.75">
+                                        <div class="inner">
+                                            <h5>Hit Rate</h5>
+                                            <h3 align="center">{{dashboard.hitrate.p1 | percentage:1}}</h3>
+                                            <h7 class="right"> 3m Atrás: {{dashboard.hitrate.p2 | percentage:1}}</h7>
+                                            <h4 class="pull-right" ng-bind="dashboard.hitrate.vs | percentage: 1" style="color:{{dashboard.hitrate.vs > 0 ? 'green' : 'red'}};background-color:{{dashboard.hitrate.vs > 0 ? 'white' : 'grey'}}"></h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -435,8 +437,7 @@
                         </small>
                     </div>
                     <div class="card-body">
-                        <canvasjs config="dashboard.funil" style="width: 100%; height: 560px"></canvasjs>
-
+                        <canvasjs config="dashboard.funil" style="width: 100%; height: 585px"></canvasjs>
                     </div>
                 </div>
             </div>
@@ -482,7 +483,7 @@
         </div>
 
         <!--Carteira-->
-        <div class="row">
+        <div class="row margin-bottom">
             <!--CARTEIRA MES-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
@@ -854,7 +855,7 @@
             if (!$scope.filtros.empresa == '' || !$scope.filtros.carteiras == '' || !$scope.filtros.segmentos == '' || !$scope.filtros.bloco == '') {
                 $scope.exibirGrafico.exibir = false;
             } else {
-                
+
                 $scope.exibirGrafico.exibir = true;
             }
 
