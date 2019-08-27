@@ -449,6 +449,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             segmento: '',
             carteira: '',
+            empresa: "[{ 'id':'1'}]",
             supervisor: '',
             equipe: '',
         };
@@ -464,7 +465,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
