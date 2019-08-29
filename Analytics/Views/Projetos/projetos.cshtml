@@ -38,6 +38,12 @@
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="lista.filtros.status" dados="opcoes.statuses"></select2>
                         </div>
 
+                        <!--RESPONSAVEIS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Responsável</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="lista.filtros.responsaveis" dados="opcoes.responsavel"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarProjetos()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -86,7 +92,7 @@
                         <ul class="list-inline">
                             <li class="pull-left" style="font-size: 14px;">
                                 <i class="fa fa-lightbulb-o"></i>
-                                <b ng-bind="x.nome | uppercase"></b>
+                                <b ng-bind="x.id_projeto + ' - ' + x.nome | uppercase"></b>
                             </li>
                             <li class="pull-right">
                                 <span ng-bind="x.prioridade"></span>
@@ -281,7 +287,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title">{{editprojeto.nome | uppercase}}</h4>
+                        <h4 class="modal-title">{{editprojeto.id_projeto + ' - ' + editprojeto.nome | uppercase}}</h4>
                     </div>
                     <div class="modal-body">
 
@@ -487,6 +493,7 @@
         $scope.lista = {
             filtros: {
                 status: null,
+                responsaveis: '',
             },
             order: '',
             orderField: 'prazo',

@@ -110,12 +110,14 @@ namespace Analytics.Controllers
             try
             {
                 DataTable status = JsonConvert.DeserializeObject<DataTable>(form["status"]);
+                DataTable responsaveis = JsonConvert.DeserializeObject<DataTable>(form["responsaveis"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
                 {
                     Dictionary<string, object> parameters = new Dictionary<string, object>();
 
                     parameters.Add("@status", status);
+                    parameters.Add("@responsaveis", responsaveis);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("prjt_sel_projeto", parameters);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
