@@ -137,7 +137,7 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green-active">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
+                        <h3 ng-bind="dashboard.resumo.vlr_acordo_bloco3 | megaNumber"></h3>
                         <p>Valor de Acordo</p>
                     </div>
                     <div class="icon">
@@ -189,7 +189,7 @@
                                         <th>Acordo</th>
                                         <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>$ Negociação</th>
+                                        @*<th>$ Negociação</th>*@
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -205,9 +205,9 @@
                                         <td>{{d.cpc | number}}</td>
                                         <td>{{d.cpca | number}}</td>
                                         <td>{{d.promessa | number}}</td>
-                                        <td>{{d.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{d.vlr_acordo_bloco3 | currency: 'R$ '}}</td>
                                         <td>{{d.negociacao | number}}</td>
-                                        <td>{{d.vlr_negociacao | currency: 'R$ '}}</td>
+                                        @*<td>{{d.vlr_negociacao | currency: 'R$ '}}</td>*@
                                         <td>{{d.alo / d.discado | percentage:1}}</td>
                                         <td>{{d.cpc / d.contato | percentage:1}}</td>
                                         <td>{{d.cpca / d.cpc | percentage:1}}</td>
@@ -223,9 +223,9 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vlr_acordo_bloco3 | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>
+                                        @*<th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>*@
                                         <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -249,9 +249,9 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Acordo</option>
-                                    <option value="vlr_promessa">Valor Acordo</option>
+                                    <option value="vlr_acordo_bloco3">Valor Acordo</option>
                                     <option value="negociacao">Negociação</option>
-                                    <option value="vlr_negociacao">Valor Negociação</option>
+                                    @*<option value="vlr_negociacao">Valor Negociação</option>*@
                                 </select>
                             </span>
                             <high-chart series="graficoDia.dados" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
@@ -289,7 +289,7 @@
                                         <th>Acordo</th>
                                         <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>$ Negociação</th>
+                                        @*<th>$ Negociação</th>*@
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
@@ -307,9 +307,9 @@
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'valor_promessa' | currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'vlr_acordo_bloco3' | currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{c | sumByColumn: 'valor_negociacao'| currency: 'R$ '}}</td>
+                                        @*<td>{{c | sumByColumn: 'valor_negociacao'| currency: 'R$ '}}</td>*@
                                         <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -322,9 +322,9 @@
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
                                         <td>{{f.promessa | number}}</td>
-                                        <td>{{f.valor_promessa | currency: 'R$ '}}</td>
+                                        @*<td>{{f.valor_promessa | currency: 'R$ '}}</td>*@
                                         <td>{{f.negociacao | number}}</td>
-                                        <td>{{f.valor_negociacao | currency: 'R$ '}}</td>
+                                        <td>{{f.vlr_acordo_bloco3 | currency: 'R$ '}}</td>
                                         <td>{{f.contato / f.discado | percentage:1}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
@@ -431,6 +431,7 @@
             </div>
         </div>
 
+        <!--POR OPERADOR-->
         <div class="row  margin-bottom">
             <div class="col-xs-12">
                 <div class="card">

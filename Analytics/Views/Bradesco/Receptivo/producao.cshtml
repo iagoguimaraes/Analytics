@@ -126,7 +126,7 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Promessa</p>
+                        <p>Acordo</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -138,7 +138,7 @@
                 <div class="small-box" style="color:white; background-color:#004592;">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
-                        <p>Valor de Promessa</p>
+                        <p>Valor de Acordo</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-usd"></i>
@@ -175,10 +175,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Vlr Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Vlr Negociação</th>
+                                        @*<th>Vlr Negociação</th>*@
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Conversão</th>
@@ -195,7 +195,7 @@
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{dia.negociacao | number}}</td>
-                                        <td>{{dia.vlr_negociacao | currency: 'R$ '}}</td>
+                                        @*<td>{{dia.vlr_negociacao | currency: 'R$ '}}</td>*@
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
@@ -212,7 +212,7 @@
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>
+                                        @*<th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>*@
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -246,10 +246,10 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
-                                <option value="vlr_promessa">Valor Promessa</option>
+                                <option value="promessa">Acordo</option>
+                                <option value="vlr_promessa">$ Acordo</option>
                                 <option value="negociacao">Negociação</option>
-                                <option value="vlr_negociacao">Valor Negociação</option>
+                                @*<option value="vlr_negociacao">Valor Negociação</option>*@
                             </select>
                         </small>
                     </div>
@@ -292,7 +292,7 @@
                                         <th>Atendida</th>
                                         <th>Abandonada</th>
                                         <th>% Abandono</th>
-                                        <th>Tempo Médio Atendimento</th>
+                                        <th>TMA</th>
                                         <th>Tempo Médio em Fila</th>
                                     </tr>
                                 </thead>
@@ -329,8 +329,8 @@
             </div>
         </div>
 
+        <!--OCORRENCIA-->
         <div class="row margin-bottom">
-            <!--OCORRENCIA-->
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
@@ -343,25 +343,21 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
+                                <option value="promessa">Acordo</option>
                                 <option value="negociacao">Negociação</option>
                             </select>
                         </small>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12 col-md-6 margin-bottom">
-                                <high-chart series="dashboard.ocorrenciaQuantidade" type="pie" title-Text="Financeiro" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                            </div>
-                            <div class="col-xs-12 col-md-6 margin-bottom">
-                                <high-chart series="dashboard.ocorrenciaFinanceiro" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            <div class="col-xs-12 col-md-12 margin-bottom">
+                                <high-chart series="dashboard.ocorrenciaQuantidade" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <!--ANALISE POR SUPERVISOR \ AGENTE-->
         <div class="row margin-bottom">
@@ -385,10 +381,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        @*<th>Valor Negociação</th>*@
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -406,7 +402,7 @@
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{c | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
+                                        @*<td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>*@
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -419,7 +415,7 @@
                                         <td>{{f.promessa | number}}</td>
                                         <td>{{f.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{f.negociacao | number}}</td>
-                                        <td>{{f.vlr_negociacao | currency: 'R$ '}}</td>
+                                        @*<td>{{f.vlr_negociacao | currency: 'R$ '}}</td>*@
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
@@ -452,7 +448,7 @@
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
 
 
     </div>
@@ -477,6 +473,7 @@
             carteira: '',
             supervisor: '',
             equipe: '',
+            empresa: '',
         };
 
         $scope.dashFiltros = {
@@ -490,7 +487,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
@@ -556,11 +553,11 @@
 
         $scope.carregarGraficoPizza = function () {
 
-            let dadosqtd = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ') valor from ? group by empresa ', [$scope.dashboard.empresaqtd]);
-            let dadosfinan = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ')  quantidade from ? group by empresa ', [$scope.dashboard.empresafinanceiro]);
+            let dadosqtd = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ') quantidade from ? group by empresa ', [$scope.dashboard.empresaqtd]);
+            let dadosfinan = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ') valor  from ? group by empresa ', [$scope.dashboard.empresafinanceiro]);
 
-            $scope.dashboard.ocorrenciaFinanceiro = [{ name: 'Financeiro', innerSize: '10%', data: dadosqtd.map(obj => ({ name: obj.empresa, y: obj.valor })) }];
-            $scope.dashboard.ocorrenciaQuantidade = [{ name: 'Quantidade', innerSize: '10%', data: dadosfinan.map(obj => ({ name: obj.empresa, y: obj.quantidade })) }];
+            $scope.dashboard.ocorrenciaQuantidade = [{ name: 'Financeiro', innerSize: '10%', data: dadosqtd.map(obj => ({ name: obj.empresa, y: obj.quantidade })) }];
+            $scope.dashboard.ocorrenciaFinanceiro = [{ name: 'Quantidade', innerSize: '10%', data: dadosfinan.map(obj => ({ name: obj.empresa, y: obj.valor })) }];
 
         }
 
