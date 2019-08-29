@@ -116,36 +116,36 @@
                             <span class="description-text">Hit Rate</span>
                         </div>
                     </div>*@
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
                             <span class="description-text">Tx Loc</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
                             <span class="description-text">Tx Apv</span>
                         </div>
                     </div>
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$'"></h5>
-                            <span class="description-text">Valor Promessa</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$ '"></h5>
+                            <span class="description-text">Valor Acordo</span>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    @*<div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.vlr_negociacao | currency: 'R$'"></h5>
                             <span class="description-text">Valor Negociação</span>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
 
             </div>
@@ -174,10 +174,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Vlr Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Vlr Negociação</th>
+                                        <th>@*Vlr Negociação*@</th>
                                         @*<th>Hit Rate</th>*@
                                         <th>Tx Loc</th>
                                         <th>Conversão</th>
@@ -243,10 +243,10 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
-                                <option value="vlr_promessa">Valor Promessa</option>
+                                <option value="promessa">Acordo</option>
+                                <option value="vlr_promessa">$ Acordo</option>
                                 <option value="negociacao">Negociação</option>
-                                <option value="vlr_negociacao">Valor Negociação</option>
+                                @*<option value="vlr_negociacao">Valor Negociação</option>*@
                             </select>
                         </small>
                     </div>
@@ -326,8 +326,8 @@
             </div>
         </div>
 
+        <!--INSUCESSO RECUSA-->
         <div class="row margin-bottom">
-            <!--INSUCESSO RECUSA-->
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
@@ -340,25 +340,24 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
+                                <option value="promessa">Acordo</option>
                                 <option value="negociacao">Negociação</option>
                             </select>
                         </small>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-12 col-md-6 margin-bottom">
+                            @*<div class="col-xs-12 col-md-6 margin-bottom">
                                 <high-chart series="dashboard.ocorrenciaQuantidade" type="pie" title-Text="Financeiro" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                            </div>
-                            <div class="col-xs-12 col-md-6 margin-bottom">
-                                <high-chart series="dashboard.ocorrenciaFinanceiro" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                            </div>*@
+                            <div class="col-xs-12 col-md-12 margin-bottom">
+                                <high-chart series="dashboard.ocorrenciaQuantidade" type="pie" title-Text="Quantidade" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <!--ANALISE POR SUPERVISOR \ EQUIPE-->
         <div class="row margin-bottom">
@@ -382,10 +381,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>Valor Negociação</th>
+                                        @*<th>$ Negociação</th>*@
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -403,7 +402,7 @@
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{c | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
+                                        @*<td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>*@
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -416,7 +415,7 @@
                                         <td>{{f.promessa | number}}</td>
                                         <td>{{f.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{f.negociacao | number}}</td>
-                                        <td>{{f.vlr_negociacao | currency: 'R$ '}}</td>
+                                        @*<td>{{f.vlr_negociacao | currency: 'R$ '}}</td>*@
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
@@ -460,8 +459,8 @@
 
         $scope.dashboard = {};
 
-        $scope.grafico = { indicador: 'contato' };
-        $scope.graficoPizza = { indicador: 'contato' }
+        $scope.grafico = { indicador: 'promessa' };
+        $scope.graficoPizza = { indicador: 'promessa' }
 
         // carregar os filtros
         $http({
@@ -529,11 +528,11 @@
 
         $scope.carregarGraficoPizza = function () {
 
-            let dadosqtd = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ') valor from ? group by empresa ', [$scope.dashboard.empresaqtd]);
-            let dadosfinan = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ')  quantidade from ? group by empresa ', [$scope.dashboard.empresafinanceiro]);
+            let dadosqtd = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ') quantidade from ? group by empresa ', [$scope.dashboard.empresaqtd]);
+            let dadosfinan = alasql('select empresa, sum(' + $scope.graficoPizza.indicador + ')  valor from ? group by empresa ', [$scope.dashboard.empresafinanceiro]);
 
-            $scope.dashboard.ocorrenciaFinanceiro = [{ name: 'Financeiro', innerSize: '10%', data: dadosqtd.map(obj => ({ name: obj.empresa, y: obj.valor })) }];
-            $scope.dashboard.ocorrenciaQuantidade = [{ name: 'Quantidade', innerSize: '10%', data: dadosfinan.map(obj => ({ name: obj.empresa, y: obj.quantidade })) }];
+            $scope.dashboard.ocorrenciaFinanceiro = [{ name: 'Financeiro', innerSize: '10%', data: dadosfinan.map(obj => ({ name: obj.empresa, y: obj.valor })) }];
+            $scope.dashboard.ocorrenciaQuantidade = [{ name: 'Quantidade', innerSize: '10%', data: dadosqtd.map(obj => ({ name: obj.empresa, y: obj.quantidade })) }];
 
         }
 

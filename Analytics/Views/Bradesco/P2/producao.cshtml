@@ -154,7 +154,7 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green-active">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
+                        <h3 ng-bind="dashboard.resumo.vlr_acordo | megaNumber"></h3>
                         <p>Valor Acordo</p>
                     </div>
                     <div class="icon">
@@ -225,7 +225,7 @@
                                         <td>{{d.cpc | number}}</td>
                                         <td>{{d.cpca | number}}</td>
                                         <td>{{d.promessa | number}}</td>
-                                        <td>{{d.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{d.vlr_acordo | currency: 'R$ '}}</td>
                                         <td>{{d.negociacao | number}}</td>
                                         <td>{{d.vlr_negociacao | currency: 'R$ '}}</td>
                                         <td>{{d.alo / d.discado | percentage:1}}</td>
@@ -244,7 +244,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vlr_acordo | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.negociacao | number}}</th>
                                         <th>{{dashboard.resumo.vlr_negociacao | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
@@ -310,28 +310,26 @@
                                         <th>Acordo</th>
                                         <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>$ Negociação</th>
                                         <th>HitRate</th>
                                         <th>Txa Loc</th>
                                         <th>Txa Apv</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="c in dashboard.credor | groupBy: 'credor'">
+                                <tbody ng-repeat="c in dashboard.credor | groupBy: 'segmento'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{c[0].credor}}
+                                            {{c[0].segmento}}
                                         </td>
                                         <td>{{c | sumByColumn: 'discado'| number}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'vlr_acordo'| currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao'| number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
                                         <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -339,15 +337,14 @@
                                     </tr>
 
                                     <tr ng-repeat="f in c" ng-show="showTbody">
-                                        <td>{{f.fase}}</td>
+                                        <td>{{f.carteira}}</td>
                                         <td>{{f.discado | number}}</td>
                                         <td>{{f.contato | number}}</td>
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
                                         <td>{{f.promessa| number}}</td>
-                                        <td>{{f.vlr_promessa| currency: 'R$ '}}</td>
+                                        <td>{{f.vlr_acordo| currency: 'R$ '}}</td>
                                         <td>{{f.negociacao| number}}</td>
-                                        <td>{{f.vlr_negociacao| currency: 'R$ '}}</td>
                                         <td>{{f.contato / f.discado | percentage:1}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.cpca / f.cpc | percentage:1}}</td>
@@ -388,7 +385,6 @@
                                         <th>Acordo</th>
                                         <th>$ Acordo</th>
                                         <th>Negociação</th>
-                                        <th>$ Negociação</th>
                                         <th>TxLoc</th>
                                         <th>Conversão</th>
                                     </tr>
@@ -404,9 +400,8 @@
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{c | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_promessa' | currency: 'R$ '}}</td>
+                                        <td>{{c | sumByColumn: 'vlr_acordo' | currency: 'R$ '}}</td>
                                         <td>{{c | sumByColumn: 'negociacao' | number}}</td>
-                                        <td>{{c | sumByColumn: 'vlr_negociacao'| currency: 'R$ '}}</td>
                                         <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
@@ -417,9 +412,8 @@
                                         <td>{{f.cpc | number}}</td>
                                         <td>{{f.cpca | number}}</td>
                                         <td>{{f.promessa | number}}</td>
-                                        <td>{{f.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{f.vlr_acordo | currency: 'R$ '}}</td>
                                         <td>{{f.negociacao | number}}</td>
-                                        <td>{{f.vlr_negociacao | currency: 'R$ '}}</td>
                                         <td>{{f.cpc / f.contato | percentage:1}}</td>
                                         <td>{{f.promessa / f.cpca | percentage:1}}</td>
                                     </tr>
