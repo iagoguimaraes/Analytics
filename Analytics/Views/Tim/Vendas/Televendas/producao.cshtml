@@ -290,6 +290,8 @@
                                         <th>% Recusa</th>
                                         <th>% Venda</th>
                                         <th>Chips</th>
+                                        <th>Controle</th>
+                                        <th>Pós</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.operacao | groupBy: 'supervisor'">
@@ -309,6 +311,8 @@
                                         <td>{{c | divideSumColumns: 'recusa':'efetivo' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'venda':'efetivo' | percentage:1}}</td>
                                         <td>{{c | sumByColumn: 'chips'| number}}</td>
+                                        <td>{{c | sumByColumn: 'controle'| number}}</td>
+                                        <td>{{c | sumByColumn: 'pos'| number}}</td>
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
@@ -322,6 +326,8 @@
                                         <td>{{p.recusa / p.efetivo | percentage:1}}</td>
                                         <td>{{p.venda / p.efetivo | percentage:1}}</td>
                                         <td>{{p.chips | number}}</td>
+                                        <td>{{p.controle | number}}</td>
+                                        <td>{{p.pos | number}}</td>
                                     </tr>
 
                                 </tbody>
