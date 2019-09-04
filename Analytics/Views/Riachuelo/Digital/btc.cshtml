@@ -259,99 +259,99 @@
     </div>
 
 </div>
-        <script>
+<script>
 
-            angular.module('app').controller('ctrl-riachuelo-btc', function ($scope, $http, $filter, dadosPagina) {
-                dadosPagina.titulo = 'Best Time to Call';
-                dadosPagina.descricao = 'Riachuelo'
+    angular.module('app').controller('ctrl-riachuelo-btc', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Best Time to Call';
+        dadosPagina.descricao = 'Riachuelo'
 
-                $scope.dashboard = {};
-                $scope.mapa = {
-                    indicador: 'hitrate'
-                }
+        $scope.dashboard = {};
+        $scope.mapa = {
+            indicador: 'hitrate'
+        }
 
-                // filtros iniciais
-                let dtini = new Date();
-                dtini.setDate(dtini.getDate() - 7);
+        // filtros iniciais
+        let dtini = new Date();
+        dtini.setDate(dtini.getDate() - 7);
 
-                $scope.filtros = {
-                    dtini: $filter('date')(dtini, "yyyy-MM-dd"),
-                    dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-                    carteiras: '',
-                    funcionario: '',
-                    regiao: '',
-                };
+        $scope.filtros = {
+            dtini: $filter('date')(dtini, "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            carteiras: '',
+            funcionario: '',
+            regiao: '',
+        };
 
-                // carrega os filtros e colocar no scope
-                $scope.carregarFiltros = function () {
-                    $http({
-                        method: 'GET',
-                        url: "/api/riachuelo/dashboard/filtros",
-                    }).then(function success(r) {
-                        $scope.dashboardFiltros = r;
-                    });
-                }
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/riachuelo/dashboard/filtros",
+            }).then(function success(r) {
+                $scope.dashboardFiltros = r;
+            });
+        }
 
 
-                // obtem filtros do escopo e carrega os dados do dashboard
-                $scope.carregarDados = function () {
-                    $http({
-                        method: 'POST',
-                        url: "/api/riachuelo/dashboard/btc",
-                        data: $scope.filtros,
-                    }).then(function success(r) {
-                        $scope.dashboard.r = r;
-                        $scope.dashboard.status = r.status;
-                        $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_descricao);
-                        $scope.dashboard.rotas = r.data.Table2.map(obj => obj.rota);
-                        $scope.dashboard.tipos = r.data.Table3.map(obj => obj.tipo_telefone);
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDados = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/btc",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.r = r;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.horas = r.data.Table.map(obj => obj.hora_descricao);
+                $scope.dashboard.rotas = r.data.Table2.map(obj => obj.rota);
+                $scope.dashboard.tipos = r.data.Table3.map(obj => obj.tipo_telefone);
 
-                        $scope.dashboard.hitratePorHora = [{ name: 'HitRate', data: r.data.Table.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
-                        $scope.dashboard.txlocPorHora = [{ name: 'TxLoc', data: r.data.Table.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
-                        $scope.dashboard.conversaoPorHora = [{ name: 'Conversão', data: r.data.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) / 1) }];
+                $scope.dashboard.hitratePorHora = [{ name: 'HitRate', data: r.data.Table.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorHora = [{ name: 'TxLoc', data: r.data.Table.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+                $scope.dashboard.conversaoPorHora = [{ name: 'Conversão', data: r.data.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) / 1) }];
 
-                        $scope.dashboard.quantidadePorRota = [{ name: 'Qtd', data: r.data.Table2.map(obj => ({ name: obj.rota, y: obj.discado })) }];
-                        $scope.dashboard.hitratePorRota = [{ name: 'HitRate', data: r.data.Table2.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
-                        $scope.dashboard.txlocPorRota = [{ name: 'TxLoc', data: r.data.Table2.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+                $scope.dashboard.quantidadePorRota = [{ name: 'Qtd', data: r.data.Table2.map(obj => ({ name: obj.rota, y: obj.discado })) }];
+                $scope.dashboard.hitratePorRota = [{ name: 'HitRate', data: r.data.Table2.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorRota = [{ name: 'TxLoc', data: r.data.Table2.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
 
-                        $scope.dashboard.quantidadePorTel = [{ name: 'Qtd', data: r.data.Table3.map(obj => ({ name: obj.tipo_telefone, y: obj.discado })) }];
-                        $scope.dashboard.hitratePorTel = [{ name: 'HitRate', data: r.data.Table3.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
-                        $scope.dashboard.txlocPorTel = [{ name: 'TxLoc', data: r.data.Table3.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
+                $scope.dashboard.quantidadePorTel = [{ name: 'Qtd', data: r.data.Table3.map(obj => ({ name: obj.tipo_telefone, y: obj.discado })) }];
+                $scope.dashboard.hitratePorTel = [{ name: 'HitRate', data: r.data.Table3.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) / 1) }];
+                $scope.dashboard.txlocPorTel = [{ name: 'TxLoc', data: r.data.Table3.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) / 1) }];
 
-                        $scope.carregarMapa();
-
-                    });
-                }
-
-                // carrega o mapa de acordo com o indicador escolhido
-                $scope.carregarMapa = function () {
-                    let dados = $scope.dashboard.r.data.Table1;
-                    switch ($scope.mapa.indicador) {
-                        case 'hitrate':
-                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.contato * 100 / obj.discado).toFixed(1) }));
-                            break;
-                        case 'txloc':
-                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.contato).toFixed(1) }));
-                            break;
-                        case 'txapv':
-                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpca * 100 / obj.cpc).toFixed(1) }));
-                            break;
-                        case 'conversao':
-                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
-                            break;
-                        default:
-                            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
-                    }
-                }
-
-                $scope.carregarFiltros();
-                $scope.carregarDados();
-
-                // extrair dados para excel
-                $scope.extrair = function (nomeArquivo, tabela) {
-                    alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.r.data[tabela]]);
-                }
+                $scope.carregarMapa();
 
             });
+        }
 
-        </script>
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.r.data.Table1;
+            switch ($scope.mapa.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.contato * 100 / obj.discado).toFixed(1) }));
+                    break;
+                case 'txloc':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpc * 100 / obj.contato).toFixed(1) }));
+                    break;
+                case 'txapv':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.cpca * 100 / obj.cpc).toFixed(1) }));
+                    break;
+                case 'conversao':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: (obj.promessa * 100 / obj.cpca).toFixed(1) }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.uf, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+        $scope.carregarFiltros();
+        $scope.carregarDados();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.r.data[tabela]]);
+        }
+
+    });
+
+</script>

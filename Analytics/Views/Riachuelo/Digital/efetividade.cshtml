@@ -114,6 +114,44 @@
 
         </div>
 
+        <!--POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por DIA</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.dia">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Dia</th>
+                                    <th style="text-align:center">Promessa</th>
+                                    <th style="text-align:center">Pagamento</th>
+                                    <th style="text-align:center">% Efetividade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dia in dashboard.dia">
+                                    <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                    <td>{{dia.promessa | number}}</td>
+                                    <td>{{dia.promessaPaga | number}}</td>
+                                    <td>{{dia.promessaPaga / dia.promessa | percentage:1}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
@@ -215,7 +253,7 @@
             </div>
         </div>
 
-</div>
+    </div>
 
 </div>
 
@@ -260,6 +298,7 @@
                 let data = r.data;
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
+                $scope.dashboard.dia = data.Table1;
 
                 $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
                 $scope.dashboard.carteiras = r.data.Table.map(obj => obj.carteira);
