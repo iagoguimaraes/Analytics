@@ -1,0 +1,200 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-tim-producao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Backoffice - Rastreio</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.entregue | number"></h3>
+                        <p>Entregue</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ENTREGUES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">
+                            ENTREGUES POR DIA
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <!--GRAFICO-->
+                        <high-charts config="dashboard.entregue" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--STATUS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">
+                            STATUS
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <!--GRAFICO-->
+                        <high-charts config="dashboard.statuses" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-tim-producao', function ($scope, $http, $filter) {
+
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {};
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/tim/vendas/backoffice/rastreio",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.entregue = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: r.data.Table1.map(o => o.data)
+                    },
+                    series: [
+                        {
+                            type: 'column',
+                            name: 'Entregue',
+                            color: 'rgba(119,119,119,0.8)',
+                            data: r.data.Table1.map(o => o.qtd),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+                $scope.dashboard.statuses = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+                    },
+                    plotOptions: {
+                        pie: {
+                            innerSize: '60%'
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            name: 'chamadas',
+                            data: r.data.Table2.map(o => ({ name: o['status'], y: o['qtd'] })),
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+
+                $scope.dashboard.status = r.status;
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
