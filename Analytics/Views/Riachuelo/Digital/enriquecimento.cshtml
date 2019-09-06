@@ -93,10 +93,6 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="contato">Contato</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -123,10 +119,6 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="contato">Contato</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -146,7 +138,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Grafico','Table4')">
+                        <div class="card-header-button" ng-click="extrair('Estado','Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                         <small class="pull-right">
@@ -155,10 +147,6 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="contato">Contato</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -178,7 +166,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Grafico','Table1')">
+                        <div class="card-header-button" ng-click="extrair('Dia','Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                         <small class="pull-right">
@@ -187,15 +175,39 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="contato">Contato</option>
-                                <option value="cpc">CPC</option>
-                                <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
                             </select>
                         </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.dias"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO FORNECEDOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Fornecedores</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Fornecedor','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoFornecedor.indicador" ng-change="carregarGraficoFornecedor()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoFornecedor" axis-Categories="dashboard.fornecedores" plot-Options-Column-Data-Label="true"></high-chart>
                     </div>
                 </div>
             </div>
@@ -223,6 +235,10 @@
         $scope.graficoDia = {
             indicador: 'txloc'
         }
+        $scope.graficoFornecedor = {
+            indicador: 'txloc'
+        }
+
 
 
         $scope.idSelecionadoMapa = '';
@@ -264,11 +280,13 @@
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.regiao = r.data.Table3;
                 $scope.dashboard.ddd = r.data.Table4;
+                $scope.dashboard.fornecedor = r.data.Table5;
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoRegiao();
                 $scope.carregarGraficoUF();
                 $scope.carregarGraficoDia();
+                $scope.carregarGraficoFornecedor();                
                 
             });
         }
@@ -398,6 +416,38 @@
                     $scope.dashboard.graficoDia = [
                         { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line',  data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credor']) },
                         { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credit']) }];
+            }
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGraficoFornecedor = function () {
+            let dados = $scope.dashboard.fornecedor;
+            $scope.dashboard.fornecedores = dados.map(obj => obj.ds_fornecedor);
+            switch ($scope.graficoFornecedor.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column',  data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credit']) }];
             }
         }
 
