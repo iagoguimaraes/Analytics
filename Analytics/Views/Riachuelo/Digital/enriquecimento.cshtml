@@ -1,0 +1,468 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-riachuelo-enriquecimento">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Performance de Enriquecimento</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab" ng-if="dashboardFiltros.status === 200">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--CAMPANHAS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashboardFiltros.data.Table" style="width:100%"></select2>
+                            </div>
+
+                            <!--REGIAO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Região</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.regiao" dados="dashboardFiltros.data.Table6" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDados()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <!--GRAFICO CARTEIRA-->
+            <div class="col-xs-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Carteiras</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Grafico','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.carteiras" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!--POR ESTADO-->
+            <div class="col-xs-6 col-md-6">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Região</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoRegiao.indicador" ng-change="carregarGraficoRegiao()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoRegiao" axis-Categories="dashboard.regioes" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO Estado-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Estado</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Estado','Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoUf.indicador" ng-change="carregarGraficoUF()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoUf" axis-Categories="dashboard.ufs"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Dia a Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Dia','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoDia.indicador" ng-change="carregarGraficoDia()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.dias"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO FORNECEDOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Fornecedores</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Fornecedor','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoFornecedor.indicador" ng-change="carregarGraficoFornecedor()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoFornecedor" axis-Categories="dashboard.fornecedores" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    angular.module('app').controller('ctrl-riachuelo-enriquecimento', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Performance Enriquecimento';
+        dadosPagina.descricao = 'Riachuelo'
+
+        $scope.dashboard = {};
+
+        $scope.grafico = {
+            indicador: 'txloc'
+        }
+
+        $scope.graficoRegiao = {
+            indicador: 'txloc'
+        }
+        $scope.graficoUf = {
+            indicador: 'txloc'
+        }
+        $scope.graficoDia = {
+            indicador: 'txloc'
+        }
+        $scope.graficoFornecedor = {
+            indicador: 'txloc'
+        }
+
+
+
+        $scope.idSelecionadoMapa = '';
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteiras: '',
+            funcionario: '',
+            regiao: '',
+        };
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/riachuelo/dashboard/filtros",
+            }).then(function success(r) {
+                $scope.dashboardFiltros = r;
+            });
+        }
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDados = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/enriquecimento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.r = r;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.dia = r.data.Table1;
+                $scope.dashboard.carteira = r.data.Table2;
+                $scope.dashboard.regiao = r.data.Table3;
+                $scope.dashboard.ddd = r.data.Table4;
+                $scope.dashboard.fornecedor = r.data.Table5;
+
+                $scope.carregarGrafico();
+                $scope.carregarGraficoRegiao();
+                $scope.carregarGraficoUF();
+                $scope.carregarGraficoDia();
+                $scope.carregarGraficoFornecedor();                
+                
+            });
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.carteira;
+            $scope.dashboard.carteiras = dados.map(obj => obj.carteira);
+            switch ($scope.grafico.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.grafico = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.grafico = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.grafico = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.grafico = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column',  data: dados.map(obj => obj[$scope.grafico.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => obj[$scope.grafico.indicador+'_credit']) }];
+            }
+        }
+
+
+        $scope.carregarGraficoRegiao = function () {
+            let dados = $scope.dashboard.regiao;
+            $scope.dashboard.regioes = dados.map(obj => obj.ds_regiao);
+            switch ($scope.graficoRegiao.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoRegiao = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoRegiao = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoRegiao = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoRegiao = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoRegiao = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column',  data: dados.map(obj => obj[$scope.graficoRegiao.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => obj[$scope.graficoRegiao.indicador+'_credit']) }];
+            }
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGraficoUF = function () {
+            let dados = $scope.dashboard.ddd;
+            $scope.dashboard.ufs = dados.map(obj => obj.uf);
+            switch ($scope.graficoUf.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoUf = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoUf = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoUf = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoUf = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoUf = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line',  data: dados.map(obj => obj[$scope.graficoUf.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => obj[$scope.graficoUf.indicador+'_credit']) }];
+            }
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGraficoDia = function () {
+            let dados = $scope.dashboard.dia;
+            $scope.dashboard.dias = dados.map(obj => obj.data);
+            switch ($scope.graficoDia.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoDia = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoDia = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoDia = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoDia = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoDia = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'line',  data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'line', data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credit']) }];
+            }
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGraficoFornecedor = function () {
+            let dados = $scope.dashboard.fornecedor;
+            $scope.dashboard.fornecedores = dados.map(obj => obj.ds_fornecedor);
+            switch ($scope.graficoFornecedor.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.contato_credor * 100 / obj.discado_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.contato_credit * 100 / obj.discado_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpc_credor * 100 / obj.contato_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpc_credit * 100 / obj.contato_credit).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.cpca_credor * 100 / obj.cpc_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.cpca_credit * 100 / obj.cpc_credit).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column',  data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credor']) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => obj[$scope.graficoDia.indicador+'_credit']) }];
+            }
+        }
+
+
+
+
+        $scope.carregarFiltros();
+        $scope.carregarDados();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.r.data[tabela]]);
+        }
+
+    });
+
+
+</script>
