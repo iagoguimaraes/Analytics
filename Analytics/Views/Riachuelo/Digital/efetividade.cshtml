@@ -10,10 +10,19 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Efetividade</div>
+            <div class="page-name">Efetividade - {{grafico.nome}}</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
+            </div>
+            <div class="page-menu-button">
+                <small class="pull-right">
+                    <select class="form-control form-control-lg" ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                        <option value="total">Consolidado</option>
+                        <option value="promessa">AD</option>
+                        <option value="acordo_portal">Portal</option>
+                    </select>
+                </small>
             </div>
         </header>
 
@@ -81,7 +90,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Efetividade por Carteira</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Efetividade por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -93,12 +102,10 @@
             </div>
 
 
-
-
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Promessa Paga por Carteira</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Pagamentos por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -119,7 +126,7 @@
             <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por DIA</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Análise por DIA</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -133,19 +140,36 @@
                             <thead>
                                 <tr>
                                     <th style="text-align:center">Dia</th>
-                                    <th style="text-align:center">Promessa</th>
-                                    <th style="text-align:center">Pagamento</th>
-                                    <th style="text-align:center">% Efetividade</th>
+                                    <th style="text-align:center">Promessa AD</th>
+                                    <th style="text-align:center">Promessa AD Pag</th>
+                                    <th style="text-align:center">% Efet.</th>
+                                    <th style="text-align:center">Promessa Portal</th>
+                                    <th style="text-align:center">Promessa Portal Pag</th>
+                                    <th style="text-align:center">% Efet. </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="dia in dashboard.dia">
                                     <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                     <td>{{dia.promessa | number}}</td>
-                                    <td>{{dia.promessaPaga | number}}</td>
-                                    <td>{{dia.promessaPaga / dia.promessa | percentage:1}}</td>
+                                    <td>{{dia.promessa_pago | number}}</td>
+                                    <td>{{dia.promessa_pago / dia.promessa | percentage:1}}</td>
+                                    <td>{{dia.acordo_portal | number}}</td>
+                                    <td>{{dia.acordo_portal_pago | number}}</td>
+                                    <td>{{dia.acordo_portal_pago / dia.acordo_portal | percentage:1}}</td>
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr style="background-color: #d3d3d3; font-weight: bold">
+                                    <th>Total</th>
+                                    <td>{{dashboard.resumo.promessa | number}}</td>
+                                    <td>{{dashboard.resumo.promessa_pago | number}}</td>
+                                    <td>{{dashboard.resumo.promessa_pago / dashboard.resumo.promessa | percentage:1}}</td>
+                                    <td>{{dashboard.resumo.acordo_portal | number}}</td>
+                                    <td>{{dashboard.resumo.acordo_portal_pago | number}}</td>
+                                    <td>{{dashboard.resumo.acordo_portal_pago / dashboard.resumo.acordo_portal | percentage:1}}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -156,7 +180,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Promessa Paga por Dia</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Pagamentos por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -175,7 +199,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Efetividade por Dia</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Efetividade por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -191,7 +215,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Lote Pago por Carteira</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Lote Pago por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -207,8 +231,8 @@
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Pagamento Lote por Carteira</span>
-                        <div class="card-header-button card-header-expand">
+                        <span class="card-header-title">{{grafico.subtitulo}} - Pagamento Lote por Carteira</span>
+                        <div class="card-header-button card-header-expand"> 
                             <i class="fa fa-expand"></i>
                         </div>
                     </div>
@@ -222,7 +246,7 @@
             <div class="col-xs-12 ">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Pagamentos Lotes</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - Pagamentos Lotes</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -231,7 +255,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.pagamentoLoteDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        <high-chart series="dashboard.pagamentoLoteDia" axis-Categories="dashboard.diaslote" plot-Options-Column-Data-Label="true" type="column"></high-chart>
                     </div>
                 </div>
             </div>
@@ -241,13 +265,13 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">% Pago Lotes</span>
+                        <span class="card-header-title">{{grafico.subtitulo}} - % Pago Lotes</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.efetividadeLoteDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+                        <high-chart series="dashboard.efetividadeLoteDia" axis-Categories="dashboard.diaslote" plot-Options-Line-Data-Label="true"></high-chart>
                     </div>
                 </div>
             </div>
@@ -275,6 +299,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.grafico = { indicador: 'total' , nome: 'GERAL', titulo: 'Promessas Paga'}
 
         // carregar os filtros
         $http({
@@ -299,26 +324,64 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.resumo = data.Table4[0];
 
-                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
                 $scope.dashboard.carteiras = r.data.Table.map(obj => obj.carteira);
 
-                $scope.dashboard.promessaPagaCarteira = [{ name: 'PromessaPaga', data: data.Table.map(obj => ({ name: obj.carteira, y: obj.promessaPaga })) }];
-                $scope.dashboard.efetividadeCarteira = [{ name: 'Efetividade', data: data.Table.map(obj => (obj.promessaPaga * 100 / obj.promessa).toFixed(1) / 1) }];
-
-                $scope.dashboard.promessaPagaDia = [{ name: 'PromessaPaga', data: data.Table1.map(obj => obj.promessaPaga) }];
-                $scope.dashboard.efetividadeDia = [{ name: 'Efetividade', data: data.Table1.map(obj => (obj.promessaPaga * 100 / obj.promessa).toFixed(1) / 1) }];
-
-                $scope.dashboard.pagamentoLoteCarteira = [{ name: 'Pago', data: data.Table2.map(obj => ({ name: obj.carteira, y: obj.pago })) }];
-                $scope.dashboard.efetividadeLoteCarteira = [{ name: 'Efetividade', data: data.Table2.map(obj => (obj.pago * 100 / obj.inclusao).toFixed(1) / 1) }];
-
-                $scope.dashboard.pagamentoLoteDia = [{ name: 'Pago', data: data.Table3.map(obj => obj.pago) }];
-                $scope.dashboard.efetividadeLoteDia = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj.pago * 100 / obj.inclusao).toFixed(1) / 1) }];
+                $scope.carregarGrafico(); 
 
             });
         }
 
+
         $scope.carregarDashboard();
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+
+            switch ($scope.grafico.indicador) {
+                case 'promessa':
+                    $scope.grafico.nome = 'AD';
+                    $scope.grafico.titulo = 'Promessas Pagas';
+                    $scope.grafico.subtitulo = 'AD';
+                    break;
+                case 'acordo_portal':
+                    $scope.grafico.nome = 'PORTAL';
+                    $scope.grafico.titulo = 'Promessas Pagas Portal';
+                    $scope.grafico.subtitulo = 'Portal';
+                    break;
+                case 'total':
+                    $scope.grafico.nome = 'GERAL';
+                    $scope.grafico.titulo = 'Promessas Pagas Total';
+                    $scope.grafico.subtitulo = 'Geral';
+                    break;
+                default:
+                    $scope.grafico.nome = 'AD';
+                    $scope.grafico.titulo = 'Promessas Pagas';
+                    $scope.grafico.subtitulo = 'AD';
+
+            }
+
+            let data = $scope.dashboard.dados;
+
+            $scope.dashboard.dias = data.Table1.map(obj => obj.data);
+            $scope.dashboard.diaslote = data.Table3.map(obj => obj.data);
+
+            $scope.dashboard.promessaPagaCarteira = [{ name: [$scope.grafico.titulo], data: data.Table.map(obj => ({ name: obj.carteira, y: obj[$scope.grafico.indicador  + '_pago'] })) }];
+            $scope.dashboard.efetividadeCarteira = [{ name: 'Efetividade', data: data.Table.map(obj => (obj[$scope.grafico.indicador  + '_pago'] * 100 / obj[$scope.grafico.indicador]).toFixed(1) / 1) }];
+            
+            $scope.dashboard.promessaPagaDia = [{ name: [$scope.grafico.titulo], data: data.Table1.map(obj => obj[$scope.grafico.indicador  + '_pago']) }];
+            $scope.dashboard.efetividadeDia = [{ name: 'Efetividade', data: data.Table1.map(obj => (obj[$scope.grafico.indicador  + '_pago'] * 100 / obj[$scope.grafico.indicador]).toFixed(1) / 1) }];
+            
+            $scope.dashboard.pagamentoLoteCarteira = [{ name: 'Pago', data: data.Table2.map(obj => ({ name: obj.carteira, y: obj[$scope.grafico.indicador] })) }];
+            $scope.dashboard.efetividadeLoteCarteira = [{ name: 'Efetividade', data: data.Table2.map(obj => (obj[$scope.grafico.indicador] * 100 / obj.inclusao).toFixed(1) / 1) }];
+
+            $scope.dashboard.pagamentoLoteDia = [{ name: 'Pago', data: data.Table3.map(obj => obj[$scope.grafico.indicador]) }];
+            $scope.dashboard.efetividadeLoteDia = [{ name: 'Efetividade', data: data.Table3.map(obj => (obj[$scope.grafico.indicador] * 100 / obj.inclusao).toFixed(1) / 1) }];
+
+            }
+
+        
 
         // extrair dados para excel
         $scope.extrair = function (nomeArquivo, tabela) {
