@@ -5,7 +5,7 @@
 
 
 <!-- DAHSBOARD -->
-<div ng-controller="ctrl-riachuelo-baserolagem">
+<div ng-controller="ctrl-baserolagem">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -27,19 +27,15 @@
 
         <!--FILTROS-->
         <div class="row">
-            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
-                <label class="control-sidebar-subheading">Carteira</label>
-                <multiple-select ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()" placeholder="Carteira" /><multiple-select />
+            <div class="col-xs-12 col-sm-4 margin-bottom">
+                <label class="control-sidebar-subheading">Atraso</label>
+                <multiple-select ng-model="dashboard.filtros.atraso" dados="dashboard.dimensao.atraso" ng-change="aplicarFiltros()" placeholder="Atraso" /><multiple-select />
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
-                <label class="control-sidebar-subheading">Rating</label>
-                <multiple-select ng-model="dashboard.filtros.rating" dados="dashboard.dimensao.rating" ng-change="aplicarFiltros()" placeholder="Rating" /><multiple-select />
-            </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+            <div class="col-xs-12 col-sm-4 margin-bottom">
                 <label class="control-sidebar-subheading">Situação</label>
                 <multiple-select ng-model="dashboard.filtros.situacao" dados="dashboard.dimensao.situacao" ng-change="aplicarFiltros()" placeholder="Situação" /><multiple-select />
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+            <div class="col-xs-12 col-sm-4 margin-bottom">
                 <label class="control-sidebar-subheading">Rolagem</label>
                 <div style="width:100%">
                     <multiple-select ng-model="dashboard.filtros.rolagem" dados="dashboard.dimensao.rolagem" ng-change="aplicarFiltros()" placeholder="Rolagem" /><multiple-select />
@@ -57,24 +53,16 @@
                     </div>
                 </div>
             </div>
-            <!--RATING-->
+            <!--ATRASO-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-body">
-                        <high-charts config="dashboard.rating" style="width: 100%; height: 300px"></high-charts>
-                    </div>
-                </div>
-            </div>
-            <!--CARTEIRA-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
-                <div class="card">
-                    <div class="card-body">
-                        <high-charts config="dashboard.carteira" style="width: 100%; height: 300px"></high-charts>
+                        <high-charts config="dashboard.atraso" style="width: 100%; height: 300px"></high-charts>
                     </div>
                 </div>
             </div>
             <!--SITUACAO-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-body">
                         <high-charts config="dashboard.situacao" style="width: 100%; height: 300px"></high-charts>
@@ -89,7 +77,7 @@
 <script>
     $('select').multipleSelect()
 
-    angular.module('app').controller('ctrl-riachuelo-baserolagem', function ($scope, $http, $filter, cubo) {
+    angular.module('app').controller('ctrl-baserolagem', function ($scope, $http, $filter, cubo) {
 
         $scope.dashboard = {
             visao: 'quantidade',
@@ -101,7 +89,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/riachuelo/dashboard/humano/baserolagem",
+                url: "/api/marisa/dashboard/digital/baserolagem",
                 data: $scope.filtros,
             }).then(function success(r) {
 
@@ -114,8 +102,7 @@
         }
 
         $scope.popularFiltros = function () {
-            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('carteira').sort();
-            $scope.dashboard.dimensao.rating = cubo.obterDimensao('rating').sort();
+            $scope.dashboard.dimensao.atraso = cubo.obterDimensao('atraso').sort();
             $scope.dashboard.dimensao.situacao = cubo.obterDimensao('situacao').sort();
             $scope.dashboard.dimensao.rolagem = cubo.obterDimensao('rolagem').sort();
         }
@@ -125,16 +112,14 @@
                 $scope.dashboard.visao = visao;
 
             // OBTER DIMENSOES (JA FILTRADO)
-            $scope.dimensao.carteira = cubo.obterDimensao('carteira');
-            $scope.dimensao.rating = cubo.obterDimensao('rating');
+            $scope.dimensao.atraso = cubo.obterDimensao('atraso');
             $scope.dimensao.situacao = cubo.obterDimensao('situacao');
             $scope.dimensao.rolagem = cubo.obterDimensao('rolagem');
 
             // CARREGAR AS VISUALIZAÇÕES
             let dados = cubo.obter();
 
-            let carteira = alasql('select carteira, sum(' + $scope.dashboard.visao + ') qtd from ? group by carteira', [dados]);
-            let rating = alasql('select ini,rating, sum(' + $scope.dashboard.visao + ') qtd from ? group by ini,rating order by ini', [dados]);
+            let atraso = alasql('select ini,atraso, sum(' + $scope.dashboard.visao + ') qtd from ? group by ini,atraso order by ini', [dados]);
             let situacao = alasql('select situacao, sum(' + $scope.dashboard.visao + ') qtd from ? group by situacao', [dados]);
             let rolagem = alasql('select rolagem, sum(' + $scope.dashboard.visao + ') qtd from ? group by rolagem order by rolagem', [dados]);
 
@@ -145,33 +130,18 @@
                 rolagem[i].perc_scum = (scum * 100 / tt).toFixed(1) / 1;
             }
 
-            $scope.dashboard.carteira = {
-                chart: {
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Carteira'
-                },
-                legend: {
-                    enabled: false,
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{ name: $scope.dashboard.visao, data: carteira.map(obj => ({ name: obj.carteira, y: obj.qtd.toFixed(0) / 1 })) }]
-            };
-            $scope.dashboard.rating = {
+            $scope.dashboard.atraso = {
                 chart: {
                     type: 'bar'
                 },
                 title: {
-                    text: 'Rating'
+                    text: 'Atraso'
                 },
                 yAxis: {
                     visible: false,
                 },
                 xAxis: {
-                    categories: rating.map(obj => obj.rating)
+                    categories: atraso.map(obj => obj.atraso)
                 },
                 legend: {
                     enabled: false,
@@ -186,7 +156,7 @@
                 credits: {
                     enabled: false
                 },
-                series: [{ name: $scope.dashboard.visao, data: rating.map(obj => obj.qtd.toFixed(0) / 1), color: '#333' }]
+                series: [{ name: $scope.dashboard.visao, data: atraso.map(obj => obj.qtd.toFixed(0) / 1), color: '#333' }]
             };
             $scope.dashboard.situacao = {
                 chart: {
@@ -240,7 +210,7 @@
                     enabled: false
                 },
                 series: [
-                    { name: $scope.dashboard.visao, type: 'column', data: rolagem.map(obj => obj.qtd.toFixed(0) / 1), color: '' },
+                    { name: $scope.dashboard.visao, type: 'column', data: rolagem.map(obj => obj.qtd.toFixed(0) / 1) },
                     { name: '%', yAxis: 1, type: 'spline', data: rolagem.map(obj => obj.perc_scum) }
                 ],
                 tooltip: {
@@ -254,8 +224,7 @@
 
             cubo.limparFiltros();
 
-            cubo.filtrar('carteira', $scope.dashboard.filtros.carteira);
-            cubo.filtrar('rating', $scope.dashboard.filtros.rating);
+            cubo.filtrar('atraso', $scope.dashboard.filtros.atraso);
             cubo.filtrar('situacao', $scope.dashboard.filtros.situacao);
             cubo.filtrar('rolagem', $scope.dashboard.filtros.rolagem);
 

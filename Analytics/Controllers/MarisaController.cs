@@ -1123,6 +1123,26 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/baserolagem")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoBaseRolagem(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baserolagem");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion 
 
         #region DIGITAL
@@ -1467,6 +1487,26 @@ namespace Analytics.Controllers
                     parametros.Add("data", data);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_funil", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/baserolagem")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseRolagem(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA_DIGITAL"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baserolagem");
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
