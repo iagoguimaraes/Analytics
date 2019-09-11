@@ -1123,6 +1123,26 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/baserolagem")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoBaseRolagem(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_MARISA"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baserolagem");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion 
 
         #region DIGITAL
