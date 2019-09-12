@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="row" style="background-color: #b81554; color:white;">
-                    <div class="col-sm-2 border-right">
+                    <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
                             <span class="description-text">Esforço</span>
@@ -207,14 +207,8 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.total / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h5>
-                            <span class="description-text">Conversao Acordo</span>
                         </div>
                     </div>
                 </div>
@@ -254,8 +248,7 @@
                                           <th>Hit Rate</th>
                                           <th>Tx Loc</th>
                                           <th>Tx Apv</th>
-                                          <th>Conversão</th>
-                                          <th>Conversão Acordo</th>
+                                          <th>Conversão Total</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -274,8 +267,7 @@
                                           <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                           <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                           <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                          <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
-                                          <td>{{hora.acordo / hora.cpca | percentage:1}}</td>
+                                          <td>{{(hora.acordo + hora.promessa) / hora.cpca | percentage:1}}</td>
                                       </tr>
                                   </tbody>
                                   <tfoot>
@@ -294,8 +286,7 @@
                                           <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                           <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                           <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                          <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
-                                          <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
+                                          <th>{{dashboard.resumo.total  / dashboard.resumo.cpca | percentage: 1}}</th>
                                       </tr>
                                   </tfoot>
                               </table>
@@ -337,8 +328,7 @@
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
-                                        <th>Conversão</th>
-                                        <th>Conversão Acordo</th>
+                                        <th>Conversão Total</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_empresa'">
@@ -361,8 +351,7 @@
                                         <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'total':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
@@ -380,8 +369,7 @@
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
-                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                        <td>{{c.total / c.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -517,10 +505,7 @@
                     $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                    break;
-                case 'conversaoacordo':
-                    $scope.dashboard.grafico = [{ name: 'conversao acordo', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => ( ( obj.promessa + obj.acordo) * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];

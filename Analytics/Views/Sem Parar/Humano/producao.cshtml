@@ -247,7 +247,6 @@
                                                 <th>TxLoc</th>
                                                 <th>TxApv</th>
                                                 <th>Conversão</th>
-                                                <th>Conversão Acordo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -266,8 +265,7 @@
                                                 <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                                 <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                                 <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
-                                                <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
-                                                <td>{{dia.acordo / dia.cpca | percentage:1}}</td>
+                                                <td>{{(dia.promessa + dia.acordo ) / dia.cpca | percentage:1}}</td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -286,8 +284,7 @@
                                                 <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                                 <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                                 <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                                <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
-                                                <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
+                                                <th>{{(dashboard.resumo.promessa + dashboard.resumo.acordo) / dashboard.resumo.cpca | percentage: 1}}</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -311,14 +308,13 @@
                                         <option value="hitrate">Hit Rate</option>
                                         <option value="txloc">Tx Loc</option>
                                         <option value="txapv">Tx Apv</option>
-                                        <option value="conversao">Conversão</option>
-                                        <option value="conversaoacordo">Conversão Acordo</option>
                                         <option value="discado">Discado</option>
                                         <option value="contato">Contato</option>
                                         <option value="cpc">CPC</option>
                                         <option value="cpca">CPCA</option>
                                         <option value="promessa">Promessa</option>
                                         <option value="acordo">Acordo</option>
+                                        <option value="conversao">Conversão</option>
                                     </select>
                                 </small>
                             </div>
@@ -423,10 +419,7 @@
                         $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                         break;
                     case 'conversao':
-                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                        break;
-                    case 'conversaoacordo':
-                        $scope.dashboard.grafico = [{ name: 'conversao acordo', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => ((obj.promessa + obj.acordo ) * 100 / obj.cpca).toFixed(1) * 1) }];
                         break;
                     default:
                         $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
