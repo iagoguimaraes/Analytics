@@ -342,22 +342,29 @@
             </div>
         </div>
 
-        <!--TABELA SUPERVISOR/EQUIPE-->
+        <!--TABELA SUPERVISOR/EQUIPE/HORA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <span class="card-header-title">Análise por Supervisor</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            Visão Equipe
+                            <input type="radio" name="visao_supervisor" ng-model="visao_supervisor" value="0" />
+                            Visão Hora
+                            <input type="radio" name="visao_supervisor" ng-model="visao_supervisor" value="1" />
+                        </small>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                            <!-- VISÃO EQUIPE-->
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="visao_supervisor == 0">
                                 <thead>
                                     <tr>
                                         <th>Supervisor/Equipe</th>
@@ -388,6 +395,50 @@
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
                                         <td>{{c.ds_equipe}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                            <!-- VISÃO HORA-->
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="visao_supervisor == 1">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor/Hora</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.supervisorHora | groupBy: 'ds_supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.hora}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
@@ -471,6 +522,7 @@
             carteiras: '',
         }
         $scope.grafico = { indicador: 'promessa' };
+        $scope.visao_supervisor = '0';
 
         // carregar os filtros
         $http({
@@ -501,6 +553,7 @@
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.supervisor = r.data.Table4;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table6.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
+                $scope.dashboard.supervisorHora = r.data.Table7;
                 $scope.carregarGrafico();
             });
         }
