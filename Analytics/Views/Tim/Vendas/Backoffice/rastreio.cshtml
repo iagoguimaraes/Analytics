@@ -84,6 +84,9 @@
                         <span class="card-header-title">
                             ENTREGUES POR DIA
                         </span>
+                        <div class="card-header-button" ng-click="extrair('entregue_analitico')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <!--GRAFICO-->
@@ -99,12 +102,12 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">
-                            STATUS
+                            STATUS CORREIOS / BACKOFFICE
                         </span>
                     </div>
                     <div class="card-body">
                         <!--GRAFICO-->
-                        <high-charts config="dashboard.statuses" style="width: 100%; height: 350px"></high-charts>
+                        <high-charts config="dashboard.situacao" style="width: 100%; height: 350px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -162,38 +165,63 @@
                         enabled: false
                     }
                 };
-                $scope.dashboard.statuses = {
+
+                let dados_status = alasql('select status, sum(quantidade) quantidade from ? group by status', [$scope.dashboard.dados.Table2]);
+                dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+                let dados_substatus = [];
+                for (s in dados_status) {
+                    let d = alasql('select substatus, quantidade from ?', [$scope.dashboard.dados.Table2.filter(d => d.status == dados_status[s]['name'])]);
+                    d = d.map(o => [o.substatus, o.quantidade]);
+                    let obj = {
+                        name: dados_status[s]['name'],
+                        id: dados_status[s]['name'],
+                        data: d
+                    }
+                    dados_substatus.push(obj);
+                }
+                $scope.dashboard.situacao = {
+                    chart: {
+                        type: 'pie'
+                    },
                     title: {
                         text: ''
                     },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-                    },
                     plotOptions: {
-                        pie: {
-                            innerSize: '60%'
-                        }
-                    },
-                    series: [
-                        {
-                            type: 'pie',
-                            name: 'chamadas',
-                            data: r.data.Table2.map(o => ({ name: o['status'], y: o['qtd'] })),
+                        series: {
                             dataLabels: {
-                                enabled: true
+                                enabled: true,
+                                format: '{point.name}: {point.y}'
                             }
                         }
-                    ],
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                    },
+                    series: [{
+                        name: "Status",
+                        colorByPoint: true,
+                        data: dados_status
+                    }],
+                    drilldown: {
+                        series: dados_substatus
+                    },
                     credits: {
                         enabled: false
-                    }
+                    },
                 };
+
+                $scope.dashboard.entregue_analitico = r.data.Table3;
 
                 $scope.dashboard.status = r.status;
             });
         }
 
         $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard[tabela]]);
+        }
 
     });
 
