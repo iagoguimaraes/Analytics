@@ -56,9 +56,24 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("funcionario", funcionario); 
-                     
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    parametros.Add("funcionario", funcionario);
+
+                    string procedure = "sp_dashboard_horahora";
+
+                    if (form["conceito"] == "_unique")
+                    {
+                        procedure = "sp_dashboard_horahora_unique";
+                    }
+                    else if (form["conceito"] == "_total")
+                    {
+                        procedure = "sp_dashboard_horahora";
+                    }
+                    else
+                    {
+                        Console.WriteLine("parametro de conceito não passado");
+                    }
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -90,7 +105,22 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    string procedure = "sp_dashboard_producao";
+
+                    if (form["conceito"] == "_unique")
+                    {
+                        procedure = "sp_dashboard_producao_unique";
+                    }
+                    else if (form["conceito"] == "_total")
+                    {
+                        procedure = "sp_dashboard_producao";
+                    }
+                    else
+                    {
+                        Console.WriteLine("parametro de conceito não passado");
+                    }
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

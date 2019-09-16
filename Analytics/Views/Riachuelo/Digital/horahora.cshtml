@@ -158,12 +158,24 @@
             </div>
         </div>
 
+        <!--Visão Unique-->
+        <div class="pull-left">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" ng-click="carregarDashboard()">
+                <label class="btn btn-primary active" ng-click="filtros.conceito = '_total'">
+                    <input type="radio" checked> Total
+                </label>
+                <label class="btn btn-primary" ng-click="filtros.conceito = '_unique'">
+                    <input type="radio"> Unique
+                </label>
+            </div>
+        </div> <br /><br />
+
         <!-- PRODUTO -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Produto</span>
+                        <span class="card-header-title">Análise por Produto {{conceito.string}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -242,7 +254,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
+                        <span class="card-header-title">Análise por Hora {{conceito.string}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -304,14 +316,14 @@
                 </div>
             </div>
         </div>
-     
+
         <div class="row">
 
             <!-- DIAGRAMA -->
             <div class="col-xs-12 col-lg-8 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Diagrama de Finalizações</span>
+                        <span class="card-header-title">Diagrama de Finalizações {{conceito.string}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -358,10 +370,13 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteiras: '',
-            funcionario: ''
+            funcionario: '',
+            conceito: ''
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.conceito = { string: '' };
 
         // carregar os filtros
         $http({
@@ -391,6 +406,14 @@
                 $scope.dashboard.horahora = data.Table3;
                 $scope.dashboard.diagrama = data.Table4;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table5.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
+
+
+                if ($scope.filtros.conceito == '' || $scope.filtros.conceito == '_total') {
+                    $scope.conceito.string = '- Total';
+                } else {
+                    $scope.conceito.string = '- Unique';
+                }
+
             });
         }
 
