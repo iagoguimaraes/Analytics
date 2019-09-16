@@ -281,15 +281,15 @@
 
         </div>
 
-        <!--CARTEIRA-->
+        <!-- CARTEIRA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
-
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Carteira</span>
                     </div>
                     <div class="card-body">
+
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
                                 <thead>
@@ -302,26 +302,28 @@
                                         <th>Valor Negociado</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr ng-repeat="dia in dashboard.carteira">
-                                        <td>{{dia.carteira}}</td>
-                                        <td>{{dia.consulta | number}}</td>
-                                        <td><b>{{dia.pagou | number}}</b> ({{dia.pagou / dia.consulta | percentage:1}})</td>
-                                        <td><b>{{dia.nega | number}}</b> ({{dia.nega / dia.consulta | percentage:1}})</td>
-                                        <td><b>{{dia.boleto | number}}</b> ({{dia.boleto / dia.consulta | percentage:1}})</td>
-                                        <td>{{dia.vlr | currency:'R$'}}</td>
+                                <tbody ng-repeat="p in dashboard.carteira | groupBy: 'operacao'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{p[0].operacao}}
+                                        </td>
+                                        <td>{{p | sumByColumn: 'consulta'| number}}</td>
+                                        <td>{{p | sumByColumn: 'pagou'| number}} ({{p | divideSumColumns: 'pagou':'consulta' | percentage:1}})</td>
+                                        <td>{{p | sumByColumn: 'nega'| number}} ({{p | divideSumColumns: 'nega':'consulta' | percentage:1}})</td>
+                                        <td>{{p | sumByColumn: 'boleto'| number}} ({{p | divideSumColumns: 'boleto':'consulta' | percentage:1}})</td>
+                                        <td>{{p | sumByColumn: 'vlr'| currency:'R$'}}</td>
+                                    </tr>
+                                    <tr ng-repeat="c in p" ng-show="showTbody">
+                                        <td>{{c.carteira}}</td>
+                                        <td>{{c.consulta | number}}</td>
+                                        <td><b>{{c.pagou | number}}</b> ({{c.pagou / c.consulta | percentage:1}})</td>
+                                        <td><b>{{c.nega | number}}</b> ({{c.nega / c.consulta | percentage:1}})</td>
+                                        <td><b>{{c.boleto | number}}</b> ({{c.boleto / c.consulta | percentage:1}})</td>
+                                        <td>{{c.vlr | currency:'R$'}}</td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    <tr style="background-color: #d3d3d3">
-                                        <th>Total</th>
-                                        <td>{{dashboard.resumo.consulta | number}}</td>
-                                        <td><b>{{dashboard.resumo.pagou | number}}</b> ({{dashboard.resumo.pagou / dashboard.resumo.consulta | percentage:1}})</td>
-                                        <td><b>{{dashboard.resumo.nega | number}}</b> ({{dashboard.resumo.nega / dashboard.resumo.consulta | percentage:1}})</td>
-                                        <td><b>{{dashboard.resumo.boleto | number}}</b> ({{dashboard.resumo.boleto / dashboard.resumo.consulta | percentage:1}})</td>
-                                        <td>{{dashboard.resumo.vlr | currency:'R$'}}</td>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
 
