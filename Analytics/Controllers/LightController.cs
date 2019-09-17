@@ -106,14 +106,14 @@ namespace Analytics.Controllers
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
-
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_LIGHT"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("data", dtini.ToString("yyyy-MM-dd"));
-
+                    parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_basecobranca", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
