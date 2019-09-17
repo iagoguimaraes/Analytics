@@ -145,10 +145,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
-                DataTable tipo = JsonConvert.DeserializeObject<DataTable>(form["tipo"]);
-                DataTable fase = JsonConvert.DeserializeObject<DataTable>(form["fase"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -156,11 +154,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("segmento", segmento);
-                    parametros.Add("fase", fase);
+                    parametros.Add("segmentos", segmentos);
                     parametros.Add("origem", origem);
-                    parametros.Add("tipo", tipo);
-
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
