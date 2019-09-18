@@ -65,6 +65,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario" style="width:100%"></select2>
                         </div>
 
+                        <!--FPD-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Cliente FPD</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fpd" dados="dashFiltros.fpd" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -371,6 +377,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteiras: '',
             funcionario: '',
+            fpd: '',
             conceito: ''
         };
 
@@ -388,6 +395,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
             $scope.dashFiltros.funcionario = data.Table1;
+            $scope.dashFiltros.fpd = data.Table7;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
