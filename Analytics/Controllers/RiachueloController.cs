@@ -710,6 +710,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable servidores = JsonConvert.DeserializeObject<DataTable>(form["servidores"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -717,6 +718,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("servidores", servidores);
 
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_portalnegocia", parametros);

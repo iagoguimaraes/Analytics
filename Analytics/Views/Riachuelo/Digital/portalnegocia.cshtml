@@ -7,7 +7,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Portal Negocia</div>
+            <div class="page-name">Portal Negocia Riachuelo</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -55,6 +55,12 @@
                                     </div>
                                 </div>
 
+                                <!--OPERACAO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Operação</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.servidores" dados="dashFiltros.servidores" style="width:100%"></select2>
+                                </div>
+
                                 <!--BOTÃO-->
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -94,65 +100,106 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-4 col-lg-3">
-                <div class="small-box bg-gray">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.consulta | number"></h3>
-                        <p>Consultas</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-search"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.pagou | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.pagou / dashboard.resumo.consulta | percentage: 1"></h4>
-                        <p>Já Pagou</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-close"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.nega | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.nega / dashboard.resumo.consulta | percentage: 1"></h4>
-                        <p>Nega Pgto</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-ban"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6 col-lg-2">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.boleto | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.boleto / dashboard.resumo.consulta | percentage: 1"></h4>
-                        <p>Boleto</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-barcode"></i>
-                    </div>
-                </div>
-            </div>
             <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.vlr | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.boleto | number"></h4>
                         <p>Valor Negociado</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-3">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr_promessa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa | number"></h4>
+                        <p>Valor Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-widget widget-user">
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-sm-2 col-xs-offset-1 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.consulta | megaNumber"></h5>                           
+                            <div class="icon description-text">
+                                <span>Consultas</span>
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.pagou | megaNumber"></h5>
+                            <div class="icon description-text">
+                                <span>Já Pagou</span>
+                                <i class="fa fa-close"></i>                          
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.nega | megaNumber"></h5>
+                            <div class="icon description-text">
+                                <span>Nega Pgto</span>
+                                <i class="fa fa-ban"></i>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.boleto | number"></h5>
+                            <div class="icon description-text">
+                                <span>Boleto</span>
+                                <i class="fa fa-barcode"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
+                            <div class="icon description-text">
+                                <span>Promessa</span>
+                                <i class="fa fa-thumbs-o-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row bg-black-gradient" style="background-color:#d3d3d3">
+                    <div class="col-sm-2 col-sm-offset-3 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.pagou / dashboard.resumo.consulta | percentage: 1"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.nega / dashboard.resumo.consulta | percentage: 1"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.boleto / dashboard.resumo.consulta | percentage: 1"></h5>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.consulta | percentage: 1"></h5>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -177,6 +224,8 @@
                                         <th>Nega Pgto</th>
                                         <th>Boleto</th>
                                         <th>Valor Negociado</th>
+                                        <th>Promessa</th>
+                                        <th>Valor Promessa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -189,6 +238,8 @@
                                         <td><b>{{dia.nega | number}}</b> ({{dia.nega / dia.consulta | percentage:1}})</td>
                                         <td><b>{{dia.boleto | number}}</b> ({{dia.boleto / dia.consulta | percentage:1}})</td>
                                         <td>{{dia.vlr | currency:'R$'}}</td>
+                                        <td><b>{{dia.promessa | number}}</b> ({{dia.promessa / dia.consulta | percentage:1}})</td>
+                                        <td>{{dia.vlr_promessa | currency:'R$'}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -201,6 +252,8 @@
                                         <td><b>{{dashboard.resumo.nega | number}}</b> ({{dashboard.resumo.nega / dashboard.resumo.consulta | percentage:1}})</td>
                                         <td><b>{{dashboard.resumo.boleto | number}}</b> ({{dashboard.resumo.boleto / dashboard.resumo.consulta | percentage:1}})</td>
                                         <td>{{dashboard.resumo.vlr | currency:'R$'}}</td>
+                                        <td><b>{{dashboard.resumo.promessa | number}}</b> ({{dashboard.resumo.promessa / dashboard.resumo.consulta | percentage:1}})</td>
+                                        <td>{{dashboard.resumo.vlr_promessa | currency:'R$'}}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -232,6 +285,8 @@
                                         <th>Nega Pgto</th>
                                         <th>Boleto</th>
                                         <th>Valor Negociado</th>
+                                        <th>Promessa</th>
+                                        <th>Valor Promessa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -244,6 +299,8 @@
                                         <td><b>{{h.nega | number}}</b> ({{h.nega / h.consulta | percentage:1}})</td>
                                         <td><b>{{h.boleto | number}}</b> ({{h.boleto / h.consulta | percentage:1}})</td>
                                         <td>{{h.vlr | currency:'R$'}}</td>
+                                        <td><b>{{h.promessa | number}}</b> ({{h.promessa / h.consulta | percentage:1}})</td>
+                                        <td>{{h.vlr_promessa | currency:'R$'}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -256,6 +313,8 @@
                                         <td><b>{{dashboard.resumo.nega | number}}</b> ({{dashboard.resumo.nega / dashboard.resumo.consulta | percentage:1}})</td>
                                         <td><b>{{dashboard.resumo.boleto | number}}</b> ({{dashboard.resumo.boleto / dashboard.resumo.consulta | percentage:1}})</td>
                                         <td>{{dashboard.resumo.vlr | currency:'R$'}}</td>
+                                        <td><b>{{dashboard.resumo.promessa | number}}</b> ({{dashboard.resumo.promessa / dashboard.resumo.consulta | percentage:1}})</td>
+                                        <td>{{dashboard.resumo.vlr_promessa | currency:'R$'}}</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -300,6 +359,8 @@
                                         <th>Nega Pgto</th>
                                         <th>Boleto</th>
                                         <th>Valor Negociado</th>
+                                        <th>Promessa</th>
+                                        <th>Valor Promessa</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="p in dashboard.carteira | groupBy: 'operacao'">
@@ -314,6 +375,8 @@
                                         <td>{{p | sumByColumn: 'nega'| number}} ({{p | divideSumColumns: 'nega':'consulta' | percentage:1}})</td>
                                         <td>{{p | sumByColumn: 'boleto'| number}} ({{p | divideSumColumns: 'boleto':'consulta' | percentage:1}})</td>
                                         <td>{{p | sumByColumn: 'vlr'| currency:'R$'}}</td>
+                                        <td>{{p | sumByColumn: 'promessa'| number}} ({{p | divideSumColumns: 'promessa':'consulta' | percentage:1}})</td>
+                                        <td>{{p | sumByColumn: 'vlr_promessa'| currency:'R$'}}</td>
                                     </tr>
                                     <tr ng-repeat="c in p" ng-show="showTbody">
                                         <td>{{c.carteira}}</td>
@@ -322,6 +385,8 @@
                                         <td><b>{{c.nega | number}}</b> ({{c.nega / c.consulta | percentage:1}})</td>
                                         <td><b>{{c.boleto | number}}</b> ({{c.boleto / c.consulta | percentage:1}})</td>
                                         <td>{{c.vlr | currency:'R$'}}</td>
+                                        <td><b>{{c.promessa | number}}</b> ({{c.promessa / c.consulta | percentage:1}})</td>
+                                        <td>{{c.vlr_promessa | currency:'R$'}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -341,21 +406,27 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            servidores: '',
+        };
+        $scope.dashFiltros = {
+            servidores: [{ id: 1, servidor: 'DIGITAL' }, {id: 3, servidor: 'HUMANO' }]
         };
         $scope.dashboard = {};
+
 
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
                 url: "/api/riachuelo/dashboard/portalnegocia",
                 data: $scope.filtros,
-            }).then(function success(r) {           
+            }).then(function success(r) {
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.dia = r.data.Table1;
                 $scope.dashboard.hora = r.data.Table2;
                 $scope.dashboard.motivo = r.data.Table3;
                 $scope.dashboard.motivo = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.motivo_recusa, y: obj.qtd })) }];
                 $scope.dashboard.carteira = r.data.Table4;
+                $scope.dashboard.diagrama = r.data.Table5;
 
                 $scope.dashboard.status = r.status;
             });
