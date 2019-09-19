@@ -35,13 +35,11 @@
 
                         <!-- Filtros -->
                         <div class="tab-pane active" id="control-sidebar-filters-tab">
-                            <!--DATA-->
-
-
                             <div class="row">
-                                <div class="col-xs-12 col-sm-6">
+                                <!--DATA-->
+                                <div class="col-xs-12 col-sm-3">
                                     <div class="form-group">
-                                        <label class="control-sidebar-subheading">Data Inicio</label>
+                                        <label class="control-sidebar-subheading">Data Inicial</label>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
@@ -50,6 +48,22 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!--DATA FINAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Final</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
                                 <div class="col-xs-12 col-sm-3">
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Hora Inicio</label>
@@ -101,6 +115,7 @@
                                 </div>
 
                             </div>
+                        </div>
 
                             <div class="row">
 
@@ -1037,9 +1052,10 @@
 <script>
     angular.module('app').controller('ctrl-sky-horahora', function ($scope, $http, $filter) {
 
+
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            //dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteira: '',
             segmentacao: '',
             supervisor: '',

@@ -44,7 +44,7 @@ namespace Analytics.Controllers
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtini"]); //@DTINI
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]); //@DTINI
 
                 int horaini = Convert.ToInt16(form["horaini"]);
                 int horafim = Convert.ToInt16(form["horafim"]);
