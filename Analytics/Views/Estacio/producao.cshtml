@@ -125,8 +125,12 @@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>R$ {{dashboard.resumo.vl_acordo | megaNumber}}</h3>
-                        <p>Valor</p>
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
+                        <p>Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
                     </div>
                 </div>
             </div>
@@ -169,7 +173,9 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Acordo</th>
+                                        <th>Promessa</th>
                                         <th>Vl Acordo</th>
+                                        <th>Vl Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -184,11 +190,13 @@
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.acordo | number}}</td>
+                                        <td>{{hora.promessa | number}}</td>
                                         <td>{{hora.vl_acordo |  currency: 'R$'}}</td>
+                                        <td>{{hora.vl_promessa |  currency: 'R$'}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.acordo / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.total_negociacao / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -199,11 +207,13 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.acordo | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vl_acordo |  currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vl_promessa |  currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.total_negociacao / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -222,7 +232,9 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="acordo">Acordo</option>
+                                    <option value="promessa">Promessa</option>
                                     <option value="vl_acordo">Vl Acordo</option>
+                                    <option value="vl_promessa">Vl Promessa</option>
                                 </select>
                             </span>
                             <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
@@ -258,7 +270,9 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Acordo</th>
+                                        <th>Promessa</th>
                                         <th>Vl Acordo</th>
+                                        <th>Vl Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -276,11 +290,13 @@
                                         <td>{{s | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{s | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{s | sumByColumn: 'acordo'| number}}</td>
+                                        <td>{{s | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{s | sumByColumn: 'vl_acordo'| currency: 'R$'}}</td>
+                                        <td>{{s | sumByColumn: 'vl_promessa'| currency: 'R$'}}</td>
                                         <td>{{s | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                         <td>{{s | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{s | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{s | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        <td>{{s | divideSumColumns: 'total_negociacao':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in s" ng-show="showTbody">
@@ -290,11 +306,13 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.acordo | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
                                         <td>{{c.vl_acordo | currency: 'R$'}}</td>
+                                        <td>{{c.vl_promessa | currency: 'R$'}}</td>
                                         <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                        <td>{{c.total_negociacao / c.cpca | percentage:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -417,7 +435,7 @@
                     $scope.dashboard.graficoHora = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.graficoHora = [{ name: 'conversao', data: dados.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.graficoHora = [{ name: 'conversao', data: dados.map(obj => (obj.total_negociacao * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.graficoHora = [{ name: $scope.graficoHora.indicador, data: dados.map(obj => obj[$scope.graficoHora.indicador]) }];
