@@ -67,41 +67,29 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-                <div class="col-xs-12 col-md-4">
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.gross | number"></h3>
-                            <p>Gross</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-thumbs-o-up"></i>
-                        </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.portabilidade | number"></h3>
+                        <p>Portabilidade</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exchange"></i>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-xs-12 col-md-4">
-                    <div class="small-box bg-blue">
-                        <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.portabilidade | number"></h3>
-                            <p>Portabilidade</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-exchange"></i>
-                        </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.erro_portabilidade | number"></h3>
+                        <p>Erro Portabilidade</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-triangle"></i>
                     </div>
                 </div>
-
-                <div class="col-xs-12 col-md-4">
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.erro_portabilidade | number"></h3>
-                            <p>Erro Portabilidade</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                </div>
+            </div>
         </div>
 
         <!--DIA A DIA-->
@@ -119,15 +107,54 @@
                                 <thead>
                                     <tr>
                                         <th>Data</th>
-                                        <th>Gross</th>
+                                        <th>Portabilidade</th>
+                                        <th>Erro de Portabilidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.dia | groupBy: 'data'">
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].data}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'portabilidade' | number}}</td>
+                                        <td>{{c | sumByColumn: 'erro_portabilidade'| number}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.backoffice}}</td>
+                                        <td>{{p.portabilidade | number}}</td>
+                                        <td>{{p.erro_portabilidade | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--BACKOFFICE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">
+                            Análise por Backoffice
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.backoffice">
+                                <thead>
+                                    <tr>
+                                        <th>Backoffice</th>
                                         <th>Portabilidade</th>
                                         <th>Erro de Portabilidade</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="c in dashboard.dia">
-                                        <td>{{c.data}}</td>
-                                        <td>{{c.gross | number}}</td>
+                                    <tr ng-repeat="c in dashboard.backoffice">
+                                        <td>{{c.backoffice}}</td>
                                         <td>{{c.portabilidade | number}}</td>
                                         <td>{{c.erro_portabilidade | number}}</td>
                                     </tr>
@@ -152,7 +179,6 @@
                                 <thead>
                                     <tr>
                                         <th>Campanha</th>
-                                        <th>Gross</th>
                                         <th>Portabilidade</th>
                                         <th>Erro de Portabilidade</th>
                                     </tr>
@@ -160,7 +186,6 @@
                                 <tbody>
                                     <tr ng-repeat="c in dashboard.campanha">
                                         <td>{{c.campanha}}</td>
-                                        <td>{{c.gross | number}}</td>
                                         <td>{{c.portabilidade | number}}</td>
                                         <td>{{c.erro_portabilidade | number}}</td>
                                     </tr>
@@ -199,7 +224,8 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.campanha = r.data.Table1;
                 $scope.dashboard.dia = r.data.Table2;
-                $scope.dashboard.analitico = r.data.Table3;
+                $scope.dashboard.backoffice = r.data.Table3;
+                $scope.dashboard.analitico = r.data.Table4;
 
                 $scope.dashboard.status = r.status;
             });
