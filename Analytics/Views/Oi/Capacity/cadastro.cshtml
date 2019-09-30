@@ -1,0 +1,290 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-oi-cadastro">
+
+    <!-- DAHSBOARD -->
+   
+        <!-- HEADER-->
+        @*<header class="page-header">
+            <div class="page-name">Editar Capacity</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                Periodo
+            </div>
+        </header>*@
+
+
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Período</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--CAMPANHA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanha</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas" style="width:100%"></select2>
+                            </div>
+
+                            <!--SEGMENTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmento</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
+                            </div>
+
+                            <!--PRDOUTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Produto</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard(filtros.campanhas,filtros.segmentos, filtros.produtos)">Carregar Capacity</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--VISÃO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Capacity - Diario</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <div>
+                                <small>
+                                    <input type="button" class="btn btn-secondary" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
+                                </small>
+                                <small>
+                                    <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar(filtros.campanhas,filtros.segmentos,filtros.produtos )" />
+                                </small>
+                            </div>
+
+                        </div>
+                        <div class="table">
+                            <table class="table table-striped table-bordered" ng-if="dashboard.dia" style="text-align:center">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Data</th>
+                                        <th style="text-align:center">Campanha</th>
+                                        <th style="text-align:center">Segmento</th>
+                                        <th style="text-align:center">Produto</th>
+                                        <th style="text-align:center">Capacity</th>
+                                        <th style="text-align:center">Capacity Real</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="idtbody">
+                                    <tr ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.ds_campanha}}</td>
+                                        <td style="display:none">
+                                            <input type="number" value={{dia.id_campanha}} />
+                                        </td>
+                                        <td>{{dia.ds_segmento}}</td>
+                                        <td style="display:none">
+                                            <input type="number" value={{dia.id_segmento}} />
+                                        </td>
+                                        <td>{{dia.ds_produto }}</td>
+                                        <td style="display:none">
+                                            <input type="number" value={{dia.id_produto}} />
+                                        </td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa}}" ng-disabled="!opcoes.edit" />
+                                        </td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa_real}}" ng-disabled="!opcoes.edit" />
+                                        </td>
+                                        <td ng-if="!opcoes.edit">{{dia.quantidade_pa | number}}</td>
+                                        <td ng-if="!opcoes.edit">{{dia.quantidade_pa_real | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+ 
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-oi-cadastro', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Editar';
+        dadosPagina.descricao = 'Oi'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        $scope.dashFiltros = {};
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            campanhas: '',
+            segmentos: '',
+            produtos:  '',
+        };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/oi/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = r.data.Table1;
+            $scope.dashFiltros.segmentos = r.data.Table2;
+            $scope.dashFiltros.produtos = r.data.Table3;
+        });
+
+        $scope.dashboard = {};
+
+        $scope.opcoes = {
+            edit: false
+        };
+
+        // Objeto Mailing
+        $scope.capacity = [{
+            data: '',
+            id_campanha: '',
+            id_segmento: '',
+            id_produto:  '',
+            quantidade_pa: '',
+            quantidade_pa_real: '',
+        }];
+
+        $scope.cadastrarCapacity = function (campanha, segmento, produto) {
+            $http({
+                method: 'POST',
+                url: "/api/oi/dashboard/cadcapacity",
+                data: JSON.stringify($scope.capacity),
+            }).then(function success(r) {
+
+                // Objeto Mailing
+                $scope.capacity = [{
+                    data: '',
+                    id_campanha: '',
+                    id_segmento: '',
+                    id_produto: '',
+                    quantidade_pa: '',
+                    quantidade_pa_real: '',
+                }];
+
+                //location.reload();
+                $scope.carregarDashboard();
+
+            });
+        }
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+
+            $http({
+                method: 'POST',
+                url: "/api/oi/dashboard/capacity",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dia = data.Table;
+
+
+            });
+        }
+
+        $scope.editar = function () {
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+        }
+
+        $scope.salvar = function () {
+
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+
+            let tabela = document.getElementById('idtbody')
+
+
+            for (let i = 0; i < tabela.rows.length; i++) {
+
+    
+                let dt = $scope.converterData(tabela.children[i].children[0].innerHTML);
+                let txt = tabela.children[i].children[7].getElementsByTagName('input').item(0).value;
+                let txt2 = tabela.children[i].children[8].getElementsByTagName('input').item(0).value;
+                let id_campanha = tabela.children[i].children[2].getElementsByTagName('input').item(0).value;
+                let id_segmento = tabela.children[i].children[4].getElementsByTagName('input').item(0).value;
+                let id_produto =  tabela.children[i].children[6].getElementsByTagName('input').item(0).value;
+
+               $scope.capacity.push({ data: dt, quantidade_pa: txt, quantidade_pa_real: txt2, id_campanha: id_campanha, id_segmento: id_segmento, id_produto: id_produto });
+            }
+            
+            $scope.cadastrarCapacity($scope.capacity);
+
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.converterData = function (data) {
+            var dia = data.split("/")[0];
+            var mes = data.split("/")[1];
+            var ano = data.split("/")[2];
+
+            return ano + '-' + ("0" + mes).slice(-2) + '-' + ("0" + dia).slice(-2);
+        }
+    });
+
+</script>
