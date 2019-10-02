@@ -124,7 +124,6 @@
                                 <span class="description-text">Acordo</span>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="row" style="background-color: #c3b900; color:white; opacity: 0.8">
@@ -156,12 +155,6 @@
                             <div class="description-block">
                                 <h5 class="description-header" ng-bind="(dashboard.resumo.promessa+dashboard.resumo.acordo) / dashboard.resumo.cpca | percentage: 1"></h5>
                                 <span class="description-text">Conversao</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.preventivo | number"></h5>
-                                <span class="description-text">Preventiva</span>
                             </div>
                         </div>
                     </div>
@@ -197,8 +190,6 @@
                                             <th>Vlr Promessa</th>
                                             <th>Acordo</th>
                                             <th>Vlr Acordo</th>
-                                            <th>Negociação</th>
-                                            <th>Preventiva</th>
                                             <th>Hit Rate</th>
                                             <th>Tx Loc</th>
                                             <th>Tx Apv</th>
@@ -218,8 +209,6 @@
                                             <td>{{hora.promessa_vlr | currency: 'R$ '}}</td>
                                             <td>{{hora.acordo | number}}</td>
                                             <td>{{hora.acordo_vlr | currency: 'R$ '}}</td>
-                                            <td>{{hora.negociacao | number}}</td>
-                                            <td>{{hora.preventivo | number}}</td>
                                             <td>{{hora.alo / hora.discado | percentage:1}}</td>
                                             <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                             <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -239,8 +228,6 @@
                                             <th>{{dashboard.resumo.promessa_vlr | currency: 'R$ '}}</th>
                                             <th>{{dashboard.resumo.acordo | number}}</th>
                                             <th>{{dashboard.resumo.acordo_vlr | currency: 'R$ '}}</th>
-                                            <th>{{dashboard.resumo.negociacao | number}}</th>
-                                            <th>{{dashboard.resumo.preventivo | number}}</th>
                                             <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -282,8 +269,6 @@
                                             <th>Vlr Promessa</th>
                                             <th>Acordo</th>
                                             <th>Vlr Acordo</th>
-                                            <th>Negociação</th>
-                                            <th>Preventiva</th>
                                             <th>HitRate</th>
                                             <th>TxLoc</th>
                                             <th>TxApv</th>
@@ -306,8 +291,6 @@
                                             <td>{{e | sumByColumn: 'promessa_vlr' | currency: 'R$ '}}</td>
                                             <td>{{e | sumByColumn: 'acordo' | number}}</td>
                                             <td>{{e | sumByColumn: 'acordo_vlr' | currency: 'R$ '}}</td>
-                                            <td>{{e | sumByColumn: 'negociacao' | number}}</td>
-                                            <td>{{e | sumByColumn: 'preventivo' | number}}</td>
                                             <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
                                             <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                             <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -325,17 +308,13 @@
                                             <td>{{c.promessa_vlr | currency:'R$ '}}</td>
                                             <td>{{c.acordo | number}}</td>
                                             <td>{{c.acordo_vlr | currency:'R$ '}}</td>
-                                            <td>{{c.negociacao | number}}</td>
-                                            <td>{{c.preventivo | number}}</td>
                                             <td>{{c.contato / c.discado | percentage:1}}</td>
                                             <td>{{c.cpc / c.contato | percentage:1}}</td>
                                             <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                             <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                             <td>{{c.acordo / c.cpca | percentage:1}}</td>
                                         </tr>
-
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -365,13 +344,90 @@
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
                                     <option value="acordo">Acordo</option>
-                                    <option value="negociacao">Negociação</option>
-                                    <option value="preventivo">Preventiva</option>
                                 </select>
                             </small>
                         </div>
                         <div class="card-body">
                             <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--TABELA EQUIPE/SUPERVISOR-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table5')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.equipe">
+                                    <thead>
+                                        <tr>
+                                            <th>Supervisor</th>
+                                            <th>Contato</th>
+                                            <th>CPC</th>
+                                            <th>CPCA</th>
+                                            <th>Promessa</th>
+                                            <th>Vlr Promessa</th>
+                                            <th>Acordo</th>
+                                            <th>Vlr Acordo</th>
+                                            <th>TxLoc</th>
+                                            <th>TxApv</th>
+                                            <th>Conversão PROM</th>
+                                            <th>Conversão ACOR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="e in dashboard.equipe | groupBy: 'ds_supervisor'">
+
+                                        <tr class="text-bold">
+                                            <td>
+                                                <b>
+                                                    <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                    {{e[0].ds_supervisor}}
+                                                </b>
+                                            </td>
+                                            <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                            <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                            <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                            <td>{{e | sumByColumn: 'promessa' | number}}</td>
+                                            <td>{{e | sumByColumn: 'promessa_vlr' | currency: 'R$ '}}</td>
+                                            <td>{{e | sumByColumn: 'acordo' | number}}</td>
+                                            <td>{{e | sumByColumn: 'acordo_vlr' | currency: 'R$ '}}</td>
+                                            <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                            <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                            <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                            <td>{{e | divideSumColumns: 'acordo':'cpca' | percentage:1}}</td>
+                                        </tr>
+
+                                        <tr ng-repeat="c in e" ng-show="showTbody">
+                                            <td>{{c.ds_equipe}}</td>
+                                            <td>{{c.contato | number}}</td>
+                                            <td>{{c.cpc | number}}</td>
+                                            <td>{{c.cpca | number}}</td>
+                                            <td>{{c.promessa | number}}</td>
+                                            <td>{{c.promessa_vlr | currency:'R$ '}}</td>
+                                            <td>{{c.acordo | number}}</td>
+                                            <td>{{c.acordo_vlr | currency:'R$ '}}</td>
+                                            <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                            <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                            <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                            <td>{{c.acordo / c.cpca | percentage:1}}</td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -387,7 +443,10 @@
                                 <i class="fa fa-expand"></i>
                             </div>
                             <div class="card-header-button" ng-click="extrair('Table3')">
-                                <i class="fa fa-file-excel-o"></i>
+                                <i class="fa fa-file-excel-o"> Operador</i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table6')">
+                                <i class="fa fa-file-excel-o" alt="Visão Operador/Ocorrencia"> Ocorrencia</i>
                             </div>
                         </div>
                         <div class="card-body">
@@ -462,6 +521,7 @@
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
+                $scope.dashboard.equipe = r.data.Table5;
 
                 $scope.carregarGrafico();
             });

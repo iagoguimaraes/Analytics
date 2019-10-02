@@ -655,7 +655,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_azul", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -675,7 +675,6 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
                 {
@@ -683,9 +682,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("carteira", carteira);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_azul", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

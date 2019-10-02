@@ -527,5 +527,68 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/cadcapacity")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadCapacity(FormDataCollection form)
+        {
+            try
+            {
+                DataTable capacity = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                capacity.Rows[0].Delete();
+              
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI_NEW"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("capacity", capacity);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_fatoCapacity_cadastro", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/capacity")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEditarCapacity(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanhas = JsonConvert.DeserializeObject<DataTable>(form["campanhas"]);
+                DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
+                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_OI_NEW"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanhas", campanhas);
+                    parametros.Add("segmentos", segmentos);
+                    parametros.Add("produtos", produtos);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_editar", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
