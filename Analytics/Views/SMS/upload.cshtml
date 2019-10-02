@@ -3,18 +3,69 @@
 }
 
 <div ng-controller="ctrl-sms-upload">
-    <div class="margin-bottom">
-        <!--FILTROS-->
-        <div class="col-xs-12 margin-bottom" ng-if="dashFiltros.status == 200">
+
+    <div class="margin-bottom"></div>
+
+    <!--IMPORTAR ARQUIVO-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-title">Filtros</span>
+                    <span class="card-header-title">Importar Arquivo</span>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-
+                    <div class="margin-bottom">
+                        <label>Upload Arquivo</label>
+                        <input type="file" id="fileInput" accept=".csv" uploadfile="filtrosUpload.arquivo" />
+                        <input type="hidden" ng-model="filtrosUpload.arquivo" />
+                    </div>
+                    <button style="display: inline-block" type="button" class="btn btn-primary" ng-click="uploadArquivo()">Importar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--LISTA DE ARQUIVO-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Arquivos a Processar</span>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered" style="width:100%" ng-if="listaarquivos">
+                        <thead>
+                            <tr>
+                                <th>Arquivo</th>
+                                <th>Processar</th>
+                                <th>Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="a in listaarquivos">
+                                <td>{{a}}</td>
+                                <td><i class="fa fa-cogs" style="cursor:pointer" ng-click="selecionarArquivo(a)"></i></td>
+                                <td><i class="fa fa-close" style="cursor:pointer" ng-click="removerArquivo(a)"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--MODAL PROCESSAR ARQUIVO-->
+    <div class="modal" id="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{filtros.arquivoSelecionado}}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row margin-bottom">
                         <!--CENTRO DE CUSTO-->
-                        <div class="col-xs-12 col-sm-4 col-md-2">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Centro de Custo</label>
                                 <select ng-model="filtros.centrocusto" class="form-control">
@@ -25,10 +76,10 @@
                         </div>
 
                         <!--CARTEIRA-->
-                        <div class="col-xs-12 col-sm-4 col-md-2">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Carteira</label>
-                                <select ng-model="filtros.carteira" ng-change="getCarteiraLayout(filtros.carteira)" class="form-control">
+                                <select ng-model="filtros.carteira" class="form-control">
                                     <option value="" selected="selected"> Selecione</option>
                                     <option ng-repeat="c in dashFiltros.carteira" value="{{c.id_carteira}}">{{c.carteira}}</option>
                                 </select>
@@ -36,7 +87,7 @@
                         </div>
 
                         <!--FORNECEDOR-->
-                        <div class="col-xs-12 col-sm-4 col-md-2">
+                        <div class="col-xs-12">
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Fornecedor</label>
                                 <select ng-model="filtros.fornecedor" class="form-control">
@@ -46,133 +97,23 @@
                             </div>
                         </div>
 
-                        <!--LAYOUT ARQUIVO-->
-                        <div class="col-xs-12 col-sm-5 col-md-3">
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Layout do Arquivo</label>
-                                <select ng-model="filtros.layout" ng-change="getPreview(filtros.layout)" class="form-control">
-                                    <option value="" selected="selected">Selecione</option>
-                                    <option ng-repeat="l in dashFiltros.layout" value="{{l.id_layout}}">{{l.layout}}</option>
-                                </select>
+                        <!--TOKEN DO FORNECEDOR VOCALNET-->
+                        <div ng-if="filtros.fornecedor == 2">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Token</label>
+                                    <input class="form-control" type="text" name="vocalnet_token" ng-model="filtros.token" onchange="localStorage.setItem('vocalnet_token',this.value)" />
+                                </div>
                             </div>
                         </div>
 
-                        <!--UPLOAD ARQUIVO-->
-                        <div class="col-xs-12 col-sm-4 col-md-2" ng-show="validarSelecao()">
-                            <div class="form-group">
-                                <label>Upload Arquivo</label>
-                                <input type="file" id="fileInput" accept="{{layout.extensao.extensao}}" uploadfile="filtros.arquivo" />
-                                <input type="hidden" ng-model="filtros.arquivo" />
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- BOTÃO UPLOAD ARQUIVO-->
-                    <div class="form-group">
-                        <button data-toggle="modal" data-target="#modalUpload" ng-disabled="!validarSelecaoArquivo()" type="button" class="btn btn-success">Importar Arquivo</button>
+
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <!--PREVIEW LAYOUT ARQUIVO-->
-        <div class="row margin-bottom" ng-show="validarSelecao()">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Layout do Arquivo {{layout.layout.layout}}</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-
-                            <div class="col-xs-4">
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
-                                    <h4> {{layout.extensao.extensao}} </h4>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading"> Qtd Colunas:</label>
-                                    <h4> {{layout.qtdcolumn.qtd}} </h4>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading"> Tipos de Coluna:</label>
-                                    <table class="table table-striped table-bordered" ng-if="layout.qtdTipo">
-                                        <thead>
-                                            <tr>
-                                                <th ng-repeat="(Key, val) in layout.qtdTipo[0]">{{ Key }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="row in layout.qtdTipo">
-                                                <td ng-repeat="column in row">
-                                                    {{  column }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="col-xs-8">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="layout.tabela">
-                                    <thead>
-                                        <tr>
-                                            <th ng-repeat="(Key, val) in layout.tabela[0]">{{ Key }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="row in layout.tabela">
-                                            <td ng-repeat="column in row">
-                                                {{  column }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--TABELA DINAMICA HORIZONTAL
-        <div class="card-body">
-            <div class="form-group">
-                <label class="control-sidebar-subheading"> Extensão Arquivo:</label>
-                <h3> {{arquivo.extensao[0]}} </h3>
-            </div>
-            <table class="table table-striped table-bordered" style="width:100%" ng-if="arquivo.metadados">
-                <thead>
-                    <tr>
-                        <th ng-repeat="x in arquivo.metadados">{{  x.name }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td ng-repeat="y in arquivo.metadados">
-                            {{  y.tipo }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>-->
-        <!--MODAL CONFIRMAR UPLOAD-->
-        <div class="modal" id="modalUpload" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Confirmar Upload</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p><h4>Tem certeza que é este o arquivo que deseja importar?</h4></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" ng-click="importarArquivo()" data-dismiss="modal">Confirmar</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" ng-click="processarArquivo()">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -181,137 +122,128 @@
 
 <script>
     angular.module('app').controller('ctrl-sms-upload', function ($scope, $http, $filter) {
-
-
+        $scope.filtrosUpload = {
+            nomearquivo: '',
+            arquivo: '',
+        };
         $scope.filtros = {
-
+            arquivoSelecionado: '',
             centrocusto: '',
             carteira: '',
             fornecedor: '',
-            layout: '',
-            tabela: '',
-            arquivo: '',
-            nomearquivo: '',
+            token: localStorage.getItem('vocalnet_token'),
         };
-
-        $scope.layout = {};
         $scope.dashFiltros = {};
 
         //carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/sms/lote/filtros",
-            data: $scope.filtros,
+            url: "/api/sms/filtros",
         }).then(function success(r) {
-
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.centrocusto = r.data.Table;
             $scope.dashFiltros.carteira = r.data.Table1;
             $scope.dashFiltros.fornecedor = r.data.Table2;
-            //$scope.dashFiltros.layout = r.data.Table3;
-            $scope.getCarteiraLayout(1);
         });
 
-
-        $scope.getCarteiraLayout = function (carteira) {            
+        $scope.obterLista = function () {
             $http({
                 method: 'POST',
-                url: "/api/sms/lote/getCarteiraLayout",
-                data: { carteira },
-            }).then(function success(r) {
-                $scope.dashFiltros.layout = r.data;                
-            });
-        }
-
-        $scope.getPreviewLayout = function () {
-
-            $http({
-                method: 'POST',
-                url: "/api/sms/lote/getPreviewLayout",
+                url: "/api/sms/listararquivos",
                 data: $scope.filtros,
             }).then(function success(r) {
-
-                $scope.layout.status = r.status;
-
-                $scope.layout.tabela = r.data.Table;
-                $scope.filtros.tabela = r.data.Table1[0].tabela;
-                $scope.layout.qtdTipo = r.data.Table2;
-                $scope.layout.qtdcolumn = r.data.Table3[0];
-                $scope.layout.extensao = r.data.Table4[0];
-                $scope.layout.layout = r.data.Table5[0];
+                $scope.listaarquivos = r.data;
             });
         }
+        $scope.uploadArquivo = function () {
 
-        $scope.validarSelecao = function () {
+            if (!confirm('Tem certeza que deseja importar este arquivo?'))
+                return false;
 
-            let show = false;
-
-            if (!$scope.filtros.centrocusto == '' && !$scope.filtros.carteira == '' && !$scope.filtros.fornecedor == '' && !$scope.filtros.layout == '') {
-
-                show = true;
-            }
-
-            return show;
-        }        
-
-        $scope.validarSelecaoArquivo = function () {
-            let show = false;
-
-            if (!$scope.filtros.arquivo == '') {
-                show = true;
-            }
-            return show;
-        }
-
-        $scope.getPreview = function (id) {
-
-            if (!id == 0) {
-                $scope.getPreviewLayout();
-            }
-        }
-
-        $scope.importarArquivo = function () {
-
-            $scope.filtros.nomearquivo = document.querySelector('#fileInput').files[0].name;
+            $scope.filtrosUpload.nomearquivo = document.querySelector('#fileInput').files[0].name;
 
             $http({
                 method: 'POST',
-                url: "/api/sms/lote/upload",
-                data: $scope.filtros,
+                url: "/api/sms/upload",
+                data: $scope.filtrosUpload,
             }).then(function success(r) {
-
-                //let status = r.status;
-                //let id = r.data;
-
                 if (r.status == 200) {
-
-                    alert("Arquivo importado com sucesso!");
                     $("#fileInput").val('');
-                    $scope.filtros.centrocusto = '';
-                    $scope.filtros.carteira = '';
-                    $scope.filtros.fornecedor = '';
-                    $scope.filtros.layout = '';
-                    $scope.filtros.tabela = '';
-                    $scope.filtros.arquivo = '';
-                    $scope.filtros.nomearquivo = '';
+                    $scope.filtrosUpload.arquivo = '';
+                    $scope.filtrosUpload.nomearquivo = '';
+
+                    $scope.obterLista();
+                    alert("Arquivo importado com sucesso!");
 
                 } else if (r.status == 500) {
-                    console.log(r.data.Message);
+                    $("#fileInput").val('');
+                    $scope.filtrosUpload.arquivo = '';
+                    $scope.filtrosUpload.nomearquivo = '';
 
                     alert(r.data.Message);
+                }
+            });
+        }
+        $scope.removerArquivo = function (arquivo) {
+            if (!confirm('Deseja exluir o arquivo ' + arquivo + "?"))
+                return false;
 
-                    $("#fileInput").val('');
-                    $scope.filtros.centrocusto = '';
-                    $scope.filtros.carteira = '';
-                    $scope.filtros.fornecedor = '';
-                    $scope.filtros.layout = '';
-                    $scope.filtros.tabela = '';
-                    $scope.filtros.arquivo = '';
-                    $scope.filtros.nomearquivo = '';
+            $http({
+                method: 'POST',
+                url: "/api/sms/removerarquivo",
+                data: { "arquivo": arquivo },
+            }).then(function success(r) {
+                $scope.obterLista();
+            });
+        }
+        $scope.selecionarArquivo = function (arquivo) {
+            $scope.filtros.arquivoSelecionado = arquivo;
+            $('#modal').modal('show');
+        }
+        $scope.processarArquivo = function () {
+            if (!$scope.filtros.centrocusto) {
+                $('[ng-model="filtros.centrocusto"]').focus();
+                return false;
+            }
+            if (!$scope.filtros.carteira) {
+                $('[ng-model="filtros.carteira"]').focus();
+                return false;
+            }
+            if (!$scope.filtros.fornecedor) {
+                $('[ng-model="filtros.fornecedor"]').focus();
+                return false;
+            }
+
+            if ($scope.filtros.fornecedor == 1) {
+                $scope.processarTalkIP();
+            }
+            else if ($scope.filtros.fornecedor == 2) {
+
+                if (!$scope.filtros.token) {
+                    $('[ng-model="filtros.token"]').focus();
+                    return false;
                 }
 
+                $scope.processarVocalNet();
+            }
+
+            $('#modal').modal('hide');
+        }
+        $scope.processarVocalNet = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sms/processar/vocalnet",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                if (r.status == '500')
+                    alert(r.data.Message);
+                else if (r.status == '200') {
+                    alert('O arquivo foi processado com sucesso!');
+                    $scope.obterLista();
+                }
             });
         }
 
+        $scope.obterLista();
     });
 </script>

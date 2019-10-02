@@ -70,6 +70,12 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedores" dados="dashFiltros.fornecedores"></select2>
                         </div>
 
+                        <!--USUARIOS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Usuarios</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.usuarios" dados="dashFiltros.usuarios"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -80,209 +86,121 @@
             </div>
         </div>
 
+        <!--FILTROS INTERATIVOS-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Centro de Custo</label>
+                <multiple-select ng-model="dashboard.filtros.centrocusto" dados="dashboard.dimensao.centrocusto" ng-change="aplicarFiltros()" placeholder="Centro de Custo" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Carteira</label>
+                <multiple-select ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()" placeholder="Carteira" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Usuario</label>
+                <multiple-select ng-model="dashboard.filtros.usuario" dados="dashboard.dimensao.usuario" ng-change="aplicarFiltros()" placeholder="Usuario" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-3 margin-bottom">
+                <label class="control-sidebar-subheading">Fornecedor</label>
+                <multiple-select ng-model="dashboard.filtros.fornecedor" dados="dashboard.dimensao.fornecedor" ng-change="aplicarFiltros()" placeholder="Fornecedor" /><multiple-select />
+            </div>
+        </div>
+
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-2">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-gray">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.lotes | number: 0"></h3>
+                        <h3 ng-bind="dashboard.resumo.lote | number"></h3>
                         <p>Lotes</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-clone"></i>
+                        <i class="fa fa-file-excel-o"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-2">
-                <div class="small-box bg-blue-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.registros | megaNumber"></h3>
-                        <p>Registros</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-list"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <div class="small-box bg-yellow-active">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-blue">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.enviado | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.enviado / dashboard.resumo.registros | percentage: 1"></h4>
-                        <p>Enviado</p>
+                        <p>SMS</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-envelope-square"></i>
+                        <i class="fa fa-envelope-o"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-2">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.entregue | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.entregue / dashboard.resumo.enviado | percentage: 2"></h4>
-                        <p>Entregue</p>
+                        <h3>R$ {{dashboard.resumo.custo | number}}</h3>
+                        <p>Custo</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-check"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <div class="small-box bg-red">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.pendente | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.pendente / dashboard.resumo.enviado | percentage: 2"></h4>
-                        <p>Pendentes</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-times-circle"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <div class="small-box bg-gray-active">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.erro | number"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.erro / dashboard.resumo.enviado | percentage: 2"></h4>
-                        <p>Erro Envio</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-exclamation"></i>
+                        <i class="fa fa-money"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--LOTE-->
-        <div class="row  margin-bottom">
-            <div class="col-xs-12">
+        <!--DASHBAORD-->
+        <div class="row margin-bottom">
+            <!--DIA-->
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Lotes Importados</span>
-                    </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.lote">
-                                <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>Centro Custo</th>
-                                        <th>Carteira</th>
-                                        <th>Fornecedor</th>
-                                        <th>Usuário</th>
-                                        <th>Layout</th>
-                                        <th>Enviados</th>
-                                        <th>Entregue</th>
-                                        <th>Erros</th>
-                                        <th>Pendentes</th>
-                                        <th>% Entregue</th>
-                                        <th>% Erros</th>
-                                        <th>Callback</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="r in dashboard.lote">
-                                        <td>{{r.data}}</td>
-                                        <td>{{r.centrocusto}}</td>
-                                        <td>{{r.carteira}}</td>
-                                        <td>{{r.fornecedor}}</td>
-                                        <td>{{r.usuario}}</td>
-                                        <td>{{r.layout}}</td>
-                                        <td>{{r.enviado | number}}</td>
-                                        <td>{{r.entregue | number}}</td>
-                                        <td>{{r.erro | number}}</td>
-                                        <td>{{r.pendente | number}}</td>
-                                        <td>{{r.entregue / r.enviado | percentage:1}}</td>
-                                        <td>{{r.erro / r.enviado | percentage:1}}</td>
-                                        <td>{{r.tempo_callback | formatTimer}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="6">Total</th>
-                                        <th>{{dashboard.resumo.enviado | number}}</th>
-                                        <th>{{dashboard.resumo.entregue | number}}</th>
-                                        <th>{{dashboard.resumo.erro | number}}</th>
-                                        <th>{{dashboard.resumo.pendente | number}}</th>
-                                        <th>{{dashboard.resumo.entregue / dashboard.resumo.enviado | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.erro / dashboard.resumo.enviado | percentage: 1}}</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                        <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--CENTRO DE CUSTO-->
+            <div class="col-xs-12 col-md-5 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.centrocusto" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--CARTEIRA-->
+            <div class="col-xs-12 col-md-7 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.carteira" style="width: 100%; height: 300px"></high-charts>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--ERROS IMPORTACAO LOTE-->
+        <!--ANALITICO-->
         <div class="row  margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Lotes de Insucesso</span>
+                        <span class="card-header-title">Lote a Lote</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.erroLote">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.analitico">
                                 <thead>
                                     <tr>
                                         <th>Data</th>
-                                        <th>Carteira</th>
-                                        <th>Fornecedor</th>
-                                        <th>Usuário</th>
-                                        <th>Layout</th>
                                         <th>Arquivo</th>
-                                        <th>Cod Erro</th>
-                                        <th>Erro</th>
-                                        <th>Descrição</th>                                        
+                                        <th>Sucesso</th>
+                                        <th>Registros</th>
+                                        <th>SMS Enviado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="r in dashboard.erroLote">
-                                        <td>{{r.data}}</td>
-                                        <td>{{r.carteira}}</td>
-                                        <td>{{r.fornecedor}}</td>
-                                        <td>{{r.usuario}}</td>
-                                        <td>{{r.layout}}</td>
-                                        <td>{{r.nomearquivo}}</td>
-                                        <td>{{r.id_erro}}</td>
-                                        <td>{{r.erro}}</td>
-                                        <td>{{r.descricao}}</td>
+                                    <tr align="center" ng-repeat="r in dashboard.analitico">
+                                        <td>{{r.datac}}</td>
+                                        <td>{{r.arquivo}}</td>
+                                        <td>{{r.sucesso ? 'SIM' : 'NÃO'}}</td>
+                                        <td>{{r.qtd_registros | number}}</td>
+                                        <td>{{r.qtd_enviado | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--GRAFICO DIA-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Enviado por Dia</span>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.dia" axis-Categories="dashboard.datas" type="column" plot-Options-Column-Data-Label="true"></high-chart>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--CALLBACK-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Status Callback</span>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.callback" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
@@ -292,30 +210,40 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-sms-acompanhamento', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-sms-acompanhamento', function ($scope, $http, $filter, cubo) {
 
+        // obj ref aos filtros da consulta
         $scope.filtros = {
-            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(new Date(new Date().getFullYear(), new Date().getMonth(), 1), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             centrocusto: '',
             carteiras: '',
             fornecedores: '',
+            usuarios: '',
         };
-
+        // obj ref aos graficos e elementos do dashboard
+        $scope.dashboard = {
+            dimensao: {},
+            filtros: {},
+        }
+        // obj ref aos filtros de dimensoes (interativos)
+        $scope.dimensao = {};
+        // obj ref as opcoes de filtros fixos
         $scope.dashFiltros = {};
-        $scope.dashboard = {};
 
-        // carregar os filtros
+
+        // carregar os filtros fixos
         $http({
             method: 'GET',
-            url: "/api/sms/lote/filtros",
+            url: "/api/sms/filtros",
             data: $scope.filtros,
-        }).then(function success(r) {
-            $scope.dashFiltros.status = r.status;
+        }).then(function success(r) {           
             $scope.dashFiltros.centrocusto = r.data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.fornecedores = r.data.Table2;
-            //$scope.dashFiltros.layout = r.data.Table3;
+            $scope.dashFiltros.usuarios = r.data.Table3;
+
+            $scope.dashFiltros.status = r.status;
         });
 
         $scope.carregarDashboard = function () {
@@ -324,18 +252,130 @@
                 url: "/api/sms/dashboard/acompanhamento",
                 data: $scope.filtros,
             }).then(function success(r) {
+                console.log(r.data.Table);
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dados = r.data;
-
-                $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.lote = r.data.Table1;
-
-                $scope.dashboard.datas = r.data.Table2.map(obj => obj.data);
-                $scope.dashboard.dia = [{ name: 'SMS', data: r.data.Table2.map(obj => obj.enviado) }];
-
-                $scope.dashboard.callback = [{ name: 'Qtd', data: r.data.Table3.map(obj => ({ name: obj.retorno, y: obj.quantidade })) }];
-                $scope.dashboard.erroLote = r.data.Table4;
             });
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.centrocusto = cubo.obterDimensao('centrocusto').sort();
+            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('carteira').sort();            
+            $scope.dashboard.dimensao.fornecedor = cubo.obterDimensao('fornecedor').sort();
+            $scope.dashboard.dimensao.usuario = cubo.obterDimensao('usuario').sort();
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.centrocusto = cubo.obterDimensao('centrocusto');
+            $scope.dimensao.carteira = cubo.obterDimensao('carteira');
+            $scope.dimensao.fornecedor = cubo.obterDimensao('fornecedor');
+            $scope.dimensao.usuario = cubo.obterDimensao('usuario');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+            $scope.dashboard.analitico = dados;
+
+            let dia = alasql('select data, sum(custo) custo from ? group by data order by data', [dados]);
+            let centrocusto = alasql('select centrocusto, sum(custo) custo from ? group by centrocusto', [dados]);
+            let carteira = alasql('select carteira, sum(custo) custo from ? group by carteira order by custo desc', [dados]);
+
+            $scope.dashboard.resumo = alasql('select count(*) lote, sum(qtd_enviado) enviado, sum(custo) custo from ?', [dados])[0];
+
+            $scope.dashboard.dia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Dia a Dia'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dia.map(obj => obj['data'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Custo', data: dia.map(obj => obj.custo), color: '#333' }]
+            };
+            $scope.dashboard.centrocusto = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Centro de Custo'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%'
+                    }
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Custo', data: centrocusto.map(obj => ({ name: obj.centrocusto, y: obj.custo })) }]
+            };            
+            $scope.dashboard.carteira = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Carteira'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: carteira.map(obj => obj['carteira'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Custo', data: carteira.map(obj => obj.custo) }]
+            };
+
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('centrocusto', $scope.dashboard.filtros.centrocusto);
+            cubo.filtrar('carteira', $scope.dashboard.filtros.carteira);
+            cubo.filtrar('fornecedor', $scope.dashboard.filtros.fornecedor);
+            cubo.filtrar('usuario', $scope.dashboard.filtros.usuario);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
         }
 
         $scope.carregarDashboard();
