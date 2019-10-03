@@ -21,29 +21,11 @@ namespace Analytics.Controllers
     [RoutePrefix("api/sms")]
     public class SMSController : ApiController
     {
-        private void ValidarArquivoImportado(string nomearquivo)
-        {
-            using (SqlHelper sql = new SqlHelper("DB_SMS"))
-            {
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
-                parametros.Add("@nomearquivo", nomearquivo);
-
-                DataTable dt = sql.ExecuteQueryDataTable(@"
-                        select nomearquivo, convert(varchar(16),data_upload,121) data from TB_LOTE where nomearquivo = @nomearquivo"
-                , parametros);
-
-                if (dt.Rows.Count > 0)
-                {
-                    throw new Exception(string.Format("O Arquivo: {0} já existe e foi importado as {1}", nomearquivo, dt.Rows[0][1]));
-                }
-            }
-        }
-
-        [Route("lote/filtros")]
+        [Route("filtros")]
         [HttpGet]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage LoteFiltros()
+        public HttpResponseMessage Filtros()
         {
             try
             {
@@ -59,205 +41,27 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("lote/getCarteiraLayout")]
+        [Route("upload")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage LotegetCarteiraLayout(FormDataCollection form)
+        public HttpResponseMessage Upload(FormDataCollection form)
         {
             try
             {
-                int carteira = Convert.ToInt16(form["carteira"]);
-
-                using (SqlHelper sql = new SqlHelper("DB_SMS"))
-                {
-
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-                    parametros.Add("idcarteira", carteira);
-
-                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_sel_carteira_layout", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("lote/getPreviewLayout")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage LotegetPreviewLayout(FormDataCollection form)
-        {
-
-            int idlayout = Convert.ToInt16(form["layout"]);
-
-            try
-            {
-                using (SqlHelper sql = new SqlHelper("DB_SMS"))
-                {
-
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-                    parametros.Add("idlayout", idlayout);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_getLayout", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("lote/upload")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage LoteUpload(FormDataCollection form)
-        {
-            try
-            {
-                int idcentrocusto = Convert.ToInt16(form["centrocusto"]);
-                int idcarteira = Convert.ToInt16(form["carteira"]);
-                int idfornecedor = Convert.ToInt16(form["fornecedor"]);
-                int idlayout = Convert.ToInt16(form["layout"]);
-                var tabela = form["tabela"];
-                string blob = form["arquivo"];
                 string nomearquivo = form["nomearquivo"];
-
+                string blob = form["arquivo"];
                 byte[] data = Convert.FromBase64String(blob.Substring(blob.IndexOf(",") + 1));
-                string arquivo = Encoding.UTF8.GetString(data);
 
-                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+                if (nomearquivo.Substring(nomearquivo.Length - 4) != ".csv")
+                    throw new Exception("formato inválido");
+                if (File.Exists(string.Format(@"\\venezuela\SMSAnalytics\{0}", nomearquivo)))
+                    throw new Exception("Este arquivo já foi importado");
+                if (File.Exists(string.Format(@"\\venezuela\SMSAnalytics\Processados\{0}", nomearquivo)))
+                    throw new Exception("Este arquivo já foi processado");
 
-                using (SqlHelper sql = new SqlHelper("DB_SMS"))
-                {
-
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("idcentrocusto", idcentrocusto);
-                    parametros.Add("idcarteira", idcarteira);
-                    parametros.Add("idfornecedor", idfornecedor);
-                    parametros.Add("idlayout", idlayout);
-                    parametros.Add("idusuario", Convert.ToInt16(sessao.id_usuario.ToString()));
-                    parametros.Add("dtupload", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    parametros.Add("nomearquivo", nomearquivo);
-
-                    ValidarArquivoImportado(nomearquivo);
-
-                    //retorna do id_lote
-                    int idlote = sql.ExecuteProcedureInt("sp_ins_lote", parametros);
-
-
-                    //verifica o id_layout                    
-                    if (idlayout == 1)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout simples
-                        DataTable dt = new CsvHelper().CarregarArquivoSimples(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_SIMPLES
-                        sql.BulkInsert(tabela, dt);
-
-                    }
-                    else if (idlayout == 2)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout CLARO TV
-                        DataTable dt = new CsvHelper().CarregarArquivoClaroTv(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_CLARO_TV
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamClaroTv = new Dictionary<String, Object>();
-                        ParamClaroTv.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_claro_tv", ParamClaroTv);
-
-                    }
-                    else if (idlayout == 3)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout CLARO MOVEL
-                        DataTable dt = new CsvHelper().CarregarArquivoClaroMovel(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_CLARO_MOVEL
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamClaroMovel = new Dictionary<String, Object>();
-                        ParamClaroMovel.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_claro_movel", ParamClaroMovel);
-                    }
-                    else if (idlayout == 4)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout NET
-                        DataTable dt = new CsvHelper().CarregarArquivoNet(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_NET
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamNet = new Dictionary<String, Object>();
-                        ParamNet.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_net", ParamNet);
-                    }
-                    else if (idlayout == 5)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout CLARO TV CANCELADO
-                        DataTable dt = new CsvHelper().CarregarArquivoClaroTvCancelado(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_CLARO_TV_CANCELADO
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamClaroTvCancelado = new Dictionary<String, Object>();
-                        ParamClaroTvCancelado.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_claro_tv_cancelado", ParamClaroTvCancelado);
-                    }
-                    else if (idlayout == 6)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout CLARO MOVEL CANCELADO
-                        DataTable dt = new CsvHelper().CarregarArquivoClaroMovelCancelado(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_CLARO_MOVEL_CANCELADO
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamClaroMovelCancelado = new Dictionary<String, Object>();
-                        ParamClaroMovelCancelado.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_claro_movel_cancelado", ParamClaroMovelCancelado);
-                    }
-                    else if (idlayout == 7)
-                    {
-                        //Monta o datatable com os registros do arquivo.csv layout NET CANCELADO
-                        DataTable dt = new CsvHelper().CarregarArquivoNetCancelado(arquivo, idlote);
-
-                        //Insere os registros do datatable na TB_LAYOUT_NET_CANCELADO
-                        sql.BulkInsert(tabela.Replace("TB", "STAGE"), dt);
-
-                        Dictionary<string, object> ParamNetCancelado = new Dictionary<String, Object>();
-                        ParamNetCancelado.Add("idlote", idlote);
-
-                        sql.ExecuteProcedure("sp_ins_layout_net_cancelado", ParamNetCancelado);
-                    }
-
-                    // Chama o Método da API para envio do lote SMS;
-                    using (TalkIP api = new TalkIP())
-                    {
-                        try
-                        {
-                            api.EnviarLoteSMS(idlote, idlayout);
-                        }
-                        catch (Exception e)
-                        {
-                            throw new Exception(e.Message);
-                        }
-
-                    }
-
-                    return Request.CreateResponse(HttpStatusCode.OK, idlote);
-                }
+                File.WriteAllBytes(string.Format(@"\\venezuela\SMSAnalytics\{0}", nomearquivo), data);
+                return Request.CreateResponse(HttpStatusCode.OK, "OK");
             }
             catch (Exception e)
             {
@@ -265,28 +69,211 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("talkip")]
-        [HttpGet]
-        public HttpResponseMessage TalkIP()
+        [Route("listararquivos")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ListarArquivos(FormDataCollection form)
         {
             try
             {
-                // VALIDAR
-                //string path = @"\\luxemburgo\public\talkipdebug.txt";
-                //File.AppendAllLines(path, new string[] { DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Request.RequestUri.Query });
+                string[] arquivos = Directory.GetFiles(@"\\venezuela\SMSAnalytics");
+                arquivos = arquivos.Select(f => f.Replace(@"\\venezuela\SMSAnalytics\", "")).ToArray();
 
-                long id_registro = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idregistro"));
-                int id_layout = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlayout"));
-                int id_lote = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("idlote"));
-                int codigo_status = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("status"));
-                int id_unico_fornecedor = Convert.ToInt32(HttpUtility.ParseQueryString(Request.RequestUri.Query).Get("id"));
+                string[] rejeitados = Directory.GetFiles(@"\\venezuela\SMSAnalytics\Rejeitados\");
+                rejeitados = rejeitados.Select(f => f.Replace(@"\\venezuela\SMSAnalytics\Rejeitados\", "")).ToArray();
 
-                using (TalkIP api = new TalkIP())
-                {
-                    api.AtualizarStatus(id_registro, id_layout, codigo_status, id_lote, id_unico_fornecedor);
-                }
+                return Request.CreateResponse(HttpStatusCode.OK, new[] { arquivos, rejeitados });
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("removerarquivo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage RemoverArquivo(FormDataCollection form)
+        {
+            try
+            {
+                File.Delete(string.Format(@"\\venezuela\SMSAnalytics\{0}", form["arquivo"]));
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("removerarquivorejeitado")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage RemoverArquivoRejeitado(FormDataCollection form)
+        {
+            try
+            {
+                File.Delete(string.Format(@"\\venezuela\SMSAnalytics\Rejeitados\{0}", form["arquivo"]));
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("reutilizararquivo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ReutilizarArquivo(FormDataCollection form)
+        {
+            try
+            {
+                string pathAtual = string.Format(@"\\venezuela\SMSAnalytics\Rejeitados\{0}", form["arquivo"]);
+                string novoPath = string.Format(@"\\venezuela\SMSAnalytics\{0}", form["arquivo"]);
+
+                if (File.Exists(novoPath))
+                    novoPath = novoPath.Replace(".csv", DateTime.Now.ToString("_yyyyMMddHHmmss") + ".csv");
+
+                File.Move(pathAtual, novoPath);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("processar/talkip")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ProcessarTalkIP(FormDataCollection form)
+        {
+            try
+            {
+                //string arquivoSelecionado = form["arquivoSelecionado"];
+                //string centrocusto = form["centrocusto"];
+                //string carteira = form["carteira"];
+                //string fornecedor = form["fornecedor"];
+
+                string retorno = "Processamento para este fornecedor não foi implementado";
+
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, retorno);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("processar/vocalnet")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ProcessarVocalNet(FormDataCollection form)
+        {
+            try
+            {
+                string path = @"\\venezuela\SMSAnalytics";
+
+                string arquivoSelecionado = form["arquivoSelecionado"];
+                int centrocusto = Convert.ToInt32(form["centrocusto"]);
+                int carteira = Convert.ToInt32(form["carteira"]);               
+                string token = form["token"];
+                int fornecedor = 2;
+
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+                int id_usuario = Convert.ToInt16(sessao.id_usuario.ToString());
+
+                DataTable arquivo = new DataTable();
+
+                bool sucesso = false;
+                string motivo_erro = null;
+                int qtd_registros = 0;
+                int qtd_enviado = 0;
+                double custo = 0;
+                bool prosseguir = true;
+
+                if (!(DateTime.Now.Hour >= 8 && DateTime.Now.Hour <= 20))
+                {
+                    motivo_erro = "Fora do horário permitido";
+                    prosseguir = false;
+                }
+
+                // CARREGAR ARQUIVO
+                if (prosseguir)
+                {
+                    try
+                    {
+                        using (CsvHelper csv = new CsvHelper())
+                        {
+                            arquivo = csv.CarregarArquivoSimples(string.Format(@"{0}\{1}", path, arquivoSelecionado));
+                        }
+
+                        qtd_registros = arquivo.Rows.Count;
+                    }
+                    catch (Exception e)
+                    {
+                        motivo_erro = "Arquivo inválido: " + e.Message;
+                        prosseguir = false;
+                    }
+                }
+                
+
+                // PROCESSAR
+                if (prosseguir)
+                {                   
+                    try
+                    {
+                        using (VocalNET vc = new VocalNET(token))
+                        {
+                            qtd_enviado = vc.ProcessarArquivo(arquivoSelecionado, arquivo);
+                            custo = qtd_enviado * 0.04;
+                        }
+                        sucesso = true;
+                    }
+                    catch (Exception e)
+                    {
+                        motivo_erro = "Erro no processamento: " + e.Message;
+                    }
+                }
+                
+
+                // SUIBR DADOS               
+                SMSProcessamento p = new SMSProcessamento();
+                p.arquivo = arquivoSelecionado;
+                p.id_centrocusto = centrocusto;
+                p.id_carteira = carteira;
+                p.id_fornecedor = fornecedor;
+                p.id_usuario = id_usuario;
+                p.sucesso = sucesso ? 1 : 0;
+                p.motivo_erro = motivo_erro;
+                p.qtd_registros = qtd_registros;
+                p.qtd_enviado = qtd_enviado;
+                p.custo = custo;
+                InserirTabelaProcessamento(p);
+
+                // MOVER ARQUIVO
+                string pathProcessado = string.Format(@"{0}\Processados\{1}", path, arquivoSelecionado);
+                string pathAtual = string.Format(@"{0}\{1}", path, arquivoSelecionado);
+
+                if(!sucesso)
+                    pathProcessado = string.Format(@"{0}\Rejeitados\{1}", path, arquivoSelecionado);
+                if (File.Exists(pathProcessado))
+                    pathProcessado = pathProcessado.Replace(".csv", DateTime.Now.ToString("_yyyyMMddHHmmss") + ".csv");
+
+                File.Move(pathAtual, pathProcessado);
+
+                if (sucesso)
+                    return Request.CreateResponse(HttpStatusCode.OK, "OK");
+                else
+                    throw new Exception("Erro ao importar o arquivo");
             }
             catch (Exception e)
             {
@@ -307,41 +294,7 @@ namespace Analytics.Controllers
                 DataTable centrocusto = JsonConvert.DeserializeObject<DataTable>(form["centrocusto"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable fornecedores = JsonConvert.DeserializeObject<DataTable>(form["fornecedores"]);
-
-                using (SqlHelper sql = new SqlHelper("DB_SMS"))
-                {
-
-                    Dictionary<string, object> parametros = new Dictionary<string, object>();
-
-                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
-                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("centrocusto", centrocusto);
-                    parametros.Add("carteiras", carteiras);
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acompanhamento", parametros);
-                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [Route("dashboard/custo")]
-        [HttpPost]
-        [Autorizar]
-        [Gravar]
-        public HttpResponseMessage DashboardCusto(FormDataCollection form)
-        {
-            try
-            {
-                DateTime dtini = Convert.ToDateTime(form["dtini"]);
-                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable centrocusto = JsonConvert.DeserializeObject<DataTable>(form["centrocusto"]);
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable fornecedores = JsonConvert.DeserializeObject<DataTable>(form["fornecedores"]);
-                DataTable estados = JsonConvert.DeserializeObject<DataTable>(form["estados"]);
+                DataTable usuarios = JsonConvert.DeserializeObject<DataTable>(form["usuarios"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {
@@ -353,9 +306,9 @@ namespace Analytics.Controllers
                     parametros.Add("centrocusto", centrocusto);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("fornecedores", fornecedores);
-                    parametros.Add("estados", estados);
+                    parametros.Add("usuarios", usuarios);
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_custo", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acompanhamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -363,6 +316,32 @@ namespace Analytics.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+        private void InserirTabelaProcessamento(SMSProcessamento p)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("DB_SMS"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", p.id_usuario);
+                    parametros.Add("id_carteira", p.id_carteira);
+                    parametros.Add("id_centrocusto", p.id_centrocusto);
+                    parametros.Add("id_fornecedor", p.id_fornecedor);
+                    parametros.Add("arquivo", p.arquivo);
+                    parametros.Add("sucesso", p.sucesso);
+                    parametros.Add("motivo_erro", p.motivo_erro);
+                    parametros.Add("qtd_registros", p.qtd_registros);
+                    parametros.Add("qtd_enviado", p.qtd_enviado);
+                    parametros.Add("custo", p.custo.ToString().Replace(",", "."));
+
+                    sql.ExecuteProcedure("sp_ins_processamento", parametros);
+                }
+
+            }
+            catch { }
         }
 
 
