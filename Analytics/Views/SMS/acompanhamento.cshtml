@@ -193,8 +193,12 @@
                                 <tbody>
                                     <tr align="center" ng-repeat="r in dashboard.analitico">
                                         <td>{{r.datac}}</td>
-                                        <td>{{r.arquivo}}</td>
-                                        <td>{{r.sucesso ? 'SIM' : 'NÃO'}}</td>
+                                        <td ng-attr-title="{{
+                                            'Centro de Custo: ' + r.centrocusto + 
+                                            '&#10; Carteira: ' + r.carteira + 
+                                            '&#10; Fornecedor: ' + r.fornecedor + 
+                                            '&#10; Usuário: ' + r.usuario}}">{{r.arquivo}}</td>
+                                        <td ng-attr-title="{{r.motivo_erro}}">{{r.sucesso ? 'SIM' : 'NÃO'}}</td>
                                         <td>{{r.qtd_registros | number}}</td>
                                         <td>{{r.qtd_enviado | number}}</td>
                                     </tr>

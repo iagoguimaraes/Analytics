@@ -40,9 +40,16 @@ namespace Analytics.Models
                     DataRow row = dataTable.NewRow();
                     row.ItemArray = linhas[i].Split(';').Take(2).ToArray();
 
-                    if (ValidarTelefone(row.ItemArray[0].ToString()))
-                        dataTable.Rows.Add(row);
+                    if (ValidarTelefone(row.ItemArray[0].ToString())) // telefone valido
+                    {
+                        if(!string.IsNullOrEmpty(row.ItemArray[1].ToString())) // contem msg 
+                            dataTable.Rows.Add(row);
+                    }
+                        
                 }
+
+                if (dataTable.Rows.Count == 0)
+                    throw new Exception("Arquivo sem nenhum registro válido");
 
                 return dataTable;
             }

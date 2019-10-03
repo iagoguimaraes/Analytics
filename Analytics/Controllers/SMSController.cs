@@ -53,7 +53,8 @@ namespace Analytics.Controllers
                 string blob = form["arquivo"];
                 byte[] data = Convert.FromBase64String(blob.Substring(blob.IndexOf(",") + 1));
 
-
+                if (nomearquivo.Substring(nomearquivo.Length - 4) != ".csv")
+                    throw new Exception("formato inválido");
                 if (File.Exists(string.Format(@"\\venezuela\SMSAnalytics\{0}", nomearquivo)))
                     throw new Exception("Este arquivo já foi importado");
                 if (File.Exists(string.Format(@"\\venezuela\SMSAnalytics\Processados\{0}", nomearquivo)))
@@ -78,7 +79,11 @@ namespace Analytics.Controllers
             {
                 string[] arquivos = Directory.GetFiles(@"\\venezuela\SMSAnalytics");
                 arquivos = arquivos.Select(f => f.Replace(@"\\venezuela\SMSAnalytics\", "")).ToArray();
-                return Request.CreateResponse(HttpStatusCode.OK, arquivos);
+
+                string[] rejeitados = Directory.GetFiles(@"\\venezuela\SMSAnalytics\Rejeitados\");
+                rejeitados = rejeitados.Select(f => f.Replace(@"\\venezuela\SMSAnalytics\Rejeitados\", "")).ToArray();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new[] { arquivos, rejeitados });
             }
             catch (Exception e)
             {
@@ -95,6 +100,47 @@ namespace Analytics.Controllers
             try
             {
                 File.Delete(string.Format(@"\\venezuela\SMSAnalytics\{0}", form["arquivo"]));
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("removerarquivorejeitado")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage RemoverArquivoRejeitado(FormDataCollection form)
+        {
+            try
+            {
+                File.Delete(string.Format(@"\\venezuela\SMSAnalytics\Rejeitados\{0}", form["arquivo"]));
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("reutilizararquivo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage ReutilizarArquivo(FormDataCollection form)
+        {
+            try
+            {
+                string pathAtual = string.Format(@"\\venezuela\SMSAnalytics\Rejeitados\{0}", form["arquivo"]);
+                string novoPath = string.Format(@"\\venezuela\SMSAnalytics\{0}", form["arquivo"]);
+
+                if (File.Exists(novoPath))
+                    novoPath = novoPath.Replace(".csv", DateTime.Now.ToString("_yyyyMMddHHmmss") + ".csv");
+
+                File.Move(pathAtual, novoPath);
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception e)
@@ -154,7 +200,7 @@ namespace Analytics.Controllers
                 int qtd_registros = 0;
                 int qtd_enviado = 0;
                 double custo = 0;
-
+                bool arquivo_valido = false;
                 // CARREGAR ARQUIVO
                 try
                 {
@@ -164,28 +210,31 @@ namespace Analytics.Controllers
                     }
 
                     qtd_registros = arquivo.Rows.Count;
+                    arquivo_valido = true;
                 }
                 catch (Exception e)
                 {
                     motivo_erro = "Arquivo inválido: " + e.Message;
                 }
 
-
                 // PROCESSAR
-                try
-                {
-                    using (VocalNET vc = new VocalNET(token))
+                if (arquivo_valido)
+                {                   
+                    try
                     {
-                        qtd_enviado = vc.ProcessarArquivo(arquivoSelecionado, arquivo);
-                        custo = qtd_enviado * 0.04;
+                        using (VocalNET vc = new VocalNET(token))
+                        {
+                            qtd_enviado = vc.ProcessarArquivo(arquivoSelecionado, arquivo);
+                            custo = qtd_enviado * 0.04;
+                        }
+                        sucesso = true;
                     }
-                    sucesso = true;
+                    catch (Exception e)
+                    {
+                        motivo_erro = "Erro no processamento: " + e.Message;
+                    }
                 }
-                catch (Exception e)
-                {
-                    motivo_erro = "Erro no processamento: " + e.Message;
-                }
-
+                
 
                 // SUIBR DADOS               
                 SMSProcessamento p = new SMSProcessamento();
@@ -205,12 +254,17 @@ namespace Analytics.Controllers
                 string pathProcessado = string.Format(@"{0}\Processados\{1}", path, arquivoSelecionado);
                 string pathAtual = string.Format(@"{0}\{1}", path, arquivoSelecionado);
 
+                if(!sucesso)
+                    pathProcessado = string.Format(@"{0}\Rejeitados\{1}", path, arquivoSelecionado);
                 if (File.Exists(pathProcessado))
                     pathProcessado = pathProcessado.Replace(".csv", DateTime.Now.ToString("_yyyyMMddHHmmss") + ".csv");
 
                 File.Move(pathAtual, pathProcessado);
 
-                return Request.CreateResponse(HttpStatusCode.OK, "OK");
+                if (sucesso)
+                    return Request.CreateResponse(HttpStatusCode.OK, "OK");
+                else
+                    throw new Exception("Erro ao importar o arquivo");
             }
             catch (Exception e)
             {

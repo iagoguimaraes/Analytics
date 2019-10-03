@@ -2,123 +2,151 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-sms-upload">
+    <div ng-controller="ctrl-sms-upload">
 
-    <div class="margin-bottom"></div>
+        <div class="margin-bottom"></div>
 
-    <!--IMPORTAR ARQUIVO-->
-    <div class="row margin-bottom">
-        <div class="col-xs-12">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-header-title">Importar Arquivo</span>
-                </div>
-                <div class="card-body">
-                    <div class="margin-bottom">
-                        <label>Upload Arquivo</label>
-                        <input type="file" id="fileInput" accept=".csv" uploadfile="filtrosUpload.arquivo" />
-                        <input type="hidden" ng-model="filtrosUpload.arquivo" />
+        <!--IMPORTAR ARQUIVO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Importar Arquivo</span>
                     </div>
-                    <button style="display: inline-block" type="button" class="btn btn-primary" ng-click="uploadArquivo()">Importar</button>
+                    <div class="card-body">
+                        <div class="margin-bottom">
+                            <label>Upload Arquivo</label>
+                            <input type="file" id="fileInput" accept=".csv" uploadfile="filtrosUpload.arquivo" />
+                            <input type="hidden" ng-model="filtrosUpload.arquivo" />
+                        </div>
+                        <button style="display: inline-block" type="button" class="btn btn-primary" ng-click="uploadArquivo()">Importar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--LISTA DE ARQUIVO-->
-    <div class="row margin-bottom">
-        <div class="col-xs-12">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-header-title">Arquivos a Processar</span>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped table-bordered" style="width:100%" ng-if="listaarquivos">
-                        <thead>
-                            <tr>
-                                <th>Arquivo</th>
-                                <th>Processar</th>
-                                <th>Excluir</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="a in listaarquivos">
-                                <td>{{a}}</td>
-                                <td><i class="fa fa-cogs" style="cursor:pointer" ng-click="selecionarArquivo(a)"></i></td>
-                                <td><i class="fa fa-close" style="cursor:pointer" ng-click="removerArquivo(a)"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <!--LISTA DE ARQUIVO-->
+        <div class="row margin-bottom" ng-if="listaarquivos.length">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Arquivos a Processar</span>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Arquivo</th>
+                                    <th>Processar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="a in listaarquivos">
+                                    <td>{{a}}</td>
+                                    <td><i class="fa fa-cogs" style="cursor:pointer" ng-click="selecionarArquivo(a)"></i></td>
+                                    <td><i class="fa fa-close" style="cursor:pointer" ng-click="removerArquivo(a)"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--MODAL PROCESSAR ARQUIVO-->
-    <div class="modal" id="modal" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">{{filtros.arquivoSelecionado}}</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <!--ARQUIVOS REJEITADOS-->
+        <div class="row margin-bottom" ng-if="listarejeitados.length">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Arquivos Rejeitados</span>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Arquivo</th>
+                                    <th>Reutilizar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="a in listarejeitados">
+                                    <td>{{a}}</td>
+                                    <td><i class="fa fa-recycle" style="cursor:pointer" ng-click="reutilizarArquivo(a)"></i></td>
+                                    <td><i class="fa fa-close" style="cursor:pointer" ng-click="removerArquivoRejeitado(a)"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row margin-bottom">
-                        <!--CENTRO DE CUSTO-->
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Centro de Custo</label>
-                                <select ng-model="filtros.centrocusto" class="form-control">
-                                    <option value="" selected="selected"> Selecione</option>
-                                    <option ng-repeat="cc in dashFiltros.centrocusto" value="{{cc.id_centrocusto}}">{{cc.centrocusto}}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!--CARTEIRA-->
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select ng-model="filtros.carteira" class="form-control">
-                                    <option value="" selected="selected"> Selecione</option>
-                                    <option ng-repeat="c in dashFiltros.carteira" value="{{c.id_carteira}}">{{c.carteira}}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!--FORNECEDOR-->
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Fornecedor</label>
-                                <select ng-model="filtros.fornecedor" class="form-control">
-                                    <option value="" selected="selected"> Selecione</option>
-                                    <option ng-repeat="f in dashFiltros.fornecedor" value="{{f.id_fornecedor}}">{{f.fornecedor}}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!--TOKEN DO FORNECEDOR VOCALNET-->
-                        <div ng-if="filtros.fornecedor == 2">
+            </div>
+        </div>
+        <!--MODAL PROCESSAR ARQUIVO-->
+        <div class="modal" id="modal" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{filtros.arquivoSelecionado}}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row margin-bottom">
+                            <!--CENTRO DE CUSTO-->
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-sidebar-subheading">Token</label>
-                                    <input class="form-control" type="text" name="vocalnet_token" ng-model="filtros.token" onchange="localStorage.setItem('vocalnet_token',this.value)" />
+                                    <label class="control-sidebar-subheading">Centro de Custo</label>
+                                    <select ng-model="filtros.centrocusto" class="form-control">
+                                        <option value="" selected="selected"> Selecione</option>
+                                        <option ng-repeat="cc in dashFiltros.centrocusto" value="{{cc.id_centrocusto}}">{{cc.centrocusto}}</option>
+                                    </select>
                                 </div>
                             </div>
+
+                            <!--CARTEIRA-->
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <select ng-model="filtros.carteira" class="form-control">
+                                        <option value="" selected="selected"> Selecione</option>
+                                        <option ng-repeat="c in dashFiltros.carteira" value="{{c.id_carteira}}">{{c.carteira}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--FORNECEDOR-->
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Fornecedor</label>
+                                    <select ng-model="filtros.fornecedor" class="form-control">
+                                        <option value="" selected="selected"> Selecione</option>
+                                        <option ng-repeat="f in dashFiltros.fornecedor" value="{{f.id_fornecedor}}">{{f.fornecedor}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--TOKEN DO FORNECEDOR VOCALNET-->
+                            <div ng-if="filtros.fornecedor == 2">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Token</label>
+                                        <input class="form-control" type="text" name="vocalnet_token" ng-model="filtros.token" onchange="localStorage.setItem('vocalnet_token',this.value)" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
-
-
-
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" ng-click="processarArquivo()">Confirmar</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="processarArquivo()">Confirmar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <script>
     angular.module('app').controller('ctrl-sms-upload', function ($scope, $http, $filter) {
@@ -152,7 +180,8 @@
                 url: "/api/sms/listararquivos",
                 data: $scope.filtros,
             }).then(function success(r) {
-                $scope.listaarquivos = r.data;
+                $scope.listaarquivos = r.data[0];
+                $scope.listarejeitados = r.data[1];
             });
         }
         $scope.uploadArquivo = function () {
@@ -235,12 +264,38 @@
                 url: "/api/sms/processar/vocalnet",
                 data: $scope.filtros,
             }).then(function success(r) {
-                if (r.status == '500')
+                if (r.status == '500') {
                     alert(r.data.Message);
+                    $scope.obterLista();
+                }                    
                 else if (r.status == '200') {
                     alert('O arquivo foi processado com sucesso!');
-                    $scope.obterLista();
+                    
                 }
+            });
+        }
+        $scope.reutilizarArquivo = function (arquivo) {
+            if (!confirm('Deseja reutilizar o arquivo ' + arquivo + "?"))
+                return false;
+
+            $http({
+                method: 'POST',
+                url: "/api/sms/reutilizararquivo",
+                data: { "arquivo": arquivo },
+            }).then(function success(r) {
+                $scope.obterLista();
+            });
+        }
+        $scope.removerArquivoRejeitado = function (arquivo) {
+            if (!confirm('Deseja exluir o arquivo ' + arquivo + "?"))
+                return false;
+
+            $http({
+                method: 'POST',
+                url: "/api/sms/removerarquivorejeitado",
+                data: { "arquivo": arquivo },
+            }).then(function success(r) {
+                $scope.obterLista();
             });
         }
 
