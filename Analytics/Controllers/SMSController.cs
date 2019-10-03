@@ -191,8 +191,6 @@ namespace Analytics.Controllers
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
                 int id_usuario = Convert.ToInt16(sessao.id_usuario.ToString());
 
-
-
                 DataTable arquivo = new DataTable();
 
                 bool sucesso = false;
@@ -200,25 +198,36 @@ namespace Analytics.Controllers
                 int qtd_registros = 0;
                 int qtd_enviado = 0;
                 double custo = 0;
-                bool arquivo_valido = false;
-                // CARREGAR ARQUIVO
-                try
-                {
-                    using (CsvHelper csv = new CsvHelper())
-                    {
-                        arquivo = csv.CarregarArquivoSimples(string.Format(@"{0}\{1}", path, arquivoSelecionado));
-                    }
+                bool prosseguir = true;
 
-                    qtd_registros = arquivo.Rows.Count;
-                    arquivo_valido = true;
-                }
-                catch (Exception e)
+                if (!(DateTime.Now.Hour >= 8 && DateTime.Now.Hour <= 20))
                 {
-                    motivo_erro = "Arquivo inválido: " + e.Message;
+                    motivo_erro = "Fora do horário permitido";
+                    prosseguir = false;
                 }
+
+                // CARREGAR ARQUIVO
+                if (prosseguir)
+                {
+                    try
+                    {
+                        using (CsvHelper csv = new CsvHelper())
+                        {
+                            arquivo = csv.CarregarArquivoSimples(string.Format(@"{0}\{1}", path, arquivoSelecionado));
+                        }
+
+                        qtd_registros = arquivo.Rows.Count;
+                    }
+                    catch (Exception e)
+                    {
+                        motivo_erro = "Arquivo inválido: " + e.Message;
+                        prosseguir = false;
+                    }
+                }
+                
 
                 // PROCESSAR
-                if (arquivo_valido)
+                if (prosseguir)
                 {                   
                     try
                     {
