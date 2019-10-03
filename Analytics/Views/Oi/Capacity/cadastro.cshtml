@@ -3,10 +3,9 @@
 }
 
 
-<div ng-controller="ctrl-oi-cadastro">
+    <div ng-controller="ctrl-oi-cadastro">
 
-    <!-- DAHSBOARD -->
-   
+        <!-- DAHSBOARD -->
         <!-- HEADER-->
         @*<header class="page-header">
             <div class="page-name">Editar Capacity</div>
@@ -20,7 +19,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
 
             <div class="col-xs-12">
                 <div class="card">
@@ -59,29 +58,33 @@
                                 </div>
                             </div>
 
-                            <!--CAMPANHA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Campanha</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanhas" dados="dashFiltros.campanhas" style="width:100%"></select2>
-                            </div>
-
-                            <!--SEGMENTO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Segmento</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentos" dados="dashFiltros.segmentos" style="width:100%"></select2>
-                            </div>
-
-                            <!--PRDOUTO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Produto</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
-                            </div>
 
                             <!--BOTÃO-->
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard(filtros.campanhas,filtros.segmentos, filtros.produtos)">Carregar Capacity</button>
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Capacity</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div ng-if="capacityMes.qtd" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Marcar todos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza que deseja atualizar TODO capacity do período selecionado?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" ng-click="salvar()">Sim</button>
                     </div>
                 </div>
             </div>
@@ -99,51 +102,40 @@
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
-                            <div>
+                            <div class="col-xs-3">
+                                <label class="control-sidebar-subheading" ng-if="opcoes.edit"> Definir para todo Periodo:</label>
+                                <div style="margin-bottom: 25px;" ng-if="opcoes.edit" class="input-group">
+                                    <div class="input-group-addon" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input ng-if="opcoes.edit" style="color: red; font-weight: bold;" type="number" min="0" max="9999999" placeholder="Exem.: 15" class="form-control" ng-model="capacityMes.qtd"  />
+                                </div>
                                 <small>
                                     <input type="button" class="btn btn-secondary" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
                                 </small>
-                                <small>
-                                    <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar(filtros.campanhas,filtros.segmentos,filtros.produtos )" />
-                                </small>
                             </div>
-
                         </div>
                         <div class="table">
                             <table class="table table-striped table-bordered" ng-if="dashboard.dia" style="text-align:center">
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">Data</th>
-                                        <th style="text-align:center">Campanha</th>
-                                        <th style="text-align:center">Segmento</th>
-                                        <th style="text-align:center">Produto</th>
                                         <th style="text-align:center">Capacity</th>
-                                        <th style="text-align:center">Capacity Real</th>
+                                        <th ng-if="opcoes.edit" style="text-align:center">Alterar</th>
                                     </tr>
                                 </thead>
                                 <tbody id="idtbody">
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{dia.ds_campanha}}</td>
-                                        <td style="display:none">
-                                            <input type="number" value={{dia.id_campanha}} />
-                                        </td>
-                                        <td>{{dia.ds_segmento}}</td>
-                                        <td style="display:none">
-                                            <input type="number" value={{dia.id_segmento}} />
-                                        </td>
-                                        <td>{{dia.ds_produto }}</td>
-                                        <td style="display:none">
-                                            <input type="number" value={{dia.id_produto}} />
-                                        </td>
                                         <td ng-if="opcoes.edit">
                                             <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa}}" ng-disabled="!opcoes.edit" />
                                         </td>
+                                        <td id="maisuma" ng-if="!opcoes.edit">{{dia.quantidade_pa | number}}</td>
                                         <td ng-if="opcoes.edit">
-                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa_real}}" ng-disabled="!opcoes.edit" />
+                                            <small>
+                                                <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar()" />
+                                            </small>
                                         </td>
-                                        <td ng-if="!opcoes.edit">{{dia.quantidade_pa | number}}</td>
-                                        <td ng-if="!opcoes.edit">{{dia.quantidade_pa_real | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -154,8 +146,8 @@
         </div>
 
 
- 
-</div>
+
+    </div>
 
 <script>
     angular.module('app').controller('ctrl-oi-cadastro', function ($scope, $http, $filter, dadosPagina) {
@@ -163,30 +155,17 @@
         dadosPagina.descricao = 'Oi'
 
         // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
         $scope.dashFiltros = {};
+
+        $scope.capacityMes = {
+            qtd: 0
+        };
+
 
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            campanhas: '',
-            segmentos: '',
-            produtos:  '',
         };
-
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/oi/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            $scope.dados = r.status;
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.campanhas = r.data.Table1;
-            $scope.dashFiltros.segmentos = r.data.Table2;
-            $scope.dashFiltros.produtos = r.data.Table3;
-        });
 
         $scope.dashboard = {};
 
@@ -197,14 +176,10 @@
         // Objeto Mailing
         $scope.capacity = [{
             data: '',
-            id_campanha: '',
-            id_segmento: '',
-            id_produto:  '',
             quantidade_pa: '',
-            quantidade_pa_real: '',
         }];
 
-        $scope.cadastrarCapacity = function (campanha, segmento, produto) {
+        $scope.cadastrarCapacity = function () {
             $http({
                 method: 'POST',
                 url: "/api/oi/dashboard/cadcapacity",
@@ -214,22 +189,22 @@
                 // Objeto Mailing
                 $scope.capacity = [{
                     data: '',
-                    id_campanha: '',
-                    id_segmento: '',
-                    id_produto: '',
                     quantidade_pa: '',
-                    quantidade_pa_real: '',
                 }];
 
-                //location.reload();
-                $scope.carregarDashboard();
-
+                
+                $('#exampleModal').modal('toggle');
+                $scope.zeraCapacity();
+                
             });
+
         }
+
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
 
+           
             $http({
                 method: 'POST',
                 url: "/api/oi/dashboard/capacity",
@@ -239,32 +214,56 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dia = data.Table;
 
-
             });
+        
         }
 
         $scope.editar = function () {
             $scope.opcoes.edit = !$scope.opcoes.edit;
         }
 
+        $scope.zeraCapacity = function () {
+
+            if ($scope.capacityMes.qtd > 0) {
+
+                location.reload();
+
+            } else {
+
+                $scope.carregarDashboard(); 
+            }
+        }
+
+
         $scope.salvar = function () {
 
-            $scope.opcoes.edit = !$scope.opcoes.edit;
+            let valor = $scope.capacityMes.qtd;
 
+            if (valor > 0) {
+
+                let tabela = document.getElementById('idtbody')
+
+                for (let i = 0; i < tabela.rows.length; i++) {
+            
+                    tabela.children[i].children[1].getElementsByTagName('input').item(0).value = valor;
+
+                }
+    
+            }
+
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+            
             let tabela = document.getElementById('idtbody')
 
 
             for (let i = 0; i < tabela.rows.length; i++) {
 
-    
+                
                 let dt = $scope.converterData(tabela.children[i].children[0].innerHTML);
-                let txt = tabela.children[i].children[7].getElementsByTagName('input').item(0).value;
-                let txt2 = tabela.children[i].children[8].getElementsByTagName('input').item(0).value;
-                let id_campanha = tabela.children[i].children[2].getElementsByTagName('input').item(0).value;
-                let id_segmento = tabela.children[i].children[4].getElementsByTagName('input').item(0).value;
-                let id_produto =  tabela.children[i].children[6].getElementsByTagName('input').item(0).value;
+                let txt = tabela.children[i].children[1].getElementsByTagName('input').item(0).value;
 
-               $scope.capacity.push({ data: dt, quantidade_pa: txt, quantidade_pa_real: txt2, id_campanha: id_campanha, id_segmento: id_segmento, id_produto: id_produto });
+                $scope.capacity.push({ data: dt, quantidade_pa: txt});
+
             }
             
             $scope.cadastrarCapacity($scope.capacity);
