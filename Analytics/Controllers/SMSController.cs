@@ -184,9 +184,9 @@ namespace Analytics.Controllers
 
                 string arquivoSelecionado = form["arquivoSelecionado"];
                 int centrocusto = Convert.ToInt32(form["centrocusto"]);
-                int carteira = Convert.ToInt32(form["carteira"]);
-                int fornecedor = Convert.ToInt32(form["fornecedor"]);
+                int carteira = Convert.ToInt32(form["carteira"]);               
                 string token = form["token"];
+                int fornecedor = 2;
 
                 Sessao sessao = (Sessao)Request.Properties["Sessao"];
                 int id_usuario = Convert.ToInt16(sessao.id_usuario.ToString());
