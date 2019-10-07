@@ -9,24 +9,24 @@
         <!-- HEADER-->
         <header class="page-header">
             <div class="page-name">Gráfico Comparativo {{conceito.string}}</div>
-            
+
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
             <div class="page-menu-button" ng-click="carregarDashboard()">
-                <input type="button" class="btn btn-danger" ng-click="filtros.conceito = '_uniq'" value="UNIQ" />                
+                <input type="button" class="btn btn-danger" ng-click="filtros.conceito = '_uniq'" value="UNIQ" />
             </div>
             <div class="page-menu-button" ng-click="carregarDashboard()">
                 <input type="button" class="btn btn-danger" ng-click="filtros.conceito = ''" value="TOTAL" />
-            </div>                
+            </div>
         </header>
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
-                    <div class="card-header">                        
+                    <div class="card-header">
                         <span class="card-header-title">Filtros</span>
 
                         <div class="card-header-button card-header-close">
@@ -155,6 +155,12 @@
                                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ocorrencia" dados="dashFiltros.ocorrencia" style="width:100%"></select2>
                                     </div>
 
+                                    <!--AGENTE-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Agente</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.agente" dados="dashFiltros.agente" style="width:100%"></select2>
+                                    </div>
+
                                     <!--BOTÃO-->
                                     <div class="form-group">
                                         <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -276,6 +282,12 @@
                                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ocorrencia_2" dados="dashFiltros.ocorrencia" style="width:100%"></select2>
                                     </div>
 
+                                    <!--AGENTE-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Agente</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.agente_2" dados="dashFiltros.agente" style="width:100%"></select2>
+                                    </div>
+
                                 </fieldset>
                             </div>
                         </div>
@@ -316,144 +328,214 @@
 
                         <!--QUADROS -->
                         <div class="row">
+                            <!--INDICADORES PERCENTUAIS-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                                    <div class="small-box" ng-class="dashboard.ocupacao.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.ocupacao.vs | percentage:1"></h3>
+                                            <p>{{dashboard.ocupacao.p1 | percentage:1}} vs {{dashboard.ocupacao.p2 | percentage:1}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-hourglass-half"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'ocupacao'" class="small-box-footer">Ocupação <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.tma.vs >= 0 ? 'bg-red' : 'bg-green'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.tma.vs | percentage:1"></h3>
+                                            <p>{{dashboard.tma.p1 | formatTimer}} vs {{dashboard.tma.p2 | formatTimer}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'tma'" class="small-box-footer">TMA <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.tme.vs >= 0 ? 'bg-red' : 'bg-green'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.tme.vs | percentage:1"></h3>
+                                            <p>{{dashboard.tme.p1 | formatTimer }} vs {{dashboard.tme.p2 | formatTimer}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'tme'" class="small-box-footer">TME <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.improdutivo.vs >= 0 ? 'bg-red' : 'bg-green'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.improdutivo.vs | percentage:1"></h3>
+                                            <p>{{dashboard.improdutivo.p1 | percentage:1}} vs {{dashboard.improdutivo.p2 | percentage:1}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-o-down"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'improdutivo'" class="small-box-footer">Improdutivo <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.pausa.vs >= 0 ? 'bg-red' : 'bg-green'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.pausa.vs | percentage:1"></h3>
+                                            <p>{{dashboard.pausa.p1 | percentage : 1 }} vs {{dashboard.pausa.p2 | percentage : 1 }}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-hourglass-end"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'pausa'" class="small-box-footer">Pausa <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!--INDICADORES ABSOLUTOS-->
-                            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
-                                <div class="small-box" ng-class="dashboard.discado.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.discado.vs | percentage:1"></h3>
-                                        <p>{{dashboard.discado.p1 | megaNumber}} vs {{dashboard.discado.p2 | megaNumber}}</p>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                                    <div class="small-box" ng-show="exibirQuadro.show" ng-class="dashboard.discado.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.discado.vs | percentage:1"></h3>
+                                            <p>{{dashboard.discado.p1 | megaNumber}} vs {{dashboard.discado.p2 | megaNumber}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'discado'" class="small-box-footer">Discado <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
-                                    <div class="icon">
-                                        <i class="fa fa-phone"></i>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.contato.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.contato.vs | percentage:1"></h3>
+                                            <p>{{dashboard.contato.p1 | megaNumber}} vs {{dashboard.contato.p2 | megaNumber}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-headphones"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'contato'" class="small-box-footer">Contato <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
-                                    <a href="#" ng-click="grafico.indicador = 'discado'" class="small-box-footer">Discado <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.cpc.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.cpc.vs | percentage:1"></h3>
+                                            <p>{{dashboard.cpc.p1 | number}} vs {{dashboard.cpc.p2 | number}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-male"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.cpca.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.cpca.vs | percentage:1"></h3>
+                                            <p>{{dashboard.cpca.p1 | number}} vs {{dashboard.cpca.p2 | number}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-street-view"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.promessa.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.promessa.vs | percentage:1"></h3>
+                                            <p>{{dashboard.promessa.p1 | number}} vs {{dashboard.promessa.p2 | number}}</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-handshake-o"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.contato.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.contato.vs | percentage:1"></h3>
-                                        <p>{{dashboard.contato.p1 | megaNumber}} vs {{dashboard.contato.p2 | megaNumber}}</p>
+                            <!--INDICADORES RELATIVOS-->
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                                    <div class="small-box" ng-show="exibirQuadro.show" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.hitrate.vs | percentage:1"></h3>
+                                            <p>{{dashboard.hitrate.p1 | percentage:1}} vs {{dashboard.hitrate.p2 | percentage:1}}</p>
+                                            <p><h5> Dif : {{dashboard.difhitrate.dif | percentage:1}} </h5> </p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-bullseye"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'hitrate'" class="small-box-footer">Hit Rate <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
-                                    <div class="icon">
-                                        <i class="fa fa-headphones"></i>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.txloc.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.txloc.vs | percentage:1"></h3>
+                                            <p>{{dashboard.txloc.p1 | percentage:1}} vs {{dashboard.txloc.p2 | percentage:1}}</p>
+                                            <p><h5> Dif : {{dashboard.diftxloc.dif | percentage:1}} </h5> </p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'txloc'" class="small-box-footer">Tx Loc <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
-                                    <a href="#" ng-click="grafico.indicador = 'contato'" class="small-box-footer">Contato <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.txapv.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.txapv.vs | percentage:1"></h3>
+                                            <p>{{dashboard.txapv.p1 | percentage:1}} vs {{dashboard.txapv.p2 | percentage:1}}</p>
+                                            <p><h5> Dif : {{dashboard.diftxapv.dif | percentage:1}} </h5></p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'txapv'" class="small-box-footer">Tx Apv <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-class="dashboard.conversao.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.conversao.vs | percentage:1"></h3>
+                                            <p>{{dashboard.conversao.p1 | percentage:1}} vs {{dashboard.conversao.p2 | percentage:1}}</p>
+                                            <p><h5> Dif : {{dashboard.difconversao.dif | percentage:1}} </h5></p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-lg-2">
+                                    <div class="small-box" ng-show="exibirQuadro.show" ng-class="dashboard.esforco.vs >= 0 ? 'bg-red' : 'bg-green'">
+                                        <div class="inner">
+                                            <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
+                                            <p>{{dashboard.esforco.p1 | number : 0 }} vs {{dashboard.esforco.p2 | number : 0 }}</p>
+                                            <p><h5> Dif : {{dashboard.difesforco.dif | number : 0 }} </h5></p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-o-up"></i>
+                                        </div>
+                                        <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.cpc.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.cpc.vs | percentage:1"></h3>
-                                        <p>{{dashboard.cpc.p1 | number}} vs {{dashboard.cpc.p2 | number}}</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-male"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'cpc'" class="small-box-footer">CPC <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.cpca.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.cpca.vs | percentage:1"></h3>
-                                        <p>{{dashboard.cpca.p1 | number}} vs {{dashboard.cpca.p2 | number}}</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-street-view"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'cpca'" class="small-box-footer">CPCA <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.promessa.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.promessa.vs | percentage:1"></h3>
-                                        <p>{{dashboard.promessa.p1 | number}} vs {{dashboard.promessa.p2 | number}}</p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-handshake-o"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'promessa'" class="small-box-footer">Promessa <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <!--INDICADORES PERCENTUAIS e MAILING-->
-                            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
-                                <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.hitrate.vs | percentage:1"></h3>
-                                        <p>{{dashboard.hitrate.p1 | percentage:1}} vs {{dashboard.hitrate.p2 | percentage:1}}</p>
-                                        <p><h5> Dif : {{dashboard.difhitrate.dif | percentage:1}} </h5> </p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-bullseye"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'hitrate'" class="small-box-footer">Hit Rate <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.txloc.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.txloc.vs | percentage:1"></h3>
-                                        <p>{{dashboard.txloc.p1 | percentage:1}} vs {{dashboard.txloc.p2 | percentage:1}}</p>
-                                        <p><h5> Dif : {{dashboard.diftxloc.dif | percentage:1}} </h5> </p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-search"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'txloc'" class="small-box-footer">Tx Loc <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.txapv.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.txapv.vs | percentage:1"></h3>
-                                        <p>{{dashboard.txapv.p1 | percentage:1}} vs {{dashboard.txapv.p2 | percentage:1}}</p>
-                                        <p><h5> Dif : {{dashboard.diftxapv.dif | percentage:1}} </h5></p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-check"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'txapv'" class="small-box-footer">Tx Apv <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.conversao.vs >= 0 ? 'bg-green' : 'bg-red'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.conversao.vs | percentage:1"></h3>
-                                        <p>{{dashboard.conversao.p1 | percentage:1}} vs {{dashboard.conversao.p2 | percentage:1}}</p>
-                                        <p><h5> Dif : {{dashboard.difconversao.dif | percentage:1}} </h5></p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-thumbs-up"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-red' : 'bg-green'">
-                                    <div class="inner">
-                                        <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
-                                        <p>{{dashboard.esforco.p1 | number : 0 }} vs {{dashboard.esforco.p2 | number : 0 }}</p>
-                                        <p><h5> Dif : {{dashboard.difesforco.dif | number : 0 }} </h5></p>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fa fa-thumbs-o-up"></i>
-                                    </div>
-                                    <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
@@ -493,12 +575,14 @@
             tenure: '',
             supervisor: '',
             ocorrencia: '',
+            agente: '',
 
             carteira_2: '',
             segmentacao_2: '',
             tenure_2: '',
             supervisor_2: '',
             ocorrencia_2: '',
+            agente_2: '',
 
             visao: 'hora',
             conceito: '',
@@ -507,7 +591,8 @@
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
-        $scope.conceito = {string : ''}
+        $scope.exibirQuadro = { show: true };
+        $scope.conceito = { string: '' }
 
         // carregar os filtros
         $http({
@@ -522,6 +607,7 @@
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.tenure = data.Table3;
             $scope.dashFiltros.ocorrencia = data.Table6;
+            $scope.dashFiltros.agente = data.Table13;
 
         });
 
@@ -535,6 +621,7 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
+
                 $scope.carregarGrafico();
                 $scope.carregarComparativo();
 
@@ -545,7 +632,10 @@
                 } else {
                     $scope.conceito.string = '- Uniq';
                 }
+
                 
+                $scope.OcultarQuadro();
+
             });
         }
 
@@ -576,6 +666,22 @@
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado / obj.contato).toFixed(1) * 1);
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.discado2 / obj.contato2).toFixed(1) * 1);
                     break;
+                case 'ocupacao':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_ocupado * 100 / obj.tmp_logadoA).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_ocupado2 * 100 / obj.tmp_logadoA2).toFixed(1) * 1);
+                    break;
+                case 'tma':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_falado / obj.contato).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_falado2 / obj.contato2).toFixed(1) * 1);
+                    break;
+                case 'tme':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_disponivel / obj.contato).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_disponivel2 / obj.contato2).toFixed(1) * 1);
+                    break;
+                case 'pausa':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_pausa * 100 / obj.tmp_logadoB).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.tmp_pausa2 * 100 / obj.tmp_logadoB2).toFixed(1) * 1);
+                    break;
                 default:
                     series1 = $scope.dashboard.dados.Table.map(obj => obj[indicador]);
                     series2 = $scope.dashboard.dados.Table.map(obj => obj[indicador + '2']);
@@ -589,8 +695,8 @@
         }
 
         $scope.carregarComparativo = function () {
-            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(improdutivo) improdutivo, sum(tmp_falado) tmp_falado, sum(tmp_disponivel) tmp_disponivel, sum(tmp_ocupado) tmp_ocupado, sum(tmp_logadoA) tmp_logadoA, sum(tmp_logadoB) tmp_logadoB, sum(tmp_pausa) tmp_pausa  from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa, sum(improdutivo2) improdutivo, sum(tmp_falado2) tmp_falado, sum(tmp_disponivel2) tmp_disponivel, sum(tmp_ocupado2) tmp_ocupado, sum(tmp_logadoA2) tmp_logadoA, sum(tmp_logadoB2) tmp_logadoB, sum(tmp_pausa2) tmp_pausa from ?', [$scope.dashboard.dados.Table])[0];
 
             let calculo = {
                 hitrate1: dados1.contato / dados1.discado,
@@ -602,8 +708,24 @@
                 conversao1: dados1.promessa / dados1.cpca,
                 conversao2: dados2.promessa / dados2.cpca,
                 esforco1: dados1.discado / dados1.contato,
-                esforco2: dados2.discado / dados2.contato
+                esforco2: dados2.discado / dados2.contato,
+                ocupacao1: dados1.tmp_ocupado / dados1.tmp_logadoA,
+                ocupacao2: dados2.tmp_ocupado / dados2.tmp_logadoA,
+                tma1: dados1.tmp_falado / dados1.contato,
+                tma2: dados2.tmp_falado / dados2.contato,
+                tme1: dados1.tmp_disponivel / dados1.contato,
+                tme2: dados2.tmp_disponivel / dados2.contato,
+                improd1: dados1.improdutivo / dados1.contato,
+                improd2: dados2.improdutivo / dados2.contato,
+                pausa1: dados1.tmp_pausa / dados1.tmp_logadoB,
+                pausa2: dados2.tmp_pausa / dados2.tmp_logadoB
             }
+
+            $scope.dashboard.ocupacao = { p1: calculo.ocupacao1, p2: calculo.ocupacao2, vs: calculo.ocupacao1 / calculo.ocupacao2 - 1 };
+            $scope.dashboard.tma = { p1: calculo.tma1, p2: calculo.tma2, vs: calculo.tma1 / calculo.tma2 - 1 };
+            $scope.dashboard.tme = { p1: calculo.tme1, p2: calculo.tme2, vs: calculo.tme1 / calculo.tme2 - 1 };
+            $scope.dashboard.improdutivo = { p1: calculo.improd1, p2: calculo.improd2, vs: calculo.improd1 / calculo.improd2 - 1 };
+            $scope.dashboard.pausa = { p1: calculo.pausa1, p2: calculo.pausa2, vs: calculo.pausa1 / calculo.pausa2 - 1 };
 
             $scope.dashboard.discado = { p1: dados1.discado, p2: dados2.discado, vs: dados1.discado / dados2.discado - 1 };
             $scope.dashboard.contato = { p1: dados1.contato, p2: dados2.contato, vs: dados1.contato / dados2.contato - 1 };
@@ -626,7 +748,18 @@
 
         }
 
+        $scope.OcultarQuadro = function () {
+
+            if (!$scope.filtros.ocorrencia == '' || !$scope.filtros.ocorrencia_2 == '' || !$scope.filtros.supervisor == '' || !$scope.filtros.supervisor_2 == '' || !$scope.filtros.agente == '' || !$scope.filtros.agente_2 == '') {
+                $scope.exibirQuadro.show = false;
+            }
+            else
+                $scope.exibirQuadro.show = true;
+        }
+
         $scope.carregarDashboard();
+
+
 
         $scope.$watch('grafico.indicador', function (newVal, oldVal) {
             if ($scope.dashboard.status == 200)
