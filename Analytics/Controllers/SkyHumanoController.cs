@@ -141,6 +141,7 @@ namespace Analytics.Controllers
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
                 DataTable agente = JsonConvert.DeserializeObject<DataTable>(form["agente"]);
 
@@ -149,6 +150,7 @@ namespace Analytics.Controllers
                 DataTable tenure_2 = JsonConvert.DeserializeObject<DataTable>(form["tenure_2"]);
 
                 DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
+                DataTable equipe_2 = JsonConvert.DeserializeObject<DataTable>(form["equipe_2"]);
                 DataTable ocorrencia_2 = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia_2"]);
                 DataTable agente_2 = JsonConvert.DeserializeObject<DataTable>(form["agente_2"]);
 
@@ -185,6 +187,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("tenure", tenure);
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
                     parametros.Add("ocorrencia", ocorrencia);
                     parametros.Add("agente", agente);
 
@@ -192,6 +195,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao_2", segmentacao_2);
                     parametros.Add("tenure_2", tenure_2);
                     parametros.Add("supervisor_2", supervisor_2);
+                    parametros.Add("equipe_2", equipe_2);
                     parametros.Add("ocorrencia_2", ocorrencia_2);
                     parametros.Add("agente_2", agente_2);
 
