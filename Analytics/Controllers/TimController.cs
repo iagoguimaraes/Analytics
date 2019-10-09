@@ -818,6 +818,7 @@ namespace Analytics.Controllers
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable ocorrenciaFiltro = JsonConvert.DeserializeObject<DataTable>(form["ocorrenciaFiltro"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -842,10 +843,12 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("ocorrenciaFiltro", ocorrenciaFiltro);
                     parametros.Add("empresa", empresa);
                     parametros.Add("segmento", segmento);
                     parametros.Add("atraso", atraso);
                     parametros.Add("produto", produto);
+
 
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
@@ -892,6 +895,7 @@ namespace Analytics.Controllers
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable ocorrenciaFiltro = JsonConvert.DeserializeObject<DataTable>(form["ocorrenciaFiltro"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -924,6 +928,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
+                    parametros.Add("ocorrenciaFiltro", ocorrenciaFiltro);
 
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
