@@ -370,13 +370,15 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-title">Motivo Recusa</span>
+                    <div class="card-header-button" ng-click="extrair('Motivo','Table3')">
+                        <i class="fa fa-file-excel-o"></i>
+                    </div>
                 </div>
                 <div class="card-body">
                     <high-chart series="dashboard.motivo" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- CARTEIRA -->
@@ -460,6 +462,7 @@
                 url: "/api/riachuelo/dashboard/portalnegocia",
                 data: $scope.filtros,
             }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.dia = r.data.Table1;
                 $scope.dashboard.hora = r.data.Table2;
@@ -467,6 +470,7 @@
                 $scope.dashboard.motivo = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.motivo_recusa, y: obj.qtd })) }];
                 $scope.dashboard.carteira = r.data.Table4;
                 $scope.dashboard.diagrama = r.data.Table5;
+
                 $scope.carregarGrafico();
 
                 $scope.dashboard.status = r.status;
@@ -491,6 +495,11 @@
         }
 
         $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
 
     });
 </script>
