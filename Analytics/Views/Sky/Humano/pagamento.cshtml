@@ -51,10 +51,22 @@
                             </div>
                         </div>
 
-                        <!--PRODUTO-->
+                        <!--CARTEIRA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Produtos</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                        </div>
+
+                        <!--SEGMENTACAO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentacao</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao"></select2>
+                        </div>
+
+                        <!--TENURE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tenure</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -69,7 +81,7 @@
 
         <!--RESUMO-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-5">
+            <div class="col-xs-12 col-md-4">
                 <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.qtd | number"></h3>
@@ -80,11 +92,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-7">
+            <div class="col-xs-12 col-md-5">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr | currency:'R$'"></h3>
+                        <h3 ng-bind="dashboard.resumo.vlr | currency:'R$ '"></h3>
                         <p>Vlr Pagamento</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.vlr / dashboard.resumo.qtd | currency:'R$ '"></h3>
+                        <p>Ticket Médio</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-money"></i>
@@ -96,7 +119,7 @@
         <!--QUANTIDADE-->
         <div class="row margin-bottom">
             <!--POR DIA-->
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Quantidade por Dia</span>
@@ -106,44 +129,29 @@
                         <div class="card-header-button" ng-click="extrair('Table1')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGraficoDia()">
+                                <option value="qtd">Quantidade</option>
+                                <option value="vlr">Valor</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
-                        <div class="row margin-bottom">
-                            <high-chart series="dashboard.qtDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!--POR CARTEIRA-->
-            <div class="col-xs-12 col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Quantidade por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row margin-bottom">
-                            <high-chart series="dashboard.qtCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                        </div>
+                        <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!--VALOR-->
+        <!--POR CARTEIRA E TENURE-->
         <div class="row margin-bottom">
-            <!--POR DIA-->
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Valor por Dia</span>
+                        <span class="card-header-title">Quantidade por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -152,16 +160,34 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.vlDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
+                        <high-chart series="dashboard.qtCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
-
-            <!--POR CARTEIRA-->
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Valor por Carteira</span>
+                        <span class="card-header-title">Tenure</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.tenure" axis-Categories="dashboard.faixatenure" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FAIXA DE IDADE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa Idade</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -170,7 +196,78 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart series="dashboard.vlCarteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.idade" axis-Categories="dashboard.faixaIdade" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--REGIÃO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise Região</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Quantidade</th>
+                                        <th>R$ Valor</th>
+                                        <th>% Pago</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.estado | groupBy: 'ds_regiao'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_regiao}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr'| currency: 'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'percentage' | number:1}}</td>
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.ds_estado}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.vlr | currency: 'R$ '}}</td>
+                                        <td>{{p.percentage | number:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Mapa Região</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                <option value="qtd">Quantidade</option>
+                                <option value="vlr">Valor</option>
+                                <option value="percentual">Percentual</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height:420px" width="100%" dados="dashboard.mapa"></mapa-brasil>
                     </div>
                 </div>
             </div>
@@ -189,10 +286,16 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            produtos: ''
+            carteira: '',
+            segmentacao: '',
+            tenure: '',
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+
+        $scope.grafico = { indicador: 'qtd' };
+        $scope.mapa = { indicador: 'qtd' };
 
         // carregar os filtros
         $http({
@@ -212,23 +315,54 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/vivo/dashboard/humano/pagamento",
+                url: "/api/sky/dashboard/humano/pagamento",
                 data: $scope.filtros,
             }).then(function success(r) {
-                let data = r.data;
-
-                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
-
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
-                $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.quantidade)) }];
-                $scope.dashboard.vlDia = [{ name: 'Valor', data: r.data.Table2.map(obj => (obj.valor)) }];
-                $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table3.map(obj => ({ name: obj.segmentacao, y: obj.quantidade })) }];
-                $scope.dashboard.vlCarteira = [{ name: 'Valor', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmentacao, y: obj.valor })) }];
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.faixaIdade = r.data.Table4.map(obj => obj.ds_faixaIdade);
+                $scope.dashboard.faixatenure = r.data.Table5.map(obj => obj.ds_tenure);
 
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.qtCarteira = [{ name: 'Quantidade', innerSize: '20%', data: r.data.Table2.map(obj => ({ name: obj.ds_segmentacao, y: obj.qtd })) }];
+                $scope.dashboard.estado = r.data.Table3;
+                $scope.dashboard.idade = [{ name: 'Contrato', data: r.data.Table4.map(obj => (obj.qtd)) }];
+                $scope.dashboard.tenure = [{ name: 'Quantidade', data: r.data.Table5.map(obj => (obj.qtd)) }];
+
+
+
+                $scope.carregarGraficoDia();
+                $scope.carregarMapa();
             });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.dados.Table3;
+            let contratos = $scope.dashboard.dados.Table[0].qtd;
+
+            switch ($scope.mapa.indicador) {
+                case 'percentual':
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_uf, value: (obj.qtd * 100 / contratos).toFixed(1) * 1 }));
+                    break;
+                default:
+                    $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_uf, value: obj[$scope.mapa.indicador] }));
+            }
+        }
+
+        $scope.carregarGraficoDia = function () {
+
+            let dados = $scope.dashboard.dados.Table1;
+
+            switch ($scope.grafico.indicador) {
+                case 'vlr':
+                    $scope.dashboard.graficoDia = [{ name: 'Valor', data: dados.map(obj => (obj[$scope.grafico.indicador])) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoDia = [{ name: 'Quantidade', data: dados.map(obj => (obj[$scope.grafico.indicador])) }];
+            }
         }
 
         $scope.carregarDashboard();
