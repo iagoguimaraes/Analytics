@@ -184,7 +184,7 @@
                 <div class="col-xs-2">
                     <div class="small-box bg-blue">
                         <div class="inner">
-                            <h3 ng-bind="dashboard.producaoResumo.discado| megaNumber"></h3>
+                            <h3 ng-bind="dashboard.producaoResumo.alo| megaNumber"></h3>
                             <p>ALO</p>
                         </div>
                         <div class="icon">
@@ -292,10 +292,10 @@
                                     <high-charts config="dashboard.pizza.hitrate" style="width: 100%; height: 200px"></high-charts>
                                 </div>
                                 <div class="col-xs-4">
-                                    <high-charts config="dashboard.pizza.contato_discado" style="width: 100%; height: 200px"></high-charts>
+                                    <high-charts config="dashboard.pizza.cpc_alo" style="width: 100%; height: 200px"></high-charts>
                                 </div>
                                 <div class="col-xs-4">
-                                    <high-charts config="dashboard.pizza.cpc_contato" style="width: 100%; height: 200px"></high-charts>
+                                    <high-charts config="dashboard.pizza.cpca_alo" style="width: 100%; height: 200px"></high-charts>
                                 </div>
                                 <div class="col-xs-4">
                                     <high-charts config="dashboard.pizza.cpca_cpc" style="width: 100%; height: 200px"></high-charts>
@@ -381,7 +381,7 @@
                             <p>Média Disponível</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-hourglass-start"></i> 
+                            <i class="fa fa-hourglass-start"></i>
                         </div>
                     </div>
                     <div class="small-box bg-gray-active">
@@ -396,8 +396,46 @@
                 </div>
             </div>
 
+
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="card">
+                        @*<div class="card-header">
+                            <span class="card-header-title">Ocupação</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>*@
+                        <div class="card-body">
+                            <high-charts config="dashboard.recusa" style="width: 100%; height: 190px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="card">
+                        @*<div class="card-header">
+                            <span class="card-header-title">Ocupação</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>*@
+                        <div class="card-body">
+                            <high-charts config="dashboard.recusaPercentual" style="width: 100%; height: 190px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
         </div>
-    </div>
 </div>
 
 <script>
@@ -418,21 +456,6 @@
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
 
-        // carregar os filtros
-        //$http({
-        //    method: 'GET',
-        //    url: "/api/oi/dashboard/filtros",
-        //    data: $scope.filtros,
-        //}).then(function success(r) {
-        //    let data = r.data;
-        //    $scope.dashFiltros.status = r.status;
-        //    $scope.dashFiltros.empresas = data.Table;
-        //    $scope.dashFiltros.campanhas = r.data.Table1;
-        //    $scope.dashFiltros.segmentos = r.data.Table2;
-        //    $scope.dashFiltros.produtos = r.data.Table3;
-        //    $scope.dashFiltros.supervisores = r.data.Table5;
-        //    $scope.dashFiltros.equipes = r.data.Table6;
-        //});
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -448,7 +471,7 @@
 
                 //ESTOQUE
                 $scope.dashboard.datasEstoque3M = r.data.Table7.map(obj => obj.mesNome);
-                $scope.dashboard.mesAtual = r.data.Table7[2];
+                $scope.dashboard.mesAtual = r.data.Table7[0];
                 $scope.dashboard.estoque3M = [{ name: 'Estoque', data: r.data.Table7.map(obj => obj.base_ativo), color: 'orange' }];
 
                 //ESTOQUE / PA
@@ -456,13 +479,13 @@
 
                 //CAPACITY
                 $scope.dashboard.datasCapacity3M = r.data.Table4.map(obj => obj.mesNome);
-                $scope.dashboard.capacityAtual = r.data.Table4[2];
+                $scope.dashboard.capacityAtual = r.data.Table4[0];
                 $scope.dashboard.capacity3M = [ { name: 'Capacity', data: r.data.Table4.map(obj => obj.capacity) }
                                                ,{ name: 'Capacity Real', data: r.data.Table4.map(obj => obj.capacity_real) }];
 
                 //PRODUCAO
                 $scope.dashboard.producaoResumo = r.data.Table2[0];
-                $scope.dashboard.producao3M = [ { name: 'Ctt/PA', data: r.data.Table3.map(obj => (obj.contato / obj.capacity).toFixed(0) * 1)  }
+                $scope.dashboard.producao3M = [ { name: 'Alo/PA', data: r.data.Table3.map(obj => (obj.alo / obj.capacity).toFixed(0) * 1)  }
                                               , { name: 'Cpc/PA', data: r.data.Table3.map(obj => (obj.cpc/ obj.capacity).toFixed(0) * 1) }
                                               , { name: 'Cpca/PA', data: r.data.Table3.map(obj => (obj.cpca/ obj.capacity).toFixed(0) * 1) }
                                               , { name: 'PP/PA', data: r.data.Table3.map(obj => (obj.promessa/ obj.capacity).toFixed(0) * 1) }
@@ -474,17 +497,19 @@
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table9.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
 
                 $scope.gerarGrafico();
-
+                $scope.gerarGraficoRecusa();
             });
         }
 
         $scope.dashboard.pizza = {};
 
-        // gera graficos pizza
+        //gera graficos pizza
         $scope.gerarGrafico = function () {
             let dados = $scope.dashboard.dados.Table8[0];
 
-            var indicadores = ["hitrate", "spin", "contato_discado", "cpc_contato", "cpca_cpc", "promessa_cpca"];
+            var indicadores = ["hitrate", "spin", "cpc_alo", "cpca_alo", "cpca_cpc", "promessa_cpca"];
+            var titulos = ["HIT RATE", "SPIN", "CPC X ALO", "CPCA X ALO", "CPCA X CPC", "PROMESSA X CPCA"];
+            var contador = 0;
 
             for (var prop in indicadores) {
               
@@ -497,10 +522,13 @@
                         text: dados[ indicadores[prop] ] + '%',
                         align: 'center',
                         verticalAlign: 'middle',
-                        y: 20,
+                        y: 27,
                     },
                     subtitle: {
-                         text:  indicadores[prop] 
+                        text: titulos[contador], 
+                        style: {
+                                    fontSize: '18px',
+                                },
                     },
                     tooltip: {
                         enabled: false
@@ -519,11 +547,88 @@
                     credits: {
                         enabled: false
                     },
-                     series: [{ name: indicadores[prop], data: [dados[indicadores[prop]], (100 - dados[indicadores[prop]] )]  }]
+                     //series: [{ name: indicadores[prop], data: [ dados[indicadores[prop]], (100 - dados[indicadores[prop]]  ) ], color: 'red' }]
+
+                     series: [{ name: indicadores[prop], data: [ {name: 'Teste', color: '#7cb5ec', y: dados[indicadores[prop]], dataLabels: { enabled: false } }, ( {name: 'Teste', color: '#e3e1e1', y: 100 - dados[indicadores[prop]], dataLabels: { enabled: false } }  )  ] }]
+
                 };
 
+                contador = contador + 1;
             }
 
+        }
+
+
+        //gera graficos recusa
+        $scope.gerarGraficoRecusa = function () {
+
+            let dados = $scope.dashboard.dados.Table10;
+
+                 $scope.dashboard.recusa = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Motivos Recusas - Quantidade'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: dados.map(obj => obj.motivos)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Quantidade', data: dados.map(obj => ({ name: obj.motivos, y: obj.qtd })) }]
+                 };
+
+                 $scope.dashboard.recusaPercentual = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Motivos Recusas - Percentual'
+                    },
+                    yAxis: {
+                        visible: false,
+                    },
+                    xAxis: {
+                        categories: dados.map(obj => obj.motivos)
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                style: {
+                                    fontSize: '18px',
+                                },
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{ name: 'Quantidade', data: dados.map(obj => ({ name: obj.motivos, y: obj.percentual })) }]
+                };
+
+            
         }
 
 
