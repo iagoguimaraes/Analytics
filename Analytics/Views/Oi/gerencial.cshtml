@@ -34,25 +34,35 @@
                         <!-- Filtros -->
                         <div class="tab-pane active" id="control-sidebar-filters-tab">
 
-                            <!--DATA-->
+                            <!--ANO-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Inicial</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                                </div>
+                                <label style="width: 100px;">Ano</label>
+                                <select  ng-model="filtros.ano">
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select>
                             </div>
 
+                            <!--MES-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Fim</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
-                                </div>
+                                <label style="width: 100px;">Mês</label>
+                                <select  ng-model="filtros.mes">
+                                    <option value="1">Janeiro</option>
+                                    <option value="2">Fevereiro</option>
+                                    <option value="3">Março</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Maio</option>
+                                    <option value="6">Junho</option>
+                                    <option value="7">Julho</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
                             </div>
 
 
@@ -445,13 +455,11 @@
         dadosPagina.descricao = 'Oi Telecomunicações'
 
         // filtros iniciais
-        let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
-
         $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            ano: '' + new Date().getFullYear(),
+            mes: '' + (new Date().getMonth() + 1),
         };
+
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
@@ -471,7 +479,7 @@
 
                 //ESTOQUE
                 $scope.dashboard.datasEstoque3M = r.data.Table7.map(obj => obj.mesNome);
-                $scope.dashboard.mesAtual = r.data.Table7[0];
+                $scope.dashboard.mesAtual = r.data.Table8[0];
                 $scope.dashboard.estoque3M = [{ name: 'Estoque', data: r.data.Table7.map(obj => obj.base_ativo), color: 'orange' }];
 
                 //ESTOQUE / PA
@@ -494,7 +502,7 @@
                 //TEMPOS
                 $scope.dashboard.temposresumoAtual = r.data.Table5[0];
                 $scope.dashboard.temposresumo3M = r.data.Table6[0];
-                $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table9.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
+                $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table10.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
 
                 $scope.gerarGrafico();
                 $scope.gerarGraficoRecusa();
@@ -505,7 +513,7 @@
 
         //gera graficos pizza
         $scope.gerarGrafico = function () {
-            let dados = $scope.dashboard.dados.Table8[0];
+            let dados = $scope.dashboard.dados.Table9[0];
 
             var indicadores = ["hitrate", "spin", "cpc_alo", "cpca_alo", "cpca_cpc", "promessa_cpca"];
             var titulos = ["HIT RATE", "SPIN", "CPC X ALO", "CPCA X ALO", "CPCA X CPC", "PROMESSA X CPCA"];
@@ -562,7 +570,7 @@
         //gera graficos recusa
         $scope.gerarGraficoRecusa = function () {
 
-            let dados = $scope.dashboard.dados.Table10;
+            let dados = $scope.dashboard.dados.Table11;
 
                  $scope.dashboard.recusa = {
                     chart: {
@@ -640,5 +648,6 @@
         $scope.carregarDashboard();
 
     });
+
 
 </script>

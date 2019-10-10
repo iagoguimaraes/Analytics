@@ -70,7 +70,7 @@
         </div>
 
         <!-- Modal -->
-        <div ng-if="capacityMes.qtd" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div ng-if="capacityMes.qtd > 0 || capacityMes.qtd_real > 0" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -108,7 +108,8 @@
                                     <div class="input-group-addon" data-toggle="modal" data-target="#exampleModal">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input ng-if="opcoes.edit" style="color: red; font-weight: bold;" type="number" min="0" max="9999999" placeholder="Exem.: 15" class="form-control" ng-model="capacityMes.qtd"  />
+                                    <input ng-if="opcoes.edit" style="color: red; font-weight: bold;" type="number" min="0" max="100" placeholder="Capacity - Exem.: 15" class="form-control" ng-model="capacityMes.qtd" />
+                                    <input ng-if="opcoes.edit" style="color: red; font-weight: bold;" type="number" min="0" max="100" placeholder="Capacity Real - Exem.: 10" class="form-control" ng-model="capacityMes.qtd_real" />
                                 </div>
                                 <small>
                                     <input type="button" class="btn btn-secondary" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
@@ -121,6 +122,7 @@
                                     <tr>
                                         <th style="text-align:center">Data</th>
                                         <th style="text-align:center">Capacity</th>
+                                        <th style="text-align:center">Capacity Real</th>
                                         <th ng-if="opcoes.edit" style="text-align:center">Alterar</th>
                                     </tr>
                                 </thead>
@@ -130,7 +132,11 @@
                                         <td ng-if="opcoes.edit">
                                             <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa}}" ng-disabled="!opcoes.edit" />
                                         </td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{dia.quantidade_pa_real}}" ng-disabled="!opcoes.edit" />
+                                        </td>
                                         <td id="maisuma" ng-if="!opcoes.edit">{{dia.quantidade_pa | number}}</td>
+                                        <td id="maisuma" ng-if="!opcoes.edit">{{dia.quantidade_pa_real | number}}</td>
                                         <td ng-if="opcoes.edit">
                                             <small>
                                                 <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar()" />
@@ -158,7 +164,8 @@
         $scope.dashFiltros = {};
 
         $scope.capacityMes = {
-            qtd: 0
+             qtd: ''
+            ,qtd_real:''
         };
 
 
@@ -177,6 +184,7 @@
         $scope.capacity = [{
             data: '',
             quantidade_pa: '',
+            quantidade_pa_real: '',
         }];
 
         $scope.cadastrarCapacity = function () {
@@ -190,6 +198,7 @@
                 $scope.capacity = [{
                     data: '',
                     quantidade_pa: '',
+                    quantidade_pa_real: '',
                 }];
 
                 
@@ -238,17 +247,21 @@
         $scope.salvar = function () {
 
             let valor = $scope.capacityMes.qtd;
+            let valor_real = $scope.capacityMes.qtd_real;
 
-            if (valor > 0) {
+            if (valor > 0 && valor_real > 0) {
 
                 let tabela = document.getElementById('idtbody')
 
                 for (let i = 0; i < tabela.rows.length; i++) {
-            
-                    tabela.children[i].children[1].getElementsByTagName('input').item(0).value = valor;
 
+                    tabela.children[i].children[1].getElementsByTagName('input').item(0).value = valor;
+                    tabela.children[i].children[2].getElementsByTagName('input').item(0).value = valor_real;
                 }
-    
+
+            } else if ((valor = '' && valor_real > 0) || !(valor = '' && valor_real > 0)) {
+
+                alert("Preencha a informação nos dois campos e tente novamente.");
             }
 
             $scope.opcoes.edit = !$scope.opcoes.edit;
@@ -261,8 +274,9 @@
                 
                 let dt = $scope.converterData(tabela.children[i].children[0].innerHTML);
                 let txt = tabela.children[i].children[1].getElementsByTagName('input').item(0).value;
+                let txt2 = tabela.children[i].children[2].getElementsByTagName('input').item(0).value;
 
-                $scope.capacity.push({ data: dt, quantidade_pa: txt});
+                $scope.capacity.push({ data: dt, quantidade_pa: txt, quantidade_pa_real: txt2});
 
             }
             
