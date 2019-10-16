@@ -276,6 +276,106 @@
             </div>
         </div>
 
+        <!--GRAFICO POR ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('PorAtraso','Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoAtraso.indicador" ng-change="carregarGraficoAtraso()">
+                                <option value="hitrate">% Hit Rate</option>
+                                <option value="txloc">% Loc</option>
+                                <option value="txapv">% Apv</option>
+                                <option value="conversao">Conversão</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.graficoAtraso" axis-Categories="dashboard.atrasos" plot-Options-Column-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO POR AGENCIA\CENTRAL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Central/Agência</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Agencias','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.agencia">
+                                <thead>
+                                    <tr>
+                                        <th>Central</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>Cpc</th>
+                                        <th>Cpca</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.agencia | groupBy: 'ds_central'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].ds_central}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{c | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{c | sumByColumn: 'cpc' | number}}</td>
+                                        <td>{{c | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{c | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.ds_loja}}</td>
+                                        <td>{{p.discado | number}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.cpc | number}}</td>
+                                        <td>{{p.cpca | number}}</td>
+                                        <td>{{p.promessa | number}}</td>
+                                        <td>{{p.contato / p.discado | percentage:1}}</td>
+                                        <td>{{p.cpc / p.contato | percentage:1}}</td>
+                                        <td>{{p.cpca / p.cpc | percentage:1}}</td>
+                                        <td>{{p.promessa / p.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- ANÁLISE POR OCORRENCIA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -333,6 +433,7 @@
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
+        $scope.graficoAtraso = { indicador: 'promessa' };
 
         //carregar os filtros
         $http({
@@ -361,9 +462,12 @@
                 $scope.dashboard.tabulacao = data.Table2;
                 $scope.dashboard.equipe = r.data.Table3;
                 $scope.dashboard.ocorrencia = r.data.Table4;
+                $scope.dashboard.agencia = r.data.Table5;
+                $scope.dashboard.atraso = r.data.Table6;
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoPromessa();
+                $scope.carregarGraficoAtraso();
             });
         }
 
@@ -387,6 +491,29 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, color: '#1c6b36', data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGraficoAtraso = function () {
+            let dados = $scope.dashboard.atraso;
+            $scope.dashboard.atrasos = dados.map(obj => obj.ds_faixa);
+            switch ($scope.graficoAtraso.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.graficoAtraso = [{ name: 'hitrate', color: 'rgb(28, 107, 54, 0.8)', type: 'column', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.graficoAtraso = [{ name: 'txloc', color: 'rgb(28, 107, 54, 0.8)', type: 'column', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.graficoAtraso = [{ name: 'txapv', color: 'rgb(28, 107, 54, 0.8)', type: 'column', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.graficoAtraso = [{ name: 'conversao', color: 'rgb(28, 107, 54, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.graficoAtraso = [{ name: $scope.graficoAtraso.indicador, color: 'rgb(28, 107, 54, 0.8)', type: 'column', data: dados.map(obj => obj[$scope.graficoAtraso.indicador]) }];
+            }
+
         }
 
         //grafico promessa
