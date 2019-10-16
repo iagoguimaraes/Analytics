@@ -170,15 +170,13 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -200,15 +198,13 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("produtos", produtos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

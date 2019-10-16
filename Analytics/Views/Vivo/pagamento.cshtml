@@ -2,238 +2,395 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-vivo-pagamento">
-    <div ng-if="dashboard.status == 200">
+    <div ng-controller="ctrl-vivo-pagamento">
 
-        <!-- HEADER-->
-        <header class="page-header">
-            <div class="page-name">Pagamento</div>
-            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
-                <i class="fa fa-filter"></i>
-                FILTROS
-            </div>
-        </header>
+        <div ng-if="dashboard.status == 200">
 
-        <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
-            <div class="col-xs-12">
-                <div id="filtros-window" class="card display-none">
-                    <div class="card-header">
-                        <span class="card-header-title">Filtros</span>
-                        <div class="card-header-button card-header-close">
-                            <i class="fa fa-close"></i>
-                        </div>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
+            <!-- HEADER-->
+            <header class="page-header">
+                <div class="page-name">Pagamento</div>
+                <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                    <i class="fa fa-filter"></i>
+                    FILTROS
+                </div>
+            </header>
 
-                        <!--DATA INCIAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Inicial</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+            <!-- FILTROS -->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div id="filtros-window" class="card display-none">
+                        <div class="card-header">
+                            <span class="card-header-title">Filtros</span>
+                            <div class="card-header-button card-header-close">
+                                <i class="fa fa-close"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
                             </div>
                         </div>
+                        <div class="card-body">
 
-                        <!--DATA FINAL-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Data Final</label>
-                            <div class="input-group date">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
-                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--FILTROS 2-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Filtros</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.empresa">
+                                    <label class="control-sidebar-subheading">Empresa</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.empresa" dados="dashboard.dimensao.empresa" ng-change="aplicarFiltros()"></select22>
+                                </div>
 
-                        <!--PRODUTO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Produtos</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos"></select2>
-                        </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.aging">
+                                    <label class="control-sidebar-subheading">Aging</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.aging" dados="dashboard.dimensao.aging" ng-change="aplicarFiltros()"></select22>
+                                </div>
 
-                        <!--BOTÃO-->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
-                        </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.segmentacao">
+                                    <label class="control-sidebar-subheading">Segmento</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.segmentacao" dados="dashboard.dimensao.segmentacao" ng-change="aplicarFiltros()"></select22>
+                                </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.billing">
+                                    <label class="control-sidebar-subheading">Billing</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.billing" dados="dashboard.dimensao.billing" ng-change="aplicarFiltros()"></select22>
+                                </div>
 
-        <!--RESUMO-->
-        <div class="row margin-bottom">
-            <div class="col-xs-12 col-md-5">
-                <div class="small-box bg-yellow">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.qtd | number"></h3>
-                        <p>Qtd Pagamento</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-credit-card"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-7">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr | currency:'R$'"></h3>
-                        <p>Vlr Pagamento</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--QUANTIDADE-->
-        <div class="row margin-bottom">
-            <!--POR DIA-->
-            <div class="col-xs-12 col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Quantidade por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row margin-bottom">
-                            <high-chart series="dashboard.qtDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!--POR CARTEIRA-->
-            <div class="col-xs-12 col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Quantidade por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
-                            <i class="fa fa-file-excel-o"></i>
+
+            <div class="row margin-bottom">
+                <div class="text-center margin-bottom">
+                    <label class="control-sidebar-subheading">Indicador:</label>
+                    <select ng-model="dashboard.indicador" ng-change="aplicarFiltros()">
+                        <option value="qtd">Quantidade</option>
+                        <option value="vlr">Valor</option>
+                    </select>
+                </div>
+
+                <!--RESUMO-->
+                <div class="col-xs-12 margin-bottom">           
+                    <div class="col-xs-12 col-md-6">
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd"></h3>
+                                <p>Quantidade</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-list"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row margin-bottom">
-                            <high-chart series="dashboard.qtCarteira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3>R$ {{dashboard.resumo.vlr | number}}</h3>
+                                <p>Valor</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-money"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DIA-->
+                <div class="col-xs-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--EMPRESA-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.empresa" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--AGING-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.aging" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--SEGMENTACAO-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.segmentacao" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--BILLING-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.billing" style="width: 100%; height: 300px"></high-charts>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <!--VALOR-->
-        <div class="row margin-bottom">
-            <!--POR DIA-->
-            <div class="col-xs-12 col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Valor por Dia</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table2')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.vlDia" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
-                    </div>
-                </div>
-            </div>
-
-            <!--POR CARTEIRA-->
-            <div class="col-xs-12 col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-header-title">Valor por Carteira</span>
-                        <div class="card-header-button card-header-expand">
-                            <i class="fa fa-expand"></i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
-                            <i class="fa fa-file-excel-o"></i>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <high-chart series="dashboard.vlCarteira" type="pie" inner-size="60%" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
-</div>
 
 
 <script>
-    angular.module('app').controller('ctrl-vivo-pagamento', function ($scope, $http, $filter) {
-        // filtros iniciais
+    angular.module('app').controller('ctrl-vivo-pagamento', function ($scope, $http, $filter, cubo) {
+       
+      // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            produtos: ''
         };
-        $scope.dashFiltros = {};
-        $scope.dashboard = {};
 
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/vivo/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-            let data = r.data;
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.produtos = data.Table2;
-        });
+        $scope.dashboard = { dimensao: {}, filtros: {}, indicador: 'qtd' };
+        $scope.dimensao = {};
 
-        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dashboard.dimensao.aging = cubo.obterDimensao('aging');
+            $scope.dashboard.dimensao.segmentacao = cubo.obterDimensao('segmentacao');
+            $scope.dashboard.dimensao.billing = cubo.obterDimensao('billing');
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dimensao.aging = cubo.obterDimensao('aging');
+            $scope.dimensao.segmentacao = cubo.obterDimensao('segmentacao');
+            $scope.dimensao.billing = cubo.obterDimensao('billing');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            let indicador = $scope.dashboard.indicador;
+
+            let dia = alasql('select data, sum(' + indicador + ') qtd from ? group by data order by 1', [dados]);
+            let empresa = alasql('select empresa, sum(' + indicador + ') qtd from ? group by empresa order by 2 desc', [dados]);
+            let aging = alasql('select aging, sum(' + indicador + ') qtd from ? group by aging order by 2 desc', [dados]);
+            let segmentacao = alasql('select segmentacao, sum(' + indicador + ') qtd from ? group by segmentacao order by 2 desc', [dados]);
+            let billing = alasql('select billing, sum(' + indicador + ') qtd from ? group by billing order by 2 desc', [dados]);
+
+            $scope.dashboard.resumo = alasql('select data, sum(qtd) qtd, sum(vlr) vlr from ?', [dados])[0];
+
+            $scope.dashboard.dia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Dia a Dia'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dia.map(obj => obj['data'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: dia.map(obj => obj.qtd), color: '#333' }]
+            };
+            $scope.dashboard.empresa = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Empresa'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%'
+                    }
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: empresa.map(obj => ({ name: obj.empresa, y: obj.qtd })) }]
+            };    
+            $scope.dashboard.aging = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Aging'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: aging.map(obj => obj['aging'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: aging.map(obj => obj.qtd) }]
+            };
+            $scope.dashboard.segmentacao = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Segmentacao'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: segmentacao.map(obj => obj['segmentacao'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: segmentacao.map(obj => obj.qtd) }]
+            };
+            $scope.dashboard.billing = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Billing'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: billing.map(obj => obj['billing'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: billing.map(obj => obj.qtd) }]
+            };
+
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('empresa', $scope.dashboard.filtros.empresa);
+            cubo.filtrar('aging', $scope.dashboard.filtros.aging);
+            cubo.filtrar('segmentacao', $scope.dashboard.filtros.segmentacao);
+            cubo.filtrar('billing', $scope.dashboard.filtros.billing);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
                 url: "/api/vivo/dashboard/pagamento",
                 data: $scope.filtros,
             }).then(function success(r) {
-                let data = r.data;
-
-                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
 
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dados = r.data;
-
-                $scope.dashboard.resumo = data.Table[0];
-                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.quantidade)) }];
-                $scope.dashboard.vlDia = [{ name: 'Valor', data: r.data.Table2.map(obj => (obj.valor)) }];
-                $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table3.map(obj => ({ name: obj.segmentacao, y: obj.quantidade })) }];
-                $scope.dashboard.vlCarteira = [{ name: 'Valor', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmentacao, y: obj.valor })) }];
-
+                $scope.dashboard.dados = r.status;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
             });
         }
 
         $scope.carregarDashboard();
 
-        $scope.extrair = function (tabela) {
-            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-        }
-
     });
-
 </script>
