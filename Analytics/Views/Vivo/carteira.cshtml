@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row margin-bottom">
             <div class="text-center margin-bottom">
                 <label class="control-sidebar-subheading">Indicador:</label>
@@ -112,7 +112,7 @@
                     <option value="devolucao_vlr">Valor Devoluções</option>
                 </select>
             </div>
-            
+
             <!--DIA-->
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
@@ -196,6 +196,12 @@
             let indicador = $scope.dashboard.indicador;
 
             let dia = alasql('select data, sum(' + indicador + ') qtd from ? group by data order by 1', [dados]);
+
+            if (indicador.startsWith('carteira')) {
+                let ultimodia = dia[dia.length - 1]['data'];
+                dados = dados.filter(obj => obj.data === ultimodia);
+            }
+
             let empresa = alasql('select empresa, sum(' + indicador + ') qtd from ? group by empresa order by 2 desc', [dados]);
             let aging = alasql('select aging, sum(' + indicador + ') qtd from ? group by aging order by 2 desc', [dados]);
             let segmentacao = alasql('select segmentacao, sum(' + indicador + ') qtd from ? group by segmentacao order by 2 desc', [dados]);
@@ -248,7 +254,7 @@
                     enabled: false
                 },
                 series: [{ name: indicador, data: empresa.map(obj => ({ name: obj.empresa, y: obj.qtd })) }]
-            };    
+            };
             $scope.dashboard.aging = {
                 chart: {
                     type: 'column'
