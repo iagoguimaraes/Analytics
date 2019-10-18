@@ -1,0 +1,352 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-estacio-horahora">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Boletim</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMO -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Ação Massiva</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Massivo','Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box bg-purple-active">
+                                    <span class="info-box-icon">
+                                        <i class="fa fa-envelope-open-o"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <div class="text"></div>
+                                        <div class="info-box-number" ng-bind="dashboard.resumo.acao_massiva | number"></div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 100%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            Total Massivas
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box bg-aqua-active">
+                                    <span class="info-box-icon">
+                                        <i class="fa fa-at"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <div class="text">E-mail </div>
+                                        <div class="info-box-number" ng-bind="dashboard.resumo.email | number"></div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_email}}%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            <b>{{dashboard.resumo.pct_email}}%</b> E-mail Enviados
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="info-box bg-green-active">
+                                    <span class="info-box-icon">
+                                        <i class="fa fa-comments-o "></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <div class="text">SMS </div>
+                                        <div class="info-box-number" ng-bind="dashboard.resumo.sms | number"></div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_sms}}%"></div>
+                                        </div>
+                                        <span class="progress-description">
+                                            <b>{{dashboard.resumo.pct_sms}}%</b> SMS Enviados
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Produção Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Producao','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="true" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="false" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Hora</th>
+                                        <th style="text-align:center">Contato</th>
+                                        <th style="text-align:center">Cpc</th>
+                                        <th style="text-align:center">Cpc(%)</th>
+                                        <th style="text-align:center">Negociação</th>
+                                        <th style="text-align:center">% Negociação/Cpc</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.contato | number}}</td>
+                                        <td>{{hora.cpc | number}}</td>
+                                        <td>{{hora.cpc / hora.contato | percentage:1}}</td>
+                                        <td>{{hora.promessa | number}}</td>
+                                        <td>{{hora.promessa / hora.cpc | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th style="text-align:center">Total</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.contato | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.cpc | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.cpc / dashboard.resumoProducao.contato | percentage: 1}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.promessa | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.promessa / dashboard.resumoProducao.cpc | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoDia.exibir == 'false'">
+                            <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RECEPTIVO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Receptivo</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Receptivo','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoRecExibir" ng-model="graficoReceptivo.exibir" value="true"  />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoRecExibir" ng-model="graficoReceptivo.exibir" value="false" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoReceptivo.exibir == 'true'">
+                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.receptivo">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Hora</th>
+                                        <th style="text-align:center">Recebidas</th>
+                                        <th style="text-align:center">Atendidas</th>
+                                        <th style="text-align:center">Atendidas (20s)</th>
+                                        <th style="text-align:center">Abandono</th>
+                                        <th style="text-align:center">% Abandono</th>
+                                        <th style="text-align:center">TMA</th>
+                                        <th style="text-align:center">TME</th>
+                                        <th style="text-align:center">Tempo Máximo de Espera</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="receptivo in dashboard.receptivo">
+                                        <td>{{receptivo.hora}}</td>
+                                        <td>{{receptivo.chamada | number}}</td>
+                                        <td>{{receptivo.atendido | number}}</td>
+                                        <td>{{receptivo.ns20 | number}}</td>
+                                        <td>{{receptivo.abandonado | number}}</td>
+                                        <td>{{receptivo.abandonado / receptivo.chamada | percentage:1}}</td>
+                                        <td>{{receptivo.tma}}</td>
+                                        <td>{{receptivo.tmf}}</td>
+                                        <td>{{receptivo.tmf_max}}</td>
+                                    </tr>
+                                </tbody>
+                                @*<tfoot>
+                                    <tr>
+                                        <th style="text-align:center">Total</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.contato | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.cpc | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.cpc / dashboard.resumoProducao.contato | percentage: 1}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.promessa | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.promessa / dashboard.resumoProducao.cpc | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>*@
+                            </table>
+                        </div>
+
+                        <!--GRAFICO-->
+                        <div ng-show="graficoReceptivo.exibir == 'false'">
+                            <high-chart series="dashboard.graficoReceptivo" axis-Categories="dashboard.horas" plot-Options-Column-Data-Label="true" ></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-estacio-horahora', function ($scope, $http, $filter) {
+        $scope.showTbody = false;
+
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = {};
+        $scope.graficoDia = { exibir: 'true' };
+        $scope.graficoReceptivo = { exibir: 'false' };
+        $scope.showTbody = false;
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/estacio/boletim",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                let data = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.horahora = data.Table1;
+                $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.resumoProducao = data.Table2[0];
+                $scope.dashboard.receptivo = data.Table3;
+
+                $scope.carregarGraficoDia();
+                $scope.carregarGraficoReceptivo();
+            });
+        }
+
+        // carrega o gráfico dia
+        $scope.carregarGraficoDia = function () {
+            let dados = $scope.dashboard.horahora;
+
+            $scope.dashboard.graficoDia = [
+                { name: 'Contato', type: 'column', color: '#a3a3a3', data: dados.map(obj => (obj.contato)) },
+                { name: 'Cpc', type: 'column', color: '#06afc9', data: dados.map(obj => (obj.cpc)) },
+                { name: 'Cpca', type: 'column', color: '#f39c12', data: dados.map(obj => (obj.cpca)) },
+                { name: 'Promessa', type: 'column', color: '#00a65a', data: dados.map(obj => (obj.promessa)) }];
+        }
+
+
+        // carrega o gráfico receptivo
+        $scope.carregarGraficoReceptivo = function () {
+            let dados = $scope.dashboard.receptivo;
+
+            $scope.dashboard.graficoReceptivo = [
+                { name: 'Atendido', type: 'column', color: '#06afc9', data: dados.map(obj => (obj.atendido)) },
+                { name: 'Abandono', type: 'area', color: '#a3a3a3', data: dados.map(obj => (obj.abandonado)) },
+                { name: 'Ns20', type: 'spline', yAxis: 1, color: '#90ed7d', data: dados.map(obj => (obj.ns20)) }];
+        }
+
+
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
