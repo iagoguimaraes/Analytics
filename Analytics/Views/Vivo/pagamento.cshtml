@@ -139,6 +139,12 @@
                 <!--DIA-->
                 <div class="col-xs-12 margin-bottom">
                     <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Por Dia</span>
+                            <div class="card-header-button" ng-click="extrairDia()">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
                         </div>
@@ -219,6 +225,7 @@
             let indicador = $scope.dashboard.indicador;
 
             let dia = alasql('select data, sum(' + indicador + ') qtd from ? group by data order by 1', [dados]);
+            $scope.dashboard.diaTabela = dia;
             let empresa = alasql('select empresa, sum(' + indicador + ') qtd from ? group by empresa order by 2 desc', [dados]);
             let aging = alasql('select aging, sum(' + indicador + ') qtd from ? group by aging order by 2 desc', [dados]);
             let segmentacao = alasql('select segmentacao, sum(' + indicador + ') qtd from ? group by segmentacao order by 2 desc', [dados]);
@@ -231,7 +238,7 @@
                     type: 'spline'
                 },
                 title: {
-                    text: 'Dia a Dia'
+                    text: ''
                 },
                 yAxis: {
                     visible: false,
@@ -391,6 +398,11 @@
         }
 
         $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrairDia = function () {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.diaTabela]);
+        }
 
     });
 </script>
