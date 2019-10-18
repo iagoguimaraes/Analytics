@@ -74,7 +74,7 @@
 
             <!--RESUMO-->
             <div class="row margin-bottom">
-                <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="col-xs-12 col-md-4 col-lg-2 col-sm-offset-1">
                     <div class="small-box bg-blue-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.tma_geral | formatTimer"></h3>
@@ -89,7 +89,7 @@
                     <div class="small-box bg-blue-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.recebidas | megaNumber"></h3>
-                            <p>Ch Recebidas</p>
+                            <p>Recebidas</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-male"></i>
@@ -101,14 +101,14 @@
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.atendidas | number"></h3>
                             <h4 class="pull-right" ng-bind="dashboard.resumo.atendidas / dashboard.resumo.recebidas | percentage: 1"></h4>
-                            <p>Ch Atendidas</p>
+                            <p>Atendidas</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-street-view"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-4 col-lg-2">
+                @*<div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-red-active">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumo.abandonadas | number"></h3>
@@ -119,7 +119,7 @@
                             <i class="fa fa-exclamation-circle"></i>
                         </div>
                     </div>
-                </div>
+                </div>*@
                 <div class="col-xs-12 col-md-4 col-lg-2">
                     <div class="small-box bg-green">
                         <div class="inner">
@@ -135,7 +135,7 @@
                     <div class="small-box bg-green">
                         <div class="inner">
                             <h3 ng-bind="dashboard.resumoaceite.atendidas_aceite | megaNumber "></h3>
-                            <p>Ch Atendidas - Aceite</p>
+                            <p>Atendidas - Aceite</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-thumbs-o-up"></i>
@@ -152,24 +152,68 @@
                         <div class="card-header">
                             <span class="card-header-title">Análise por Data</span>
                             <small class="pull-right">
-                                <span>Indicadores:</span>
-                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoHora()">
-                                    <option value="ns_10s">NS 10S</option>
-                                    <option value="ns_20s">NS 20S</option>
-                                    <option value="ns_30s">NS 30S</option>
-                                    <option value="ns_60s">NS 60S</option>
-                                </select>
-                                <select ng-model="dashboard.indicador2" ng-change="carregarGraficoHora()">
-                                    <option value="recebidas">Recebidas</option>
-                                    <option value="atendidas">Atendidas</option>
-                                    <option value="abandonadas">Abandonadas</option>
-                                    <option value="atendidas_aceite">Atendidas - Aceite</option>
-                                    <option value="qtd_agente">Logados</option>
-                                </select>
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                    Tabela
+                                </label>
+                                <label>
+                                    <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                    Gráfico
+                                </label>
+
                             </small>
                         </div>
                         <div class="card-body">
-                            <high-charts config="dashboard.hora" style="width: 100%; height: 350px"></high-charts>
+                            <!--TABELA-->
+                            <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Logados</th>
+                                            <th>Recebidas</th>
+                                            <th>Atendidas</th>
+                                            <th>Aten. % Rece.</th>
+                                            <th>Atendidas - Aceite</th>
+                                            <th>TMA</th>
+                                            <th>TMA - Aceite</th>
+                                            <th>Nivel de Serviço</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in dashboard.diadia">
+                                            <td>{{data.data}}</td>
+                                            <td>{{data.qtd_agente | number}}</td>
+                                            <td>{{data.recebidas| number}}</td>
+                                            <td>{{data.atendidas | number}}</td>
+                                            <td>{{data.atendidas / data.recebidas | percentage:1}}</td>
+                                            <td>{{data.atendidas_aceite | number}}</td>
+                                            <td>{{data.tma_geral | formatTimer}}</td>
+                                            <td>{{data.tma_aceite| formatTimer }}</td>
+                                            <td>{{data.ns_60s | number }}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show="graficoHora.exibir == 'true'">
+                                <small class="pull-right">
+                                    <span>Indicadores:</span>
+                                    <select ng-model="dashboard.indicador" ng-change="carregarGraficoHora()">
+                                        @*<option value="ns_10s">NS 10S</option>
+                                        <option value="ns_20s">NS 20S</option>
+                                        <option value="ns_30s">NS 30S</option>*@
+                                        <option value="ns_60s">NS 60S</option>
+                                    </select>
+                                    <select ng-model="dashboard.indicador2" ng-change="carregarGraficoHora()">
+                                        <option value="recebidas">Recebidas</option>
+                                        <option value="atendidas">Atendidas</option>
+                                        <option value="abandonadas">Abandonadas</option>
+                                        <option value="atendidas_aceite">Atendidas - Aceite</option>
+                                        <option value="qtd_agente">Logados</option>
+                                    </select>
+                                </small>
+                                <high-charts config="dashboard.hora" style="width: 100%; height: 350px"></high-charts>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -235,8 +279,10 @@
 
         $scope.dashboard = {};
         $scope.dashboard = {
-            indicador: 'ns_10s', indicador2: 'recebidas', nivel_servico:'',  indicadorMarcado:''
+            indicador: 'ns_60s', indicador2: 'recebidas', nivel_servico:'',  indicadorMarcado:''
         };
+
+        $scope.graficoHora = { exibir: 'false' };
 
         $scope.carregarDashboard = function () {
             $http({
@@ -249,6 +295,7 @@
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.resumoaceite = r.data.Table1[0];
+                $scope.dashboard.diadia = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
 
 
