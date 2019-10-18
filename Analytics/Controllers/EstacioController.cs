@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace Analytics.Controllers
 {
@@ -287,6 +288,63 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_boletim", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("mailing")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardEditarMailing(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_editar", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("cadmailing")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMailing(FormDataCollection form)
+        {
+            try
+            {
+                DataTable mailing = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                mailing.Rows[0].Delete();
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("mailing", mailing);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_ins_fatoMailing_cadastro", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

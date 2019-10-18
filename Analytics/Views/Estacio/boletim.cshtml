@@ -164,6 +164,8 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">Hora</th>
+                                        <th style="text-align:center">Mailing</th>
+                                        <th style="text-align:center">Penetração</th>
                                         <th style="text-align:center">Contato</th>
                                         <th style="text-align:center">Cpc</th>
                                         <th style="text-align:center">Cpc(%)</th>
@@ -174,6 +176,8 @@
                                 <tbody>
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
+                                        <td>{{hora.mailing | number}}</td>
+                                        <td>{{hora.discado | number}} ({{hora.discado / hora.mailing | percentage:1}})</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
@@ -184,6 +188,8 @@
                                 <tfoot>
                                     <tr>
                                         <th style="text-align:center">Total</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.mailing | number}}</th>
+                                        <th style="text-align:center">{{dashboard.resumoProducao.discado | number}} ({{dashboard.resumoProducao.discado / dashboard.resumoProducao.mailing | percentage:1}})</th>
                                         <th style="text-align:center">{{dashboard.resumoProducao.contato | number}}</th>
                                         <th style="text-align:center">{{dashboard.resumoProducao.cpc | number}}</th>
                                         <th style="text-align:center">{{dashboard.resumoProducao.cpc / dashboard.resumoProducao.contato | percentage: 1}}</th>
@@ -322,8 +328,8 @@
 
             $scope.dashboard.graficoDia = [
                 { name: 'Contato', type: 'column', color: '#a3a3a3', data: dados.map(obj => (obj.contato)) },
-                { name: 'Cpc', type: 'column', color: '#06afc9', data: dados.map(obj => (obj.cpc)) },
-                { name: 'Cpca', type: 'column', color: '#f39c12', data: dados.map(obj => (obj.cpca)) },
+                { name: 'Cpc', type: 'column', color: '#f39c12', data: dados.map(obj => (obj.cpc)) },
+                { name: 'Cpca', type: 'column', color: '#06afc9', data: dados.map(obj => (obj.cpca)) },
                 { name: 'Promessa', type: 'column', color: '#00a65a', data: dados.map(obj => (obj.promessa)) }];
         }
 
