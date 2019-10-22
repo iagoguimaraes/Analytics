@@ -465,6 +465,7 @@ namespace Analytics.Controllers
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);                
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable operador = JsonConvert.DeserializeObject<DataTable>(form["operador"]);
                 string visao = form["visao"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
@@ -479,6 +480,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("tenure", tenure);
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("operador", operador);
                     parametros.Add("visao", visao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
