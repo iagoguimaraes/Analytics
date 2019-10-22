@@ -687,6 +687,48 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/comparativopag")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardComparativoPagamentos(FormDataCollection form)
+        {
+            try
+            {
+                int ano = Convert.ToInt32(form["ano"]);
+                int mes = Convert.ToInt32(form["mes"]);
+                DataTable supervisor1 = JsonConvert.DeserializeObject<DataTable>(form["supervisor1"]);
+                int ano2 = Convert.ToInt32(form["ano2"]);
+                int mes2 = Convert.ToInt32(form["mes2"]);
+                DataTable supervisor2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor2"]);
+                int ano3 = Convert.ToInt32(form["ano3"]);
+                int mes3 = Convert.ToInt32(form["mes3"]);
+                DataTable supervisor3 = JsonConvert.DeserializeObject<DataTable>(form["supervisor3"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("ano", ano);
+                    parametros.Add("mes", mes);
+                    parametros.Add("supervisor1", supervisor1);
+                    parametros.Add("ano2", ano2);
+                    parametros.Add("mes2", mes2);
+                    parametros.Add("supervisor2", supervisor2);
+                    parametros.Add("ano3", ano3);
+                    parametros.Add("mes3", mes3);
+                    parametros.Add("supervisor3", supervisor3);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade_comparativo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]
