@@ -107,6 +107,45 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("ddd")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DDD(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable fornecedor = JsonConvert.DeserializeObject<DataTable>(form["fornecedor"]);
+                DataTable plataforma = JsonConvert.DeserializeObject<DataTable>(form["plataforma"]);
+                DataTable operadora = JsonConvert.DeserializeObject<DataTable>(form["operadora"]);
+                DataTable tipochamada = JsonConvert.DeserializeObject<DataTable>(form["tipochamada"]);
+                DataTable rota = JsonConvert.DeserializeObject<DataTable>(form["rota"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TELECOM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("fornecedor", fornecedor);
+                    parametros.Add("plataforma", plataforma);
+                    parametros.Add("operadora", operadora);
+                    parametros.Add("tipochamada", tipochamada);
+                    parametros.Add("rota", rota);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ddd", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("inserir/operadora")]
         [HttpPost]
         [Autorizar]

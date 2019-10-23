@@ -1,0 +1,315 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-telecom-ddd">
+    <div ng-if="dashboard.status == 200">
+
+        <!--HEADER-->
+        <header class="page-header">
+            <div class="page-name">Discagem Direta à Distância</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div id="filtros-window" class="row margin-bottom display-none" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INICIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--FORNECEDOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fornecedor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fornecedor" dados="dashFiltros.fornecedor" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--PLATAFORMA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Plataforma</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plataforma" dados="dashFiltros.plataforma" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--OPERADORA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Operadora</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operadora" dados="dashFiltros.operadora" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--TIPO DE CHAMADA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo de Chamada</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tipochamada" dados="dashFiltros.tipochamada" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--ROTA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Rota</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.rota" dados="dashFiltros.rota" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="small-box bg-gray-light">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.quantidade | number"></h3>
+                        <p>Quantidade</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="small-box bg-new-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.valor | currency:'R$'"></h3>
+                        <p>Valor</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-usd"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR REGIÃO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Região</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.regiao">
+                                <thead>
+                                    <tr>
+                                        <th>Região</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="s in dashboard.regiao | groupBy: 'ds_regiao'">
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{s[0].ds_regiao}}
+                                        </td>
+                                        <td>{{s | sumByColumn: 'quantidade'| number}}</td>
+                                        <td>{{s | sumByColumn: 'valor'| currency: 'R$'}}</td>
+                                    </tr>
+                                    <tr ng-repeat="c in s" ng-show="showTbody">
+                                        <td>{{c.uf}}</td>
+                                        <td>{{c.quantidade | number}}</td>
+                                        <td>{{c.valor | currency: 'R$'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ESTADO\DDD-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Estado e DDD</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoExibir" ng-model="grafico.exibir" value="true" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoExibir" ng-model="grafico.exibir" value="false" checked="checked" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="card-body">
+                            <!--TABELA-->
+                            <div class="table-responsive" ng-show="grafico.exibir == 'true'">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.uf">
+                                        <thead>
+                                            <tr>
+                                                <th>Região</th>
+                                                <th>Quantidade</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody ng-repeat="s in dashboard.uf | groupBy: 'uf'">
+                                            <tr class="text-bold">
+                                                <td class="text-bold">
+                                                    <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                    {{s[0].uf}}
+                                                </td>
+                                                <td>{{s | sumByColumn: 'quantidade'| number}}</td>
+                                                <td>{{s | sumByColumn: 'valor'| currency: 'R$'}}</td>
+                                            </tr>
+                                            <tr ng-repeat="c in s" ng-show="showTbody">
+                                                <td>{{c.ddd}}</td>
+                                                <td>{{c.quantidade | number}}</td>
+                                                <td>{{c.valor | currency: 'R$'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!--GRAFICO-->
+                            <div ng-show="grafico.exibir == 'false'">
+
+                                <small class="pull-right">
+                                    <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                        <option value="quantidade">Quantidade</option>
+                                        <option value="valor">Valor</option>
+                                    </select>
+                                </small>
+                                <div class="card-body">
+                                    <high-chart series="dashboard.grafico" axis-Categories="dashboard.ufs" plot-Options-Spline-Data-Label="true"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-telecom-ddd', function ($scope, $http, $filter) {
+
+        $scope.dashboard = {
+            indicador_performance: 'LOC',
+            indicador_plataforma: '3',
+        };
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            fornecedor: '',
+            plataforma: '',
+            operadora: '',
+            tipochamada: '',
+            rota: '',
+        };
+        $scope.showTbody = false;
+        $scope.grafico = { indicador: 'quantidade', exibir: 'false' };
+
+        //carregar os filtros
+        $http({
+            method: 'POST',
+            url: "/api/telecom/filtros",
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.fornecedor = r.data.Table;
+            $scope.dashFiltros.plataforma = r.data.Table1;
+            $scope.dashFiltros.operadora = r.data.Table2;
+            $scope.dashFiltros.tipochamada = r.data.Table3;
+            $scope.dashFiltros.rota = r.data.Table4;
+        });
+
+        // carregar dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/telecom/ddd",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.regiao = r.data.Table1;
+                $scope.dashboard.uf = r.data.Table2;
+                $scope.dashboard.estado = r.data.Table3;
+
+                $scope.carregarGrafico();
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.estado;
+            $scope.dashboard.ufs = dados.map(obj => obj.uf);
+
+            $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, type:'spline', color:'#4caf50', data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
