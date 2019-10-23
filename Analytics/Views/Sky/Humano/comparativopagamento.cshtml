@@ -1,0 +1,357 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-sky-comparativo-pagamento">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Comparativo Pagamentos</div>
+            @*<div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>*@
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div class="card display">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Período 1:</label>
+                                <select class="form-control" ng-model="filtros.mes">
+                                    <option value="1">Janeiro</option>
+                                    <option value="2">Fevereiro</option>
+                                    <option value="3">Março</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Maio</option>
+                                    <option value="6">Junho</option>
+                                    <option value="7">Julho</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <select class="form-control" ng-model="filtros.ano">
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                                <div class="form-group">
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Supervisor1" ng-model="filtros.supervisor1" dados="dashFiltros.supervisor1"></select2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--DATA INTERMEDIARIA-->
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Período 2:</label>
+                                <select class="form-control" ng-model="filtros.mes2">
+                                    <option value="1">Janeiro</option>
+                                    <option value="2">Fevereiro</option>
+                                    <option value="3">Março</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Maio</option>
+                                    <option value="6">Junho</option>
+                                    <option value="7">Julho</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <select class="form-control" ng-model="filtros.ano2">
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                                <div class="form-group">
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Supervisor2" ng-model="filtros.supervisor2" dados="dashFiltros.supervisor2"></select2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Período 3:</label>
+                                <select class="form-control" ng-model="filtros.mes3">
+                                    <option value="1">Janeiro</option>
+                                    <option value="2">Fevereiro</option>
+                                    <option value="3">Março</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Maio</option>
+                                    <option value="6">Junho</option>
+                                    <option value="7">Julho</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <select class="form-control" ng-model="filtros.ano3">
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                                <div class="form-group">
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Supervisor3" ng-model="filtros.supervisor3" dados="dashFiltros.supervisor3"></select2>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--BOTÃO-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+
+
+        <!--GRAFICO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Comparativo por Dia Útil - Indicador: </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="card-header-title">
+                            <select style="margin-left: 20px" class="form-control" ng-model="opcoes.indicador" ng-change="carregarGrafico()">
+                                <option value="qtd_promessa">Promessas</option>
+                                <option value="vlr_promessa">R$ Promessas</option>
+                                <option value="qtd_pago">Pagamentos</option>
+                                <option value="vlr_pago">R$ Pagamentos</option>
+                                <option value="efetividade">% Efetvidade</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="info-box-new bg-new-red hover-zoom-effect">
+                                    <div class="icon">
+                                        <i class="material-icons">done_all</i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">Total Periodo 1</div>
+                                        <div class="number" ng-bind="depara.campo1  | megaNumber"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="info-box-new bg-new-red hover-expand-effect">
+                                    <div class="icon">
+                                        <i class="material-icons">done_outline</i>
+                                    </div>
+
+                                    <div class="content">
+                                        <div class="text">Total Periodo 2</div>
+                                        <div class="number" ng-bind="depara.campo2 | megaNumber"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="info-box-new bg-new-red hover-zoom-effect">
+                                    <div class="icon">
+                                        <i class="material-icons">done</i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">Total Periodo 3</div>
+                                        <div class="number" ng-bind="depara.campo3 | megaNumber "></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <high-charts config="dashboard.grafico_comparativo" style="width: 100%; height: 450px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-sky-comparativo-pagamento', function ($scope, $http, $filter) {
+
+        let hoje = new Date(), mesPassado = new Date(), mesRetrassado = new Date();
+        mesPassado.setDate(0);
+        mesRetrassado.setDate(0);
+
+        $scope.filtros = {
+            ano: '' + mesRetrassado.getFullYear(),
+            mes: '' + (mesRetrassado.getMonth()),
+            supervisor1: '',
+            ano2: '' + mesPassado.getFullYear(),
+            mes2: '' + (mesPassado.getMonth() + 1),
+            supervisor2: '',
+            ano3: '' + hoje.getFullYear(),
+            mes3: '' + (hoje.getMonth() + 1),
+            supervisor3: '',
+        };
+
+        $scope.opcoes = {
+            indicador: 'qtd_promessa'
+        }
+
+         $scope.dashFiltros = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/sky/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = data.Table;
+            $scope.dashFiltros.supervisor1 = data.Table2;
+            $scope.dashFiltros.supervisor2 = data.Table2;
+            $scope.dashFiltros.supervisor3 = data.Table2;
+          
+        });
+
+        //Objeto para alterar o ng bind
+        $scope.depara = {
+              campo1: $scope.opcoes.indicador
+            , campo2: $scope.opcoes.indicador + '2'
+            , campo3: $scope.opcoes.indicador + '3'
+            , campo4: $scope.opcoes.indicador + '3_atual'
+        };
+
+
+        $scope.dashboard = {};
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/dashboard/humano/comparativopag",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.campo = r.data.Table1[0];
+                $scope.carregarGrafico();
+            });
+
+
+
+        }
+
+
+        $scope.carregarGrafico = function () {
+            let indicador = $scope.opcoes.indicador;
+            $scope.dashboard.valor = $scope.dashboard.campo;
+
+            $scope.depara.campo1 = $scope.dashboard.valor[indicador];
+            $scope.depara.campo2 = $scope.dashboard.valor[indicador + '2'];
+            $scope.depara.campo3 = $scope.dashboard.valor[indicador + '3'];
+            $scope.depara.campo4 = $scope.dashboard.valor[indicador + '3_atual'];
+
+            let dados = $scope.dashboard.dados.Table;
+
+            let nome1 = $scope.filtros.mes + '/' + $scope.filtros.ano;
+            let nome2 = $scope.filtros.mes2 + '/' + $scope.filtros.ano2;
+            let nome3 = $scope.filtros.mes3 + '/' + $scope.filtros.ano3;
+            $scope.dashboard.grafico_comparativo = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: dados.map(o => o.dia)
+                },
+                series: [
+                    {
+                        type: 'column',
+                        name: nome1,
+                        color: 'rgba(245, 183, 177)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -30,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador])
+                    },
+                    {
+                        type: 'column',
+                        name: nome2,
+                        color: 'rgb(231, 76, 60)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -20,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador + '2'])
+                    },
+                   {
+                        type: 'column',
+                        name: nome3,
+                        color: 'rgb(148, 49, 38)',
+                        dataLabels: {
+                            enabled: true,
+                            rotation: 270,
+                            y: -20,
+                            formatter: function () { return $filter('megaNumber')(this.y) },
+                        },
+                        data: dados.map(o => o[indicador + '3'])
+                   },
+                ],
+                tooltip: {
+                    shared: true,
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+        $scope.carregarDashboard();
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("comparativo_analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+    });
+</script>
