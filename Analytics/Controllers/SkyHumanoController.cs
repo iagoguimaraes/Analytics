@@ -699,13 +699,22 @@ namespace Analytics.Controllers
             {
                 int ano = Convert.ToInt32(form["ano"]);
                 int mes = Convert.ToInt32(form["mes"]);
+                DataTable carteira1 = JsonConvert.DeserializeObject<DataTable>(form["carteira1"]);
+                DataTable segmentacao1 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao1"]);
                 DataTable supervisor1 = JsonConvert.DeserializeObject<DataTable>(form["supervisor1"]);
+                DataTable agente1 = JsonConvert.DeserializeObject<DataTable>(form["agente1"]);
                 int ano2 = Convert.ToInt32(form["ano2"]);
                 int mes2 = Convert.ToInt32(form["mes2"]);
+                DataTable carteira2 = JsonConvert.DeserializeObject<DataTable>(form["carteira2"]);
+                DataTable segmentacao2 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao2"]);
                 DataTable supervisor2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor2"]);
+                DataTable agente2 = JsonConvert.DeserializeObject<DataTable>(form["agente2"]);
                 int ano3 = Convert.ToInt32(form["ano3"]);
                 int mes3 = Convert.ToInt32(form["mes3"]);
+                DataTable carteira3 = JsonConvert.DeserializeObject<DataTable>(form["carteira3"]);
+                DataTable segmentacao3 = JsonConvert.DeserializeObject<DataTable>(form["segmentacao3"]);
                 DataTable supervisor3 = JsonConvert.DeserializeObject<DataTable>(form["supervisor3"]);
+                DataTable agente3 = JsonConvert.DeserializeObject<DataTable>(form["agente3"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -713,13 +722,22 @@ namespace Analytics.Controllers
 
                     parametros.Add("ano", ano);
                     parametros.Add("mes", mes);
+                    parametros.Add("carteira1", carteira1);
+                    parametros.Add("segmentacao1", segmentacao1);
                     parametros.Add("supervisor1", supervisor1);
+                    parametros.Add("agente1", agente1);
                     parametros.Add("ano2", ano2);
                     parametros.Add("mes2", mes2);
+                    parametros.Add("carteira2", carteira2);
+                    parametros.Add("segmentacao2", segmentacao2);
                     parametros.Add("supervisor2", supervisor2);
+                    parametros.Add("agente2", agente2);
                     parametros.Add("ano3", ano3);
                     parametros.Add("mes3", mes3);
+                    parametros.Add("carteira3", carteira3);
+                    parametros.Add("segmentacao3", segmentacao3);
                     parametros.Add("supervisor3", supervisor3);
+                    parametros.Add("agente3", agente3);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade_comparativo", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
