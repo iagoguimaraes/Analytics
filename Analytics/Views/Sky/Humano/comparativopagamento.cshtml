@@ -191,21 +191,38 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table')">
+                        <div class="card-header-button" ng-click="extrair('Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <div class="card-header-title">
+                        <div class="card-header-title" ng-show="opcoes.exibir == 'true'">
                             <select style="margin-left: 20px" class="form-control" ng-model="opcoes.indicador" ng-change="carregarGrafico()">
                                 <option value="qtd_promessa">Promessas</option>
                                 <option value="vlr_promessa">R$ Promessas</option>
                                 <option value="qtd_pago">Pagamentos</option>
+                                <option value="qtd_pag_promessa_cartao">Pagamentos Cartão</option>
+                                <option value="qtd_pag_promessa_parc">Pagamentos Parcelamento</option>
+                                <option value="qtd_pag_migracao">Pagamentos Migração</option>
                                 <option value="vlr_pago">R$ Pagamentos</option>
-                                <option value="efetividade">% Efetvidade</option>
+                                <option value="efetividade">% Geral</option>
+                                <option value="efetividade_cartao">% Cartão</option>
+                                <option value="efetividade_par">% Parcelamento</option>
+                                <option value="efetividade_migracao">% Migração</option>
                             </select>
                         </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="opcoes.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="opcoes.exibir" value="true" checked="checked"  />
+                                Gráfico
+                            </label>
+
+                        </small>
                     </div>
                     <div class="card-body">
-                        <div class="row clearfix">
+                        <div class="row clearfix" ng-show="opcoes.exibir == 'true'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <div class="info-box-new bg-new-red hover-zoom-effect">
                                     <div class="icon">
@@ -237,12 +254,66 @@
                                     <div class="content">
                                         <div class="text">Total Periodo 3</div>
                                         <div class="number" ng-bind="depara.campo3 | megaNumber "></div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <high-charts config="dashboard.grafico_comparativo" style="width: 100%; height: 450px"></high-charts>
+                        <high-charts config="dashboard.grafico_comparativo" style="width: 100%; height: 450px" ng-show="opcoes.exibir == 'true'"></high-charts>
+
+                        <div class="table-responsive" ng-show="opcoes.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.diadia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia/Mês</th>
+                                        <th>Qtd Promessas Geral</th>
+                                        <th>Qtd Pag Geral</th>
+                                        <th>Qtd Pag Cartão</th>
+                                        <th>Qtd Pag Migração</th>
+                                        <th>Qtd Pag Parcelado</th>
+                                        <th>% Geral</th>
+                                        <th>% Cartão</th>
+                                        <th>% Parcelado</th>
+                                        <th>% Migração</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.diadia | groupBy: 'dia'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].dia}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd_promessa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pago'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_promessa_cartao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_migracao'| number}}</td>
+                                        <td>{{c | sumByColumn: 'qtd_pag_promessa_parc'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pago':'qtd_promessa' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_promessa_cartao':'qtd_promessa_cartao' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_promessa_parc':'qtd_promessa_parc' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'qtd_pag_migracao':'qtd_promessa_migracao' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.mes_descricao}}</td>
+                                        <td>{{p.qtd_promessa | number}}</td>
+                                        <td>{{p.qtd_pago | number}}</td>
+                                        <td>{{p.qtd_pag_promessa_cartao | number}}</td>
+                                        <td>{{p.qtd_pag_migracao | number}}</td>
+                                        <td>{{p.qtd_pag_promessa_parc | number}}</td>
+                                        <td>{{p.total_qtd_pago / p.qtd_qtd_promessa | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_promessa_cartao / p.qtd_promessa_cartao  | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_promessa_parc / p.qtd_promessa_parc | percentage:1}}</td>
+                                        <td>{{p.qtd_pag_migracao / p.qtd_promessa_migracao | percentage:1}}</td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -280,7 +351,7 @@
         };
 
         $scope.opcoes = {
-            indicador: 'qtd_promessa'
+            indicador: 'qtd_promessa', exibir: 'true'
         }
 
          $scope.dashFiltros = {};
@@ -315,6 +386,7 @@
             , campo2: $scope.opcoes.indicador + '2'
             , campo3: $scope.opcoes.indicador + '3'
             , campo4: $scope.opcoes.indicador + '3_atual'
+            
         };
 
 
@@ -327,6 +399,7 @@
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
+                $scope.dashboard.diadia = r.data.Table2;
                 $scope.dashboard.campo = r.data.Table1[0];
                 $scope.carregarGrafico();
             });
