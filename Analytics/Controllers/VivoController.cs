@@ -402,7 +402,7 @@ namespace Analytics.Controllers
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 int situacao = Convert.ToInt32(form["situacao"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
