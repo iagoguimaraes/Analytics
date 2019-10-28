@@ -51,8 +51,8 @@
 
                                 <!--CARTEIRA-->
                                 <div class="form-group">
-                                    <label class="control-sidebar-subheading">Carteira</label>
-                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira"></select2>
+                                    <label class="control-sidebar-subheading">Billing</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tipobilling" dados="dashFiltros.tipobilling"></select2>
                                 </div>
 
                                 <!--AGING-->
@@ -143,8 +143,8 @@
                                         </div>
                                         <!--CHECKED CARTEIRA-->
                                         <div class="form-group">
-                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkCarteira" ng-true-value="'CARTEIRA,'" ng-false-value="''" />
-                                            <label class="control-sidebar-subheading">Carteira</label>
+                                            <input type="checkbox" ng_checked="true" ng-model="filtros.chkTipobilling" ng-true-value="'BILLING,'" ng-false-value="''" />
+                                            <label class="control-sidebar-subheading">Billing</label>
                                         </div>
                                         <!--CHECKED AGING-->
                                         <div class="form-group">
@@ -205,7 +205,7 @@
             dtini: $filter('date')(hoje, "yyyy-MM-dd"),
             dtfim: $filter('date')(hoje, "yyyy-MM-dd"),
             empresa: '',
-            carteira: '',
+            tipobilling: '',
             aging: '',
             supervisor: '',
             equipe: '',
@@ -220,7 +220,7 @@
             chkSupervisor: '',
             chkEquipe: '',
             chkEmpresa: 'EMPRESA,',
-            chkCarteira: 'CARTEIRA,',
+            chkTipobilling: 'BILLING,',
             chkAging: 'AGING,',
         };
 
@@ -232,14 +232,14 @@
         //carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/vivo/humano/dashboard/filtros",
+            url: "/api/vivo/new/humano/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
 
             $scope.dashFiltros.empresa = data.Table;
-            $scope.dashFiltros.carteira = data.Table1;
+            $scope.dashFiltros.tipobilling = data.Table1;
             $scope.dashFiltros.aging = data.Table2;
 
             $scope.dashFiltros.supervisor = data.Table3;
@@ -252,7 +252,7 @@
 
             $http({
                 method: 'POST',
-                url: "/api/vivo/humano/dashboard/acionamento",
+                url: "/api/vivo/new/humano/dashboard/acionamento",
                 data: $scope.filtros,
             }).then(function success(r) {
 
@@ -278,7 +278,7 @@
                  + $scope.filtros.chkSupervisor + ''
                  + $scope.filtros.chkEquipe + ''
                  + $scope.filtros.chkEmpresa + ''
-                 + $scope.filtros.chkCarteira + ''
+                 + $scope.filtros.chkTipobilling + ''
                  + $scope.filtros.chkAging +
                  'sum(QTD_ACIONAMENTOS) QTD, sum(CONTATO) CTT, sum(CPC) CPC, sum(CPCA) CPCA, sum(PROMESSA) PROM from ? group by '
                  + $scope.filtros.ano + ''
@@ -291,7 +291,7 @@
                  + $scope.filtros.chkSupervisor + ''
                  + $scope.filtros.chkEquipe + ''
                  + $scope.filtros.chkEmpresa + ''
-                 + $scope.filtros.chkCarteira + ''
+                 + $scope.filtros.chkTipobilling + ''
                  + $scope.filtros.chkAging + ''
                  + 'DT_ARQUIVO'
                  + ' order by PROM desc, CPCA, CPC, CTT'
@@ -320,7 +320,7 @@
 
                 $http({
                     method: 'POST',
-                    url: "/api/vivo/humano/dashboard/download",
+                    url: "/api/vivo/new/humano/dashboard/download",
                     data: $scope.filtros,
                     responseType: 'arraybuffer',
 

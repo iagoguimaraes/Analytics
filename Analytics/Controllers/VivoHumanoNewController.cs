@@ -151,7 +151,7 @@ namespace Analytics.Controllers
                 string chkTipobilling = form["chkTipobilling"];
                 string chkAging = form["chkAging"];
 
-                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
