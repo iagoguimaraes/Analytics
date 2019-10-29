@@ -1078,6 +1078,42 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/ocupacaoFila")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacaoFilaHumano(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("produto", produto);
+                    parametros.Add("fila", fila);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacaoFila", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/humano/downloadClassificacao")]
         [HttpGet]
         [Autorizar]
