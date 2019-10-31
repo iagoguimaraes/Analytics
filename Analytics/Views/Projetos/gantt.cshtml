@@ -1,0 +1,227 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-projetos">
+    <div ng-if="dashboard.status == 200">
+
+        <!--HEADER-->
+        <header class="page-header">
+            <div class="page-name">Dashboard Projetos</div>
+            <button type="button" class="btn btn-default pull-right" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                Filtros
+            </button>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FILTROS ONLINE-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Responsavel</label>
+                <multiple-select ng-model="dashboard.filtros.responsavel" dados="dashboard.dimensao.responsavel" ng-change="aplicarFiltros()" placeholder="Responsavel" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Solicitante</label>
+                <multiple-select ng-model="dashboard.filtros.solicitante" dados="dashboard.dimensao.solicitante" ng-change="aplicarFiltros()" placeholder="Solicitante" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Departamento</label>
+                <multiple-select ng-model="dashboard.filtros.departamento" dados="dashboard.dimensao.departamento" ng-change="aplicarFiltros()" placeholder="Departamento" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Categoria</label>
+                <multiple-select ng-model="dashboard.filtros.categoria" dados="dashboard.dimensao.categoria" ng-change="aplicarFiltros()" placeholder="Categoria" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Prioridade</label>
+                <multiple-select ng-model="dashboard.filtros.prioridade" dados="dashboard.dimensao.prioridade" ng-change="aplicarFiltros()" placeholder="Prioridade" /><multiple-select />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-4 margin-bottom">
+                <label class="control-sidebar-subheading">Status</label>
+                <multiple-select ng-model="dashboard.filtros.status" dados="dashboard.dimensao.status" ng-change="aplicarFiltros()" placeholder="Status" /><multiple-select />
+            </div>
+        </div>
+
+      
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-projetos', function ($scope, $http, $filter, cubo) {
+
+        // obj ref aos filtros da consulta
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(new Date().setFullYear(new Date().getFullYear() - 1)), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+        }
+        // obj ref opcoes interativas do dashboard
+        $scope.opcoes = {
+            variavel: 'responsavel',
+            data: 'prazo',
+            order: '',
+            field: 'prazo',
+        }
+        // obj ref aos graficos e elementos do dashboard
+        $scope.dashboard = {
+            dimensao: {},
+            filtros: {},
+        }
+        // obj ref aos filtros de dimensoes
+        $scope.dimensao = {};
+        // obj ref a visualizacao do projeto
+        $scope.viewprojeto = {};
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/projetos/gantt",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+
+
+                $scope.dashboard.status = r.status;
+            })
+        }
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.responsavel = cubo.obterDimensao('responsavel').sort();
+            $scope.dashboard.dimensao.solicitante = cubo.obterDimensao('solicitante').sort();
+            $scope.dashboard.dimensao.departamento = cubo.obterDimensao('departamento').sort();
+            $scope.dashboard.dimensao.categoria = cubo.obterDimensao('categoria').sort();
+            $scope.dashboard.dimensao.prioridade = cubo.obterDimensao('prioridade').sort();
+            $scope.dashboard.dimensao.status = cubo.obterDimensao('status').sort();
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.responsavel = cubo.obterDimensao('responsavel');
+            $scope.dimensao.solicitante = cubo.obterDimensao('solicitante');
+            $scope.dimensao.departamento = cubo.obterDimensao('departamento');
+            $scope.dimensao.categoria = cubo.obterDimensao('categoria');
+            $scope.dimensao.prioridade = cubo.obterDimensao('prioridade');
+            $scope.dimensao.status = cubo.obterDimensao('status');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+            $scope.dashboard.projetos = dados;
+
+            let status = alasql('select status, count(*) qtd from ? group by status order by qtd', [dados]);
+            let dia = alasql('select ' + $scope.opcoes.data + ', count(*) qtd from ? group by ' + $scope.opcoes.data + ' order by ' + $scope.opcoes.data + '', [dados]);
+            let variavel = alasql('select ' + $scope.opcoes.variavel + ', count(*) qtd from ? group by ' + $scope.opcoes.variavel + ' order by qtd', [dados]);
+            let prioridade = alasql('select id_prioridade, prioridade, count(*) qtd from ? group by id_prioridade, prioridade order by id_prioridade', [dados]);
+
+            $scope.dashboard.statuses = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Status'
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: 'Qtd', data: status.map(obj => ({ name: obj.status, y: obj.qtd })) }]
+            };
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('responsavel', $scope.dashboard.filtros.responsavel);
+            cubo.filtrar('solicitante', $scope.dashboard.filtros.solicitante);
+            cubo.filtrar('departamento', $scope.dashboard.filtros.departamento);
+            cubo.filtrar('categoria', $scope.dashboard.filtros.categoria);
+            cubo.filtrar('prioridade', $scope.dashboard.filtros.prioridade);
+            cubo.filtrar('status', $scope.dashboard.filtros.status);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function () {
+            alasql('SELECT id_projeto, nome, objetivo, prazo, dtini, dtfim, responsavel, solicitante, departamento, categoria, prioridade, status, etapas, etapas_concluidas, comentarios, ultima_atualizacao, ultimo_comentario INTO XLSX("projetos.xlsx", { headers: true }) FROM ? ', [$scope.dashboard.projetos]);
+        }
+
+    });
+</script>
+<style>
+    .alerta-vermelho {
+        background-color: #ff3b3b;
+        color: white;
+    }
+
+    input[type=checkbox]:checked + span {
+        text-decoration: line-through;
+    }
+
+    #lista_projetos tr:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .riscado {
+        text-decoration: line-through;
+    }
+</style>
