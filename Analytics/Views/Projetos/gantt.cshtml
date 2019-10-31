@@ -89,17 +89,208 @@
             </div>
         </div>
 
-      
-    </div>
-</div>
+        <!--DASHBOARD-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts-gantt config="dashboard.graficogantt"></high-charts-gantt>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<script>
+        <!-- MODAL PROJETO-->
+        <div class="modal fade" id="modal-view" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">{{viewprojeto.id_projeto + ' - ' + viewprojeto.nome | uppercase}}</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs margin-bottom">
+                                <li class="active"><a href="#informacoes" data-toggle="tab" aria-expanded="false"><i class="fa fa-info"></i> Informações</a></li>
+                                <li class=""><a href="#checklist" data-toggle="tab" aria-expanded="false"><i class="fa fa-check-square-o"></i> Checklist</a></li>
+                                <li class=""><a href="#comentarios" data-toggle="tab" aria-expanded="true"><i class="fa fa-commenting-o"></i> Comentários</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <!--INFORMACOES-->
+                                <div class="tab-pane active" id="informacoes">
+                                    <form role="form">
+                                        <div class="row">
+                                            <input type="hidden" ng-model="viewprojeto.id" />
+
+                                            <div class="col-xs-12 col-md-8 margin-bottom">
+                                                <label>Nome</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-lightbulb-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.nome" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-4 margin-bottom">
+                                                <label>Status</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-exclamation-circle"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.status" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 margin-bottom">
+                                                <label>Objetivo</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </div>
+                                                    <textarea class="form-control" rows="3" ng-model="viewprojeto.objetivo" disabled="disabled"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Prioridade</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-star"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.prioridade" disabled="disabled" />
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Prazo</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-check-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.prazo" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Data Inicio</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-plus-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.dtini" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 margin-bottom">
+                                                <label>Data Fim</label>
+                                                <div class="input-group date">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar-times-o"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.dtfim" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Responsável</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-eye"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.responsavel" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Solicitante</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.solicitante" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Departamento</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-map-marker"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.departamento" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Categoria</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-tag"></i>
+                                                    </div>
+                                                    <input type="text" class="form-control" ng-model="viewprojeto.categoria" disabled="disabled" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--CHECKLIST-->
+                                <div class="tab-pane" id="checklist">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar progress-bar-success" ng-style="{'width': (viewprojeto.etapas_concluidas*100/viewprojeto.etapas)+'%'}"></div>
+                                    </div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" ng-repeat="x in viewprojeto.etapas_">
+                                            <input type="checkbox" ng-checked="{{x.concluido}}" ng-model="x.concluido" ng-true-value="1" ng-false-value="0" disabled="disabled" />
+                                            <span ng-bind="x.descricao"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--COMENTARIOS-->
+                                <div class="tab-pane" id="comentarios">
+                                    <!-- TIMELINE -->
+                                    <ul class="timeline">
+                                        <li ng-repeat="x in viewprojeto.comentarios_">
+                                            <i class="fa fa-commenting-o"></i>
+                                            <div class="timeline-item">
+                                                <span class="time">
+                                                    <i class="fa fa-calendar-o"></i> <span style="padding-right:5px;">{{x.data}}</span>
+                                                    <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{x.hora}}</span>
+                                                </span>
+                                                <div class="timeline-body" ng-bind="x.comentario"></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+
+<script type="text/javascript">
     angular.module('app').controller('ctrl-projetos', function ($scope, $http, $filter, cubo) {
+        
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         // obj ref aos filtros da consulta
         $scope.filtros = {
-            dtini: $filter('date')(new Date(new Date().setFullYear(new Date().getFullYear() - 1)), "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd")
         }
         // obj ref opcoes interativas do dashboard
         $scope.opcoes = {
@@ -112,9 +303,11 @@
         $scope.dashboard = {
             dimensao: {},
             filtros: {},
+            datas: {}
         }
         // obj ref aos filtros de dimensoes
         $scope.dimensao = {};
+
         // obj ref a visualizacao do projeto
         $scope.viewprojeto = {};
 
@@ -126,11 +319,13 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 cubo.carregar(r.data.Table);
-                $scope.popularDashboard();
+                $scope.popularDashboard($scope.dashboard.datas = r.data.Table1[0]);
                 $scope.popularFiltros();
-
+                
 
                 $scope.dashboard.status = r.status;
+
+            
             })
         }
 
@@ -143,7 +338,7 @@
             $scope.dashboard.dimensao.status = cubo.obterDimensao('status').sort();
         }
 
-        $scope.popularDashboard = function () {
+        $scope.popularDashboard = function (datas) {
 
             // OBTER DIMENSOES (JA FILTRADO)
             $scope.dimensao.responsavel = cubo.obterDimensao('responsavel');
@@ -156,27 +351,59 @@
             // CARREGAR AS VISUALIZAÇÕES
             let dados = cubo.obter();
             $scope.dashboard.projetos = dados;
+            console.log(dados);
+            
+            $scope.dashboard.graficoFila = [];
 
-            let status = alasql('select status, count(*) qtd from ? group by status order by qtd', [dados]);
-            let dia = alasql('select ' + $scope.opcoes.data + ', count(*) qtd from ? group by ' + $scope.opcoes.data + ' order by ' + $scope.opcoes.data + '', [dados]);
-            let variavel = alasql('select ' + $scope.opcoes.variavel + ', count(*) qtd from ? group by ' + $scope.opcoes.variavel + ' order by qtd', [dados]);
-            let prioridade = alasql('select id_prioridade, prioridade, count(*) qtd from ? group by id_prioridade, prioridade order by id_prioridade', [dados]);
+            for (let i = 0; i < (dados.length) ; i++) {
+                
+                let linha = dados[i];   
+    
+                var today = new Date(linha.dtini)
 
-            $scope.dashboard.statuses = {
-                chart: {
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Status'
-                },
-                legend: {
-                    enabled: false,
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{ name: 'Qtd', data: status.map(obj => ({ name: obj.status, y: obj.qtd })) }]
-            };
+                // Set to 00:00:00:000 today
+                today.setUTCHours(0);
+                today.setUTCMinutes(0);
+                today.setUTCSeconds(0);
+                today.setUTCMilliseconds(0);
+
+                var today2 = new Date(linha.dtfim)
+
+                // Set to 00:00:00:000 today
+                today2.setUTCHours(0);
+                today2.setUTCMinutes(0);
+                today2.setUTCSeconds(0);
+                today2.setUTCMilliseconds(0);
+                        
+
+                let serie = { name: linha.nome, id: linha.nome, parent: linha.parente, start: today.getTime(), end: today2.getTime(), completed: linha.evolucao};
+
+                $scope.dashboard.graficoFila.push(serie);
+
+             }   
+               
+
+            let BaseGantt = $scope.dashboard.graficoFila;
+            var dtprimeiroprojeto = new Date(datas.dtini);
+            var dtultimoprojeto   = new Date(datas.dtfim);
+
+
+            $scope.dashboard.graficogantt = {
+            title: {
+                text: 'Projetos - Gantt'
+            },
+            subtitle: {
+                text: 'Reponsaveis x Projetos'
+            },
+            xAxis: {
+                min: dtprimeiroprojeto.getTime(),
+                max: dtultimoprojeto.getTime() 
+            },
+            series: [{ name: 'Projetos', data: BaseGantt.map(obj => ({ name: obj.name, id: obj.id, parent: obj.parent, start: obj.start, end: obj.end, completed: obj.completed})) }]
+
+            }
+                     
+
         }
 
         $scope.aplicarFiltros = function () {
@@ -192,8 +419,10 @@
 
             cubo.aplicarFiltros();
 
-            $scope.popularDashboard();
+            $scope.popularDashboard($scope.dashboard.datas);
         }
+
+        
 
 
 
