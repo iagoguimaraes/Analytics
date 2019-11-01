@@ -16,7 +16,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -50,6 +50,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -102,11 +108,11 @@
                         </div>
                     </div>
                     @*<div class="col-sm-2">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency: 'R$ '"></h5>
-                            <span class="description-text">R$ Promessa</span>
-                        </div>
-                    </div>*@
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa | currency: 'R$ '"></h5>
+                                <span class="description-text">R$ Promessa</span>
+                            </div>
+                        </div>*@
                 </div>
 
                 <div class="row">
@@ -191,7 +197,6 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Tempo Falado</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Alega</th>
@@ -209,7 +214,6 @@
                                         <td>{{hora.alega_pagamento | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.falado | formatTimer }}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.alega_pagamento / hora.cpc | percentage:1}}</td>
@@ -227,7 +231,6 @@
                                         <th>{{dashboard.resumo.alega_pagamento | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.falado | formatTimer }}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.alega_pagamento / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -252,7 +255,6 @@
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
                                     <option value="alega_pagamento">Alega Pagamento</option>
-                                    <option value="falado">Falado</option>
                                 </select>
                             </span>
                             <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
@@ -325,12 +327,26 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            //produtos: null,
+            atrasos: '',
         };
 
         $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
 
         $scope.dashboard = {};
+        $scope.dashFiltros = {};
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/enel/digital/filtros",
+            }).then(function success(r) {
+
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.atrasos = r.data.Table;
+
+            });
+        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -350,7 +366,6 @@
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
                 $scope.dashboard.horas = r.data.Table5.map(obj => obj.hora);
 
-                console.log(r)
 
                 $scope.carregarGraficoHora();
 
@@ -397,8 +412,8 @@
 
         }
 
-       
 
+        $scope.carregarFiltros();
         $scope.carregarDashboard();
 
         $scope.extrair = function (tabela) {

@@ -15,7 +15,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" >
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -49,6 +49,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -128,16 +134,16 @@
                 </div>
             </div>
             @*<div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
-                        <p>R$ Promessa</p>
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
+                            <p>R$ Promessa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
-                    </div>
-                </div>
-            </div>*@
+                </div>*@
         </div>
 
         <!--ANALISE POR DIA-->
@@ -166,7 +172,6 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Tempo Falado</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Alega</th>
@@ -184,7 +189,6 @@
                                         <td>{{dia.alega_pagamento | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
-                                        <td>{{dia.falado | formatTimer }}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.alega_pagamento / dia.cpc | percentage:1}}</td>
@@ -202,7 +206,6 @@
                                         <th>{{dashboard.resumo.alega_pagamento | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.med_tmp_falado | formatTimer }}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.alega_pagamento / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -238,7 +241,6 @@
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
                                 <option value="alega_pagamento">Alega Pagamento</option>
-                                <option value="falado">Tempo Falado</option>
                             </select>
                         </small>
                     </div>
@@ -249,7 +251,7 @@
             </div>
         </div>
 
-  
+
         <!--TABULACOES-->
         <div class="row">
             <div class="col-xs-12">
@@ -284,51 +286,26 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            //produtos: ''
+            atrasos: '',
         };
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
 
-        //$scope.opcoes = {
-        //    edit: false
-        //};
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/enel/digital/filtros",
+            }).then(function success(r) {
 
-        // Objeto Mailing
-        //$scope.mailing = [{
-        //    data: '',
-        //    qtd_mailing: ''
-        //}];
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.atrasos = r.data.Table;
 
-        //$scope.cadastrarMailing = function () {
-        //    $http({
-        //        method: 'POST',
-        //        url: "/api/localiza/dashboard/cadmailing",
-        //        data: JSON.stringify($scope.mailing),
-        //    }).then(function success(r) {
 
-        //        $scope.mailing = [{
-        //            data: '',
-        //            qtd_mailing: ''
-        //        }];
-
-        //        location.reload();
-        //        $scope.carregarDashboard();
-
-        //    });
-        //}
-
-        //// carregar os filtros
-        //$http({
-        //    method: 'GET',
-        //    url: "/api/localiza/dashboard/filtros",
-        //    data: $scope.filtros,
-        //}).then(function success(r) {
-        //    let data = r.data;
-        //    $scope.dashFiltros.status = r.status;
-        //    $scope.dashFiltros.produtos = data.Table;
-        //});
+            });
+        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -350,29 +327,6 @@
             });
         }
 
-
-        //$scope.editar = function () {
-        //    $scope.opcoes.edit = !$scope.opcoes.edit;
-        //}
-
-        //$scope.salvar = function () {
-
-        //    $scope.opcoes.edit = !$scope.opcoes.edit;
-
-        //    let tabela = document.getElementById('idtbody')
-
-
-        //    for (let i = 0; i < tabela.rows.length; i++) {
-
-        //        let dt = tabela.children[i].children[0].innerHTML
-        //        let txt = tabela.children[i].children[2].getElementsByTagName('input').item(0).value;
-
-        //        $scope.mailing.push({ data: dt, qtd_mailing: txt });
-        //    }
-
-        //    //console.log($scope.mailing);
-        //    $scope.cadastrarMailing();
-        //}
 
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
@@ -399,7 +353,7 @@
             }
         }
 
-
+        $scope.carregarFiltros();
         $scope.carregarDashboard();
 
         $scope.extrair = function (tabela) {
