@@ -358,6 +358,7 @@ namespace Analytics.Controllers
                 string hora = form["hora"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
+                string chkCarteira = form["chkCarteira"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -373,6 +374,7 @@ namespace Analytics.Controllers
                     parametros.Add("hora", hora);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkCarteira", chkCarteira);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
 
@@ -409,7 +411,7 @@ namespace Analytics.Controllers
                 string hora = form["hora"];
                 string nome = form["nome"];
                 string chkSupervisor = form["chkSupervisor"];
-
+                string chkCarteira= form["chkCarteira"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_NET"))
                 {
@@ -425,6 +427,7 @@ namespace Analytics.Controllers
                     parametros.Add("hora", hora);
                     parametros.Add("nome", nome);
                     parametros.Add("chkSupervisor", chkSupervisor);
+                    parametros.Add("chkCarteira", chkCarteira);
 
                     DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
 

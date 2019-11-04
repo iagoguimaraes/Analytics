@@ -95,6 +95,11 @@
                                             <input type="checkbox" ng-model="filtros.chkSupervisor" ng-true-value="'SUPERVISOR,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">Supervisor</label>
                                         </div>
+                                        <!--CHECKED CARTEIRA-->
+                                        <div class="form-group">
+                                            <input type="checkbox" ng-model="filtros.chkCarteira" ng-true-value="'CARTEIRA,'" ng-false-value="''" />
+                                            <label class="control-sidebar-subheading">Carteira</label>
+                                        </div>
 
                                     </div>
 
@@ -159,6 +164,7 @@
             hora: '',
             nome: 'NOME,',
             chkSupervisor: '',
+            chkCarteira: '',
         };
 
 
@@ -210,6 +216,7 @@
                  + $scope.filtros.hora + ''
                  + $scope.filtros.nome + ''
                  + $scope.filtros.chkSupervisor + ''
+                 + $scope.filtros.chkCarteira + ''
                  + 'sum(QTD_ALO) QTD_ALO, sum(CONTATO) CTT, sum(CPC) CPC, sum(CPCA) CPCA, sum(PROMESSA) PROM, round(sum(CONVERSADO)*1.0/sum(QTD_ALO),0) CONVERSADO from ? group by '
                  + $scope.filtros.ano + ''
                  + $scope.filtros.mes + ''
@@ -218,6 +225,7 @@
                  + $scope.filtros.hora + ''
                  + $scope.filtros.nome + ''
                  + $scope.filtros.chkSupervisor + ''
+                 + $scope.filtros.chkCarteira + ''
                  + 'CONTADOR'
                  + ' order by 6 desc  '
                  , [$scope.dashboard.dados.Table]);
