@@ -93,16 +93,27 @@
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
-                    <div class="card-body">
-                        <select ng-model="opcoes.variavel" class="pull-right" ng-change="popularBase()">
-                            <option value="responsavel">Responsável</option>
-                            <option value="solicitante">Solicitante</option>
-                            <option value="departamento">Departamento</option>
-                            <option value="categoria">Categoria</option>
-                        </select>
-                       <high-charts-gantt config="dashboard.graficogantt"></high-charts-gantt>
+                    <div class="card-header">
+                        <span class="card-header-title">Projetos por </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="card-header-title">
+                            <select style="margin-left: 20px" class="form-control" ng-model="opcoes.variavel" ng-change="popularBase()">
+                                <option value="responsavel">Responsável</option>
+                                <option value="solicitante">Solicitante</option>
+                                <option value="departamento">Departamento</option>
+                                <option value="categoria">Categoria</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                        <div class="card-body">
+                            <high-charts-gantt config="dashboard.graficogantt" width="100%"></high-charts-gantt>
+                        </div>
+                    </div>
             </div>
         </div>
 
