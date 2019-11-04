@@ -14,3 +14,17 @@
     }
 });
 
+Highcharts.setOptions({
+    lang: {
+        months: [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril',
+            'Maio', 'Junho', 'Julho', 'Agosto',
+            'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ],
+        weekdays: [
+            'Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira',
+            'Quinta-Feira', 'Sexta-Feira', 'Sabado'
+        ],
+        shortMonths: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+    }
+});
