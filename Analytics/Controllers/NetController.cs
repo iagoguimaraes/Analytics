@@ -350,6 +350,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 string mes = form["mes"];
                 string ano = form["ano"];
@@ -367,6 +368,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("carteira", carteira);
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
                     parametros.Add("semana", semana);
@@ -403,6 +405,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 string mes = form["mes"];
                 string ano = form["ano"];
@@ -420,6 +423,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("carteira", carteira);
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
                     parametros.Add("semana", semana);
