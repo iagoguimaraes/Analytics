@@ -355,6 +355,7 @@
         let ini = new Date();
         ini.setDate(ini.getDate() - 30);
         let fim = new Date();
+        let hr = ('0' + (fim.getHours() - 1)).slice(-2) + ':' + ('0' + fim.getMinutes()).slice(-2);
 
         // filtros para pesquisa de diario de bordo
         $scope.filtros = {
@@ -375,7 +376,10 @@
         // dados para inserir uma nova ocorrencia
         $scope.diario = {
             data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            hora: hr
         };
+        document.querySelector("[ng-model='diario.hora']").value = hr
+
 
         // dados para editar uma ocorrencia
         $scope.editdiario = {
@@ -459,8 +463,9 @@
             }).then(function success(r) {
                 $scope.diario = {
                     data: $filter('date')(new Date(), "yyyy-MM-dd"),
-                    hora: ('0' + fim.getHours()).slice(-2) + ':' + ('0' + fim.getMinutes()).slice(-2)
-                }
+                    hora: hr
+                };
+                document.querySelector("[ng-model='diario.hora']").value = hr
 
                 $scope.carregarDashboard();
             });
@@ -537,7 +542,7 @@
                 }).then(function success(r) {
                     $scope.carregarDashboard();
                 });
-            }        
+            }
         }
 
         $scope.carregarDashboard();
