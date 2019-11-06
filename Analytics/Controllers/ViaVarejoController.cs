@@ -48,7 +48,9 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable score = JsonConvert.DeserializeObject<DataTable>(form["score"]);
                 DataTable regua = JsonConvert.DeserializeObject<DataTable>(form["regua"]);
-               
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_viavarejo"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -57,6 +59,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("score", score);
                     parametros.Add("regua", regua);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -80,6 +84,8 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable score = JsonConvert.DeserializeObject<DataTable>(form["score"]);
                 DataTable regua = JsonConvert.DeserializeObject<DataTable>(form["regua"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_viavarejo"))
                 {
@@ -89,6 +95,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("score", score);
                     parametros.Add("regua", regua);
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
