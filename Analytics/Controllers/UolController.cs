@@ -111,7 +111,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                using (SqlHelper sql = new SqlHelper("CUBO_UOL"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -179,6 +179,34 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao", segmentacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/ocupacao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacao(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_UOL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
