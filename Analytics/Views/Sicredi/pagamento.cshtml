@@ -147,7 +147,7 @@
                 </div>
             </div>
 
-            <!--Agencia-->
+            <!--Carteira-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-body">
@@ -155,11 +155,65 @@
                     </div>
                 </div>
             </div>
-            <!--Grupo-->
+
+            <!--Atraso-->
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-body">
-                        <high-charts config="dashboard.grupo" style="width: 100%; height: 300px"></high-charts>
+                        <high-charts config="dashboard.atraso" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <!--Grupo-->
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoGrupoExibir" ng-model="graficoGrupo.exibir" value="false" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoGrupoExibir" ng-model="graficoGrupo.exibir" value="true" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoGrupo.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.produto">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Produto</th>
+                                        <th style="text-align:center">Quantidade</th>
+                                        <th style="text-align:center">R$ Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.produto | groupBy: 'grupo'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].grupo}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'quantidade'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor'| number}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.produto}}</td>
+                                        <td>{{p.quantidade | number}}</td>
+                                        <td>{{p.valor | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--GRAFICO-->
+                        <div ng-show="graficoGrupo.exibir == 'true'">
+                            <high-charts config="dashboard.grupo" style="width: 100%; height: 200px"></high-charts>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -167,8 +221,52 @@
             <!--Central-->
             <div class="col-xs-12 col-md-12 margin-bottom">
                 <div class="card">
+                    <div class="card-header">
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoCentralExibir" ng-model="graficoCentral.exibir" value="false" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoCentralExibir" ng-model="graficoCentral.exibir" value="true" />
+                                Gráfico
+                            </label>
+                        </small>
+                    </div>
                     <div class="card-body">
-                        <high-charts config="dashboard.central" style="width: 100%; height: 300px"></high-charts>
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoCentral.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.agencia">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Cooperativa</th>
+                                        <th style="text-align:center">Quantidade</th>
+                                        <th style="text-align:center">R$ Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.agencia | groupBy: 'central'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].central}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'quantidade'| number}}</td>
+                                        <td>{{c | sumByColumn: 'valor'| number}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.agencia}}</td>
+                                        <td>{{p.quantidade | number}}</td>
+                                        <td>{{p.valor | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--GRAFICO-->
+                        <div ng-show="graficoCentral.exibir == 'true'">
+                            <high-charts config="dashboard.central" style="width: 100%; height: 200px"></high-charts>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,6 +290,8 @@
 
         $scope.dashboard = { dimensao: {}, filtros: {}, indicador: 'quantidade' };
         $scope.dimensao = {};
+        $scope.graficoCentral = { exibir: 'true' };
+        $scope.graficoGrupo = { exibir: 'true' };
 
         $scope.popularFiltros = function () {
             $scope.dashboard.dimensao.carteira = cubo.obterDimensao('carteira');
@@ -216,8 +316,13 @@
             let carteira = alasql('select carteira, sum(' + indicador + ') quantidade from ? group by carteira order by 2 desc', [dados]);
             let grupo = alasql('select grupo, sum(' + indicador + ') quantidade from ? group by grupo order by 2 desc', [dados]);
             let central = alasql('select central, sum(' + indicador + ') quantidade from ? group by central order by 2 desc', [dados]);
+            let atraso = alasql('select atraso, sum(' + indicador + ') quantidade from ? group by atraso order by 2 desc', [dados]);
+
+
 
             $scope.dashboard.resumo = alasql('select sum(quantidade) quantidade, sum(valor) valor from ?', [dados])[0];
+            $scope.dashboard.produto = alasql('select grupo, produto, sum(quantidade) quantidade, sum(valor) valor from ? group by grupo, produto order by 3 desc', [dados]);
+            $scope.dashboard.agencia = alasql('select central, agencia, sum(quantidade) quantidade, sum(valor) valor from ? group by central, agencia order by 3 desc', [dados]);
 
             $scope.dashboard.dia = {
                 chart: {
@@ -294,14 +399,14 @@
                 credits: {
                     enabled: false
                 },
-                series: [{ name: indicador, data: grupo.map(obj => obj.quantidade) }]
+                series: [{ name: indicador, color: '#026636', data: grupo.map(obj => obj.quantidade) }]
             };
             $scope.dashboard.central = {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: 'Central'
+                    text: 'Cooperativa'
                 },
                 yAxis: {
                     visible: false,
@@ -322,7 +427,36 @@
                 credits: {
                     enabled: false
                 },
-                series: [{ name: indicador, data: central.map(obj => obj.quantidade) }]
+                series: [{ name: indicador, color: '#026636', data: central.map(obj => obj.quantidade) }]
+            };
+
+            $scope.dashboard.atraso = {
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Faixa de Atraso'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: atraso.map(obj => obj['atraso'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, color: '#026636', data: atraso.map(obj => obj.quantidade) }]
             };
 
         }
