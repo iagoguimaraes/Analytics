@@ -192,14 +192,14 @@
             let base = '';
 
             
-            let baseFullTratada = alasql('select ' + pai +' parente, nome, dtini, dtfim, evolucao  from ?', [geral]);           
+            let baseFullTratada = alasql('select ' + pai +' parente, nome, dtini, dtfim, evolucao, cor  from ?', [geral]);           
             let basePai = alasql('select ' + pai +' nome  from ? group by ' + pai +'  ', [geral]);
 
             for (let i = 0; i < (baseFullTratada.length) ; i++) {
                 
                 let linha = baseFullTratada[i];   
             
-                let serie = { nome: linha.nome, id: linha.nome, parente: linha.parente, dtini: linha.dtini, dtfim: linha.dtfim, completed: linha.evolucao};
+                let serie = { nome: linha.nome, id: linha.nome, parente: linha.parente, dtini: linha.dtini, dtfim: linha.dtfim, completed: linha.evolucao, color: linha.cor};
 
                 $scope.dashboard.listaTratada.push(serie);
 
@@ -209,7 +209,7 @@
     
                 let linha = basePai[i];   
             
-                let serie = { nome: linha.nome, id: linha.nome, parente: '', dtini: '', dtfim: '', completed: ''};
+                let serie = { nome: linha.nome, id: linha.nome, parente: '', dtini: '', dtfim: '', completed: '', color: ''};
 
                 $scope.dashboard.listaTratada.push(serie);
 
@@ -262,7 +262,7 @@
                 today2.setUTCSeconds(0);
                 today2.setUTCMilliseconds(0);
                         
-                let serie = { name: linha.nome, id: linha.nome, parent: linha.parente, start: today.getTime(), end: today2.getTime(), completed: linha.completed};
+                let serie = { name: linha.nome, id: linha.nome, parent: linha.parente, start: today.getTime(), end: today2.getTime(), completed: linha.completed, color: linha.color};
  
                 $scope.dashboard.graficoFila.push(serie);
 
@@ -293,7 +293,7 @@
                 max: dtultimoprojeto.getTime(), 
                 tickLength: 0
             },
-            series: [{ name: 'Projetos', data: BaseGantt.map(obj => ({ name: obj.name, id: obj.id, parent: obj.parent, start: obj.start, end: obj.end, completed: obj.completed})) }]
+            series: [{ name: 'Projetos', data: BaseGantt.map(obj => ({ name: obj.name, id: obj.id, parent: obj.parent, start: obj.start, end: obj.end, color: obj.color, completed: obj.completed})) }]
 
             }
 
