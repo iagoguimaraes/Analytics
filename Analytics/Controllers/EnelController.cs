@@ -300,6 +300,149 @@ namespace Analytics.Controllers
 
         #endregion
 
+        #region HUMANO
+
+        [Route("humano/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_ENEL_HUMANO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoHoraHora(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable divisao = JsonConvert.DeserializeObject<DataTable>(form["divisao"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ENEL_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("divisao", divisao);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
+                    
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoProducao(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable divisao = JsonConvert.DeserializeObject<DataTable>(form["divisao"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ENEL_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("divisao", divisao);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("equipe", equipe);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/ocupacaoFila")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacaoFilaHumano(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);                                
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ENEL_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteira", carteira);
+                    parametros.Add("equipe", equipe);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("fila", fila);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacaoFila", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
 
     }
 }
