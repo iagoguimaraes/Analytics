@@ -65,6 +65,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.setores" dados="dadosFiltros.setores" style="width:100%"></select2>
                         </div>
 
+                        <!--CANAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Canal</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.canal" dados="dadosFiltros.canal" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -178,6 +184,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             campanhas: '',
             setores: '',
+            canal: '',
         };
         $scope.dashboard = {};
 
@@ -190,6 +197,7 @@
 
             $scope.dadosFiltros.campanhas = r.data.Table;
             $scope.dadosFiltros.setores = r.data.Table1;
+            $scope.dadosFiltros.canal = r.data.Table2;
         });
 
         $scope.carregarDashboard = function () {
