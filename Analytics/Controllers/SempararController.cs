@@ -305,6 +305,42 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        {
+            try
+            {
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
+                DataTable devedor = JsonConvert.DeserializeObject<DataTable>(form["devedor"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("faixaAtraso", faixaAtraso);
+                    parametros.Add("plano", plano);
+                    parametros.Add("devedor", devedor);
+
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region DIGITAL
