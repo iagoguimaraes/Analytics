@@ -127,6 +127,7 @@ namespace Analytics.Controllers
 
                 DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
                 DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+                DataTable canal = JsonConvert.DeserializeObject<DataTable>(form["canal"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
@@ -136,6 +137,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim);
                     parametros.Add("campanhas", _campanhas);
                     parametros.Add("setores", _setores);
+                    parametros.Add("canal", canal);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_gerencial", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -162,6 +164,7 @@ namespace Analytics.Controllers
 
                 DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
                 DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+                DataTable canal = JsonConvert.DeserializeObject<DataTable>(form["canal"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
@@ -171,6 +174,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim);
                     parametros.Add("campanhas", _campanhas);
                     parametros.Add("setores", _setores);
+                    parametros.Add("canal", canal);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_operacional", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -197,6 +201,7 @@ namespace Analytics.Controllers
 
                 DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
                 DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+                DataTable canal = JsonConvert.DeserializeObject<DataTable>(form["canal"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
@@ -206,6 +211,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim);
                     parametros.Add("campanhas", _campanhas);
                     parametros.Add("setores", _setores);
+                    parametros.Add("canal", canal);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -232,6 +238,7 @@ namespace Analytics.Controllers
 
                 DataTable _campanhas = JsonConvert.DeserializeObject<DataTable>(campanhas);
                 DataTable _setores = JsonConvert.DeserializeObject<DataTable>(setores);
+                DataTable canal = JsonConvert.DeserializeObject<DataTable>(form["canal"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_MKTZAP"))
                 {
@@ -241,6 +248,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim);
                     parametros.Add("campanhas", _campanhas);
                     parametros.Add("setores", _setores);
+                    parametros.Add("canal", canal);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

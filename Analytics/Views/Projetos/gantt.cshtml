@@ -107,6 +107,8 @@
                                 <option value="solicitante">Solicitante</option>
                                 <option value="departamento">Departamento</option>
                                 <option value="categoria">Categoria</option>
+                                <option value="status">Status</option>
+                                <option value="prioridade">Prioridade</option>
                             </select>
                         </div>
                     </div>
@@ -181,7 +183,8 @@
 
            
         }
-
+        
+        //monta a base conforme indicador escolhido
         $scope.popularBase = function () {
              
             $scope.dashboard.listaTratada = [];
@@ -192,14 +195,14 @@
             let base = '';
 
             
-            let baseFullTratada = alasql('select ' + pai +' parente, nome, dtini, dtfim, evolucao  from ?', [geral]);           
+            let baseFullTratada = alasql('select ' + pai +' parente, nome, dtini, dtfim, evolucao, cor  from ?', [geral]);           
             let basePai = alasql('select ' + pai +' nome  from ? group by ' + pai +'  ', [geral]);
 
             for (let i = 0; i < (baseFullTratada.length) ; i++) {
                 
                 let linha = baseFullTratada[i];   
             
-                let serie = { nome: linha.nome, id: linha.nome, parente: linha.parente, dtini: linha.dtini, dtfim: linha.dtfim, completed: linha.evolucao};
+                let serie = { nome: linha.nome, id: linha.nome, parente: linha.parente, dtini: linha.dtini, dtfim: linha.dtfim, completed: linha.evolucao, color: linha.cor};
 
                 $scope.dashboard.listaTratada.push(serie);
 
@@ -209,7 +212,7 @@
     
                 let linha = basePai[i];   
             
-                let serie = { nome: linha.nome, id: linha.nome, parente: '', dtini: '', dtfim: '', completed: ''};
+                let serie = { nome: linha.nome, id: linha.nome, parente: '', dtini: '', dtfim: '', completed: '', color: ''};
 
                 $scope.dashboard.listaTratada.push(serie);
 
@@ -224,7 +227,8 @@
              $scope.popularDashboard($scope.dashboard.datas, $scope.dashboard.listaTratada); 
            
         }
-
+        
+        //faz o array com a series da forma que o grafico pede
         $scope.popularDashboard = function (datas, dados) {
 
             // OBTER DIMENSOES (JA FILTRADO)
@@ -262,7 +266,7 @@
                 today2.setUTCSeconds(0);
                 today2.setUTCMilliseconds(0);
                         
-                let serie = { name: linha.nome, id: linha.nome, parent: linha.parente, start: today.getTime(), end: today2.getTime(), completed: linha.completed};
+                let serie = { name: linha.nome, id: linha.nome, parent: linha.parente, start: today.getTime(), end: today2.getTime(), completed: linha.completed, color: linha.color};
  
                 $scope.dashboard.graficoFila.push(serie);
 
@@ -270,10 +274,10 @@
                
 
             let BaseGantt = $scope.dashboard.graficoFila;
-
             var dtprimeiroprojeto = new Date(datas.dtini.dtini);
             var dtultimoprojeto  = new Date(datas.dtfim.dtfim);
-
+            
+            //Monta o grafico com a base já tratada
             $scope.dashboard.graficogantt = {
             credits: {
                 enable: false,
@@ -293,7 +297,7 @@
                 max: dtultimoprojeto.getTime(), 
                 tickLength: 0
             },
-            series: [{ name: 'Projetos', data: BaseGantt.map(obj => ({ name: obj.name, id: obj.id, parent: obj.parent, start: obj.start, end: obj.end, completed: obj.completed})) }]
+            series: [{ name: 'Projetos', data: BaseGantt.map(obj => ({ name: obj.name, id: obj.id, parent: obj.parent, start: obj.start, end: obj.end, color: obj.color, completed: obj.completed})) }]
 
             }
 

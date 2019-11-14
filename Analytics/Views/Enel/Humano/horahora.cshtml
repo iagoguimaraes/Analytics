@@ -3,12 +3,12 @@
 }
 
 
-<div ng-controller="ctrl-viavarejo-horahora">
+<div ng-controller="ctrl-enel-horahora">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora</div>
+            <div class="page-name">Hora Hora Humano</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -109,16 +109,28 @@
                                 </div>
                             </div>
 
-                            <!--SCORE-->
+                            <!--CARTEIRA-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Score</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.score" dados="dashFiltros.score" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                             </div>
 
-                            <!--REGUA-->
+                            <!--DIVISAO-->
                             <div class="form-group">
-                                <label class="control-sidebar-subheading">Regua</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.regua" dados="dashFiltros.regua" style="width:100%"></select2>
+                                <label class="control-sidebar-subheading">Divisao</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.divisao" dados="dashFiltros.divisao" style="width:100%"></select2>
+                            </div>
+
+                            <!--SUPERVISOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                            </div>
+
+                            <!--EQUIPE-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Equipe</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.equipe" dados="dashFiltros.equipe" style="width:100%"></select2>
                             </div>
 
 
@@ -135,34 +147,26 @@
 
         <!-- RESUMO INDICADORES -->
         <div class="box box-widget widget-user">
-            <div class="widget-user-header" style="background: url('/Content/Images/ViaVarejo/banner_new.jpg') no-repeat center;background-color:#003333">
+            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Enel/banner.jpg') center center; ">
             </div>
-            <div class="widget-user-image">
-                <img class="img-circle" style="border-color:#2b5734; height:85px" src="~/Content/Images/ViaVarejo/logo_new.jpg">
-            </div>
+
             <div class="box-footer">
-                <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
+                <div class="row" style="background-color:#452448; color: white">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | number"></h5>
                             <span class="description-text">Discado</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.alo | megaNumber"></h5>
-                            <span class="description-text">Atendido</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato | number"></h5>
                             <span class="description-text">Contato</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | number"></h5>
                             <span class="description-text">CPC</span>
                         </div>
                     </div>
@@ -174,22 +178,28 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
-                            <span class="description-text">Promessa</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessanectar | number"></h5>
+                            <span class="description-text">Promessa Nectar</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessaportal | number"></h5>
+                            <span class="description-text">Promessa Portal</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="row" style="background-color: #2b5734; color:white; opacity: 0.8">
+                <div class="row">
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
-                            <span class="description-text">Esforço</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.atendido | number"></h5>
+                            <span class="description-text">Atendido</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.atendido / dashboard.resumo.discado | percentage: 1"></h5>
                             <span class="description-text">Hit Rate</span>
                         </div>
                     </div>
@@ -207,14 +217,14 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessanectar / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.valor_promessa / dashboard.resumo.promessa| currency:'R$ '"></h5>
-                            <span class="description-text">Tckt Medio Promessa</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessanectar | currency:'R$ '"></h5>
+                            <span class="description-text">$ Promessa Nectar</span>
                         </div>
                     </div>
                 </div>
@@ -222,15 +232,28 @@
             </div>
         </div>
 
-        <!--GRÁFICO DIA-->
+        <!-- GRÁFICO DIA -->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Valor Negociado - Comparativo</span>
+                        <span class="card-header-title">Comparativo Indicadores</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="graficoComparativo.indicador" ng-change="carregarGraficoComparativo()">
+                                <option value="atendido">Atendido</option>
+                                <option value="discado">Discado</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessanectar">Promessa Nectar</option>
+                                <option value="vlr_promessanectar">Valor Promessa Nectar</option>
+                                <option value="promessaportal">Promessa Portal</option>
+                                <option value="vlr_promessaportal">Valor Promessa Portal</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficoComparativo" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.horasComparativo" plot-Options-Column-Data-Label="true"></high-chart>
@@ -264,9 +287,10 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Vlr Promessa</th>
-                                        <th>Tckt Medio Promessa</th>
+                                        <th>Promessa Nectar</th>
+                                        <th>$ Nectar</th>
+                                        <th>Promessa Portal</th>
+                                        <th>$ Portal</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -276,37 +300,39 @@
                                 <tbody>
                                     <tr ng-repeat="hora in dashboard.horahora">
                                         <td>{{hora.hora}}</td>
-                                        <td>{{hora.qtd_agentes}}</td>
+                                        <td>{{hora.qtd_pa}}</td>
                                         <td>{{hora.discado | number}}</td>
-                                        <td>{{hora.alo | number}}</td>
+                                        <td>{{hora.atendido | number}}</td>
                                         <td>{{hora.contato | number}}</td>
                                         <td>{{hora.cpc | number}}</td>
                                         <td>{{hora.cpca | number}}</td>
-                                        <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.valor_promessa | currency:'R$ '}}</td>
-                                        <td>{{hora.valor_promessa / hora.promessa | currency:'R$ '}}</td>
-                                        <td>{{hora.alo / hora.discado | percentage:1}}</td>
+                                        <td>{{hora.promessanectar | number}}</td>
+                                        <td>{{hora.vlr_promessanectar | currency:'R$ '}}</td>
+                                        <td>{{hora.promessaportal | number}}</td>
+                                        <td>{{hora.vlr_promessaportal | currency:'R$ '}}</td>
+                                        <td>{{hora.atendido / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.promessanectar / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.qtd_agentes | number}}</th>
+                                        <th>{{dashboard.resumo.qtd_pa | number}}</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
-                                        <th>{{dashboard.resumo.alo | number}}</th>
+                                        <th>{{dashboard.resumo.atendido | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
-                                        <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
-                                        <th>{{dashboard.resumo.valor_promessa / dashboard.resumo.promessa | currency:'R$ '}}</th>
-                                        <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessanectar | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_promessanectar | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.promessaportal | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_promessaportal | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.atendido / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessanectar / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -322,7 +348,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Empresa/Carteira</span>
+                        <span class="card-header-title">Análise por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -336,49 +362,58 @@
                                 <thead>
                                     <tr>
                                         <th>Carteira</th>
+                                        <th>PA</th>
                                         <th>Discado</th>
+                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa</th>
-                                        <th>Vlr Promessa</th>
-                                        <th>Tckt Medio Promessa</th>
+                                        <th>Promessa Nectar</th>
+                                        <th>$ Nectar</th>
+                                        <th>Promessa Portal</th>
+                                        <th>$ Portal</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_score'">
+                                <tbody ng-repeat="e in dashboard.carteira | groupBy: 'carteira'">
 
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_score}}
+                                            {{e[0].carteira}}
                                         </td>
+                                        <td>{{e | sumByColumn: 'qtd_pa'| number}}</td>
                                         <td>{{e | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{e | sumByColumn: 'atendido'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
-                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
-                                        <td>{{e | sumByColumn: 'valor_promessa'| currency:'R$ '}}</td>
-                                        <td>{{e | divideSumColumns: 'valor_promessa':'promessa' | currency:'R$ '}}</td>
-                                        <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                        <td>{{e | sumByColumn: 'promessanectar'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessanectar'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'promessaportal'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessaportal'| currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'atendido':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_regua}}</td>
+                                        <td>{{c.divisao}}</td>
+                                        <td></td>
                                         <td>{{c.discado | number}}</td>
+                                        <td>{{c.atendido | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
-                                        <td>{{c.promessa | number}}</td>
-                                        <td>{{c.valor_promessa | currency:'R$ '}}</td>
-                                        <td>{{c.valor_promessa / c.promessa | currency:'R$ '}}</td>
-                                        <td>{{c.contato / c.discado | percentage:1}}</td>
+                                        <td>{{c.promessanectar | number}}</td>
+                                        <td>{{c.vlr_promessanectar | currency:'R$ '}}</td>
+                                        <td>{{c.promessaportal | number}}</td>
+                                        <td>{{c.vlr_promessaportal | currency:'R$ '}}</td>
+                                        <td>{{c.atendido / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -410,17 +445,90 @@
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="discado">Discado</option>
-                                <option value="alo">Atendido</option>
+                                <option value="atendido">Atendido</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Promessa</option>
-                                <option value="valor_promessa">Vlr Promessa</option>
+                                <option value="promessanectar">Promessa Nectar</option>
+                                <option value="vlr_promessanectar">Valor Promessa Nectar</option>
+                                <option value="promessaportal">Promessa Portal</option>
+                                <option value="vlr_promessaportal">Valor Promessa Portal</option>
                             </select>
                         </small>
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.grafico" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA SUPERVISOR/EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor/Equipe</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa Nectar</th>
+                                        <th>$ Nectar</th>
+                                        <th>Promessa Portal</th>
+                                        <th>$ Portal</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'supervisor'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessanectar'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessanectar' | currency: 'R$ ' }}</td>
+                                        <td>{{e | sumByColumn: 'promessaportal'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessaportal' | currency: 'R$ ' }}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessanectar':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.equipe}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessanectar | number}}</td>
+                                        <td>{{c.vlr_promessanectar | currency: 'R$ '}}</td>
+                                        <td>{{c.promessaportal | number}}</td>
+                                        <td>{{c.vlr_promessaportal | currency: 'R$ '}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessanectar / c.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -435,12 +543,12 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[3,'desc']]"></d-table>
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[4,'desc']]"></d-table>
                     </div>
                 </div>
             </div>
@@ -455,7 +563,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table4')">
+                        <div class="card-header-button" ng-click="extrair('Table5')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -471,9 +579,9 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-viavarejo-horahora', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-enel-horahora', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'Via Varejo'
+        dadosPagina.descricao = 'Enel Humano'
         $scope.showTbody = false;
 
         $scope.dashboard = {};
@@ -481,55 +589,53 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            score: '',
-            regua: '',
             horaini: '7',
             horafim: '22',
+            carteira: '',
+            divisao: '',
+            supervisor: '',
+            equipe: '',
         }
-        $scope.grafico = { indicador: 'promessa' };
+
+        $scope.grafico = { indicador: 'promessanectar' };
+        $scope.graficoComparativo = { indicador: 'promessanectar' };
 
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/viavarejo/filtros",
+            url: "/api/enel/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
 
             $scope.dashFiltros.status = r.status;
 
-            $scope.dashFiltros.score = r.data.Table;
-            $scope.dashFiltros.regua = r.data.Table1;
+            $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.divisao = r.data.Table1;
+            $scope.dashFiltros.supervisor = r.data.Table3;
+            $scope.dashFiltros.equipe = r.data.Table4;
 
-            
+
         });
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/viavarejo/horahora",
+                url: "/api/enel/humano/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
+
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.carteira = r.data.Table2;
-                $scope.dashboard.operador = r.data.Table3;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
-                $scope.dashboard.horasComparativo = r.data.Table5.map(obj => obj.hora);
-
-                $scope.dashboard.dias = r.data.Table6;
-
-                console.log($scope.dashboard.dias[0].name);
-
-                $scope.dashboard.graficoComparativo = [
-                    { name: $scope.dashboard.dias[1].name, type: 'spline', color: '#d2d6de', data: r.data.Table5.map(obj => obj[ $scope.dashboard.dias[1].name]) },
-                    { name: $scope.dashboard.dias[3].name, type: 'spline', color: '#dd4b39', data: r.data.Table5.map(obj => obj[$scope.dashboard.dias[3].name]) },
-                    { name: $scope.dashboard.dias[2].name, type: 'spline', color: '#00c0ef', data: r.data.Table5.map(obj => obj[ $scope.dashboard.dias[2].name]) }
-                ];
+                $scope.dashboard.supervisor = r.data.Table3;
+                $scope.dashboard.operador = r.data.Table4;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];
 
                 $scope.carregarGrafico();
+                $scope.carregarGraficoComparativo();
             });
         }
 
@@ -539,7 +645,7 @@
             $scope.dashboard.horas = dados.map(obj => obj.hora);
             switch ($scope.grafico.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.atendido * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
                     $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
@@ -548,11 +654,31 @@
                     $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessanectar * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+
+        }
+
+        $scope.carregarGraficoComparativo = function () {
+            let dados = $scope.dashboard.dados.Table6;
+
+
+            let dadosMelhorDia = alasql('select dia, hora, sum(MelhorDia) MelhorDia from ? where indicador = ("' + [$scope.graficoComparativo.indicador] + '") and MelhorDia is not null group by dia, hora order by 1,2 ', [dados]);
+            let dadosAnteriorDia = alasql('select dia, hora, sum(DiaAnterior) DiaAnterior from ? where indicador = ("' + [$scope.graficoComparativo.indicador] + '") and DiaAnterior is not null group by dia, hora order by 1,2 ', [dados]);
+            let dadosAtualDia = alasql('select dia, hora, sum(DiaAtual) DiaAtual from ? where indicador = ("' + [$scope.graficoComparativo.indicador] + '") and DiaAtual is not null group by dia, hora order by 1,2 ', [dados]);
+
+            $scope.dashboard.horasComparativo = $scope.dashboard.dados.Table7.map(obj => obj.hora);            
+
+            $scope.dashboard.graficoComparativo = [
+                { name: ['Melhor dia ' + dadosMelhorDia[0].dia], type: 'spline', color: '#116d06', data: dadosMelhorDia.map(obj => obj.MelhorDia) },
+                { name: ['dia Anterior ' + dadosAnteriorDia[0].dia], type: 'spline', color: '#dcb528', data: dadosAnteriorDia.map(obj => obj.DiaAnterior) },
+                { name: ['dia Atual ' + dadosAtualDia[0].dia], type: 'spline', color: '#00c0ef', data: dadosAtualDia.map(obj => obj.DiaAtual) }
+            ];
+
+
 
         }
 

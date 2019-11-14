@@ -1,0 +1,417 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-claro-vendas-producao">
+    <div ng-if="dashboard.status === 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Produção RCV</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header" style="height: 200px; background: url('/Content/Images/Claro/banner-rvc.jpg') center center;">
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-2 col-sm-offset-1">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.tma_geral | number : 0"></h3>
+                        <p>TMA AA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-volume-control-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.recebidas | megaNumber"></h3>
+                        <p>Recebidas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.atendidas | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.atendidas / dashboard.resumo.recebidas | percentage: 1"></h4>
+                        <p>Atendidas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.abandonadas | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.abandonadas / dashboard.resumo.recebidas | percentage: 1"></h4>
+                        <p>Ch Abandonadas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-exclamation-circle"></i>
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.tma_aceite | number : 0 "></h3>
+                        <p>TMA - Aceite</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-volume-control-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.atendidas_aceite | megaNumber "></h3>
+                        <p>Atendidas - Aceite</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--HORA HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Data</span>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Forecast Logados</th>
+                                        <th>Recebidas</th>
+                                        <th>Atendidas</th>
+                                        <th>Aten. % Rece.</th>
+                                        <th>Atendidas - Aceite</th>
+                                        <th>TMA AA</th>
+                                        <th>TMA - Aceite</th>
+                                        <th>Nivel de Serviço</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="hora in dashboard.horahora">
+                                        <td>{{hora.hora}}</td>
+                                        <td>{{hora.logados | number}}</td>
+                                        <td>{{hora.recebidas| number}}</td>
+                                        <td>{{hora.atendidas | number}}</td>
+                                        <td>{{hora.atendidas / hora.recebidas | percentage:1}}</td>
+                                        <td>{{hora.atendidas_aceite | number}}</td>
+                                        <td>{{hora.tma_geral | number}}</td>
+                                        <td>{{hora.tma_aceite | number }}</td>
+                                        <td>{{hora.ns_60s | number }}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="graficoHora.exibir == 'true'">
+                            <small class="pull-right">
+                                <span>Indicadores:</span>
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoHora()">
+                                    @*<option value="ns_10s">NS 10S</option>
+                                    <option value="ns_20s">NS 20S</option>
+                                    <option value="ns_30s">NS 30S</option>*@
+                                    <option value="ns_60s">NS 60S</option>
+                                </select>
+                                <select ng-model="dashboard.indicador2" ng-change="carregarGraficoHora()">
+                                    <option value="recebidas">Recebidas</option>
+                                    <option value="atendidas">Atendidas</option>
+                                    <option value="abandonadas">Abandonadas</option>
+                                    <option value="atendidas_aceite">Atendidas - Aceite</option>
+                                    <option value="qtd_agente">Logados</option>
+                                </select>
+                            </small>
+                            <high-charts config="dashboard.hora" style="width: 100%; height: 350px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABELA SUPERVISOR/CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Agentes</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.agentes">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor</th>
+                                        <th>Atendidas</th>
+                                        <th>Atendidas Aceite</th>
+                                        <th>Atendidas Lojas</th>
+                                        <th>N Pesquisa</th>
+                                        <th>N Convertida</th>
+                                        <th>Ñ Respondeu</th>
+                                        <th>Qtd Notas</th>
+                                        <th>Transferidas</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.agentes | groupBy: 'supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'atendidas_geral'| number}}</td>
+                                        <td>{{e | sumByColumn: 'atendidas_aceite'| number}}</td>
+                                        <td>{{e | sumByColumn: 'atendidas_validas'| number}}</td>
+                                        <td>{{e | avgColumn: 'nota_pesquisa' }}</td>
+                                        <td>{{e | avgColumn: 'nota_convertida' }}</td>
+                                        <td>{{e | sumByColumn: 'qtde_notas'| number}}</td>
+                                        <td>{{e | sumByColumn: 'nao_respondeu'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'transferidas' : 'atendidas_validas' | percentage:0}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.nome_agente}}</td>
+                                        <td>{{c.atendidas_geral | number}}</td>
+                                        <td>{{c.atendidas_aceite | number}}</td>
+                                        <td>{{c.atendidas_validas | number}}</td>
+                                        <td>{{c.nota_pesquisa  }}</td>
+                                        <td>{{c.nota_convertida  }}</td>
+                                        <td>{{c.qtde_notas | number}}</td>
+                                        <td>{{c.nao_respondeu | number}}</td>
+                                        <td>{{c.transferidas  / c.atendidas_validas | percentage:0}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+
+<script>
+    angular.module('app').controller('ctrl-claro-vendas-producao', function ($scope, $http, $filter, $interval, dadosPagina) {
+
+        dadosPagina.titulo = 'Hora Hora';
+        dadosPagina.descricao = 'Claro Digital'
+        $scope.showTbody = false;
+
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+
+        };
+
+        $scope.nivel_servico = {
+            ns_10s: 'NS 10S'
+           ,ns_20s: 'NS 20S'
+           ,ns_30s: 'NS 30S'
+           ,ns_60s: 'NS 60S'
+        }
+
+
+        $scope.producao = {
+            recebidas: 'Recebidas'
+           ,atendidas: 'Atendidas'
+           ,abandonadas: 'Abandonadas'
+           ,atendidas_aceite: 'Atendidas Aceite'
+           ,qtd_agente: 'Logados'
+        }
+
+        $scope.dashboard = {};
+        $scope.dashboard = {
+            indicador: 'ns_60s', indicador2: 'recebidas', nivel_servico:'',  indicadorMarcado:''
+        };
+
+        $scope.graficoHora = { exibir: 'false' };
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/claro/dashboard/vendas/producao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.agentes = r.data.Table2;
+
+                $scope.carregarGraficoHora();
+            });
+        }
+
+
+        $scope.carregarGraficoHora = function () {
+
+
+
+            $scope.dashboard.nivel_servico = $scope.nivel_servico[$scope.dashboard.indicador];
+            $scope.dashboard.indicadorMarcado = $scope.producao[$scope.dashboard.indicador2];
+
+    
+            $scope.dashboard.hora = {
+                title: {
+                    text: ''
+                },
+                yAxis: [
+                    {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    {
+                        title: {
+                            text: ''
+                        },
+                        opposite: true,
+                    }
+                ],
+                xAxis: {
+                    categories: $scope.dashboard.dados.Table1.map(o => o.hora)
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: $scope.dashboard.nivel_servico,
+                        color: '#00a65a',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        type: 'column',
+                        yAxis: 1,
+                        name: $scope.dashboard.indicadorMarcado,
+                        color: 'rgba(0,115,183,0.4)',
+                        data: $scope.dashboard.dados.Table1.map(o => o[$scope.dashboard.indicador2]),
+                        dataLabels: {
+                            enabled: true
+                        }
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>
+
