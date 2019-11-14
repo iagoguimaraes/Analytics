@@ -42,6 +42,24 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                         </div>
 
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa Atraso</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                        </div>
+
+                        <!--PLANO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Plano</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
+                        </div>
+
+                        <!--TIPO DEVEDOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Devedor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.devedor" dados="dashFiltros.devedor" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -224,6 +242,8 @@
         $scope.filtros = {
             carteiras: '',
             faixaAtraso: '',
+            plano: '',
+            devedor: '',
         };
 
         $scope.mapa = {
@@ -243,6 +263,9 @@
 
             $scope.dashFiltros.carteiras = r.data.Table4;
             $scope.dashFiltros.faixaAtraso = data.Table2;
+            $scope.dashFiltros.plano = r.data.Table6;
+            $scope.dashFiltros.devedor = r.data.Table5;
+        
         });
 
         $scope.carregarDashboard = function () {

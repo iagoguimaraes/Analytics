@@ -107,6 +107,8 @@
                                 <option value="solicitante">Solicitante</option>
                                 <option value="departamento">Departamento</option>
                                 <option value="categoria">Categoria</option>
+                                <option value="status">Status</option>
+                                <option value="prioridade">Prioridade</option>
                             </select>
                         </div>
                     </div>
@@ -181,7 +183,8 @@
 
            
         }
-
+        
+        //monta a base conforme indicador escolhido
         $scope.popularBase = function () {
              
             $scope.dashboard.listaTratada = [];
@@ -224,7 +227,8 @@
              $scope.popularDashboard($scope.dashboard.datas, $scope.dashboard.listaTratada); 
            
         }
-
+        
+        //faz o array com a series da forma que o grafico pede
         $scope.popularDashboard = function (datas, dados) {
 
             // OBTER DIMENSOES (JA FILTRADO)
@@ -270,10 +274,10 @@
                
 
             let BaseGantt = $scope.dashboard.graficoFila;
-
             var dtprimeiroprojeto = new Date(datas.dtini.dtini);
             var dtultimoprojeto  = new Date(datas.dtfim.dtfim);
-
+            
+            //Monta o grafico com a base já tratada
             $scope.dashboard.graficogantt = {
             credits: {
                 enable: false,

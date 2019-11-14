@@ -1,0 +1,418 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-semparar-projecao">
+    <div ng-if="dashboard.status == 200">
+
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Projeção</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteira</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                            </div>
+
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                            </div>
+
+                            <!--PLANO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Plano</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
+                            </div>
+
+                            <!--TIPO DEVEDOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Devedor</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.devedor" dados="dashFiltros.devedor" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-red hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Projeção Acordos Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.acordo | number"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-red hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">done</i>
+                        </div>
+
+                        <div class="content">
+                            <div class="text">Projeção Acordos Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.acordo | number"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-red hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Acordos Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.vl_acordo| megaNumber "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-red hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">money_off</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Acordos Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.vl_acordo | megaNumber "></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Projeção Promessas Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.promessa| number"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-blue hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">done</i>
+                        </div>
+
+                        <div class="content">
+                            <div class="text">Projeção Promessas Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.promessa | number"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-blue hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Promessa Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.vl_promessa| megaNumber "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-3 col-md-12 col-sm-12">
+                    <div class="info-box-new bg-new-blue hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">money_off</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Promessa Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.vl_promessa | megaNumber "></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card-header-title">Volumes por : </div>
+                <div class="card-header-title">
+                    <select style="margin-left: 20px" class="form-control" ng-model="filtros.conceito" ng-change="carregarGrafico()">
+                        <option value="promessa" selected="selected">Promessa</option>
+                        <option value="vl_promessa" selected="selected">Valor Promessa</option>
+                        <option value="acordo">Acordo</option>
+                        <option value="vl_acordo">Valor Acordo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!--PROJECAO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção de Hoje - {{visao}}</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_dia" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PROJECAO MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção do Mês - {{visao}}</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+angular.module('app').controller('ctrl-semparar-projecao', function ($scope, $http, $filter) {
+
+    $scope.dashboard = {};
+    $scope.filtros = { conceito: 'acordo', visao: 'acordo', empresas: '', carteiras: '', faixaAtraso: '', plano: '', devedor: '' };
+    $scope.visao = "";
+    $scope.grafico = { indicador: 'promessa' };
+    $scope.dashFiltros = {};
+
+    // carregar os filtros
+    $http({
+        method: 'GET',
+        url: "/api/semparar/dashboard/humano/filtros",
+        data: $scope.filtros,
+    }).then(function success(r) {
+        $scope.dados = r.status;
+        
+        $scope.dashFiltros.status = r.status;
+        $scope.dashFiltros.empresas = r.data.Table;
+        $scope.dashFiltros.carteiras = r.data.Table1;
+        $scope.dashFiltros.faixaAtraso = r.data.Table2;
+        $scope.dashFiltros.plano = r.data.Table6;
+        $scope.dashFiltros.devedor = r.data.Table5;
+
+    });
+
+    $scope.carregarDashboard = function () {
+        $http({
+            method: 'POST',
+            url: "/api/semparar/dashboard/humano/projecao",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashboard.dados = r.data;
+
+            $scope.dashboard.resumoDia = r.data.Table4[0];
+            $scope.dashboard.resumoMes = r.data.Table4[1];
+
+
+            // STATUS DASHBOARD OK
+            $scope.dashboard.status = r.status;
+            $scope.carregarGrafico();
+
+        });
+    }
+
+    // carrega o grafico de acordo com o indicador escolhido
+    $scope.carregarGrafico = function () {
+
+        let indicador = $scope.filtros.conceito;
+        let data = $scope.dashboard.dados;
+
+        // PROJECAO DO DIA
+        if ($scope.dashboard.dados.Table.length > 0) {
+
+
+            let dia_acordo = '';
+            let dia_projecao = '';
+
+            switch (indicador) {
+                case 'acordo':
+                    dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                    dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                    $scope.visao = "QUANTIDADE";
+                    break;
+                case 'vl_acordo':
+                    dia_acordo = data.Table1.map(o => ({ y: o.vl_acordo }));
+                    dia_projecao = data.Table.map(o => ({ y: o.vl_acordo }));
+                    $scope.visao = "FINANCEIRA";
+                    break;
+                case 'promessa':
+                    dia_acordo = data.Table1.map(o => ({ y: o.promessa }));
+                    dia_projecao = data.Table.map(o => ({ y: o.promessa }));
+                    $scope.visao = "QUANTIDADE";
+                    break;
+                case 'vl_promessa':
+                    dia_acordo = data.Table1.map(o => ({ y: o.vl_promessa }));
+                    dia_projecao = data.Table.map(o => ({ y: o.vl_promessa }));
+                    $scope.visao = "FINANCEIRA";
+                    break;
+                default:
+                    dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                    dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                    $scope.visao = "QUANTIDADE";
+            }
+
+            dia_acordo[dia_acordo.length - 1].dataLabels = { enabled: true };
+            dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+
+            $scope.dashboard.projecao_dia = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: data.Table1.map(o => o.hora)
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: 'Projeção',
+                        color: 'black',
+                        dashStyle: 'dot',
+                        marker: { symbol: 'circle' },
+                        data: dia_acordo
+                    },
+                    {
+                        type: 'area',
+                        name: 'Negociação',
+                        color: 'black',
+                        marker: { symbol: 'circle' },
+                        data: dia_projecao
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        let mes_acordo = '';
+        let mes_projecao = '';
+
+        switch (indicador) {
+            case 'acordo':
+                mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
+                break;
+            case 'vl_acordo':
+                mes_acordo = data.Table3.map(o => ({ y: o.vl_acordo }));
+                mes_projecao = data.Table2.map(o => ({ y: o.vl_acordo }));
+                break;
+            case 'promessa':
+                mes_acordo = data.Table3.map(o => ({ y: o.promessa }));
+                mes_projecao = data.Table2.map(o => ({ y: o.promessa }));
+                break;
+            case 'vl_promessa':
+                mes_acordo = data.Table3.map(o => ({ y: o.vl_promessa }));
+                mes_projecao = data.Table2.map(o => ({ y: o.vl_promessa }));
+                break;
+            default:
+                mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
+        }
+
+        mes_acordo[mes_acordo.length - 1].dataLabels = { enabled: true };
+        mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+
+        $scope.dashboard.projecao_mes = {
+            title: {
+                text: ''
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+            },
+            xAxis: {
+                categories: data.Table3.map(o => o.data)
+            },
+            series: [
+                {
+                    type: 'line',
+                    name: 'Projeção',
+                    color: 'black',
+                    dashStyle: 'dot',
+                    marker: { symbol: 'circle' },
+                    data: mes_acordo
+                },
+                {
+                    type: 'area',
+                    name: 'Negociação',
+                    color: 'black',
+                    marker: { symbol: 'circle' },
+                    data: mes_projecao
+                },
+            ],
+            credits: {
+                enabled: false
+            }
+        };
+
+    }
+
+    $scope.carregarDashboard();
+});
+
+</script>

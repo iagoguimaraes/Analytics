@@ -128,6 +128,18 @@
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                                 </div>
 
+                                <!--PLANO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Plano</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
+                                </div>
+
+                                <!--TIPO DEVEDOR-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Devedor</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.devedor" dados="dashFiltros.devedor" style="width:100%"></select2>
+                                </div>
+
                                 <!--BOTÃO-->
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -365,6 +377,8 @@
                 empresas: '',
                 carteiras: '',
                 faixaAtraso: '',
+                plano: '',
+                devedor: '',
                 horaini: '7',
                 horafim: '22',
             };
@@ -384,7 +398,10 @@
                 $scope.dashFiltros.empresas = data.Table;
                 $scope.dashFiltros.carteiras = r.data.Table1;
                 $scope.dashFiltros.faixaAtraso = r.data.Table2;
-            });
+                $scope.dashFiltros.plano = r.data.Table6;
+                $scope.dashFiltros.devedor = r.data.Table5;
+            
+        });
 
             // obtem filtros do escopo e carrega os dados do dashboard
             $scope.carregarDashboard = function () {
