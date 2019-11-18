@@ -259,7 +259,69 @@
                         </div>
                     </div>
                     <div class="card-body" ng-if="dashboard.operador">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[4,'desc']]"></d-table>
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" order="[[10,'asc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR QUARTIL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Quartil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.quartil">
+                                <thead>
+                                    <tr>
+                                        <th>Quartil</th>
+                                        <th>Operadores</th>
+                                        <th>% HeadCount</th>
+                                        <th>Acordo</th>
+                                        <th>Acordo Pago</th>
+                                        <th>Efetividade</th>
+                                        <th>Acordo $</th>
+                                        <th>Acordo Pago $</th>
+                                        <th>Efetividade $</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="q in dashboard.quartil">
+                                        <td>{{q.ds_quartil}}</td>
+                                        <td>{{q.qtd_op | number}}</td>
+                                        <td>{{q.qtd_op / q.qtd_op_tt | percentage:1}}</td>
+                                        <td>{{q.acordo | number}}</td>
+                                        <td>{{q.pago | number}}</td>
+                                        <td>{{q.pago / q.acordo | percentage:1}}</td>
+                                        <td>{{q.vlr_acordo | currency : 'R$ '}}</td>
+                                        <td>{{q.vlr_pago | currency : 'R$ '}}</td>
+                                        <td>{{q.vlr_pago / q.vlr_acordo | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfooter>
+                                    <tr class="text-bold">
+                                        <td>Total</td>
+                                        <td>{{dashboard.resumo.qtd_op | number}}</td>
+                                        <td></td>
+                                        <td>{{dashboard.resumo.qtd | number}}</td>
+                                        <td>{{dashboard.resumo.qtd_pago | number}}</td>
+                                        <td>{{dashboard.resumo.qtd_pago / dashboard.resumo.qtd | percentage:1}}</td>
+                                        <td>{{dashboard.resumo.vlr | currency : 'R$ '}}</td>
+                                        <td>{{dashboard.resumo.vlr_pago | currency : 'R$ '}}</td>
+                                        <td>{{dashboard.resumo.vlr_pago / dashboard.resumo.vlr | percentage:1}}</td>
+                                    </tr>
+                                </tfooter>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -298,6 +360,7 @@
                 $scope.dashboard.horahora = data.Table1;
                 $scope.dashboard.classe = data.Table2;
                 $scope.dashboard.operador = data.Table3;
+                $scope.dashboard.quartil = data.Table4;
 
                 $scope.carregarGraficoHora();
             });

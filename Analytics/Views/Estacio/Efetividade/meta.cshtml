@@ -1,0 +1,292 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-estacio-cadmeta">
+
+    <!-- DAHSBOARD -->
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Cadastrar Metas de Efetividade</div>
+        </header>
+
+        <!-- RESUMO INDICADORES -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_op | number: 0"></h3>
+                        <p>Operadores</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-new-light-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_cad | number:0"></h3>
+                        <p>Metas Cadastradas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_op - dashboard.resumo.qtd_cad | number:0"></h3>
+                        <p>Sem Meta</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-times"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_cad / dashboard.resumo.qtd_op | percentage: 1"></h3>                        
+                        <p>% Com Meta</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-percent"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-4">
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.med_vlr | currency: 'R$ '"></h3>
+                        <p>$ Média Metas Cadastradas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-usd"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--METAS MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo Metas</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table">
+                            <table class="table table-striped table-bordered" ng-if="dashboard.mes">
+                                <thead>
+                                    <tr>
+                                        <th>Mes</th>
+                                        <th>Operadores - ( Distintos )</th>
+                                        <th>Metas Cadastradas</th>
+                                        <th> % Com Meta </th>
+                                        <th> $ Méd. Meta Cadastrada </th>
+                                        <th> $ Menor </th>
+                                        <th> $ Maior </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="m in dashboard.mes">
+                                        <td>{{m.mesDesc}}</td>
+                                        <td>{{m.qtd_op}}</td>
+                                        <td>{{m.qtd_cad}}</td>
+                                        <td>{{m.qtd_cad / m.qtd_op | percentage: 1}}</td>
+                                        <td>{{m.med_vlr | currency: 'R$ '}}</td>
+                                        <td>{{m.menor_vlr | currency: 'R$ '}}</td>
+                                        <td>{{m.maior_vlr | currency: 'R$ '}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfooter>
+                                    <tr class="text-bold">
+                                        <td>Total</td>
+                                        <td>{{dashboard.resumo.qtd_op}} - ( {{dashboard.resumo.distinctOp}} )</td>
+                                        <td>{{dashboard.resumo.qtd_cad}}</td>
+                                        <td>{{dashboard.resumo.qtd_cad / dashboard.resumo.qtd_op | percentage: 1}}</td>
+                                        <td>{{dashboard.resumo.med_vlr | currency: 'R$ '}}</td>
+                                        <td>{{dashboard.resumo.menor_vlr | currency: 'R$ '}}</td>
+                                        <td>{{dashboard.resumo.maior_vlr | currency: 'R$ '}}</td>
+                                    </tr>
+                                </tfooter>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--CADASTRAR META-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Lista de Operadores para : </span>
+                        <span>
+                            <select ng-change="carregarDashboard()" ng-model="filtros.mes">
+                                <option value="" selected="selected"> Selecione</option>
+                                <option ng-repeat="cc in dashFiltros.listMonths" value="{{cc.mes}}">{{cc.mesDesc}}</option>
+                            </select>
+                        </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <!--Cadastrar Meta-->
+                            <div>
+                                <small>
+                                    <input type="button" class="btn btn-danger" value="{{opcoes.edit? 'Cancelar':'Editar'}}" ng-click="editar()" />
+                                </small>
+                                <small>
+                                    <input type="button" class="btn btn-success" value="Salvar" ng-if="opcoes.edit" ng-click="salvar()" />
+                                </small>
+                            </div>
+                        </div>
+                        <div class="table">
+                            <table class="table table-striped table-bordered" ng-if="dashboard.lista">
+                                <thead>
+                                    <tr>
+                                        <th>Operador</th>
+                                        <th>$ Valor Meta</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="idtbody">
+                                    <tr ng-repeat="l in dashboard.lista">
+                                        <td style="display : none">{{l.mes}}</td>
+                                        <td style="display : none">{{l.id_operador}}</td>
+                                        <td>{{l.operador}}</td>
+                                        <td ng-if="opcoes.edit">
+                                            <input type="number" id="idinput" min="0" max="9999999" placeholder="9.999.999" class="form-control" onkeyup="if (this.value > 9999999) { this.value = '9999999';} else if (this.value < 0) {this.value = '0';}" value="{{l.vlr}}" ng-disabled="!opcoes.edit" />
+                                        </td>
+                                        <td ng-if="!opcoes.edit">{{l.vlr | number : 2}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-estacio-cadmeta', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Cadastro Metas Efetividade';
+        dadosPagina.descricao = 'Estacio'        
+
+        $scope.filtros = {            
+            mes: '',
+        };
+
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        
+        $scope.opcoes = {
+            edit: false
+        };
+
+        // Objeto Metas
+        $scope.metas = [{
+            mes: '',
+            id_operador: '',
+            vlr: ''
+        }];
+
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/estacio/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.listMonths = r.data.Table;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/estacio/meta",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.mes = data.Table1;
+                $scope.dashboard.lista = data.Table2;
+
+                console.log(data.Table2);
+
+            });
+        }
+
+        $scope.cadastrarMeta = function () {
+            $http({
+                method: 'POST',
+                url: "/api/estacio/cadmetaefetividade",
+                data: JSON.stringify($scope.metas),
+            }).then(function success(r) {
+
+                $scope.metas = [{
+                    mes: '',
+                    id_operador: '',
+                    vlr: ''
+                }];
+
+                location.reload();
+                $scope.carregarDashboard();
+
+            });
+        }
+
+        $scope.editar = function () {
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+        }
+
+        $scope.salvar = function () {
+
+            $scope.opcoes.edit = !$scope.opcoes.edit;
+
+            let tabela = document.getElementById('idtbody')
+
+            console.log(tabela);
+
+            for (let i = 0; i < tabela.rows.length; i++) {
+
+                let mes = tabela.children[i].children[0].innerHTML;
+                let id = tabela.children[i].children[1].innerHTML;
+                let valor = tabela.children[i].children[3].getElementsByTagName('input').item(0).value;
+                $scope.metas.push({ mes: mes, id_operador: id, vlr: valor});            
+
+            }
+
+            
+
+            $scope.cadastrarMeta();
+
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+    });
+</script>
