@@ -180,6 +180,41 @@
             </div>
         </div>
 
+        <!--PLANO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Plano</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.plano">
+                                <thead>
+                                    <tr>
+                                        <th>Plano</th>
+                                        <th>Workflow</th>
+                                        <th>Cancelado</th>
+                                        <th>Finalizado</th>
+                                        <th>Gross</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.plano">
+                                        <td>{{c.plano}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td>{{c.cancelado | number}}</td>
+                                        <td>{{c.finalizado | number}}</td>
+                                        <td>{{c.gross | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--WORKFLOW-->
         <div class="row margin-bottom">
             <div class="col-xs-12 margin-bottom">
@@ -194,6 +229,7 @@
             </div>
         </div>
 
+        <!--BACKOFFICE-->
         <div class="row margin-bottom">
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
@@ -235,6 +271,7 @@
                 $scope.dashboard.hora = r.data.Table2;
                 $scope.dashboard.campanha = r.data.Table3;
                 $scope.dashboard.backoffice = r.data.Table4;
+                $scope.dashboard.plano = r.data.Table6;
 
                 $scope.dashboard.workflow = {
                     title: {
