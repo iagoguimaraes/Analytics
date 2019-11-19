@@ -13,6 +13,25 @@ namespace Analytics.Controllers
     [RoutePrefix("api/estacio")]
     public class EstacioController : ApiController
     {
+        [Route("filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         [Route("horahora")]
         [HttpPost]
@@ -325,6 +344,7 @@ namespace Analytics.Controllers
             }
         }
 
+
         [Route("cadmailing")]
         [HttpPost]
         [Autorizar]
@@ -354,5 +374,59 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("meta")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardMeta(FormDataCollection form)
+        {
+            try
+            {
+                string mes = form["mes"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("mes", mes);
+                    
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_meta", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("cadmetaefetividade")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CadMetaEfetividade(FormDataCollection form)
+        {
+            try
+            {
+                DataTable metas = JsonConvert.DeserializeObject<DataTable>(form.ReadAsNameValueCollection().Keys[0].ToString());
+
+                using (SqlHelper sql = new SqlHelper("CUBO_ESTACIO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("metas", metas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_cad_fatoMetaEfetividade", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
