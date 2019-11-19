@@ -343,7 +343,7 @@
 
         // carregar os filtros
         $http({
-            method: 'GET',
+            method: 'POST',
             url: "/api/bradesco/dashboard/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
@@ -371,7 +371,6 @@
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table1.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
                 $scope.dashboard.dia = r.data.Table4;
 
-                console.log($scope.dashboard.dia);
                // $scope.carregarGrafico();
             });
         }
