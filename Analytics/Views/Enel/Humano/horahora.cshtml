@@ -217,14 +217,14 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessanectar / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessatotal / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversao</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessanectar | currency:'R$ '"></h5>
-                            <span class="description-text">$ Promessa Nectar</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessatotal | currency:'R$ '"></h5>
+                            <span class="description-text">$ Total Promessas</span>
                         </div>
                     </div>
                 </div>
@@ -252,6 +252,8 @@
                                 <option value="vlr_promessanectar">Valor Promessa Nectar</option>
                                 <option value="promessaportal">Promessa Portal</option>
                                 <option value="vlr_promessaportal">Valor Promessa Portal</option>
+                                <option value="promessatotal">Promessa Total</option>
+                                <option value="vlr_promessatotal">Valor Promessa Total</option>
                             </select>
                         </small>
                     </div>
@@ -284,13 +286,15 @@
                                         <th>Agentes</th>
                                         <th>Discado</th>
                                         <th>Atendido</th>
-                                        <th>Contato</th>
+                                        <th>Ctt.</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa Nectar</th>
-                                        <th>$ Nectar</th>
-                                        <th>Promessa Portal</th>
+                                        <th>Prom.</th>
+                                        <th>$ Prom.</th>
+                                        <th>Prom. Portal</th>
                                         <th>$ Portal</th>
+                                        <th>Total Prom.</th>
+                                        <th>$ Total Prom.</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -310,10 +314,12 @@
                                         <td>{{hora.vlr_promessanectar | currency:'R$ '}}</td>
                                         <td>{{hora.promessaportal | number}}</td>
                                         <td>{{hora.vlr_promessaportal | currency:'R$ '}}</td>
+                                        <td>{{hora.promessatotal | number}}</td>
+                                        <td>{{hora.vlr_promessatotal | currency:'R$ '}}</td>
                                         <td>{{hora.atendido / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.promessanectar / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.promessatotal / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -329,10 +335,12 @@
                                         <th>{{dashboard.resumo.vlr_promessanectar | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.promessaportal | number}}</th>
                                         <th>{{dashboard.resumo.vlr_promessaportal | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.promessatotal | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_promessatotal | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.atendido / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.promessanectar / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessatotal / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -365,13 +373,15 @@
                                         <th>PA</th>
                                         <th>Discado</th>
                                         <th>Atendido</th>
-                                        <th>Contato</th>
+                                        <th>Ctt.</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa Nectar</th>
-                                        <th>$ Nectar</th>
-                                        <th>Promessa Portal</th>
+                                        <th>Prom.</th>
+                                        <th>$ Prom.</th>
+                                        <th>Prom. Portal</th>
                                         <th>$ Portal</th>
+                                        <th>Total Prom.</th>
+                                        <th>$ Total Prom.</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -379,7 +389,6 @@
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="e in dashboard.carteira | groupBy: 'carteira'">
-
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
@@ -395,10 +404,12 @@
                                         <td>{{e | sumByColumn: 'vlr_promessanectar'| currency:'R$ '}}</td>
                                         <td>{{e | sumByColumn: 'promessaportal'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessaportal'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'promessatotal'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessatotal'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'atendido':'discado' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessatotal':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
@@ -413,17 +424,16 @@
                                         <td>{{c.vlr_promessanectar | currency:'R$ '}}</td>
                                         <td>{{c.promessaportal | number}}</td>
                                         <td>{{c.vlr_promessaportal | currency:'R$ '}}</td>
+                                        <td>{{c.promessatotal | number}}</td>
+                                        <td>{{c.vlr_promessatotal | currency:'R$ '}}</td>
                                         <td>{{c.atendido / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                        <td>{{c.promessatotal / c.cpca | percentage:1}}</td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -453,6 +463,8 @@
                                 <option value="vlr_promessanectar">Valor Promessa Nectar</option>
                                 <option value="promessaportal">Promessa Portal</option>
                                 <option value="vlr_promessaportal">Valor Promessa Portal</option>
+                                <option value="promessatotal">Promessa Total</option>
+                                <option value="vlr_promessatotal">Valor Total Promessa</option>
                             </select>
                         </small>
                     </div>
@@ -482,13 +494,15 @@
                                 <thead>
                                     <tr>
                                         <th>Supervisor/Equipe</th>
-                                        <th>Contato</th>
+                                        <th>Ctt.</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
-                                        <th>Promessa Nectar</th>
-                                        <th>$ Nectar</th>
-                                        <th>Promessa Portal</th>
+                                        <th>Prom.</th>
+                                        <th>$ Prom.</th>
+                                        <th>Prom. Portal</th>
                                         <th>$ Portal</th>
+                                        <th>Total Prom.</th>
+                                        <th>$ Total Prom.</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -507,9 +521,11 @@
                                         <td>{{e | sumByColumn: 'vlr_promessanectar' | currency: 'R$ ' }}</td>
                                         <td>{{e | sumByColumn: 'promessaportal'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessaportal' | currency: 'R$ ' }}</td>
+                                        <td>{{e | sumByColumn: 'promessatotal'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_promessatotal' | currency: 'R$ ' }}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
-                                        <td>{{e | divideSumColumns: 'promessanectar':'cpca' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessatotal':'cpca' | percentage:1}}</td>
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
@@ -521,9 +537,11 @@
                                         <td>{{c.vlr_promessanectar | currency: 'R$ '}}</td>
                                         <td>{{c.promessaportal | number}}</td>
                                         <td>{{c.vlr_promessaportal | currency: 'R$ '}}</td>
+                                        <td>{{c.promessatotal | number}}</td>
+                                        <td>{{c.vlr_promessatotal | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
-                                        <td>{{c.promessanectar / c.cpca | percentage:1}}</td>
+                                        <td>{{c.promessatotal / c.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -597,8 +615,8 @@
             equipe: '',
         }
 
-        $scope.grafico = { indicador: 'promessanectar' };
-        $scope.graficoComparativo = { indicador: 'promessanectar' };
+        $scope.grafico = { indicador: 'promessatotal' };
+        $scope.graficoComparativo = { indicador: 'promessatotal' };
 
         // carregar os filtros
         $http({
