@@ -158,13 +158,13 @@
                     <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
-                            <span class="description-text">Acordo</span>
+                            <span class="description-text">Promessa</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.saldo | currency: 'R$ '"></h5>
-                            <span class="description-text">R$ Acordo</span>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.acordo | number"></h5>
+                            <span class="description-text">Acordo</span>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                 <div class="row" style="background-color: #ec880a; color:white; opacity: 0.8">
                     <div class="col-sm-2 border-right col-sm-offset-1">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.total | number:1"></h5>
                             <span class="description-text">Esforço</span>
                         </div>
                     </div>
@@ -196,7 +196,7 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.total / dashboard.resumo.cpca | percentage: 1"></h5>
                             <span class="description-text">Conversão</span>
                         </div>
                     </div>
@@ -228,8 +228,12 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Pr Vlr</th>
                                         <th>Acordo</th>
-                                        <th>R$ Acordo</th>
+                                        <th>Ac Vlr</th>
+                                        <th>Total</th>
+                                        <th>Vlr</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -245,10 +249,14 @@
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
                                         <td>{{hora.saldo | currency: 'R$ '}}</td>
+                                        <td>{{hora.acordo | number}}</td>
+                                        <td>{{hora.vlr_acordo | currency: 'R$ '}}</td>
+                                        <td>{{hora.total | number}}</td>
+                                        <td>{{hora.valor | currency: 'R$ '}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                        <td>{{hora.total / hora.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -260,10 +268,14 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.saldo | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.acordo | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_acordo | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.total | number}}</th>
+                                        <th>{{dashboard.resumo.valor | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.total / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -297,8 +309,12 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Pr Vlr</th>
                                         <th>Acordo</th>
-                                        <th>R$ Acordo</th>
+                                        <th>Ac Vlr</th>
+                                        <th>Total</th>
+                                        <th>Vlr</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -314,10 +330,14 @@
                                         <td>{{campanha.cpca | number}}</td>
                                         <td>{{campanha.promessa | number}}</td>
                                         <td>{{campanha.saldo | currency:'R$ '}}</td>
+                                        <td>{{campanha.acordo | number}}</td>
+                                        <td>{{campanha.vlr_acordo | currency: 'R$ '}}</td>
+                                        <td>{{campanha.total | number}}</td>
+                                        <td>{{campanha.valor | currency: 'R$ '}}</td>
                                         <td>{{campanha.contato / campanha.discado | percentage:1}}</td>
                                         <td>{{campanha.cpc / campanha.contato | percentage:1}}</td>
                                         <td>{{campanha.cpca / campanha.cpc | percentage:1}}</td>
-                                        <td>{{campanha.promessa / campanha.cpca | percentage:1}}</td>
+                                        <td>{{campanha.total / campanha.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -329,15 +349,18 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.saldo | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.acordo | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_acordo | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.total | number}}</th>
+                                        <th>{{dashboard.resumo.valor | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.total / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
-
                     </div>
 
                 </div>
@@ -363,8 +386,12 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Acordo</option>
-                                <option value="saldo">R$ Acordo</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="saldo">R$ Promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="vlr_acordo">R$ Acordo</option>
+                                <option value="total">Total</option>
+                                <option value="valor">R$ Valor</option>
                             </select>
                         </small>
                     </div>

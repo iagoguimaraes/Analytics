@@ -176,7 +176,7 @@
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
-                        <p>Acordo</p>
+                        <p>Promessa</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-thumbs-o-up"></i>
@@ -184,13 +184,14 @@
                 </div>
             </div>
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-green">
+                <div class="small-box bg-new-blue-grey">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.saldo | megaNumber "></h3>
-                        <p>R$ Acordo</p>
+                        <h3 ng-bind="dashboard.resumo.acordo | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.acordo / dashboard.resumo.cpca | percentage: 1"></h4>
+                        <p>Acordo</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-thumbs-o-up"></i>
+                        <i class="fa fa-barcode"></i>
                     </div>
                 </div>
             </div>
@@ -219,8 +220,12 @@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Pr Vlr</th>
                                         <th>Acordo</th>
-                                        <th>R$ Acordo</th>
+                                        <th>Ac Vlr</th>
+                                        <th>Total</th>
+                                        <th>Vlr</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -236,10 +241,14 @@
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.saldo | currency:'R$ '}}</td>
+                                        <td>{{dia.acordo | number}}</td>
+                                        <td>{{dia.vlr_acordo | currency: 'R$ '}}</td>
+                                        <td>{{dia.total | number}}</td>
+                                        <td>{{dia.valor | currency: 'R$ '}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
-                                        <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                        <td>{{dia.total / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -251,10 +260,14 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.saldo | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.acordo | number}}</th>
+                                        <th>{{dashboard.resumo.vlr_acordo | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.total | number}}</th>
+                                        <th>{{dashboard.resumo.valor | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
-                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.total / dashboard.resumo.cpca | percentage: 1}}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -283,8 +296,12 @@
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
-                                <option value="promessa">Acordo</option>
-                                <option value="saldo">R$ Acordo</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="saldo">R$ Promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="vlr_acordo">R$ Acordo</option>
+                                <option value="total">Total</option>
+                                <option value="valor">R$ Valor</option>
                             </select>
                         </small>
                     </div>
