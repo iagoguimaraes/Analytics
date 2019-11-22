@@ -67,6 +67,7 @@ namespace Analytics.Controllers
                 string login = form["login"];
                 string cpf = form["cpf"];
                 bool cliente = Convert.ToBoolean(form["cliente"]);
+                string senha = form["senha"];
                 DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
@@ -77,6 +78,7 @@ namespace Analytics.Controllers
                     parametros.Add("login", login);
                     parametros.Add("cpf", cpf);
                     parametros.Add("cliente", cliente ? 1 : 0);
+                    parametros.Add("senha", senha);
                     DataTable result = sql.ExecuteProcedureDataTable("sp_ins_usuario", parametros);
                     string id_usuario = result.Rows[0]["id_usuario"].ToString();
 
@@ -109,6 +111,7 @@ namespace Analytics.Controllers
                 string cpf = form["cpf"];
                 bool cliente = Convert.ToBoolean(form["cliente"]);
                 bool ativo = Convert.ToBoolean(form["ativo"]);
+                string senha = form["senha"];
                 DataTable grupos = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
@@ -121,6 +124,7 @@ namespace Analytics.Controllers
                     parametros.Add("cpf", cpf);
                     parametros.Add("cliente", cliente ? 1 : 0);
                     parametros.Add("ativo", ativo ? 1 : 0);
+                    parametros.Add("senha", senha);
                     sql.ExecuteProcedure("sp_upd_usuario", parametros);
 
                     // ALTERAR OS GRUPOS

@@ -51,10 +51,10 @@
                 <div class="modal-body">
 
                     <form role="form">
-                       
+
                         <div class="form-group">
                             <label>Nome</label>
-                            <input type="text" class="form-control" placeholder="Nome Completo" ng-model="usuario.nome"/>
+                            <input type="text" class="form-control" placeholder="Nome Completo" ng-model="usuario.nome" />
                         </div>
 
                         <div class="form-group">
@@ -65,18 +65,23 @@
                         <div class="form-group" ng-if="grupos">
                             <label>Grupo</label>
                             <div>
-                                <select2 id="insert-select2"  class="form-control" data-placeholder="Selecione" ng-model="usuario.grupo" dados="grupos" style="width:100%;"></select2>
-                            </div>                            
+                                <select2 id="insert-select2" class="form-control" data-placeholder="Selecione" ng-model="usuario.grupo" dados="grupos" style="width:100%;"></select2>
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label>CPF</label>
-                            <input maxlength="11" type="text" class="form-control" placeholder="CPF" ng-model="usuario.cpf" />
+                            <input maxlength="11" type="number" class="form-control" placeholder="CPF" ng-model="usuario.cpf" />
                         </div>
 
                         <div class="form-group">
                             <label>Cliente: </label>
                             <input type="checkbox" ng-model="usuario.cliente" />
+                        </div>
+
+                        <div class="form-group" ng-if="usuario.cliente">
+                            <label>Senha</label>
+                            <input type="text" class="form-control" placeholder="Senha" ng-model="usuario.senha" />
                         </div>
 
                     </form>
@@ -139,6 +144,11 @@
                             <input type="checkbox" ng-model="editusuario.ativo" />
                         </div>
 
+                        <div class="form-group" ng-if="editusuario.cliente">
+                            <label>Senha</label>
+                            <input type="text" class="form-control" placeholder="Senha" ng-model="editusuario.senha" />
+                        </div>
+
                     </form>
 
 
@@ -193,7 +203,8 @@
             login: '',
             cpf: '',
             grupo: null,
-            cliente: false
+            cliente: false,
+            senha: null
         }; // objeto para inserir usuario
 
         $scope.inserirUsuario = function () {
@@ -207,7 +218,8 @@
                     login: '',
                     cpf: '',
                     grupo: null,
-                    cliente: false
+                    cliente: false,
+                    senha: null
                 };
                 
                 location.reload();//eliminar o cache dos grupos
@@ -218,8 +230,24 @@
         }
 
         // EDITAR USUARIO
-        $scope.editusuario = {}; // objeto para editar usuario
+        $scope.editusuario = {
+            id_usuario: '',
+            nome: '',
+            cpf: '',
+            login: '',
+            cliente: '',
+            ativo: '',
+            senha: '',
+            grupo: ''
+        }; // objeto para editar usuario
+
         $scope.editarUsuario = function () {
+
+            if ($scope.editusuario.cliente == false) {
+                $scope.editusuario.senha = '';
+                 
+            }
+
             $http({
                 method: 'POST',
                 url: "/api/usuario/alterar",
@@ -249,6 +277,7 @@
                 $scope.editusuario.login = r.data.Table[0].login;
                 $scope.editusuario.cliente = r.data.Table[0].cliente;
                 $scope.editusuario.ativo = r.data.Table[0].ativo;
+                $scope.editusuario.senha = r.data.Table[0].senha;
                 let valida = r.data.Table[0].grupos;
                 //console.log(valida);
 
@@ -262,9 +291,8 @@
                 };
                     
               
-                 $('#modal-edit').modal('show');
+                 $('#modal-edit').modal('show');               
                 
-
                
             });
 
