@@ -584,6 +584,7 @@ namespace Analytics.Controllers
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
                 DataTable classificacao = JsonConvert.DeserializeObject<DataTable>(form["classificacao"]);
+                DataTable operador = JsonConvert.DeserializeObject<DataTable>(form["operador"]);
 
                 //DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -604,6 +605,7 @@ namespace Analytics.Controllers
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("ocorrencia", ocorrencia);
                     parametros.Add("classificacao", classificacao);
+                    parametros.Add("operador", operador);
                     //parametros.Add("equipe", equipe);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_atemporal", parametros);

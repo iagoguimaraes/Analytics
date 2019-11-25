@@ -422,7 +422,6 @@
             </div>
         </div>
 
-
         <!--PRODUÇÃO POR OPERADOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -521,6 +520,29 @@
             </div>
         </div>
 
+        <!--POR MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+
+                    <div class="card-header" ng-show="grafico.exibir == 'true'">
+                        <span class="card-header-title">Efetividade ultimos Mesês Visão : {{grafico.indicador}}</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table9')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtMes" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.meses" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -530,14 +552,14 @@
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 1), 1);
-        $scope.grafico = { indicador: 'total' ,  exibir: 'true'};
+        $scope.grafico = { indicador: 'total', exibir: 'true' };
 
         $scope.filtros = {
 
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteira: '',
-            segmentacao: '',            
+            segmentacao: '',
             tenure: '',
             supervisor: '',
             operador: '',
@@ -564,7 +586,7 @@
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.tenure = data.Table3;
             $scope.dashFiltros.operador = data.Table13;
-            
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -587,8 +609,10 @@
                 $scope.dashboard.car = r.data.Table3;
                 $scope.dashboard.operador = r.data.Table4;
                 $scope.dashboard.supervisor = r.data.Table7;
+                $scope.dashboard.mes = r.data.Table9;
                 $scope.mudarEstado('BR-SP');
-                $scope.carregarGrafico(); 
+                $scope.carregarGrafico();
+                $scope.carregarGraficoMes();
 
             });
         }
@@ -602,48 +626,48 @@
 
             switch ($scope.grafico.indicador) {
                 case 'total':
-                $scope.dashboard.qtDia = [
-                  { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
-                , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
-                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+                    $scope.dashboard.qtDia = [
+                        { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
 
                     $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
-               
-                break;
+
+                    break;
                 case 'migracao':
-                $scope.dashboard.qtDia = [
-                  { name: 'Migração', type: "column", data: data.map(obj => (obj.migracao)) }
-                , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_migracao)) }
-                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) * 1) }];
+                    $scope.dashboard.qtDia = [
+                        { name: 'Migração', type: "column", data: data.map(obj => (obj.migracao)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_migracao)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) * 1) }];
 
-                $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) / 1) }];
-             
-                break;
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) / 1) }];
+
+                    break;
                 case 'parcelamento':
-                $scope.dashboard.qtDia = [
-                  { name: 'Parcelamento', type: "column", data: data.map(obj => (obj.promessa_parc)) }
-                , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_parc)) }
-                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) * 1) }];
+                    $scope.dashboard.qtDia = [
+                        { name: 'Parcelamento', type: "column", data: data.map(obj => (obj.promessa_parc)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_parc)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) * 1) }];
 
-                $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) / 1) }];
-            
-                break;
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) / 1) }];
+
+                    break;
                 case 'cartao':
-                $scope.dashboard.qtDia = [
-                  { name: 'Cartão', type: "column", data: data.map(obj => (obj.promessa_cartao)) }
-                , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_cartao)) }
-                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) * 1) }];
+                    $scope.dashboard.qtDia = [
+                        { name: 'Cartão', type: "column", data: data.map(obj => (obj.promessa_cartao)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_cartao)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) * 1) }];
 
-                $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) / 1) }];
-             
-                break;
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) / 1) }];
+
+                    break;
                 default:
-                 $scope.dashboard.qtDia = [
-                 { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
-                ,{ name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
-                ,{ name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+                    $scope.dashboard.qtDia = [
+                        { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
 
-                 $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
             }
         }
 
@@ -658,6 +682,60 @@
 
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGraficoMes = function () {
+            let data = $scope.dashboard.mes;
+            let dataCarteira = $scope.dashboard.car;
+
+            $scope.dashboard.meses = data.map(obj => obj.mes);
+
+            switch ($scope.grafico.indicador) {
+                case 'total':
+                    $scope.dashboard.qtMes = [
+                        { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+
+                    break;
+                case 'migracao':
+                    $scope.dashboard.qtMes = [
+                        { name: 'Migração', type: "column", data: data.map(obj => (obj.migracao)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_migracao)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) * 1) }];
+
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_migracao * 100 / obj.migracao).toFixed(1) / 1) }];
+
+                    break;
+                case 'parcelamento':
+                    $scope.dashboard.qtMes = [
+                        { name: 'Parcelamento', type: "column", data: data.map(obj => (obj.promessa_parc)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_parc)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) * 1) }];
+
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_parc * 100 / obj.promessa_parc).toFixed(1) / 1) }];
+
+                    break;
+                case 'cartao':
+                    $scope.dashboard.qtMes = [
+                        { name: 'Cartão', type: "column", data: data.map(obj => (obj.promessa_cartao)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pag_promessa_cartao)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) * 1) }];
+
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pag_promessa_cartao * 100 / obj.promessa_cartao).toFixed(1) / 1) }];
+
+                    break;
+                default:
+                    $scope.dashboard.qtMes = [
+                        { name: 'Promessa', type: "column", data: data.map(obj => (obj.qtd_promessa)) }
+                        , { name: 'Pago', type: "column", data: data.map(obj => (obj.qtd_pago)) }
+                        , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: data.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+
+                    $scope.dashboard.carteira = [{ name: 'Efetividade', data: dataCarteira.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
+            }
         }
 
     });
