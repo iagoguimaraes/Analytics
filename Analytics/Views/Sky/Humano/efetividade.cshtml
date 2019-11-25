@@ -525,7 +525,7 @@
             <div class="col-xs-12 col-md-12">
                 <div class="card">
 
-                    <div class="card-header" ng-show="grafico.exibir == 'true'">
+                    <div class="card-header">
                         <span class="card-header-title">Efetividade ultimos Mesês Visão : {{grafico.indicador}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
@@ -533,6 +533,14 @@
                         <div class="card-header-button" ng-click="extrair('Table9')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGraficoMes()">
+                                <option value="total">Total</option>
+                                <option value="migracao">Migração</option>
+                                <option value="parcelamento">Parcelamento</option>
+                                <option value="cartao">Cartão</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <div class="row margin-bottom">
