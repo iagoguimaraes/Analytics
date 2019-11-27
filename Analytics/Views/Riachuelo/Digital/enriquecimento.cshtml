@@ -203,6 +203,7 @@
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
+                                <option value="efetividade">Efetividade</option>
                             </select>
                         </small>
                     </div>
@@ -281,6 +282,7 @@
                 $scope.dashboard.regiao = r.data.Table3;
                 $scope.dashboard.ddd = r.data.Table4;
                 $scope.dashboard.fornecedor = r.data.Table5;
+                $scope.dashboard.efetividade_fornecedor = r.data.Table6;
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoRegiao();
@@ -443,6 +445,13 @@
                     $scope.dashboard.graficoFornecedor = [
                         { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.promessa_credor * 100 / obj.cpca_credor).toFixed(1) * 1) },
                         { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.promessa_credit * 100 / obj.cpca_credit).toFixed(1) * 1) }];
+                    break;
+                case 'efetividade':
+                    dados = $scope.dashboard.efetividade_fornecedor;
+                    $scope.dashboard.fornecedores = dados.map(obj => obj.ds_fornecedor);
+                    $scope.dashboard.graficoFornecedor = [
+                        { name: 'Credor', color: 'rgba(67, 67, 72, 0.8)', type: 'column', data: dados.map(obj => (obj.paga_credor * 100 / obj.promessa_credor).toFixed(1) * 1) },
+                        { name: 'Credit', color: 'rgba(198, 65, 57, 1.0)', type: 'column', data: dados.map(obj => (obj.paga_credit * 100 / obj.promessa_credit).toFixed(1) * 1) }];
                     break;
                 default:
                     $scope.dashboard.graficoFornecedor = [
