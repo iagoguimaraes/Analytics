@@ -42,12 +42,6 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                         </div>
 
-                        <!--FAIXA ATRASO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Faixa Atraso</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
-                        </div>
-
                         <!--PLANO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Plano</label>
@@ -68,6 +62,9 @@
                 </div>
             </div>
         </div>
+
+
+
 
         <!--RESUMO-->
         <div class="row margin-bottom">
@@ -101,6 +98,32 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-ticket"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ROLAGEM BUCKET-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Rolagem Bucket</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('rolagem','Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>Lote: </label>
+                            <select ng-change="carregarGraficoRolagem()" ng-model="lote.mes">                                
+                                <option ng-repeat="cc in dashboard.listMonth" value="{{cc.mes}}">{{cc.ds_mes}}</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.bucket"></high-charts>
                     </div>
                 </div>
             </div>
@@ -229,7 +252,6 @@
             </div>
         </div>
 
-
     </div>
 </div>
 
@@ -252,6 +274,7 @@
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.lote = { mes: '' };
 
         //carregar os filtros
         $http({
@@ -265,7 +288,7 @@
             $scope.dashFiltros.faixaAtraso = data.Table2;
             $scope.dashFiltros.plano = r.data.Table6;
             $scope.dashFiltros.devedor = r.data.Table5;
-        
+
         });
 
         $scope.carregarDashboard = function () {
@@ -278,14 +301,16 @@
                 let data = r.data;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.listMonth = data.Table9;
+
+                $scope.lote.mes = $scope.dashboard.listMonth.map(obj => obj.mes)[0];
 
                 $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_aging);
                 $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_fx_saldo);
                 $scope.dashboard.faixaCarteira = data.Table5.map(obj => obj.ds_carteira);
                 $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
-
-
+                
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table1.map(obj => (obj[indicador])), color: '#b90404' }];
@@ -295,8 +320,62 @@
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#b90404' }];
 
                 $scope.carregarMapa();
-
+                $scope.carregarGraficoRolagem();
             });
+        }
+
+        $scope.carregarGraficoRolagem = function () {           
+
+            let titulo = alasql('select ds_mes from ? ', [$scope.dashboard.dados.Table9.filter(obj => obj.mes == $scope.lote.mes)])[0].ds_mes;
+            
+            let dados_status = alasql('select bucketIni status, sum(qtd) quantidade from ? where mes = ' + $scope.lote.mes + ' group by bucketIni', [$scope.dashboard.dados.Table7]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select bucketFim substatus, qtd quantidade from ? where mes = ' + $scope.lote.mes + '', [$scope.dashboard.dados.Table7.filter(d => d.bucketIni == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            $scope.dashboard.bucket = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Lote '+ titulo
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                series: [{
+                    name: "Atraso Inicial do Lote",
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
         }
 
         // carrega o mapa de acordo com o indicador escolhido
