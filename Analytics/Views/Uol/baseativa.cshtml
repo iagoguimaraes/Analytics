@@ -15,6 +15,18 @@
             </div>
         </header>
 
+        <!-- VISÃO-->
+        <div class="row margin-bottom text-center" style="margin-top: 15px;">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-warning active" ng-click="alterarVisao('digital')">
+                    <input type="radio"> Digital
+                </label>
+                <label class="btn btn-warning" ng-click="alterarVisao('humano')">
+                    <input type="radio"> Humano
+                </label>
+            </div>
+        </div>
+
         <!-- FILTROS -->
         <div class="row margin-bottom">
             <div class="col-xs-12" ng-if="dashFiltros.status === 200">
@@ -237,7 +249,19 @@
 
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            segmentacao: ''
+            segmentacao: '',
+            visao: 'digital',
+        };
+
+        //alterar visão dashboard
+        $scope.alterarVisao = function (visao) {
+            if (visao == 'humano') {
+                $scope.filtros.visao = 'humano'
+            } else if (visao == 'digital') {
+                $scope.filtros.visao = 'digital'
+            }
+
+            $scope.carregarDashboard();
         };
 
         $scope.mapa = {

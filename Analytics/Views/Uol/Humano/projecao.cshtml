@@ -1,0 +1,256 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-uol-projecao">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Projecao Acordos - Visão</div>
+            <div class="page-menu-button" ng-click="carregarGrafico()">
+                <input type="button" class="btn btn-warning" ng-click="filtros.conceito = 'vl_acordo'" value="Financeiro" />
+            </div>
+            <div class="page-menu-button" ng-click="carregarGrafico()">
+                <input type="button" class="btn btn-warning" ng-click="filtros.conceito = 'acordo'" value="Quantidade" />
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <!-- Widgets -->
+            <div class="row clearfix">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new bg-new-orange hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Projeção Acordos Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.acordo | number"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new bg-new-deep-orange hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">done</i>
+                        </div>
+
+                        <div class="content">
+                            <div class="text">Projeção Acordos Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.acordo | number"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box-new bg-new-orange hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Dia</div>
+                            <div class="number" ng-bind="dashboard.resumoDia.vl_acordo| currency: 'R$' "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new bg-new-deep-orange hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons">money_off</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">R$ Projeção Mês</div>
+                            <div class="number" ng-bind="dashboard.resumoMes.vl_acordo | currency: 'R$' "></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PROJECAO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção de Hoje - {{visao}}</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_dia" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PROJECAO MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Projeção do Mês - {{visao}}</span>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.projecao_mes" style="width: 100%; height: 350px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-uol-projecao', function ($scope, $http, $filter) {
+
+        $scope.dashboard = {};
+        $scope.filtros = { conceito: 'acordo' };
+        $scope.visao = "";
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/uol/dashboard/humano/projecao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumoDia = r.data.Table4[0];
+                $scope.dashboard.resumoMes = r.data.Table4[1];
+
+                // STATUS DASHBOARD OK
+                $scope.dashboard.status = r.status;
+                $scope.carregarGrafico();
+
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+
+            let indicador = $scope.filtros.conceito;
+            let data = $scope.dashboard.dados;
+
+            // PROJECAO DO DIA
+            if ($scope.dashboard.dados.Table.length > 0) {
+
+
+                let dia_acordo = '';
+                let dia_projecao = '';
+
+                switch (indicador) {
+                    case 'acordo':
+                        dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                        $scope.visao = "QUANTIDADE";
+                        break;
+                    case 'vl_acordo':
+                        dia_acordo = data.Table1.map(o => ({ y: o.vl_acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.vl_acordo }));
+                        $scope.visao = "FINANCEIRA";
+                        break;
+                    default:
+                        dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                        $scope.visao = "QUANTIDADE";
+                }
+
+                dia_acordo[dia_acordo.length - 1].dataLabels = { enabled: true };
+                dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+
+                $scope.dashboard.projecao_dia = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: data.Table1.map(o => o.hora)
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: '#404040',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: dia_acordo
+                        },
+                        {
+                            type: 'area',
+                            name: 'Acordo',
+                            color: '#404040',
+                            marker: { symbol: 'circle' },
+                            data: dia_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+            }
+
+            let mes_acordo = '';
+            let mes_projecao = '';
+
+            switch (indicador) {
+                case 'acordo':
+                    mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
+                    break;
+                case 'vl_acordo':
+                    mes_acordo = data.Table3.map(o => ({ y: o.vl_acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.vl_acordo }));
+                    break;
+                default:
+                    mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
+            }
+
+            mes_acordo[mes_acordo.length - 1].dataLabels = { enabled: true };
+            mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+
+            $scope.dashboard.projecao_mes = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: data.Table3.map(o => o.data)
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: 'Projeção',
+                        color: '#404040',
+                        dashStyle: 'dot',
+                        marker: { symbol: 'circle' },
+                        data: mes_acordo
+                    },
+                    {
+                        type: 'area',
+                        name: 'Acordo',
+                        color: '#404040',
+                        marker: { symbol: 'circle' },
+                        data: mes_projecao
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+
+        }
+
+        $scope.carregarDashboard();
+    });
+
+</script>
