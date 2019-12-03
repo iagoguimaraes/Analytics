@@ -895,6 +895,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
@@ -925,6 +927,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
                     parametros.Add("empresa", empresa);
                     parametros.Add("segmento", segmento);
                     parametros.Add("atraso", atraso);

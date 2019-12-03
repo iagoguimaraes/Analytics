@@ -345,7 +345,7 @@
                         <!--TABELA-->
                         <div class="table-responsive" ng-show="graficoHora.exibir == 'true'">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahoraProduto">
                                     <thead>
                                         <tr>
                                             <th>Hora / Produto</th>
@@ -363,7 +363,7 @@
                                             <th>Conversão</th>
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="e in dashboard.horahora | groupBy: 'hora'">
+                                    <tbody ng-repeat="e in dashboard.horahoraProduto | groupBy: 'hora'">
 
                                         <tr class="text-bold">
                                             <td>
@@ -778,13 +778,12 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.horahoraProduto = r.data.Table1;
                 $scope.dashboard.produto = r.data.Table2;
                 $scope.dashboard.supervisor = r.data.Table3;
                 $scope.dashboard.operador = r.data.Table4;
                 $scope.dashboard.tabulacao = r.data.Table6;
-
-                $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.horahora = r.data.Table8;
 
                 $scope.dashboard.alegaPagamento = [
                     { name: 'CPC', type: 'column', color: 'rgba(124, 197, 230, 1)', data: r.data.Table5.map(obj => obj.CPC) },

@@ -42,12 +42,6 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                         </div>
 
-                        <!--FAIXA ATRASO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Faixa Atraso</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
-                        </div>
-
                         <!--PLANO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Plano</label>
@@ -68,6 +62,9 @@
                 </div>
             </div>
         </div>
+
+
+
 
         <!--RESUMO-->
         <div class="row margin-bottom">
@@ -105,6 +102,7 @@
                 </div>
             </div>
         </div>
+        
 
         <!--VALOR-->
         <div class="row margin-bottom">
@@ -229,7 +227,6 @@
             </div>
         </div>
 
-
     </div>
 </div>
 
@@ -252,6 +249,7 @@
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        
 
         //carregar os filtros
         $http({
@@ -265,7 +263,7 @@
             $scope.dashFiltros.faixaAtraso = data.Table2;
             $scope.dashFiltros.plano = r.data.Table6;
             $scope.dashFiltros.devedor = r.data.Table5;
-        
+
         });
 
         $scope.carregarDashboard = function () {
@@ -278,14 +276,14 @@
                 let data = r.data;
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
+                
 
                 $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_aging);
                 $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_fx_saldo);
                 $scope.dashboard.faixaCarteira = data.Table5.map(obj => obj.ds_carteira);
                 $scope.dashboard.faixaSituacao = data.Table6.map(obj => obj.ds_situacao);
-
-
+                
                 let indicador = 'CONTRATO';
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.atraso = [{ name: [indicador], data: data.Table1.map(obj => (obj[indicador])), color: '#b90404' }];
@@ -295,9 +293,9 @@
                 $scope.dashboard.situacao = [{ name: 'Quantidade', data: data.Table6.map(obj => (obj.CONTRATO)), color: '#b90404' }];
 
                 $scope.carregarMapa();
-
+                
             });
-        }
+        }       
 
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarMapa = function () {
