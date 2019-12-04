@@ -8,14 +8,14 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">HoraHora Porto Vida - {{carteiraSelecionada}}</div>
+            <div class="page-name">Hora Hora Porto Vida</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
         </header>
 
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Cobrança')">Cobrança</button>
@@ -23,7 +23,7 @@
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('ADC')">ADC</button>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
@@ -63,12 +63,10 @@
                         </div>
 
                         <!--CARTEIRA-->
-                        <!--
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
-                             -->
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -263,7 +261,7 @@
                                 <tbody>
                                     <tr ng-repeat="carteira in dashboard.carteira">
                                         <td>{{carteira.carteira}}</td>
-<td>{{carteira.discado | number}}</td>
+                                        <td>{{carteira.discado | number}}</td>
                                         <td>{{carteira.contato | number}}</td>
                                         <td>{{carteira.cpc | number}}</td>
                                         <td>{{carteira.cpca | number}}</td>
@@ -304,7 +302,7 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            carteira: '[{ id: 6 }, { id: 7 }]',
+            carteira: '',
         };
 
         $scope.carteiraSelecionada = 'Cobrança';
@@ -316,12 +314,12 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/portoseguro/dashboard/humano/filtro",
+            url: "/api/portoseguro/dashboard/digital/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteira = r.data.Table2;
+            $scope.dashFiltros.carteira = r.data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -372,10 +370,10 @@
             else if (carteira == 'ADC') {
                 $scope.filtros.carteira = '[{ id: 4 }]';
                 $scope.sucessoDesc = "Autoriza";
-            }   
+            }
             else
                 $scope.filtros.carteira = null;
-          
+
             $scope.carregarDashboard();
         };
 
