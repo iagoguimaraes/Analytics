@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora Digital</div>
+            <div class="page-name">Hora Hora Digital Auto</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -282,7 +282,6 @@
                 </div>
             </div>
 
-
         </div>
     </div>
 </div>
@@ -302,13 +301,12 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/portoseguro/dashboard/humano/filtro",
+            url: "/api/portoseguro/dashboard/digital/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
             $scope.dashFiltros.status = r.status;
-
-            $scope.dashFiltros.carteira = r.data.Table1;
+            $scope.dashFiltros.carteira = r.data.Table;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

@@ -16,6 +16,26 @@ namespace Analytics.Controllers
 
         #region DIGITAL
 
+        [Route("dashboard/digital/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardDigitalFiltros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_PORTO"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/horahora")]
         [HttpPost]
         [Autorizar]

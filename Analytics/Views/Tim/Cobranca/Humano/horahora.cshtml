@@ -161,10 +161,10 @@
         </div>
 
         <div class="margin-bottom">
-            <div class="form-group">                
-                    <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadClassificacoes()">Classificação Ocorrências</button>                
-                
-                    <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadCarteiras()">De/para Carteiras</button>                
+            <div class="form-group">
+                <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadClassificacoes()">Classificação Ocorrências</button>
+
+                <button type="button" class="btn btn-danger" data-toggle="control-sidebar" ng-click="DownloadCarteiras()">De/para Carteiras</button>
             </div>
         </div>
 
@@ -178,11 +178,11 @@
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
-            <div class="description-block">
-                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                <span class="description-text">Discado</span>
-            </div>
-        </div>*@
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                                <span class="description-text">Discado</span>
+                            </div>
+                        </div>*@
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -223,11 +223,11 @@
 
                 <div class="row bg-blue">
                     @*<div class="col-sm-2 col-sm-offset-1 border-right">
-            <div class="description-block">
-                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                <span class="description-text">Hit Rate</span>
-            </div>
-        </div>*@
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                                <span class="description-text">Hit Rate</span>
+                            </div>
+                        </div>*@
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -345,7 +345,7 @@
                         <!--TABELA-->
                         <div class="table-responsive" ng-show="graficoHora.exibir == 'true'">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahoraProduto">
                                     <thead>
                                         <tr>
                                             <th>Hora / Produto</th>
@@ -363,7 +363,7 @@
                                             <th>Conversão</th>
                                         </tr>
                                     </thead>
-                                    <tbody ng-repeat="e in dashboard.horahora | groupBy: 'hora'">
+                                    <tbody ng-repeat="e in dashboard.horahoraProduto | groupBy: 'hora'">
 
                                         <tr class="text-bold">
                                             <td>
@@ -461,68 +461,96 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <high-chart class="margin-bottom" series="dashboard.alegaPagamento" axis-Categories="dashboard.horas" type="column"
+                        <high-chart series="dashboard.alegaPagamento" axis-Categories="dashboard.horas" type="column"
                                     plot-Options-Column-Stacking="normal" plot-Options-spline-Data-Label="true" y-Axis1-Min="0"
-                                    y-Axis1-Max="80" height="410"></high-chart>
+                                    y-Axis1-Max="80" height="500"></high-chart>
                     </div>
                 </div>
             </div>
             <!--POR ESTADO-->
             <div class="col-xs-12 col-md-6">
                 <div class="card">
-                    <div id="info" class="card-header">
-                        <span class="card-header-title">Promessa por estado</span>
+                    <div class="card-header">
+                        <span class="card-header-title">Produção por Estado</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table7')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right">
-                            <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                <option value="percentual">Percentual por Estado</option>
-                                <option value="promessas">Qtd Promessas</option>
+                        <span class="pull-right">
+                            <select ng-model="graficoEstado.indicador" ng-change="CarregarGraficoEstado()">
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="vlr_promessas">Valor Promessas</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="percentual">% Percent. Promessas</option>
+                                <option value="vlr_promessas">$ Valor Promessa</option>
+                                <option value="ticket_medio">$ Ticket Médio Promessa</option>
                             </select>
-                        </small>
+                        </span>
                     </div>
-
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-blue-active">
-                                    <div class="inner">
-                                        <p><h5>Qtd - {{dashboard.mapa.estado}}</h5></p>
-                                        <h4 ng-bind="dashboard.mapa.promessas | number"></h4>
-                                        <h5 ng-bind="(dashboard.mapa.percentual)+' %'"></h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-green-active">
-                                    <div class="inner">
-                                        <p><h5>Valor - {{dashboard.mapa.estado}}</h5></p>
-                                        <h4 ng-bind="dashboard.mapa.vlr_promessas | currency: 'R$ '"></h4>
-                                        <h5 ng-bind="dashboard.mapa.ticket_medio | currency: 'R$ '"></h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12 col-md-4">
-                                <div class="small-box bg-yellow-active">
-                                    <div class="inner">
-                                        <h5>Conversão</h5>
-                                        <h4 ng-bind="(dashboard.mapa.conversao)+' %'"></h4>
-                                        <h5>{{dashboard.mapa.estado}}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <mapa-brasil style="height: 300px" width="100%" dados="dashboard.estados" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        <high-chart series="dashboard.estado" height="500" axis-Categories="dashboard.estados" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
+                @*<div class="card">
+                        <div id="info" class="card-header">
+                            <span class="card-header-title">Promessa por estado</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table7')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <small class="pull-right">
+                                <select ng-model="mapa.indicador" ng-change="carregarMapa()">
+                                    <option value="percentual">Percentual por Estado</option>
+                                    <option value="promessas">Qtd Promessas</option>
+                                    <option value="conversao">Conversão</option>
+                                    <option value="vlr_promessas">Valor Promessas</option>
+                                </select>
+                            </small>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-blue-active">
+                                        <div class="inner">
+                                            <p><h5>Qtd - {{dashboard.mapa.estado}}</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.promessas | number"></h4>
+                                            <h5 ng-bind="(dashboard.mapa.percentual)+' %'"></h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-green-active">
+                                        <div class="inner">
+                                            <p><h5>Valor - {{dashboard.mapa.estado}}</h5></p>
+                                            <h4 ng-bind="dashboard.mapa.vlr_promessas | currency: 'R$ '"></h4>
+                                            <h5 ng-bind="dashboard.mapa.ticket_medio | currency: 'R$ '"></h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-4">
+                                    <div class="small-box bg-yellow-active">
+                                        <div class="inner">
+                                            <h5>Conversão</h5>
+                                            <h4 ng-bind="(dashboard.mapa.conversao)+' %'"></h4>
+                                            <h5>{{dashboard.mapa.estado}}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <mapa-brasil style="height: 300px" width="100%" dados="dashboard.estados" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
+                        </div>
+                    </div>*@
             </div>
         </div>
 
@@ -548,7 +576,7 @@
                                         @*<th>Discado</th>*@
                                         <th>Contato</th>
                                         <th>CPC</th>
-                                        <th>Alega</th> 
+                                        <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>Valor Promessa</th>
@@ -623,7 +651,7 @@
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
                                 <thead>
                                     <tr>
-                                        <th>Supervisor/Equipe</th>
+                                        <th>Supervisor/{{}}</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>Alega</th>
@@ -637,7 +665,6 @@
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'ds_supervisor'">
-
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
@@ -668,12 +695,9 @@
                                         <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -745,12 +769,17 @@
             indicador: 'percentual'
         };
 
+        $scope.graficoEstado = {
+            indicador: 'promessa'
+        };
+
         $scope.idSelecionadoMapa = '';
-        $scope.graficoHora = { indicador: 'promessa', exibir: 'true' };
+        $scope.graficoHora = { indicador: 'promessa', exibir: 'true' };        
+        $scope.filtrar = { visao: 'Equipe' };
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-
+        
 
         // carregar os filtros
         $http({
@@ -778,13 +807,12 @@
                 $scope.dashboard.dados = r.data;
 
                 $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.horahoraProduto = r.data.Table1;
                 $scope.dashboard.produto = r.data.Table2;
                 $scope.dashboard.supervisor = r.data.Table3;
                 $scope.dashboard.operador = r.data.Table4;
                 $scope.dashboard.tabulacao = r.data.Table6;
-
-                $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.horahora = r.data.Table8;
 
                 $scope.dashboard.alegaPagamento = [
                     { name: 'CPC', type: 'column', color: 'rgba(124, 197, 230, 1)', data: r.data.Table5.map(obj => obj.CPC) },
@@ -792,14 +820,16 @@
                     { name: '% Alega Pagamento', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table5.map(obj => (obj.AlegaPagamento * 100 / obj.CPC).toFixed(1) * 1) }
                 ];
 
-                $scope.carregarMapa();
-
+                //$scope.carregarMapa();
 
                 $scope.carregarGraficoHora();
+                $scope.CarregarGraficoEstado();
             });
         }
 
 
+
+        // Muda o estado conforme escolha e click no mapa
         $scope.mudarEstado = function (id) {
 
             let dados = alasql('select "BR-" + uf id, ' + $scope.mapa.indicador + ' [value], uf, estado, regiao, percentual, conversao, promessas, vlr_promessas, ticket_medio from ? where id like ("%' + id + '%") order by [value] desc', [$scope.dashboard.dados.Table7])[0];
@@ -832,6 +862,26 @@
 
             $scope.mudarEstado($scope.dashboard.maiorUF);
 
+        }
+
+        // carrega grafico bar de estados conforme indicador escolhido
+        $scope.CarregarGraficoEstado = function () {
+
+            let dados = $scope.dashboard.dados.Table7;
+            $scope.dashboard.estados = dados.map(obj => obj.estado);
+
+            let indicador = $scope.graficoEstado.indicador;
+
+            switch (indicador) {
+                case 'txloc':
+                    $scope.dashboard.estado = [{ name: indicador, data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1), color: '#0073b7' }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.estado = [{ name: indicador, data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1), color: '#0073b7' }];
+                    break;
+                default:
+                    $scope.dashboard.estado = [{ name: indicador, data: dados.map(obj => (obj[indicador])), color: '#0073b7' }];
+            }
         }
 
         // carrega o grafico de acordo com o indicador escolhido

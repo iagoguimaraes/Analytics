@@ -8,14 +8,14 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Pagamento Porto Vida - {{carteiraSelecionada}}</div>
+            <div class="page-name">Pagamento Porto Vida</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
         </header>
 
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Cobrança')">Cobrança</button>
@@ -23,7 +23,7 @@
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('ADC')">ADC</button>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
@@ -60,6 +60,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--CARTEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -158,7 +164,7 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            carteira: '[{ id: 6 }, { id: 7 }]',
+            carteira: '',
         };
 
         $scope.carteiraSelecionada = 'Cobrança';
@@ -171,13 +177,13 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/portoseguro/dashboard/humano/filtro",
+            url: "/api/portoseguro/dashboard/digital/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
 
             $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.carteira = r.data.Table2;
+            $scope.dashFiltros.carteira = r.data.Table1;
         });
 
 

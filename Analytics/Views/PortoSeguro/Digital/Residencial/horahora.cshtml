@@ -8,14 +8,14 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">HoraHora Porto Residencial - {{carteiraSelecionada}}</div>
+            <div class="page-name">Hora Hora Porto Residencial</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
             </div>
         </header>
 
-        <div class="row margin-bottom">
+        @*<div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('Inadimplente')">Inadimplente</button>
@@ -23,7 +23,7 @@
                     <button type="button" class="btn btn-primary" ng-click="selecionarCarteira('ADC')">ADC</button>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <!-- FILTROS -->
         <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
@@ -62,13 +62,12 @@
                             </div>
                         </div>
 
-                        <!--CARTEIRA-->
-                        <!--
+                        <!--CARTEIRA-->                        
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
-                             -->
+                             
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -303,7 +302,7 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            carteira: '[{ id: 10 }]',
+            carteira: '',
         };
 
         $scope.carteiraSelecionada = 'Inadimplente';
@@ -315,7 +314,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/portoseguro/dashboard/humano/filtro",
+            url: "/api/portoseguro/dashboard/digital/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
