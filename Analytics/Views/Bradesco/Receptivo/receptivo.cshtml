@@ -223,23 +223,8 @@
                                         <th>Tempo Médio em Fila</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.fila | groupBy: 'fila'">
-
-                                    <tr class="text-bold">
-                                        <td>
-                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].fila}}
-                                        </td>
-                                        <td>{{e | divideSumColumns: 'sla_ok':'chamada'| percentage:1}}</td>
-                                        <td>{{e | sumByColumn: 'chamada'| number}}</td>
-                                        <td>{{e | sumByColumn: 'atendido'| number}}</td>
-                                        <td>{{e | sumByColumn: 'abandonado'| number}}</td>
-                                        <td>{{e | divideSumColumns: 'abandonado':'chamada'| percentage:1}}</td>
-                                        <td>{{e | avgColumn: 'tma' | formatTimer}}</td>
-                                        <td>{{e | avgColumn: 'tmf' | formatTimer}}</td>
-                                    </tr>
-
-                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                <tbody>          
+                                    <tr ng-repeat="c in dashboard.fila">
                                         <td>{{c.fila}}</td>
                                         <td>{{c.sla_ok / c.chamada | percentage:1}}</td>
                                         <td>{{c.chamada | number}}</td>
@@ -249,9 +234,7 @@
                                         <td>{{c.tma}}</td>
                                         <td>{{c.tmf}}</td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
 
