@@ -633,25 +633,32 @@
             </div>
         </div>
 
-        <!--TABELA SUPERVISOR/EQUIPE-->
+        <!--TABELA SUPERVISOR-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <span class="card-header-title">Análise por Supervisor / {{agrupar.coluna}}</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
+                        <span class="pull-right">
+                            <select ng-model="agrupar.coluna" ng-change="agruparTabelaSupervisor()">
+                                <option value="Equipe">Equipe</option>
+                                <option value="Produto">Produto</option>
+                                <option value="FaixaAtraso">Faixa de Atraso</option>
+                            </select>
+                        </span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.supervisor">
                                 <thead>
                                     <tr>
-                                        <th>Supervisor/{{}}</th>
+                                        <th>Supervisor / {{agrupar.coluna}}</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>Alega</th>
@@ -664,11 +671,11 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'ds_supervisor'">
+                                <tbody ng-repeat="e in dashboard.supervisor | groupBy: 'Supervisor'">
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{e[0].ds_supervisor}}
+                                            {{e[0].Supervisor}}
                                         </td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
@@ -683,7 +690,7 @@
                                     </tr>
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
-                                        <td>{{c.ds_equipe}}</td>
+                                        <td>{{c.coluna}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.alega_pagamento | number}}</td>
@@ -774,12 +781,12 @@
         };
 
         $scope.idSelecionadoMapa = '';
-        $scope.graficoHora = { indicador: 'promessa', exibir: 'true' };        
-        $scope.filtrar = { visao: 'Equipe' };
+        $scope.graficoHora = { indicador: 'promessa', exibir: 'true' };
+        $scope.agrupar = { coluna: 'Equipe' };
 
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        
+
 
         // carregar os filtros
         $http({
@@ -809,10 +816,11 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahoraProduto = r.data.Table1;
                 $scope.dashboard.produto = r.data.Table2;
-                $scope.dashboard.supervisor = r.data.Table3;
+
                 $scope.dashboard.operador = r.data.Table4;
                 $scope.dashboard.tabulacao = r.data.Table6;
                 $scope.dashboard.horahora = r.data.Table8;
+
 
                 $scope.dashboard.alegaPagamento = [
                     { name: 'CPC', type: 'column', color: 'rgba(124, 197, 230, 1)', data: r.data.Table5.map(obj => obj.CPC) },
@@ -822,12 +830,18 @@
 
                 //$scope.carregarMapa();
 
+                $scope.agruparTabelaSupervisor();
                 $scope.carregarGraficoHora();
                 $scope.CarregarGraficoEstado();
             });
         }
 
 
+        $scope.agruparTabelaSupervisor = function () {
+
+            $scope.dashboard.supervisor = alasql('select Supervisor, ' + $scope.agrupar.coluna + ' coluna , sum(contato) contato ,sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(alega_pagamento) alega_pagamento, sum(vlr_promessa) vlr_promessa from ? group by Supervisor, ' + $scope.agrupar.coluna + ' order by 1,2', [$scope.dashboard.dados.Table3]);
+
+        }
 
         // Muda o estado conforme escolha e click no mapa
         $scope.mudarEstado = function (id) {
