@@ -285,7 +285,7 @@
                     <div class="card-header">
 
                         <div class="card-header-title">
-                           Comparar {{grafico.indicador}} por :
+                            Comparar {{grafico.indicador}} por :
                         </div>
                         <div class="card-header-title">
                             <select style="margin-left: 20px" class="form-control" ng-model="filtros.visao" ng-change="carregarDashboard()">
@@ -304,15 +304,14 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <!--GRAFICO-->
-                        <high-chart series="dashboard.series" axis-Categories="dashboard.categories" type="line" plot-Options-Line-Data-Label="true"></high-chart>
+                        <high-chart series="dashboard.series" axis-Categories="dashboard.categories" plot-Options-Line-Data-Label="true" plot-Options-Column-Data-Label="true"></high-chart>
 
                         <!--QUADROS -->
                         <div class="row">
 
                             <!--INDICADORES ABSOLUTOS-->
-                            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                            <div class="col-xs-12 col-sm-6 col-lg-2 ">
                                 <div class="small-box" ng-class="dashboard.discado.vs >= 0 ? 'bg-green' : 'bg-red'">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.discado.vs | percentage:1"></h3>
@@ -377,8 +376,21 @@
                                 </div>
                             </div>
 
+                            <div class="col-xs-12 col-sm-6 col-lg-2">
+                                <div class="small-box" ng-class="dashboard.acordo.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.acordo.vs | percentage:1"></h3>
+                                        <p>{{dashboard.acordo.p1 | number}} vs {{dashboard.acordo.p2 | number}}</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </div>
+                                    <a href="#" ng-click="grafico.indicador = 'acordo'" class="small-box-footer">Acordo <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+
                             <!--INDICADORES PERCENTUAIS e MAILING-->
-                            <div class="col-xs-12 col-sm-6 col-lg-2 col-lg-offset-1">
+                            <div class="col-xs-12 col-sm-6 col-lg-2 col-xs-offset-1">
                                 <div class="small-box" ng-class="dashboard.hitrate.vs >= 0 ? 'bg-green' : 'bg-red'">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.hitrate.vs | percentage:1"></h3>
@@ -421,20 +433,34 @@
                             </div>
 
                             <div class="col-xs-12 col-sm-6 col-lg-2">
-                                <div class="small-box" ng-class="dashboard.conversao.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                <div class="small-box" ng-class="dashboard.conversaop.vs >= 0 ? 'bg-green' : 'bg-red'">
                                     <div class="inner">
-                                        <h3 ng-bind="dashboard.conversao.vs | percentage:1"></h3>
-                                        <p>{{dashboard.conversao.p1 | percentage:1}} vs {{dashboard.conversao.p2 | percentage:1}}</p>
-                                        <p><h5> Dif : {{dashboard.difconversao.dif | percentage:1}} </h5></p>
+                                        <h3 ng-bind="dashboard.conversaop.vs | percentage:1"></h3>
+                                        <p>{{dashboard.conversaop.p1 | percentage:1}} vs {{dashboard.conversaop.p2 | percentage:1}}</p>
+                                        <p><h5> Dif : {{dashboard.difconversaop.dif | percentage:1}} </h5></p>
                                     </div>
                                     <div class="icon">
                                         <i class="fa fa-thumbs-up"></i>
                                     </div>
-                                    <a href="#" ng-click="grafico.indicador = 'conversao'" class="small-box-footer">Conversão <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="#" ng-click="grafico.indicador = 'conversaop'" class="small-box-footer">Conversão Prom. <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
 
                             <div class="col-xs-12 col-sm-6 col-lg-2">
+                                <div class="small-box" ng-class="dashboard.conversaoa.vs >= 0 ? 'bg-green' : 'bg-red'">
+                                    <div class="inner">
+                                        <h3 ng-bind="dashboard.conversaoa.vs | percentage:1"></h3>
+                                        <p>{{dashboard.conversaoa.p1 | percentage:1}} vs {{dashboard.conversaoa.p2 | percentage:1}}</p>
+                                        <p><h5> Dif : {{dashboard.difconversaoa.dif | percentage:1}} </h5></p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fa fa-thumbs-up"></i>
+                                    </div>
+                                    <a href="#" ng-click="grafico.indicador = 'conversaoa'" class="small-box-footer">Conversão Acordo <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+
+                            @*<div class="col-xs-12 col-sm-6 col-lg-2">
                                 <div class="small-box" ng-class="dashboard.esforco.vs >= 0 ? 'bg-red' : 'bg-green'">
                                     <div class="inner">
                                         <h3 ng-bind="dashboard.esforco.vs | percentage:1"></h3>
@@ -446,10 +472,8 @@
                                     </div>
                                     <a href="#" ng-click="grafico.indicador = 'esforco'" class="small-box-footer">Esforço <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
-                            </div>
-
+                            </div>*@
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -515,7 +539,7 @@
             $scope.dashFiltros.faixaAtraso = data.Table2;
             $scope.dashFiltros.plano = data.Table5;
             $scope.dashFiltros.devedor = data.Table6;
-           
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -552,9 +576,13 @@
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1);
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.cpca2 * 100 / obj.cpc2).toFixed(1) * 1);
                     break;
-                case 'conversao':
+                case 'conversaop':
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1);
                     series2 = $scope.dashboard.dados.Table.map(obj => (obj.promessa2 * 100 / obj.cpca2).toFixed(1) * 1);
+                    break;
+                case 'conversaoa':
+                    series1 = $scope.dashboard.dados.Table.map(obj => (obj.acordo * 100 / obj.cpca).toFixed(1) * 1);
+                    series2 = $scope.dashboard.dados.Table.map(obj => (obj.acordo2 * 100 / obj.cpca2).toFixed(1) * 1);
                     break;
                 case 'esforco':
                     series1 = $scope.dashboard.dados.Table.map(obj => (obj.discado / obj.promessa).toFixed(1) * 1);
@@ -565,16 +593,25 @@
                     series2 = $scope.dashboard.dados.Table.map(obj => obj[indicador + '2']);
             }
 
-            $scope.dashboard.series = [
-                { name: 'Período 1', data: series1 },
-                { name: 'Período 2', data: series2, dashStyle: 'shortdot' }
-            ];
+
+            if ($scope.filtros.visao == 'mes') {
+
+                $scope.dashboard.series = [
+                    { name: 'Período 1', data: series1, type: 'column' },
+                    { name: 'Período 2', data: series2, type: 'column' }
+                ];
+            }
+            else
+                $scope.dashboard.series = [
+                    { name: 'Período 1', data: series1, type: 'line' },
+                    { name: 'Período 2', data: series2, type: 'line', dashStyle: 'shortdot' }
+                ];
 
         }
 
         $scope.carregarComparativo = function () {
-            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [$scope.dashboard.dados.Table])[0];
-            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa from ?', [$scope.dashboard.dados.Table])[0];
+            let dados1 = alasql('select sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(acordo) acordo from ?', [$scope.dashboard.dados.Table])[0];
+            let dados2 = alasql('select sum(discado2) discado, sum(contato2) contato, sum(cpc2) cpc, sum(cpca2) cpca, sum(promessa2) promessa, sum(acordo2) acordo from ?', [$scope.dashboard.dados.Table])[0];
 
             let calculo = {
                 hitrate1: dados1.contato / dados1.discado,
@@ -583,8 +620,10 @@
                 txloc2: dados2.cpc / dados2.contato,
                 txapv1: dados1.cpca / dados1.cpc,
                 txapv2: dados2.cpca / dados2.cpc,
-                conversao1: dados1.promessa / dados1.cpca,
-                conversao2: dados2.promessa / dados2.cpca,
+                conversaop1: dados1.promessa / dados1.cpca,
+                conversaop2: dados2.promessa / dados2.cpca,
+                conversaoa1: dados1.acordo / dados1.cpca,
+                conversaoa2: dados2.acordo / dados2.cpca,
                 esforco1: (dados1.discado / dados1.promessa).toFixed(2),
                 esforco2: (dados2.discado / dados2.promessa).toFixed(2)
             }
@@ -594,18 +633,21 @@
             $scope.dashboard.cpc = { p1: dados1.cpc, p2: dados2.cpc, vs: dados1.cpc / dados2.cpc - 1 };
             $scope.dashboard.cpca = { p1: dados1.cpca, p2: dados2.cpca, vs: dados1.cpca / dados2.cpca - 1 };
             $scope.dashboard.promessa = { p1: dados1.promessa, p2: dados2.promessa, vs: dados1.promessa / dados2.promessa - 1 };
+            $scope.dashboard.acordo = { p1: dados1.acordo, p2: dados2.acordo, vs: dados1.acordo / dados2.acordo - 1 };
 
             $scope.dashboard.hitrate = { p1: calculo.hitrate1, p2: calculo.hitrate2, vs: calculo.hitrate1 / calculo.hitrate2 - 1 };
             $scope.dashboard.txloc = { p1: calculo.txloc1, p2: calculo.txloc2, vs: calculo.txloc1 / calculo.txloc2 - 1 };
             $scope.dashboard.txapv = { p1: calculo.txapv1, p2: calculo.txapv2, vs: calculo.txapv1 / calculo.txapv2 - 1 };
-            $scope.dashboard.conversao = { p1: calculo.conversao1, p2: calculo.conversao2, vs: calculo.conversao1 / calculo.conversao2 - 1 };
+            $scope.dashboard.conversaop = { p1: calculo.conversaop1, p2: calculo.conversaop2, vs: calculo.conversaop1 / calculo.conversaop2 - 1 };
+            $scope.dashboard.conversaoa = { p1: calculo.conversaoa1, p2: calculo.conversaoa2, vs: calculo.conversaoa1 / calculo.conversaoa2 - 1 };
 
             $scope.dashboard.esforco = { p1: calculo.esforco1, p2: calculo.esforco2, vs: calculo.esforco1 / calculo.esforco2 - 1 };
 
             $scope.dashboard.difhitrate = { dif: calculo.hitrate1 - calculo.hitrate2 };
             $scope.dashboard.diftxloc = { dif: calculo.txloc1 - calculo.txloc2 };
             $scope.dashboard.diftxapv = { dif: calculo.txapv1 - calculo.txapv2 };
-            $scope.dashboard.difconversao = { dif: calculo.conversao1 - calculo.conversao2 };
+            $scope.dashboard.difconversaop = { dif: calculo.conversaop1 - calculo.conversaop2 };
+            $scope.dashboard.difconversaoa = { dif: calculo.conversaoa1 - calculo.conversaoa2 };
             $scope.dashboard.difesforco = { dif: calculo.esforco1 - calculo.esforco2 };
 
         }
