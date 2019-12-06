@@ -1,0 +1,396 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+<div ng-controller="ctrl-uol-pagamento-humano">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Pagamentos Humano</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--CARTEIRA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Carteiras</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                            </div>
+
+                            <!--ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Atrasos</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso" style="width:100%"></select2>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAHSBOARD -->
+        <div ng-if="dashboard.status == 200">
+
+            <div class="container-fluid">
+
+                <!-- Resumo -->
+                <!-- Quantidade -->
+                <div class="row clearfix">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-green hover-zoom-effect">
+                            <div class="icon">
+                                <i class="material-icons">done_outline</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">Total Pagamentos</div>
+                                <div class="number" ng-bind="dashboard.resumo.totalpag | number"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-cyan hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">done_all</i>
+                            </div>
+
+                            <div class="content">
+                                <div class="text">Operação</div>
+                                <div class="number" ng-bind="dashboard.resumo.operacao | number"></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.operacao / dashboard.resumo.totalpag | percentage:1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-light-grey hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">done</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">Espontaneos</div>
+                                <div class="number" ng-bind="dashboard.resumo.direto | number"></div>
+                                <div class="percent-new" ng-style="{'color': 'black'}" ng-bind="dashboard.resumo.direto / dashboard.resumo.totalpag | percentage:1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Valores -->
+                <div class="row clearfix">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-green hover-zoom-effect">
+                            <div class="icon">
+                                <i class="material-icons">attach_money</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">R$ Pagamentos</div>
+                                <div class="number" ng-bind="dashboard.resumo.vlr_totalpag | currency:'R$ ' "></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-cyan hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">attach_money</i>
+                            </div>
+
+                            <div class="content">
+                                <div class="text">R$ Operação</div>
+                                <div class="number" ng-bind="dashboard.resumo.vlr_operacao | currency:'R$ ' "></div>
+                                <div class="percent-new" ng-bind="dashboard.resumo.vlr_operacao/dashboard.resumo.vlr_totalpag | percentage:1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="info-box-new bg-new-light-grey hover-expand-effect">
+                            <div class="icon">
+                                <i class="material-icons">money_off</i>
+                            </div>
+                            <div class="content">
+                                <div class="text">R$ Espontaneos</div>
+                                <div class="number" ng-bind="dashboard.resumo.vlr_direto | currency:'R$ ' "></div>
+                                <div class="percent-new" ng-style="{'color': 'black'}" ng-bind="dashboard.resumo.vlr_direto/dashboard.resumo.vlr_totalpag | percentage:1"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--TABELA CARTEIRA/ATRASO-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Pagamento por Carteira/Atraso</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table1')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                    <thead>
+                                        <tr>
+                                            <th>Carteira</th>
+                                            <th>Qtd Total</th>
+                                            <th>R$ Total</th>
+                                            <th>Operação</th>
+                                            <th>R$ Operação</th>
+                                            <th>Espontaneo</th>
+                                            <th>R$ Espontaneo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-repeat="e in dashboard.carteira | groupBy: 'ds_carteira'">
+
+                                        <tr class="text-bold">
+                                            <td>
+                                                <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                {{e[0].ds_carteira}}
+                                            </td>
+                                            <td>{{e | sumByColumn: 'totalpag'| number}}</td>
+                                            <td>{{e | sumByColumn: 'vlr_totalpag'| currency:'R$ '}}</td>
+                                            <td>{{e | sumByColumn: 'operacao'| number}}</td>
+                                            <td>{{e | sumByColumn: 'vlr_operacao'| currency:'R$ '}}</td>
+                                            <td>{{e | sumByColumn: 'direto'| number}}</td>
+                                            <td>{{e | sumByColumn: 'vlr_direto'| currency:'R$ '}}</td>
+                                        </tr>
+
+                                        <tr ng-repeat="c in e" ng-show="showTbody">
+                                            <td>{{c.ds_atraso}}</td>
+                                            <td>{{c.totalpag | number}}</td>
+                                            <td>{{c.vlr_totalpag | currency:'R$ '}}</td>
+                                            <td>{{c.operacao | number}}</td>
+                                            <td>{{c.vlr_operacao | currency:'R$ '}}</td>
+                                            <td>{{c.direto | number}}</td>
+                                            <td>{{c.vlr_direto | currency:'R$ '}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--GRAFICO-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Pagamentos do Período</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table2')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <small class="pull-right">
+                                <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                    <option value="qtd">Quantidade</option>
+                                    <option value="vlr">Valor</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                    <high-chart series="dashboard.dia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--MÉDIA MÊS-->
+            <div class="row clearfix">
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons col-black">group</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Media Operação Mês</div>
+                            <div class="number" ng-bind="dashboard.media.media_operacao | currency:'R$ ' "></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="info-box-new-4 hover-zoom-effect">
+                        <div class="icon">
+                            <i class="material-icons col-black">done_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Media Espontâneo Mês</div>
+                            <div class="number" ng-bind="dashboard.media.media_espontaneo | currency:'R$ ' "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--HISTORICO RECEBIMENTO-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Financeiro ultimos mesês</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table3')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row margin-bottom">
+                                <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.visao" plot-Options-Column-Stacking="normal"></high-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-uol-pagamento-humano', function ($scope, $http, $filter) {
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'qtd' };
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            carteira: '',
+            atraso: ''
+
+        };
+
+
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/uol/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.carteira = r.data.Table;
+            $scope.dashFiltros.atraso = r.data.Table1;
+
+
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/uol/dashboard/humano/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
+                $scope.dashboard.media = r.data.Table4[0];
+                $scope.dashboard.carteira = r.data.Table1;
+
+                $scope.carregarGrafico();
+                $scope.mudarGrafico();
+
+            });
+        }
+
+        $scope.mudarGrafico = function () {
+            let dados = $scope.dashboard.dados;
+            $scope.dashboard.visao = dados.Table3.map(obj => obj.mes_do_ano_descricao);
+
+            $scope.dashboard.qtDia = [
+                 { name: 'Operação', type: "column", data: dados.Table3.map(obj => (obj.vlr_operacao)) }
+               , { name: 'Espontaneo', type: "column", data: dados.Table3.map(obj => (obj.vlr_direto)) }];
+
+        }
+
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados;
+
+            if ($scope.grafico.indicador == 'vlr') {
+                $scope.dashboard.dia = [{ name: 'Valor', data: dados.Table2.map(obj => (obj.vlr_totalpag)) }];
+
+            }
+            else {
+                $scope.dashboard.dia = [{ name: 'Quantidade', data: dados.Table2.map(obj => (obj.totalpag)) }];
+            }
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
