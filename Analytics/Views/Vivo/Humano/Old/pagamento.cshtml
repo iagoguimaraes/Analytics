@@ -1,0 +1,363 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+    <div ng-controller="ctrl-vivo-pagamento">
+
+        <div ng-if="dashboard.status == 200">
+
+            <!-- HEADER-->
+            <header class="page-header">
+                <div class="page-name">Pagamento</div>
+                <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                    <i class="fa fa-filter"></i>
+                    FILTROS
+                </div>
+            </header>
+
+            <!-- FILTROS -->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div id="filtros-window" class="card display-none">
+                        <div class="card-header">
+                            <span class="card-header-title">Filtros</span>
+                            <div class="card-header-button card-header-close">
+                                <i class="fa fa-close"></i>
+                            </div>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA FINAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--FILTROS 2-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Filtros</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.empresa">
+                                    <label class="control-sidebar-subheading">Empresa</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.empresa" dados="dashboard.dimensao.empresa" ng-change="aplicarFiltros()"></select22>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.carteira">
+                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.carteira" dados="dashboard.dimensao.carteira" ng-change="aplicarFiltros()"></select22>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.aging">
+                                    <label class="control-sidebar-subheading">Aging</label>
+                                    <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.aging" dados="dashboard.dimensao.aging" ng-change="aplicarFiltros()"></select22>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row margin-bottom">
+                <div class="text-center margin-bottom">
+                    <label class="control-sidebar-subheading">Indicador:</label>
+                    <select ng-model="dashboard.indicador" ng-change="aplicarFiltros()">
+                        <option value="qtd">Quantidade</option>
+                        <option value="vlr">Valor</option>
+                    </select>
+                </div>
+
+                <!--RESUMO-->
+                <div class="col-xs-12 margin-bottom">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="small-box bg-aqua">
+                            <div class="inner">
+                                <h3 ng-bind="dashboard.resumo.qtd | number: 0"></h3>
+                                <p>Quantidade</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-list"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3>R$ {{dashboard.resumo.vlr | number : 2}}</h3>
+                                <p>Valor</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-money"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DIA-->
+                <div class="col-xs-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Por Dia</span>
+                            <div class="card-header-button" ng-click="extrairDia()">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--EMPRESA-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.empresa" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--CARTEIRA-->
+                <div class="col-xs-12 col-md-6 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.carteira" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+                <!--AGING-->
+                <div class="col-xs-12 col-md-12 margin-bottom">
+                    <div class="card">
+                        <div class="card-body">
+                            <high-charts config="dashboard.aging" style="width: 100%; height: 300px"></high-charts>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    angular.module('app').controller('ctrl-vivo-pagamento', function ($scope, $http, $filter, cubo) {
+       
+      // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = { dimensao: {}, filtros: {}, indicador: 'qtd' };
+        $scope.dimensao = {};
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dashboard.dimensao.carteira = cubo.obterDimensao('carteira');
+            $scope.dashboard.dimensao.aging = cubo.obterDimensao('aging');            
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.empresa = cubo.obterDimensao('empresa');
+            $scope.dimensao.carteira = cubo.obterDimensao('carteira');
+            $scope.dimensao.aging = cubo.obterDimensao('aging');            
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            let indicador = $scope.dashboard.indicador;
+
+            let dia = alasql('select data, sum(' + indicador + ') qtd from ? group by data order by 1', [dados]);
+            $scope.dashboard.diaTabela = dia;
+            let empresa = alasql('select empresa, sum(' + indicador + ') qtd from ? group by empresa order by 2 desc', [dados]);
+            let carteira = alasql('select carteira, sum(' + indicador + ') qtd from ? group by carteira order by 2 desc', [dados]);
+            let aging = alasql('select aging, sum(' + indicador + ') qtd from ? group by aging order by 2 desc', [dados]);            
+
+            $scope.dashboard.resumo = alasql('select data, sum(qtd) qtd, sum(vlr) vlr from ?', [dados])[0];
+
+            $scope.dashboard.dia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dia.map(obj => obj['data'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: dia.map(obj => obj.qtd), color: '#333' }]
+            };
+            $scope.dashboard.empresa = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Empresa'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%'
+                    }
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: empresa.map(obj => ({ name: obj.empresa, y: obj.qtd })) }]
+            };    
+            $scope.dashboard.carteira = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Carteira'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: carteira.map(obj => obj['carteira'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: carteira.map(obj => obj.qtd) }]
+            };
+            $scope.dashboard.aging = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Aging'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: aging.map(obj => obj['aging'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: aging.map(obj => obj.qtd) }]
+            };
+           
+
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('empresa', $scope.dashboard.filtros.empresa);
+            cubo.filtrar('carteira', $scope.dashboard.filtros.carteira);
+            cubo.filtrar('aging', $scope.dashboard.filtros.aging);
+            
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/humano/dashboard/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.status;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+            });
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrairDia = function () {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.diaTabela]);
+        }
+
+    });
+</script>
