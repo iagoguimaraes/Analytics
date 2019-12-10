@@ -49,6 +49,7 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
                 DataTable fpd = JsonConvert.DeserializeObject<DataTable>(form["fpd"]);
+                DataTable class_filas = JsonConvert.DeserializeObject<DataTable>(form["class_filas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -59,6 +60,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
                     parametros.Add("fpd", fpd);
+                    parametros.Add("class_filas", class_filas);
 
                     string procedure = "sp_dashboard_horahora";
 
@@ -98,6 +100,7 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
                 DataTable fpd = JsonConvert.DeserializeObject<DataTable>(form["fpd"]);
+                DataTable class_filas = JsonConvert.DeserializeObject<DataTable>(form["class_filas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -108,6 +111,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
                     parametros.Add("fpd", fpd);
+                    parametros.Add("class_filas", class_filas);
 
                     string procedure = "sp_dashboard_producao";
 
