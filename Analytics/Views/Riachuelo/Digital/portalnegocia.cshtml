@@ -61,6 +61,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.servidores" dados="dashFiltros.servidores" style="width:100%"></select2>
                             </div>
 
+                            <!--ATRASO-->
+                            <div class="form-group" ng-if="dashFiltros.atrasos">
+                                <label class="control-sidebar-subheading">Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -576,6 +582,7 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             servidores: '',
+            atrasos: '',
         };
         $scope.dashFiltros = {
             servidores: [{ id: 1, servidor: 'DIGITAL' }, { id: 3, servidor: 'HUMANO' }]
@@ -584,6 +591,15 @@
         $scope.tabela = { indicador: 'qtd' };
         $scope.dashboard = {};
 
+
+         // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.atrasos = r.data.Table9;
+        });
 
         $scope.carregarDashboard = function () {
             $http({
