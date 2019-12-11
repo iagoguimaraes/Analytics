@@ -202,10 +202,9 @@
             </div>
         </div>
 
-
         <!--QUANTIDADE POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12 margin-bottom"> 
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Contratos por Dia</span>
@@ -228,10 +227,10 @@
                     </div>
                     <div class="card-body">
                         <high-chart series="dashboard.graficoQtd" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" type="column" height="300"></high-chart>
-                        
-                    </div>                    
+
+                    </div>
                 </div>
-            </div>         
+            </div>
         </div>
 
         <!--VALOR POR DIA-->
@@ -264,7 +263,80 @@
             </div>
         </div>
 
+        <!-- ROLAGEM BUCKET -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Rolagem Bucket</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('rolagem','Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>Lote: </label>
+                            <select ng-change="carregarGraficoRolagem()" ng-model="lote.mes">
+                                <option ng-repeat="cc in dashboard.listMonth" value="{{cc.mes}}">{{cc.ds_mes}}</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.piebucket"></high-charts>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-xs-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Bucket</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.bucket">
+                                <thead>
+                                    <tr>
+                                        <th>Bucket</th>
+                                        <th>Contratos</th>
+                                        <th>Titulos</th>
+                                        <th>% Rolagem</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.bucket | groupBy: 'bucketIni'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].bucketIni}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd'| number}}</td>
+                                        <td>{{e | sumByColumn: 'qtd_titulos'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'qtd':'qtd'| percentage}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.bucketFim}}</td>
+                                        <td>{{c.qtd | number}}</td>
+                                        <td>{{c.qtd_titulos | number}}</td>
+
+                                        <td>{{c.qtd / c.qtd_total | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -291,6 +363,7 @@
         $scope.grafico = {
             indicador: 'ativo'
         };
+        $scope.lote = { mes: '' };
 
         // carregar os filtros
         $http({
@@ -315,25 +388,86 @@
                 method: 'POST',
                 url: "/api/semparar/dashboard/humano/carteira",
                 data: $scope.filtros,
-            }).then(function success(r) {                
-                $scope.dashboard.status = r.status;                
-                $scope.dashboard.dados = r.data;              
-                
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.carteira = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table1.map(obj => ({ name: obj.produto, y: obj.ativo })) }];
                 $scope.dashboard.dia = r.data.Table2;
                 $scope.dashboard.atraso = r.data.Table3;
-                
+
                 $scope.dashboard.dias = r.data.Table2.map(obj => obj.data);
                 $scope.dashboard.faixas = r.data.Table3.map(obj => obj.faixaAtraso);
-                
 
+                $scope.dashboard.listMonth = r.data.Table5;
+                $scope.lote.mes = $scope.dashboard.listMonth.map(obj => obj.mes)[0];
 
                 $scope.carregarGrafico();
+                $scope.carregarGraficoRolagem();
             });
         }
 
+
+        $scope.carregarGraficoRolagem = function () {
+
+            let titulo = alasql('select ds_mes from ? ', [$scope.dashboard.dados.Table5.filter(obj => obj.mes == $scope.lote.mes)])[0].ds_mes;
+
+
+            let dados_status = alasql('select bucketIni status, sum(qtd) quantidade from ? where mes = ' + $scope.lote.mes + ' group by bucketIni', [$scope.dashboard.dados.Table4]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select bucketFim substatus, qtd quantidade from ? where mes = ' + $scope.lote.mes + '', [$scope.dashboard.dados.Table4.filter(d => d.bucketIni == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // filtra a tabela ANÁLISE BUCKET
+            $scope.dashboard.bucket = alasql('select bucketIni, bucketFim, sum(qtd) qtd, sum(qtd_titulos) qtd_titulos, sum(qtd_total) qtd_total from ? group by bucketIni, bucketFim', [$scope.dashboard.dados.Table4.filter(obj => obj.mes == $scope.lote.mes)])
+
+            // Gráfico rolagem BUCKET
+            $scope.dashboard.piebucket = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Lotes ' + titulo
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                series: [{
+                    name: "Atraso Inicial do Lote",
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
 
         // carrega o mapa de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
@@ -342,8 +476,7 @@
             let indicador = $scope.grafico.indicador;
 
             $scope.dashboard.atrasoQtd = [{ name: 'Quantidade', data: atraso.map(obj => (obj[indicador])) }];
-            $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];
-            console.log(indicador);
+            $scope.dashboard.graficoQtd = [{ name: 'Quantidade', data: dados.map(obj => (obj[indicador])) }];            
 
             if (indicador == 'tt_inclusao') {
 
@@ -359,10 +492,10 @@
 
             } else {
 
-                $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador +'Vlr'])) }];
+                $scope.dashboard.graficoVlr = [{ name: 'Valor', data: dados.map(obj => (obj[indicador + 'Vlr'])) }];
             }
 
-            
+
         }
 
 
