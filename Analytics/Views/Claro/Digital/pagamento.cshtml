@@ -65,6 +65,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem" style="width:100%"></select2>
                         </div>
 
+                        <!--COBRADORA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Cobradora</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.cobradora" dados="dashFiltros.cobradora" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -203,6 +209,8 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             segmentos: '',
             origem: '',
+            cobradora: '',
+
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -217,6 +225,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.segmentos = data.Table1;
             $scope.dashFiltros.origem = data.Table6;
+            $scope.dashFiltros.cobradora = data.Table7;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
