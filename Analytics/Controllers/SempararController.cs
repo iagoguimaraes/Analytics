@@ -136,6 +136,7 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
                 DataTable devedor = JsonConvert.DeserializeObject<DataTable>(form["devedor"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
 
                 string procedure = "sp_dashboard_efetividade_humano_vencimento";
 
@@ -156,6 +157,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("plano", plano);
                     parametros.Add("devedor", devedor);
+                    parametros.Add("faixaAtraso", faixaAtraso);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
