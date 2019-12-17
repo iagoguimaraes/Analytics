@@ -144,6 +144,7 @@ namespace Analytics.Controllers
                 int id_departamento = Convert.ToInt32(form["id_departamento"]);
                 int id_categoria = Convert.ToInt32(form["id_categoria"]);
                 int id_prioridade = Convert.ToInt32(form["id_prioridade"]);
+                int id_porte = Convert.ToInt32(form["id_porte"]);
                 DateTime prazo = Convert.ToDateTime(form["prazo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
@@ -157,6 +158,7 @@ namespace Analytics.Controllers
                     parameters.Add("@id_departamento", id_departamento);
                     parameters.Add("@id_categoria", id_categoria);
                     parameters.Add("@id_prioridade", id_prioridade);
+                    parameters.Add("@id_porte", id_porte);
                     parameters.Add("@prazo", prazo.Year == 1? null : prazo.ToString("yyyy-MM-dd"));
 
                     sql.ExecuteProcedureDataTable("prjt_ins_projeto", parameters);
@@ -186,6 +188,7 @@ namespace Analytics.Controllers
                 int id_departamento = Convert.ToInt32(form["id_departamento"]);
                 int id_categoria = Convert.ToInt32(form["id_categoria"]);
                 int id_prioridade = Convert.ToInt32(form["id_prioridade"]);
+                int id_porte = Convert.ToInt32(form["id_porte"]);
                 DateTime prazo = Convert.ToDateTime(string.IsNullOrEmpty(form["prazo"])?null: form["prazo"]);
                 DateTime dtini = Convert.ToDateTime(string.IsNullOrEmpty(form["dtini"]) ? null : form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(string.IsNullOrEmpty(form["dtfim"]) ? null : form["dtfim"]);
@@ -203,6 +206,7 @@ namespace Analytics.Controllers
                     parameters.Add("@id_departamento", id_departamento);
                     parameters.Add("@id_categoria", id_categoria);
                     parameters.Add("@id_prioridade", id_prioridade);
+                    parameters.Add("@id_porte", id_porte);
                     parameters.Add("@prazo", prazo.Year == 1 ? null : prazo.ToString("yyyy-MM-dd"));
                     parameters.Add("@dtini", dtini.Year == 1 ? null : dtini.ToString("yyyy-MM-dd"));
                     parameters.Add("@dtfim", dtfim.Year == 1 ? null : dtfim.ToString("yyyy-MM-dd"));

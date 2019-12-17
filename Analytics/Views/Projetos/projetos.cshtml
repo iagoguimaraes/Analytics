@@ -266,6 +266,18 @@
                                     </div>
                                 </div>
 
+                                <div class="col-xs-12 col-md-6 margin-bottom">
+                                    <label>Porte</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-tag"></i>
+                                        </div>
+                                        <select class="form-control" ng-model="novoprojeto.id_porte" ng-options="x.id as x.descricao for x in opcoes.porte">
+                                            <option value="">Selecione</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -427,6 +439,18 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                                <label>Porte</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-tag"></i>
+                                                    </div>
+                                                    <select class="form-control" ng-model="editprojeto.id_porte" ng-options="x.id as x.descricao for x in opcoes.porte">
+                                                        <option value="">Selecione</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </form>
                                     <div class="modal-footer">
@@ -521,6 +545,7 @@
                 $scope.opcoes.categoria = r.data.Table3;
                 $scope.opcoes.prioridade = r.data.Table4;
                 $scope.opcoes.statuses = r.data.Table5;
+                $scope.opcoes.porte = r.data.Table6;
 
                 $scope.opcoes.status = r.status;
 
@@ -576,6 +601,11 @@
             }
             if (!$scope.novoprojeto.id_prioridade) {
                 $('[ng-model="novoprojeto.id_prioridade"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+            if (!$scope.novoprojeto.id_porte) {
+                $('[ng-model="novoprojeto.id_porte"]').focus();
                 $event.stopPropagation();
                 return false;
             }
@@ -639,6 +669,11 @@
             }
             if (!$scope.editprojeto.id_prioridade) {
                 $('[ng-model="editprojeto.id_prioridade"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+            if (!$scope.editprojeto.id_porte) {
+                $('[ng-model="editprojeto.id_porte"]').focus();
                 $event.stopPropagation();
                 return false;
             }
