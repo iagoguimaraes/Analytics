@@ -278,6 +278,137 @@
             </div>
         </div>
 
+        <!--ANALISE POR HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Hora / Campanha</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table7')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahoraCampanha">
+                                <thead>
+                                    <tr>
+                                        <th>Hora / Campanha</th>
+                                        <th>Chamada</th>
+                                        <th>Atendida</th>
+                                        <th>Abandonado</th>
+                                        <th>% Abandono</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.horahoraCampanha | groupBy: 'hora'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].hora}}
+                                        <td>{{e | sumByColumn: 'chamada'| number}}</td>
+                                        <td>{{e | sumByColumn: 'atendido'| number}}</td>
+                                        <td>{{e | sumByColumn: 'abandonado'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'abandonado':'chamada' | percentage:1}}</td>
+                                        <td>{{e | sumByColumn: 'tma'| formatTimer}}</td>
+                                        <td>{{e | sumByColumn: 'tmf' | formatTimer}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_fila}}</td>
+                                        <td>{{c.chamada | number}}</td>
+                                        <td>{{c.atendido | number}}</td>
+                                        <td>{{c.abandonado | number}}</td>
+                                        <td>{{c.abandonado / c.chamada | percentage:1}}</td>
+                                        <td>{{c.tma | formatTimer}}</td>
+                                        <td>{{c.tmf | formatTimer}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.chamada | number}}</th>
+                                        <th>{{dashboard.resumo.atendido | number}}</th>
+                                        <th>{{dashboard.resumo.abandonado | number}}</th>
+                                        <th>{{dashboard.resumo.abandonado / dashboard.resumo.chamada | percentage:1}}</th>
+                                        <th>{{dashboard.resumo.tma | formatTimer}}</th>
+                                        <th>{{dashboard.resumo.tmf | formatTimer}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--TABELA SUPERVISOR/OPERADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor / Operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.operador">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor </th>
+                                        <th>Chamada</th>
+                                        <th>Atendida</th>
+                                        <th>TMA</th>
+                                        <th>TME</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.operador | groupBy: 'ds_supervisor'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_supervisor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'chamada'| number}}</td>
+                                        <td>{{e | sumByColumn: 'atendido'| number}}</td>
+                                        <td>{{e | sumByColumn: 'tma'| formatTimer}}</td>
+                                        <td>{{e | sumByColumn: 'tmf' | formatTimer}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.ds_nome}}</td>
+                                        <td>{{c.chamada | number}}</td>
+                                        <td>{{c.atendido | number}}</td>
+                                        <td>{{c.tma | formatTimer}}</td>
+                                        <td>{{c.tmf | formatTimer}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.chamada | number}}</th>
+                                        <th>{{dashboard.resumo.atendido | number}}</th>
+                                        <th>{{dashboard.resumo.tma | formatTimer}}</th>
+                                        <th>{{dashboard.resumo.tmf | formatTimer}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!--POR HORA GRAFICO-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -342,7 +473,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table1')">
+                        <div class="card-header-button" ng-click="extrair('Table3')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -395,8 +526,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 
@@ -457,11 +586,12 @@
                 ];
 
                 $scope.dashboard.fila = r.data.Table2;
-                console.log($scope.dashboard.fila);
                 $scope.dashboard.produtos = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.ds_fila, y: obj.atendido })) }];
                 $scope.dashboard.tempos = r.data.Table5.map(obj => obj.tempo_fila);
                 $scope.dashboard.tempofila = [{ name: 'chamada', data: r.data.Table5.map(obj => obj.chamada) }]
-                console.log($scope.dashboard.graficohora);
+                
+                $scope.dashboard.operador = r.data.Table6;
+                $scope.dashboard.horahoraCampanha = r.data.Table7;
 
             });
         }
