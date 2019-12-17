@@ -147,6 +147,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmentos = JsonConvert.DeserializeObject<DataTable>(form["segmentos"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
+                DataTable cobradora = JsonConvert.DeserializeObject<DataTable>(form["cobradora"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
                 {
@@ -156,6 +157,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmentos", segmentos);
                     parametros.Add("origem", origem);
+                    parametros.Add("cobradora", cobradora);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
