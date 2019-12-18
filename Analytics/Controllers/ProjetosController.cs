@@ -221,6 +221,49 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("kpi/editar")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage EditarKPIProjeto(FormDataCollection form)
+        {
+            try
+            {
+                Dictionary<string, object> parameters = new Dictionary<string, object>();
+
+                parameters.Add("@id_projeto", Convert.ToInt32(form["id_projeto"]));
+
+                if (!string.IsNullOrEmpty(form["esforco"]))
+                    parameters.Add("@esforco", Convert.ToInt32(form["esforco"]));
+
+                if (!string.IsNullOrEmpty(form["custo_setup"]))
+                    parameters.Add("@custo_setup", Convert.ToDouble(form["custo_setup"]));
+
+                if (!string.IsNullOrEmpty(form["custo_mensal"]))
+                    parameters.Add("@custo_mensal", Convert.ToDouble(form["custo_mensal"]));
+
+                if (!string.IsNullOrEmpty(form["kpi_quantitativo"]))
+                    parameters.Add("@kpi_quantitativo", form["kpi_quantitativo"]);
+
+                if (!string.IsNullOrEmpty(form["kpi_qualitativo"]))
+                    parameters.Add("@kpi_qualitativo", form["kpi_qualitativo"]);
+
+                if (!string.IsNullOrEmpty(form["kpi_afericao"]))
+                    parameters.Add("@kpi_afericao", form["kpi_afericao"]);
+
+
+                using (SqlHelper sql = new SqlHelper("DB_ANALYTICS"))
+                {
+                    sql.ExecuteProcedureDataTable("prjt_upd_kpiprojeto", parameters);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("excluir")]
         [HttpPost]
         [Autorizar]

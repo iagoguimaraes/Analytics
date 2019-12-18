@@ -308,6 +308,7 @@
                                 <li class="active"><a href="#informacoes" data-toggle="tab" aria-expanded="false"><i class="fa fa-info"></i> Informações</a></li>
                                 <li class=""><a href="#checklist" data-toggle="tab" aria-expanded="false"><i class="fa fa-check-square-o"></i> Checklist</a></li>
                                 <li class=""><a href="#comentarios" data-toggle="tab" aria-expanded="true"><i class="fa fa-commenting-o"></i> Comentários</a></li>
+                                <li class=""><a href="#kpi" data-toggle="tab" aria-expanded="true"><i class="fa fa-key"></i> KPI'S</a></li>
                             </ul>
                             <div class="tab-content">
                                 <!--INFORMACOES-->
@@ -497,6 +498,75 @@
                                             </div>
                                         </li>
                                     </ul>
+                                </div>
+                                <!--KPI-->
+                                <div class="tab-pane" id="kpi">
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-md-4 margin-bottom">
+                                            <label>Esforço</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                <input class="form-control" type="number" ng-model="editprojeto.esforco" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-4 margin-bottom">
+                                            <label>Custo Setup</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </div>
+                                                <input-mask mask="#.##0" reverse="true" class="form-control" ng-model="editprojeto.custo_setup" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-4 margin-bottom">
+                                            <label>Custo Mensal</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-money"></i>
+                                                </div>
+                                                <input-mask mask="#.##0" reverse="true" class="form-control" ng-model="editprojeto.custo_mensal" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 margin-bottom">
+                                            <label>KPI Quantitativo</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </div>
+                                                <textarea class="form-control" rows="3" placeholder="Descrever os indicadores quantitativos" ng-model="editprojeto.kpi_quantitativo"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 margin-bottom">
+                                            <label>KPI Qualitativo</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </div>
+                                                <textarea class="form-control" rows="3" placeholder="Descrever os indicadores qualitativos" ng-model="editprojeto.kpi_qualitativo"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 margin-bottom">
+                                            <label>Aferição KPI</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </div>
+                                                <textarea class="form-control" rows="3" placeholder="Descrever o aferição dos indicadores" ng-model="editprojeto.kpi_afericao"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarKPI($event)">Salvar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -795,6 +865,23 @@
                 });
             }
         }
+        $scope.editarKPI = function ($event) {
+
+            if($scope.editprojeto.custo_setup)
+                $scope.editprojeto.custo_setup = $scope.editprojeto.custo_setup.replace('.', '');
+
+            if($scope.editprojeto.custo_mensal)
+            $scope.editprojeto.custo_mensal = $scope.editprojeto.custo_mensal.replace('.', '');
+         
+            $http({
+                method: 'POST',
+                url: "/api/projetos/kpi/editar",
+                data: $scope.editprojeto,
+            }).then(function success(r) {
+                $scope.editprojeto = {}
+                $scope.carregarProjetos();
+            });
+        }
 
         // executar ao iniciar a página
         let querystring = new URLSearchParams(window.location.search);
@@ -803,7 +890,7 @@
 
         if (querystring.get('id')) {
             $('#modal-edit').modal('show');
-        }       
+        }
 
     });
 </script>
