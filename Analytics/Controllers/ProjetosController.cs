@@ -234,7 +234,7 @@ namespace Analytics.Controllers
                 parameters.Add("@id_projeto", Convert.ToInt32(form["id_projeto"]));
 
                 if (!string.IsNullOrEmpty(form["esforco"]))
-                    parameters.Add("@esforco", Convert.ToInt32(form["esforco"]));
+                    parameters.Add("@esforco", Convert.ToDouble(form["esforco"]));
 
                 if (!string.IsNullOrEmpty(form["custo_setup"]))
                     parameters.Add("@custo_setup", Convert.ToDouble(form["custo_setup"]));

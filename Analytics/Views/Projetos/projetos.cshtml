@@ -509,7 +509,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-clock-o"></i>
                                                 </div>
-                                                <input class="form-control" type="number" ng-model="editprojeto.esforco" />
+                                                <input-mask mask="##0,0" reverse="true" class="form-control" ng-model="editprojeto.esforco" />
                                             </div>
                                         </div>
 
@@ -519,7 +519,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-money"></i>
                                                 </div>
-                                                <input-mask mask="#.##0" reverse="true" class="form-control" ng-model="editprojeto.custo_setup" />
+                                                <input-mask mask="##0,00" reverse="true" class="form-control" ng-model="editprojeto.custo_setup" />
                                             </div>
                                         </div>
 
@@ -529,7 +529,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-money"></i>
                                                 </div>
-                                                <input-mask mask="#.##0" reverse="true" class="form-control" ng-model="editprojeto.custo_mensal" />
+                                                <input-mask mask="##0,00" reverse="true" class="form-control" ng-model="editprojeto.custo_mensal" />
                                             </div>
                                         </div>
 
@@ -867,12 +867,6 @@
         }
         $scope.editarKPI = function ($event) {
 
-            if($scope.editprojeto.custo_setup)
-                $scope.editprojeto.custo_setup = $scope.editprojeto.custo_setup.replace('.', '');
-
-            if($scope.editprojeto.custo_mensal)
-            $scope.editprojeto.custo_mensal = $scope.editprojeto.custo_mensal.replace('.', '');
-         
             $http({
                 method: 'POST',
                 url: "/api/projetos/kpi/editar",
