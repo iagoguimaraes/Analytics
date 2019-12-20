@@ -209,6 +209,7 @@
                                     <tr>
                                         <th>Dia</th>
                                         <th>Carteira</th>
+                                        <th>Cobráveis</th>
                                         <th>Spin</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
@@ -226,7 +227,8 @@
                                     <tr ng-repeat="dia in dashboard.dia">
                                         <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
                                         <td>{{dia.carteira | number}}</td>
-                                        <td>{{dia.discado / dia.carteira | number:1}}</td>
+                                        <td>{{dia.cobraveis | number}}</td>
+                                        <td>{{dia.discado / dia.cobraveis | number:1}}</td>
                                         <td>{{dia.discado | number}}</td>
                                         <td>{{dia.contato | number}}</td>
                                         <td>{{dia.cpc | number}}</td>
@@ -242,6 +244,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
+                                        <th>-</th>
                                         <th>-</th>
                                         <th>-</th>
                                         <th>{{dashboard.resumo.discado | number}}</th>
