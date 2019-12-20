@@ -199,6 +199,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Vlr Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -214,6 +215,7 @@
                                         <td>{{carteira.cpc | number}}</td>
                                         <td>{{carteira.cpca | number}}</td>
                                         <td>{{carteira.promessa | number}}</td>
+                                        <td>{{carteira.valor_promessa | currency:'R$ '}}</td>
                                         <td>{{carteira.alo / carteira.discado | percentage:1}}</td>
                                         <td>{{carteira.cpc / carteira.contato | percentage:1}}</td>
                                         <td>{{carteira.cpca / carteira.cpc | percentage:1}}</td>
@@ -229,6 +231,7 @@
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency:'R$ '}}</th>
                                         <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -270,6 +273,7 @@
                                         <th>Promessa</th>
                                         <th>Prm Andamento</th>
                                         <th>Preventivo</th>
+                                        <th>Vlr Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -287,6 +291,7 @@
                                         <td>{{hora.promessa | number}}</td>
                                         <td>{{hora.promessa_andamento | number}}</td>
                                         <td>{{hora.preventivo | number}}</td>
+                                        <td>{{hora.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{hora.alo / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -304,6 +309,7 @@
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.promessa_andamento | number}}</th>
                                         <th>{{dashboard.resumo.preventivo | number}}</th>
+                                        <th>{{dashboard.resumo.valor_promessa | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.alo / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -339,6 +345,7 @@
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
                                 <option value="promessa_andamento">Prom. Andamento</option>
+                                <option value="valor_promessa">Valor Promessa</option>
                                 <option value="preventivo">Preventivo</option>
                             </select>
                         </small>
@@ -380,6 +387,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Vlr Promessa</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -396,6 +404,7 @@
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'valor_promessa' | currency: 'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -407,6 +416,7 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
+                                        <td>{{c.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -424,6 +434,7 @@
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>Vlr Promessa</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -440,6 +451,7 @@
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'valor_promessa'| currency: 'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -451,6 +463,7 @@
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
+                                        <td>{{c.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
