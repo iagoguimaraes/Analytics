@@ -489,10 +489,7 @@
                             <i class="fa fa-expand"></i>
                         </div>
                         <div class="card-header-button" ng-click="extrair('Table3')">
-                            <i class="fa fa-file-excel-o" alt="Visão Operador/Classificação"> Operador</i>
-                        </div>
-                        <div class="card-header-button" ng-click="extrair('Table5')">
-                            <i class="fa fa-file-excel-o" alt="Visão Operador/Ocorrencia"> Ocorrencia</i>
+                            <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -511,7 +508,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table6')">
+                        <div class="card-header-button" ng-click="extrair('Table5')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -573,9 +570,10 @@
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.supervisor = r.data.Table4;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table6.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
-                $scope.dashboard.supervisorHora = r.data.Table7;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table5.map(obj => ({ name: obj.ds_ocorrencia, y: obj.quantidade })) }];  
+                $scope.dashboard.supervisorHora = r.data.Table6;
                 $scope.carregarGrafico();
+                console.log(r.data.Table3);
             });
         }
 
