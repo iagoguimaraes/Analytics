@@ -71,12 +71,6 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.fpd" dados="dashFiltros.fpd" style="width:100%"></select2>
                         </div>
 
-                        <!--FILAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Filas</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.class_filas" dados="dashFiltros.class_filas" style="width:100%"></select2>
-                        </div>
-
                         <!--ATRASO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Atraso</label>
@@ -149,13 +143,13 @@
                 <div class="row bg-black-gradient" style="background-color:#8e8e8e">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.carteiraativa.qtd | number"></h5>
-                            <span class="description-text">Carteira</span>
+                            <h5 class="description-header" ng-bind="dashboard.carteiraativa.cobraveis | number"></h5>
+                            <span class="description-text">Cobráveis</span>
                         </div>
                     </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.carteiraativa.qtd | number:1"></h5>
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.carteiraativa.cobraveis | number:1"></h5>
                             <span class="description-text">Spin</span>
                         </div>
                     </div>
@@ -215,6 +209,7 @@
                                     <tr>
                                         <th>Produto</th>
                                         <th>Carteira</th>
+                                        <th>Cobráveis</th>
                                         <th>Spin</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
@@ -236,7 +231,8 @@
                                             {{p[0].produto}}
                                         </td>
                                         <td>{{p | sumByColumn: 'carteira'| number}}</td>
-                                        <td>{{p | divideSumColumns: 'discado':'carteira' | number:1}}</td>
+                                        <td>{{p | sumByColumn: 'cobraveis'| number}}</td>
+                                        <td>{{p | divideSumColumns: 'discado':'cobraveis' | number:1}}</td>
                                         <td>{{p | sumByColumn: 'discado'| number}}</td>
                                         <td>{{p | sumByColumn: 'contato'| number}}</td>
                                         <td>{{p | sumByColumn: 'cpc'| number}}</td>
@@ -252,6 +248,7 @@
                                     <tr ng-repeat="f in p" ng-show="showTbody">
                                         <td>{{f.funcionario}}</td>
                                         <td>{{f.carteira | number}}</td>
+                                        <td>{{f.cobraveis | number}}</td>
                                         <td>{{f.discado / f.carteira | number:1}}</td>
                                         <td>{{f.discado | number}}</td>
                                         <td>{{f.contato | number}}</td>
