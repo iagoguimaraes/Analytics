@@ -190,6 +190,71 @@
             </div>
         </div>
 
+        <!-- CARTEIRA -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Carteira</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
+                                <thead>
+                                    <tr>
+                                        <th>Carteira</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="c in dashboard.carteira">
+                                        <td>{{c.ds_carteira}}</td>
+                                        <td>{{c.discado | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.contato / c.discado | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- TABELA HORA HORA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -356,6 +421,7 @@
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.operador = r.data.Table2;
                 $scope.dashboard.ocorrencia = r.data.Table3;
+                $scope.dashboard.carteira = r.data.Table4;
 
                 $scope.carregarGrafico();
             });
