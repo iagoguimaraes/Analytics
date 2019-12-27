@@ -1095,6 +1095,7 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM_HUMANO"))
@@ -1106,6 +1107,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("segmento", segmento);
                     parametros.Add("produto", produto);
+                    parametros.Add("supervisor", supervisor);
                     parametros.Add("fila", fila);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacaoFila", parametros);
