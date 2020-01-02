@@ -76,6 +76,28 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        {
+            try
+            {
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PAGSEGURO"))
+                {
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {   
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
     }
 }
