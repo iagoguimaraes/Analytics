@@ -80,7 +80,7 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        public HttpResponseMessage DashboardProjecao()
         {
             try
             {
@@ -94,6 +94,116 @@ namespace Analytics.Controllers
             }
             catch (Exception e)
             {   
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/acionamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Acionamento(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkCarteira = form["chkCarteira"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PAGSEGURO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+                    parametros.Add("chkCarteira", chkCarteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+
+        }
+
+        [Route("dashboard/download")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadExcel(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+                string data = form["data"];
+                string hora = form["hora"];
+                string ocorrencia = form["ocorrencia"];
+                string operador = form["operador"];
+                string chkCarteira = form["chkCarteira"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_PAGSEGURO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("ocorrencia", ocorrencia);
+                    parametros.Add("operador", operador);
+
+                    parametros.Add("chkCarteira", chkCarteira);
+
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download", parametros);
+
+
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_PAGSEGURO_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
