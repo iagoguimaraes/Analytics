@@ -127,8 +127,8 @@
             </div>
         </div>
 
+        <!--POR ESTADO-->
         <div class="row margin-bottom">
-            <!--POR ESTADO-->
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div id="info" class="card-header">
@@ -189,7 +189,7 @@
                             </div>
                             <mapa-brasil style="height: 505px" width="100%" dados="dashboard.estado" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
                         </div>
-                            
+
                         <div class="table-responsive" ng-show="graficoMapa.exibir == 'false'">
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.estado">
                                 <thead>
@@ -302,7 +302,7 @@
                     <div class="card-header">
                         <span class="card-header-title">Efetividade por: </span>
                         <div class="card-header-title">
-                            <select style="margin-left: 20px" class="form-control" ng-model="graficoDia.visao" ng-change="mudarGrafico(graficoDia.visao)">                                
+                            <select style="margin-left: 20px" class="form-control" ng-model="graficoDia.visao" ng-change="mudarGrafico(graficoDia.visao)">
                                 <option value="data" selected="selected">Dia</option>
                                 <option value="semana">Semana do Mês</option>
                                 <option value="mes">Mês do Ano</option>
@@ -338,7 +338,7 @@
 
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            segmento: '',            
+            segmento: '',
             atraso: '',
             produto: '',
 
@@ -373,7 +373,7 @@
             }).then(function success(r) {
                 let data = r.data;
 
-                
+
                 $scope.dashboard.carteiras = r.data.Table3.map(obj => obj.carteira);
 
                 $scope.dashboard.status = r.status;
@@ -384,7 +384,7 @@
                 $scope.dashboard.estado = alasql('select "BR-" + uf id, qtd_pago [percent], efet_porcentagem [value], uf, estado, regiao, qtd_pago, vlr_pago, qtd_promessa, vlr_promessa, efet_porcentagem from ?', [data.Table2]);
                 $scope.dashboard.carteira = [{ name: 'Efetividade', color: '#014691', data: data.Table3.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) / 1) }];
 
-               
+
                 $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [data.Table2])[0];
                 $scope.mudarEstado($scope.dashboard.maiorEfetividade);
 
@@ -409,9 +409,9 @@
             $scope.dashboard.visao = dados.map(obj => obj.visao);
 
             $scope.dashboard.qtDia = [
-                 { name: 'Promessa', type: "column", data: dados.map(obj => (obj.qtd_promessa)) }
-               , { name: 'Pago', type: "column", data: dados.map(obj => (obj.qtd_pago)) }
-               , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: dados.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
+                { name: 'Promessa', type: "column", data: dados.map(obj => (obj.qtd_promessa)) }
+                , { name: 'Pago', type: "column", data: dados.map(obj => (obj.qtd_pago)) }
+                , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: dados.map(obj => (obj.qtd_pago * 100 / obj.qtd_promessa).toFixed(1) * 1) }];
 
         }
 

@@ -198,6 +198,12 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable tipobilling = JsonConvert.DeserializeObject<DataTable>(form["tipobilling"]);
+                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable campanhaNectar = JsonConvert.DeserializeObject<DataTable>(form["campanhaNectar"]);
+                DataTable segmentacaoNectar = JsonConvert.DeserializeObject<DataTable>(form["segmentacaoNectar"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
@@ -205,6 +211,12 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresa", empresa);
+                    parametros.Add("tipobilling", tipobilling);
+                    parametros.Add("aging", aging);
+                    parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("campanhaNectar", campanhaNectar);
+                    parametros.Add("segmentacaoNectar", segmentacaoNectar);                    
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
