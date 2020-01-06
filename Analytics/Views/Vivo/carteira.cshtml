@@ -88,6 +88,36 @@
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacaoNectar" dados="dashFiltros.segmentacaoNectar"></select2>
                         </div>
 
+                        <!--FAIXA ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaatraso" dados="dashFiltros.faixaatraso"></select2>
+                        </div>
+
+                        <!--FAIXA VALOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Valor</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixavalor" dados="dashFiltros.faixavalor"></select2>
+                        </div>
+
+                        <!--ESTADO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Estado</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.estado" dados="dashFiltros.estado"></select2>
+                        </div>
+
+                        <!--STATUS SEGMENTACAO NECTAR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Status Segmentação Nectar</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.statusSegmentacao" dados="dashFiltros.statusSegmentacao"></select2>
+                        </div>
+
+                        <!--SITUAÇÃO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Situação</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.situacao" dados="dashFiltros.situacao"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -354,7 +384,6 @@
             </div>
         </div>
 
-
         <!--SEGMENTAÇÃO NECTAR-->
         <div class="col-xs-8 col-md-12 margin-bottom">
             <div class="card">
@@ -413,6 +442,12 @@
             segmentacao: '',
             campanhaNectar: '',
             segmentacaoNectar: '',
+            faixaatraso: '',
+            faixavalor: '',
+            estado:'',
+            statusSegmentacao: '',
+            situacao: '',
+
         };
 
         $scope.dashFiltros = {};
@@ -435,6 +470,11 @@
             $scope.dashFiltros.segmentacao = r.data.Table6;
             $scope.dashFiltros.campanhaNectar = r.data.Table7;
             $scope.dashFiltros.segmentacaoNectar = r.data.Table8;
+            $scope.dashFiltros.faixaatraso = r.data.Table9;
+            $scope.dashFiltros.faixavalor = r.data.Table10;
+            $scope.dashFiltros.estado = r.data.Table11;
+            $scope.dashFiltros.statusSegmentacao = r.data.Table12;
+            $scope.dashFiltros.situacao = r.data.Table13;
 
         });
 
@@ -487,7 +527,7 @@
             $scope.dashboard.faixavalor = [{ name: indicador, type: 'column', color:'#056338' ,  data: dados.Table7.map(obj => obj[indicador]) }];
 
             $scope.dashboard.situacoes = dados.Table8.map(obj => obj.ds_situacao);
-            $scope.dashboard.situacao = [{ name: indicador, type: 'bar', data: dados.Table8.map(obj => obj[indicador]) }];
+            $scope.dashboard.situacao = [{ name: indicador, type: 'bar', color: 'rgb(126, 37, 149)', data: dados.Table8.map(obj => obj[indicador]) }];
 
             $scope.dashboard.campanhasnectar = dados.Table9.map(obj => obj.ds_campanha);
             $scope.dashboard.campanhanectar = [{ name: indicador, type: 'bar', data: dados.Table9.map(obj => obj[indicador]) }];

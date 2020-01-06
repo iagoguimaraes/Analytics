@@ -204,6 +204,11 @@ namespace Analytics.Controllers
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable campanhaNectar = JsonConvert.DeserializeObject<DataTable>(form["campanhaNectar"]);
                 DataTable segmentacaoNectar = JsonConvert.DeserializeObject<DataTable>(form["segmentacaoNectar"]);
+                DataTable faixaatraso = JsonConvert.DeserializeObject<DataTable>(form["faixaatraso"]);
+                DataTable faixavalor = JsonConvert.DeserializeObject<DataTable>(form["faixavalor"]);
+                DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
+                DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
+                DataTable situacao = JsonConvert.DeserializeObject<DataTable>(form["situacao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
@@ -216,7 +221,12 @@ namespace Analytics.Controllers
                     parametros.Add("aging", aging);
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("campanhaNectar", campanhaNectar);
-                    parametros.Add("segmentacaoNectar", segmentacaoNectar);                    
+                    parametros.Add("segmentacaoNectar", segmentacaoNectar);
+                    parametros.Add("faixaatraso", faixaatraso);
+                    parametros.Add("faixavalor", faixavalor);
+                    parametros.Add("estado", estado);
+                    parametros.Add("statusSegmentacao", statusSegmentacao);
+                    parametros.Add("situacao", situacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
