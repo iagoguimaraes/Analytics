@@ -319,5 +319,27 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecao()
+        {
+            try
+            {
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
+                {
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
