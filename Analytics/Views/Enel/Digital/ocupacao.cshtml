@@ -52,6 +52,12 @@
                             </div>
                         </div>
 
+                        <!--FILA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fila</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fila" dados="dashFiltros.fila"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -357,6 +363,7 @@
             produtos: '',
             fila: '',
             faixa: '',
+            fila: '',
 
         };
         $scope.dashFiltros = {};
@@ -364,6 +371,18 @@
         $scope.grafico = { indicador: 'ocupacao', exibir: 'true' };
         $scope.graficoFila = { indicador: 'atendido', exibir: 'true' };
 
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/enel/digital/filtros",
+            }).then(function success(r) {
+
+                $scope.dashFiltros.status = r.status;
+                $scope.dashFiltros.fila = r.data.Table1;
+
+            });
+        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -456,6 +475,7 @@
 
         }
 
+        $scope.carregarFiltros();
         $scope.carregarDashboard();
 
         $scope.$watch('grafico.indicador', function (newVal, oldVal) {
