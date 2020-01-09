@@ -1,0 +1,256 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+
+<div ng-controller="ctrl-riachuelo-analise">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Estratificação de Base</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Foto</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-white">
+                    <div class="inner" style="color:black">
+                        <h3 ng-bind="dashboard.resumo.quantidade | megaNumber"></h3>
+                        <p>Total Contratos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.saldo | megaNumber"></h3>
+                        <p>Total Financeiro</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.saldo / dashboard.resumo.quantidade | currency:'R$'"></h3>
+                        <p>Tckt Medio</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-ticket"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--BANDEIRA e FXATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 margin-bottom ">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Carteira</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.bandeira" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 margin-bottom ">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Atraso</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.fxatraso" axis-Categories="dashboard._fxatraso" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FXSALDO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Valor</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.fxsaldo" axis-Categories="dashboard._fxsaldo" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--SEGMENTACAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Segmentação</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.segmentacao" axis-Categories="dashboard._segmentacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--SITUACAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Situação</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.situacao" axis-Categories="dashboard._situacao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FXIDADE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Faixa de Idade</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.fxidade" axis-Categories="dashboard._fxidade" plot-Options-Line-Data-Label="true" type="line"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GENERO E ESTADO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Genero</span>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.genero" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6 margin-bottom"">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Região</span>
+                    </div>
+                    <div class="card-body">
+                        <mapa-brasil style="height:400px" width="100%" dados="dashboard.mapa"></mapa-brasil>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-riachuelo-analise', function ($scope, $http, $filter) {
+
+        $scope.filtros = {
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+        };
+
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {
+            indicador: 'quantidade'
+        };
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/31a90/baseativa",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table[0];
+
+                $scope.dashboard._fxatraso = data.Table2.map(obj => obj.ds_fxatraso);
+                $scope.dashboard._fxsaldo = data.Table3.map(obj => obj.ds_fxsaldo);
+                $scope.dashboard._fxidade = data.Table4.map(obj => obj.ds_fxidade);
+                $scope.dashboard._segmentacao = data.Table5.map(obj => obj.ds_segmentacao);
+                $scope.dashboard._situacao = data.Table6.map(obj => obj.ds_situacao);
+
+                let indicador = $scope.dashboard.indicador;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.bandeira = [{ name: indicador, data: r.data.Table1.map(obj => ({ name: obj.ds_bandeira, y: obj[indicador] })) }];
+                $scope.dashboard.fxatraso = [{ name: indicador, data: data.Table2.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.fxsaldo = [{ name: indicador, data: data.Table3.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.fxidade = [{ name: indicador, data: data.Table4.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.segmentacao = [{ name: indicador, data: data.Table5.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.situacao = [{ name: indicador, data: data.Table6.map(obj => (obj[indicador])), color: '#000000' }];
+                $scope.dashboard.genero = [{ name: indicador, data: r.data.Table8.map(obj => ({ name: obj.ds_genero, y: obj[indicador] })) }];
+
+                $scope.carregarMapa();
+            });
+        }
+
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarMapa = function () {
+            let dados = $scope.dashboard.dados.Table7;
+            $scope.dashboard.mapa = dados.map(obj => ({ id: 'BR-' + obj.ds_estado, value: obj[$scope.dashboard.indicador] }));
+
+        }
+
+        $scope.carregarDashboard();
+
+
+    });
+</script>

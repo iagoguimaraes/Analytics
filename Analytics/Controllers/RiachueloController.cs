@@ -220,6 +220,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
+                DataTable faixaatraso = JsonConvert.DeserializeObject<DataTable>(form["faixaatraso"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -229,6 +230,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("funcionario", funcionario);
+                    parametros.Add("faixaatraso", faixaatraso);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1457,6 +1459,36 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento_humano_31a90", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region 31 a 90
+
+        [Route("31a90/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Dashboard31a90BaseAtiva(FormDataCollection form)
+        {
+            try
+            {
+                DateTime data = Convert.ToDateTime(form["data"]);
+                
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
