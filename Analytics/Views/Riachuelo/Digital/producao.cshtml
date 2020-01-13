@@ -188,7 +188,7 @@
                 <label class="btn btn-primary active" ng-click="filtros.conceito = '_total'">
                     <input type="radio" checked> Total
                 </label>
-                <label class="btn btn-primary"   ng-click="filtros.conceito = '_unique'">
+                <label class="btn btn-primary" ng-click="filtros.conceito = '_unique'">
                     <input type="radio"> Unique
                 </label>
             </div>
@@ -274,7 +274,7 @@
         </div>
 
         <!--GRAFICO-->
-        <div class="row">
+        <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
@@ -313,6 +313,50 @@
 
         </div>
 
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Melhor Acionamento Unico por Ocorrência</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Ocorrencias','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.ocorrencia" axis-Categories="dashboard.ocorrencias" plot-Options-Column-Data-Label="true" height="400"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Melhor Acionamento Unico por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Ocorrencias','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>Ocorrência : </label>
+                            <select ng-change="carregarGraficoOcorrencia()" ng-model="ocorrencia.indicador">
+                                <option ng-repeat="cc in dashboard.selectedListOcorrencias" value="{{cc.idocorrencia}}">{{cc.ocorrencia}}</option>
+                            </select>
+                        </small>
+                    </div>
+
+                    <div class="card-body">
+                        <high-chart series="dashboard.ocorrenciaDia" axis-Categories="dashboard.dias" plot-Options-Column-Data-Label="true" height="400"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -337,6 +381,7 @@
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
         $scope.conceito = { string: '' };
+        $scope.ocorrencia = { indicador: '13' };
 
         // carregar os filtros
         $http({
@@ -366,9 +411,10 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.selectedListOcorrencias = data.Table2;
 
                 $scope.carregarGrafico();
-
+                $scope.carregarGraficoOcorrencia();
 
                 if ($scope.filtros.conceito == '' || $scope.filtros.conceito == '_total') {
                     $scope.conceito.string = '- Total';
@@ -399,6 +445,25 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+
+        $scope.carregarGraficoOcorrencia = function () {
+            let dados = $scope.dashboard.dados;
+            let indicador = $scope.ocorrencia.indicador;
+            let dtfim = $filter('date')(newdate, "dd/MM/yyyy");
+
+            //console.log(dados.Table3);
+
+            let select1 = alasql('select ocorrencia, qtd from ? order by 2 desc', [dados.Table3.filter(d => d.data == dtfim)]);
+            let select2 = alasql('select data, qtd from ? where idocorrencia = ' + indicador + ' order by 1', [dados.Table3]);
+            
+            $scope.dashboard.ocorrencias = select1.map(obj => obj.ocorrencia);
+            $scope.dashboard.ocorrencia = [{ name: 'Quantidade', type: 'column', data: select1.map(obj => obj.qtd) }];
+
+            $scope.dashboard.dias = select2.map(obj => obj.data);
+            $scope.dashboard.ocorrenciaDia = [{ name: 'Quantidade', type: 'column', color: 'rgb(126, 37, 149)', data: select2.map(obj => obj.qtd) }];
+
+
         }
 
         $scope.carregarDashboard();
