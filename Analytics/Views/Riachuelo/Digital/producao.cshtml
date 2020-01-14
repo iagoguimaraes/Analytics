@@ -450,9 +450,9 @@
         $scope.carregarGraficoOcorrencia = function () {
             let dados = $scope.dashboard.dados;
             let indicador = $scope.ocorrencia.indicador;
-            let dtfim = $filter('date')(newdate, "dd/MM/yyyy");
+            var dtfim = $filter('date')($scope.filtros.dtfim, "dd/MM/yyyy");
 
-            //console.log(dados.Table3);
+            console.log(dtfim);
 
             let select1 = alasql('select ocorrencia, qtd from ? order by 2 desc', [dados.Table3.filter(d => d.data == dtfim)]);
             let select2 = alasql('select data, qtd from ? where idocorrencia = ' + indicador + ' order by 1', [dados.Table3]);
