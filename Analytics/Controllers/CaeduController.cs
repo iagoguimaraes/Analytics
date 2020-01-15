@@ -49,6 +49,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
                 {
@@ -58,6 +59,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("segmento", segmento);
                     parametros.Add("faixa", faixa);
+                    parametros.Add("supervisor", supervisor);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_humano", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
