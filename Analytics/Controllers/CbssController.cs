@@ -49,6 +49,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CBSS"))
                 {
@@ -58,6 +59,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteira", carteira);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("supervisor", supervisor);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
