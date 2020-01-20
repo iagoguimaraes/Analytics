@@ -51,6 +51,18 @@
                             </div>
                         </div>
 
+                        <!--BANDEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeiras" dados="dashFiltros.bandeiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Atraso</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -303,7 +315,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('ProducaoOperador','Table3')">
+                        <div class="card-header-button" ng-click="extrair('ProducaoOperador','Table4')">
                             <i class="fa fa-file-excel-o"> Operador</i>
                         </div>
                     </div>
@@ -326,8 +338,22 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            bandeiras: '',
+            atrasos: '',
         }
         $scope.grafico = { indicador: 'promessa' };
+        $scope.dashFiltros = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/31a90/filtros",
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.bandeiras = data.Table;
+            $scope.dashFiltros.atrasos = r.data.Table1;
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -339,13 +365,10 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
-                console.log(r.data);
-
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
-                $scope.dashboard.ocorrencia = r.data.Table4;
 
                 $scope.carregarGrafico();
             });
