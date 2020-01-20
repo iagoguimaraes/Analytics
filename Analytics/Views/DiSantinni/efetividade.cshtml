@@ -1,0 +1,234 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<!-- DASHBOARD -->
+
+<div ng-controller="ctrl-disantinni-efetividade">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Efetividade</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Resumo-->
+        <div class="row clearfix">
+            <!--Promessas-->
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="info-box-new bg-new-green hover-expand-effect hover-zoom-effect">
+                    <div class="icon">
+                        <i class="material-icons">thumb_up</i>
+                    </div>
+                    <div class="content">
+                        <div class="text">Total Acordos</div>
+                        <div class="number" ng-bind="dashboard.resumo.quantidade_acordo | number"></div>
+                    </div>
+                </div>
+            </div>
+            <!--Pagamento-->
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="info-box-new bg-new-blue hover-expand-effect hover-zoom-effect">
+                    <div class="icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <div class="content">
+                        <div class="text">Acordos Pagos</div>
+                        <div class="number" ng-bind="dashboard.resumo.acordo_pago | number"></div>
+                    </div>
+                </div>
+            </div>
+            <!--Efetividade-->
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="info-box-new bg-new-grey hover-expand-effect hover-zoom-effect">
+                    <div class="icon">
+                        <i class="material-icons">trending_up</i>
+                    </div>
+                    <div class="content">
+                        <div class="text">Efetividade</div>
+                        <div class="number" ng-bind="dashboard.resumo.acordo_pago/dashboard.resumo.quantidade_acordo | percentage:1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por DIA </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtDia" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.dias" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO POR CARTEIRA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Carteira </span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtCarteira" plot-Options-Spline-Data-Label="true" axis-Categories="dashboard.carteiras" plot-Options-Column-Stacking="normal"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PRODUÇÃO POR OPERADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body" ng-if="dashboard.operador" style="height:500px">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[4,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+<script>
+    angular.module('app').controller('ctrl-disantinni-efetividade', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Efetividade';
+
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        //filtros iniciais
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+
+        };
+
+        $scope.dashboard = {};
+        $scope.showTbody = false;
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/disantinni/efetividade",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                let data = r.data;
+
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                $scope.dashboard.carteira = data.Table2;
+                $scope.dashboard.operador = data.Table3;
+
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.qtDia = [
+                    { name: 'Acordo', type: "column", color: '#4caf50', data: data.Table1.map(obj => (obj.quantidade_acordo)) }
+                    , { name: 'Pago', type: "column", color: '#2196f3', data: data.Table1.map(obj => (obj.acordo_pago)) }
+                    , { name: '% Efetividade', yAxis: 1, type: 'spline', color: '#9e9e9e', data: data.Table1.map(obj => (obj.acordo_pago * 100 / obj.quantidade_acordo).toFixed(1) * 1) }];
+
+                $scope.dashboard.carteiras = r.data.Table2.map(obj => obj.ds_carteira);
+                $scope.dashboard.qtCarteira = [
+                    { name: 'Acordo', type: "column", color: '#4caf50', data: data.Table2.map(obj => (obj.quantidade_acordo)) }
+                    , { name: 'Pago', type: "column", color: '#2196f3', data: data.Table2.map(obj => (obj.acordo_pago)) }
+                    , { name: '% Efetividade', yAxis: 1, type: 'spline', color: '#9e9e9e', data: data.Table2.map(obj => (obj.acordo_pago * 100 / obj.quantidade_acordo).toFixed(1) * 1) }];
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
