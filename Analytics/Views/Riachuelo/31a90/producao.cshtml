@@ -51,6 +51,18 @@
                             </div>
                         </div>
 
+                        <!--BANDEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeiras" dados="dashFiltros.bandeiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--ATRASO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Atraso</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -294,6 +306,76 @@
 
         </div>
 
+        <!--SUPERVISOR / EQUIPE-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.equipe">
+                                <thead>
+                                    <tr>
+                                        <th>Equipe</th>
+                                        <th>Atendido</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>% Contato</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.equipe | groupBy: 'supervisor'">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <b>
+                                                <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                                {{e[0].supervisor}}
+                                            </b>
+                                        </td>
+                                        <td>{{e | sumByColumn: 'atendimento'| number}}</td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'vl_promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'contato':'atendimento' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.equipe}}</td>
+                                        <td>{{c.atendimento | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.vl_promessa | currency:'R$ '}}</td>
+                                        <td>{{c.contato / c.atendimento | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
@@ -306,10 +388,24 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            bandeiras: '',
+            atrasos: '',
         };
 
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
+        $scope.dashFiltros = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/31a90/filtros",
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.bandeiras = data.Table;
+            $scope.dashFiltros.atrasos = r.data.Table1;
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -326,6 +422,7 @@
                 $scope.dashboard.carteira = data.Table2;
                 $scope.dashboard.operador = data.Table3;
                 $scope.dashboard.ocorrencia = data.Table4;
+                $scope.dashboard.equipe = data.Table5;
 
                 $scope.carregarGrafico();
 

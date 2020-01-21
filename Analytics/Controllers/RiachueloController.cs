@@ -1472,6 +1472,26 @@ namespace Analytics.Controllers
 
         #region 31 a 90
 
+        [Route("31a90/filtros")]
+        [HttpGet]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Dashboard31a90Filtros()
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_filtros");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("31a90/baseativa")]
         [HttpPost]
         [Autorizar]
@@ -1508,6 +1528,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
@@ -1515,6 +1537,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("bandeiras", bandeiras);
+                    parametros.Add("atrasos", atrasos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1536,6 +1560,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
+                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
@@ -1543,6 +1569,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("bandeiras", bandeiras);
+                    parametros.Add("atrasos", atrasos);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
