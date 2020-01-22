@@ -114,6 +114,9 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable rota = JsonConvert.DeserializeObject<DataTable>(form["rota"]);
+                DataTable telefone = JsonConvert.DeserializeObject<DataTable>(form["tptelefone"]);
+                DataTable chamada = JsonConvert.DeserializeObject<DataTable>(form["tpchamada"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -123,6 +126,9 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
                     parametros.Add("faixa", faixa);
+                    parametros.Add("rota", rota);
+                    parametros.Add("tptelefone", telefone);
+                    parametros.Add("tpchamada", chamada);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

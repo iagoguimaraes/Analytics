@@ -63,6 +63,24 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
                         </div>
 
+                        <!--ROTA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Rota</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.rota" dados="dashFiltros.rota"></select2>
+                        </div>
+
+                        <!--TIPO DE TELEFONE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo de Telefone</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.tptelefone" dados="dashFiltros.telefone"></select2>
+                        </div>
+
+                        <!--TIPO DE CHAMADA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo de Chamada</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.tpchamada" dados="dashFiltros.chamada"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -215,6 +233,9 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             produtos: '',
             faixa: '',
+            rota: '',
+            tptelefone: '',
+            tpchamada: '',
         };
 
         // carrega os filtros e colocar no scope
@@ -227,7 +248,9 @@
                 $scope.dashFiltros.status = r.status;
                 $scope.dashFiltros.produtos = r.data.Table;
                 $scope.dashFiltros.faixa = r.data.Table10;
-
+                $scope.dashFiltros.rota = r.data.Table3;
+                $scope.dashFiltros.telefone = r.data.Table6;
+                $scope.dashFiltros.chamada = r.data.Table5;
             });
         }
 
