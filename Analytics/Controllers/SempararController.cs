@@ -555,6 +555,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
                 bool carregar = Convert.ToBoolean(form["carregar"]);
+                DataTable discador = JsonConvert.DeserializeObject<DataTable>(form["discador"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
                 {
@@ -564,6 +565,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("filas", filas);
                     parametros.Add("carregar", carregar ? 1 : 0);
+                    parametros.Add("discador", discador);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_boleto_sms", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
