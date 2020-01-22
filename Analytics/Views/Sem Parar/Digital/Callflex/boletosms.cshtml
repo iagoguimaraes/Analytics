@@ -61,6 +61,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas" style="width:100%"></select2>
                             </div>
 
+                            <!--DISCADOR-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Discador</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.discador" dados="dashFiltros.discador" style="width:100%"></select2>
+                            </div>
+
                             <div class="form-group">
                                 <label>Carregar Analítico: </label>
                                 <input type="checkbox" ng-model="filtros.carregar" />
@@ -327,7 +333,8 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             filas: '',
-            carregar: false
+            carregar: false,
+            discador: '',
         };
 
          // carregar os filtros
@@ -339,6 +346,7 @@
             $scope.dados = r.status;
 
             $scope.dashFiltros.filas = r.data.Table3;
+            $scope.dashFiltros.discador = r.data.Table5;
 
         });
 
