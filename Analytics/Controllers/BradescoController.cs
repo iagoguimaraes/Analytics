@@ -267,6 +267,7 @@ namespace Analytics.Controllers
                 //DataTable equipe_2 = JsonConvert.DeserializeObject<DataTable>(form["equipe_2"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable bloco = JsonConvert.DeserializeObject<DataTable>(form["bloco"]);
+                DataTable bloco_2 = JsonConvert.DeserializeObject<DataTable>(form["bloco_2"]);
 
                 string procedure = "sp_dashboard_comparativo_hora";
                 if (form["visao"] == "hora")
@@ -305,6 +306,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("empresa", empresa);
                     parametros.Add("bloco", bloco);
+                    parametros.Add("bloco_2", bloco_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
