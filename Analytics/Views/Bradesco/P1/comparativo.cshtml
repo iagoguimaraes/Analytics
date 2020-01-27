@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-bradesco-comparativo">
+<div ng-controller="ctrl-p1-comparativo">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -70,6 +70,7 @@
                                             <div class="form-group">
                                                 <label class="control-sidebar-subheading">Hora Inicio</label>
                                                 <select class="form-control" ng-model="filtros.horaini">
+                                                    <option value="6">06h</option>
                                                     <option value="7" selected="selected">07h</option>
                                                     <option value="8">08h</option>
                                                     <option value="9">09h</option>
@@ -96,6 +97,7 @@
                                             <div class="form-group">
                                                 <label class="control-sidebar-subheading">Hora Final</label>
                                                 <select class="form-control" ng-model="filtros.horafim">
+                                                    <option value="6">06h</option>
                                                     <option value="7">07h</option>
                                                     <option value="8">08h</option>
                                                     <option value="9">09h</option>
@@ -133,6 +135,12 @@
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Supervisor</label>
                                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--BLOCO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Bloco</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bloco" dados="dashFiltros.bloco" style="width:100%"></select2>
                                     </div>
 
 
@@ -183,6 +191,7 @@
                                             <div class="form-group">
                                                 <label class="control-sidebar-subheading">Hora Inicio</label>
                                                 <select class="form-control" ng-model="filtros.horaini_2">
+                                                    <option value="6">06h</option>
                                                     <option value="7" selected="selected">07h</option>
                                                     <option value="8">08h</option>
                                                     <option value="9">09h</option>
@@ -206,6 +215,7 @@
                                             <div class="form-group">
                                                 <label class="control-sidebar-subheading">Hora Final</label>
                                                 <select class="form-control" ng-model="filtros.horafim_2">
+                                                    <option value="6">06h</option>
                                                     <option value="7">07h</option>
                                                     <option value="8">08h</option>
                                                     <option value="9">09h</option>
@@ -243,6 +253,12 @@
                                     <div class="form-group">
                                         <label class="control-sidebar-subheading">Supervisor</label>
                                         <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor_2" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--BLOCO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Bloco</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bloco_2" dados="dashFiltros.bloco" style="width:100%"></select2>
                                     </div>
 
                                 </fieldset>
@@ -435,7 +451,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-bradesco-comparativo', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-p1-comparativo', function ($scope, $http, $filter, dadosPagina) {
         dadosPagina.titulo = 'Comparativo';
         dadosPagina.descricao = 'Bradesco'
 
@@ -468,7 +484,8 @@
 
             visao: 'hora',
             empresa: "[{ 'id':'1'}]",
-            bloco: "[{ 'id':'1'}, {'id': '2'}]"
+            bloco: '',
+            bloco_2: '',
 
         };
         $scope.dashFiltros = {};
@@ -486,6 +503,7 @@
             $scope.dashFiltros.carteira = data.Table;
             $scope.dashFiltros.fase = data.Table1;
             $scope.dashFiltros.supervisor = data.Table2;
+            $scope.dashFiltros.bloco = data.Table7;
            
         });
 
