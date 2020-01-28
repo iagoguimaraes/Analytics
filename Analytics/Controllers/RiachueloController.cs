@@ -1685,6 +1685,26 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("31a90/baserolagem")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Dashboard31a90BaseRolagem(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baserolagem");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }
