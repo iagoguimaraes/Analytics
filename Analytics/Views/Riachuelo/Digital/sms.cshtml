@@ -55,6 +55,12 @@
                                 </div>
                             </div>
 
+                            <!--EMPRESA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresa</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa" style="width:100%"></select2>
+                            </div>
+
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -307,12 +313,26 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresa: '',
         };
 
+        $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.graficoDia = { exibir: 'false' };
         $scope.buttonDownload = { exibir: false };
         $scope.grafico = { indicador: 'promessa' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            let data = r.data;
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresa = data.Table12;
+            
+        });
 
         $scope.carregarDashboard = function () {
             $scope.buttonDownload.exibir = $scope.filtros.carregar
