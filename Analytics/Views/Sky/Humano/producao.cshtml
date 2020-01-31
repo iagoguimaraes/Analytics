@@ -34,26 +34,87 @@
 
                         <!-- Filtros -->
                         <div class="tab-pane active" id="control-sidebar-filters-tab">
-                            <!--DATA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
-                                </div>
-                            </div>
 
-                            <!--DATA FINAL-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Final</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+                            <div class="row">
+                                <!--DATA-->
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Inicial</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                        </div>
                                     </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                                 </div>
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!--DATA FINAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Final</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Inicio</label>
+                                        <select class="form-control" ng-model="filtros.horaini">
+                                            <option value="6" selected="selected">06h</option>
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!--HORA FIM-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Final</label>
+                                        <select class="form-control" ng-model="filtros.horafim">
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22" selected="selected">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <!--CARTEIRA-->
@@ -494,6 +555,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            horaini: '6',
+            horafim: '22',
             carteira: '',
             segmentacao: '',
             supervisor: '',
