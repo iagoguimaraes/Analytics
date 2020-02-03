@@ -117,41 +117,48 @@
 
                             </div>
 
-                            <!--CARTEIRA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <!--CARTEIRA-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Carteira</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--SEGMENTACAO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Segmentação</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--TENURE-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Tenure</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+
+
+                                    <!--SUPERVISOR-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Supervisor</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--OPERADOR-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Operador</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operador" dados="dashFiltros.operador" style="width:100%"></select2>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <!--SEGMENTACAO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Segmentação</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
-                            </div>
 
-                            <!--SUPERVISOR-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Supervisor</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
-                            </div>
-
-                            <!--TENURE-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Tenure</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
-                            </div>
-
-                            <!--OPERADOR-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Operador</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operador" dados="dashFiltros.operador" style="width:100%"></select2>
-                            </div>
-
-                            <!--OCORRENCIA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Ocorrência</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ocorrencia" dados="dashFiltros.ocorrencia" style="width:100%"></select2>
-                            </div>
+                            
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -396,12 +403,12 @@
                 </div>
             </div>
 
-            <!--GRÁFICO POR DIA-->
+            <!--GRÁFICO INDICADORES POR DIA-->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <span class="card-header-title">Gráfico por Dia</span>
+                            <span class="card-header-title">Indicadores por Dia</span>
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
                             </div>
@@ -430,6 +437,32 @@
                         </div>
                         <div class="card-body">
                             <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--GRAFICO VOLUME OCORRÊNCIA POR DIA-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Volume de Ocorrência por Dia</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table7')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <small class="pull-right">
+                                <label>Ocorrência: </label>
+                                <select ng-change="carregarGraficoOcorrenciaDia()" ng-model="grafico.ocorrencia">
+                                    <option ng-repeat="cc in dashboard.ocorrenciasList" value="{{cc.id_ocorrencia}}">{{cc.ds_ocorrencia}}</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.ocorrenciaDia" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
                         </div>
                     </div>
                 </div>
@@ -568,11 +601,10 @@
             supervisor: '',
             tenure: '',
             operador: '',
-            ocorrencia: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'promessa' };
+        $scope.grafico = { indicador: 'promessa', ocorrencia: '' };
 
         // carregar os filtros
         $http({
@@ -606,8 +638,11 @@
                 $scope.dashboard.equipe = data.Table2;
                 $scope.dashboard.operador = data.Table4;
 
-                $scope.carregarGrafico();
+                $scope.dashboard.ocorrencia = data.Table6;
+                $scope.dashboard.ocorrenciasList = alasql('select distinct id_ocorrencia, ds_ocorrencia from ? order by 2', [data.Table6]);
 
+                $scope.carregarGrafico();
+                $scope.carregarGraficoOcorrenciaDia();
             });
         }
 
@@ -640,6 +675,13 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+        
+        $scope.carregarGraficoOcorrenciaDia = function () {
+            let idocorrencia = $scope.grafico.ocorrencia;
+            let dados = alasql('select data, sum(qtd) qtd from ? group by data order by 1', [$scope.dashboard.ocorrencia.filter(d => d.id_ocorrencia == idocorrencia)]);
+
+            $scope.dashboard.ocorrenciaDia = [{ name: 'Quantidade', type: "line", color: "black", data: dados.map(obj => obj.qtd) }];
         }
 
         $scope.carregarDashboard();
