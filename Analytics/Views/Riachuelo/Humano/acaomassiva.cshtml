@@ -71,6 +71,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
                             </div>
 
+                            <!--SAVE-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmentação</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.save" dados="dashFiltros.save" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -271,6 +277,7 @@
             empresas: '',
             carteiras: '',
             faixas: '',
+            save: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -287,6 +294,7 @@
             $scope.dashFiltros.empresas = data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.faixas = r.data.Table6;
+            $scope.dashFiltros.save = r.data.Table9;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard

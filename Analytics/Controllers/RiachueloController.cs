@@ -1273,6 +1273,7 @@ namespace Analytics.Controllers
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -1283,6 +1284,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("faixas", faixas);
+                    parametros.Add("save", save);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_acaomassiva", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1314,6 +1316,46 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+
+        [Route("dashboard/humano/pagamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoPagamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("faixas", faixas);
+                    parametros.Add("save", save);
+                    parametros.Add("origem", origem);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
         #endregion
 
