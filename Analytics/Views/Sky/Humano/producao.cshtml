@@ -34,57 +34,131 @@
 
                         <!-- Filtros -->
                         <div class="tab-pane active" id="control-sidebar-filters-tab">
-                            <!--DATA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+
+                            <div class="row">
+                                <!--DATA-->
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Inicial</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                                        </div>
                                     </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
                                 </div>
-                            </div>
 
-                            <!--DATA FINAL-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Data Final</label>
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+                                <div class="col-xs-12 col-sm-3">
+                                    <!--DATA FINAL-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Data Final</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                                        </div>
                                     </div>
-                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                                 </div>
+
+
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Inicio</label>
+                                        <select class="form-control" ng-model="filtros.horaini">
+                                            <option value="6" selected="selected">06h</option>
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-3">
+                                    <!--HORA FIM-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Hora Final</label>
+                                        <select class="form-control" ng-model="filtros.horafim">
+                                            <option value="7">07h</option>
+                                            <option value="8">08h</option>
+                                            <option value="9">09h</option>
+                                            <option value="10">10h</option>
+                                            <option value="11">11h</option>
+                                            <option value="12">12h</option>
+                                            <option value="13">13h</option>
+                                            <option value="14">14h</option>
+                                            <option value="15">15h</option>
+                                            <option value="16">16h</option>
+                                            <option value="17">17h</option>
+                                            <option value="18">18h</option>
+                                            <option value="19">19h</option>
+                                            <option value="20">20h</option>
+                                            <option value="21">21h</option>
+                                            <option value="22" selected="selected">22h</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <!--CARTEIRA-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Carteira</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <!--CARTEIRA-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Carteira</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--SEGMENTACAO-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Segmentação</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--TENURE-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Tenure</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-6">
+
+
+                                    <!--SUPERVISOR-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Supervisor</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                                    </div>
+
+                                    <!--OPERADOR-->
+                                    <div class="form-group">
+                                        <label class="control-sidebar-subheading">Operador</label>
+                                        <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operador" dados="dashFiltros.operador" style="width:100%"></select2>
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <!--SEGMENTACAO-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Segmentação</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
-                            </div>
 
-                            <!--SUPERVISOR-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Supervisor</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
-                            </div>
-
-                            <!--TENURE-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Tenure</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
-                            </div>
-
-                            <!--OPERADOR-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Operador</label>
-                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.operador" dados="dashFiltros.operador" style="width:100%"></select2>
-                            </div>
+                            
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -329,12 +403,12 @@
                 </div>
             </div>
 
-            <!--GRÁFICO POR DIA-->
+            <!--GRÁFICO INDICADORES POR DIA-->
             <div class="row margin-bottom">
                 <div class="col-xs-12">
                     <div class="card">
                         <div class="card-header">
-                            <span class="card-header-title">Gráfico por Dia</span>
+                            <span class="card-header-title">Indicadores por Dia</span>
                             <div class="card-header-button card-header-expand">
                                 <i class="fa fa-expand"></i>
                             </div>
@@ -363,6 +437,32 @@
                         </div>
                         <div class="card-body">
                             <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--GRAFICO VOLUME OCORRÊNCIA POR DIA-->
+            <div class="row margin-bottom">
+                <div class="col-xs-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-header-title">Volume de Ocorrência por Dia</span>
+                            <div class="card-header-button card-header-expand">
+                                <i class="fa fa-expand"></i>
+                            </div>
+                            <div class="card-header-button" ng-click="extrair('Table7')">
+                                <i class="fa fa-file-excel-o"></i>
+                            </div>
+                            <small class="pull-right">
+                                <label>Ocorrência: </label>
+                                <select ng-change="carregarGraficoOcorrenciaDia()" ng-model="grafico.ocorrencia">
+                                    <option ng-repeat="cc in dashboard.ocorrenciasList" value="{{cc.id_ocorrencia}}">{{cc.ds_ocorrencia}}</option>
+                                </select>
+                            </small>
+                        </div>
+                        <div class="card-body">
+                            <high-chart series="dashboard.ocorrenciaDia" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
                         </div>
                     </div>
                 </div>
@@ -494,6 +594,8 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            horaini: '6',
+            horafim: '22',
             carteira: '',
             segmentacao: '',
             supervisor: '',
@@ -502,7 +604,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
-        $scope.grafico = { indicador: 'promessa' };
+        $scope.grafico = { indicador: 'promessa', ocorrencia: '' };
 
         // carregar os filtros
         $http({
@@ -518,6 +620,7 @@
             $scope.dashFiltros.supervisor = data.Table2;
             $scope.dashFiltros.tenure = data.Table3;
             $scope.dashFiltros.operador = data.Table13;
+            $scope.dashFiltros.ocorrencia = data.Table6;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -535,8 +638,11 @@
                 $scope.dashboard.equipe = data.Table2;
                 $scope.dashboard.operador = data.Table4;
 
-                $scope.carregarGrafico();
+                $scope.dashboard.ocorrencia = data.Table6;
+                $scope.dashboard.ocorrenciasList = alasql('select distinct id_ocorrencia, ds_ocorrencia from ? order by 2', [data.Table6]);
 
+                $scope.carregarGrafico();
+                $scope.carregarGraficoOcorrenciaDia();
             });
         }
 
@@ -569,6 +675,13 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+        
+        $scope.carregarGraficoOcorrenciaDia = function () {
+            let idocorrencia = $scope.grafico.ocorrencia;
+            let dados = alasql('select data, sum(qtd) qtd from ? group by data order by 1', [$scope.dashboard.ocorrencia.filter(d => d.id_ocorrencia == idocorrencia)]);
+
+            $scope.dashboard.ocorrenciaDia = [{ name: 'Quantidade', type: "line", color: "black", data: dados.map(obj => obj.qtd) }];
         }
 
         $scope.carregarDashboard();

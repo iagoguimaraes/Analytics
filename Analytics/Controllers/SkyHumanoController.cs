@@ -52,7 +52,6 @@ namespace Analytics.Controllers
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
-                DataTable ocorrencia = JsonConvert.DeserializeObject<DataTable>(form["ocorrencia"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -64,7 +63,6 @@ namespace Analytics.Controllers
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("tenure", tenure);
-                    parametros.Add("ocorrencia", ocorrencia);
                     parametros.Add("horaini", horaini);
                     parametros.Add("horafim", horafim);
 
@@ -88,6 +86,8 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                int horaini = Convert.ToInt16(form["horaini"]);
+                int horafim = Convert.ToInt16(form["horafim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
@@ -100,6 +100,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("horaini", horaini);
+                    parametros.Add("horafim", horafim);
                     parametros.Add("carteira", carteira);
                     parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
