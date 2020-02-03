@@ -185,13 +185,36 @@
             </div>
         </div>
 
+        <!--HISTORICO RECEBIMENTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Financeiro ultimos mesês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="valor">Valor</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtMes" axis-Categories="dashboard.visao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
-
-
-
-    <div class="control-sidebar-bg"></div>
-
-
 </div>
 
 <script>
@@ -214,6 +237,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.grafico = { indicador: 'quantidade' };
 
         // carregar os filtros
         $http({
@@ -244,15 +268,34 @@
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.qtDia = [{ name: 'Operação', data: r.data.Table1.map(obj => (obj.humano)), color: 'black' },
-                                          { name: 'Digital', data: r.data.Table1.map(obj => (obj.digital)), color: 'red' }];
+                { name: 'Digital', data: r.data.Table1.map(obj => (obj.digital)), color: 'red' }];
 
                 $scope.dashboard.vlDia = [{ name: 'Operação', data: r.data.Table2.map(obj => (obj.humano)), color: 'black' },
-                                          { name: 'Digital', data: r.data.Table2.map(obj => (obj.digital)), color: 'red' }];
+                { name: 'Digital', data: r.data.Table2.map(obj => (obj.digital)), color: 'red' }];
 
                 $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table3.map(obj => ({ name: obj.segmento, y: obj.quantidade })) }];
                 $scope.dashboard.vlCarteira = [{ name: 'Valor', innerSize: '60%', data: r.data.Table4.map(obj => ({ name: obj.segmento, y: obj.valor })) }];
 
+                $scope.carregarGrafico();
             });
+        }
+
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados;
+            $scope.dashboard.visao = dados.Table5.map(obj => obj.mes_do_ano_descricao);
+
+            if ($scope.grafico.indicador == 'valor') {
+                $scope.dashboard.qtMes = [
+                    { name: 'Operação', data: dados.Table5.map(obj => (obj.valor_humano)), color: 'black' },
+                    { name: 'Digital', data: dados.Table5.map(obj => (obj.valor_digital)), color: 'red' }];
+
+            }
+            else {
+                $scope.dashboard.qtMes = [
+                    { name: 'Operação', data: dados.Table5.map(obj => (obj.quantidade_humano)), color: 'black' },
+                    { name: 'Digital', data: dados.Table5.map(obj => (obj.quantidade_digital)), color: 'red' }];
+            }
+
         }
 
         $scope.carregarDashboard();
