@@ -131,26 +131,22 @@
                                     <label class="control-sidebar-subheading">Segmentação</label>
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacao" dados="dashFiltros.segmentacao" style="width:100%"></select2>
                                 </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
 
                                 <!--TENURE-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Tenure</label>
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tenure" dados="dashFiltros.tenure" style="width:100%"></select2>
                                 </div>
-                            </div>
 
-                            <div class="col-xs-12 col-sm-6">
                                 <!--SUPERVISOR-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">Supervisor</label>
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
                                 </div>
 
-                                <!--OCORRENCIA-->
-                                <div class="form-group">
-                                    <label class="control-sidebar-subheading">Ocorrencia</label>
-                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ocorrencia" dados="dashFiltros.ocorrencia" style="width:100%"></select2>
-                                </div>
                             </div>
 
                         </div>
@@ -181,17 +177,17 @@
 
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
                     @*<div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                            <span class="description-text">Discado</span>
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
+                                <span class="description-text">Discado</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.transferido | megaNumber"></h5>
-                            <span class="description-text">Atendido</span>
-                        </div>
-                    </div>*@
+                        <div class="col-sm-2 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.transferido | megaNumber"></h5>
+                                <span class="description-text">Atendido</span>
+                            </div>
+                        </div>*@
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
@@ -220,17 +216,17 @@
 
                 <div class="row margin-bottom" style="background-color:#ff0000; color:white;">
                     @*<div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                            <span class="description-text">Hit Rate</span>
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                                <span class="description-text">Hit Rate</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1"></h5>
-                            <span class="description-text">Tx Tab</span>
-                        </div>
-                    </div>*@
+                        <div class="col-sm-2 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.transferido | percentage: 1"></h5>
+                                <span class="description-text">Tx Tab</span>
+                            </div>
+                        </div>*@
                     <div class="col-sm-3 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
@@ -559,7 +555,7 @@
                                         <th>% Migração</th>
                                         <th>% Parc</th>
                                         @*<th>Hit Rate</th>
-                                        <th>Tx Atd</th>*@
+                                            <th>Tx Atd</th>*@
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
                                         <th>Conversão</th>
@@ -841,7 +837,6 @@
             segmentacao: '',
             supervisor: '',
             tenure: '',
-            ocorrencia: '',
             horaini: '7',
             horafim: '22',
         };
@@ -924,16 +919,16 @@
 
         $scope.carregarGraficoOcorrencia = function () {
             let classificacao = $scope.graficoOco.classificacao;
-            let dados = alasql('select ds_ocorrencia, sum(qtd) qtd from ? group by ds_ocorrencia',[$scope.dashboard.ocorrencia.filter(d => d[classificacao] == 1)]) ;
+            let dados = alasql('select ds_ocorrencia, sum(qtd) qtd from ? group by ds_ocorrencia', [$scope.dashboard.ocorrencia.filter(d => d[classificacao] == 1)]);
             $scope.dashboard.ocorrencias = dados.map(obj => obj.ds_ocorrencia);
-            
+
             $scope.dashboard.graficoOcorrencia = [{ name: 'Quantidade', type: "column", data: dados.map(obj => obj.qtd) }];
         }
 
         $scope.carregarGraficoOcorrenciaHora = function () {
             let ocorrencia = $scope.graficoOco.ocorrencia;
-            let dados = alasql('select hora, sum(qtd) qtd from ? group by hora order by 1',[$scope.dashboard.ocorrencia.filter(d => d.id_ocorrencia == ocorrencia)]) ;            
-            
+            let dados = alasql('select hora, sum(qtd) qtd from ? group by hora order by 1', [$scope.dashboard.ocorrencia.filter(d => d.id_ocorrencia == ocorrencia)]);
+
             $scope.dashboard.ocorrenciaHora = [{ name: 'Quantidade', type: "line", color: "black", data: dados.map(obj => obj.qtd) }];
         }
 
