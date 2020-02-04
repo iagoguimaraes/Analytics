@@ -177,18 +177,6 @@
             </div>
             <div class="box-footer">
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
-                    @*<div class="col-sm-2 col-sm-offset-1 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                                <span class="description-text">Discado</span>
-                            </div>
-                        </div>*@
-
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-
-                        </div>
-                    </div>
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
@@ -219,15 +207,15 @@
                             <span class="description-text">Promessa</span>
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.vlr_negociado | currency:'R$ '"></h5>
+                            <span class="description-text">Negociado</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row bg-blue">
-                    @*<div class="col-sm-2 col-sm-offset-1 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                                <span class="description-text">Hit Rate</span>
-                            </div>
-                        </div>*@
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -263,24 +251,12 @@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.vlr_promessa | currency: 'R$ '"></h5>
-                            <span class="description-text">Valor Promessa</span>
+                            <span class="description-text">Saldo Risco</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="row" style="background-color:rgba(255, 255, 255, 0.00); color:black; opacity: 0.8">
-                    @*<div class="col-sm-2 col-sm-offset-1 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                                <span class="description-text">Discado</span>
-                            </div>
-                        </div>*@
-
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-
-                        </div>
-                    </div>
 
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
@@ -313,7 +289,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -349,14 +324,13 @@
                                     <thead>
                                         <tr>
                                             <th>Hora / Produto</th>
-                                            @*<th>Discado</th>*@
                                             <th>Contato</th>
                                             <th>CPC</th>
                                             <th>Alega</th>
                                             <th>CPCA</th>
                                             <th>Promessa</th>
-                                            <th>Valor Promessa</th>
-                                            @*<th>HitRate</th>*@
+                                            <th>$ Risco</th>
+                                            <th>$ Negociado</th>
                                             <th>TxLoc</th>
                                             <th>TxAlega</th>
                                             <th>TxApv</th>
@@ -377,7 +351,7 @@
                                             <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                             <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                             <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
-                                            @*<td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>*@
+                                            <td>{{e | sumByColumn: 'vlr_negociado' | currency: 'R$ '}}</td>
                                             <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                             <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
                                             <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -393,7 +367,7 @@
                                             <td>{{c.cpca | number}}</td>
                                             <td>{{c.promessa | number}}</td>
                                             <td>{{c.vlr_promessa| currency: 'R$ '}}</td>
-                                            @*<td>{{c.contato / c.discado | percentage:1}}</td>*@
+                                            <td>{{c.vlr_negociado| currency: 'R$ '}}</td>
                                             <td>{{c.cpc / c.contato | percentage:1}}</td>
                                             <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
                                             <td>{{c.cpca / c.cpc | percentage:1}}</td>
@@ -402,7 +376,7 @@
 
                                     </tbody>
                                     <tfoot>
-                                        <tr>
+                                        <tr style="background-color:lightgray">
                                             <th>Total</th>
                                             @*<th>{{dashboard.resumo.discado | number}}</th>*@
                                             <th>{{dashboard.resumo.contato | number}}</th>
@@ -411,7 +385,7 @@
                                             <th>{{dashboard.resumo.cpca | number}}</th>
                                             <th>{{dashboard.resumo.promessa | number}}</th>
                                             <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
-                                            @*<th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>*@
+                                            <th>{{dashboard.resumo.vlr_negociado | currency: 'R$ '}}</th>
                                             <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.alega / dashboard.resumo.cpc | percentage: 1}}</th>
                                             <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -427,11 +401,11 @@
                         <div ng-show="graficoHora.exibir == 'false'">
                             <span class="pull-right">
                                 <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
-                                    @*<option value="hitrate">Hit Rate</option>*@
                                     <option value="txloc">Tx Loc</option>
                                     <option value="txapv">Tx Apv</option>
                                     <option value="conversao">Conversão</option>
-                                    @*<option value="qtd_discado">Discado</option>*@
+                                    <option value="vlr_promessa">Valor Risco</option>
+                                    <option value="vlr_negociado">Valor Negociado</option>
                                     <option value="contato">Contato</option>
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
@@ -449,6 +423,7 @@
 
         <!--GRAFICO ALEGA PAGAMENTO E ESTADOS-->
         <div class="row margin-bottom">
+            <!--GRAFICO ALEGA PAGAMENTO-->
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
@@ -488,7 +463,8 @@
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
                                 <option value="percentual">% Percent. Promessas</option>
-                                <option value="vlr_promessas">$ Valor Promessa</option>
+                                <option value="vlr_promessa">$ Valor Risco</option>
+                                <option value="vlr_negociado">$ Valor Negociado</option>
                                 <option value="ticket_medio">$ Ticket Médio Promessa</option>
                             </select>
                         </span>
@@ -497,60 +473,6 @@
                         <high-chart series="dashboard.estado" height="500" axis-Categories="dashboard.estados" plot-Options-Bar-Data-Label="true" type="bar"></high-chart>
                     </div>
                 </div>
-                @*<div class="card">
-                        <div id="info" class="card-header">
-                            <span class="card-header-title">Promessa por estado</span>
-                            <div class="card-header-button card-header-expand">
-                                <i class="fa fa-expand"></i>
-                            </div>
-                            <div class="card-header-button" ng-click="extrair('Table7')">
-                                <i class="fa fa-file-excel-o"></i>
-                            </div>
-                            <small class="pull-right">
-                                <select ng-model="mapa.indicador" ng-change="carregarMapa()">
-                                    <option value="percentual">Percentual por Estado</option>
-                                    <option value="promessas">Qtd Promessas</option>
-                                    <option value="conversao">Conversão</option>
-                                    <option value="vlr_promessas">Valor Promessas</option>
-                                </select>
-                            </small>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="small-box bg-blue-active">
-                                        <div class="inner">
-                                            <p><h5>Qtd - {{dashboard.mapa.estado}}</h5></p>
-                                            <h4 ng-bind="dashboard.mapa.promessas | number"></h4>
-                                            <h5 ng-bind="(dashboard.mapa.percentual)+' %'"></h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="small-box bg-green-active">
-                                        <div class="inner">
-                                            <p><h5>Valor - {{dashboard.mapa.estado}}</h5></p>
-                                            <h4 ng-bind="dashboard.mapa.vlr_promessas | currency: 'R$ '"></h4>
-                                            <h5 ng-bind="dashboard.mapa.ticket_medio | currency: 'R$ '"></h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="small-box bg-yellow-active">
-                                        <div class="inner">
-                                            <h5>Conversão</h5>
-                                            <h4 ng-bind="(dashboard.mapa.conversao)+' %'"></h4>
-                                            <h5>{{dashboard.mapa.estado}}</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <mapa-brasil style="height: 300px" width="100%" dados="dashboard.estados" ng-change="mudarEstado(idSelecionadoMapa)" ng-model="idSelecionadoMapa"></mapa-brasil>
-                        </div>
-                    </div>*@
             </div>
         </div>
 
@@ -579,8 +501,8 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
-                                        @*<th>HitRate</th>*@
+                                        <th>$ Risco</th>
+                                        <th>$ Negociado</th>
                                         <th>TxLoc</th>
                                         <th>TxAlega</th>
                                         <th>TxApv</th>
@@ -601,7 +523,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
-                                        @*<td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>*@
+                                        <td>{{e | sumByColumn: 'vlr_negociado'| currency: 'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -616,8 +538,8 @@
                                         <td>{{c.alega_pagamento | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
-                                        <td>{{c.vlr_promessa| currency: 'R$ '}}</td>
-                                        @*<td>{{c.contato / c.discado | percentage:1}}</td>*@
+                                        <td>{{c.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{c.vlr_negociado | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
@@ -664,7 +586,8 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>$ Risco</th>
+                                        <th>$ Negociado</th>
                                         <th>TxLoc</th>
                                         <th>TxAlega</th>
                                         <th>TxApv</th>
@@ -683,6 +606,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ ' }}</td>
+                                        <td>{{e | sumByColumn: 'vlr_negociado' | currency: 'R$ ' }}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -694,8 +618,10 @@
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.alega_pagamento | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{c.vlr_negociado | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
@@ -770,11 +696,6 @@
             supervisor: '',
         }
 
-
-        $scope.mapa = {
-            indicador: 'percentual'
-        };
-
         $scope.graficoEstado = {
             indicador: 'promessa'
         };
@@ -827,8 +748,6 @@
                     { name: '% Alega Pagamento', yAxis: 1, type: 'spline', color: 'rgba(232, 2, 39, 1)', data: r.data.Table5.map(obj => (obj.AlegaPagamento * 100 / obj.CPC).toFixed(1) * 1) }
                 ];
 
-                //$scope.carregarMapa();
-
                 $scope.agruparTabelaSupervisor();
                 $scope.carregarGraficoHora();
                 $scope.CarregarGraficoEstado();
@@ -838,43 +757,7 @@
 
         $scope.agruparTabelaSupervisor = function () {
 
-            $scope.dashboard.supervisor = alasql('select Supervisor, ' + $scope.agrupar.coluna + ' coluna , sum(contato) contato ,sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(alega_pagamento) alega_pagamento, sum(vlr_promessa) vlr_promessa from ? group by Supervisor, ' + $scope.agrupar.coluna + ' order by 1,2', [$scope.dashboard.dados.Table3]);
-
-        }
-
-        // Muda o estado conforme escolha e click no mapa
-        $scope.mudarEstado = function (id) {
-
-            let dados = alasql('select "BR-" + uf id, ' + $scope.mapa.indicador + ' [value], uf, estado, regiao, percentual, conversao, promessas, vlr_promessas, ticket_medio from ? where id like ("%' + id + '%") order by [value] desc', [$scope.dashboard.dados.Table7])[0];
-            $scope.dashboard.mapa = dados;
-
-        }
-
-        // carrega o mapa de acordo com o indicador escolhido
-        $scope.carregarMapa = function () {
-
-            let dados = $scope.dashboard.dados.Table7;
-            switch ($scope.mapa.indicador) {
-                case 'percentual':
-                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.percentual) }));
-                    break;
-                case 'conversao':
-                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.conversao) }));
-                    break;
-                case 'promessas':
-                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.promessas) }));
-                    break;
-                case 'vlr_promessas':
-                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: (obj.vlr_promessas) }));
-                    break;
-                default:
-                    $scope.dashboard.estados = dados.map(obj => ({ id: obj.id, value: obj[$scope.mapa.indicador] }));
-            }
-
-            $scope.dashboard.maiorUF = alasql('select id from ? order by [value] desc', [$scope.dashboard.estados])[0];
-
-            $scope.mudarEstado($scope.dashboard.maiorUF);
-
+            $scope.dashboard.supervisor = alasql('select Supervisor, ' + $scope.agrupar.coluna + ' coluna , sum(contato) contato ,sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa, sum(alega_pagamento) alega_pagamento, sum(vlr_promessa) vlr_promessa, sum(vlr_negociado) vlr_negociado from ? group by Supervisor, ' + $scope.agrupar.coluna + ' order by 1,2', [$scope.dashboard.dados.Table3]);
         }
 
         // carrega grafico bar de estados conforme indicador escolhido

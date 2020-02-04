@@ -175,8 +175,8 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box" style="color:white; background-color:#004592;">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessa | megaNumber"></h3>
-                        <p>Valor Promessa</p>
+                        <h3 ng-bind="dashboard.resumo.vlr_negociado | megaNumber"></h3>
+                        <p>Valor Negociado</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-usd"></i>
@@ -218,7 +218,7 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.cpcadia | number : 0"></h3>                        
+                        <h3 ng-bind="dashboard.resumo.cpcadia | number : 0"></h3>
                         <p>CPCA Dia</p>
                     </div>
                 </div>
@@ -227,7 +227,7 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.promessadia | number : 0"></h3>                        
+                        <h3 ng-bind="dashboard.resumo.promessadia | number : 0"></h3>
                         <p>Promessa Dia</p>
                     </div>
                 </div>
@@ -236,8 +236,8 @@
             <div class="col-xs-12 col-md-6 col-lg-2">
                 <div class="small-box bg-blue-active">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.vlr_promessadia | megaNumber"></h3>
-                        <p>Valor Promessa Dia</p>
+                        <h3 ng-bind="dashboard.resumo.vlr_negociadodia | megaNumber"></h3>
+                        <p>Valor Negociado Dia</p>
                     </div>
                 </div>
             </div>
@@ -281,7 +281,8 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>$ Risco</th>
+                                        <th>$ Negociado</th>
                                         <th>HitRate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Alega</th>
@@ -299,6 +300,7 @@
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{dia.vlr_negociado | currency: 'R$ '}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.alega / dia.cpc | percentage:1}}</td>
@@ -316,6 +318,7 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
+                                        <th>{{dashboard.resumo.vlr_negociado | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.alega / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -339,7 +342,8 @@
                                     <option value="cpc">CPC</option>
                                     <option value="cpca">CPCA</option>
                                     <option value="promessa">Promessa</option>
-                                    <option value="vlr_promessa">Valor Promessa</option>
+                                    <option value="vlr_promessa">$ Saldo Risco</option>
+                                    <option value="vlr_negociado">$ Negociado</option>
                                 </select>
                             </span>
                             <high-chart series="dashboard.graficoDia" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
@@ -376,7 +380,8 @@
                                 <option value="Cpca">CPCA</option>
                                 <option value="Promessa">Promessa</option>
                                 <option value="Alega">Alega</option>
-                                <option value="VlrPromessa">Valor Promessa</option>
+                                <option value="VlrPromessa">$ Saldo Risco</option>
+                                <option value="VlrNegociado">$ Negociado</option>
                             </select>
                         </span>
                     </div>
@@ -406,14 +411,13 @@
                                 <thead>
                                     <tr>
                                         <th>Carteira</th>
-                                        @*<th>Discado</th>*@
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
-                                        @*<th>HitRate</th>*@
+                                        <th>$ Risco</th>
+                                        <th>$ Negociado</th>
                                         <th>TxLoc</th>
                                         <th>TxAlega</th>
                                         <th>TxApv</th>
@@ -427,14 +431,13 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{e[0].ds_produto}}
                                         </td>
-                                        @*<td>{{e | sumByColumn: 'discado'| number}}</td>*@
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'alega'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa'| currency: 'R$ '}}</td>
-                                        @*<td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>*@
+                                        <td>{{e | sumByColumn: 'vlr_negociado'| currency: 'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'alega':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -443,14 +446,13 @@
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
                                         <td>{{c.ds_aging}}</td>
-                                        @*<td>{{c.discado | number}}</td>*@
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.alega | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa| currency: 'R$ '}}</td>
-                                        @*<td>{{c.contato / c.discado | percentage:1}}</td>*@
+                                        <td>{{c.vlr_negociado| currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.alega / c.cpc | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
@@ -520,7 +522,8 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>Valor Promessa</th>
+                                        <th>$ Risco</th>
+                                        <th>$ Negociado</th>
                                         <th>TxLoc</th>
                                         <th>TxAlega</th>
                                         <th>TxApv</th>
@@ -540,6 +543,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa' | currency: 'R$ ' }}</td>
+                                        <td>{{e | sumByColumn: 'vlr_negociado' | currency: 'R$ ' }}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'alega':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
@@ -554,6 +558,7 @@
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa | currency: 'R$ '}}</td>
+                                        <td>{{c.vlr_negociado | currency: 'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.alega / c.cpc | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
