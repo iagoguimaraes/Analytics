@@ -58,10 +58,17 @@
                             <label class="control-sidebar-subheading">Segmento</label>
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento"></select2>
                         </div>
+
                         <!--FAIXAS-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Faixas</label>
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
+                        </div>
+
+                        <!--ENTRADA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentação</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.entrada" dados="dashFiltros.entrada"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -399,6 +406,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             segmento: '',
             faixa: '',
+            entrada: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -414,6 +422,7 @@
 
             $scope.dashFiltros.segmento = r.data.Table;
             $scope.dashFiltros.faixa = r.data.Table1;
+            $scope.dashFiltros.entrada = r.data.Table4;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -434,7 +443,6 @@
                 $scope.dashboard.equipe = r.data.Table5;
 
                 $scope.carregarGrafico();
-
             });
         }
 

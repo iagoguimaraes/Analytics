@@ -63,6 +63,12 @@
                                 <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa"></select2>
                             </div>
 
+                            <!--ENTRADA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Segmentação</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.entrada" dados="dashFiltros.entrada"></select2>
+                            </div>
+
                             <!--SUPERVISOR-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Supervisor</label>
@@ -496,6 +502,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             segmento: '',
             faixa: '',
+            entrada: '',
             supervisor: '',
         }
         $scope.grafico = { indicador: 'promessa' };
@@ -507,9 +514,10 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
-
+      
             $scope.dashFiltros.segmento = r.data.Table;
             $scope.dashFiltros.faixa = r.data.Table1;
+            $scope.dashFiltros.entrada = r.data.Table4;
             $scope.dashFiltros.supervisor = r.data.Table2;
         });
 
