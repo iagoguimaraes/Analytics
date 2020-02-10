@@ -73,8 +73,9 @@
         </div>
 
         <!-- RESUMO -->
-        <div class="row clearfix">
-            <div class="col-xs-12 col-md-4">
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-6">
                 <div class="info-box bg-blue">
                     <span class="info-box-icon">
                         <i class="fa fa-envelope-open-o "></i>
@@ -85,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-6">
                 <div class="info-box bg-green">
                     <span class="info-box-icon">
                         <i class="fa fa-money"></i>
@@ -101,63 +102,37 @@
 
         <!--ANALISE POR DIA-->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
-                    <small class="pull-right">
-                        <label>
-                            <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="true" />
-                            Tabela
-                        </label>
-                        <label>
-                            <input type="radio" name="graficoDiaExibir" ng-model="graficoDia.exibir" value="false" checked="checked" />
-                            Gráfico
-                        </label>
-                    </small>
-
                     <div class="card-body">
-                        <!--TABELA-->
-                        <div class="table-responsive" ng-show="graficoDia.exibir == 'true'">
-                            <table class="table table-striped table-bordered" style="text-align:center" ng-if="dashboard.dia">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:center">Dia</th>
-                                        <th style="text-align:center">SMS Enviado</th>
-                                        <th style="text-align:center">Custo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="dia in dashboard.dia">
-                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{dia.quantidade | number}}</td>
-                                        <td>{{dia.custo | currency:'R$ '}}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th style="text-align:center">Total</th>
-                                        <th style="text-align:center">{{dashboard.resumo.quantidade | number}}</th>
-                                        <th style="text-align:center">{{dashboard.resumo.custo | currency:'R$ '}}</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                        <small class="pull-right">
+                            <select ng-model="dashboard.indicador" style="color:black" ng-change="carregarGraficoDia()">
+                                <option value="quantidade">Quantidade</option>
+                                <option value="custo">Custo</option>
+                            </select>
+                        </small>
+                        <high-charts config="dashboard.graficoDia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
 
-                        <!--GRAFICO-->
-                        <div ng-show="graficoDia.exibir == 'false'">
-                            <high-charts config="dashboard.graficoDia" style="width: 100%; height: 300px"></high-charts>
-                        </div>
+            <!--CENTRO DE CUSTO-->
+            <div class="col-xs-12 col-md-5 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.centrocusto" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+            <!--CARTEIRA-->
+            <div class="col-xs-12 col-md-7 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.carteira" style="width: 100%; height: 300px"></high-charts>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
 
     </div>
 </div>
@@ -170,9 +145,9 @@
         dadosPagina.descricao = 'Digital'
         $scope.showTbody = false;
         $scope.dashFiltros = {};
-        $scope.dashboard = {};
-        $scope.graficoDia = { exibir: 'false' };
-
+        $scope.dashboard = {
+            indicador: 'custo'
+        };
 
         // filtros iniciais
         let newdate = new Date();
@@ -208,7 +183,89 @@
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.dia = r.data.Table1;
-                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                let cart = r.data.Table2;
+                let tipo = r.data.Table3;
+
+                $scope.dashboard.centrocusto = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Tipo SMS'
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: 'Quantidade'
+                            },
+                        },
+                        {
+                            title: {
+                                text: 'Custo'
+                            },
+                            opposite: true
+                        }],
+                    xAxis: {
+                        categories: tipo.map(obj => obj['ds_tipo_sms'])
+                    },
+                    legend: {
+                        enabled: true,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                        { name: 'Quantidade', data: tipo.map(obj => obj.quantidade), color: '#0073b7' },
+                        { name: 'Custo', yAxis: 1, data: tipo.map(obj => obj.custo), color: '#008548' }]
+                };
+
+
+                $scope.dashboard.carteira = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Carteira'
+                    },
+                    yAxis: [
+                        {
+                            title: {
+                                text: 'Quantidade'
+                            },
+                        },
+                        {
+                            title: {
+                                text: 'Custo'
+                            },
+                            opposite: true
+                        }],
+                    xAxis: {
+                        categories: cart.map(obj => obj['carteira'])
+                    },
+                    legend: {
+                        enabled: true,
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                            }
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                        { name: 'Quantidade', data: cart.map(obj => obj.quantidade), color: '#0073b7' },
+                        { name: 'Custo', yAxis: 1, data: cart.map(obj => obj.custo), color: '#008548' }]
+                };
 
                 $scope.carregarGraficoDia();
 
@@ -245,7 +302,7 @@
                 credits: {
                     enabled: false
                 },
-                series: [{ name: 'Custo', data: dados.map(obj => obj.custo), color: '#0073b7' }]
+                series: [{ name: 'Custo', data: dados.map(obj => obj[$scope.dashboard.indicador]), color: '#0073b7' }]
             };
         }
 
