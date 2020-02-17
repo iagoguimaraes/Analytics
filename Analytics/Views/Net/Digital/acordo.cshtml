@@ -270,7 +270,9 @@
                                 <thead>
                                     <tr>
                                         <th>Região</th>
+                                        <th>Qtd Acordos</th>
                                         <th>Qtd Pagamento</th>
+                                        <th>% Efetividade</th>
                                         <th>R$ Pagamento</th>
                                         <th>Ticket Médio Pagamento</th>
                                     </tr>
@@ -282,14 +284,18 @@
                                             {{e[0].regiao}}
                                         </td>
                                         <td>{{e | sumByColumn: 'quantidade'| number}}</td>
+                                        <td>{{e | sumByColumn: 'quantidade_pago'| number}}</td>
+                                        <td>{{e | divideSumColumns: 'quantidade_pago':'quantidade' | percentage:1}}</td>
                                         <td>{{e | sumByColumn: 'valor'| currency: 'R$ '}}</td>
-                                        <td>{{e | divideSumColumns: 'valor':'quantidade' | currency:'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'valor':'quantidade_pago' | currency:'R$ '}}</td>
                                     </tr>
                                     <tr ng-repeat="p in e" ng-show="showTbody">
                                         <td>{{p.estado}}</td>
                                         <td>{{p.quantidade | number}}</td>
+                                        <td>{{p.quantidade_pago | number}}</td>
+                                        <td>{{p.quantidade_pago / p.quantidade | percentage:1}}</td>
                                         <td>{{p.valor | currency: 'R$ '}}</td>
-                                        <td>{{p.valor / p.quantidade | currency:'R$ '}}</td>
+                                        <td>{{p.valor / p.quantidade_pago | currency:'R$ '}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -298,6 +304,30 @@
                 </div>
             </div>
         </div>
+
+        <!--HISTORICO RECEBIMENTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Financeiro ultimos mesês</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row margin-bottom">
+                            <high-chart series="dashboard.qtMes" axis-Categories="dashboard.visao" plot-Options-Column-Data-Label="true" type="column"></high-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </div>
 </div>
@@ -356,7 +386,9 @@
                 $scope.dashboard.produtos = r.data.Table2.map(obj => obj.ds_produto);
                 $scope.dashboard.statusacordo = r.data.Table3.map(obj => obj.ds_status_acordo);
                 $scope.dashboard.parcelas = r.data.Table5.map(obj => obj.ds_parcela);
-                $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percent_pago [value], uf, estado, regiao, quantidade, valor from ?', [r.data.Table4]);
+                $scope.dashboard.visao = r.data.Table6.map(obj => obj.mes_do_ano_descricao);
+
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percent_pago [value], uf, estado, regiao, quantidade, quantidade_pago, valor from ?', [r.data.Table4]);
 
                 $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [r.data.Table4])[0];
                 $scope.mudarEstado($scope.dashboard.maiorEfetividade);
@@ -378,6 +410,15 @@
                     { name: 'Acordo', type: "column", color: '#2196f3', data: r.data.Table5.map(obj => (obj.quantidade)) }
                     , { name: 'Pago', type: "column", color: '#49885e', data: r.data.Table5.map(obj => (obj.quantidade_pago)) }
                     , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(105, 214, 153, 1)', data: r.data.Table5.map(obj => (obj.quantidade_pago * 100 / obj.quantidade).toFixed(1) * 1) }];
+
+
+                $scope.dashboard.qtMes = [
+                    { name: 'Acordo', type: "column", color: '#2196f3', data: r.data.Table6.map(obj => (obj.quantidade)) }
+                    , { name: 'Pago', type: "column", color: '#49885e', data: r.data.Table6.map(obj => (obj.quantidade_pago)) }
+                    , { name: '% Efetividade', yAxis: 1, type: 'spline', color: 'rgba(105, 214, 153, 1)', data: r.data.Table6.map(obj => (obj.quantidade_pago * 100 / obj.quantidade).toFixed(1) * 1) }];
+
+
+
 
             });
         }
