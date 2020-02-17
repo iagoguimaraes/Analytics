@@ -236,7 +236,7 @@
                                     <div class="small-box bg-yellow-active">
                                         <div class="inner">
                                             <p><h4>Qtd Pagamento</h4></p>
-                                            <h3 ng-bind="dashboard.mapa.quantidade | number"></h3>
+                                            <h3 ng-bind="dashboard.mapa.quantidade_pago | number"></h3>
                                             <p>{{ dashboard.mapa.estado }}</p>
                                         </div>
                                     </div>
@@ -246,7 +246,7 @@
                                     <div class="small-box bg-green-active">
                                         <div class="inner">
                                             <p><h4>Valor Pagamento</h4></p>
-                                            <h3 ng-bind="dashboard.mapa.valor | currency:'R$ '"></h3>
+                                            <h3 ng-bind="dashboard.mapa.valor_pago | currency:'R$ '"></h3>
                                             <p>{{ dashboard.mapa.estado }}</p>
                                         </div>
                                     </div>
@@ -256,7 +256,7 @@
                                     <div class="small-box bg-blue-active">
                                         <div class="inner">
                                             <p><h4>Ticket Médio Pagamento</h4></p>
-                                            <h3 ng-bind="( dashboard.mapa.valor / dashboard.mapa.quantidade ) | currency : 'R$ '"> Ticket Médio Pago</h3>
+                                            <h3 ng-bind="( dashboard.mapa.valor_pago / dashboard.mapa.quantidade_pago ) | currency : 'R$ '"> Ticket Médio Pago</h3>
                                             <p>{{ dashboard.mapa.estado }}</p>
                                         </div>
                                     </div>
@@ -286,16 +286,16 @@
                                         <td>{{e | sumByColumn: 'quantidade'| number}}</td>
                                         <td>{{e | sumByColumn: 'quantidade_pago'| number}}</td>
                                         <td>{{e | divideSumColumns: 'quantidade_pago':'quantidade' | percentage:1}}</td>
-                                        <td>{{e | sumByColumn: 'valor'| currency: 'R$ '}}</td>
-                                        <td>{{e | divideSumColumns: 'valor':'quantidade_pago' | currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'valor_pago'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'valor_pago':'quantidade_pago' | currency:'R$ '}}</td>
                                     </tr>
                                     <tr ng-repeat="p in e" ng-show="showTbody">
                                         <td>{{p.estado}}</td>
                                         <td>{{p.quantidade | number}}</td>
                                         <td>{{p.quantidade_pago | number}}</td>
                                         <td>{{p.quantidade_pago / p.quantidade | percentage:1}}</td>
-                                        <td>{{p.valor | currency: 'R$ '}}</td>
-                                        <td>{{p.valor / p.quantidade_pago | currency:'R$ '}}</td>
+                                        <td>{{p.valor_pago | currency: 'R$ '}}</td>
+                                        <td>{{p.valor_pago / p.quantidade_pago | currency:'R$ '}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -388,7 +388,7 @@
                 $scope.dashboard.parcelas = r.data.Table5.map(obj => obj.ds_parcela);
                 $scope.dashboard.visao = r.data.Table6.map(obj => obj.mes_do_ano_descricao);
 
-                $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percent_pago [value], uf, estado, regiao, quantidade, quantidade_pago, valor from ?', [r.data.Table4]);
+                $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percent_pago [value], uf, estado, regiao, quantidade, quantidade_pago, valor, quantidade_pago, valor_pago from ?', [r.data.Table4]);
 
                 $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [r.data.Table4])[0];
                 $scope.mudarEstado($scope.dashboard.maiorEfetividade);
@@ -426,7 +426,7 @@
 
         $scope.mudarEstado = function (id) {
 
-            let dados = alasql('select id, [value], uf, estado, quantidade, valor from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
+            let dados = alasql('select id, [value], uf, estado, quantidade_pago, valor_pago from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
             $scope.dashboard.mapa = dados;
 
             console.log($scope.dashboard.mapa);
