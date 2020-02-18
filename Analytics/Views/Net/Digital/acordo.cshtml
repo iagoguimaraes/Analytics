@@ -390,9 +390,8 @@
 
                 $scope.dashboard.estado = alasql('select "BR-" + uf id, quantidade [percent], percent_pago [value], uf, estado, regiao, quantidade, quantidade_pago, valor, quantidade_pago, valor_pago from ?', [r.data.Table4]);
 
-                $scope.dashboard.maiorEfetividade = alasql('select top 1 "BR-" + uf id from ?', [r.data.Table4])[0];
+                $scope.dashboard.maiorEfetividade = "BR-SP"
                 $scope.mudarEstado($scope.dashboard.maiorEfetividade);
-
 
                 $scope.dashboard.qtDia = [
                     { name: 'Acordo', type: "column", color: '#2196f3', data: r.data.Table1.map(obj => (obj.quantidade)) }
@@ -428,8 +427,7 @@
 
             let dados = alasql('select id, [value], uf, estado, quantidade_pago, valor_pago from ? where id like ("%' + id + '%")', [$scope.dashboard.estado])[0];
             $scope.dashboard.mapa = dados;
-
-            console.log($scope.dashboard.mapa);
+          
         }
 
         // extrair dados para excel
