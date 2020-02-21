@@ -64,10 +64,10 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
             @*<div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: #004592">
-                    <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
-                </div>
-            </div>*@
+            <div class="small-box" style="background-color: #004592">
+                <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
+            </div>
+        </div>*@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -127,6 +127,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
+                        <p>R$ Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!--ANALISE POR DIA-->
@@ -155,6 +166,7 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
+                                        <th>R$ Promessa</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>Tx Alega</th>
@@ -173,6 +185,7 @@
                                         <td>{{dia.alega | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.valor_promessa | currency: 'R$ '}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.alega / dia.cpc | percentage:1}}</td>
@@ -208,6 +221,7 @@
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
                                 <option value="alega">Alega Pagamento</option>
+                                <option value="valor_promessa">R$ Promessa</option>
                             </select>
                         </small>
                     </div>
