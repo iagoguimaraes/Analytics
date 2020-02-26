@@ -923,5 +923,191 @@ namespace Analytics.Controllers
             }
         }
 
+
+        #region DIARIO DE BORDO
+
+        [Route("humano/diariodebordo/opcoes")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage OpcoesDiarioBordo()
+        {
+            try
+            {
+                
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_diario_bordo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordo/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string supervisor = form["supervisor"];
+                string operador = form["operador"];
+                string motivo = form["motivo"];                
+                string usuario = form["usuario"];
+
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(string.Concat(dtfim, " 23:59:59"));
+
+                DataTable _supervisor = JsonConvert.DeserializeObject<DataTable>(supervisor);
+                DataTable _operador = JsonConvert.DeserializeObject<DataTable>(operador);
+                DataTable _motivo = JsonConvert.DeserializeObject<DataTable>(motivo);              
+                DataTable _usuario = JsonConvert.DeserializeObject<DataTable>(usuario);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", sessao.id_usuario);
+                    parametros.Add("dtini", _dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", _dtfim.ToString("yyyy-MM-dd HH:mm:ss"));
+                    parametros.Add("supervisor", _supervisor);
+                    parametros.Add("operador", _operador);
+                    parametros.Add("motivo", _motivo);
+                    parametros.Add("usuario", _usuario);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_diario_bordo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordo/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_supervisor = Convert.ToInt32(form["supervisor"]);
+                int id_operador = Convert.ToInt32(form["operador"]);
+                int id_motivo = Convert.ToInt32(form["motivo"]);
+                string descricao = form["descricao"];
+
+
+                DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
+
+                if (string.IsNullOrEmpty(descricao))
+                    descricao = "";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", _data);
+                    parametros.Add("id_supervisor", id_supervisor);
+                    parametros.Add("id_operador", id_operador);
+                    parametros.Add("id_motivo", id_motivo);
+                    parametros.Add("id_usuario", sessao.id_usuario);
+                    parametros.Add("descricao", descricao);
+
+                    sql.ExecuteProcedureDataSet("sp_ins_diario_bordo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordo/editar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage EditarDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_supervisor = Convert.ToInt32(form["supervisor"]);
+                int id_operador = Convert.ToInt32(form["operador"]);
+                int id_motivo = Convert.ToInt32(form["motivo"]);
+                string descricao = form["descricao"];
+
+                DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
+
+                if (string.IsNullOrEmpty(descricao))
+                    descricao = "";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+                    parametros.Add("data", _data);
+                    parametros.Add("id_supervisor", id_supervisor);
+                    parametros.Add("id_operador", id_operador);
+                    parametros.Add("id_motivo", id_motivo);
+                    parametros.Add("descricao", descricao);
+
+                    sql.ExecuteProcedureDataSet("sp_upd_diario_bordo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordo/remover")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage RemoverDiarioBordo(FormDataCollection form)
+        {
+            try
+            {
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+
+                    sql.ExecuteProcedureDataSet("sp_del_diario_bordo", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
+
+
     }
 }
