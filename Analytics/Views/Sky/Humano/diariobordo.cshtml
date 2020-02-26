@@ -84,11 +84,10 @@
         </div>
     </div>
 
-
     <!--BOTAO INSERIR E PESQUISA-->
     <div class="row margin-bottom">
         <div class="col-xs-12 col-sm-6 margin-bottom">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
                 Inserir Ocorrência
             </button>
         </div>
@@ -109,6 +108,7 @@
         </li>
 
         <li ng-repeat="d in r">
+
             <i class="fa fa-pencil-square-o bg-blue" ng-click="popularEdit(d)" data-toggle="modal" data-target="#modal-edit"></i>
 
             <div class="timeline-item">
@@ -169,21 +169,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label>Supervisor</label>
                             <select class="form-control" ng-model="diario.supervisor" ng-options="e.id_supervisor as e.supervisor for e in opcoes.supervisores">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label>Operador</label>
                             <select class="form-control" ng-model="diario.operador" ng-options="c.id_operador as c.operador for c in opcoes.operadores | filter:{id_supervisor: diario.supervisor}:true">
                                 <option value="">Selecione</option>
                             </select>
                         </div>
 
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label>Motivo</label>
                             <select class="form-control" ng-model="diario.motivo" ng-options="o.id_motivo as o.motivo for o in opcoes.motivos">
                                 <option value="">Selecione</option>
@@ -394,7 +394,7 @@
             $scope.editdiario.hora = r.hora;
             $scope.editdiario.supervisor = r.id_supervisor;
             $scope.editdiario.operador = r.id_operador;
-            $scope.editdiario.motivo = r.id_motivo;          
+            $scope.editdiario.motivo = r.id_motivo;
         }
 
         // editar uma ocorrencia
