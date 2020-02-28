@@ -661,6 +661,40 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/digital/funil")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardFunilDigital(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable statusBase = JsonConvert.DeserializeObject<DataTable>(form["statusBase"]);
+                DataTable tipoDevedor = JsonConvert.DeserializeObject<DataTable>(form["tipoDevedor"]);
+                DataTable tipoPlano = JsonConvert.DeserializeObject<DataTable>(form["tipoPlano"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SEMPARAR_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini);
+                    parametros.Add("id_faixa", faixaAtraso);
+                    parametros.Add("id_base", statusBase);
+                    parametros.Add("id_devedor", tipoDevedor);
+                    parametros.Add("id_plano", tipoPlano);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_funil", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         [Route("dashboard/digital/filtros")]
         [HttpGet]
         [Autorizar]
