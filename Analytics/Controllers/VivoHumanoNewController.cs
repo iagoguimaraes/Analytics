@@ -55,6 +55,7 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable tipobilling = JsonConvert.DeserializeObject<DataTable>(form["tipobilling"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -68,6 +69,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("tipobilling", tipobilling);
                     parametros.Add("aging", aging);
+                    parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
 
@@ -94,6 +96,7 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable tipobilling = JsonConvert.DeserializeObject<DataTable>(form["tipobilling"]);
                 DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
+                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
 
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
@@ -107,6 +110,7 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("tipobilling", tipobilling);
                     parametros.Add("aging", aging);
+                    parametros.Add("segmentacao", segmentacao);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
 

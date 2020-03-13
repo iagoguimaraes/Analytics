@@ -75,15 +75,34 @@
             </div>
         </div>
 
-        <!--RESUMO-->
+        <!-- RESUMO -->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box" style="background-color: #7e2595">
-                    <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
+                <div class="small-box bg-black" style="opacity: 0.6">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.mailing_dia / dashboard.resumo.pa | number: 0"></h4>
+                        <p>Mailing / AD</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-black">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing_dia | megaNumber"></h3>
+                        <p>Mailing Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.pa | megaNumber"></h3>
+                        <p>Média AD</p>
+                    </div>
                 </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-gray">
+                <div class="small-box bg-gray" style="opacity: 0.8">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
                         <p>Discado</p>
@@ -92,9 +111,24 @@
                         <i class="fa fa-phone"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado_dia | megaNumber"></h3>
+                        <p>Discado Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado_pa | megaNumber"></h3>
+                        <p>Discado AD</p>
+                    </div>
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-aqua">
+                <div class="small-box bg-aqua" style="opacity: 0.8">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
@@ -104,23 +138,55 @@
                         <i class="fa fa-headphones"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato_dia | number"></h3>
+                        <p>Contato Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-aqua-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato_pa | megaNumber"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.contato_pa / dashboard.resumo.discado_pa | percentage: 1"></h4>*@
+                        <p>Contato AD</p>
+                    </div>
+                </div>
             </div>
+
             <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-red">
+                <div class="small-box bg-red" style="opacity: 0.8">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>*@
                         <p>CPC</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-male"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-yellow">
+
+                <div class="small-box bg-red">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.cpca | megaNumber"></h3>
+                        <h3 ng-bind="dashboard.resumo.cpc_dia | number"></h3>
+                        <p>CPC Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-red-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpc_pa / dashboard.resumo.contato_pa | percentage: 1"></h4>*@
+                        <p>CPC AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
                         <p>CPCA</p>
                     </div>
@@ -128,11 +194,27 @@
                         <i class="fa fa-street-view"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-4 col-lg-2">
-                <div class="small-box bg-green">
+
+                <div class="small-box bg-yellow">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.promessa | megaNumber"></h3>
+                        <h3 ng-bind="dashboard.resumo.cpca_dia | number"></h3>
+                        <p>CPCA Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-yellow-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca_pa | number"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpca_pa / dashboard.resumo.cpc_pa | percentage: 1"></h4>*@
+                        <p>CPCA AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
                         <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
                         <p>Promessa</p>
                     </div>
@@ -140,8 +222,93 @@
                         <i class="fa fa-thumbs-o-up"></i>
                     </div>
                 </div>
+
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa_dia | number"></h3>
+                        <p>Promessa Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa_pa | number"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.promessa_pa / dashboard.resumo.cpca_pa | percentage: 1"></h4>*@
+                        <p>Promessa AD</p>
+                    </div>
+                </div>
+
+
             </div>
         </div>
+
+        <!--RESUMO 2-->
+        @*<div class="row margin-bottom">
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box" style="background-color: #7e2595">
+                        <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-gray">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
+                            <p>Discado</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                            <p>Contato</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
+                            <p>CPC</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-male"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.cpca | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
+                            <p>CPCA</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-street-view"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.promessa | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
+                            <p>Promessa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
 
         <!--ANALISE DIA-->
         <div class="row  margin-bottom">
@@ -302,14 +469,14 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.dia = r.data.Table1;
                 $scope.dashboard.tabulacao = r.data.Table2;
-                $scope.dashboard.consolidado = data.Table3;
+                $scope.dashboard.consolidado = r.data.Table3;
 
                 $scope.carregarGrafico();
 
             });
         }
 
-        // carrega o mapa de acordo com o indicador escolhido
+        // carrega o gráfico de acordo com o indicador escolhido
         $scope.carregarGrafico = function () {
             let dados = $scope.dashboard.dia;
             $scope.dashboard.datas = dados.map(obj => obj.data);

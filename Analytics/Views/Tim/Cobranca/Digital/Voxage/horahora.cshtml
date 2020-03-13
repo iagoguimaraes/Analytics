@@ -52,6 +52,12 @@
                             </div>
                         </div>
 
+                        <!--PRODUTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Produtos</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produto"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -184,6 +190,65 @@
                 </div>
 
 
+            </div>
+        </div>
+
+        <!--ANALISE POR PRODUTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Produto</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table4')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.produto">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>AD</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>Alega Pagamento</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>Hit Rate</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Alega</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="e in dashboard.produto">
+                                        <td>{{e.produto}}</td>
+                                        <td>{{e.qtd_ad | number}}</td>
+                                        <td>{{e.discado | number}}</td>
+                                        <td>{{e.contato | number}}</td>
+                                        <td>{{e.cpc | number}}</td>
+                                        <td>{{e.alega_pagamento | number}}</td>
+                                        <td>{{e.cpca | number}}</td>
+                                        <td>{{e.promessa | number}}</td>
+                                        <td>{{e.valor_promessa| currency: 'R$ '}}</td>
+                                        <td>{{e.contato / e.discado | percentage:1}}</td>
+                                        <td>{{e.cpc / e.contato | percentage:1}}</td>
+                                        <td>{{e.alega_pagamento / e.cpc | percentage:1}}</td>
+                                        <td>{{e.cpca / e.cpc | percentage:1}}</td>
+                                        <td>{{e.promessa / e.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -358,9 +423,23 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            produtos: '',
         };
 
         $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
+        $scope.dashFiltros = {};
+
+        // carrega os filtros e colocar no scope
+        $scope.carregarFiltros = function () {
+            $http({
+                method: 'GET',
+                url: "/api/tim/dashboard/filtros",
+            }).then(function success(r) {
+                $scope.dashFiltros.status = r.status;
+
+                $scope.dashFiltros.produto = r.data.Table;
+            });
+        }
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -376,6 +455,7 @@
                 $scope.dashboard.horahora = r.data.Table1;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
                 $scope.dashboard.horas = r.data.Table1.map(obj => obj.hora);
+                $scope.dashboard.produto = r.data.Table4;
 
                 $scope.dashboard.horahoraGrafico = r.data.Table1;
                 $scope.carregarGraficoHora();
@@ -423,6 +503,7 @@
 
         }
 
+        $scope.carregarFiltros();
         $scope.carregarDashboard();
 
         $scope.extrair = function (tabela) {
