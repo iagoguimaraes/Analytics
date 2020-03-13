@@ -52,6 +52,7 @@ namespace Analytics.Controllers
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -65,6 +66,7 @@ namespace Analytics.Controllers
                     parametros.Add("tenure", tenure);
                     parametros.Add("horaini", horaini);
                     parametros.Add("horafim", horafim);
+                    parametros.Add("origem", origem);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_new", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
