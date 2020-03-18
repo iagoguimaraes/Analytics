@@ -47,7 +47,6 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable funcionario = JsonConvert.DeserializeObject<DataTable>(form["funcionario"]);
                 DataTable fpd = JsonConvert.DeserializeObject<DataTable>(form["fpd"]);
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable inclusao = JsonConvert.DeserializeObject<DataTable>(form["inclusao"]);
@@ -60,7 +59,6 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("funcionario", funcionario);
                     parametros.Add("fpd", fpd);
                     parametros.Add("atraso", atraso);
                     parametros.Add("inclusao", inclusao);
