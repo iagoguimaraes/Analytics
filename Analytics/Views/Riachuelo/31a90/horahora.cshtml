@@ -226,6 +226,60 @@
             </div>
         </div>
 
+        <!-- TABELA ATRASO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Atraso</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('atraso','Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.atraso">
+                                <thead>
+                                    <tr>
+                                        <th>Atraso</th>
+                                        <th>Atendido</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>R$ Promessa</th>
+                                        <th>% Contato</th>
+                                        <th>Tx Loc</th>
+                                        <th>Tx Apv</th>
+                                        <th>Conversão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="a in dashboard.atraso">
+                                        <td>{{a.ds_fxatraso}}</td>
+                                        <td>{{a.atendimento | number}}</td>
+                                        <td>{{a.contato | number}}</td>
+                                        <td>{{a.cpc | number}}</td>
+                                        <td>{{a.cpca | number}}</td>
+                                        <td>{{a.promessa | number}}</td>
+                                        <td>{{a.vl_promessa | currency:'R$ '}}</td>
+                                        <td>{{a.contato / a.atendimento | percentage:1}}</td>
+                                        <td>{{a.cpc / a.contato | percentage:1}}</td>
+                                        <td>{{a.cpca / a.cpc | percentage:1}}</td>
+                                        <td>{{a.promessa / a.cpca | percentage:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--TABELA EMPRESA/CARTEIRA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -317,6 +371,9 @@
                         </div>
                         <div class="card-header-button" ng-click="extrair('ProducaoOperador','Table4')">
                             <i class="fa fa-file-excel-o"> Operador</i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('ProducaoOcorrencia','Table7')">
+                            <i class="fa fa-file-excel-o" alt="Visão Operador/Ocorrencia"> Ocorrencia</i>
                         </div>
                     </div>
                     <div class="card-body">
@@ -440,6 +497,7 @@
                 $scope.dashboard.carteira = r.data.Table2;
                 $scope.dashboard.operador = r.data.Table3;
                 $scope.dashboard.equipe = r.data.Table5;
+                $scope.dashboard.atraso = r.data.Table6;
 
                 $scope.carregarGrafico();
             });

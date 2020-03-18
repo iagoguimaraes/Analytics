@@ -329,6 +329,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable tipo = JsonConvert.DeserializeObject<DataTable>(form["tipo"]);
 
                 using (SqlHelper sql = new SqlHelper("DB_SMS"))
                 {
@@ -338,6 +339,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("tipo", tipo);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_sms_digital", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
