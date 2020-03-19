@@ -243,6 +243,26 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoProjecao(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao_humano");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region DIGITAL
