@@ -2,10 +2,9 @@
     Layout = "~/Views/master.cshtml";
 }
 
-
 <!-- DAHSBOARD -->
 
-<div ng-controller="ctrl-light-baseativa">
+<div ng-controller="ctrl-naturgy-baseativa">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -218,7 +217,7 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-light-baseativa', function ($scope, $http, $filter, $interval, dadosPagina) {
+    angular.module('app').controller('ctrl-naturgy-baseativa', function ($scope, $http, $filter, $interval, dadosPagina) {
         dadosPagina.titulo = 'Estratificação de Base';
 
 
@@ -239,7 +238,7 @@
         // carregar os filtros
         $http({
             method: 'GET',
-            url: "/api/light/dashboard/humano/filtros",
+            url: "/api/naturgy/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dados = r.status;
@@ -251,7 +250,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/light/dashboard/humano/baseativa",
+                url: "/api/naturgy/dashboard/humano/baseativa",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

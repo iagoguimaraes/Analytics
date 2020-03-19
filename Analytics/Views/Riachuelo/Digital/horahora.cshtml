@@ -59,12 +59,6 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                         </div>
 
-                        <!--FUNCIONARIO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Funcionário</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.funcionario" dados="dashFiltros.funcionario" style="width:100%"></select2>
-                        </div>
-
                         <!--FPD-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Cliente FPD</label>
@@ -344,10 +338,9 @@
             </div>
         </div>
 
-        <div class="row">
-
-            <!-- DIAGRAMA -->
-            <div class="col-xs-12 col-lg-8 margin-bottom">
+        <!-- DIAGRAMA -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-lg-8">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Diagrama de Finalizações {{conceito.string}}</span>
@@ -365,7 +358,7 @@
             </div>
 
             <!-- INSUCESSO CONTATO -->
-            <div class="col-xs-12 col-lg-4 margin-bottom">
+            <div class="col-xs-12 col-lg-4">
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Insucesso no Contato</span>
@@ -384,6 +377,40 @@
 
         </div>
 
+        <!--FUNIL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funil de Transferências</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!--DIAGRAMA TABULAÇÃO-->
+
+                            <div class="col-xs-12 col-md-6">
+                                <h4 class="text-center">Tabulações Nectar</h4>
+                                <h3 class="text-center">{{dashboard.transferencia.tabulado | number}} - ({{dashboard.transferencia.tabulado / dashboard.transferencia.atendido  | percentage: 0}})</h3>
+                                <div class="card-body">
+                                    <high-chart series="dashboard.transferenciaTabulada" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                                </div>
+                            </div>
+
+                            <!--FUNIL-->
+                            <div class="col-xs-12 col-md-6">
+                                <canvasjs config="dashboard.funil" style="width: 100%; height: 480px"></canvasjs>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 </div>
 
@@ -397,7 +424,6 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             carteiras: '',
-            funcionario: '',
             fpd: '',
             conceito: '',
             atraso: '',
@@ -408,6 +434,7 @@
         $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.conceito = { string: '' };
+        $scope.classificacao = { indicador: 'PROMESSA' }
 
         // carregar os filtros
         $http({
@@ -418,12 +445,11 @@
             let data = r.data;
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = data.Table;
-            $scope.dashFiltros.funcionario = data.Table1;
             $scope.dashFiltros.fpd = data.Table7;
             $scope.dashFiltros.atraso = data.Table9;
             $scope.dashFiltros.inclusao = data.Table10;
             $scope.dashFiltros.empresa = data.Table12;
-            
+
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -442,16 +468,39 @@
                 $scope.dashboard.horahora = data.Table3;
                 $scope.dashboard.diagrama = data.Table4;
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: data.Table5.map(obj => ({ name: obj.ocorrencia, y: obj.qtd })) }];
+                $scope.dashboard.transferencia = data.Table6[0];
 
+                $scope.dashboard.transferenciaTabulada = [{ innerSize: '60%', data: data.Table7.map(obj => ({ name: obj.ds_ocorrencia, y: obj.qtd })) }];
+
+                // FUNIL
+                let funil = data.Table6[0];
+
+                $scope.dashboard.funil = {
+                    animationEnabled: true,
+                    data: [{
+                        type: "funnel",
+                        toolTipContent: "<b>{label}</b>: {value} <b>({percentage}%)</b>",
+                        indexLabel: "{label}: {value} - ({percentage}%)",
+                        dataPoints: [
+                            { y: 45, value: funil.transferido, label: "Transferidas", percentage: 100 },
+                            { y: 30, value: funil.atendido, label: "Atendidas", percentage: (funil.atendido * 100 / funil.transferido).toFixed(1) / 1 },
+                            { y: 25, value: funil.tabulado, label: "Tabulado", percentage: (funil.tabulado * 100 / funil.atendido).toFixed(1) / 1 },
+                            { y: 20, value: funil.contato, label: "Contato", percentage: (funil.contato * 100 / funil.atendido).toFixed(1) / 1 },
+                            { y: 15, value: funil.cpc, label: "CPC", percentage: (funil.cpc * 100 / funil.atendido).toFixed(1) / 1 },
+                            { y: 10, value: funil.cpca, label: "CPCA", percentage: (funil.cpca * 100 / funil.atendido).toFixed(1) / 1 },
+                            { y: 10, value: funil.promessa, label: "Promessa", percentage: (funil.promessa * 100 / funil.atendido).toFixed(1) / 1 },
+                        ]
+                    }]
+                };
 
                 if ($scope.filtros.conceito == '' || $scope.filtros.conceito == '_total') {
                     $scope.conceito.string = '- Total';
                 } else {
                     $scope.conceito.string = '- Unique';
                 }
-
             });
         }
+
 
         $scope.carregarDashboard();
 
