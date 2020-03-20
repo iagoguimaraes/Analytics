@@ -83,6 +83,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem" style="width:100%"></select2>
                             </div>
 
+                            <!--TIPO DO PAGAMENTO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Tipo de Plano</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -263,155 +269,159 @@
 
 <script>
 
-angular.module('app').controller('ctrl-riachuelo-pagamento', function ($scope, $http, $filter, $interval, dadosPagina) {
-    dadosPagina.titulo = 'Pagamento';
-    dadosPagina.descricao = 'Riachuelo'
+    angular.module('app').controller('ctrl-riachuelo-pagamento', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Pagamento';
+        dadosPagina.descricao = 'Riachuelo'
 
-    // filtros iniciais
-    let newdate = new Date();
-    let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
-    $scope.filtros = {
-        dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
-        dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-        empresas: '',
-        carteiras: '',
-        faixas: '',
-        save: '',
-        origem: '',
-    };
-    $scope.dashFiltros = {};
-    $scope.dashboard = {};
-    $scope.grafico = {indicador: 'vlr_caixa'};
-    $scope.grafico2 = {indicador: 'vlr_caixaCarteira'};
-    $scope.grafico3 = {indicador: 'PjValorCaixa'};
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresas: '',
+            carteiras: '',
+            faixas: '',
+            save: '',
+            origem: '',
+            plano: '',
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'vlr_caixa' };
+        $scope.grafico2 = { indicador: 'vlr_caixaCarteira' };
+        $scope.grafico3 = { indicador: 'PjValorCaixa' };
 
-    // carregar os filtros
-    $http({
-        method: 'GET',
-        url: "/api/riachuelo/dashboard/humano/filtros",
-        data: $scope.filtros,
-    }).then(function success(r) {
-        let data = r.data;
-        $scope.dashFiltros.status = r.status;
-        $scope.dashFiltros.empresas = data.Table7;
-        $scope.dashFiltros.carteiras = data.Table8;
-        $scope.dashFiltros.faixas = data.Table10;
-        $scope.dashFiltros.save = r.data.Table9;
-        $scope.dashFiltros.origem = r.data.Table11;
-    });
-
-    // obtem filtros do escopo e carrega os dados do dashboard
-    $scope.carregarDashboard = function () {
+        // carregar os filtros
         $http({
-            method: 'POST',
-            url: "/api/riachuelo/dashboard/humano/pagamento",
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
             let data = r.data;
-            $scope.dashboard.dados = r.data;
-            $scope.dashboard.status = r.status;
-            $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
-            $scope.dashboard.carteira = r.data.Table4.map(obj => obj.carteira);
-            $scope.dashboard.status = r.status;
-            $scope.dashboard.resumo = r.data.Table[0];
-            $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.qtd)) }];
-            $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table2.map(obj => ({ name: obj.carteira, y: obj.qtd })) }];
-            $scope.dashboard.dados = r.data;
-            $scope.dashboard.dados2 = r.data;
-            $scope.dashboard.dados3 = r.data;
-            $scope.carregarGrafico();
-            $scope.carregarGrafico2();
-            $scope.carregarGrafico3();
-            console.log()
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresas = data.Table7;
+            $scope.dashFiltros.carteiras = data.Table8;
+            $scope.dashFiltros.faixas = data.Table10;
+            $scope.dashFiltros.save = r.data.Table9;
+            $scope.dashFiltros.origem = r.data.Table11;
+            $scope.dashFiltros.plano = r.data.Table12;
         });
-    }
 
-    $scope.carregarGrafico = function () {
-        let dados = $scope.dashboard.dados;
-  
-        if ($scope.grafico.indicador == 'vlr_caixa') {
-            $scope.dashboard.valor = [{ name: 'Valor Caixa', data: dados.Table3.map(obj => (obj.vlr_pagamento)) }];
-            $scope.dashboard.carteira = [{ name: 'Valor Caixa', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.carteira})) }];
-        }
-        else {
-            $scope.dashboard.valor = [{ name: 'Valor Contábil', data: dados.Table3.map(obj => (obj.vlr_contabil)) }]};
-            $scope.dashboard.carteira = [{ name: 'Valor Contábil', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.carteira})) }];
-        }
-
-    $scope.carregarGrafico2 = function () {
-        let dados = $scope.dashboard.dados2;
-  
-        if ($scope.grafico2.indicador == 'vlr_caixaCarteira') {
-            $scope.dashboard.valorCarteira = [{ name: 'Valor Caixa', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.vlr_pagamento })) }];
-        }
-        else {
-            $scope.dashboard.valorCarteira = [{ name: 'Valor Contábil', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.vlr_contabil })) }];
-        }
-    }
-
-
-    $scope.carregarGrafico3 = function () {
-    let indicador = $scope.grafico3.indicador;
-    let data = $scope.dashboard.dados3;
-    let mes_recebido = '';
-    let mes_projecao = '';
-
-        switch (indicador) {
-            case 'PjValorCaixa':
-                mes_recebido = data.Table5.map(obj => ({ y: obj.vlr_pagamento }));
-                mes_projecao = data.Table6.map(obj => ({ y: obj.vlr_pagamento }));
-                break;
-            case 'PjValorContabil':
-                mes_recebido = data.Table5.map(obj => ({ y: obj.vlr_contabil }));
-                mes_projecao = data.Table6.map(obj => ({ y: obj.vlr_contabil }));
-                break;
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/pagamento",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
+                $scope.dashboard.carteira = r.data.Table4.map(obj => obj.carteira);
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.qtd)) }];
+                $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table2.map(obj => ({ name: obj.carteira, y: obj.qtd })) }];
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.dados2 = r.data;
+                $scope.dashboard.dados3 = r.data;
+                $scope.carregarGrafico();
+                $scope.carregarGrafico2();
+                $scope.carregarGrafico3();
+                console.log()
+            });
         }
 
-   mes_recebido[mes_recebido.length - 1].dataLabels = { enabled: true };
-   mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dados;
 
-    $scope.dashboard.projecao_mes = {
-       title: {
-           text: ''
-       },
-       yAxis: {
-           title: {
-               text: ''
-           },
-       },
-       xAxis: {
-           categories: data.Table1.map(obj => obj.data)
-       },
-       series: [
-           {
-               type: 'line',
-               name: 'Projeção',
-               color: 'black',
-               dashStyle: 'dot',
-               marker: { symbol: 'circle' },
-               data: mes_projecao
-           },
-           {
-               type: 'area',
-               name: 'Recebimento',
-               color: 'black',
-               marker: { symbol: 'circle' },
-               data: mes_recebido
-           },
-       ],
-       credits: {
-           enabled: false
-       }
-   };
- }
-    $scope.carregarDashboard();
+            if ($scope.grafico.indicador == 'vlr_caixa') {
+                $scope.dashboard.valor = [{ name: 'Valor Caixa', data: dados.Table3.map(obj => (obj.vlr_pagamento)) }];
+                $scope.dashboard.carteira = [{ name: 'Valor Caixa', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.carteira })) }];
+            }
+            else {
+                $scope.dashboard.valor = [{ name: 'Valor Contábil', data: dados.Table3.map(obj => (obj.vlr_contabil)) }]
+            };
+            $scope.dashboard.carteira = [{ name: 'Valor Contábil', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.carteira })) }];
+        }
 
-    // extrair dados para excel
-    $scope.extrair = function (nomeArquivo, tabela) {
-        alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-    }
+        $scope.carregarGrafico2 = function () {
+            let dados = $scope.dashboard.dados2;
 
-});
+            if ($scope.grafico2.indicador == 'vlr_caixaCarteira') {
+                $scope.dashboard.valorCarteira = [{ name: 'Valor Caixa', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.vlr_pagamento })) }];
+            }
+            else {
+                $scope.dashboard.valorCarteira = [{ name: 'Valor Contábil', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.vlr_contabil })) }];
+            }
+        }
+
+
+        $scope.carregarGrafico3 = function () {
+            let indicador = $scope.grafico3.indicador;
+            let data = $scope.dashboard.dados3;
+            let mes_recebido = '';
+            let mes_projecao = '';
+
+            switch (indicador) {
+                case 'PjValorCaixa':
+                    mes_recebido = data.Table5.map(obj => ({ y: obj.vlr_pagamento }));
+                    mes_projecao = data.Table6.map(obj => ({ y: obj.vlr_pagamento }));
+                    break;
+                case 'PjValorContabil':
+                    mes_recebido = data.Table5.map(obj => ({ y: obj.vlr_contabil }));
+                    mes_projecao = data.Table6.map(obj => ({ y: obj.vlr_contabil }));
+                    break;
+            }
+
+            mes_recebido[mes_recebido.length - 1].dataLabels = { enabled: true };
+            mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
+
+            $scope.dashboard.projecao_mes = {
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    categories: data.Table1.map(obj => obj.data)
+                },
+                series: [
+                    {
+                        type: 'line',
+                        name: 'Projeção',
+                        color: 'black',
+                        dashStyle: 'dot',
+                        marker: { symbol: 'circle' },
+                        data: mes_projecao
+                    },
+                    {
+                        type: 'area',
+                        name: 'Recebimento',
+                        color: 'black',
+                        marker: { symbol: 'circle' },
+                        data: mes_recebido
+                    },
+                ],
+                credits: {
+                    enabled: false
+                }
+            };
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
 
 </script>

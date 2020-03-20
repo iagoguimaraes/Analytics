@@ -1347,6 +1347,7 @@ namespace Analytics.Controllers
                 DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
+                DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -1359,6 +1360,7 @@ namespace Analytics.Controllers
                     parametros.Add("faixas", faixas);
                     parametros.Add("save", save);
                     parametros.Add("origem", origem);
+                    parametros.Add("plano", plano);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_pagamento", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
