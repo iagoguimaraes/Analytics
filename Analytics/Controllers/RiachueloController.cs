@@ -834,7 +834,7 @@ namespace Analytics.Controllers
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
-                DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipes"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
@@ -848,7 +848,7 @@ namespace Analytics.Controllers
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("atrasos", atrasos);
                     parametros.Add("supervisores", supervisores);
-                    parametros.Add("equipes", equipes);
+                    parametros.Add("save", save);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1031,7 +1031,8 @@ namespace Analytics.Controllers
             {
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
-                DataTable grupo = JsonConvert.DeserializeObject<DataTable>(form["grupo"]);
+                DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -1040,7 +1041,8 @@ namespace Analytics.Controllers
 
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("grupo", grupo);
+                    parametros.Add("faixaAtraso", faixaAtraso);
+                    parametros.Add("save", save);
 
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_baseativa", parametros);

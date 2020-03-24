@@ -42,10 +42,16 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
-                        <!--GRUPOS-->
+                        <!--FAIXA DE ATRASO-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Grupos</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.grupo" dados="dashFiltros.grupo" style="width:100%"></select2>
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
+                        </div>
+
+                        <!--BASE SAVE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentação</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.save" dados="dashFiltros.save" style="width:100%"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -93,8 +99,29 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xs-12 col-md-4 col-xs-offset-0 col-md-offset-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.CONTABILVLR | megaNumber"></h3>
+                        <p>Valor Contábil</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-money"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.TCK_MEDIO_CTB | currency:'R$'"></h3>
+                        <p>Tckt Medio</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-ticket"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-
 
 
         <!--VALOR-->
@@ -163,7 +190,7 @@
             <div class="col-xs-12 col-md-12">
                 <div class="card col-md-6">
                     <div class="card-header">
-                        <span class="card-header-title">Grupos</span>
+                        <span class="card-header-title">Base Save</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -209,7 +236,8 @@
         $scope.filtros = {
             empresa: '',
             carteira: '',
-            grupo: ''
+            faixaAtraso: '',
+            save: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -223,7 +251,8 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.empresa = data.Table7;
             $scope.dashFiltros.carteira = data.Table8;
-            $scope.dashFiltros.grupo = data.Table2;
+            $scope.dashFiltros.faixaAtraso = data.Table13;
+            $scope.dashFiltros.save = data.Table9;
 
         });
 
@@ -238,10 +267,10 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
 
-                $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixaAtraso);
+                $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixa);
                 $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_faixaSaldo);
-                $scope.dashboard.faixaGrupo = data.Table5.map(obj => obj.GRUPO);
+                $scope.dashboard.faixaGrupo = data.Table5.map(obj => obj.CLASSE);
 
 
                 let indicador = 'CONTRATO';
