@@ -251,9 +251,19 @@ namespace Analytics.Controllers
         {
             try
             {
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable entrada = JsonConvert.DeserializeObject<DataTable>(form["entrada"]);
+
                 using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
                 {
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao_humano");
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("faixa", faixa);
+                    parametros.Add("entrada", entrada);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao_humano", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
