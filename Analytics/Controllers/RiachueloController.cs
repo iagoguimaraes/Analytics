@@ -1031,7 +1031,9 @@ namespace Analytics.Controllers
             {
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
+                DataTable bandeira = JsonConvert.DeserializeObject<DataTable>(form["bandeira"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
+                DataTable faixaSaldo = JsonConvert.DeserializeObject<DataTable>(form["faixaSaldo"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
@@ -1041,7 +1043,9 @@ namespace Analytics.Controllers
 
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("bandeira", bandeira);
                     parametros.Add("faixaAtraso", faixaAtraso);
+                    parametros.Add("faixaSaldo", faixaSaldo);
                     parametros.Add("save", save);
 
 

@@ -42,12 +42,24 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashFiltros.carteira" style="width:100%"></select2>
                         </div>
 
+                        <!--BANDEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Bandeira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeira" dados="dashFiltros.bandeira" style="width:100%"></select2>
+                        </div>
+
                         <!--FAIXA DE ATRASO-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Faixa de Atraso</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaAtraso" dados="dashFiltros.faixaAtraso" style="width:100%"></select2>
                         </div>
 
+                        <!--FAIXA DE VALOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Valor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixaSaldo" dados="dashFiltros.faixaSaldo" style="width:100%"></select2>
+                        </div>
+                        
                         <!--BASE SAVE-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Segmentação</label>
@@ -236,7 +248,9 @@
         $scope.filtros = {
             empresa: '',
             carteira: '',
+            bandeira: '',
             faixaAtraso: '',
+            faixaSaldo: '',
             save: '',
         };
         $scope.dashFiltros = {};
@@ -251,7 +265,9 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.empresa = data.Table7;
             $scope.dashFiltros.carteira = data.Table8;
-            $scope.dashFiltros.faixaAtraso = data.Table13;
+            $scope.dashFiltros.bandeira = data.Table14;
+            $scope.dashFiltros.faixaAtraso = data.Table10;
+            $scope.dashFiltros.faixaSaldo = data.Table15;
             $scope.dashFiltros.save = data.Table9;
 
         });
@@ -267,7 +283,7 @@
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.resumo = data.Table[0];
 
-                $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixa);
+                $scope.dashboard.faixaAtraso = data.Table1.map(obj => obj.ds_faixaAtraso);
                 $scope.dashboard.faixaIdade = data.Table2.map(obj => obj.ds_faixaIdade);
                 $scope.dashboard.faixaValor = data.Table3.map(obj => obj.ds_faixaSaldo);
                 $scope.dashboard.faixaGrupo = data.Table5.map(obj => obj.CLASSE);
