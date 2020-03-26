@@ -829,10 +829,11 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable bandeira = JsonConvert.DeserializeObject<DataTable>(form["bandeira"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
@@ -843,10 +844,11 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("produtos", produtos);
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("bandeira", bandeira);
                     parametros.Add("atrasos", atrasos);
+                    parametros.Add("saldo", saldo);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("save", save);
 
