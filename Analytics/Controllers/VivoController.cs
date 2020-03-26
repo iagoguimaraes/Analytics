@@ -669,5 +669,68 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/acordo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardAcordo(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentacoes", segmentacoes);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_promessa_escob", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/checkacordo")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CheckAcordo(FormDataCollection form)
+        {
+            try
+            {
+                string id_chamada = form["id_chamada"];
+                bool marcado = Convert.ToBoolean(form["marcado"]);
+                int id_segmentacao = Convert.ToInt32(form["id_segmentacao"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_chamada", id_chamada);
+                    parametros.Add("marcado", Convert.ToInt16(marcado).ToString());
+                    parametros.Add("id_segmentacao", id_segmentacao);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_promessa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
