@@ -54,12 +54,6 @@
 
                         <!--EMPRESA-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Produto</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produtos" style="width:100%"></select2>
-                        </div>
-
-                        <!--EMPRESA-->
-                        <div class="form-group">
                             <label class="control-sidebar-subheading">Empresa</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
                         </div>
@@ -70,10 +64,22 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                         </div>
 
+                        <!--BANDEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Bandeira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeira" dados="dashFiltros.bandeira" style="width:100%"></select2>
+                        </div>
+
                         <!--ATRASOS-->
                         <div class="form-group">
-                            <label class="control-sidebar-subheading">Atrasos</label>
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                        </div>
+
+                        <!--FAIXA DE VALOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Valor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.saldo" dados="dashFiltros.saldo" style="width:100%"></select2>
                         </div>
 
                         <!--SUPERVISOR-->
@@ -88,6 +94,12 @@
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.save" dados="dashFiltros.save" style="width:100%"></select2>
                         </div>
 
+                        <!--ORIGEM PROMESSA
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Origem da Promessa</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origemPromessa" dados="dashFiltros.origemPromessa" style="width:100%"></select2>
+                        </div>
+                        -->
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -204,6 +216,7 @@
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
+                                        <th>R$ Contábil</th>
                                         <th>HitRate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
@@ -221,6 +234,7 @@
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{dia.vlr_contabil | currency:'R$ '}}</td>
                                         <td>{{dia.alo / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
@@ -259,6 +273,7 @@
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
+                                        <th>R$ Contábil</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -278,6 +293,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_contabil'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -290,6 +306,7 @@
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{c.vlr_contabil | currency:'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -329,6 +346,7 @@
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
+                                        <th>R$ Contábil</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -348,6 +366,7 @@
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vlr_promessa'| currency:'R$ '}}</td>
+                                        <td>{{e | sumByColumn: 'vlr_contabil'| currency:'R$ '}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -360,6 +379,7 @@
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vlr_promessa | currency:'R$ '}}</td>
+                                        <td>{{c.vlr_contabil | currency:'R$ '}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -438,12 +458,14 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
-            produtos:'',
             empresas: '',
             carteiras: '',
+            bandeira: '',
             atrasos: '',
+            saldo: '',
             supervisores: '',
             save: '',
+            //origemPromessa: '',
         };
 
         $scope.dashFiltros = {};
@@ -460,10 +482,12 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.empresas = data.Table;
             $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.bandeira = r.data.Table14;
+            $scope.dashFiltros.atrasos = r.data.Table13;
+            $scope.dashFiltros.saldo = r.data.Table15;
             $scope.dashFiltros.supervisores = r.data.Table3;
             $scope.dashFiltros.save = r.data.Table9;
-            $scope.dashFiltros.produtos = r.data.Table5;
-            $scope.dashFiltros.atrasos = r.data.Table13;
+            //$scope.dashFiltros.origemPromessa = r.data.Table16;
 
         });
 
