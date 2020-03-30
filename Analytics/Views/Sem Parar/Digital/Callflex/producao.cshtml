@@ -52,6 +52,12 @@
                             </div>
                         </div>
 
+                        <!--FILAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Filas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas" style="width:100%"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -284,10 +290,24 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            filas: '',
         };
 
+        $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'hitrate' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/semparar/dashboard/digital/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
+
+            $scope.dashFiltros.filas = r.data.Table3;
+
+        });
 
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
