@@ -930,12 +930,19 @@ namespace Analytics.Controllers
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable bandeira = JsonConvert.DeserializeObject<DataTable>(form["bandeira"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
+                DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
 
-                
+
                 DataTable empresa_2 = JsonConvert.DeserializeObject<DataTable>(form["empresa_2"]);
                 DataTable carteira_2 = JsonConvert.DeserializeObject<DataTable>(form["carteira_2"]);
                 DataTable supervisor_2 = JsonConvert.DeserializeObject<DataTable>(form["supervisor_2"]);
-
+                DataTable bandeira_2 = JsonConvert.DeserializeObject<DataTable>(form["bandeira_2"]);
+                DataTable atraso_2 = JsonConvert.DeserializeObject<DataTable>(form["atraso_2"]);
+                DataTable saldo_2 = JsonConvert.DeserializeObject<DataTable>(form["saldo_2"]);
+                DataTable save_2 = JsonConvert.DeserializeObject<DataTable>(form["save_2"]);
 
                 string procedure = "sp_dashboard_humano_comparativo_hora";
 
@@ -969,11 +976,19 @@ namespace Analytics.Controllers
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
                     parametros.Add("supervisor", supervisor);
+                    parametros.Add("bandeira", bandeira);
+                    parametros.Add("atraso", atraso);
+                    parametros.Add("saldo", saldo);
+                    parametros.Add("save", save);
 
-                    
+
                     parametros.Add("empresa_2", empresa_2);
                     parametros.Add("carteira_2", carteira_2);
                     parametros.Add("supervisor_2", supervisor_2);
+                    parametros.Add("bandeira_2", bandeira_2);
+                    parametros.Add("atraso_2", atraso_2);
+                    parametros.Add("saldo_2", saldo_2);
+                    parametros.Add("save_2", save_2);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet(procedure, parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
