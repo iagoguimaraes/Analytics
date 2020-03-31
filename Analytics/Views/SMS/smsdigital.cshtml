@@ -67,6 +67,13 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tipo" dados="dashFiltros.tipo" style="width:100%"></select2>
                             </div>
 
+                            <!--Origem-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Tipo SMS</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.tipo_nectar" dados="dashFiltros.tipo_nectar" style="width:100%"></select2>
+                            </div>
+
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -184,6 +191,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteiras: '',
             tipo: '',
+            tipo_nectar: '',
         };
 
         // carregar os filtros fixos
@@ -195,7 +203,7 @@
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = r.data.Table1;
             $scope.dashFiltros.tipo = r.data.Table4;
-
+            $scope.dashFiltros.tipo_nectar = r.data.Table5;
         });
 
 
