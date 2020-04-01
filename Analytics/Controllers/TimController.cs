@@ -602,6 +602,130 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/voxage/acionamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage AcionamentoVoxAgeDigital(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable uf = JsonConvert.DeserializeObject<DataTable>(form["uf"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+
+                string data = form["data"];
+                string hora = form["hora"];
+                string chkOcorrencia = form["chkOcorrencia"];
+                string chkCampanha = form["chkCampanha"];
+                string chkProduto = form["chkProduto"];
+                string chkUF = form["chkUF"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanha", campanha);
+                    parametros.Add("produto", produto);
+                    parametros.Add("uf", uf);
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("chkOcorrencia", chkOcorrencia);
+                    parametros.Add("chkCampanha", chkCampanha);
+                    parametros.Add("chkProduto", chkProduto);
+                    parametros.Add("chkUF", chkUF);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento_voxage", parametros);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+
+
+        }
+
+        [Route("dashboard/voxage/download")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DownloadExcelVoxAgeDigital(FormDataCollection form)
+        {
+
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
+                DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable uf = JsonConvert.DeserializeObject<DataTable>(form["uf"]);
+
+                string mes = form["mes"];
+                string ano = form["ano"];
+                string semana = form["semana"];
+
+                string data = form["data"];
+                string hora = form["hora"];
+                string chkOcorrencia = form["chkOcorrencia"];
+                string chkCampanha = form["chkCampanha"];
+                string chkProduto = form["chkProduto"];
+                string chkUF = form["chkUF"];
+
+                using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("campanha", campanha);
+                    parametros.Add("produto", produto);
+                    parametros.Add("uf", uf);
+                    parametros.Add("mes", mes);
+                    parametros.Add("ano", ano);
+                    parametros.Add("semana", semana);
+                    parametros.Add("data", data);
+                    parametros.Add("hora", hora);
+                    parametros.Add("chkOcorrencia", chkOcorrencia);
+                    parametros.Add("chkCampanha", chkCampanha);
+                    parametros.Add("chkProduto", chkProduto);
+                    parametros.Add("chkUF", chkUF);
+
+                    
+                    DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download_voxage", parametros);
+                    HttpResponse Response = HttpContext.Current.Response;
+
+                    Response.ClearContent();
+                    Response.ClearHeaders();
+                    Response.Clear();
+                    Response.ContentType = "application/csv";
+                    Response.AddHeader("Content-Disposition", "attachment;filename=ACIONAMENTOS_ANALYTICS_TIM_");
+
+                    new GerarArquivo(Response, resultado);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
