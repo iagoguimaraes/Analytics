@@ -95,6 +95,7 @@ namespace Analytics.Controllers
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
                 DataTable operador = JsonConvert.DeserializeObject<DataTable>(form["operador"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
                 {
@@ -109,6 +110,7 @@ namespace Analytics.Controllers
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("tenure", tenure);
                     parametros.Add("operador", operador);
+                    parametros.Add("origem", origem);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_new", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
