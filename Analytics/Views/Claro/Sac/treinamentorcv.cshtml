@@ -1,0 +1,488 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-claro-treinamentorcv">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Treinamento RCV</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--TIPO TREINAMENTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tipo Treinamento</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tipotreinamento" dados="dashFiltros.tipotreinamento"></select2>
+                        </div>
+
+                        <!--INSTRUTOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Instrutor</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.instrutor" dados="dashFiltros.instrutor"></select2>
+                        </div>
+
+                        <!--CANAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Canal</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.canal" dados="dashFiltros.canal"></select2>
+                        </div>
+
+                        <!--CATEGORIA TEMA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Categoria Tema</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.categoriatema" dados="dashFiltros.categoriatema"></select2>
+                        </div>
+
+                        <!--TEMA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Tema</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.tema" dados="dashFiltros.tema"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--FILTRO INDICADOR-->
+        <div class="row margin-bottom">
+            <div class="text-center margin-bottom">
+                <label class="control-sidebar-subheading">Indicador Principal:</label>
+                <select ng-model="grafico.indicador" ng-change="carregarGraficos()">
+                    <option value="Treinamentos">Quantidade Turmas</option>
+                    <option value="Treinados">Quantidade Treinados</option>
+                    <option value="Duracao">Tempo Total Duração</option>
+                    <option value="medAproveitamento">Nota Média de Aproveitamento</option>
+                </select>
+            </div>
+        </div>
+
+        <!--RESUMO E TIPO TREINAMENTO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo de Treinamentos</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="info-box bg-purple-active">
+                            <span class="info-box-icon"><i class="fa fa-users"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Turmas</span>
+                                <span class="info-box-number">{{dashboard.resumo.Treinamentos | number}}</span>
+                                @*<span class="progress-description">
+                                        {{dashboard.resumo.vlInclusao | currency:'R$'}}
+                                    </span>*@
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-yellow">
+                            <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Duração Total</span>
+                                <span class="info-box-number">{{dashboard.resumo.Duracao | formatTimer}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="fa fa-check"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Treinados</span>
+                                <span class="info-box-number">{{dashboard.resumo.Treinados | number}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                        <div class="info-box bg-blue">
+                            <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Nota Méd. Aproveitamento</span>
+                                <span class="info-box-number">{{dashboard.resumo.medAproveitamento | number:1}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-chart series="dashboard.tipotreinamento" type="pie" height="200" title-Text="Tipo de Treinamento" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-chart series="dashboard.canal" axis-Categories="dashboard.canais" title-Text="Canal" plot-Options-Column-Data-Label="true" height="200"></high-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <high-chart series="dashboard.instrutor" axis-Categories="dashboard.instrutores" title-Text="Instrutor" plot-Options-Column-Data-Label="true" height="220"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--GRAFICO DIA e TEMA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">{{grafico.indicador}} por Mês / Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.mes" height="200"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">{{grafico.indicador}} por Tema</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.categoriaTema" height="200"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--INSTRUTOR e TEMAS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div id="info" class="card-header">
+                        <span class="card-header-title">Instrutor e Temas</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table6')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.instrutorTema">
+                                <thead>
+                                    <tr>
+                                        <th>Instrutor</th>
+                                        <th>Turmas</th>
+                                        <th>Treinados</th>
+                                        <th>Duração</th>
+                                        <th>Média Aproveitamento</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="e in dashboard.instrutorTema | groupBy: 'ds_instrutor'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].ds_instrutor}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'Treinamentos'| number}}</td>
+                                        <td>{{e | sumByColumn: 'Treinados'| number}}</td>
+                                        <td>{{e | sumByColumn: 'Duracao'| formatTimer}}</td>
+                                        <td>{{e | avgColumn: 'medAproveitamento'| number:1}}</td>
+
+                                    </tr>
+                                    <tr ng-repeat="p in e" ng-show="showTbody">
+                                        <td>{{p.ds_tema}}</td>
+                                        <td>{{p.Treinamentos | number}}</td>
+                                        <td>{{p.Treinados | number}}</td>
+                                        <td>{{p.Duracao | formatTimer}}</td>
+                                        <td>{{p.medAproveitamento | number:1}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    angular.module('app').controller('ctrl-claro-treinamentorcv', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), (newdate.getMonth() - 2), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            tipotreinamento: '',
+            instrutor: '',
+            canal: '',
+            categoriatema: '',
+            tema: '',
+        };
+
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+
+        $scope.grafico = { indicador: 'Treinamentos' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/claro/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.tipotreinamento = r.data.Table8;
+            $scope.dashFiltros.instrutor = r.data.Table9;
+            $scope.dashFiltros.canal = r.data.Table10;
+            $scope.dashFiltros.categoriatema = r.data.Table11;
+            $scope.dashFiltros.tema = r.data.Table12;
+
+        });
+
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/claro/dashboard/vendas/treinamentorcv",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.instrutorTema = r.data.Table6;
+
+                $scope.carregarGraficos();
+
+            });
+        }
+
+        $scope.carregarGraficos = function () {
+
+            $scope.carregarGraficoMes();
+            $scope.carregarGraficoCategoriaTema();
+
+            let dados = $scope.dashboard.dados;
+            let indicador = $scope.grafico.indicador;
+
+            $scope.dashboard.tipotreinamento = [{ name: 'Quantidade', innerSize: '60%', data: dados.Table1.map(obj => ({ name: obj.ds_tipo_treinamento, y: obj[indicador] })) }];
+
+            $scope.dashboard.canais = dados.Table2.map(obj => obj.ds_canal);
+            $scope.dashboard.canal = [{ name: indicador, type: 'column', color: 'black', data: dados.Table2.map(obj => obj[indicador]) }];
+
+            $scope.dashboard.instrutores = dados.Table5.map(obj => obj.ds_instrutor);
+            $scope.dashboard.instrutor = [{ name: indicador, type: "column", color: 'purple', data: dados.Table5.map(obj => (obj[indicador])) }];
+          
+        }
+
+        $scope.carregarGraficoMes = function () {
+
+            let indicador = $scope.grafico.indicador;
+
+            let dados_status = alasql('select mes status, sum(' + indicador + ') quantidade from ? group by mes', [$scope.dashboard.dados.Table3]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select dia substatus, sum(' + indicador + ') quantidade from ? group by dia', [$scope.dashboard.dados.Table3.filter(d => d.mes == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // Gráfico MES / DIA
+            $scope.dashboard.mes = {
+                chart: {
+                    type: 'column',
+                    height: 300
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}"></span>{point.name}: {point.y}<br/>'
+                },
+                series: [{
+                    name: indicador + ' no mês',
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
+
+        $scope.carregarGraficoCategoriaTema = function () {
+
+            let indicador = $scope.grafico.indicador;
+
+            let dados_status = alasql('select ds_categoria_tema cTema, sum(' + indicador + ') quantidade from ? group by ds_categoria_tema', [$scope.dashboard.dados.Table4]);
+            dados_status = dados_status.map(o => ({ name: o.cTema, drilldown: o.cTema, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select ds_tema, sum(' + indicador + ') quantidade from ? group by ds_tema', [$scope.dashboard.dados.Table4.filter(d => d.ds_categoria_tema == dados_status[s]['name'])]);
+                d = d.map(o => [o.ds_tema, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // Gráfico MES / DIA
+            $scope.dashboard.categoriaTema = {
+                chart: {
+                    type: 'pie',
+                    height: 300
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                series: [{
+                    name: indicador,
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+
+</script>
