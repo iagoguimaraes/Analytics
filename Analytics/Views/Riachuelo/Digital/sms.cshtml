@@ -74,7 +74,7 @@
 
         <!-- RESUMO -->
         <div class="row clearfix">
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-purple-active">
                     <span class="info-box-icon">
                         <i class="fa fa-handshake-o"></i>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-green-active">
                     <span class="info-box-icon">
                         <i class="fa fa-envelope-open-o "></i>
@@ -108,8 +108,25 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="info-box bg-aqua-active">
+                    <span class="info-box-icon">
+                        <i class="fa fa-at"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <div class="text">Total E-mail</div>
+                        <div class="info-box-number" ng-bind="dashboard.resumo.total_email | number"></div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: {{dashboard.resumo.pct_email}}%"></div>
+                        </div>
+                        <span class="progress-description">
+                            <b>{{dashboard.resumo.pct_email}}%</b> E-mail Enviados
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="info-box bg-orange-active">
                     <span class="info-box-icon">
                         <i class="fa fa-money"></i>
                     </span>
@@ -245,6 +262,7 @@
                                         <th style="text-align:center">Total</th>
                                         <th style="text-align:center">Promessa</th>
                                         <th style="text-align:center">Demais</th>
+                                        <th style="text-align:center">SMS E-mail</th>
                                         <th style="text-align:center">SMS Total</th>
                                         <th style="text-align:center">SMS Promessa</th>
                                         <th style="text-align:center">SMS Demais</th>
@@ -260,6 +278,7 @@
                                         <td>{{dia.total | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
                                         <td>{{dia.demais| number}}</td>
+                                        <td>{{dia.total_email| number}}</td>
                                         <td>{{dia.total_sms| number}}</td>
                                         <td>{{dia.quantidade_promessa_sms | number}}</td>
                                         <td>{{dia.quantidade_demais_sms | number}}</td>
@@ -364,6 +383,7 @@
                 $scope.dashboard.graficoDia = [
                     { name: 'Disponivel', type: 'column', color: '#555299', data: dados.map(obj => (obj.total)) },
                     { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.total_sms)) },
+                    { name: 'E-mail', type: 'column', color: '#0086a6', data: dados.map(obj => (obj.total_email)) },
                     { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.total_sms * 100 / obj.total).toFixed(1) * 1) }
                 ];
                     break;
@@ -372,14 +392,16 @@
                 $scope.dashboard.graficoDia = [
                     { name: 'Promessa', type: 'column', color: '#555299', data: dados.map(obj => (obj.promessa)) },
                     { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.quantidade_promessa_sms)) },
-                    { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.quantidade_promessa_sms * 100 / obj.promessa).toFixed(1) * 1) }
+                    { name: 'E-mail', type: 'column', color: '#0086a6', data: dados.map(obj => (obj.total_email)) },
+                    { name: '%', yAxis: 1, type: 'spline', data: dados.map(obj => (obj.quantidade_promessa_sms * 100 / obj.promessa).toFixed(1) * 1) }
                 ];
                     break;
                 case 'demais':
                 $scope.dashboard.graficoDia = [
                     { name: 'Demais', type: 'column', color: '#555299', data: dados.map(obj => (obj.demais)) },
                     { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.quantidade_demais_sms)) },
-                    { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.quantidade_demais_sms * 100 / obj.demais).toFixed(1) * 1) }
+                    { name: 'E-mail', type: 'column', color: '#0086a6', data: dados.map(obj => (obj.total_email)) },
+                    { name: '%', yAxis: 1, type: 'spline', data: dados.map(obj => (obj.quantidade_demais_sms * 100 / obj.demais).toFixed(1) * 1) }
                 ];
                     break;
                 default:
@@ -387,7 +409,8 @@
                 $scope.dashboard.graficoDia = [
                     { name: 'Total', type: 'column', color: '#555299', data: dados.map(obj => (obj.total)) },
                     { name: 'Sms', type: 'column', color: '#008d4c', data: dados.map(obj => (obj.total_sms)) },
-                    { name: '%',  yAxis: 1, type: 'spline',  data: dados.map(obj => (obj.total_sms * 100 / obj.total).toFixed(1) * 1) }
+                    { name: 'E-mail', type: 'column', color: '#0086a6', data: dados.map(obj => (obj.total_email)) },
+                    { name: '%', yAxis: 1, type: 'spline', data: dados.map(obj => (obj.total_sms * 100 / obj.total).toFixed(1) * 1) }
                 ];
             }
 
