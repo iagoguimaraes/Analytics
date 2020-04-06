@@ -287,7 +287,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rvc_discagem", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rcv_discagem", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -316,7 +316,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rvc_tempos", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rcv_tempos", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -326,6 +326,45 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("dashboard/vendas/treinamentorcv")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardTreinamentorcv(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable tipotreinamento = JsonConvert.DeserializeObject<DataTable>(form["tipotreinamento"]);
+                DataTable instrutor = JsonConvert.DeserializeObject<DataTable>(form["instrutor"]);
+                DataTable canal = JsonConvert.DeserializeObject<DataTable>(form["canal"]);
+                DataTable categoriatema = JsonConvert.DeserializeObject<DataTable>(form["categoriatema"]);
+                DataTable tema = JsonConvert.DeserializeObject<DataTable>(form["tema"]);               
+                
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("tipotreinamento",tipotreinamento);
+                    parametros.Add("instrutor",instrutor);
+                    parametros.Add("canal",canal);
+                    parametros.Add("categoriatema",categoriatema);
+                    parametros.Add("tema", tema);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rcv_treinamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
         #endregion
 
     }
