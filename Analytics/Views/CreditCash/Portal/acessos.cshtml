@@ -1,0 +1,498 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-creditcash-portal">
+
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Portal Credit Cash</div>
+
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+
+            <button type="button" class="btn btn-default page-menu-button" data-toggle="modal" data-target="#modal-default">
+                <i class="fa fa-info-circle"></i>
+                Conceitos
+            </button>
+
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Filtros -->
+                        <div class="tab-pane active" id="control-sidebar-filters-tab">
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Inicial</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini" style="width:100%"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--DATA INCIAL-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Data Final</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim" style="width:100%"></date-picker>
+                                </div>
+                            </div>
+
+                            <!--BOTÃO-->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RESUMO -->
+        <div class="row margin-bottom">
+
+            <div class="col-xs-12 col-md-3">
+                <div class="info-box bg-blue">
+                    <span class="info-box-icon">
+                        <i class="fa fa-desktop"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3 ng-bind="dashboard.resumo.acesso | number"></h3>
+                        <div>Acesso</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-2">
+                <div class="info-box bg-blue">
+                    <span class="info-box-icon">
+                        <i class="fa fa-eye"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3 ng-bind="dashboard.resumo.viu_divida | number"></h3>
+                        <div>Viu a dívida</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-2">
+                <div class="info-box bg-green">
+                    <span class="info-box-icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3 ng-bind="dashboard.resumo.negociado | number"></h3>
+                        <div>Negociado</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+                <div class="info-box bg-green">
+                    <span class="info-box-icon">
+                        <i class="fa fa-money"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3>R$ {{dashboard.resumo.vl_negociado | number}}</h3>
+                        <div>Vl Negociado</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-2">
+                <div class="info-box bg-black">
+                    <span class="info-box-icon">
+                        <i class="fa fa-arrow-right"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3 ng-bind="dashboard.resumo.redirecionado | number"></h3>
+                        <div>Redirecionado</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--ANALISE POR DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="dashboard.mostrarTabela = !dashboard.mostrarTabela">
+                            <i class="fa fa-table"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Dia','Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="pull-right">
+                            <select ng-model="dashboard.indicador" style="color:black" ng-change="carregarGraficos()">
+                                <option value="acesso">Acesso</option>
+                                <option value="viu_divida">Viu Dívida</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="negociado">Negociado</option>
+                                <option value="vl_negociado">Vl Negociado</option>
+                                <option value="redirecionado">Redirecionado</option>
+                            </select>
+                        </div>
+
+                        <high-charts config="dashboard.graficoDia" style="width: 100%; height: 300px"></high-charts>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.mostrarTabela">
+                                <thead>
+                                    <tr align="center">
+                                        <th>Dia</th>
+                                        <th>Acesso</th>
+                                        <th>Viu Dívida</th>
+                                        <th>Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>Negociado</th>
+                                        <th>Vl Negociado</th>
+                                        <th>Redirecionado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr align="center" ng-repeat="dia in dashboard.diadia">
+                                        <td>{{dia.data}}</td>
+                                        <td>{{dia.acesso | number}}</td>
+                                        <td>{{dia.viu_divida | number}}</td>
+                                        <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.acordo | number}}</td>
+                                        <td>{{dia.negociado | number}}</td>
+                                        <td>R$ {{dia.vl_negociado | number}}</td>
+                                        <td>{{dia.redirecionado | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR HORA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="dashboard.mostrarTabela = !dashboard.mostrarTabela">
+                            <i class="fa fa-table"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Hora','Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="pull-right">
+                            <select ng-model="dashboard.indicador" style="color:black" ng-change="carregarGraficos()">
+                                <option value="acesso">Acesso</option>
+                                <option value="viu_divida">Viu Dívida</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="negociado">Negociado</option>
+                                <option value="vl_negociado">Vl Negociado</option>
+                                <option value="redirecionado">Redirecionado</option>
+                            </select>
+                        </div>
+
+                        <high-charts config="dashboard.graficoHora" style="width: 100%; height: 300px"></high-charts>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.mostrarTabela">
+                                <thead>
+                                    <tr align="center">
+                                        <th>Hora</th>
+                                        <th>Acesso</th>
+                                        <th>Viu Dívida</th>
+                                        <th>Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>Negociado</th>
+                                        <th>Vl Negociado</th>
+                                        <th>Redirecionado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr align="center" ng-repeat="dia in dashboard.horahora">
+                                        <td>{{dia.hora}}</td>
+                                        <td>{{dia.acesso | number}}</td>
+                                        <td>{{dia.viu_divida | number}}</td>
+                                        <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.acordo | number}}</td>
+                                        <td>{{dia.negociado | number}}</td>
+                                        <td>R$ {{dia.vl_negociado | number}}</td>
+                                        <td>{{dia.redirecionado | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--ANALISE POR EMPRESA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header-button" ng-click="dashboard.mostrarTabela = !dashboard.mostrarTabela">
+                            <i class="fa fa-table"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Empresa','Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <div class="pull-right">
+                            <select ng-model="dashboard.indicador" style="color:black" ng-change="carregarGraficos()">
+                                <option value="acesso">Acesso</option>
+                                <option value="viu_divida">Viu Dívida</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="acordo">Acordo</option>
+                                <option value="negociado">Negociado</option>
+                                <option value="vl_negociado">Vl Negociado</option>
+                                <option value="redirecionado">Redirecionado</option>
+                            </select>
+                        </div>
+
+                        <high-charts config="dashboard.graficoEmpresa" style="width: 100%; height: 300px"></high-charts>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.mostrarTabela">
+                                <thead>
+                                    <tr align="center">
+                                        <th>Empresa</th>
+                                        <th>Acesso</th>
+                                        <th>Viu Dívida</th>
+                                        <th>Promessa</th>
+                                        <th>Acordo</th>
+                                        <th>Negociado</th>
+                                        <th>Vl Negociado</th>
+                                        <th>Redirecionado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr align="center" ng-repeat="dia in dashboard.empresa">
+                                        <td>{{dia.empresa}}</td>
+                                        <td>{{dia.acesso | number}}</td>
+                                        <td>{{dia.viu_divida | number}}</td>
+                                        <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.acordo | number}}</td>
+                                        <td>{{dia.negociado | number}}</td>
+                                        <td>R$ {{dia.vl_negociado | number}}</td>
+                                        <td>{{dia.redirecionado | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- MODAL CONCEITOS-->
+        <div class="modal fade" id="modal-default" style="display: none;">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Conceitos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>Acesso: </b>Indica o volume de clientes que acessaram o portal e digitaram o CPF</p>
+                        <br />
+
+                        <p><b>Viu a dívida: </b>Um cliente pode ter dívida em mais de um contrato e em mais de uma empresa dentro da nossa Assessoria. 
+                        Este indicador mostra a quantidade de contratos inadimplentes que foram exibidos em tela pros clientes</p>
+                        <br />
+
+                        <p><b>Promessa: </b>Quando um cliente clicou em pagar em uma fatura e recebeu o boleto ou o codigo de barras. 
+                        Nota: cada promessa é referente a uma fatura do cliente, ou seja, um cliente pode fazer mais de um promessa</p>
+                        <br />
+
+                        <p><b>Acordo: </b>Quando o cliente efetivou um acordo, selecionando a forma de pagamento desejada.
+                        Nota: É possível que um cliente faça mais de um acordo</p>
+                        <br />
+
+                        <p><b>Negociado: </b>É a soma de promessas e acordos. Indicando o total de negócios realizados via portal</p>
+                        <p></p>
+                        <br />
+
+                        <p><b>Redirecionado: </b>Indica os clientes que viram a dívida, mas foram redirecionados ao portal especifico para negociar</p>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-creditcash-portal', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        }
+
+        $scope.dashboard = {
+            indicador: 'acesso',
+            mostrarTabela: false,
+        };
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/creditcash/dashboard/portal",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.diadia = r.data.Table1;
+                $scope.dashboard.horahora = r.data.Table2;
+                $scope.dashboard.empresa = r.data.Table3;
+
+                $scope.carregarGraficos();
+            });
+        }
+
+        $scope.carregarGraficos = function () {
+            let dados;
+
+            dados = $scope.dashboard.diadia;
+            $scope.dashboard.graficoDia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Dia a Dia'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dados.map(obj => obj['data'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: $scope.dashboard.indicador, data: dados.map(obj => obj[$scope.dashboard.indicador]), color: '#0073b7' }]
+            };
+
+            dados = $scope.dashboard.horahora;
+            $scope.dashboard.graficoHora = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Hora a Hora'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dados.map(obj => obj['hora'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: $scope.dashboard.indicador, data: dados.map(obj => obj[$scope.dashboard.indicador]), color: '#0073b7' }]
+            };
+
+            dados = $scope.dashboard.empresa;
+            $scope.dashboard.graficoEmpresa = {
+
+
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Empresa'
+                },
+                legend: {
+                    enabled: false,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: $scope.dashboard.indicador,
+                    data: dados.map(obj => ({ name: obj.empresa, y: obj[$scope.dashboard.indicador] }))
+                }]
+            };
+
+
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
+
