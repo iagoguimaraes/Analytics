@@ -48,7 +48,13 @@
                                 <!--UF-->
                                 <div class="form-group">
                                     <label class="control-sidebar-subheading">UF</label>
-                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.uf" dados="dashFiltros.uf"></select2>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.ufs" dados="dashFiltros.uf"></select2>
+                                </div>
+
+                                <!--OPERACAO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Operação</label>
+                                    <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.operacao" dados="dashFiltros.operacao"></select2>
                                 </div>
 
                             </div>
@@ -121,6 +127,11 @@
                                             <input type="checkbox" ng-model="filtros.chkUF" ng-true-value="'UF,'" ng-false-value="''" />
                                             <label class="control-sidebar-subheading">UF</label>
                                         </div>
+                                        <!--CHECKED OPERACAO-->
+                                        <div class="form-group">
+                                            <input type="checkbox" ng-model="filtros.chkOperacao" ng-true-value="'OPERACAO,'" ng-false-value="''" />
+                                            <label class="control-sidebar-subheading">Operação</label>
+                                        </div>
                                     </div>
 
                                     <!--BOTÃO-->
@@ -178,6 +189,7 @@
             campanha: '',
             produto: '',
             uf: '',
+            operacao: '',
 
             ano: '',
             mes: '',
@@ -188,6 +200,7 @@
             chkCampanha: '',
             chkProduto: 'PRODUTO,',
             chkUF: '',
+            chkOperacao: '',
 
         };
 
@@ -208,6 +221,7 @@
             $scope.dashFiltros.campanha = data.Table11;
             $scope.dashFiltros.produto = data.Table;
             $scope.dashFiltros.uf = data.Table4;
+            $scope.dashFiltros.operacao = data.Table12;
         });
 
 
@@ -240,7 +254,8 @@
                 + $scope.filtros.chkOcorrencia + ''
                 + $scope.filtros.chkCampanha + ''
                 + $scope.filtros.chkProduto + ''
-                + $scope.filtros.chkUF +
+                + $scope.filtros.chkUF + ''
+                + $scope.filtros.chkOperacao + 
                 'sum(QTD_ACIONAMENTOS) QTD, sum(CONTATO) CTT, sum(CPC) CPC, sum(CPCA) CPCA, sum(PROMESSA) PROM, sum(VLR_PROMESSA) VLR_PROM from ? group by '
                 + $scope.filtros.ano + ''
                 + $scope.filtros.mes + ''
@@ -251,6 +266,7 @@
                 + $scope.filtros.chkCampanha + ''
                 + $scope.filtros.chkProduto + ''
                 + $scope.filtros.chkUF + ''
+                + $scope.filtros.chkOperacao + ''
                 + 'CONTADOR'
                 + ' order by PROM desc, CPCA, CPC, CTT'
                 , [$scope.dashboard.dados.Table]);
