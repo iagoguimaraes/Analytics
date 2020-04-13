@@ -1,0 +1,412 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-sky-dashboardDiario">
+
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Acompanhamento Diário de Bordo</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FILTROS 2-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.motivo">
+                                <label class="control-sidebar-subheading">Motivo</label>
+                                <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.motivo" dados="dashboard.dimensao.motivo" ng-change="aplicarFiltros()"></select22>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.supervisor">
+                                <label class="control-sidebar-subheading">Supervisor</label>
+                                <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.supervisor" dados="dashboard.dimensao.supervisor" ng-change="aplicarFiltros()"></select22>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.operador">
+                                <label class="control-sidebar-subheading">Operador</label>
+                                <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.operador" dados="dashboard.dimensao.operador" ng-change="aplicarFiltros()"></select22>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-3" ng-if="dashboard.dimensao.usuario">
+                                <label class="control-sidebar-subheading">Usuario</label>
+                                <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="dashboard.filtros.usuario" dados="dashboard.dimensao.usuario" ng-change="aplicarFiltros()"></select22>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--DIA-->
+        <div class="row  margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Por Dia</span>
+                        <div class="card-header-button" ng-click="extrairDia()">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.dia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MES-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.mes" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MOTIVO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.motivo" style="width: 100%; height: 600px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--SUPERVISOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.supervisor" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--USUÁRIO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.usuario" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--OPERADOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Por Operador</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrairGeral()">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.operador" scroll-collapse="true" scroll-y="324px" order="[[1,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+    angular.module('app').controller('ctrl-sky-dashboardDiario', function ($scope, $http, $filter, cubo) {
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth() - 1, 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = { dimensao: {}, filtros: {}, indicador: 'quantidade' };
+        $scope.dimensao = {};
+
+        $scope.popularFiltros = function () {
+            $scope.dashboard.dimensao.supervisor = cubo.obterDimensao('supervisor');
+            $scope.dashboard.dimensao.operador = cubo.obterDimensao('operador');
+            $scope.dashboard.dimensao.motivo = cubo.obterDimensao('motivo');
+            $scope.dashboard.dimensao.usuario = cubo.obterDimensao('usuario');
+        }
+
+        $scope.popularDashboard = function () {
+
+            // OBTER DIMENSOES (JA FILTRADO)
+            $scope.dimensao.supervisor = cubo.obterDimensao('supervisor');
+            $scope.dimensao.operador = cubo.obterDimensao('operador');
+            $scope.dimensao.motivo = cubo.obterDimensao('motivo');
+            $scope.dimensao.usuario = cubo.obterDimensao('usuario');
+
+            // CARREGAR AS VISUALIZAÇÕES
+            let dados = cubo.obter();
+
+            let indicador = $scope.dashboard.indicador;
+
+            $scope.dashboard.operador = alasql('select operador, sum(' + indicador + ') Quantidade from ? group by operador order by 2 desc', [dados]);
+
+            let dia = alasql('select dt, data, sum(' + indicador + ') qtd from ? group by dt, data order by 1', [dados]);
+            let mes = alasql('select mesAno, mes, sum(' + indicador + ') qtd from ? group by mesAno, mes order by 1', [dados]);
+            $scope.dashboard.diaTabela = dia;
+            let supervisor = alasql('select supervisor, sum(' + indicador + ') qtd from ? group by supervisor order by 2 desc', [dados]);
+            let motivo = alasql('select motivo, sum(' + indicador + ') qtd from ? group by motivo order by 2 desc', [dados]);
+            let usuario = alasql('select usuario, sum(' + indicador + ') qtd from ? group by usuario order by 2 desc', [dados]);
+
+            $scope.dashboard.mes = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Mês do Ano'
+                },
+                yAxis: {
+                    visible: true,
+                },
+                xAxis: {
+                    categories: mes.map(obj => obj['mes'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: mes.map(obj => obj.qtd), color: 'purple' }]
+            };
+            $scope.dashboard.dia = {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: dia.map(obj => obj['data'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: dia.map(obj => obj.qtd), color: '#333' }]
+            };
+            $scope.dashboard.motivo = {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Motivos'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}:  <b>{point.y}</b></span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                legend: {
+                    enabled: true,
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: motivo.map(obj => ({ name: obj.motivo, y: obj.qtd })) }]
+            };
+            $scope.dashboard.supervisor = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Supervisor'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: supervisor.map(obj => obj['supervisor'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: supervisor.map(obj => obj.qtd) }]
+            };
+            $scope.dashboard.usuario = {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Usuário'
+                },
+                yAxis: {
+                    visible: false,
+                },
+                xAxis: {
+                    categories: usuario.map(obj => obj['usuario'])
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    column: {
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{ name: indicador, data: usuario.map(obj => obj.qtd) }]
+            };
+
+        }
+
+        $scope.aplicarFiltros = function () {
+
+            cubo.limparFiltros();
+
+            cubo.filtrar('supervisor', $scope.dashboard.filtros.supervisor);
+            cubo.filtrar('operador', $scope.dashboard.filtros.operador);
+            cubo.filtrar('motivo', $scope.dashboard.filtros.motivo);
+            cubo.filtrar('usuario', $scope.dashboard.filtros.usuario);
+
+            cubo.aplicarFiltros();
+
+            $scope.popularDashboard();
+        }
+
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/humano/diariodebordo/dashboard",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.status;
+
+                $scope.dashboard.allData = r.data.Table;
+                cubo.carregar(r.data.Table);
+                $scope.popularDashboard();
+                $scope.popularFiltros();
+            });
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrairDia = function () {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.diaTabela]);
+        }
+
+        // extrair dados para excel
+        $scope.extrairGeral = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.allData]);
+        }
+
+    });
+</script>
