@@ -57,6 +57,12 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.produtos" dados="dashFiltros.produto"></select2>
                         </div>
 
+                        <!--OPERAÇÃO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Operação</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.operacao" dados="dashFiltros.operacao"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -70,10 +76,10 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
             @*<div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box" style="background-color: #004592">
-                        <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
-                    </div>
-                </div>*@
+                <div class="small-box" style="background-color: #004592">
+                    <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
+                </div>
+            </div>*@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -155,7 +161,7 @@
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
-                        <div class="card-header-button" ng-click="extrair('Table3')">
+                        <div class="card-header-button" ng-click="extrair('Table4')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
                     </div>
@@ -180,22 +186,42 @@
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr ng-repeat="e in dashboard.produto">
-                                        <td>{{e.produto}}</td>
-                                        <td>{{e.qtd_ad | number}}</td>
-                                        <td>{{e.discado | number}}</td>
-                                        <td>{{e.contato | number}}</td>
-                                        <td>{{e.cpc | number}}</td>
-                                        <td>{{e.alega_pagamento | number}}</td>
-                                        <td>{{e.cpca | number}}</td>
-                                        <td>{{e.promessa | number}}</td>
-                                        <td>{{e.valor_promessa| currency: 'R$ '}}</td>
-                                        <td>{{e.contato / e.discado | percentage:1}}</td>
-                                        <td>{{e.cpc / e.contato | percentage:1}}</td>
-                                        <td>{{e.alega_pagamento / e.cpc | percentage:1}}</td>
-                                        <td>{{e.cpca / e.cpc | percentage:1}}</td>
-                                        <td>{{e.promessa / e.cpca | percentage:1}}</td>
+                                <tbody ng-repeat="e in dashboard.produto | groupBy: 'produto'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{e[0].produto}}
+                                        </td>
+                                        <td>{{e | sumByColumn: 'qtd_ad'| number}}</td>
+                                        <td>{{e | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{e | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpc'| number}}</td>
+                                        <td>{{e | sumByColumn: 'alega_pagamento'| number}}</td>
+                                        <td>{{e | sumByColumn: 'cpca'| number}}</td>
+                                        <td>{{e | sumByColumn: 'promessa'| number}}</td>
+                                        <td>{{e | sumByColumn: 'valor_promessa'| currency: 'R$ '}}</td>
+                                        <td>{{e | divideSumColumns: 'contato':'discado' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'alega_pagamento':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
+                                        <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="c in e" ng-show="showTbody">
+                                        <td>{{c.campanha}}</td>
+                                        <td>{{c.qtd_ad | number}}</td>
+                                        <td>{{c.discado | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.alega_pagamento | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.valor_promessa| currency: 'R$ '}}</td>
+                                        <td>{{c.contato / c.discado | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.alega_pagamento / c.cpc | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -331,6 +357,7 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             produtos: '',
+            operacao: '',
         };
 
         $scope.dashboard = {};
@@ -346,6 +373,7 @@
                 $scope.dashFiltros.status = r.status;
 
                 $scope.dashFiltros.produto = r.data.Table;
+                $scope.dashFiltros.operacao = r.data.Table12;
             });
         }
 

@@ -2,7 +2,7 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-enel-producao">
+<div ng-controller="ctrl-cpfl-digital-producao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -57,12 +57,6 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos"></select2>
                         </div>
 
-                        <!--FILA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Fila</label>
-                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.fila" dados="dashFiltros.fila"></select2>
-                        </div>
-
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -76,10 +70,10 @@
         <!--RESUMO-->
         <div class="row margin-bottom">
             @*<div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box" style="background-color: #004592">
-                        <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
-                    </div>
-                </div>*@
+            <div class="small-box" style="background-color: #004592">
+                <img class="img-responsive center-block" src="/Content/Images/Tim/logo.jpg" height="100" width="100" />
+            </div>
+        </div>*@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
@@ -88,6 +82,17 @@
                     </div>
                     <div class="icon">
                         <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.qtd_ad | number"></h3>
+                        <p>AD</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user"></i>
                     </div>
                 </div>
             </div>
@@ -139,17 +144,19 @@
                     </div>
                 </div>
             </div>
+
+
             @*<div class="col-xs-12 col-md-4 col-lg-2">
-                    <div class="small-box bg-blue">
-                        <div class="inner">
-                            <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
-                            <p>R$ Promessa</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-thumbs-o-up"></i>
-                        </div>
-                    </div>
-                </div>*@
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    <h3 ng-bind="dashboard.resumo.valor_promessa | megaNumber "></h3>
+                    <p>R$ Promessa</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-thumbs-o-up"></i>
+                </div>
+            </div>
+        </div>*@
         </div>
 
         <!--ANALISE POR DIA-->
@@ -178,7 +185,6 @@
                                         <th>Alega</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
-                                        <th>R$ Promessa</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Alega</th>
@@ -196,7 +202,6 @@
                                         <td>{{dia.alega_pagamento | number}}</td>
                                         <td>{{dia.cpca | number}}</td>
                                         <td>{{dia.promessa | number}}</td>
-                                        <td>{{dia.vlr_promessa | currency: 'R$ '}}</td>
                                         <td>{{dia.contato / dia.discado | percentage:1}}</td>
                                         <td>{{dia.cpc / dia.contato | percentage:1}}</td>
                                         <td>{{dia.alega_pagamento / dia.cpc | percentage:1}}</td>
@@ -214,7 +219,6 @@
                                         <th>{{dashboard.resumo.alega_pagamento | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
-                                        <th>{{dashboard.resumo.vlr_promessa | currency: 'R$ '}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.alega_pagamento / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -249,7 +253,6 @@
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
                                 <option value="promessa">Promessa</option>
-                                <option value="vlr_promessa">R$ Promessa</option>
                                 <option value="alega_pagamento">Alega Pagamento</option>
                             </select>
                         </small>
@@ -288,7 +291,7 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-enel-producao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-cpfl-digital-producao', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -297,7 +300,6 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             atrasos: '',
-            fila: '',
         };
 
         $scope.dashFiltros = {};
@@ -308,12 +310,11 @@
         $scope.carregarFiltros = function () {
             $http({
                 method: 'GET',
-                url: "/api/enel/digital/filtros",
+                url: "/api/cpfl/dashboard/filtros",
             }).then(function success(r) {
 
                 $scope.dashFiltros.status = r.status;
-                $scope.dashFiltros.atrasos = r.data.Table;
-                $scope.dashFiltros.fila = r.data.Table1;
+                $scope.dashFiltros.atrasos = r.data.Table1;
 
             });
         }
@@ -322,7 +323,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/enel/digital/producao",
+                url: "/api/cpfl/dashboard/digital/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;

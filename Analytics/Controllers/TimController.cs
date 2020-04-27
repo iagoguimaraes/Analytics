@@ -553,6 +553,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable operacao = JsonConvert.DeserializeObject<DataTable>(form["operacao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -561,6 +562,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("operacao", operacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_voxage", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -583,6 +585,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable produtos = JsonConvert.DeserializeObject<DataTable>(form["produtos"]);
+                DataTable operacao = JsonConvert.DeserializeObject<DataTable>(form["operacao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -591,6 +594,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("produtos", produtos);
+                    parametros.Add("operacao", operacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_voxage", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -616,6 +620,7 @@ namespace Analytics.Controllers
                 DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable uf = JsonConvert.DeserializeObject<DataTable>(form["uf"]);
+                DataTable operacao = JsonConvert.DeserializeObject<DataTable>(form["operacao"]);
 
                 string mes = form["mes"];
                 string ano = form["ano"];
@@ -627,6 +632,7 @@ namespace Analytics.Controllers
                 string chkCampanha = form["chkCampanha"];
                 string chkProduto = form["chkProduto"];
                 string chkUF = form["chkUF"];
+                string chkOperacao = form["chkOperacao"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -637,6 +643,7 @@ namespace Analytics.Controllers
                     parametros.Add("campanha", campanha);
                     parametros.Add("produto", produto);
                     parametros.Add("uf", uf);
+                    parametros.Add("operacao", operacao);
                     parametros.Add("mes", mes);
                     parametros.Add("ano", ano);
                     parametros.Add("semana", semana);
@@ -646,6 +653,7 @@ namespace Analytics.Controllers
                     parametros.Add("chkCampanha", chkCampanha);
                     parametros.Add("chkProduto", chkProduto);
                     parametros.Add("chkUF", chkUF);
+                    parametros.Add("chkOperacao", chkOperacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_acionamento_voxage", parametros);
 
@@ -674,6 +682,7 @@ namespace Analytics.Controllers
                 DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
                 DataTable uf = JsonConvert.DeserializeObject<DataTable>(form["uf"]);
+                DataTable operacao = JsonConvert.DeserializeObject<DataTable>(form["operacao"]);
 
                 string mes = form["mes"];
                 string ano = form["ano"];
@@ -685,6 +694,7 @@ namespace Analytics.Controllers
                 string chkCampanha = form["chkCampanha"];
                 string chkProduto = form["chkProduto"];
                 string chkUF = form["chkUF"];
+                string chkOperacao = form["chkOperacao"];
 
                 using (SqlHelper sql = new SqlHelper("CUBO_TIM"))
                 {
@@ -704,8 +714,9 @@ namespace Analytics.Controllers
                     parametros.Add("chkCampanha", chkCampanha);
                     parametros.Add("chkProduto", chkProduto);
                     parametros.Add("chkUF", chkUF);
+                    parametros.Add("chkOperacao", chkOperacao);
 
-                    
+
                     DataTable resultado = sql.ExecuteProcedureDataTable("sp_dashboard_download_voxage", parametros);
                     HttpResponse Response = HttpContext.Current.Response;
 
