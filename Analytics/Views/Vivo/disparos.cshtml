@@ -1,0 +1,293 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-vivo-disparos">
+
+    <!--BOTÃO FILTROS-->
+    <header class="page-header">
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" data-toggle="modal" data-target="#modal-default">
+            <i class="fa fa-filter"></i>
+            Filtros
+        </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="extrair()">
+            <i class="fa fa-file-excel-o"></i>
+            Extrair
+        </div>
+    </header>
+    <!-- MODAL FILTROS-->
+    <div class="modal fade" id="modal-default" style="display: none;">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Filtros</h4>
+                </div>
+                <div class="modal-body">
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini" style="width:100%"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim" style="width:100%"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--B2B/B2C-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">B2B/B2C</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.b2bb2c" dados="dashboard.filtros.b2bb2c"></select22>
+                    </div>
+
+                    <!--PRODUTO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Produto</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.produto" dados="dashboard.filtros.produto"></select22>
+                    </div>
+
+                    <!--OPERACAO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Operação</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.operacao" dados="dashboard.filtros.operacao"></select22>
+                    </div>
+
+                    <!--BILLING-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Billing</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.billing" dados="dashboard.filtros.billing"></select22>
+                    </div>
+
+                    <!--CARTEIRA-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Carteira</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteira" dados="dashboard.filtros.carteira"></select22>
+                    </div>
+
+                    <!--SEGMENTO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Segmento</label>
+                        <select22 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashboard.filtros.segmento"></select22>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <!--CARREGAR-->
+                    <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- SELEÇÃO DE VISÃO-->
+    <div class="row margin-bottom text-center" style="margin-top: 15px;">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-info active">
+                <input type="radio"> Ambos
+            </label>
+            <label class="btn btn-info">
+                <input type="radio"> SMS
+            </label>
+            <label class="btn btn-info">
+                <input type="radio"> Email
+            </label>
+        </div>
+    </div>
+
+
+    <!-- RESUMO -->
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-4">
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>100</h3>
+                    <p>Negociado</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa fa-dollar"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+            <div class="small-box bg-light-blue">
+                <div class="inner">
+                    <h3>90</h3>
+                    <h4 class="pull-right">90%</h4>
+                    <p>Gerado</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-out"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    <h3>00:00:30</h3>
+                    <p>Tempo Médio Envio</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-md-3">
+            <div class="info-box bg-green-active">
+                <span class="info-box-icon">
+                    <i class="fa fa-location-arrow"></i>
+                </span>
+                <div class="info-box-content">
+                    <h3>70</h3>
+                    <h4 class="pull-right" style="line-height: 0">70%</h4>
+                    <div>Enviado</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <div class="info-box bg-aqua">
+                <span class="info-box-icon">
+                    <i class="fa fa-check-square-o"></i>
+                </span>
+                <div class="info-box-content">
+                    <h3>60</h3>
+                    <h4 class="pull-right" style="line-height: 0">60%</h4>
+                    <div>Entregue</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </span>
+                <div class="info-box-content">
+                    <h3>10</h3>
+                    <h4 class="pull-right" style="line-height: 0">10%</h4>
+                    <div>Não Entregue</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <div class="info-box bg-red">
+                <span class="info-box-icon">
+                    <i class="fa fa-remove"></i>
+                </span>
+                <div class="info-box-content">
+                    <h3>20</h3>
+                    <h4 class="pull-right" style="line-height: 0">20%</h4>
+                    <div>Não Recebeu</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--GRAFICO POR DIA-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12 margin-bottom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-title">Dia a Dia</span>
+                    <small class="pull-right">
+                        <select>
+                            <option>Negociado</option>
+                            <option>Gerado</option>
+                            <option>TME</option>
+                            <option>Enviado</option>
+                            <option>Entregue</option>
+                            <option>Não Entregue</option>
+                            <option>Não Recebido</option>
+                        </select>
+                    </small>
+                </div>
+                <div class="card-body">
+                    <high-charts config="dashboard.dia" style="width: 100%; height: 400px"></high-charts>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-disparos', function ($scope, $http, $filter, cubo) {
+
+         // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            b2bb2c: "",
+            produto: "",
+            operacao: "",
+            billing: "",
+            carteira: "",
+            segmento: ""
+        };
+
+        $scope.dashboard = {
+            filtros: {
+                b2bb2c: ["B2B", "B2C"],
+                produto: ["Fixa", "Movel"],
+                operacao: ["Inbound", "Outbound"],
+                billing: ["Atlys", "Kenan", "CSO", "Atis", "Cyber 1", "Next"],
+                carteira: ["CAC", "0800", "VRF Consultor Digital", "Pool de Cobrança", "Acordo", "PEP", "IP", "BKO", "ESCOB", "RETDEF", "M1", "M2", "M3", "M4", "M5", "Fase 1", "Fase 2", "Fase 3", "Fase 4", "Fase 5", "Fase 6"],
+                segmento: ["Consultiva", "Duvidosa", "Negocial", "Recordatória"]
+            }
+        }
+
+        $scope.dashboard.dia = {
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: ''
+            },
+            yAxis: {
+                visible: false,
+            },
+            xAxis: {
+                categories: ["2020-04-01", "2020-04-02", "2020-04-03", "2020-04-04", "2020-04-05", "2020-04-06", "2020-04-07", "2020-04-08"]
+            },
+            legend: {
+                enabled: false,
+            },
+            plotOptions: {
+                spline: {
+                    dataLabels: {
+                        enabled: true,
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{ name: 'Qtd', data: [13, 6, 10, 11, 9, 18, 15, 12], color: '#333' }]
+        };
+
+
+    });
+</script>
