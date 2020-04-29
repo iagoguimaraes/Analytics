@@ -1855,6 +1855,42 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("31a90/pagamento")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage Dashboard31a90Pagamento(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
+                DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("carteiras", carteiras);
+                    parametros.Add("faixas", faixas);
+                    parametros.Add("origem", origem);
+                    parametros.Add("plano", plano);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pagamento", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }
