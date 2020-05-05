@@ -16,7 +16,7 @@
 
         <!-- FILTROS -->
         <div class="row margin-bottom">
-            <div class="col-xs-12">
+            <div class="col-xs-12" ng-if="dashFiltros.status == 200">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
                         <span class="card-header-title">Filtros</span>
@@ -49,6 +49,12 @@
                                 </div>
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
+                        </div>
+
+                        <!--FILA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Fila</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas"></select2>
                         </div>
 
                         <!--BOTÃO-->
@@ -401,11 +407,25 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            filas: '',
         };
 
         $scope.dashboard = {};
+        $scope.dashFiltros = {};
         $scope.graficoHora = { indicador: 'acordo', exibir: 'false' };
         $scope.showTbody = false;
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/estacio/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.filas = r.data.Table1;
+
+        });
 
         $scope.carregarDashboard = function () {
             $http({
