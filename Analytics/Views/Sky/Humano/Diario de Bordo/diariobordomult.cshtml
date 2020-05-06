@@ -1,0 +1,449 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<div ng-controller="ctrl-diariobordomult">
+
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Diário de Bordo Multiplicador</div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+            <i class="fa fa-filter"></i>
+            FILTROS
+        </div>
+        <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" ng-click="extrair()">
+            <i class="fa fa-file-excel-o"></i>
+            EXTRAIR
+        </div>
+    </header>
+
+    <!-- FILTROS -->
+    <div class="row margin-bottom" ng-if="opcoes.status == 200">
+        <div class="col-xs-12">
+            <div id="filtros-window" class="card display-none">
+                <div class="card-header">
+                    <span class="card-header-title">Filtros</span>
+                    <div class="card-header-button card-header-close">
+                        <i class="fa fa-close"></i>
+                    </div>
+                    <div class="card-header-button card-header-expand">
+                        <i class="fa fa-expand"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <!--DATA INCIAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Inicial</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--DATA FINAL-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Data Final</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                        </div>
+                    </div>
+
+                    <!--SUPERVISOR-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Supervisor</label>
+                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="opcoes.supervisores"></select2>
+                    </div>
+
+                    <!--multiplicador-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">multiplicador</label>
+                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.multiplicador" dados="opcoes.multiplicadores"></select2>
+                    </div>
+
+                    <!--MOTIVO-->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">Motivo</label>
+                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.motivo" dados="opcoes.motivos"></select2>
+                    </div>
+
+
+                    <!--BOTÃO-->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--BOTAO INSERIR E PESQUISA-->
+    <div class="row margin-bottom">
+        <div class="col-xs-12 col-sm-6 margin-bottom">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
+                Inserir Ocorrência
+            </button>
+        </div>
+
+        <div class="col-xs-12 col-sm-6">
+            <input class="form-control" ng-model="dashboard.filtro" placeholder="Pesquisar" />
+        </div>
+
+    </div>
+
+    <!-- TIMELINE -->
+    <ul class="timeline" ng-repeat="r in dashboard.dados | filter:dashboard.filtro | groupBy: 'data'">
+
+        <li class="time-label">
+            <span class="bg-red">
+                {{r[0].data}}
+            </span>
+        </li>
+
+        <li ng-repeat="d in r">
+
+            <i class="fa fa-pencil-square-o bg-blue" ng-click="popularEdit(d)" data-toggle="modal" data-target="#modal-edit"></i>
+
+            <div class="timeline-item">
+
+                <span class="time">
+                    <i class="fa fa-user"></i> <span style="padding-right:5px;">{{d.usuario}}</span>
+                    <i class="fa fa-calendar-o"></i> <span style="padding-right:5px;">{{d.data}}</span>
+                    <i class="fa fa-clock-o"></i> <span style="padding-right:5px;">{{d.hora}}</span>
+                </span>
+
+                <h3 class="timeline-header bg-gray-light"><b>{{d.multiplicador}}</b></h3>
+
+                <div class="timeline-body">
+                    <i class="fa fa-exclamation-circle"></i>
+                    <b> {{d.motivo}}  </b> | {{d.supervisor}}
+                </div>
+
+                <div class="timeline-footer">
+                    <i class="fa fa-commenting-o"></i>
+                    {{d.descricao}}
+                </div>
+
+            </div>
+        </li>
+    </ul>
+
+    <!-- MODAL INSERIR-->
+    <div class="modal fade" id="modal-default" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Inserir Ocorrência</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form">
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="diario.data"></date-picker>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="false">
+                            <label>Hora</label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <time-picker class="form-control pull-right" placeholder="hh:mm" ng-model="diario.hora"></time-picker>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Supervisor</label>
+                            <select class="form-control" ng-model="diario.supervisor" ng-options="e.id_supervisor as e.supervisor for e in opcoes.supervisores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Multiplicador</label>
+                            <select class="form-control" ng-model="diario.multiplicador" ng-options="c.id_multiplicador as c.multiplicador for c in opcoes.multiplicadores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Motivo</label>
+                            <select class="form-control" ng-model="diario.motivo" ng-options="o.id_motivo as o.motivo for o in opcoes.motivos">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea class="form-control" rows="3" placeholder="Descrever a ocorrência" ng-model="diario.descricao"></textarea>
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="inserirOcorrencia($event)">Inserir</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- MODAL EDITAR-->
+    <div class="modal fade" id="modal-edit" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Editar Ocorrência</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form role="form">
+
+                        <input type="hidden" ng-model="editdiario.id" />
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="editdiario.data"></date-picker>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="false">
+                            <label>Hora</label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <time-picker class="form-control pull-right" placeholder="hh:mm" ng-model="editdiario.hora"></time-picker>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="editdiario.supervisor">
+                            <label>Supervisor</label>
+                            <select class="form-control" ng-model="editdiario.supervisor" ng-options="e.id_supervisor as e.supervisor for e in opcoes.supervisores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="editdiario.supervisor">
+                            <label>multiplicador</label>
+                            <select class="form-control" ng-model="editdiario.multiplicador" ng-options="c.id_multiplicador as c.multiplicador for c in opcoes.multiplicadores">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" ng-show="editdiario.supervisor">
+                            <label>Motivo</label>
+                            <select class="form-control" ng-model="editdiario.motivo" ng-options="o.id_motivo as o.motivo for o in opcoes.motivos | filter:{id_supervisor: diario.supervisor}:true">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea class="form-control" rows="3" placeholder="Descrever a ocorrência" ng-model="editdiario.descricao"></textarea>
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="editarOcorrencia($event)">Salvar</button>
+                    @*<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="removerOcorrencia()">Remover</button>*@
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-diariobordomult', function ($scope, $http, $filter) {
+
+        // filtros iniciais
+        let ini = new Date();
+        ini.setDate(ini.getDate() - 30);
+        let fim = new Date();
+        let hr = ('0' + (fim.getHours() - 1)).slice(-2) + ':' + ('0' + fim.getMinutes()).slice(-2);
+
+        // filtros para pesquisa de diario de bordo
+        $scope.filtros = {
+            dtini: $filter('date')(ini, "yyyy-MM-dd"),
+            dtfim: $filter('date')(fim, "yyyy-MM-dd"),
+            supervisor: null,
+            multiplicador: null,
+            motivo: null,
+            usuario: null
+        };
+
+        // possiveis opcoes de escolha do formulario
+        $scope.opcoes = {};
+
+        // dados para inserir uma nova ocorrencia
+        $scope.diario = {
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            hora: hr
+        };
+        document.querySelector("[ng-model='diario.hora']").value = hr
+
+
+        // dados para editar uma ocorrencia
+        $scope.editdiario = {
+        };
+
+        // lista de ocorrencias
+        $scope.dashboard = {};
+
+        // carregar as opções do diario de bordo
+        $http({
+            method: 'POST',
+            url: "/api/sky/humano/diariodebordomult/opcoes",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.opcoes.status = r.status;
+            $scope.opcoes.supervisores = r.data.Table;
+            $scope.opcoes.multiplicadores = r.data.Table1;
+            $scope.opcoes.motivos = r.data.Table2;
+
+        });
+
+        // carregar a lista de ocorrencias
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/sky/humano/diariodebordomult/consultar",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data.Table;
+            });
+        }
+
+        // inserir nova ocorrencia
+        $scope.inserirOcorrencia = function ($event) {
+
+            if (!$scope.diario.supervisor) {
+                $('[ng-model="diario.supervisor"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.multiplicador) {
+                $('[ng-model="diario.multiplicador"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.diario.motivo) {
+                $('[ng-model="diario.motivo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            $http({
+                method: 'POST',
+                url: "/api/sky/humano/diariodebordomult/inserir",
+                data: $scope.diario,
+            }).then(function success(r) {
+                $scope.diario = {
+                    data: $filter('date')(new Date(), "yyyy-MM-dd"),
+                    hora: hr
+                };
+                document.querySelector("[ng-model='diario.hora']").value = hr
+
+                $scope.carregarDashboard();
+            });
+        }
+
+        // popular pop up de editar ocorrencia
+        $scope.popularEdit = function (r) {
+            $scope.editdiario.id = r.id_diario_bordo;
+            $scope.editdiario.data = r.data;
+            $scope.editdiario.hora = r.hora;
+            $scope.editdiario.supervisor = r.id_supervisor;
+            $scope.editdiario.multiplicador = r.id_multiplicador;
+            $scope.editdiario.motivo = r.id_motivo;
+        }
+
+        // editar uma ocorrencia
+        $scope.editarOcorrencia = function ($event) {
+
+            if (!$scope.editdiario.supervisor) {
+                $('[ng-model="editdiario.supervisor"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.multiplicador) {
+                $('[ng-model="editdiario.multiplicador"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            if (!$scope.editdiario.motivo) {
+                $('[ng-model="editdiario.motivo"]').focus();
+                $event.stopPropagation();
+                return false;
+            }
+
+            $http({
+                method: 'POST',
+                url: "/api/sky/humano/diariodebordomult/editar",
+                data: $scope.editdiario,
+            }).then(function success(r) {
+                $scope.carregarDashboard();
+            });
+        }
+
+        $scope.removerOcorrencia = function () {
+            if (confirm('Tem certeza que deseja remover essa ocorrência?')) {
+                $http({
+                    method: 'POST',
+                    url: "/api/sky/humano/diariodebordomult/remover",
+                    data: $scope.editdiario,
+                }).then(function success(r) {
+                    $scope.carregarDashboard();
+                });
+            }
+        }
+
+        $scope.carregarDashboard();
+
+        $scope.extrair = function () {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados]);
+        }
+
+    });
+</script>
