@@ -24,8 +24,7 @@
         </header>
 
         <!-- FILTROS -->
-        <div class="row margin-bottom">
-
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -61,6 +60,12 @@
                                     </div>
                                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim" style="width:100%"></date-picker>
                                 </div>
+                            </div>
+
+                            <!--EMPRESAS-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Empresas</label>
+                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas"></select2>
                             </div>
 
                             <!--BOTÃO-->
@@ -373,8 +378,23 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            empresas: ''
         }
 
+         // carregar os filtros
+        $scope.dashFiltros = {};
+        $http({
+            method: 'GET',
+            url: "/api/creditcash/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresas = r.data.Table;
+
+        });
+
+        // variaveis de view do dashboard
         $scope.dashboard = {
             indicador: 'acesso',
             mostrarTabela: false,
