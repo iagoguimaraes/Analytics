@@ -78,8 +78,8 @@
             <div class="col-xs-12 col-md-4 col-lg-2">
                 <div class="small-box bg-gray">
                     <div class="inner">
-                        <h3 ng-bind="dashboard.resumo.atendimento | megaNumber"></h3>
-                        <p>Atendimento</p>
+                        <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
+                        <p>Discado</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-phone"></i>
@@ -90,7 +90,7 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
-                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.atendimento | percentage: 1"></h4>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
                         <p>Contato</p>
                     </div>
                     <div class="icon">
@@ -155,13 +155,13 @@
                                 <thead>
                                     <tr>
                                         <th>Data</th>
-                                        <th>Atendido</th>
+                                        <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
-                                        <th>% Contato</th>
+                                        <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
                                         <th>Conversão</th>
@@ -170,13 +170,13 @@
                                 <tbody>
                                     <tr ng-repeat="d in dashboard.dia">
                                         <td>{{d.data}}</td>
-                                        <td>{{d.atendimento | number}}</td>
+                                        <td>{{d.discado | number}}</td>
                                         <td>{{d.contato | number}}</td>
                                         <td>{{d.cpc | number}}</td>
                                         <td>{{d.cpca | number}}</td>
                                         <td>{{d.promessa | number}}</td>
                                         <td>{{d.vl_promessa | currency:'R$ '}}</td>
-                                        <td>{{d.contato / d.atendimento | percentage:1}}</td>
+                                        <td>{{d.contato / d.discado | percentage:1}}</td>
                                         <td>{{d.cpc / d.contato | percentage:1}}</td>
                                         <td>{{d.cpca / d.cpc | percentage:1}}</td>
                                         <td>{{d.promessa / d.cpca | percentage:1}}</td>
@@ -185,13 +185,13 @@
                                 <tfoot>
                                     <tr>
                                         <th>Total</th>
-                                        <th>{{dashboard.resumo.atendimento | number}}</th>
+                                        <th>{{dashboard.resumo.discado | number}}</th>
                                         <th>{{dashboard.resumo.contato | number}}</th>
                                         <th>{{dashboard.resumo.cpc | number}}</th>
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vl_promessa | currency:'R$ '}}</th>
-                                        <th>{{dashboard.resumo.contato / dashboard.resumo.atendimento | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
@@ -224,13 +224,13 @@
                                 <thead>
                                     <tr>
                                         <th>Atraso</th>
-                                        <th>Atendido</th>
+                                        <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
-                                        <th>% Contato</th>
+                                        <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
                                         <th>Conversão</th>
@@ -239,13 +239,13 @@
                                 <tbody>
                                     <tr ng-repeat="a in dashboard.atraso">
                                         <td>{{a.ds_fxatraso}}</td>
-                                        <td>{{a.atendimento | number}}</td>
+                                        <td>{{a.discado | number}}</td>
                                         <td>{{a.contato | number}}</td>
                                         <td>{{a.cpc | number}}</td>
                                         <td>{{a.cpca | number}}</td>
                                         <td>{{a.promessa | number}}</td>
                                         <td>{{a.vl_promessa | currency:'R$ '}}</td>
-                                        <td>{{a.contato / a.atendimento | percentage:1}}</td>
+                                        <td>{{a.contato / a.discado | percentage:1}}</td>
                                         <td>{{a.cpc / a.contato | percentage:1}}</td>
                                         <td>{{a.cpca / a.cpc | percentage:1}}</td>
                                         <td>{{a.promessa / a.cpca | percentage:1}}</td>
@@ -278,13 +278,13 @@
                                 <thead>
                                     <tr>
                                         <th>Carteira</th>
-                                        <th>Atendido</th>
+                                        <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
-                                        <th>% Contato</th>
+                                        <th>Hit Rate</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -293,13 +293,13 @@
                                 <tbody>
                                     <tr ng-repeat="c in dashboard.carteira">
                                         <td>{{c.ds_bandeira}}</td>
-                                        <td>{{c.atendimento | number}}</td>
+                                        <td>{{c.discado | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vl_promessa | currency:'R$ '}}</td>
-                                        <td>{{c.contato / c.atendimento | percentage:1}}</td>
+                                        <td>{{c.contato / c.discado | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -320,11 +320,11 @@
                         <span class="card-header-title">Gráfico por Hora</span>
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="%ctt">% Contato</option>
+                                <option value="hitrate">Hit Rate</option>
                                 <option value="txloc">Tx Loc</option>
                                 <option value="txapv">Tx Apv</option>
                                 <option value="conversao">Conversão</option>
-                                <option value="atendimento">Atendido</option>
+                                <option value="discado">Discado</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
                                 <option value="cpca">CPCA</option>
@@ -373,13 +373,11 @@
                                 <thead>
                                     <tr>
                                         <th>Equipe</th>
-                                        <th>Atendido</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
-                                        <th>% Contato</th>
                                         <th>TxLoc</th>
                                         <th>TxApv</th>
                                         <th>Conversão</th>
@@ -394,13 +392,11 @@
                                                 {{e[0].supervisor}}
                                             </b>
                                         </td>
-                                        <td>{{e | sumByColumn: 'atendimento'| number}}</td>
                                         <td>{{e | sumByColumn: 'contato'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{e | sumByColumn: 'cpca'| number}}</td>
                                         <td>{{e | sumByColumn: 'promessa'| number}}</td>
                                         <td>{{e | sumByColumn: 'vl_promessa'| currency:'R$ '}}</td>
-                                        <td>{{e | divideSumColumns: 'contato':'atendimento' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpc':'contato' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{e | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
@@ -408,13 +404,11 @@
 
                                     <tr ng-repeat="c in e" ng-show="showTbody">
                                         <td>{{c.equipe}}</td>
-                                        <td>{{c.atendimento | number}}</td>
                                         <td>{{c.contato | number}}</td>
                                         <td>{{c.cpc | number}}</td>
                                         <td>{{c.cpca | number}}</td>
                                         <td>{{c.promessa | number}}</td>
                                         <td>{{c.vl_promessa | currency:'R$ '}}</td>
-                                        <td>{{c.contato / c.atendimento | percentage:1}}</td>
                                         <td>{{c.cpc / c.contato | percentage:1}}</td>
                                         <td>{{c.cpca / c.cpc | percentage:1}}</td>
                                         <td>{{c.promessa / c.cpca | percentage:1}}</td>
@@ -489,8 +483,8 @@
                 let dados = $scope.dashboard.dia;
                 $scope.dashboard.datas = dados.map(obj => obj.data);
                 switch ($scope.grafico.indicador) {
-                    case '%ctt':
-                        $scope.dashboard.grafico = [{ name: '%ctt', data: dados.map(obj => (obj.contato * 100 / obj.atendimento).toFixed(1) * 1) }];
+                    case 'hitrate':
+                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
                         break;
                     case 'txloc':
                         $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];

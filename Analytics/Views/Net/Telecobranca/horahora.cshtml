@@ -8,7 +8,7 @@
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora Digital</div>
+            <div class="page-name">Hora Hora Telecobrança</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -17,7 +17,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
 
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -55,19 +55,6 @@
                                     <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                                 </div>
                             </div>
-
-                            <!--ORIGEM-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Origem</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem"></select2>
-                            </div>
-
-                            <!--CAMPANHAS-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Campanhas</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
-                            </div>
-
 
                             <!--BOTÃO-->
                             <div class="form-group">
@@ -121,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class="row"  style="background-color: #0298d5; color:white; opacity: 0.8">
+                <div class="row" style="background-color: #0298d5; color:white; opacity: 0.8">
                     <div class="col-sm-2 col-sm-offset-1 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
@@ -372,26 +359,10 @@
         dadosPagina.descricao = 'Net Digital'
         $scope.showTbody = false;
 
-        $scope.dashFiltros = {};
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            campanha: '',
-            origem: '',
         };
-
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/net/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.campanha = r.data.Table1;
-            $scope.dashFiltros.origem = r.data.Table5;
-
-        });
 
         $scope.dashboard = {};
         $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
@@ -399,7 +370,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/net/dashboard/digital/horahora",
+                url: "/api/net/dashboard/telecobranca/horahora",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;

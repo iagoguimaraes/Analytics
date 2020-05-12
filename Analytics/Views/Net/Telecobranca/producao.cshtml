@@ -2,13 +2,13 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<!-- DAHSBOARD -->
-<div ng-controller="ctrl-net-horahora">
-    <div ng-if="dashboard.status === 200">
+
+<div ng-controller="ctrl-net-producao">
+    <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
         <header class="page-header">
-            <div class="page-name">Hora Hora Digital</div>
+            <div class="page-name">Produção Telecobrança</div>
             <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
                 <i class="fa fa-filter"></i>
                 FILTROS
@@ -17,7 +17,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom">
 
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
@@ -56,19 +56,6 @@
                                 </div>
                             </div>
 
-                            <!--ORIGEM-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Origem</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem"></select2>
-                            </div>
-
-                            <!--CAMPANHAS-->
-                            <div class="form-group">
-                                <label class="control-sidebar-subheading">Campanhas</label>
-                                <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha"></select2>
-                            </div>
-
-
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -80,88 +67,79 @@
         </div>
 
         <!--RESUMO-->
-        <div class="box box-widget widget-user">
-            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Net/banner net.jpg') center center;">
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box">
+                    <img class="img-responsive center-block" src="~/Content/Images/Net/logo-producao.jpg" style="height:102px" />
+                </div>
             </div>
-            <div class="widget-user-image">
-                <img class="img-circle" src="/Content/Images/Net/logo.png" style="background-color: rgba(255, 255, 255, 0.00)" height="160" width="200">
-            </div>
-            <div class="box-footer">
-
-                <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
-                            <span class="description-text">Discado</span>
-                        </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
+                        <p>Discado</p>
                     </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato | megaNumber"></h5>
-                            <span class="description-text">Contato</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc | megaNumber"></h5>
-                            <span class="description-text">CPC</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca | number"></h5>
-                            <span class="description-text">CPCA</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa | number"></h5>
-                            <span class="description-text">Promessa</span>
-                        </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
                     </div>
                 </div>
-
-                <div class="row"  style="background-color: #0298d5; color:white; opacity: 0.8">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                            <span class="description-text">Hit Rate</span>
-                        </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                        <p>Contato</p>
                     </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
-                            <span class="description-text">Tx Loc</span>
-                        </div>
+                    <div class="icon">
+                        <i class="fa fa-headphones"></i>
                     </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
-                            <span class="description-text">Tx Apv</span>
-                        </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
+                        <p>CPC</p>
                     </div>
-                    <div class="col-sm-2 border-right">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
-                            <span class="description-text">Conversao</span>
-                        </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="description-block">
-                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number: 1"></h5>
-                            <span class="description-text">Esforço</span>
-                        </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <p>CPCA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
+                        <p>Acordo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--ANALISE POR HORA-->
+        <!--ANALISE POR DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Hora</span>
+                        <span class="card-header-title">Análise por Dia</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -170,23 +148,24 @@
                         </div>
                         <small class="pull-right">
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="false" checked="checked" />
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="false" checked="checked" />
                                 Tabela
                             </label>
                             <label>
-                                <input type="radio" name="graficoHoraExibir" ng-model="graficoHora.exibir" value="true" />
+                                <input type="radio" name="graficoHoraExibir" ng-model="graficoDia.exibir" value="true" />
                                 Gráfico
                             </label>
 
                         </small>
                     </div>
                     <div class="card-body">
+
                         <!--TABELA-->
-                        <div class="table-responsive" ng-show="graficoHora.exibir == 'false'">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horahora">
+                        <div class="table-responsive" ng-show="graficoDia.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
                                 <thead>
                                     <tr>
-                                        <th>Hora</th>
+                                        <th>Data</th>
                                         <th>Discado</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
@@ -199,17 +178,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="hora in dashboard.horahora">
-                                        <td>{{hora.hora}}</td>
-                                        <td>{{hora.discado | number}}</td>
-                                        <td>{{hora.contato | number}}</td>
-                                        <td>{{hora.cpc | number}}</td>
-                                        <td>{{hora.cpca | number}}</td>
-                                        <td>{{hora.promessa | number}}</td>
-                                        <td>{{hora.contato / hora.discado | percentage:1}}</td>
-                                        <td>{{hora.cpc / hora.contato | percentage:1}}</td>
-                                        <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
-                                        <td>{{hora.promessa / hora.cpca | percentage:1}}</td>
+                                    <tr ng-repeat="d in dashboard.dia">
+                                        <td>{{d.data}}</td>
+                                        <td>{{d.discado | number}}</td>
+                                        <td>{{d.contato | number}}</td>
+                                        <td>{{d.cpc | number}}</td>
+                                        <td>{{d.cpca | number}}</td>
+                                        <td>{{d.promessa | number}}</td>
+                                        <td>{{d.contato / d.discado | percentage:1}}</td>
+                                        <td>{{d.cpc / d.contato | percentage:1}}</td>
+                                        <td>{{d.cpca / d.cpc | percentage:1}}</td>
+                                        <td>{{d.promessa / d.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -230,9 +209,9 @@
                         </div>
 
                         <!--GRAFICO-->
-                        <div ng-show="graficoHora.exibir == 'true'">
+                        <div ng-show="graficoDia.exibir == 'true'">
                             <span class="pull-right">
-                                <select ng-model="graficoHora.indicador" ng-change="carregarGraficoHora()">
+                                <select ng-model="graficoDia.indicador" ng-change="carregarGraficoDia()">
                                     <option value="hitrate">Hit Rate</option>
                                     <option value="txloc">Tx Loc</option>
                                     <option value="txapv">Tx Apv</option>
@@ -244,7 +223,7 @@
                                     <option value="promessa">Promessa</option>
                                 </select>
                             </span>
-                            <high-chart series="dashboard.graficoHora" axis-Categories="dashboard.horas" plot-Options-Line-Data-Label="true"></high-chart>
+                            <high-chart series="graficoDia.dados" axis-Categories="dashboard.dias" plot-Options-Line-Data-Label="true"></high-chart>
 
                         </div>
 
@@ -339,14 +318,15 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- ANÁLISE POR OCORRENCIA -->
+        <!--OCORRENCIA-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Análise por Andamento</span>
+                        <span class="card-header-title">Andamentos</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -355,97 +335,88 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.tabulacao" paging="false" order="[[1,'desc']]"></d-table>
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.ocorrencia" order="[[2,'desc']]"></d-table>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
+
 </div>
 
-
 <script>
-    angular.module('app').controller('ctrl-net-horahora', function ($scope, $http, $filter, $interval, dadosPagina) {
 
-        dadosPagina.titulo = 'Hora Hora';
-        dadosPagina.descricao = 'Net Digital'
-        $scope.showTbody = false;
+    angular.module('app').controller('ctrl-net-producao', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Produção';
+        dadosPagina.descricao = 'Net Telecobrança'
 
-        $scope.dashFiltros = {};
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
         $scope.filtros = {
-            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-            campanha: '',
-            origem: '',
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 
-        // carregar os filtros
-        $http({
-            method: 'GET',
-            url: "/api/net/dashboard/filtros",
-            data: $scope.filtros,
-        }).then(function success(r) {
-
-            $scope.dashFiltros.status = r.status;
-            $scope.dashFiltros.campanha = r.data.Table1;
-            $scope.dashFiltros.origem = r.data.Table5;
-
-        });
 
         $scope.dashboard = {};
-        $scope.graficoHora = { indicador: 'promessa', exibir: 'false' };
+        $scope.graficoDia = { indicador: 'promessa', dados: [], exibir: 'false' };
 
+
+        // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/net/dashboard/digital/horahora",
+                url: "/api/net/dashboard/telecobranca/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
+                let data = r.data;
                 $scope.dashboard.status = r.status;
+                $scope.dashboard.resumo = data.Table[0];
+                $scope.dashboard.dia = data.Table1;
+                //$scope.dashboard.diagrama = data.Table2;
                 $scope.dashboard.dados = r.data;
-                $scope.dashboard.tab = r.data.Table3.map(obj => obj.tabulacao);
+                $scope.dashboard.ocorrencia = data.Table2;
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.descricao, y: obj.quantidade })) }];
 
-                $scope.dashboard.resumo = r.data.Table[0];
-                $scope.dashboard.horahora = r.data.Table1;
-                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table2.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
-                $scope.dashboard.tabulacao = r.data.Table4;
-                $scope.dashboard.campanha = r.data.Table5;
-
-                let funil = r.data.Table3[0];
+                let funil = data.Table[0];
                 let dadosFunil = [];
                 Object.keys(funil).map(function (key, index) {
-                    if (key != 'discado')
+                    if(key != 'discado')
                         dadosFunil.push([key, funil[key]]);
                 });
 
+                $scope.dashboard.campanha = r.data.Table4;
+
                 $scope.dashboard.funil = [{ name: 'Quantidade', data: dadosFunil }];
 
-                $scope.carregarGraficoHora();
+                $scope.carregarGraficoDia();
+
             });
         }
 
-        // carrega o grafico de acordo com o indicador escolhido
-        $scope.carregarGraficoHora = function () {
-            let dados = $scope.dashboard.horahora;
-            $scope.dashboard.horas = dados.map(obj => obj.hora);
-            switch ($scope.graficoHora.indicador) {
+        // carrega o mapa de acordo com o indicador escolhido
+        $scope.carregarGraficoDia = function () {
+            let dados = $scope.dashboard.dia;
+            $scope.dashboard.dias = dados.map(obj => obj.data);
+            switch ($scope.graficoDia.indicador) {
                 case 'hitrate':
-                    $scope.dashboard.graficoHora = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
                     break;
                 case 'txloc':
-                    $scope.dashboard.graficoHora = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
                     break;
                 case 'txapv':
-                    $scope.dashboard.graficoHora = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
                     break;
                 case 'conversao':
-                    $scope.dashboard.graficoHora = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    $scope.graficoDia.dados = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
                     break;
                 default:
-                    $scope.dashboard.graficoHora = [{ name: $scope.graficoHora.indicador, data: dados.map(obj => obj[$scope.graficoHora.indicador]) }];
+                    $scope.graficoDia.dados = [{ name: $scope.graficoDia.indicador, data: dados.map(obj => obj[$scope.graficoDia.indicador]) }];
             }
-
         }
 
         // extrair dados para excel
@@ -456,5 +427,5 @@
         $scope.carregarDashboard();
 
     });
-</script>
 
+</script>

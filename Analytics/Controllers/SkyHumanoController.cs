@@ -1140,6 +1140,217 @@ namespace Analytics.Controllers
 
         #endregion
 
+        #region DIARIO DE BORDO MULTIPLICADOR
+
+        [Route("humano/diariodebordomult/opcoes")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage OpcoesDiarioBordoMult()
+        {
+            try
+            {
+
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_opcoes_diario_bordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordomult/consultar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage ConsultarDiarioBordoMult(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                string dtini = form["dtini"];
+                string dtfim = form["dtfim"];
+                string supervisor = form["supervisor"];
+                string multiplicador = form["multiplicador"];
+                string motivo = form["motivo"];
+                string usuario = form["usuario"];
+
+                DateTime _dtini = Convert.ToDateTime(dtini);
+                DateTime _dtfim = Convert.ToDateTime(string.Concat(dtfim, " 23:59:59"));
+
+                DataTable _supervisor = JsonConvert.DeserializeObject<DataTable>(supervisor);
+                DataTable _multiplicador = JsonConvert.DeserializeObject<DataTable>(multiplicador);
+                DataTable _motivo = JsonConvert.DeserializeObject<DataTable>(motivo);
+                DataTable _usuario = JsonConvert.DeserializeObject<DataTable>(usuario);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_usuario", sessao.id_usuario);
+                    parametros.Add("dtini", _dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", _dtfim.ToString("yyyy-MM-dd HH:mm:ss"));
+                    parametros.Add("supervisor", _supervisor);
+                    parametros.Add("multiplicador", _multiplicador);
+                    parametros.Add("motivo", _motivo);
+                    parametros.Add("usuario", _usuario);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_sel_diario_bordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordomult/inserir")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage InserirDiarioBordoMult(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_supervisor = Convert.ToInt32(form["supervisor"]);
+                int id_multiplicador = Convert.ToInt32(form["multiplicador"]);
+                int id_motivo = Convert.ToInt32(form["motivo"]);
+                string descricao = form["descricao"];
+
+
+                DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
+
+                if (string.IsNullOrEmpty(descricao))
+                    descricao = "";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", _data);
+                    parametros.Add("id_supervisor", id_supervisor);
+                    parametros.Add("id_multiplicador", id_multiplicador);
+                    parametros.Add("id_motivo", id_motivo);
+                    parametros.Add("id_usuario", sessao.id_usuario);
+                    parametros.Add("descricao", descricao);
+
+                    sql.ExecuteProcedureDataSet("sp_ins_diario_bordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordomult/editar")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage EditarDiarioBordoMult(FormDataCollection form)
+        {
+            try
+            {
+                Sessao sessao = (Sessao)Request.Properties["Sessao"];
+
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+                string data = form["data"];
+                string hora = form["hora"];
+                int id_supervisor = Convert.ToInt32(form["supervisor"]);
+                int id_multiplicador = Convert.ToInt32(form["multiplicador"]);
+                int id_motivo = Convert.ToInt32(form["motivo"]);
+                string descricao = form["descricao"];
+
+                DateTime _data = Convert.ToDateTime(string.Concat(data, " ", hora, ":00"));
+
+                if (string.IsNullOrEmpty(descricao))
+                    descricao = "";
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+                    parametros.Add("data", _data);
+                    parametros.Add("id_supervisor", id_supervisor);
+                    parametros.Add("id_multiplicador", id_multiplicador);
+                    parametros.Add("id_motivo", id_motivo);
+                    parametros.Add("descricao", descricao);
+
+                    sql.ExecuteProcedureDataSet("sp_upd_diario_bordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("humano/diariodebordomult/remover")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage RemoverDiarioBordoMult(FormDataCollection form)
+        {
+            try
+            {
+                int id_diario_bordo = Convert.ToInt32(form["id"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_diario_bordo", id_diario_bordo);
+
+                    sql.ExecuteProcedureDataSet("sp_del_diario_bordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("humano/diariodebordomult/dashboard")]
+        [HttpPost]
+        [Autorizar]
+        public HttpResponseMessage DashboardDiarioBordoMult(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SKY_HUMANO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_diarioBordo_mult", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        #endregion
 
     }
 }

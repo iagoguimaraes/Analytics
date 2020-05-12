@@ -527,9 +527,9 @@
                                         <th>% Parc.</th>
                                         <th>TMA</th>
                                         <th>TME</th>
-                                        <th>% Ocupação</th>
-                                        <th>% HitRate</th>
-                                        <th>% Ocioso</th>
+                                        <th>Ocupação</th>
+                                        <th>HitRate</th>
+                                        <th>Ocioso</th>
                                         <th>% CPC</th>
                                         <th>% CPCA</th>
                                         <th>Conversão</th>
@@ -701,11 +701,11 @@
                         </div>
                         <small class="pull-right">
                             <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
-                                <option value="ocupacao">% Ocupação</option>
-                                <option value="tmpocioso">% Ocioso</option>
-                                <option value="hitrate">% Hit Rate</option>
-                                <option value="txloc">% Loc</option>
-                                <option value="txapv">% Apv</option>
+                                <option value="ocupacao">Ocupação</option>
+                                <option value="tmpocioso">Ocioso</option>
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Loc</option>
+                                <option value="txapv">Apv</option>
                                 <option value="conversao">Conversão</option>
                                 <option value="contato">Contato</option>
                                 <option value="cpc">CPC</option>
@@ -752,14 +752,14 @@
                                         <th>Cpca</th>
                                         <th>Prom.</th>
                                         <th>Tma</th>
-                                        <th>% Ocupação</th>
-                                        <th>% Pausa</th>
-                                        <th>% Manual x Disp.</th>
-                                        <th>% Ctt x Att.</th>
-                                        <th>% Cart.</th>
-                                        <th>% Migr.</th>
-                                        <th>% Parc.</th>
-                                        <th>% CPC</th>
+                                        <th>Ocupação</th>
+                                        <th>Pausa</th>
+                                        <th>Manual x Disponivel</th>
+                                        <th>Acionado x Atendido</th>
+                                        <th>Cart.</th>
+                                        <th>Migr.</th>
+                                        <th>Parc.</th>
+                                        <th>CPC</th>
                                         <th>Conversão</th>
                                     </tr>
                                 </thead>
@@ -779,7 +779,7 @@
                                         <td>{{c | divideSumColumns: 'tmp_faladoAftercall':'tmp_disponivel' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'tmp_pausa':'tmp_logado' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'tmp_manual':'tmp_disponivel' | percentage:1}}</td>
-                                        <td>{{c | divideSumColumns: 'atendidas':'contato' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'acionado':'atendidas' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_cartao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'migracao':'promessa' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa_parc':'promessa' | percentage:1}}</td>
@@ -798,7 +798,7 @@
                                         <td>{{p.tmp_faladoAftercall / p.tmp_disponivel | percentage:1}}</td>
                                         <td>{{p.tmp_pausa / p.tmp_logado | percentage:1}}</td>
                                         <td>{{p.tmp_manual / p.tmp_disponivel | percentage:1}}</td>
-                                        <td>{{p.atendidas / p.contato | percentage:1}}</td>
+                                        <td>{{p.acionado / p.atendidas | percentage:1}}</td>
                                         <td>{{p.promessa_cartao / p.promessa | percentage:1}}</td>
                                         <td>{{p.migracao / p.promessa | percentage:1}}</td>
                                         <td>{{p.promessa_parc / p.promessa | percentage:1}}</td>
