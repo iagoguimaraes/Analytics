@@ -440,6 +440,67 @@
             </div>
         </div>
 
+        <!--ANÁLISE POR QUARTIL-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Quartil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table10')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="tabelaQuartil.indicador" ng-change="carregarTabelaQuartil()">
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="conversao">Conversão</option>
+                                <option value="promessa">Promessa</option>
+                                <option value="abandono">Abandono</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.TabelaQuartil">
+                                <thead>
+                                    <tr>
+                                        <th>Quartil</th>
+                                        <th>Operador</th>
+                                        <th>Indicador</th>
+                                        <th>Dispersão</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.TabelaQuartil | groupBy: 'quartil' ">
+
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].quartil}}
+                                        </td>
+                                        <td>{{c | sumByColumn: 'qtd_op'| number}}</td>
+                                        <td>{{c | avgColumn: 'kpi'| number}}</td>
+                                        <td>{{c | avgColumn: 'resultado' | number}}%</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td>{{p.quartil}}</td>
+                                        <td>{{p.operador}}</td>
+                                        <td>{{p.kpi | number}}</td>
+                                        <td>{{p.disp_op | number}}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--PRODUÇÃO POR FILA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -854,6 +915,7 @@
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'promessa' };
         $scope.graficoOco = { classificacao: 'todas', ocorrencia: 'Selecione' };
+        $scope.tabelaQuartil = { indicador: 'promessa' };
 
         //carregar os filtros
         $http({
@@ -888,11 +950,13 @@
                 $scope.dashboard.equipe = data.Table4;
                 $scope.dashboard.operador = data.Table6;
                 $scope.dashboard.ocorrencia = data.Table8;
-                $scope.dashboard.ocorrenciasList = alasql('select distinct id_ocorrencia, ds_ocorrencia from ? order by 2', [data.Table8]);                
+                $scope.dashboard.ocorrenciasList = alasql('select distinct id_ocorrencia, ds_ocorrencia from ? order by 2', [data.Table8]);
+                $scope.dashboard.quartil = data.Table10;
 
                 $scope.carregarGrafico();
                 $scope.carregarGraficoOcorrencia();
                 $scope.carregarGraficoOcorrenciaHora();
+                $scope.carregarTabelaQuartil();
             });
         }
 
@@ -943,6 +1007,59 @@
             $scope.dashboard.ocorrenciaHora = [{ name: 'Quantidade', type: "line", color: "black", data: dados.map(obj => obj.qtd) }];
         }
 
+        $scope.carregarTabelaQuartil = function () {
+            let indicador = $scope.tabelaQuartil.indicador;
+            let dados = $scope.dashboard.dados;
+            let select = alasql('select operador, sum(qtd) qtd_op, quartil_' + indicador + ' quartil,' + indicador + ' kpi, dispersao_' + indicador + ' disp_op from ? group by operador, quartil_' + indicador + ',' + indicador + ',dispersao_' + indicador + ' order by 3', [dados.Table10]);
+            $scope.dashboard.TabelaQuartil = select;
+
+            quartil = ['Q-1', 'Q-2', 'Q-3', 'Q-4'];
+            let dispersao = [];
+            for (let i = 0; i < quartil.length; i++) {
+                let cont = 0;
+                let soma = 0;
+                let media = 0;
+                for (let j = 0; j < $scope.dashboard.TabelaQuartil.length; j++) {
+                    if ($scope.dashboard.TabelaQuartil[j].quartil == quartil[i]) {
+                        soma += $scope.dashboard.TabelaQuartil[j].kpi
+                        cont += 1;
+                    }
+                };
+                media = soma / cont
+                dispersao.push(Math.trunc(media));
+            };
+
+            let resultado = [];
+            let mult = 0;
+            for (let i = 0; i < dispersao.length; i++) {
+                mult = parseFloat(((dispersao[0] - dispersao[i]) / dispersao[0]) * 100.00);
+                if (mult < 0) {
+                    mult = mult * -1;
+                }
+                resultado.push(mult);
+            };
+
+            for (let j = 0; j < $scope.dashboard.TabelaQuartil.length; j++) {
+                if (quartil.indexOf($scope.dashboard.TabelaQuartil[j].quartil) != -1)
+                {
+                    $scope.dashboard.TabelaQuartil[j].resultado = resultado[quartil.indexOf($scope.dashboard.TabelaQuartil[j].quartil)];
+                }
+            };
+            
+            switch ($scope.tabelaQuartil.indicador) {
+                case 'abandono':
+                    $scope.dashboard.TabelaQuartil.sort(function (a, b) {
+                        return a.kpi - b.kpi;
+                    });
+                    break;
+                default:
+                    $scope.dashboard.TabelaQuartil.sort(function (a, b) {
+                        return b.kpi - a.kpi;
+                    });
+            }
+        }
+
+        
         // extrair dados para excel
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
