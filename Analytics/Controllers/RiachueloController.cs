@@ -836,7 +836,7 @@ namespace Analytics.Controllers
                 DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
-                //DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
+                DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -851,7 +851,7 @@ namespace Analytics.Controllers
                     parametros.Add("saldo", saldo);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("save", save);
-                    //parametros.Add("origemPromessa", origemPromessa);
+                    parametros.Add("origemPromessa", origemPromessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -880,7 +880,7 @@ namespace Analytics.Controllers
                 DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
                 DataTable supervisores = JsonConvert.DeserializeObject<DataTable>(form["supervisores"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
-                //DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
+                DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -895,7 +895,7 @@ namespace Analytics.Controllers
                     parametros.Add("saldo", saldo);
                     parametros.Add("supervisores", supervisores);
                     parametros.Add("save", save);
-                    //parametros.Add("origemPromessa", origemPromessa);
+                    parametros.Add("origemPromessa", origemPromessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_humano_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1616,6 +1616,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
@@ -1625,6 +1626,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("bandeiras", bandeiras);
                     parametros.Add("atrasos", atrasos);
+                    parametros.Add("origemPromessa", origemPromessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -1648,6 +1650,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
@@ -1657,6 +1660,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("bandeiras", bandeiras);
                     parametros.Add("atrasos", atrasos);
+                    parametros.Add("origemPromessa", origemPromessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
