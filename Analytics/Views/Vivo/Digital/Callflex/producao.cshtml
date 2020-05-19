@@ -1,0 +1,510 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+
+<!-- DAHSBOARD -->
+<div ng-controller="ctrl-vivo-producao-callflex">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Produção Digital Callflex</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA FINAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--SEGMENTACOES-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentações</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmentacoes" dados="dashFiltros.segmentacoes" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--FILAS-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Filas</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas" style="width: 100%;"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUMO -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-black" style="opacity: 0.6">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.mailing_dia / dashboard.resumo.pa | number: 0"></h4>
+                        <p>Mailing / AD</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-black">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.mailing_dia | megaNumber"></h3>
+                        <p>Mailing Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-purple">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.pa | megaNumber"></h3>
+                        <p>Média AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-gray" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
+                        <p>Discado</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-phone"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-gray">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado_dia | megaNumber"></h3>
+                        <p>Discado Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-gray-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.discado_pa | megaNumber"></h3>
+                        <p>Discado AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-aqua" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                        <p>Contato</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-headphones"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato_dia | number"></h3>
+                        <p>Contato Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-aqua-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.contato_pa | megaNumber"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.contato_pa / dashboard.resumo.discado_pa | percentage: 1"></h4>*@
+                        <p>Contato AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-red" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>*@
+                        <p>CPC</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-male"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc_dia | number"></h3>
+                        <p>CPC Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-red-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpc_pa | megaNumber"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpc_pa / dashboard.resumo.contato_pa | percentage: 1"></h4>*@
+                        <p>CPC AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-yellow" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
+                        <p>CPCA</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-street-view"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca_dia | number"></h3>
+                        <p>CPCA Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-yellow-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.cpca_pa | number"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.cpca_pa / dashboard.resumo.cpc_pa | percentage: 1"></h4>*@
+                        <p>CPCA AD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4 col-lg-2">
+                <div class="small-box bg-green" style="opacity: 0.8">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa | number"></h3>
+                        <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
+                        <p>Promessa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-thumbs-o-up"></i>
+                    </div>
+                </div>
+
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa_dia | number"></h3>
+                        <p>Promessa Dia</p>
+                    </div>
+                </div>
+
+                <div class="small-box bg-green-active">
+                    <div class="inner">
+                        <h3 ng-bind="dashboard.resumo.promessa_pa | number"></h3>
+                        @*<h4 class="pull-right" ng-bind="dashboard.resumo.promessa_pa / dashboard.resumo.cpca_pa | percentage: 1"></h4>*@
+                        <p>Promessa AD</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!--RESUMO 2-->
+        @*<div class="row margin-bottom">
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box" style="background-color: #7e2595">
+                        <img class="img-responsive center-block" src="/Content/Images/Vivo/vivo.png" height="100" width="100" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-gray">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.discado | megaNumber"></h3>
+                            <p>Discado</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.contato | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h4>
+                            <p>Contato</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.cpc | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h4>
+                            <p>CPC</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-male"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.cpca | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h4>
+                            <p>CPCA</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-street-view"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-2">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 ng-bind="dashboard.resumo.promessa | megaNumber"></h3>
+                            <h4 class="pull-right" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h4>
+                            <p>Promessa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-thumbs-o-up"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <!--ANALISE DIA-->
+        <div class="row  margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Analise por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>                        
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.dia">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>AD</th>
+                                        <th>Mailing</th>
+                                        <th>Discado</th>
+                                        <th>Contato</th>
+                                        <th>CPC</th>
+                                        <th>CPCA</th>
+                                        <th>Promessa</th>
+                                        <th>HitRate</th>
+                                        <th>TxLoc</th>
+                                        <th>TxApv</th>
+                                        <th>Conversão</th>
+                                        <th>Ocupação</th>
+                                        <th>Mailing/AD</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr align="center" ng-repeat="dia in dashboard.dia">
+                                        <td>{{dia.data | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{dia.ad | number}}</td>
+                                        <td>{{dia.mailing | number}}</td>
+                                        <td>{{dia.discado | number}}</td>
+                                        <td>{{dia.contato | number}}</td>
+                                        <td>{{dia.cpc | number}}</td>
+                                        <td>{{dia.cpca | number}}</td>
+                                        <td>{{dia.promessa | number}}</td>
+                                        <td>{{dia.contato / dia.discado | percentage:1}}</td>
+                                        <td>{{dia.cpc / dia.contato | percentage:1}}</td>
+                                        <td>{{dia.cpca / dia.cpc | percentage:1}}</td>
+                                        <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
+                                        <td>{{dia.falado / dia.logado | percentage:1}}</td>
+                                        <td>{{dia.mailing / dia.ad | number:0}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--GRAFICO DIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Gráfico por Dia</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <small class="pull-right">
+                            <select ng-model="grafico.indicador" ng-change="carregarGrafico()">
+                                <option value="hitrate">Hit Rate</option>
+                                <option value="txloc">Tx Loc</option>
+                                <option value="txapv">Tx Apv</option>
+                                <option value="conversao">Conversão</option>
+                                <option value="ocupacao">Ocupação</option>
+                                <option value="mailing">Mailing</option>
+                                <option value="discado">Discado</option>
+                                <option value="contato">Contato</option>
+                                <option value="cpc">CPC</option>
+                                <option value="cpca">CPCA</option>
+                                <option value="promessa">Promessa</option>
+                            </select>
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <high-chart series="dashboard.grafico" axis-Categories="dashboard.datas" plot-Options-Line-Data-Label="true"></high-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--TABLACAO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Finalizações</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <d-table class="table table-striped table-bordered" style="width:100%" dados="dashboard.tabulacao" paging="false" order="[[2,'desc']]"></d-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-vivo-producao-callflex', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Produção';
+        dadosPagina.descricao = 'Vivo Digital Callflex'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            filas: '',
+            segmentacoes: ''
+        };
+        $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.grafico = { indicador: 'hitrate' };
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/vivo/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanhas = r.data.Table;
+            $scope.dashFiltros.segmentacoes = r.data.Table1;
+        });
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/vivo/dashboard/callflex/producao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.dia = r.data.Table1;
+                $scope.dashboard.tabulacao = r.data.Table2;
+                $scope.dashboard.consolidado = r.data.Table3;
+
+                $scope.carregarGrafico();
+
+            });
+        }
+
+        // carrega o gráfico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.dia;
+            $scope.dashboard.datas = dados.map(obj => obj.data);
+            switch ($scope.grafico.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.contato * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                case 'ocupacao':
+                    $scope.dashboard.grafico = [{ name: 'ocupacao', data: dados.map(obj => (obj.falado / obj.ad / obj.logado * 100).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            }
+
+        }
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+</script>

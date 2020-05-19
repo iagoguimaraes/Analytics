@@ -732,5 +732,68 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        
+        [Route("dashboard/callflex/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime data = Convert.ToDateTime(form["data"]);
+                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+                DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", data.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentacoes", segmentacoes);
+                    parametros.Add("filas", filas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora_callflex", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/callflex/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducaoCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmentacoes = JsonConvert.DeserializeObject<DataTable>(form["segmentacoes"]);
+                DataTable filas = JsonConvert.DeserializeObject<DataTable>(form["filas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_VIVO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmentacoes", segmentacoes);
+                    parametros.Add("filas", filas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao_callflex", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }
