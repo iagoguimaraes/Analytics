@@ -392,15 +392,19 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardProjecao()
+        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
         {
             try
             {
+                DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_CPFL"))
                 {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    parametros.Add("carteira", carteira);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
@@ -409,6 +413,7 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
         #endregion
 
     }
