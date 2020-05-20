@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +15,30 @@ namespace Analytics.Controllers
     [RoutePrefix("api/omne")]
     public class OmneController : ApiController
     {
-      
+
+        [Route("webhook")]
+        [HttpPost]
+        public HttpResponseMessage WebHook(JObject json)
+        {
+            try
+            {                
+                string path = @"\\venezuela\BI\WebHook\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".json";
+                File.WriteAllText(path, json.ToString());
+                /*
+                using (SqlHelper sql = new SqlHelper("MAURITANIA", "DB_CALLFLEX"))
+                {
+                    string query = "";
+                    sql.ExecuteQueryDataTable(query);
+                }
+                */
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         [Route("filtros")]
         [HttpGet]
