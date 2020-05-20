@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div>
+    <!-- HEADER-->
+    <header class="page-header">
+        <div class="page-name">Teste Webhook</div>
+    </header>
+</div>
+
+<script>
+
+    let data = {
+        "bot_name": "",
+        "browser": "",
+        "city": "",
+        "country": "",
+        "date_entry": "",
+        "id": "",
+        "ip": "",
+        "lat_long": "",
+        "reference": "",
+        "so": ""
+    }
+
+    fetch('/api/omne/webhook', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+
+</script>

@@ -45,6 +45,16 @@ namespace Analytics
             oSqlConnection = new SqlConnection(ConnectionString);
         }
 
+        public SqlHelper(string server, string database)
+        {
+            this.server = server;
+            this.database = database;
+            user = "BUSINESSINTELLIGENCE";
+            pass = "3qBiI3Pl@n3E@M3nc0";
+
+            oSqlConnection = new SqlConnection(ConnectionString);
+        }
+
         #endregion
 
         #region Métodos
