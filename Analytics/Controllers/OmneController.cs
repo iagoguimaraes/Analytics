@@ -22,7 +22,7 @@ namespace Analytics.Controllers
         {
             try
             {                
-                string path = @"\\venezuela\BI\WebHook\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".json";
+                string path = @"\\venezuela\SMSAnalytics\WebHook\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".json";
                 File.WriteAllText(path, json.ToString());
                 /*
                 using (SqlHelper sql = new SqlHelper("MAURITANIA", "DB_CALLFLEX"))
