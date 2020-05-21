@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -21,16 +22,22 @@ namespace Analytics.Controllers
         public HttpResponseMessage WebHook(JObject json)
         {
             try
-            {                
-                string path = @"\\venezuela\SMSAnalytics\WebHook\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".json";
-                File.WriteAllText(path, json.ToString());
-                /*
+            {
+                Task task = new Task(() =>
+                {
+                    string path = @"\\venezuela\SMSAnalytics\WebHook\" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".json";
+                    File.WriteAllText(path, json.ToString());
+
+                    /*
                 using (SqlHelper sql = new SqlHelper("MAURITANIA", "DB_CALLFLEX"))
                 {
                     string query = "";
                     sql.ExecuteQueryDataTable(query);
                 }
                 */
+
+                });
+                task.Start();
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -101,7 +108,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable fila = JsonConvert.DeserializeObject<DataTable>(form["fila"]);
-  
+
 
                 using (SqlHelper sql = new SqlHelper("CUBO_OMNE"))
                 {
@@ -110,7 +117,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
                     parametros.Add("fila", fila);
-              
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);

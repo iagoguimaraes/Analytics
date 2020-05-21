@@ -124,8 +124,8 @@
                                 <span class="info-box-text">Turmas</span>
                                 <span class="info-box-number">{{dashboard.resumo.Treinamentos | number}}</span>
                                 @*<span class="progress-description">
-                                        {{dashboard.resumo.vlInclusao | currency:'R$'}}
-                                    </span>*@
+                                    {{dashboard.resumo.vlInclusao | currency:'R$'}}
+                                </span>*@
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -150,45 +150,48 @@
                             <!-- /.info-box-content -->
                         </div>
 
-                        <div class="info-box bg-blue">
+                        @*<div class="info-box bg-blue">
                             <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Nota Méd. Aproveitamento</span>
                                 <span class="info-box-number">{{dashboard.resumo.medAproveitamento | number:1}}</span>
                             </div>
-                            <!-- /.info-box-content -->
-                        </div>
+
+                        </div>*@
 
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-4 margin-bottom">
+            <div class="col-xs-12 col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <high-chart series="dashboard.tipotreinamento" type="pie" height="200" title-Text="Tipo de Treinamento" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                        <high-chart series="dashboard.tipotreinamento" type="pie" height="380" title-Text="Tipo de Treinamento" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-4 margin-bottom">
+            <div class="col-xs-12 col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <high-chart series="dashboard.canal" axis-Categories="dashboard.canais" title-Text="Canal" plot-Options-Column-Data-Label="true" height="200"></high-chart>
+                        <high-chart series="dashboard.canal" axis-Categories="dashboard.canais" title-Text="Canal" plot-Options-Column-Data-Label="true" height="380"></high-chart>
                     </div>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-md-8">
+        </div>
+
+        <!--GRAFICO INSTRUTOR-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <high-chart series="dashboard.instrutor" axis-Categories="dashboard.instrutores" title-Text="Instrutor" plot-Options-Column-Data-Label="true" height="220"></high-chart>
+                        <high-chart series="dashboard.instrutor" axis-Categories="dashboard.instrutores" title-Text="Instrutor" plot-Options-Column-Data-Label="true" height="300"></high-chart>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <!--GRAFICO DIA e TEMA-->
         <div class="row margin-bottom">
@@ -358,7 +361,7 @@
 
             $scope.dashboard.instrutores = dados.Table5.map(obj => obj.ds_instrutor);
             $scope.dashboard.instrutor = [{ name: indicador, type: "column", color: 'purple', data: dados.Table5.map(obj => (obj[indicador])) }];
-          
+
         }
 
         $scope.carregarGraficoMes = function () {
