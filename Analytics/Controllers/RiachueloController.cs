@@ -1401,6 +1401,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable bandeira = JsonConvert.DeserializeObject<DataTable>(form["bandeira"]);
                 DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
                 DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
@@ -1414,6 +1415,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("bandeira", bandeira);
                     parametros.Add("faixas", faixas);
                     parametros.Add("save", save);
                     parametros.Add("origem", origem);
