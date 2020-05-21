@@ -54,6 +54,12 @@
                                 </div>
                             </div>
 
+                            <!--RANKING-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Ranking</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.regra_pagamento" dados="dashFiltros.regra_pagamento" style="width:100%"></select2>
+                            </div>
+
                             <!--EMPRESA-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Empresa</label>
@@ -66,7 +72,7 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
                             </div>
 
-                            <!--CARTEIRA-->
+                            <!--BANDEIRA-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Bandeira</label>
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeira" dados="dashFiltros.bandeira" style="width:100%"></select2>
@@ -294,6 +300,7 @@
             save: '',
             origem: '',
             plano: '',
+            regra_pagamento: '',
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
@@ -316,6 +323,7 @@
             $scope.dashFiltros.save = r.data.Table9;
             $scope.dashFiltros.origem = r.data.Table11;
             $scope.dashFiltros.plano = r.data.Table12;
+            $scope.dashFiltros.regra_pagamento = r.data.Table17;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -340,7 +348,6 @@
                 $scope.carregarGrafico();
                 $scope.carregarGrafico2();
                 $scope.carregarGrafico3();
-                console.log()
             });
         }
 
