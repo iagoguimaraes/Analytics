@@ -67,6 +67,12 @@
                                     <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
                                 </div>
 
+                                <!--ATRASO-->
+                                <div class="form-group" ng-if="dashFiltros.id_class_carteira">
+                                    <label class="control-sidebar-subheading">Carteira</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.id_class_carteira" dados="dashFiltros.id_class_carteira" style="width:100%"></select2>
+                                </div>
+
                                 <!--BOTÃO-->
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -647,6 +653,7 @@
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             servidores: '',
             atrasos: '',
+            id_class_carteira: '',
         };
         $scope.dashFiltros = {
             servidores: [{ id: 1, servidor: 'DIGITAL' }, { id: 3, servidor: 'HUMANO' }]
@@ -663,6 +670,7 @@
             data: $scope.filtros,
         }).then(function success(r) {
             $scope.dashFiltros.atrasos = r.data.Table9;
+            $scope.dashFiltros.id_class_carteira = r.data.Table13;
         });
 
         $scope.carregarDashboard = function () {

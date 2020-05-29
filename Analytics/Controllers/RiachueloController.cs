@@ -738,6 +738,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable servidores = JsonConvert.DeserializeObject<DataTable>(form["servidores"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable id_class_carteira = JsonConvert.DeserializeObject<DataTable>(form["id_class_carteira"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -747,7 +748,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("servidores", servidores);
                     parametros.Add("atrasos", atrasos);
-
+                    parametros.Add("id_class_carteira", id_class_carteira);
+                    
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_portalnegocia", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
