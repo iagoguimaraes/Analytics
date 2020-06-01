@@ -218,18 +218,16 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xs-12 col-md-6 margin-bottom">
+                                <div class="col-xs-12 col-md-6 margin-bottom" ng-if="opcoes.status">
                                     <label>Responsável</label>
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-eye"></i>
                                         </div>
-                                        <select class="form-control" ng-model="novoprojeto.id_responsavel" ng-options="x.id as x.descricao for x in opcoes.responsavel">
-                                            <option value="">Selecione</option>
-                                        </select>
+                                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="novoprojeto.id_responsavel" dados="opcoes.responsavel"></select2>
                                     </div>
                                 </div>
-
+    
                                 <div class="col-xs-12 col-md-6 margin-bottom">
                                     <label>Solicitante</label>
                                     <div class="input-group">
@@ -392,17 +390,32 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xs-12 col-md-6 margin-bottom">
+                                            <!--
+                                                <div class="col-xs-12 col-md-6 margin-bottom">
+                                                    <label>Responsável</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-eye"></i>
+                                                        </div>
+                                                        <select class="form-control" ng-model="editprojeto.id_responsavel" ng-options="x.id as x.descricao for x in opcoes.responsavel">
+                                                            <option value="">Selecione</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            -->
+
+                                            
+                                            <div class="col-xs-12 col-md-6 margin-bottom" ng-if="opcoes.status">
                                                 <label>Responsável</label>
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-eye"></i>
                                                     </div>
-                                                    <select class="form-control" ng-model="editprojeto.id_responsavel" ng-options="x.id as x.descricao for x in opcoes.responsavel">
-                                                        <option value="">Selecione</option>
-                                                    </select>
+                                                    <select2 style="width: 100%" class="form-control" ng-model="editprojeto.id_responsavel" dados="opcoes.responsavel">
+                                                    </select2>
                                                 </div>
                                             </div>
+                                            
 
                                             <div class="col-xs-12 col-md-6 margin-bottom">
                                                 <label>Solicitante</label>
@@ -621,6 +634,7 @@
 
             });
         }
+
         $scope.carregarProjetos = function (id_projeto) {
             $http({
                 method: 'POST',
@@ -637,6 +651,7 @@
                     $scope.popularEdit(id_projeto);
             })
         }
+
         $scope.inserirProjeto = function ($event) {
 
             if (!$scope.novoprojeto.nome) {
