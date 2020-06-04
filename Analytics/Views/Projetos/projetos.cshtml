@@ -111,7 +111,7 @@
                                 <tr>
                                     <td>
                                         <i class="fa fa-eye"></i>
-                                        <span ng-bind="x.responsavel"></span>
+                                        <span ng-bind=" x.responsavel"></span>
                                     </td>
                                     <td>
                                         <i class="fa fa-user"></i>
@@ -390,20 +390,6 @@
                                                 </div>
                                             </div>
 
-                                            <!--
-                                                <div class="col-xs-12 col-md-6 margin-bottom">
-                                                    <label>Responsável</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-eye"></i>
-                                                        </div>
-                                                        <select class="form-control" ng-model="editprojeto.id_responsavel" ng-options="x.id as x.descricao for x in opcoes.responsavel">
-                                                            <option value="">Selecione</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            -->
-
                                             
                                             <div class="col-xs-12 col-md-6 margin-bottom" ng-if="opcoes.status">
                                                 <label>Responsável</label>
@@ -411,7 +397,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-eye"></i>
                                                     </div>
-                                                    <select2 style="width: 100%" class="form-control" ng-model="editprojeto.id_responsavel" dados="opcoes.responsavel">
+                                                    <select2   style="width: 100%" class="form-control" ng-model="editprojeto.id_responsavel" dados="opcoes.responsavel">
                                                     </select2>
                                                 </div>
                                             </div>
@@ -646,10 +632,17 @@
                 $scope.lista.comentarios = r.data.Table2;
                 $scope.lista.status = r.status;
 
+                //separar os dados de uma única string
+                //for (let i = 0; i < $scope.lista.dados.length; i++) {
+                //    $scope.lista.dados[i].id_responsavel = $scope.lista.dados[i].id_responsavel.split(',');
+                //    $scope.lista.dados[i].responsavel = $scope.lista.dados[i].responsavel.split(',');
+                //};
+
                 // se precisar atualizar algum projeto em visualização
                 if (id_projeto)
                     $scope.popularEdit(id_projeto);
             })
+            
         }
 
         $scope.inserirProjeto = function ($event) {
@@ -711,12 +704,12 @@
             $('[ng-model="editprojeto.prazo"]').datepicker('setDate', prj.prazo);
             $('[ng-model="editprojeto.dtini"]').datepicker('setDate', prj.dtini);
             $('[ng-model="editprojeto.dtfim"]').datepicker('setDate', prj.dtfim);
-
+            
             $scope.editprojeto.etapas_ = $scope.lista.etapas.filter(x => x.id_projeto == prj.id_projeto);
             $scope.editprojeto.comentarios_ = $scope.lista.comentarios.filter(x => x.id_projeto == prj.id_projeto);
         }
         $scope.editarProjeto = function ($event) {
-
+            
             if (!$scope.editprojeto.nome) {
                 $('[ng-model="editprojeto.nome"]').focus();
                 $event.stopPropagation();
