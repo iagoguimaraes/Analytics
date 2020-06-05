@@ -183,7 +183,7 @@ namespace Analytics.Controllers
                 string nome = form["nome"];
                 string objetivo = form["objetivo"];
                 int id_status = Convert.ToInt32(form["id_status"]);
-                int id_responsavel = Convert.ToInt32(form["id_responsavel"]);
+                DataTable id_responsavel = JsonConvert.DeserializeObject<DataTable>(form["id_responsavel"]);
                 int id_solicitante = Convert.ToInt32(form["id_solicitante"]);
                 int id_departamento = Convert.ToInt32(form["id_departamento"]);
                 int id_categoria = Convert.ToInt32(form["id_categoria"]);

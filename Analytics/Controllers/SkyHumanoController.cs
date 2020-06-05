@@ -50,6 +50,7 @@ namespace Analytics.Controllers
                 int horafim = Convert.ToInt16(form["horafim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
+                DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable tenure = JsonConvert.DeserializeObject<DataTable>(form["tenure"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
@@ -62,6 +63,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteira", carteira);
                     parametros.Add("segmentacao", segmentacao);
+                    parametros.Add("equipe", equipe);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("tenure", tenure);
                     parametros.Add("horaini", horaini);
