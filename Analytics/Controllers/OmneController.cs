@@ -132,7 +132,7 @@ namespace Analytics.Controllers
                         string datetime = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                         string path = @"\\venezuela\SMSAnalytics\WebHook\" + datetime + ".json";
                         File.WriteAllText(path, json.ToString());
-                        path = @"\\venezuela\SMSAnalytics\WebHook2\" + datetime + ".txt";
+                        path = @"\\venezuela\SMSAnalytics\WebHook\" + datetime + ".txt";
                         File.WriteAllText(path, e.Message);
                     }
                 });
