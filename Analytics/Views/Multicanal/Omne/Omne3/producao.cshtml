@@ -54,6 +54,12 @@
                                 </div>
                             </div>
 
+                            <!--FILA-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Campanhas</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.campanha" dados="dashFiltros.campanha" style="width:100%"></select2>
+                            </div>
+
                             <!--BOTÃO-->
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()">Carregar Dados</button>
@@ -241,10 +247,23 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            campanha: ''
         };
 
-        $scope.dashboard = {};
+        // FILTROS
+        $scope.dashFiltros = {};
+        $http({
+            method: 'GET',
+            url: "/api/omne/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.campanha = r.data.Table2;
 
+        });
+
+        // DASHBOARD
+        $scope.dashboard = {};
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',

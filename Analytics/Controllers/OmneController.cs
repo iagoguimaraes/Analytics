@@ -239,6 +239,7 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable campanha = JsonConvert.DeserializeObject<DataTable>(form["campanha"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_OMNE"))
                 {
@@ -246,6 +247,7 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
+                    parametros.Add("campanha", campanha);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_omne3_producao", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -256,5 +258,6 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+    
     }
 }
