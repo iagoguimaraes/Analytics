@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Services.Description;
@@ -277,16 +278,33 @@ namespace Analytics.Controllers
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardDisparos(FormDataCollection form)
+        public async Task<HttpResponseMessage> DashboardDisparos(FormDataCollection form)
+        {
+            try
+            {
+                string WorkspaceId = "544d9d10-0068-480c-a7f6-6bf26c2c6279";
+                string ReportId = "1c0c8b70-75aa-4298-a063-1a9fa96cbc6f";
+
+                PowerBI powerbi = new PowerBI();
+                EmbedConfig dashboard = await powerbi.CarregarDashboard(WorkspaceId, ReportId);
+                return Request.CreateResponse(HttpStatusCode.OK, dashboard);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/disparos/extrair")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardDisparosExtrair(FormDataCollection form)
         {
             try
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
-                DataTable tipobilling = JsonConvert.DeserializeObject<DataTable>(form["tipobilling"]);
-                DataTable aging = JsonConvert.DeserializeObject<DataTable>(form["aging"]);
-                DataTable segmentacao = JsonConvert.DeserializeObject<DataTable>(form["segmentacao"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_VIVO_HUMANO_NEW"))
                 {
@@ -294,10 +312,6 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    parametros.Add("empresa", empresa);
-                    parametros.Add("tipobilling", tipobilling);
-                    parametros.Add("aging", aging);
-                    parametros.Add("segmentacao", segmentacao);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_disparos", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
