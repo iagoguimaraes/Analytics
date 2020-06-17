@@ -82,10 +82,16 @@ namespace Analytics.Controllers
                             registro.Add("attendance_id", obj.Value<string>("attendance_id"));
                             registro.Add("bot_name", obj.Value<string>("bot_name"));
                             registro.Add("date_entry", obj.Value<string>("date_entry"));
-                            registro.Add("manifestation", obj.Value<string>("manifestation"));
+
+                            string manifestation = obj.Value<string>("manifestation");
+                            if (manifestation.Length > 150) manifestation = manifestation.Substring(0,150);
+                            registro.Add("manifestation", manifestation);
+
                             registro.Add("occurrence", obj.Value<string>("occurrence"));
                             registro.Add("occurrence_group", obj.Value<string>("occurrence_group"));
                             registro.Add("user", obj.Value<string>("user"));
+
+                            
                         }
                         else if (type == "visitors")
                         {
