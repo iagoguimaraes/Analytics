@@ -52,31 +52,58 @@
                                 <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <!--RANKING-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Ranking</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.ranking" dados="dashFiltros.ranking" style="width:100%"></select2>
+                                </div>
 
-                        <!--CARTEIRA-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Carteiras</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                <!--EMPRESA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Empresa</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresa" dados="dashFiltros.empresa" style="width:100%"></select2>
+                                </div>
+
+                                <!--CARTEIRA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Carteiras</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                                </div>
+
+                                <!--BANDEIRA-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Bandeira</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeira" dados="dashFiltros.bandeira" style="width:100%"></select2>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6">
+                                <!--FAIXAS-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Faixas</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
+                                </div>
+
+                                <!--BASE SAVE-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Segmentação</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.save" dados="dashFiltros.save" style="width:100%"></select2>
+                                </div>
+
+                                <!--ORIGEM DO PAGAMENTO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Origem</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem" style="width:100%"></select2>
+                                </div>
+
+                                <!--TIPO DO PAGAMENTO-->
+                                <div class="form-group">
+                                    <label class="control-sidebar-subheading">Tipo de Plano</label>
+                                    <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
+                                </div>
+                            </div>
                         </div>
-
-                        <!--FAIXAS-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Faixas</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixas" dados="dashFiltros.faixas" style="width:100%"></select2>
-                        </div>
-
-                        <!--ORIGEM DO PAGAMENTO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Origem</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.origem" dados="dashFiltros.origem" style="width:100%"></select2>
-                        </div>
-
-                        <!--TIPO DO PAGAMENTO-->
-                        <div class="form-group">
-                            <label class="control-sidebar-subheading">Tipo de Plano</label>
-                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.plano" dados="dashFiltros.plano" style="width:100%"></select2>
-                        </div>
-
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -121,7 +148,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- PROJEÇÃO -->
             <div class="col-xs-12 col-md-4 col-xs-offset-0 col-md-offset-4">
                 <div class="small-box bg-green">
@@ -271,8 +298,12 @@
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            ranking: '',
+            empresa: '',
             carteiras: '',
+            bandeira: '',
             faixas: '',
+            save: '',
             origem: '',
             plano: '',
         };
@@ -290,8 +321,12 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.ranking = data.Table9;
+            $scope.dashFiltros.empresa = data.Table10;
             $scope.dashFiltros.carteiras = data.Table2;
+            $scope.dashFiltros.bandeira = data.Table;
             $scope.dashFiltros.faixas = data.Table1;
+            $scope.dashFiltros.save = data.Table8;
             $scope.dashFiltros.origem = r.data.Table5;
             $scope.dashFiltros.plano = r.data.Table6;
         });

@@ -1904,8 +1904,12 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable ranking = JsonConvert.DeserializeObject<DataTable>(form["ranking"]);
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable bandeira = JsonConvert.DeserializeObject<DataTable>(form["bandeira"]);
                 DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
                 DataTable origem = JsonConvert.DeserializeObject<DataTable>(form["origem"]);
                 DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
 
@@ -1915,8 +1919,12 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("ranking", ranking);
+                    parametros.Add("empresa", empresa);
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("bandeira", bandeira);
                     parametros.Add("faixas", faixas);
+                    parametros.Add("save", save);
                     parametros.Add("origem", origem);
                     parametros.Add("plano", plano);
 
