@@ -69,10 +69,12 @@ namespace Analytics.Controllers
                                 kv.Add("origin", msg.Value<string>("origin"));
                                 kv.Add("type", msg.Value<string>("type"));
                                 kv.Add("channel", msg.Value<string>("channel"));
-                                kv.Add("message", msg.Value<string>("message"));
 
-                                if (kv["message"].Length > 1000) kv["message"] = "";
-
+                                string message = msg.Value<string>("message");
+                                if (message.Length > 1000) message = "";
+                                message = message.Replace("'", "");
+                                kv.Add("message", message);                            
+                               
                                 dados.Add(kv);
                             }
                         }
@@ -85,6 +87,7 @@ namespace Analytics.Controllers
 
                             string manifestation = obj.Value<string>("manifestation");
                             if (manifestation.Length > 150) manifestation = manifestation.Substring(0,150);
+                            manifestation = manifestation.Replace("'", "");
                             registro.Add("manifestation", manifestation);
 
                             registro.Add("occurrence", obj.Value<string>("occurrence"));
