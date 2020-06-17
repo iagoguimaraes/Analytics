@@ -162,12 +162,24 @@
             </div>
         </div>
 
+        <!--ANALISE POR DIA-->
         <div class="row margin-bottom">
-            <!--ANALISE POR DIA-->
-            <div class="col-xs-12 col-md-6 margin-bottom">
+
+            <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-body">
                         <high-charts config="dashboard.graficoDia" style="width: 100%; height: 300px"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <!--BOT x HUMANO-->
+            <div class="col-xs-12 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <high-charts config="dashboard.botXhumano" style="width: 100%; height: 300px"></high-charts>
                     </div>
                 </div>
             </div>
@@ -182,7 +194,7 @@
         </div>
 
         <!--DIAGRAMA PORTAL-->
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" ng-if="dashboard.portal.length > 0">
             <div class="col-xs-12 margin-bottom">
                 <div class="card">
                     <div class="card-header">
@@ -276,13 +288,13 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.portal = r.data.Table3;
                 $scope.dashboard.ocorrencia = r.data.Table4;
-             
+
                 $scope.dashboard.graficoCampanha = {
                     chart: {
                         type: 'column'
                     },
                     title: {
-                        text: 'Campanha'
+                        text: 'Atendimentos por campanha'
                     },
                     yAxis: {
                         title: '',
@@ -313,7 +325,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Dia a Dia'
+                        text: 'Atendimentos por dia'
                     },
                     yAxis: {
                         title: '',
@@ -337,6 +349,37 @@
                         { name: 'Portal', data: r.data.Table2.map(obj => obj.atendimento_portal) },
                         { name: 'Whatsapp', data: r.data.Table2.map(obj => obj.atendimento_zap) },
                     ]
+                };
+                $scope.dashboard.botXhumano = {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Negociação Bot x Humano'
+                    },
+                    yAxis: {
+                        title: '',
+                    },
+                    xAxis: {
+                        categories: r.data.Table5.map(obj => obj['ds_grupo'])
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: {
+                        enabled: false,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [
+                        { name: 'Negociação', data: r.data.Table5.map(obj => obj.qtd) },
+                    ]
+
                 };
 
                 
