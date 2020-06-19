@@ -19,11 +19,14 @@
                 <label class="btn btn-info" ng-click="carregarDashboard('migracao')">
                     <input type="radio"> Migração
                 </label>
+                <label class="btn btn-info" ng-click="carregarDashboard('posfamilia')">
+                    <input type="radio"> Pós Família
+                </label>
             </div>
         </div>
 
-        <!--LAYOUT PARA MIGRACAO-->
-        <div ng-if="dashboard.campanha == 'migracao'">
+        <!--LAYOUT PARA MIGRACAO/POS FAMILIA-->
+        <div ng-if="dashboard.campanha == 'migracao' || dashboard.campanha == 'posfamilia'">
             <div class="row margin-bottom">
                 <!--HOJE-->
                 <div class="col-xs-4">
@@ -146,7 +149,7 @@
         </div>
 
         <!--LAYOUT PARA TELEVENDAS-->
-        <div ng-if="dashboard.campanha != 'migracao'">
+        <div ng-if="dashboard.campanha == 'televendas'">
             <div class="row margin-bottom text-center">
                 <label>Seleção de Campanha:</label>
                 <select ng-model="dashboard.campanha_tele" ng-change="carregarDashboard('televendas')">
@@ -314,7 +317,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: campanha == 'migracao' ? 'Migrações por Plano' : 'Gross por Plano'
+                        text: campanha == 'televendas' ? 'Gross por Plano' : 'Migrações por Plano'
                     },
                     yAxis: {
                         visible: false,
@@ -338,7 +341,7 @@
                     credits: {
                         enabled: false
                     },
-                    series: [{ name: 'Ativação', data: r.data.Table1.map(obj => ({ name: obj.plano, y: obj[campanha == 'migracao' ? 'migracao' : 'ativacao'] })) }]
+                    series: [{ name: 'Ativação', data: r.data.Table1.map(obj => ({ name: obj.plano, y: obj[campanha == 'televendas' ? 'ativacao' : 'migracao'] })) }]
                 };
                 $scope.dashboard.backoffice = {
                     chart: {

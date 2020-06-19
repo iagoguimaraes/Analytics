@@ -241,6 +241,66 @@
             </div>
         </div>
 
+        <!--LOTE/OPERADOR-->
+        <div class="row">
+            <div class="col-xs-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Análise por Lote</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.lote">
+                                <thead>
+                                    <tr>
+                                        <th>Operador</th>
+                                        <th>#</th>
+                                        <th>Acionamento</th>
+                                        <th>Contato</th>
+                                        <th>Efetivo</th>
+                                        <th>Recusa</th>
+                                        <th>Venda</th>
+                                        <th>% Recusa</th>
+                                        <th>% Venda</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="c in dashboard.lote | groupBy: 'lote'">
+
+                                    <tr class="text-bold">
+                                        <td class="text-bold">
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{c[0].lote}}
+                                        </td>
+                                        <td>{{c.length}}</td>
+                                        <td>{{c | sumByColumn: 'qtd' | number}}</td>
+                                        <td>{{c | sumByColumn: 'contato'| number}}</td>
+                                        <td>{{c | sumByColumn: 'efetivo'| number}}</td>
+                                        <td>{{c | sumByColumn: 'recusa'| number}}</td>
+                                        <td>{{c | sumByColumn: 'venda'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'recusa':'efetivo' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'venda':'efetivo' | percentage:1}}</td>
+                                    </tr>
+
+                                    <tr ng-repeat="p in c" ng-show="showTbody">
+                                        <td colspan="2">{{p.operador}}</td>
+                                        <td>{{p.qtd | number}}</td>
+                                        <td>{{p.contato | number}}</td>
+                                        <td>{{p.efetivo | number}}</td>
+                                        <td>{{p.recusa | number}}</td>
+                                        <td>{{p.venda | number}}</td>
+                                        <td>{{p.recusa / p.efetivo | percentage:1}}</td>
+                                        <td>{{p.venda / p.efetivo | percentage:1}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--RESULTADO E STATUS-->
         <div class="row margin-bottom">
             <div class="col-xs-12 col-md-6 margin-bottom">
@@ -291,6 +351,7 @@
 
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.operacao = r.data.Table2;
+                $scope.dashboard.lote = r.data.Table5;
 
                 $scope.carregarGraficoHora();
                 $scope.carregarGraficoResultado();
