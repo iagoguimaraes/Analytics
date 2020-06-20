@@ -59,9 +59,9 @@
 
         // filtros iniciais
         let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+        newdate = newdate.setDate(newdate.getDate() - 1);
         $scope.filtros = {
-            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtini: $filter('date')(newdate, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 

@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.PowerBI.Api.V2.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Microsoft.PowerBI.Api.Models;
+using System;
+
 
 namespace Analytics
 {
@@ -18,8 +16,8 @@ namespace Analytics
         {
             get
             {
-                var minutesToExpiration = EmbedToken.Expiration.Value - DateTime.UtcNow;
-                return minutesToExpiration.Minutes;
+                var minutesToExpiration = EmbedToken.Expiration - DateTime.UtcNow;
+                return (int)minutesToExpiration.TotalMinutes;
             }
         }
 

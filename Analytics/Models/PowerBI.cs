@@ -1,44 +1,69 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.PowerBI.Api.V2;
-using Microsoft.PowerBI.Api.V2.Models;
+﻿//using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.PowerBI.Api;
+using Microsoft.PowerBI.Api.Models;
 using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Identity.Client;
+using System.Security;
 
 namespace Analytics
 {
     public class PowerBI
     {
-        public async Task<EmbedConfig> CarregarDashboard(string WorkspaceId, string ReportId)
+        private static Guid GetParamGuid(string param)
         {
+            Guid paramGuid = Guid.Empty;
+            Guid.TryParse(param, out paramGuid);
+            return paramGuid;
+        }
+
+        public async Task<EmbedConfig> CarregarDashboard(string WorkspaceId_, string ReportId_)
+        {
+            Guid WorkspaceId = GetParamGuid(WorkspaceId_);
+            Guid ReportId = GetParamGuid(ReportId_);
+
             // variáveis
             string Username = "powerbi@creditcash.com.br";
             string Password = "BICr3d!tC@s#LTD4";
-            string AuthorityUrl = "https://login.microsoftonline.com/common/oauth2/authorize";
-            string ResourceUrl = "https://analysis.windows.net/powerbi/api";
-            string ApplicationId = "328e3482-e5a3-45da-b48a-d1f391f57c58";
-            string ApiUrl = "https://api.powerbi.com";
-            //string WorkspaceId = "544d9d10-0068-480c-a7f6-6bf26c2c6279";
-            //string ReportId = "0baf7dd7-17fb-4545-8b8c-95c0580a7e70";
+            string AuthorityUrl = "https://login.microsoftonline.com/organizations/";
+            string ApplicationId = "53505ee5-4b38-4381-a6c4-847ff6373fae";
+            string ApiUrl = "https://api.powerbi.com/";
             string username = null;
             string roles = null;
+            string[] Scope = new string[] { "https://analysis.windows.net/powerbi/api/.default" };
 
-            var result = new EmbedConfig();
 
-            result = new EmbedConfig { Username = username, Roles = roles };
+            var m_embedConfig = new EmbedConfig();
+            m_embedConfig = new EmbedConfig { Username = username, Roles = roles };
 
-            // Create a user password cradentials.
-            var credential = new UserPasswordCredential(Username, Password);
-
-            // Authenticate using created credentials
-            var authenticationContext = new AuthenticationContext(AuthorityUrl);
-            var authenticationResult = await authenticationContext.AcquireTokenAsync(ResourceUrl, ApplicationId, credential);
-
-            if (authenticationResult == null)
-                throw new Exception("Falha na autenticação do PowerBI");
+            AuthenticationResult authenticationResult = null;
+            IPublicClientApplication clientApp = PublicClientApplicationBuilder.Create(ApplicationId).WithAuthority(AuthorityUrl).Build();
+            var userAccounts = await clientApp.GetAccountsAsync();
+            try
+            {
+                
+                   authenticationResult = await clientApp.AcquireTokenSilent(Scope, userAccounts.FirstOrDefault()).ExecuteAsync();
+            }
+            catch (MsalUiRequiredException)
+            {
+                try
+                {
+                    SecureString password = new SecureString();
+                    foreach (var key in Password)
+                    {
+                        password.AppendChar(key);
+                    }
+                    authenticationResult = await clientApp.AcquireTokenByUsernamePassword(Scope, Username, password).ExecuteAsync();
+                }
+                catch (MsalException e)
+                {
+                    throw;
+                }
+            }
 
             var tokenCredentials = new TokenCredentials(authenticationResult.AccessToken, "Bearer");
 
@@ -50,13 +75,14 @@ namespace Analytics
 
                 // No reports retrieved for the given workspace.
                 if (reports.Value.Count() == 0)
-                    throw new Exception("Não foram encontrados relatórios neste espaço de trabalho");
-
-                Report report;
-                if (string.IsNullOrWhiteSpace(ReportId))
                 {
-                    // Get the first report in the workspace.
-                    report = reports.Value.FirstOrDefault();
+                    m_embedConfig.ErrorMessage = "No reports were found in the workspace";
+                }
+
+                Report report = null;
+                if (ReportId == Guid.Empty)
+                {
+                    m_embedConfig.ErrorMessage = "Please provide a report ID for the selected workspace. Make sure that the report ID is valid.";
                 }
                 else
                 {
@@ -64,12 +90,13 @@ namespace Analytics
                 }
 
                 if (report == null)
-                    throw new Exception("ReportID inválido");
+                {
+                    m_embedConfig.ErrorMessage = "No report with the given ID was found in the workspace. Make sure that the report ID is valid.";
+                }
 
-
-                var datasets = await client.Datasets.GetDatasetByIdInGroupAsync(WorkspaceId, report.DatasetId);
-                result.IsEffectiveIdentityRequired = datasets.IsEffectiveIdentityRequired;
-                result.IsEffectiveIdentityRolesRequired = datasets.IsEffectiveIdentityRolesRequired;
+                var datasets = await client.Datasets.GetDatasetInGroupAsync(WorkspaceId, report.DatasetId);
+                m_embedConfig.IsEffectiveIdentityRequired = datasets.IsEffectiveIdentityRequired;
+                m_embedConfig.IsEffectiveIdentityRolesRequired = datasets.IsEffectiveIdentityRolesRequired;
                 GenerateTokenRequest generateTokenRequestParameters;
                 // This is how you create embed token with effective identities
                 if (!string.IsNullOrWhiteSpace(username))
@@ -93,14 +120,17 @@ namespace Analytics
                 var tokenResponse = await client.Reports.GenerateTokenInGroupAsync(WorkspaceId, report.Id, generateTokenRequestParameters);
 
                 if (tokenResponse == null)
-                    throw new Exception("Falha ao gerar o embed token");
+                {
+                    m_embedConfig.ErrorMessage = "Failed to generate embed token.";
+                }
 
                 // Generate Embed Configuration.
-                result.EmbedToken = tokenResponse;
-                result.EmbedUrl = report.EmbedUrl;
-                result.Id = report.Id;
+                m_embedConfig.EmbedToken = tokenResponse;
+                m_embedConfig.EmbedUrl = report.EmbedUrl;
+                m_embedConfig.Id = report.Id.ToString();
 
-                return result;
+
+                return m_embedConfig;
             }
         }
     }

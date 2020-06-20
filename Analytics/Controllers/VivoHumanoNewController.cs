@@ -295,6 +295,7 @@ namespace Analytics.Controllers
             }
         }
 
+
         [Route("dashboard/disparos/extrair")]
         [HttpPost]
         [Autorizar]
