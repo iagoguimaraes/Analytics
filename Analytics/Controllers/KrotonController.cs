@@ -51,7 +51,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
+                //DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
                 int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
@@ -61,7 +61,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("statusAluno", statusAluno);
+                    //parametros.Add("statusAluno", statusAluno);
                     parametros.Add("empresa", id_empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
@@ -85,7 +85,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
+                //DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
                 int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_KROTON"))
@@ -95,7 +95,7 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("statusAluno", statusAluno);
+                    //parametros.Add("statusAluno", statusAluno);
                     parametros.Add("empresa", id_empresa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);

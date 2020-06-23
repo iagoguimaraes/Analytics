@@ -58,11 +58,11 @@
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
                         </div>
 
-                        <!--STATUS-->
+                        <!--STATUS
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Status Aluno</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.statusAluno" dados="dashFiltros.statusAluno"></select2>
-                        </div>
+                        </div>-->
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -186,6 +186,20 @@
                                         <td>{{dia.promessa / dia.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.qtd_discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.qtd_discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -198,7 +212,7 @@
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Status do Aluno</span>
+                        <span class="card-header-title">Análise por Carteira</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
@@ -208,7 +222,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.statusAluno">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.carteira">
                                 <thead>
                                     <tr>
                                         <th>Status</th>
@@ -224,19 +238,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="s in dashboard.statusAluno">
-                                        <td>{{s.status_aluno | date : 'dd/MM/yyyy'}}</td>
-                                        <td>{{s.qtd_discado | number}}</td>
-                                        <td>{{s.contato | number}}</td>
-                                        <td>{{s.cpc | number}}</td>
-                                        <td>{{s.cpca | number}}</td>
-                                        <td>{{s.promessa | number}}</td>
-                                        <td>{{s.contato / s.qtd_discado | percentage:1}}</td>
-                                        <td>{{s.cpc / s.contato | percentage:1}}</td>
-                                        <td>{{s.cpca / s.cpc | percentage:1}}</td>
-                                        <td>{{s.promessa / s.cpca | percentage:1}}</td>
+                                    <tr ng-repeat="c in dashboard.carteira">
+                                        <td>{{c.carteira | date : 'dd/MM/yyyy'}}</td>
+                                        <td>{{c.qtd_discado | number}}</td>
+                                        <td>{{c.contato | number}}</td>
+                                        <td>{{c.cpc | number}}</td>
+                                        <td>{{c.cpca | number}}</td>
+                                        <td>{{c.promessa | number}}</td>
+                                        <td>{{c.contato / c.qtd_discado | percentage:1}}</td>
+                                        <td>{{c.cpc / c.contato | percentage:1}}</td>
+                                        <td>{{c.cpca / c.cpc | percentage:1}}</td>
+                                        <td>{{c.promessa / c.cpca | percentage:1}}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>{{dashboard.resumo.qtd_discado | number}}</th>
+                                        <th>{{dashboard.resumo.contato | number}}</th>
+                                        <th>{{dashboard.resumo.cpc | number}}</th>
+                                        <th>{{dashboard.resumo.cpca | number}}</th>
+                                        <th>{{dashboard.resumo.promessa | number}}</th>
+                                        <th>{{dashboard.resumo.contato / dashboard.resumo.qtd_discado | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
+                                        <th>{{dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1}}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -307,7 +335,7 @@
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteiras: '',
-            statusAluno: '',
+            //statusAluno: '',
             id_empresa: '2', // Id Empresa - Kroton Inativos
         };
         $scope.dashFiltros = {};
@@ -323,7 +351,7 @@
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = r.data.Table;
-            $scope.dashFiltros.statusAluno = r.data.Table1;
+            //$scope.dashFiltros.statusAluno = r.data.Table1;
         });
 
         // obtem filtros do escopo e carrega os dados do dashboard
@@ -332,14 +360,14 @@
                 method: 'POST',
                 url: "/api/kroton/dashboard/producao",
                 data: $scope.filtros,
-            }).then(function success(r) {              
+            }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
                 let data = r.data;
                 $scope.dashboard.resumo = data.Table[0];
                 $scope.dashboard.dia = data.Table1;
-                $scope.dashboard.statusAluno = data.Table2;
+                $scope.dashboard.carteira = data.Table2;
                 $scope.dashboard.ocorrencia = data.Table3;
 
                 $scope.carregarGrafico();
