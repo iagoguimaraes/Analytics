@@ -57,6 +57,18 @@
                             <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.filas" dados="dashFiltros.filas"></select2>
                         </div>
 
+                        <!--REGIONAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Regional</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.regional" dados="dashFiltros.regional"></select2>
+                        </div>
+
+                        <!--MODALIDADE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Modalidade</label>
+                            <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.modalidade" dados="dashFiltros.modalidade"></select2>
+                        </div>
+
                         <!--BOTÃO-->
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
@@ -401,6 +413,8 @@
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
             filas: '',
+            regional: '',
+            modalidade:'',
         };
 
         $scope.dashboard = {};
@@ -417,6 +431,8 @@
 
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.filas = r.data.Table1;
+            $scope.dashFiltros.regional = r.data.Table2;
+            $scope.dashFiltros.modalidade = r.data.Table3;
 
         });
 
