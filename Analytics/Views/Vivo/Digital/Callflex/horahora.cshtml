@@ -72,7 +72,13 @@
             </div>
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.mailing | number"></h5>
+                            <span class="description-text">Mailing</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado | megaNumber"></h5>
                             <span class="description-text">Discado</span>
@@ -105,7 +111,13 @@
                 </div>
 
                 <div class="row" style="background-color: #7e2595; color: white; opacity: 0.8">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.penetrado / dashboard.resumo.mailing | percentage: 1"></h5>
+                            <span class="description-text">Penetração</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.ad | number"></h5>
                             <span class="description-text">AD</span>
@@ -139,7 +151,13 @@
 
 
                 <div class="row" style="background-color: #f59120; color:white; opacity: 0.8">
-                    <div class="col-sm-2 col-sm-offset-1 border-right">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.mailing_ad | number"></h5>
+                            <span class="description-text">Mailing AD</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.discado_ad | megaNumber"></h5>
                             <span class="description-text">Discado AD</span>
@@ -196,7 +214,10 @@
                                     <tr>
                                         <th>Segmentação</th>
                                         <th>AD</th>
+                                        <th>Mailing</th>
                                         <th>Discado</th>
+                                        <th>Penetrado</th>
+                                        <th>SPIN</th>
                                         <th>Contato</th>
                                         <th>CPC</th>
                                         <th>CPCA</th>
@@ -206,6 +227,7 @@
                                         <th>TxApv</th>
                                         <th>Conversão</th>
                                         <th>Ocupação</th>
+                                        <th>Mailing AD</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="c in dashboard.produto | groupBy: 'carteira'">
@@ -216,7 +238,10 @@
                                             {{c[0].carteira}}
                                         </td>
                                         <td>{{c | sumByColumn: 'ad' | number}}</td>
+                                        <td>{{c | sumByColumn: 'mailing' | number}}</td>
                                         <td>{{c | sumByColumn: 'discado'| number}}</td>
+                                        <td>{{c | divideSumColumns: 'penetrado':'mailing' | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'discado':'mailing' | number:1}}</td>
                                         <td>{{c | sumByColumn: 'contato'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpca'| number}}</td>
@@ -226,12 +251,17 @@
                                         <td>{{c | divideSumColumns: 'cpca':'cpc' | percentage:1}}</td>
                                         <td>{{c | divideSumColumns: 'promessa':'cpca' | percentage:1}}</td>
                                         <td>{{(c | divideSumColumns: 'falado':'ad') / c[0].logado | percentage:1}}</td>
+                                        <td>{{c | divideSumColumns: 'mailing':'ad' | number:1}}</td>
+
                                     </tr>
 
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.produto}}</td>
                                         <td>{{p.ad | number}}</td>
+                                        <td>{{p.mailing | number}}</td>
                                         <td>{{p.discado | number}}</td>
+                                        <td>{{p.penetrado / p.mailing | percentage:1}}</td>
+                                        <td>{{p.discado / p.mailing | number:1}}</td>
                                         <td>{{p.contato | number}}</td>
                                         <td>{{p.cpc | number}}</td>
                                         <td>{{p.cpca | number}}</td>
@@ -241,6 +271,7 @@
                                         <td>{{p.cpca / p.cpc | percentage:1}}</td>
                                         <td>{{p.promessa / p.cpca | percentage:1}}</td>
                                         <td>{{p.falado / p.ad / p.logado | percentage:1}}</td>
+                                        <td>{{p.mailing / p.ad | number:1}}</td>
                                     </tr>
 
                                 </tbody>
@@ -327,10 +358,16 @@
             <div class="col-xs-12 col-md-6 margin-bottom">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-header-title">Funil</span>
+                        <span class="card-header-title">Funil Mailing</span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
                         </div>
+                        <small class="pull-right">
+                            <label>Mailing: </label>
+                            <select ng-change="carregarFunil()" ng-model="funil.mailing">
+                                <option ng-repeat="cc in dashboard.listMailing" value="{{cc.id_mailing}}">{{cc.ds_mailing}}</option>
+                            </select>
+                        </small>
                     </div>
                     <div class="card-body">
                         <canvasjs config="dashboard.funil" style="width: 100%; height: 400px"></canvasjs>
@@ -409,6 +446,7 @@
         };
         $scope.dashFiltros = {};
         $scope.dashboard = {};
+        $scope.funil = { mailing: '' };
         $scope.grafico = { indicador: 'hitrate' };
         $scope.diagrama = { dados: [], navegacoes: [], navegacao: null };
         $scope.showTbody = false;
@@ -436,25 +474,15 @@
                 $scope.dashboard.resumo = r.data.Table[0];
                 $scope.dashboard.produto = r.data.Table1;
                 $scope.dashboard.horahora = r.data.Table2;
-
                 $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '60%', data: r.data.Table3.map(obj => ({ name: obj.tabulacao, y: obj.quantidade })) }];
 
-                let resumo = r.data.Table[0];
-                $scope.dashboard.funil = {
-                    animationEnabled: true,
-                    data: [{
-                        type: "funnel",
-                        toolTipContent: "<b>{label}</b>: {y} <b>({percentage}%)</b>",
-                        indexLabel: "{label} ({percentage}%)",
-                        dataPoints: [
-                            { y: resumo.contato, label: "Contato", percentage: 100 },
-                            { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1 },
-                            { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1 },
-                            { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1 },
-                        ]
-                    }]
-                };
+                $scope.dashboard.listMailing = alasql('select distinct id_mailing, ds_mailing FROM ?', [r.data.Table4]);
 
+                $scope.dashboard.mailing = r.data.Table4;
+                $scope.funil.mailing = $scope.dashboard.listMailing[0].id_mailing;
+
+
+                $scope.carregarFunil();
                 $scope.carregarGrafico();
             });
         }
@@ -485,6 +513,28 @@
 
         }
 
+        $scope.carregarFunil = function () {
+
+            let mailing = $scope.funil.mailing;
+            
+            let resumo = alasql('select * FROM ? where id_mailing in ( ' + mailing + ')', [$scope.dashboard.mailing])[0];
+            $scope.dashboard.funil = {
+                animationEnabled: true,  
+                data: [{
+                    type: "funnel",
+                    toolTipContent: "<b>{label}</b>: {y} <b>({percentage}%)</b>",
+                    indexLabel: "{label} ({percentage}%)",
+                    dataPoints: [
+                        { y: resumo.mailing, label: "Mailing", percentage: 100 },
+                        { y: resumo.penetrado, label: "Penetração", percentage: (resumo.penetrado * 100 / resumo.mailing).toFixed(1) / 1 },
+                        { y: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.mailing).toFixed(1) / 1  },
+                        { y: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.mailing).toFixed(1) / 1 },
+                        { y: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.mailing).toFixed(1) / 1 },
+                        { y: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.mailing).toFixed(1) / 1 },
+                    ]
+                }]
+            };
+        }
         // extrair dados para excel
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
