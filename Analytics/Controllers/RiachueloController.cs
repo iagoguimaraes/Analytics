@@ -51,6 +51,7 @@ namespace Analytics.Controllers
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable inclusao = JsonConvert.DeserializeObject<DataTable>(form["inclusao"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable score = JsonConvert.DeserializeObject<DataTable>(form["score"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -63,6 +64,7 @@ namespace Analytics.Controllers
                     parametros.Add("atraso", atraso);
                     parametros.Add("inclusao", inclusao);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("score", score);
 
                     string procedure = "sp_dashboard_horahora";
 
@@ -105,6 +107,7 @@ namespace Analytics.Controllers
                 DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable inclusao = JsonConvert.DeserializeObject<DataTable>(form["inclusao"]);
                 DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+                DataTable score = JsonConvert.DeserializeObject<DataTable>(form["score"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -118,6 +121,7 @@ namespace Analytics.Controllers
                     parametros.Add("atraso", atraso);
                     parametros.Add("inclusao", inclusao);
                     parametros.Add("empresa", empresa);
+                    parametros.Add("score", score);
 
                     string procedure = "sp_dashboard_producao";
 
@@ -806,6 +810,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable score = JsonConvert.DeserializeObject<DataTable>(form["score"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -814,7 +819,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
-                    
+                    parametros.Add("score", score);
+
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_lote", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
