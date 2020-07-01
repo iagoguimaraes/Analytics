@@ -1130,7 +1130,8 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
-                DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
+                DataTable faixas = JsonConvert.DeserializeObject<DataTable>(form["faixas"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
@@ -1140,7 +1141,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("empresas", empresas);
-                    parametros.Add("atrasos", atrasos);
+                    parametros.Add("bandeiras", bandeiras);
+                    parametros.Add("faixas", faixas);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_carteira_humano", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
