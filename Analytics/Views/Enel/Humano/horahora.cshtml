@@ -121,6 +121,12 @@
                                 <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.divisao" dados="dashFiltros.divisao" style="width:100%"></select2>
                             </div>
 
+                            <!--FAIXA ATRASO-->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                                <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atraso" dados="dashFiltros.atraso" style="width:100%"></select2>
+                            </div>
+
                             <!--SUPERVISOR-->
                             <div class="form-group">
                                 <label class="control-sidebar-subheading">Supervisor</label>
@@ -611,6 +617,7 @@
             horafim: '22',
             carteira: '',
             divisao: '',
+            atraso: '',
             supervisor: '',
             equipe: '',
         }
@@ -630,6 +637,7 @@
             $scope.dashFiltros.divisao = r.data.Table1;
             $scope.dashFiltros.supervisor = r.data.Table3;
             $scope.dashFiltros.equipe = r.data.Table4;
+            $scope.dashFiltros.atraso = r.data.Table5;
         });
         // obtem filtros do escopo e carrega os dados do dashboard
         $scope.carregarDashboard = function () {
@@ -682,16 +690,16 @@
             let dadosAnteriorDia = alasql('select dia, hora, sum(DiaAnterior) DiaAnterior from ? where indicador = ("' + [$scope.graficoComparativo.indicador] + '") and DiaAnterior is not null group by dia, hora order by 1,2 ', [dados]);
             let dadosAtualDia = alasql('select dia, hora, sum(DiaAtual) DiaAtual from ? where indicador = ("' + [$scope.graficoComparativo.indicador] + '") and DiaAtual is not null group by dia, hora order by 1,2 ', [dados]);
 
-            $scope.dashboard.horasComparativo = $scope.dashboard.dados.Table7.map(obj => obj.hora);     
+            $scope.dashboard.horasComparativo = $scope.dashboard.dados.Table7.map(obj => obj.hora);
 
             $scope.dashboard.graficoComparativo = [
                 { name: ['Melhor dia ' + dadosMelhorDia[0].dia], type: 'spline', color: '#116d06', data: dadosMelhorDia.map(obj => obj.MelhorDia) },
                 { name: ['dia Anterior ' + dadosAnteriorDia[0].dia], type: 'spline', color: '#dcb528', data: dadosAnteriorDia.map(obj => obj.DiaAnterior) },
                 { name: ['dia Atual ' + dadosAtualDia[0].dia], type: 'spline', color: '#00c0ef', data: dadosAtualDia.map(obj => obj.DiaAtual) }
             ];
-      }
- 
-    // extrair dados para excel
+        }
+
+        // extrair dados para excel
         $scope.extrair = function (tabela) {
             alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
         }

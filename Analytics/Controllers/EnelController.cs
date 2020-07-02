@@ -344,6 +344,7 @@ namespace Analytics.Controllers
                 int horafim = Convert.ToInt16(form["horafim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable divisao = JsonConvert.DeserializeObject<DataTable>(form["divisao"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -358,6 +359,7 @@ namespace Analytics.Controllers
                     parametros.Add("horafim", horafim);
                     parametros.Add("carteira", carteira);
                     parametros.Add("divisao", divisao);
+                    parametros.Add("atraso", atraso);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
                     
@@ -386,6 +388,7 @@ namespace Analytics.Controllers
                 int horafim = Convert.ToInt16(form["horafim"]);
                 DataTable carteira = JsonConvert.DeserializeObject<DataTable>(form["carteira"]);
                 DataTable divisao = JsonConvert.DeserializeObject<DataTable>(form["divisao"]);
+                DataTable atraso = JsonConvert.DeserializeObject<DataTable>(form["atraso"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
                 DataTable equipe = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
 
@@ -400,6 +403,7 @@ namespace Analytics.Controllers
                     parametros.Add("horafim", horafim);
                     parametros.Add("carteira", carteira);
                     parametros.Add("divisao", divisao);
+                    parametros.Add("atraso", atraso);
                     parametros.Add("supervisor", supervisor);
                     parametros.Add("equipe", equipe);
 
