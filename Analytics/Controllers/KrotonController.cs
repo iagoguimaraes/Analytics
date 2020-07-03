@@ -51,6 +51,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faculdade = JsonConvert.DeserializeObject<DataTable>(form["faculdade"]);
+                DataTable modalidade = JsonConvert.DeserializeObject<DataTable>(form["modalidade"]);
                 //DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
                 int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
@@ -61,6 +63,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("faculdade", faculdade);
+                    parametros.Add("modalidade", modalidade);
                     //parametros.Add("statusAluno", statusAluno);
                     parametros.Add("empresa", id_empresa);
 
@@ -85,6 +89,8 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+                DataTable faculdade = JsonConvert.DeserializeObject<DataTable>(form["faculdade"]);
+                DataTable modalidade = JsonConvert.DeserializeObject<DataTable>(form["modalidade"]);
                 //DataTable statusAluno = JsonConvert.DeserializeObject<DataTable>(form["statusAluno"]);
                 int id_empresa = Convert.ToInt16(form["id_empresa"]);
 
@@ -95,6 +101,8 @@ namespace Analytics.Controllers
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
                     parametros.Add("carteiras", carteiras);
+                    parametros.Add("faculdade", faculdade);
+                    parametros.Add("modalidade", modalidade);
                     //parametros.Add("statusAluno", statusAluno);
                     parametros.Add("empresa", id_empresa);
 

@@ -52,17 +52,29 @@
                             </div>
                         </div>
 
-                        <!--CARTEIRAS-->
+                        <!--CARTEIRAS
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteiras</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras"></select2>
-                        </div>
+                        </div>-->
 
                         <!--STATUS
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Status Aluno</label>
                             <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.statusAluno" dados="dashFiltros.statusAluno"></select2>
                         </div>-->
+
+                        <!--FACULDADE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faculdade</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.faculdade" dados="dashFiltros.faculdade"></select2>
+                        </div>
+
+                        <!--MODALIDADE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Modalidade</label>
+                            <select2 style="width: 100%;" class="form-control" data-placeholder="Selecione" ng-model="filtros.modalidade" dados="dashFiltros.modalidade"></select2>
+                        </div>
 
                         <!--BOTÃO-->
                         <div class="form-group">
@@ -206,7 +218,7 @@
                 </div>
             </div>
         </div>
-      
+
         <!--STATUS-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -271,7 +283,7 @@
                 </div>
             </div>
         </div>
-       
+
         <!--GRAFICO DIA DIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -301,7 +313,7 @@
                 </div>
             </div>
         </div>
-       
+
         <!--OCORRENCIA-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -329,12 +341,14 @@
     angular.module('app').controller('ctrl-kroton-producao', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
-        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);        
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
             dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
             carteiras: '',
+            faculdade: '',
+            modalidade: '',
             //statusAluno: '',
             id_empresa: '1', //Id Empresa - Kroton Ativos
         };
@@ -350,6 +364,8 @@
         }).then(function success(r) {
             $scope.dashFiltros.status = r.status;
             $scope.dashFiltros.carteiras = r.data.Table;
+            $scope.dashFiltros.faculdade = r.data.Table3;
+            $scope.dashFiltros.modalidade = r.data.Table4;
             //$scope.dashFiltros.statusAluno = r.data.Table1;
         });
 
@@ -359,7 +375,7 @@
                 method: 'POST',
                 url: "/api/kroton/dashboard/producao",
                 data: $scope.filtros,
-            }).then(function success(r) {             
+            }).then(function success(r) {
                 $scope.dashboard.status = r.status;
                 $scope.dashboard.dados = r.data;
 
