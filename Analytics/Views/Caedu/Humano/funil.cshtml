@@ -1,0 +1,217 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+
+<div ng-controller="ctrl-caedu-funil-humano">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Funil</div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Foto</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.data"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--SEGMENTO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmento</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.segmento" dados="dashFiltros.segmento" style="width:100%"></select2>
+                        </div>
+
+                        <!--FAIXA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Faixa de Atraso</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.faixa" dados="dashFiltros.faixa" style="width:100%"></select2>
+                        </div>
+
+                        <!--ENTRADA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentação</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.entrada" dados="dashFiltros.entrada" style="width:100%"></select2>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+
+                            <!--CARTEIRA-->
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="card-body">
+                                            <h4 class="text-center">Carteira</h4>
+                                            <high-chart series="dashboard.follow" axis-Categories="dashboard.ds_follow" plot-Options-Column-Data-Label="true" type="column" style="height: 350px"></high-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--FOLLOW-->
+                            <div class="col-xs-6">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="card-body">
+                                            <h4 class="text-center">Situação</h4>
+                                            <high-chart series="dashboard.segmentacao" axis-Categories="dashboard.ds_segmentacao" plot-Options-Bar-Data-Label="true" type="bar" style="height: 350px"></high-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--FUNIL-->
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-12 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Funil</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <canvasjs config="dashboard.funil" style="width: 100%; height: 480px"></canvasjs>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <h4 class="text-center">Discagens Improdutivas</h4>
+                                <h2 class="text-center">{{dashboard.resumo.improdutivo | number}}</h2>
+                                <div class="card-body">
+                                    <high-chart series="dashboard.discador" type="pie" tooltip-Point-Format="{point.y} (<b>{point.percentage:.1f}%</b>)"></high-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    angular.module('app').controller('ctrl-caedu-funil-humano', function ($scope, $http, $filter, $interval, dadosPagina) {
+        dadosPagina.titulo = 'Funil';
+        dadosPagina.descricao = 'Caedu'
+
+
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            data: $filter('date')(new Date(), "yyyy-MM-dd"),
+            segmento: '',
+            faixa: '',
+            entrada: '',
+        };
+
+        $scope.dashboard = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/caedu/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dashFiltros.status = r.status;
+
+            $scope.dashFiltros.segmento = r.data.Table;
+            $scope.dashFiltros.faixa = r.data.Table1;
+            $scope.dashFiltros.entrada = r.data.Table4;
+        });
+
+        $scope.carregarDashboard = function () {
+
+            $http({
+                method: 'POST',
+                url: "/api/caedu/dashboard/humano/funil",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                let data = r.data;
+                $scope.dashboard.dados = r.data;
+                $scope.dashboard.resumo = data.Table2[0];
+                $scope.dashboard.ds_follow = data.Table1.map(obj => obj.ds_follow);
+                $scope.dashboard.ds_segmentacao = data.Table5.map(obj => obj.ds_segmentacao);
+
+
+                $scope.dashboard.follow = [{ name: 'Quantidade', data: data.Table1.map(obj => (obj.quantidade)), color: '#c3b900' }];
+                $scope.dashboard.segmentacao = [{ name: 'Quantidade', data: data.Table5.map(obj => (obj.quantidade)), color: '#c3b900' }];
+                $scope.dashboard.discador = [{ name: 'Quantidade', innerSize: '50%', data: data.Table3.map(obj => ({ name: obj.ocorrencia, y: obj.quantidade })) }];
+
+                // FUNIL
+                let resumo = data.Table2[0];
+                let carteira = data.Table4[0];
+                $scope.dashboard.funil = {
+                    animationEnabled: true,
+                    data: [{
+                        type: "funnel",
+                        toolTipContent: "<b>{label}</b>: {value} <b>({percentage}%)</b>",
+                        indexLabel: "{label} ({percentage}%)",
+                        dataPoints: [
+                            { y: 45, value: carteira.carteira, label: "Carteira", percentage: 100 },
+                            { y: 25, value: resumo.discado, label: "Discado", percentage: (resumo.discado * 100 / carteira.carteira).toFixed(1) / 1 },
+                            { y: 20, value: resumo.contato, label: "Contato", percentage: (resumo.contato * 100 / resumo.discado).toFixed(1) / 1 },
+                            { y: 15, value: resumo.cpc, label: "CPC", percentage: (resumo.cpc * 100 / resumo.contato).toFixed(1) / 1 },
+                            { y: 10, value: resumo.cpca, label: "CPCA", percentage: (resumo.cpca * 100 / resumo.cpc).toFixed(1) / 1 },
+                            { y: 10, value: resumo.promessa, label: "Promessa", percentage: (resumo.promessa * 100 / resumo.cpca).toFixed(1) / 1 },
+                        ]
+                    }]
+                };
+
+            });
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+
+
+</script>

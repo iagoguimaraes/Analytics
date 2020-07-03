@@ -273,6 +273,40 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/funil")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoFunil(FormDataCollection form)
+        {
+            try
+            {
+
+
+                DateTime data = Convert.ToDateTime(form["data"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable entrada = JsonConvert.DeserializeObject<DataTable>(form["entrada"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("data", data);
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("faixa", faixa);
+                    parametros.Add("entrada", entrada);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_funil", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region DIGITAL
@@ -674,6 +708,6 @@ namespace Analytics.Controllers
             }
         }
 
-
+        
     }
 }
