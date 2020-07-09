@@ -389,7 +389,7 @@
 
             $scope.dashboard.resumo = alasql('select sum(pa)/count(distinct data) med_pa, sum(pa_real)/count(distinct data) med_pareal, sum(pa) pa, sum(pa_real) pa_real, sum(logado) logado, sum(falado) falado, sum(carteira) carteira, sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ?', [dados])[0];
             $scope.dashboard.producaoDia =
-                alasql('select data, sum(pa) pa, sum(pa_real) pa_real, sum(logado) logado, sum(falado) falado, sum(carteira) carteira, sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ? group by data order by 1', [dados]);;
+                alasql('select dt, data, sum(pa) pa, sum(pa_real) pa_real, sum(logado) logado, sum(falado) falado, sum(carteira) carteira, sum(discado) discado, sum(contato) contato, sum(cpc) cpc, sum(cpca) cpca, sum(promessa) promessa from ? group by data order by 1', [dados]);;
 
             $scope.dashboard.dia = {
                 chart: {
