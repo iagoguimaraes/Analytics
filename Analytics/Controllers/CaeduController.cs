@@ -307,6 +307,43 @@ namespace Analytics.Controllers
             }
         }
 
+        [Route("dashboard/humano/efetividade")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHumanoEfetividade(FormDataCollection form)
+        {
+            try
+            {
+
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
+                DataTable faixa = JsonConvert.DeserializeObject<DataTable>(form["faixa"]);
+                DataTable entrada = JsonConvert.DeserializeObject<DataTable>(form["entrada"]);
+                DataTable acordo = JsonConvert.DeserializeObject<DataTable>(form["acordo"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("segmento", segmento);
+                    parametros.Add("faixa", faixa);
+                    parametros.Add("entrada", entrada);
+                    parametros.Add("acordo", acordo);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_efetividade", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region DIGITAL
