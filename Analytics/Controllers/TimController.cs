@@ -976,6 +976,7 @@ namespace Analytics.Controllers
                 DataTable segmento = JsonConvert.DeserializeObject<DataTable>(form["segmento"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
                 DataTable produto = JsonConvert.DeserializeObject<DataTable>(form["produto"]);
+                DataTable subproduto = JsonConvert.DeserializeObject<DataTable>(form["subproduto"]);
                 DataTable statusSegmentacao = JsonConvert.DeserializeObject<DataTable>(form["statusSegmentacao"]);
                 DataTable estado = JsonConvert.DeserializeObject<DataTable>(form["estado"]);
 
@@ -989,6 +990,7 @@ namespace Analytics.Controllers
                     parametros.Add("segmento", segmento);
                     parametros.Add("faixaAtraso", faixaAtraso);
                     parametros.Add("produto", produto);
+                    parametros.Add("subproduto", subproduto);
                     parametros.Add("statusSegmentacao", statusSegmentacao);
                     parametros.Add("estado", estado);
 
