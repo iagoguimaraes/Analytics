@@ -315,8 +315,9 @@ namespace Analytics.Controllers
         {
             try
             {
-                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
+             
                 DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable faixaAtraso = JsonConvert.DeserializeObject<DataTable>(form["faixaAtraso"]);
                 DataTable plano = JsonConvert.DeserializeObject<DataTable>(form["plano"]);
                 DataTable devedor = JsonConvert.DeserializeObject<DataTable>(form["devedor"]);
@@ -325,15 +326,13 @@ namespace Analytics.Controllers
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
-
                     parametros.Add("empresas", empresas);
                     parametros.Add("carteiras", carteiras);
                     parametros.Add("faixaAtraso", faixaAtraso);
                     parametros.Add("plano", plano);
                     parametros.Add("devedor", devedor);
 
-
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao",parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }

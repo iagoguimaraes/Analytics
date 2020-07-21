@@ -17,7 +17,7 @@
 
 
         <!-- FILTROS -->
-        <div class="row margin-bottom" ng-if="dashFiltros.status == 200">
+        <div class="row margin-bottom" ng-if="dashboard.status == 200">
             <div class="col-xs-12">
                 <div id="filtros-window" class="card display-none">
                     <div class="card-header">
@@ -226,94 +226,167 @@
 
 
 <script>
-angular.module('app').controller('ctrl-semparar-projecao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-semparar-projecao', function ($scope, $http, $filter) {
 
-    $scope.dashboard = {};
-    $scope.filtros = { conceito: 'acordo', visao: 'acordo', empresas: '', carteiras: '', faixaAtraso: '', plano: '', devedor: '' };
-    $scope.visao = "";
-    $scope.grafico = { indicador: 'promessa' };
-    $scope.dashFiltros = {};
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            conceito: 'acordo',
+            visao: 'acordo',
+            empresas: '',
+            carteiras: '',
+            faixaAtraso: '',
+            plano: '',
+            devedor: '',
+        }
 
-    // carregar os filtros
-    $http({
-        method: 'GET',
-        url: "/api/semparar/dashboard/humano/filtros",
-        data: $scope.filtros,
-    }).then(function success(r) {
-        $scope.dados = r.status;
-        
-        $scope.dashFiltros.status = r.status;
-        $scope.dashFiltros.empresas = r.data.Table;
-        $scope.dashFiltros.carteiras = r.data.Table1;
-        $scope.dashFiltros.faixaAtraso = r.data.Table2;
-        $scope.dashFiltros.plano = r.data.Table6;
-        $scope.dashFiltros.devedor = r.data.Table5;
+        $scope.visao = "";
+        $scope.grafico = { indicador: 'acordo' };
 
-    });
 
-    $scope.carregarDashboard = function () {
+        // carregar os filtros
         $http({
-            method: 'POST',
-            url: "/api/semparar/dashboard/humano/projecao",
+            method: 'GET',
+            url: "/api/semparar/dashboard/humano/filtros",
             data: $scope.filtros,
         }).then(function success(r) {
-            $scope.dashboard.dados = r.data;
+            $scope.dados = r.status;
 
-            $scope.dashboard.resumoDia = r.data.Table4[0];
-            $scope.dashboard.resumoMes = r.data.Table4[1];
-
-
-            // STATUS DASHBOARD OK
-            $scope.dashboard.status = r.status;
-            $scope.carregarGrafico();
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresas = r.data.Table;
+            $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.faixaAtraso = r.data.Table2;
+            $scope.dashFiltros.plano = r.data.Table6;
+            $scope.dashFiltros.devedor = r.data.Table5;
 
         });
-    }
 
-    // carrega o grafico de acordo com o indicador escolhido
-    $scope.carregarGrafico = function () {
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/semparar/dashboard/humano/projecao",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.dados = r.data;
 
-        let indicador = $scope.filtros.conceito;
-        let data = $scope.dashboard.dados;
-
-        // PROJECAO DO DIA
-        if ($scope.dashboard.dados.Table.length > 0) {
+                $scope.dashboard.resumoDia = r.data.Table4[0];
+                $scope.dashboard.resumoMes = r.data.Table4[1];
 
 
-            let dia_acordo = '';
-            let dia_projecao = '';
+                // STATUS DASHBOARD OK
+                $scope.dashboard.status = r.status;
+                $scope.carregarGrafico();
+
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+
+            let indicador = $scope.filtros.conceito;
+            let data = $scope.dashboard.dados;
+
+            // PROJECAO DO DIA
+            if ($scope.dashboard.dados.Table.length > 0) {
+
+
+                let dia_acordo = '';
+                let dia_projecao = '';
+
+                switch (indicador) {
+                    case 'acordo':
+                        dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                        $scope.visao = "QUANTIDADE";
+                        break;
+                    case 'vl_acordo':
+                        dia_acordo = data.Table1.map(o => ({ y: o.vl_acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.vl_acordo }));
+                        $scope.visao = "FINANCEIRA";
+                        break;
+                    case 'promessa':
+                        dia_acordo = data.Table1.map(o => ({ y: o.promessa }));
+                        dia_projecao = data.Table.map(o => ({ y: o.promessa }));
+                        $scope.visao = "QUANTIDADE";
+                        break;
+                    case 'vl_promessa':
+                        dia_acordo = data.Table1.map(o => ({ y: o.vl_promessa }));
+                        dia_projecao = data.Table.map(o => ({ y: o.vl_promessa }));
+                        $scope.visao = "FINANCEIRA";
+                        break;
+                    default:
+                        dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
+                        dia_projecao = data.Table.map(o => ({ y: o.acordo }));
+                        $scope.visao = "QUANTIDADE";
+                }
+
+                dia_acordo[dia_acordo.length - 1].dataLabels = { enabled: true };
+                dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+
+                $scope.dashboard.projecao_dia = {
+                    title: {
+                        text: ''
+                    },
+                    yAxis: {
+                        title: {
+                            text: ''
+                        },
+                    },
+                    xAxis: {
+                        categories: data.Table1.map(o => o.hora)
+                    },
+                    series: [
+                        {
+                            type: 'line',
+                            name: 'Projeção',
+                            color: 'black',
+                            dashStyle: 'dot',
+                            marker: { symbol: 'circle' },
+                            data: dia_acordo
+                        },
+                        {
+                            type: 'area',
+                            name: 'Negociação',
+                            color: 'black',
+                            marker: { symbol: 'circle' },
+                            data: dia_projecao
+                        },
+                    ],
+                    credits: {
+                        enabled: false
+                    }
+                };
+            }
+
+            let mes_acordo = '';
+            let mes_projecao = '';
 
             switch (indicador) {
                 case 'acordo':
-                    dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
-                    dia_projecao = data.Table.map(o => ({ y: o.acordo }));
-                    $scope.visao = "QUANTIDADE";
+                    mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
                     break;
                 case 'vl_acordo':
-                    dia_acordo = data.Table1.map(o => ({ y: o.vl_acordo }));
-                    dia_projecao = data.Table.map(o => ({ y: o.vl_acordo }));
-                    $scope.visao = "FINANCEIRA";
+                    mes_acordo = data.Table3.map(o => ({ y: o.vl_acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.vl_acordo }));
                     break;
                 case 'promessa':
-                    dia_acordo = data.Table1.map(o => ({ y: o.promessa }));
-                    dia_projecao = data.Table.map(o => ({ y: o.promessa }));
-                    $scope.visao = "QUANTIDADE";
+                    mes_acordo = data.Table3.map(o => ({ y: o.promessa }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.promessa }));
                     break;
                 case 'vl_promessa':
-                    dia_acordo = data.Table1.map(o => ({ y: o.vl_promessa }));
-                    dia_projecao = data.Table.map(o => ({ y: o.vl_promessa }));
-                    $scope.visao = "FINANCEIRA";
+                    mes_acordo = data.Table3.map(o => ({ y: o.vl_promessa }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.vl_promessa }));
                     break;
                 default:
-                    dia_acordo = data.Table1.map(o => ({ y: o.acordo }));
-                    dia_projecao = data.Table.map(o => ({ y: o.acordo }));
-                    $scope.visao = "QUANTIDADE";
+                    mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
+                    mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
             }
 
-            dia_acordo[dia_acordo.length - 1].dataLabels = { enabled: true };
-            dia_projecao[dia_projecao.length - 1].dataLabels = { enabled: true };
+            mes_acordo[mes_acordo.length - 1].dataLabels = { enabled: true };
+            mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
 
-            $scope.dashboard.projecao_dia = {
+            $scope.dashboard.projecao_mes = {
                 title: {
                     text: ''
                 },
@@ -323,7 +396,7 @@ angular.module('app').controller('ctrl-semparar-projecao', function ($scope, $ht
                     },
                 },
                 xAxis: {
-                    categories: data.Table1.map(o => o.hora)
+                    categories: data.Table3.map(o => o.data)
                 },
                 series: [
                     {
@@ -332,87 +405,24 @@ angular.module('app').controller('ctrl-semparar-projecao', function ($scope, $ht
                         color: 'black',
                         dashStyle: 'dot',
                         marker: { symbol: 'circle' },
-                        data: dia_acordo
+                        data: mes_acordo
                     },
                     {
                         type: 'area',
                         name: 'Negociação',
                         color: 'black',
                         marker: { symbol: 'circle' },
-                        data: dia_projecao
+                        data: mes_projecao
                     },
                 ],
                 credits: {
                     enabled: false
                 }
             };
+
         }
 
-        let mes_acordo = '';
-        let mes_projecao = '';
-
-        switch (indicador) {
-            case 'acordo':
-                mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
-                mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
-                break;
-            case 'vl_acordo':
-                mes_acordo = data.Table3.map(o => ({ y: o.vl_acordo }));
-                mes_projecao = data.Table2.map(o => ({ y: o.vl_acordo }));
-                break;
-            case 'promessa':
-                mes_acordo = data.Table3.map(o => ({ y: o.promessa }));
-                mes_projecao = data.Table2.map(o => ({ y: o.promessa }));
-                break;
-            case 'vl_promessa':
-                mes_acordo = data.Table3.map(o => ({ y: o.vl_promessa }));
-                mes_projecao = data.Table2.map(o => ({ y: o.vl_promessa }));
-                break;
-            default:
-                mes_acordo = data.Table3.map(o => ({ y: o.acordo }));
-                mes_projecao = data.Table2.map(o => ({ y: o.acordo }));
-        }
-
-        mes_acordo[mes_acordo.length - 1].dataLabels = { enabled: true };
-        mes_projecao[mes_projecao.length - 1].dataLabels = { enabled: true };
-
-        $scope.dashboard.projecao_mes = {
-            title: {
-                text: ''
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-            },
-            xAxis: {
-                categories: data.Table3.map(o => o.data)
-            },
-            series: [
-                {
-                    type: 'line',
-                    name: 'Projeção',
-                    color: 'black',
-                    dashStyle: 'dot',
-                    marker: { symbol: 'circle' },
-                    data: mes_acordo
-                },
-                {
-                    type: 'area',
-                    name: 'Negociação',
-                    color: 'black',
-                    marker: { symbol: 'circle' },
-                    data: mes_projecao
-                },
-            ],
-            credits: {
-                enabled: false
-            }
-        };
-
-    }
-
-    $scope.carregarDashboard();
-});
+        $scope.carregarDashboard();
+    });
 
 </script>
