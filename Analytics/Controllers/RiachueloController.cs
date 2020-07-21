@@ -298,14 +298,14 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
- 
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini);
                     parametros.Add("dtfim", dtfim);
-                    
+
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_mktzap", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
@@ -338,7 +338,7 @@ namespace Analytics.Controllers
                     parametros.Add("mesIni", Convert.ToInt16(mesIni.ToString("MM")));
                     parametros.Add("mesFim", Convert.ToInt16(mesFim.ToString("MM")));
                     parametros.Add("carteiras", carteiras);
-                    parametros.Add("funcionario", funcionario);                    
+                    parametros.Add("funcionario", funcionario);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_gerencial", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -570,7 +570,7 @@ namespace Analytics.Controllers
             {
                 int ano = Convert.ToInt32(form["ano"]);
                 int mes = Convert.ToInt32(form["mes"]);
-                double meta_pl = Convert.ToDouble(form["meta_pl"].ToString().Replace(".",""));
+                double meta_pl = Convert.ToDouble(form["meta_pl"].ToString().Replace(".", ""));
                 double meta_bandeira = Convert.ToDouble(form["meta_bandeira"].ToString().Replace(".", ""));
                 double meta_saque = Convert.ToDouble(form["meta_saque"].ToString().Replace(".", ""));
                 double meta_emprestimo = Convert.ToDouble(form["meta_emprestimo"].ToString().Replace(".", ""));
@@ -661,14 +661,14 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
-               
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
-                    
+
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_pf_pesquisa", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
@@ -753,7 +753,7 @@ namespace Analytics.Controllers
                     parametros.Add("servidores", servidores);
                     parametros.Add("atrasos", atrasos);
                     parametros.Add("id_class_carteira", id_class_carteira);
-                    
+
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_portalnegocia", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
@@ -830,6 +830,67 @@ namespace Analytics.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [Route("dashboard/erroboleto")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardPortalErroBoleto(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_portal_erro_boleto", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/checkboleto")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage CheckBoleto(FormDataCollection form)
+        {
+            try
+            {
+                string id_status = form["id_status"];
+                bool tratado = Convert.ToBoolean(form["tratado"]);
+                int id_empresa = Convert.ToInt32(form["id_empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("id_status", id_status);
+                    parametros.Add("tratado", Convert.ToInt16(tratado).ToString());
+                    parametros.Add("id_empresa", id_empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_upd_erroBoleto", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
         #region HUMANO
@@ -854,7 +915,7 @@ namespace Analytics.Controllers
             }
         }
 
-        
+
 
         [Route("dashboard/humano/horahora")]
         [HttpPost]
@@ -1009,7 +1070,7 @@ namespace Analytics.Controllers
                     parametros.Add("horaini_2", horaini_2);
                     parametros.Add("horafim_2", horafim_2);
 
-                    
+
                     parametros.Add("empresa", empresa);
                     parametros.Add("carteira", carteira);
                     parametros.Add("supervisor", supervisor);
@@ -1578,7 +1639,7 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
-                
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -1630,7 +1691,7 @@ namespace Analytics.Controllers
             try
             {
                 DateTime data = Convert.ToDateTime(form["data"]);
-                
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
@@ -1882,7 +1943,7 @@ namespace Analytics.Controllers
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
                 DataTable equipes = JsonConvert.DeserializeObject<DataTable>(form["equipe"]);
                 DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
-                
+
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
