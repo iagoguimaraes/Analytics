@@ -380,14 +380,14 @@ namespace Analytics.Controllers
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
 
-                using (SqlHelper sql = new SqlHelper("CUBO_CLARO"))
+                using (SqlHelper sql = new SqlHelper("CUBO_CLARO_RCV"))
                 {
                     Dictionary<string, object> parametros = new Dictionary<string, object>();
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
 
-                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_rcv_bkocpc", parametros);
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_bkocpc", parametros);
                     return Request.CreateResponse(HttpStatusCode.OK, resultado);
                 }
             }
