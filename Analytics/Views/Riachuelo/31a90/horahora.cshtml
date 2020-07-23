@@ -51,9 +51,21 @@
                             </div>
                         </div>
 
-                        <!--BANDEIRA-->
+                        <!--EMPRESA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Empresa</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.empresas" dados="dashFiltros.empresas" style="width:100%"></select2>
+                        </div>
+
+                        <!--CARTEIRAS-->
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Carteira</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.carteiras" dados="dashFiltros.carteiras" style="width:100%"></select2>
+                        </div>
+
+                        <!--BANDEIRA-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Bandeira</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.bandeiras" dados="dashFiltros.bandeiras" style="width:100%"></select2>
                         </div>
 
@@ -61,6 +73,24 @@
                         <div class="form-group">
                             <label class="control-sidebar-subheading">Atraso</label>
                             <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.atrasos" dados="dashFiltros.atrasos" style="width:100%"></select2>
+                        </div>
+
+                        <!--SALDO-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Saldo</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.saldo" dados="dashFiltros.saldo" style="width:100%"></select2>
+                        </div>
+
+                        <!--SUPERVISOR-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Supervisor</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.supervisor" dados="dashFiltros.supervisor" style="width:100%"></select2>
+                        </div>
+
+                        <!--BASE SAVE-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Segmentação</label>
+                            <select2 class="form-control" data-placeholder="Selecione" ng-model="filtros.save" dados="dashFiltros.save" style="width:100%"></select2>
                         </div>
 
                         <!--ORIGEM PROMESSA-->
@@ -125,41 +155,46 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row bg-black-gradient">
-                <div class="col-sm-2 col-sm-offset-1 border-right">
-                    <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
-                        <span class="description-text">Esforço</span>
+                <div class="row">
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.discado / dashboard.resumo.promessa | number:1"></h5>
+                            <span class="description-text">Esforço</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2 border-right">
-                    <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
-                        <span class="description-text">Hit Rate</span>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.falado / dashboard.resumo.logado | percentage: 1"></h5>
+                            <span class="description-text">Ocupação</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2 border-right">
-                    <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
-                        <span class="description-text">Tx Loc</span>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1"></h5>
+                            <span class="description-text">Hit Rate</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2 border-right">
-                    <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
-                        <span class="description-text">Tx Apv</span>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1"></h5>
+                            <span class="description-text">Tx Loc</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="description-block">
-                        <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
-                        <span class="description-text">Conversao</span>
+                    <div class="col-sm-2 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1"></h5>
+                            <span class="description-text">Tx Apv</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.promessa / dashboard.resumo.cpca | percentage: 1"></h5>
+                            <span class="description-text">Conversao</span>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
 
@@ -188,6 +223,7 @@
                                         <th>CPCA</th>
                                         <th>Promessa</th>
                                         <th>R$ Promessa</th>
+                                        <th>Ocupação</th>
                                         <th>Hit Rate</th>
                                         <th>Tx Loc</th>
                                         <th>Tx Apv</th>
@@ -203,6 +239,7 @@
                                         <td>{{hora.cpca | number}}</td>
                                         <td>{{hora.promessa | number}}</td>
                                         <td>{{hora.vl_promessa | currency:'R$ '}}</td>
+                                        <td>{{hora.falado / hora.logado | percentage:1}}</td>
                                         <td>{{hora.contato / hora.discado | percentage:1}}</td>
                                         <td>{{hora.cpc / hora.contato | percentage:1}}</td>
                                         <td>{{hora.cpca / hora.cpc | percentage:1}}</td>
@@ -218,6 +255,7 @@
                                         <th>{{dashboard.resumo.cpca | number}}</th>
                                         <th>{{dashboard.resumo.promessa | number}}</th>
                                         <th>{{dashboard.resumo.vl_promessa | currency:'R$ '}}</th>
+                                        <th>{{dashboard.resumo.falado / dashboard.resumo.logado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.contato / dashboard.resumo.discado | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpc / dashboard.resumo.contato | percentage: 1}}</th>
                                         <th>{{dashboard.resumo.cpca / dashboard.resumo.cpc | percentage: 1}}</th>
@@ -396,6 +434,12 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">Análise por Supervisor/Equipe</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Supervisor','Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -465,8 +509,13 @@
         $scope.filtros = {
             dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
             dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            empresas: '',
+            carteiras: '',
             bandeiras: '',
             atrasos: '',
+            saldo: '',
+            supervisor: '',
+            save: '',
             origemPromessa: '',
         }
         $scope.grafico = { indicador: 'promessa' };
@@ -479,8 +528,13 @@
         }).then(function success(r) {
             let data = r.data;
             $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.empresas = r.data.Table10;
+            $scope.dashFiltros.carteiras = r.data.Table2;
             $scope.dashFiltros.bandeiras = data.Table;
             $scope.dashFiltros.atrasos = r.data.Table1;
+            $scope.dashFiltros.saldo = r.data.Table11;
+            $scope.dashFiltros.supervisor = r.data.Table4;
+            $scope.dashFiltros.save = r.data.Table8;
             $scope.dashFiltros.origemPromessa = r.data.Table7;
         });
 

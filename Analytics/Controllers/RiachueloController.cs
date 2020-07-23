@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
 
 namespace Analytics.Controllers
@@ -1718,8 +1719,13 @@ namespace Analytics.Controllers
             {
                 DateTime dtini = Convert.ToDateTime(form["dtini"]);
                 DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+                DataTable empresas = JsonConvert.DeserializeObject<DataTable>(form["empresas"]);
+                DataTable carteiras = JsonConvert.DeserializeObject<DataTable>(form["carteiras"]);
                 DataTable bandeiras = JsonConvert.DeserializeObject<DataTable>(form["bandeiras"]);
                 DataTable atrasos = JsonConvert.DeserializeObject<DataTable>(form["atrasos"]);
+                DataTable saldo = JsonConvert.DeserializeObject<DataTable>(form["saldo"]);
+                DataTable supervisor = JsonConvert.DeserializeObject<DataTable>(form["supervisor"]);
+                DataTable save = JsonConvert.DeserializeObject<DataTable>(form["save"]);
                 DataTable origemPromessa = JsonConvert.DeserializeObject<DataTable>(form["origemPromessa"]);
 
                 using (SqlHelper sql = new SqlHelper("CUBO_RIACHUELO_3190"))
@@ -1728,8 +1734,13 @@ namespace Analytics.Controllers
 
                     parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
                     parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+                    parametros.Add("empresas", empresas);
+                    parametros.Add("carteiras", carteiras);
                     parametros.Add("bandeiras", bandeiras);
                     parametros.Add("atrasos", atrasos);
+                    parametros.Add("saldo", saldo);
+                    parametros.Add("supervisor", supervisor);
+                    parametros.Add("save",save);
                     parametros.Add("origemPromessa", origemPromessa);
 
                     DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
