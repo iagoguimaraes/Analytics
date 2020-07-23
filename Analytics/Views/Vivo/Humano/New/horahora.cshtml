@@ -489,6 +489,43 @@
             </div>
         </div>
 
+        <!--ISDN HORA e CATEGORIA-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">ISDN Cause / Hora</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.isdnHora" height="300"></high-charts>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Categoria ISDN</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table5')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.isdnCategoria" height="300"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--PRODUÇÃO POR EQUIPE-->
         <div class="row margin-bottom">
             <div class="col-xs-12">
@@ -630,8 +667,12 @@
                 $scope.dashboard.horahora = data.Table2;
                 $scope.dashboard.equipe = data.Table3;
                 $scope.dashboard.operador = data.Table4;
+                $scope.dashboard.isdncause = data.Table5;
 
                 $scope.carregarGrafico();
+                $scope.carregarGraficoIsdnCause();
+                $scope.carregarGraficoIsdnCategoria();
+
             });
         }
 
@@ -658,6 +699,123 @@
                 default:
                     $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
             }
+        }
+
+        $scope.carregarGraficoIsdnCause = function () {
+            let dados = $scope.dashboard.isdncause;
+
+            //let indicador = $scope.grafico.indicador;
+
+            let dados_status = alasql('select ds_cause status, sum(qtd) quantidade from ? group by ds_cause', [dados]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select hora substatus, sum(qtd) quantidade from ? group by hora', [dados.filter(d => d.ds_cause == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // Gráfico MES / DIA
+            $scope.dashboard.isdnHora = {
+                chart: {
+                    type: 'column',
+                    height: 300
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}"></span>{point.name}: {point.y}<br/>'
+                },
+                series: [{
+                    name: 'Isdn Cause:',
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
+
+        $scope.carregarGraficoIsdnCategoria = function () {
+            let dados = $scope.dashboard.isdncause;
+
+            //let indicador = $scope.grafico.indicador;
+
+            let dados_status = alasql('select ds_categoria status, sum(qtd) quantidade from ? group by ds_categoria', [dados]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select ds_cause, sum(qtd) quantidade from ? group by ds_cause', [dados.filter(d => d.ds_categoria == dados_status[s]['name'])]);
+                d = d.map(o => [o.ds_cause, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // Gráfico MES / DIA
+            $scope.dashboard.isdnCategoria = {
+                chart: {
+                    type: 'pie',
+                    height: 300
+                },
+                title: {
+                    text: ''
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.percentage:.2f}%</b> do total<br/>'
+                },
+                series: [{
+                    name: 'Categoria da Causa',
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
         }
 
         $scope.carregarDashboard();
