@@ -144,8 +144,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
         <!--SITUAÇÃO-->
@@ -182,6 +180,7 @@
                                         <th>Backlog</th>
                                         <th>Migração Apv</th>
                                         <th>Migração Ok</th>
+                                        <th class="icon" title="Migração OK - Com base na data do Status Workflow!">Migração Ok <i class="fa fa-exclamation-circle"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -193,6 +192,7 @@
                                         <td><b>{{c.backlog | number}}</b> ({{c.backlog / c.qtd | percentage:1}})</td>
                                         <td><b>{{c.migracaoapv | number}}</b> ({{c.migracaoapv / c.qtd | percentage:1}})</td>
                                         <td><b>{{c.migracaook | number}}</b> ({{c.migracaook / c.qtd | percentage:1}})</td>
+                                        <td>{{c.migracaook_dtbk | number}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -208,7 +208,7 @@
 
 <script>
     angular.module('app').controller('ctrl-tim-backoffice', function ($scope, $http, $filter) {
-       
+
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
@@ -276,8 +276,8 @@
                     credits: {
                         enabled: false
                     },
-                };                       
-             
+                };
+
                 $scope.dashboard.status = r.status;
             });
         }

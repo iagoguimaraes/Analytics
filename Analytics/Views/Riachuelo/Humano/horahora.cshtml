@@ -550,99 +550,100 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        angular.module('app').controller('ctrl-riachuelo-hum-horahora', function ($scope, $http, $filter, dadosPagina) {
-            dadosPagina.titulo = 'Hora Hora';
-            dadosPagina.descricao = 'Riachuelo'
-            $scope.showTbody = false;
+<script>
+    angular.module('app').controller('ctrl-riachuelo-hum-horahora', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Hora Hora';
+        dadosPagina.descricao = 'Riachuelo'
+        $scope.showTbody = false;
 
-            $scope.dashboard = {};
-            $scope.dashFiltros = {};
-            $scope.filtros = {
-                dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
-                dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
-                empresas: '',
-                carteiras: '',
-                bandeira: '',
-                atrasos: '',
-                saldo: '',
-                supervisores: '',
-                save: '',
-                origemPromessa: '',
-            }
-            $scope.grafico = { indicador: 'promessa' };
+        $scope.dashboard = {};
+        $scope.dashFiltros = {};
+        $scope.filtros = {
+            dtini: $filter('date')(new Date(), "yyyy-MM-dd"),
+            dtfim: $filter('date')(new Date(), "yyyy-MM-dd"),
+            empresas: '',
+            carteiras: '',
+            bandeira: '',
+            atrasos: '',
+            saldo: '',
+            supervisores: '',
+            save: '',
+            origemPromessa: '',
+        }
+        $scope.grafico = { indicador: 'promessa' };
 
-            // carregar os filtros
-            $http({
-                method: 'GET',
-                url: "/api/riachuelo/dashboard/humano/filtros",
-                data: $scope.filtros,
-            }).then(function success(r) {
-                $scope.dados = r.status;
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/riachuelo/dashboard/humano/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+            $scope.dados = r.status;
 
-                $scope.dashFiltros.empresas = r.data.Table;
-                $scope.dashFiltros.carteiras = r.data.Table1;
-                $scope.dashFiltros.bandeira = r.data.Table14;
-                $scope.dashFiltros.atrasos = r.data.Table13;
-                $scope.dashFiltros.saldo = r.data.Table15;
-                $scope.dashFiltros.supervisores = r.data.Table3;
-                $scope.dashFiltros.save = r.data.Table9;
-                $scope.dashFiltros.origemPromessa = r.data.Table16;
-
-            });
-
-            // obtem filtros do escopo e carrega os dados do dashboard
-            $scope.carregarDashboard = function () {
-                $http({
-                    method: 'POST',
-                    url: "/api/riachuelo/dashboard/humano/horahora",
-                    data: $scope.filtros,
-                }).then(function success(r) {
-                    $scope.dashboard.status = r.status;
-                    $scope.dashboard.dados = r.data;
-
-                    $scope.dashboard.resumo = r.data.Table[0];
-                    $scope.dashboard.horahora = r.data.Table1;
-                    $scope.dashboard.carteira = r.data.Table2;
-                    $scope.dashboard.operador = r.data.Table3;
-                    $scope.dashboard.equipe = r.data.Table4;
-                    $scope.dashboard.atrasos = r.data.Table8;
-
-
-                    $scope.carregarGrafico();
-                });
-            }
-
-            // carrega o grafico de acordo com o indicador escolhido
-            $scope.carregarGrafico = function () {
-                let dados = $scope.dashboard.horahora;
-                $scope.dashboard.horas = dados.map(obj => obj.hora);
-                switch ($scope.grafico.indicador) {
-                    case 'hitrate':
-                        $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
-                        break;
-                    case 'txloc':
-                        $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
-                        break;
-                    case 'txapv':
-                        $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
-                        break;
-                    case 'conversao':
-                        $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
-                        break;
-                    default:
-                        $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
-                }
-
-            }
-
-            $scope.carregarDashboard();
-
-            // extrair dados para excel
-            $scope.extrair = function (nomeArquivo, tabela) {
-                alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
-            }
+            $scope.dashFiltros.empresas = r.data.Table;
+            $scope.dashFiltros.carteiras = r.data.Table1;
+            $scope.dashFiltros.bandeira = r.data.Table14;
+            $scope.dashFiltros.atrasos = r.data.Table13;
+            $scope.dashFiltros.saldo = r.data.Table15;
+            $scope.dashFiltros.supervisores = r.data.Table3;
+            $scope.dashFiltros.save = r.data.Table9;
+            $scope.dashFiltros.origemPromessa = r.data.Table16;
 
         });
-    </script>
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/riachuelo/dashboard/humano/horahora",
+                data: $scope.filtros,
+            }).then(function success(r) {
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.horahora = r.data.Table1;
+                $scope.dashboard.carteira = r.data.Table2;
+                $scope.dashboard.operador = r.data.Table3;
+                $scope.dashboard.equipe = r.data.Table4;
+                $scope.dashboard.atrasos = r.data.Table8;
+
+
+                $scope.carregarGrafico();
+            });
+        }
+
+        // carrega o grafico de acordo com o indicador escolhido
+        $scope.carregarGrafico = function () {
+            let dados = $scope.dashboard.horahora;
+            $scope.dashboard.horas = dados.map(obj => obj.hora);
+            switch ($scope.grafico.indicador) {
+                case 'hitrate':
+                    $scope.dashboard.grafico = [{ name: 'hitrate', data: dados.map(obj => (obj.alo * 100 / obj.discado).toFixed(1) * 1) }];
+                    break;
+                case 'txloc':
+                    $scope.dashboard.grafico = [{ name: 'txloc', data: dados.map(obj => (obj.cpc * 100 / obj.contato).toFixed(1) * 1) }];
+                    break;
+                case 'txapv':
+                    $scope.dashboard.grafico = [{ name: 'txapv', data: dados.map(obj => (obj.cpca * 100 / obj.cpc).toFixed(1) * 1) }];
+                    break;
+                case 'conversao':
+                    $scope.dashboard.grafico = [{ name: 'conversao', data: dados.map(obj => (obj.promessa * 100 / obj.cpca).toFixed(1) * 1) }];
+                    break;
+                default:
+                    $scope.dashboard.grafico = [{ name: $scope.grafico.indicador, data: dados.map(obj => obj[$scope.grafico.indicador]) }];
+            }
+
+        }
+
+        $scope.carregarDashboard();
+
+        // extrair dados para excel
+        $scope.extrair = function (nomeArquivo, tabela) {
+            alasql('SELECT * INTO XLSX("' + nomeArquivo + '.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+    });
+</script>
