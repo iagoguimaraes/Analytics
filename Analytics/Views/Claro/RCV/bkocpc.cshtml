@@ -94,13 +94,13 @@
                     <div class="col-sm-2 border-right">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.chamado_aberto | number"></h5>
-                            <span class="description-text">Chamados Aberto</span>
+                            <span class="description-text">Chamados Abertos</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="description-block">
                             <h5 class="description-header" ng-bind="dashboard.resumo.chamado_reaberto | number"></h5>
-                            <span class="description-text">Chamados Reaberto</span>
+                            <span class="description-text">Chamados Reabertos</span>
                         </div>
                     </div>
                 </div>
@@ -143,8 +143,8 @@
                                         <th style="text-align:center">Entrantes</th>
                                         <th style="text-align:center">Tratados</th>
                                         <th style="text-align:center">Retornos</th>
-                                        <th style="text-align:center">Chamados Aberto</th>
-                                        <th style="text-align:center">Chamados Reaberto</th>
+                                        <th style="text-align:center">Chamados Abertos</th>
+                                        <th style="text-align:center">Chamados Reabertos</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -191,7 +191,7 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align:center">Data</th>
-                                        <th style="text-align:center">CEC</th>
+                                        <th style="text-align:center">Solar</th>
                                         <th style="text-align:center">IW</th>
                                         <th style="text-align:center">CPC</th>
                                     </tr>
@@ -202,13 +202,13 @@
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
                                             {{c[0].data}}
                                         </td>
-                                        <td>{{c | sumByColumn: 'cec' | number}}</td>
+                                        <td>{{c | sumByColumn: 'solar' | number}}</td>
                                         <td>{{c | sumByColumn: 'iw'| number}}</td>
                                         <td>{{c | sumByColumn: 'cpc'| number}}</td>
                                     </tr>
                                     <tr ng-repeat="p in c" ng-show="showTbody">
                                         <td>{{p.ds_motivo}}</td>
-                                        <td>{{p.cec | number}}</td>
+                                        <td>{{p.solar | number}}</td>
                                         <td>{{p.iw | number}}</td>
                                         <td>{{p.cpc | number}}</td>
                                     </tr>
@@ -223,7 +223,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-header-title">
-                            Análise de Devolutiva CEC
+                            Análise de Devolutiva - Solar
                         </span>
                         <div class="card-header-button card-header-expand">
                             <i class="fa fa-expand"></i>
@@ -339,7 +339,7 @@
                 { name: 'Entrantes', type: 'column', data: dados.map(obj => obj.entrantes) },
                 { name: 'Tratados', type: 'column', data: dados.map(obj => obj.tratados) },
                 { name: 'Retorno', type: 'column', data: dados.map(obj => obj.retorno) },
-                { name: 'Chamados Aberto', type: 'column', data: dados.map(obj => obj.chamado_aberto) },
+                { name: 'Chamados Abertos', type: 'column', data: dados.map(obj => obj.chamado_aberto) },
                 { name: 'Chamados Reabertos', type: 'column', data: dados.map(obj => obj.chamado_reaberto) }
             ];
         }

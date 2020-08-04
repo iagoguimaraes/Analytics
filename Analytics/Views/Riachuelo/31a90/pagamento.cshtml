@@ -271,7 +271,7 @@
                         <i class="fa fa-expand"></i>
                     </div>
                     <small class="pull-right">
-                        <select ng-model="grafico3.indicador" ng-change="carregarGrafico3()">
+                        <select ng-model="graficoProj.indicador" ng-change="carregarGraficoProjecao()">
                             <option value="PjValorCaixa">Caixa</option>
                             <option value="PjValorContabil">Contábil</option>
                         </select>
@@ -311,7 +311,7 @@
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'vlr_caixa' };
         $scope.grafico2 = { indicador: 'vlr_caixaCarteira' };
-        $scope.grafico3 = { indicador: 'PjValorCaixa' };
+        $scope.graficoProj = { indicador: 'PjValorCaixa' };
 
         // carregar os filtros
         $http({
@@ -340,19 +340,16 @@
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;
                 $scope.dashboard.status = r.status;
-                $scope.dashboard.dias = r.data.Table1.map(obj => obj.data);
-                $scope.dashboard.carteira = r.data.Table4.map(obj => obj.carteira);
-                $scope.dashboard.status = r.status;
                 $scope.dashboard.resumo = r.data.Table[0];
+                $scope.dashboard.carteira = r.data.Table4.map(obj => obj.carteira);
+                $scope.dashboard.dias = r.data.Table6.map(obj => obj.data);
+                
                 $scope.dashboard.qtDia = [{ name: 'Quantidade', data: r.data.Table1.map(obj => (obj.qtd)) }];
                 $scope.dashboard.qtCarteira = [{ name: 'Quantidade', data: r.data.Table2.map(obj => ({ name: obj.carteira, y: obj.qtd })) }];
-                $scope.dashboard.dados = r.data;
-                $scope.dashboard.dados2 = r.data;
-                $scope.dashboard.dados3 = r.data;
+
                 $scope.carregarGrafico();
                 $scope.carregarGrafico2();
-                $scope.carregarGrafico3();
-                console.log($scope.dashboard.status);
+                $scope.carregarGraficoProjecao();
             });
         }
 
@@ -370,7 +367,7 @@
         }
 
         $scope.carregarGrafico2 = function () {
-            let dados = $scope.dashboard.dados2;
+            let dados = $scope.dashboard.dados;
 
             if ($scope.grafico2.indicador == 'vlr_caixaCarteira') {
                 $scope.dashboard.valorCarteira = [{ name: 'Valor Caixa', innerSize: '60%', data: dados.Table4.map(obj => ({ name: obj.carteira, y: obj.vlr_pagamento })) }];
@@ -380,14 +377,15 @@
             }
         }
 
+        $scope.carregarGraficoProjecao = function () {
+            
+            let data = $scope.dashboard.dados;
+            let dias = $scope.dashboard.dias;
 
-        $scope.carregarGrafico3 = function () {
-            let indicador = $scope.grafico3.indicador;
-            let data = $scope.dashboard.dados3;
             let mes_recebido = '';
             let mes_projecao = '';
 
-            switch (indicador) {
+            switch ($scope.graficoProj.indicador) {
                 case 'PjValorCaixa':
                     mes_recebido = data.Table5.map(obj => ({ y: obj.vlr_pagamento }));
                     mes_projecao = data.Table6.map(obj => ({ y: obj.vlr_pagamento }));
@@ -411,7 +409,7 @@
                     },
                 },
                 xAxis: {
-                    categories: data.Table1.map(obj => obj.data)
+                    categories: dias
                 },
                 series: [
                     {
@@ -425,7 +423,7 @@
                     {
                         type: 'area',
                         name: 'Recebimento',
-                        color: 'black',
+                        color: 'green',
                         marker: { symbol: 'circle' },
                         data: mes_recebido
                     },
