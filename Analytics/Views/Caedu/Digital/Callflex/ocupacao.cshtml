@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-caedu-tempo">
+<div ng-controller="ctrl-caedu-callflex-tempo">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -255,7 +255,7 @@
                         <div class="card-header-button" ng-click="extrair('Table2')">
                             <i class="fa fa-file-excel-o"></i>
                         </div>
-                        <small class="pull-right">
+                        @*<small class="pull-right">
                             <label>
                                 <input type="radio" name="graficoFilaExibir" ng-model="graficoFila.exibir" value="true" checked="checked" />
                                 Tabela
@@ -265,7 +265,7 @@
                                 Gráfico
                             </label>
 
-                        </small>
+                        </small>*@
                     </div>
                     <div class="card-body">
                         <!--TABELA-->
@@ -273,7 +273,7 @@
                             <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.horaHora">
                                 <thead>
                                     <tr>
-                                        <th>Campanha</th>
+                                        <th>Fila</th>
                                         <th>AD</th>
                                         <th>Atendidas</th>
                                         <th>Logado</th>
@@ -288,7 +288,7 @@
                                     <tr class="text-bold">
                                         <td>
                                             <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
-                                            {{f[0].ds_campanha}}
+                                            {{f[0].fila}}
                                         </td>
                                         <td>{{f | avgColumn: 'qtd_ad' | number : 0 }}</td>
                                         <td>{{f | sumByColumn: 'atendido' | number : 0 }}</td>
@@ -339,17 +339,15 @@
 </div>
 
 <script>
-    angular.module('app').controller('ctrl-caedu-tempo', function ($scope, $http, $filter) {
-        // filtros iniciais
-        let _dt1 = new Date();
-        _dt1.setDate(_dt1.getDate());
-        _dt1 = $filter('date')(_dt1, "yyyy-MM-dd");
+    angular.module('app').controller('ctrl-caedu-callflex-tempo', function ($scope, $http, $filter) {
 
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
 
         $scope.filtros = {
-            dtini: _dt1,
-            dtfim: _dt1,
-
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 
         $scope.dashboard = {};
@@ -362,7 +360,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/caedu/dashboard/digital/ocupacao",
+                url: "/api/caedu/dashboard/digital/callflex/ocupacao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.status = r.status;
@@ -372,7 +370,7 @@
                 $scope.dashboard.horaHora = r.data.Table1;
                 $scope.dashboard.fila = r.data.Table2;
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table4.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
-
+                console.log($scope.dashboard.ocupacao);
                 $scope.carregarGrafico();
                 $scope.carregarGraficoFila();
             });

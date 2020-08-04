@@ -2,7 +2,7 @@
     Layout = "~/Views/master.cshtml";
 }
 
-<div ng-controller="ctrl-caedu-producao">
+<div ng-controller="ctrl-caedu-sinergy-producao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -297,7 +297,7 @@
 
 <script>
 
-    angular.module('app').controller('ctrl-caedu-producao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-caedu-sinergy-producao', function ($scope, $http, $filter) {
         // filtros iniciais
         let newdate = new Date();
         let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
@@ -315,7 +315,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/caedu/dashboard/digital/producao",
+                url: "/api/caedu/dashboard/digital/sinergy/producao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 let data = r.data;
