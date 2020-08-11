@@ -347,12 +347,12 @@ namespace Analytics.Controllers
         #endregion
 
         #region DIGITAL
-
-        [Route("dashboard/digital/horahora")]
+        // sinergy
+        [Route("dashboard/digital/sinergy/horahora")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardHoraHoraDigital(FormDataCollection form)
+        public HttpResponseMessage DashboardHoraHoraDigitalSinergy(FormDataCollection form)
         {
             try
             {
@@ -376,11 +376,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/digital/producao")]
+        [Route("dashboard/digital/sinergy/producao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardProducaoDigital(FormDataCollection form)
+        public HttpResponseMessage DashboardProducaoDigitalSinergy(FormDataCollection form)
         {
             try
             {
@@ -404,11 +404,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/digital/lote")]
+        [Route("dashboard/digital/sinergy/lote")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardLote(FormDataCollection form)
+        public HttpResponseMessage DashboardLoteSinergy(FormDataCollection form)
         {
             try
             {
@@ -432,11 +432,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/digital/btc")]
+        [Route("dashboard/digital/sinergy/btc")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardBTC(FormDataCollection form)
+        public HttpResponseMessage DashboardBTCSinergy(FormDataCollection form)
         {
             try
             {
@@ -460,11 +460,11 @@ namespace Analytics.Controllers
             }
         }
 
-        [Route("dashboard/digital/projecao")]
+        [Route("dashboard/digital/sinergy/projecao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardProjecao(FormDataCollection form)
+        public HttpResponseMessage DashboardProjecaoSinergy(FormDataCollection form)
         {
             try
             {
@@ -481,11 +481,11 @@ namespace Analytics.Controllers
         }
 
 
-        [Route("dashboard/digital/ocupacao")]
+        [Route("dashboard/digital/sinergy/ocupacao")]
         [HttpPost]
         [Autorizar]
         [Gravar]
-        public HttpResponseMessage DashboardOcupacaoDigital(FormDataCollection form)
+        public HttpResponseMessage DashboardOcupacaoDigitalSinergy(FormDataCollection form)
         {
             try
             {
@@ -509,6 +509,169 @@ namespace Analytics.Controllers
             }
         }
 
+
+        //callflex
+
+        [Route("dashboard/digital/callflex/horahora")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardHoraHoraDigitalCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_horahora", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/callflex/producao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProducaoDigitalCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_producao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/callflex/lote")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardLoteCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_lote", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/callflex/btc")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBTCCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_btc", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [Route("dashboard/digital/callflex/projecao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardProjecaoCallflex(FormDataCollection form)
+        {
+            try
+            {
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_projecao");
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [Route("dashboard/digital/callflex/ocupacao")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardOcupacaoDigitalCallflex(FormDataCollection form)
+        {
+            try
+            {
+                DateTime dtini = Convert.ToDateTime(form["dtini"]);
+                DateTime dtfim = Convert.ToDateTime(form["dtfim"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_CAEDU_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("dtini", dtini.ToString("yyyy-MM-dd"));
+                    parametros.Add("dtfim", dtfim.ToString("yyyy-MM-dd"));
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_ocupacao", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         #endregion
 

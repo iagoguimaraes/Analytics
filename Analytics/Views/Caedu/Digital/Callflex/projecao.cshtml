@@ -3,7 +3,7 @@
 }
 
 
-<div ng-controller="ctrl-caedu-projecao">
+<div ng-controller="ctrl-caedu-callflex-projecao">
     <div ng-if="dashboard.status == 200">
 
         <!-- HEADER-->
@@ -103,7 +103,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-caedu-projecao', function ($scope, $http, $filter) {
+    angular.module('app').controller('ctrl-caedu-callflex-projecao', function ($scope, $http, $filter) {
 
         $scope.dashboard = {};
         $scope.filtros= { conceito: 'acordo'};
@@ -111,7 +111,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/caedu/dashboard/digital/projecao",
+                url: "/api/caedu/dashboard/digital/callflex/projecao",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.dashboard.dados = r.data;

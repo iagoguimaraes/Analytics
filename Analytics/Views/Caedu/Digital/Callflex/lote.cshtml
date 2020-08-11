@@ -4,7 +4,7 @@
 
 
 <script>
-    angular.module('app').controller('ctrl-caedu-lote', function ($scope, $http, $filter, dadosPagina) {
+    angular.module('app').controller('ctrl-caedu-callflex-lote', function ($scope, $http, $filter, dadosPagina) {
 
         dadosPagina.titulo = 'Análise de Lote';
         dadosPagina.descricao = 'Caedu'
@@ -27,7 +27,7 @@
         $scope.carregarDashboard = function () {
             $http({
                 method: 'POST',
-                url: "/api/caedu/dashboard/digital/lote",
+                url: "/api/caedu/dashboard/digital/callflex/lote",
                 data: $scope.filtros,
             }).then(function success(r) {
                 $scope.lotes = [...new Set(r.data.Table.map(o => o.data_lote))];
@@ -72,7 +72,7 @@
 </script>
 
 <!-- HTML -->
-<div ng-controller="ctrl-caedu-lote">
+<div ng-controller="ctrl-caedu-callflex-lote">
     <div ng-if="dashboard_status == 200">
 
         <!-- HEADER-->
@@ -351,10 +351,10 @@
                                     <tr>
                                         <th>Lote</th>
                                         <th>Contrato</th>
-                                        <th>%Discado</th>
-                                        <th>%Contato</th>
-                                        <th>%CPC</th>
-                                        <th>%Promessa</th>
+                                        <th>% Discado</th>
+                                        <th>% Contato</th>
+                                        <th>% CPC</th>
+                                        <th>% Promessa</th>
                                         <th>Spin</th>
                                     </tr>
                                 </thead>

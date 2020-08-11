@@ -5,7 +5,7 @@
 <div ng-controller="ctrl-vivo-disparos">
 
     <!--Extrair Dados-->
-    <div class="row margin-bottom" style="margin-top: 20px" ng-if="extrair">
+    <div class="row margin-bottom" style="margin-top: 20px">
         <div class="col-xs-12">
             <div class="card">
                 <div class="card-header">
@@ -56,6 +56,7 @@
     angular.module('app').controller('ctrl-vivo-disparos', function ($scope, $http, $filter, $window) {
 
         $scope.extrair = $window.location.search == "?extrair";
+        
 
         // filtros iniciais
         let newdate = new Date();
@@ -63,7 +64,21 @@
         $scope.filtros = {
             dtini: $filter('date')(newdate, "yyyy-MM-dd"),
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+            operacao: '',
         };
+
+        $scope.dashFiltros = {};
+
+        // carregar os filtros
+        $http({
+            method: 'GET',
+            url: "/api/vivo/new/humano/dashboard/filtros",
+            data: $scope.filtros,
+        }).then(function success(r) {
+
+            $scope.dashFiltros.status = r.status;
+            $scope.dashFiltros.operacao = r.data.Table14;
+        });
 
         // extrair dados para excel
         $scope.extrairDados = function () {
@@ -73,6 +88,7 @@
                 data: $scope.filtros,
             }).then(function success(r) {
                 alasql('SELECT * INTO XLSX("disparos.xlsx", {headers: true}) FROM ?', [r.data.Table]);
+
             });
         }
 
