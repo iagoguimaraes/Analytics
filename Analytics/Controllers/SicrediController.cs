@@ -455,6 +455,33 @@ namespace Analytics.Controllers
             }
         }
 
+
+        [Route("dashboard/digital/baseativa")]
+        [HttpPost]
+        [Autorizar]
+        [Gravar]
+        public HttpResponseMessage DashboardBaseAtivaDigital(FormDataCollection form)
+        {
+            try
+            {
+                DataTable empresa = JsonConvert.DeserializeObject<DataTable>(form["empresa"]);
+
+                using (SqlHelper sql = new SqlHelper("CUBO_SICREDI_DIGITAL"))
+                {
+                    Dictionary<string, object> parametros = new Dictionary<string, object>();
+
+                    parametros.Add("empresa", empresa);
+
+                    DataSet resultado = sql.ExecuteProcedureDataSet("sp_dashboard_baseativa", parametros);
+                    return Request.CreateResponse(HttpStatusCode.OK, resultado);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
         #endregion
 
     }

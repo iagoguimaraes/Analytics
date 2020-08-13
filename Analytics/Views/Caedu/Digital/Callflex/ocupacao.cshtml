@@ -350,6 +350,7 @@
             dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
         };
 
+        $scope.dashFiltros = {};
         $scope.dashboard = {};
         $scope.grafico = { indicador: 'ocupacao', exibir: 'true' };
         $scope.graficoFila = { indicador: 'atendido', exibir: 'true' };
@@ -370,7 +371,6 @@
                 $scope.dashboard.horaHora = r.data.Table1;
                 $scope.dashboard.fila = r.data.Table2;
                 $scope.dashboard.ocupacao = [{ name: 'Quantidade', innerSize: '10%', data: r.data.Table4.map(obj => ({ name: obj.legenda, y: obj.segundos })) }];
-                console.log($scope.dashboard.ocupacao);
                 $scope.carregarGrafico();
                 $scope.carregarGraficoFila();
             });
