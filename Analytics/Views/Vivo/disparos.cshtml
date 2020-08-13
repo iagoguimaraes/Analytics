@@ -5,7 +5,7 @@
 <div ng-controller="ctrl-vivo-disparos">
 
     <!--Extrair Dados-->
-    <div class="row margin-bottom" style="margin-top: 20px" ng-if="dashFiltros.status == 200">
+    <div class="row margin-bottom" style="margin-top: 20px">
         <div class="col-xs-12">
             <div class="card">
                 <div class="card-header">
@@ -33,12 +33,6 @@
                             </div>
                             <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim" style="width:100%"></date-picker>
                         </div>
-                    </div>
-
-                    <!--OPERACAO-->
-                    <div class="form-group">
-                        <label class="control-sidebar-subheading">Operacao</label>
-                        <select2 style="width: 100%" class="form-control" data-placeholder="Selecione" ng-model="filtros.operacao" dados="dashFiltros.operacao"></select2>
                     </div>
 
                     <div class="input-group">
@@ -95,8 +89,6 @@
             }).then(function success(r) {
                 alasql('SELECT * INTO XLSX("disparos.xlsx", {headers: true}) FROM ?', [r.data.Table]);
 
-               
-                console.log($scope.dashFiltros.operacao);
             });
         }
 

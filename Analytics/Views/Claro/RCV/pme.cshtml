@@ -1,0 +1,535 @@
+﻿@{
+    Layout = "~/Views/master.cshtml";
+}
+<div ng-controller="ctrl-claro-pme">
+    <div ng-if="dashboard.status == 200">
+
+        <!-- HEADER-->
+        <header class="page-header">
+            <div class="page-name">Claro RCV - Pequenas e Médias Empresas </div>
+            <div class="page-menu-button" ng-style="{'background-color': credor.cor_primaria, 'color': credor.cor_fonte_primaria}" onclick="toggleDisplayNone('filtros-window')">
+                <i class="fa fa-filter"></i>
+                FILTROS
+            </div>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div id="filtros-window" class="card display-none">
+                    <div class="card-header">
+                        <span class="card-header-title">Filtros</span>
+                        <div class="card-header-button card-header-close">
+                            <i class="fa fa-close"></i>
+                        </div>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Inicial</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtini"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--DATA INCIAL-->
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">Data Final</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <date-picker class="form-control pull-right" placeholder="yyyy-mm-dd" ng-model="filtros.dtfim"></date-picker>
+                            </div>
+                        </div>
+
+                        <!--BOTÃO-->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" data-toggle="control-sidebar" ng-click="carregarDashboard()" onclick="addDisplayNone('filtros-window')">Carregar Dados</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--RESUMO-->
+        <div class="box box-widget widget-user">
+            <div class="widget-user-header bg-black" style="background: url('/Content/Images/Claro/banner-claro.jpg') center center;">
+            </div>
+            <div class="widget-user-image">
+                <img class="img-circle" src="/Content/Images/Claro/icone.png" style="background-color: rgba(255, 255, 255, 0.00)" height="160" width="200">
+            </div>
+            <div class="box-footer">
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.entrantes | number"></h5>
+                            <span class="description-text">Abertos</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.tratados | number"></h5>
+                            <span class="description-text">Improcedentes</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.retorno | number"></h5>
+                            <span class="description-text">Analise 2º Nível</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header" ng-bind="dashboard.resumo.chamado_aberto | number"></h5>
+                            <span class="description-text">% de Erro</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PROTOCOLO-->
+        <div class="row margin-bottom">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Acompanhamento de Protocolo</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table2')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <high-charts config="dashboard.protocolo" height="300"></high-charts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Resumo Nota Pesquisa</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="info-box bg-purple-active">
+                            <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Média Nota</span>
+                                <span class="info-box-number">{{dashboard.resumo.media_nota | number}}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-box bg-yellow">
+                            <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Média Convertida</span>
+                                <span class="info-box-number">{{dashboard.resumo.media_convertida | number}}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="fa fa-check"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">% Transferidas</span>
+                                <span class="info-box-number">{{dashboard.resumo.trasnferidas | number}}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--PESQUISA DE SATISFAÇÃO-->
+            <div class="col-xs-8 col-md-8 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Pesquisa de Satisfação</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                        <small class="pull-right">
+                            <label>
+                                <input type="radio" name="graficoExibir" ng-model="dashboard.exibir" value="false" />
+                                Tabela
+                            </label>
+                            <label>
+                                <input type="radio" name="graficoExibir" ng-model="dashboard.exibir" value="true" checked="checked" />
+                                Gráfico
+                            </label>
+
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <!--GRAFICO-->
+                        <div ng-show="dashboard.exibir == 'true'">
+                            <small class="pull-right">
+                                <select ng-model="dashboard.indicador" ng-change="carregarGraficoPesquisa()">
+                                    <option value="chamadas">Chamadas</option>
+                                    <option value="notas">Notas</option>
+                                </select>
+                            </small>
+                            <high-charts config="dashboard.graficoPesquisa" style="width: 100%; height: 296px"></high-charts>
+                        </div>
+
+                        <!--TABELA-->
+                        <div class="table-responsive" ng-show="dashboard.exibir == 'false'">
+                            <table class="table table-striped table-bordered" style="width:100%; text-align:center" ng-if="dashboard.pesquisa">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Data</th>
+                                        <th style="text-align:center">Transferidas</th>
+                                        <th style="text-align:center">Atendidas</th>
+                                        <th style="text-align:center; background-color:#00a65a">Nota 1</th>
+                                        <th style="text-align:center; background-color:#f3c312">Nota 2</th>
+                                        <th style="text-align:center; background-color:#e8910d">Nota 3</th>
+                                        <th style="text-align:center; background-color:#ef3b3b">Nota 4</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in dashboard.pesquisa">
+                                        <td>{{d.data}}</td>
+                                        <td>{{d.quantidade | number}}</td>
+                                        <td>{{d.atendido | number}}</td>
+                                        <td>{{d.nota1 | number}}<b>({{d.nota1 / d.atendido | percentage:1}})</b></td>
+                                        <td>{{d.nota2 | number}}<b>({{d.nota2 / d.atendido | percentage:1}})</b></td>
+                                        <td>{{d.nota3 | number}}<b>({{d.nota3 / d.atendido | percentage:1}})</b></td>
+                                        <td>{{d.nota4 | number}}<b>({{d.nota4 / d.atendido | percentage:1}})</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--IMPACTOS-->
+        <div class="row margin-bottom">
+            <div class="col-xs-6">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Impactos Operacionais</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table1')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!--TABELA-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered" style="width:100%" ng-if="dashboard.impacto">
+                                <thead>
+                                    <tr>
+                                        <th>Data/Motivo</th>
+                                        <th>Tempo</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="f in dashboard.impacto | groupBy: 'data'">
+                                    <tr class="text-bold">
+                                        <td>
+                                            <i class="fa fa margin-right-5" ng-click="showTbody = !showTbody" ng-class="showTbody ? 'fa-minus' : 'fa-plus'"></i>
+                                            {{f[0].data}}
+                                        </td>
+                                        <td>{{f | sumByColumn: 'tempo'| formatTimer}}</td>
+                                    </tr>
+                                    <tr ng-repeat="h in f" ng-show="showTbody">
+                                        <td>{{h.motivo}}</td>
+                                        <td>{{h.tempo | formatTimer }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Monitoria-->
+            <div class="col-xs-6 col-md-6 margin-bottom">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-header-title">Monitoria</span>
+                        <div class="card-header-button card-header-expand">
+                            <i class="fa fa-expand"></i>
+                        </div>
+                        <div class="card-header-button" ng-click="extrair('Table3')">
+                            <i class="fa fa-file-excel-o"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="width:100%; text-align:center" ng-if="dashboard.monitoria">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Avaliação</th>
+                                    <th style="text-align:center">Quantidade</th>
+                                    <th style="text-align:center">NCG's</th>
+                                    <th style="text-align:center">Média</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="d in dashboard.monitoria">
+                                    <td>{{d.avaliacao}}</td>
+                                    <td>{{d.quantidade | number}}</td>
+                                    <td>{{d.qtd_ncg | number}}</td>
+                                    <td>{{d.media}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    angular.module('app').controller('ctrl-claro-pme', function ($scope, $http, $filter, dadosPagina) {
+        dadosPagina.titulo = 'Produção';
+        dadosPagina.descricao = 'Claro RCV'
+
+        // filtros iniciais
+        let newdate = new Date();
+        let primeiroDiaMes = new Date(newdate.getFullYear(), newdate.getMonth(), 1);
+
+        $scope.filtros = {
+            dtini: $filter('date')(primeiroDiaMes, "yyyy-MM-dd"),
+            dtfim: $filter('date')(newdate, "yyyy-MM-dd"),
+        };
+
+        $scope.dashboard = { indicador: 'chamadas', exibir: 'true' };
+
+        // obtem filtros do escopo e carrega os dados do dashboard
+        $scope.carregarDashboard = function () {
+            $http({
+                method: 'POST',
+                url: "/api/claro/dashboard/rcv/pme",
+                data: $scope.filtros,
+            }).then(function success(r) {
+
+                $scope.dashboard.status = r.status;
+                $scope.dashboard.dados = r.data;
+
+                $scope.dashboard.pesquisa = r.data.Table;
+                $scope.dashboard.impacto = r.data.Table1;
+                $scope.dashboard.monitoria = r.data.Table3;
+
+                $scope.carregarGraficoPesquisa();
+                $scope.carregarGraficoProtocolo();
+
+            });
+        }
+
+        $scope.carregarGraficoPesquisa = function () {
+            switch ($scope.dashboard.indicador) {
+                case 'chamadas':
+                    $scope.dashboard.graficoPesquisa = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: [
+                            {
+                                title: {
+                                    text: ''
+                                },
+                            },
+                            {
+                                title: {
+                                    text: ''
+                                },
+                                opposite: true,
+                            }
+                        ],
+                        xAxis: {
+                            categories: $scope.dashboard.dados.Table.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'line',
+                                name: 'Transferidas',
+                                color: '#00a65a',
+                                data: $scope.dashboard.dados.Table.map(o => o.atendido),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            {
+                                type: 'column',
+                                yAxis: 1,
+                                name: 'Atendidas Loja',
+                                color: 'rgba(0,115,183,0.4)',
+                                data: $scope.dashboard.dados.Table.map(o => o.quantidade),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+                    break;
+                default:
+
+                    $scope.dashboard.graficoPesquisa = {
+                        title: {
+                            text: ''
+                        },
+                        yAxis: [
+                            {
+                                title: {
+                                    text: ''
+                                },
+                            },
+                            {
+                                title: {
+                                    text: ''
+                                },
+                                opposite: true,
+                            }
+                        ],
+                        xAxis: {
+                            categories: $scope.dashboard.dados.Table.map(o => o.data)
+                        },
+                        series: [
+                            {
+                                type: 'column',
+                                yAxis: 1,
+                                name: 'Nota 1',
+                                color: 'rgba(0, 166, 90, 0.8)',
+                                data: $scope.dashboard.dados.Table.map(o => o.nota1),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            {
+                                type: 'column',
+                                yAxis: 1,
+                                name: 'Nota 2',
+                                color: 'rgba(243, 195, 18, 0.8)',
+                                data: $scope.dashboard.dados.Table.map(o => o.nota2),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            {
+                                type: 'column',
+                                yAxis: 1,
+                                name: 'Nota 3',
+                                color: 'rgba(232, 145, 13, 0.8)',
+                                data: $scope.dashboard.dados.Table.map(o => o.nota3),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            {
+                                type: 'column',
+                                yAxis: 1,
+                                name: 'Nota 4',
+                                color: 'rgba(239, 59, 59, 0.8)',
+                                data: $scope.dashboard.dados.Table.map(o => o.nota4),
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                        ],
+                        credits: {
+                            enabled: false
+                        }
+                    };
+            }
+        }
+
+        $scope.carregarGraficoProtocolo = function () {
+            let dados_status = alasql('select ds_status status, sum(quantidade) quantidade from ? group by ds_status', [$scope.dashboard.dados.Table2]);
+            dados_status = dados_status.map(o => ({ name: o.status, drilldown: o.status, y: o.quantidade }));
+
+            let dados_substatus = [];
+
+            for (s in dados_status) {
+
+                let d = alasql('select data substatus, sum(quantidade) quantidade from ? group by data', [$scope.dashboard.dados.Table2.filter(d => d.ds_status == dados_status[s]['name'])]);
+                d = d.map(o => [o.substatus, o.quantidade]);
+                let obj = {
+                    name: dados_status[s]['name'],
+                    id: dados_status[s]['name'],
+                    data: d
+                }
+                dados_substatus.push(obj);
+            }
+
+            // Gráfico MES / DIA
+            $scope.dashboard.protocolo = {
+                chart: {
+                    type: 'column',
+                    height: 300
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y}'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{series.name}</span><br>',
+                    pointFormat: '<span style="color:{point.color}"></span>{point.name}: {point.y}<br/>'
+                },
+                series: [{
+                    name: 'Status',
+                    colorByPoint: true,
+                    data: dados_status
+                }],
+                drilldown: {
+                    series: dados_substatus
+                },
+                credits: {
+                    enabled: false
+                },
+            };
+        }
+
+
+        // extrair dados para excel
+        $scope.extrair = function (tabela) {
+            alasql('SELECT * INTO XLSX("analytics.xlsx", {headers: true}) FROM ?', [$scope.dashboard.dados[tabela]]);
+        }
+
+        $scope.carregarDashboard();
+
+    });
+
+</script>
